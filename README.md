@@ -52,6 +52,8 @@ The Silo screens are generated: edit the scripts in `tools/`, not the XML they w
 - `tools/build_info.py` writes `xml/DialogVideoInfo.xml` and its variables.
 - `tools/build_browse.py` writes `xml/MyVideoNav.xml` (library browsing) and its variables.
 - `tools/build_search.py` writes `xml/Custom_1190_SiloSearch.xml` (search) and its variables.
+- `tools/build_upnext.py` writes Up Next's windows (`xml/script-upnext-*.xml`: Next Up, Still watching,
+  Skip intro) in Silo's player style, and their variables.
 - `xml/script-skinshortcuts.xml` (the menu manager) and `shortcuts/` are hand-written; Skin Shortcuts
   writes `xml/script-skinshortcuts-includes.xml` on the device, over the placeholder here.
 - `tools/make_textures.py` draws the masks, focus rings, pills and badges in `media/silo/`.

@@ -2986,4 +2986,11 @@
         <value>$INFO[Skin.String(silo.search)]</value>
     </variable>
     <!-- end Silo Skyline search -->
+    <!-- Silo Up Next variables (tools/build_upnext.py) -->
+    <variable name="SiloUpNextArt">
+        <value condition="!String.IsEmpty(Window.Property(thumb))">$INFO[Window.Property(thumb)]</value>
+        <value condition="!String.IsEmpty(Window.Property(landscape))">$INFO[Window.Property(landscape)]</value>
+        <value>$INFO[Window.Property(fanart)]</value>
+    </variable>
+    <!-- end Silo Up Next variables -->
 </includes>

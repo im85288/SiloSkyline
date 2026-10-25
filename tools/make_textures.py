@@ -147,6 +147,8 @@ if __name__ == '__main__':
     focus_ring('card_landscape_focus.png', 372, 214, 20, 4)
     # Badges: a 2 px outline, stretched with border="8".
     focus_ring('badge_outline.png', 32, 32, 8, 2)
+    # Silo's skip pill outline (Up Next's Skip intro), stretched with border="48".
+    focus_ring('pill_ring.png', 96, 96, 48, 4)
     pill()
     scrim()
     # Cast photos: round, with a ring 6 px outside the photo.
