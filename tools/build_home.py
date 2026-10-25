@@ -267,18 +267,19 @@ def bar_moves(control_id):
 
 
 # Silo's library sections for a page's tab (TvLibraryPill.set): OK on the tab of
-# the page you are on opens them; down still goes to the rows. Collections are
-# Silo's collection rows, listed by SiloKodiConnect.
-COLLECTIONS = 'plugin://plugin.video.silokodiconnect/?mode=sections&amp;type=collection'
+# the page you are on opens them (no marker, by request); down still goes to the rows. Collections are
+# the page's libraries' collections, linked by SiloKodiConnect.
 SECTIONS = {
-    'movies': [('Recommended', None), ('Browse', 'videodb://movies/titles/'), ('Collections', COLLECTIONS)],
-    'series': [('Recommended', None), ('Browse', 'videodb://tvshows/titles/'), ('Collections', COLLECTIONS)],
+    'movies': [('Recommended', None), ('Browse', 'videodb://movies/titles/'),
+               ('Collections', '$INFO[Window(Home).Property(silo.movies.collections)]')],
+    'series': [('Recommended', None), ('Browse', 'videodb://tvshows/titles/'),
+               ('Collections', '$INFO[Window(Home).Property(silo.series.collections)]')],
 }
 BAR_GAP = 8
 
 
 def tab_width(page):
-    return 60 + 17 * len(TAB_LABELS[page]) + (28 if page in SECTIONS else 0)
+    return 60 + 17 * len(TAB_LABELS[page])
 
 
 def open_sections(page, control_id):
@@ -288,21 +289,6 @@ def open_sections(page, control_id):
         return ''
     return ('                    <onclick condition="%s">SetFocus(%d,0,absolute)</onclick>\n'
             % (page_visible(page), control_id + 200))
-
-
-def tab_arrow(page, control_id):
-    """A small chevron on the current page's tab: it has sections."""
-    if page not in SECTIONS:
-        return ''
-    image = '''
-                <control type="image">
-                    <left>%(x)d</left><top>22</top><width>16</width><height>16</height>
-                    <texture colordiffuse="%(colour)s">overlays/arrowdown.png</texture>
-                    <visible>%(current)s + %(focus)sControl.HasFocus(%(id)d)</visible>
-                </control>'''
-    values = {'x': tab_width(page) - 42, 'current': page_visible(page), 'id': control_id}
-    return (image % dict(values, colour='FF000000', focus='') +
-            image % dict(values, colour=TAB_DIM, focus='!'))
 
 
 def bar_positions():
@@ -406,18 +392,17 @@ def tab(control_id, page, page_index):
 %(open_sections)s                    <onclick%(unless_open)s>SetProperty(silo.page,%(page)s,home)</onclick>
                     <onclick%(unless_open)s>ClearProperty(silo.row,home)</onclick>%(moves)s
 %(focus_rows)s
-                </control>%(arrow)s
+                </control>
             </control>''' % {'width': tab_width(page), 'visible': visible,
                             'selected': page_visible(page), 'id': control_id,
-                            # An em space leaves room for the sections chevron.
-                            'label': TAB_LABELS[page] + ('\u2003' if page in SECTIONS else ''),
+                            'label': TAB_LABELS[page],
                             'dim': TAB_DIM, 'text': TEXT, 'page': page,
                             'moves': bar_moves(control_id),
                             'focus_rows': first_visible('onclick', page_rows(page_index, range(1, LOOKAHEAD + 1)))
                             .replace('<onclick condition="', '<onclick condition="' + (
                                 '![' + page_visible(page) + '] + ' if page in SECTIONS else '')),
                             'unless_open': ' condition="![' + page_visible(page) + ']"' if page in SECTIONS else '',
-                            'open_sections': open_sections(page, control_id), 'arrow': tab_arrow(page, control_id)}
+                            'open_sections': open_sections(page, control_id)}
 
 
 def icon_tab(control_id, icon, action):

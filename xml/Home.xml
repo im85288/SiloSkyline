@@ -10123,17 +10123,17 @@
                 </control>
             </control>
             <control type="group">
-                <width>190</width><height>60</height>
+                <width>162</width><height>60</height>
                 <visible>String.Contains(Window(Home).Property(silo.pages),movies)</visible>
                 <control type="image">
-                    <width>190</width><height>60</height>
+                    <width>162</width><height>60</height>
                     <texture border="30" colordiffuse="26FFFFFF">silo/pill.png</texture>
                     <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !Control.HasFocus(9003)</visible>
                 </control>
                 <control type="button" id="9003">
                 <visible>String.Contains(Window(Home).Property(silo.pages),movies)</visible>
-                    <width>190</width><height>60</height>
-                    <label>Movies </label>
+                    <width>162</width><height>60</height>
+                    <label>Movies</label>
                     <font>silo_tab</font>
                     <align>center</align><aligny>center</aligny>
                     <textcolor>B3EDEDED</textcolor>
@@ -10183,29 +10183,19 @@
                     <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),movies)] + $EXP[SiloRow5104] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(5104)</onclick>
                     <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),movies)] + $EXP[SiloRow5154] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104]">SetFocus(5154)</onclick>
                 </control>
-                <control type="image">
-                    <left>148</left><top>22</top><width>16</width><height>16</height>
-                    <texture colordiffuse="FF000000">overlays/arrowdown.png</texture>
-                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + Control.HasFocus(9003)</visible>
-                </control>
-                <control type="image">
-                    <left>148</left><top>22</top><width>16</width><height>16</height>
-                    <texture colordiffuse="B3EDEDED">overlays/arrowdown.png</texture>
-                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !Control.HasFocus(9003)</visible>
-                </control>
             </control>
             <control type="group">
-                <width>190</width><height>60</height>
+                <width>162</width><height>60</height>
                 <visible>String.Contains(Window(Home).Property(silo.pages),series)</visible>
                 <control type="image">
-                    <width>190</width><height>60</height>
+                    <width>162</width><height>60</height>
                     <texture border="30" colordiffuse="26FFFFFF">silo/pill.png</texture>
                     <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !Control.HasFocus(9004)</visible>
                 </control>
                 <control type="button" id="9004">
                 <visible>String.Contains(Window(Home).Property(silo.pages),series)</visible>
-                    <width>190</width><height>60</height>
-                    <label>Series </label>
+                    <width>162</width><height>60</height>
+                    <label>Series</label>
                     <font>silo_tab</font>
                     <align>center</align><aligny>center</aligny>
                     <textcolor>B3EDEDED</textcolor>
@@ -10254,16 +10244,6 @@
                     <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),series)] + $EXP[SiloRow5253] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203]">SetFocus(5253)</onclick>
                     <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),series)] + $EXP[SiloRow5204] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(5204)</onclick>
                     <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),series)] + $EXP[SiloRow5254] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204]">SetFocus(5254)</onclick>
-                </control>
-                <control type="image">
-                    <left>148</left><top>22</top><width>16</width><height>16</height>
-                    <texture colordiffuse="FF000000">overlays/arrowdown.png</texture>
-                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + Control.HasFocus(9004)</visible>
-                </control>
-                <control type="image">
-                    <left>148</left><top>22</top><width>16</width><height>16</height>
-                    <texture colordiffuse="B3EDEDED">overlays/arrowdown.png</texture>
-                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !Control.HasFocus(9004)</visible>
                 </control>
             </control>
             <control type="group">
@@ -10444,7 +10424,7 @@
         </control>
 
         <control type="group">
-            <left>790</left><top>130</top>
+            <left>818</left><top>130</top>
             <!-- Present but faded out until it has focus: Kodi can't focus a hidden control. -->
             <animation effect="fade" start="100" end="0" time="120" condition="!Control.HasFocus(9203)">Conditional</animation>
             <control type="image">
@@ -10491,7 +10471,7 @@
                     </item>
                     <item>
                         <label>Collections</label>
-                        <onclick>ActivateWindow(Videos,plugin://plugin.video.silokodiconnect/?mode=sections&amp;type=collection,return)</onclick>
+                        <onclick>ActivateWindow(Videos,$INFO[Window(Home).Property(silo.movies.collections)],return)</onclick>
                     </item>
                 </content>
             </control>
@@ -10544,7 +10524,7 @@
                     </item>
                     <item>
                         <label>Collections</label>
-                        <onclick>ActivateWindow(Videos,plugin://plugin.video.silokodiconnect/?mode=sections&amp;type=collection,return)</onclick>
+                        <onclick>ActivateWindow(Videos,$INFO[Window(Home).Property(silo.series.collections)],return)</onclick>
                     </item>
                 </content>
             </control>

@@ -317,6 +317,7 @@ VARIABLES = '''
         <value>$INFO[ListItem.Label]</value>
     </variable>
     <variable name="SiloBrowseSub">
+        <value condition="!String.IsEmpty(ListItem.Property(silo.count))">$INFO[ListItem.Property(silo.count),, titles]</value>
         <value condition="Container.Content(seasons) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0)">$INFO[ListItem.Property(TotalEpisodes),, episodes]</value>
         <value condition="Container.Content(tvshows) + Integer.IsGreater(ListItem.Property(TotalSeasons),0)">$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), · , seasons]</value>
         <value>$INFO[ListItem.Year]</value>
