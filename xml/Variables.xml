@@ -2263,6 +2263,13 @@
     </variable>
     <!-- end Silo Skyline browse -->
 
+    <!-- Silo Skyline search (tools/build_search.py) -->
+    <variable name="SiloSearchPill">
+        <value condition="String.IsEmpty(Skin.String(silo.search))">Search films and shows</value>
+        <value>$INFO[Skin.String(silo.search)]</value>
+    </variable>
+    <!-- end Silo Skyline search -->
+
     <!-- Silo Skyline detail (tools/build_info.py) -->
     <variable name="SiloDetailArt">
         <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
@@ -2352,16 +2359,13 @@
         <value condition="Container(62).IsUpdating">$LOCALIZE[208]</value>
         <value>$LOCALIZE[1024]</value>
     </variable>
+    <variable name="SiloEpisodeSeason">
+        <value condition="Integer.IsEqual(ListItem.Season,0)">Specials</value>
+        <value>Season $INFO[ListItem.Season]</value>
+    </variable>
     <variable name="SiloSeasonLabel">
         <value condition="String.StartsWith(ListItem.Label,*)">All episodes</value>
         <value>$INFO[ListItem.Label]</value>
     </variable>
     <!-- end Silo Skyline detail -->
-
-    <!-- Silo Skyline search (tools/build_search.py) -->
-    <variable name="SiloSearchPill">
-        <value condition="String.IsEmpty(Skin.String(silo.search))">Search films and shows</value>
-        <value>$INFO[Skin.String(silo.search)]</value>
-    </variable>
-    <!-- end Silo Skyline search -->
 </includes>

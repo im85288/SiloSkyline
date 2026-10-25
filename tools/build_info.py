@@ -86,6 +86,8 @@ def build():
     <onload condition="String.IsEqual(Window(home).Property(silo.from_rail),1) + Integer.IsGreater(Container(50).NumItems,0)">SetFocus(50)</onload>
     <onload condition="String.IsEqual(Window(home).Property(silo.from_rail),1)">SetFocus(5000)</onload>
     <onload>ClearProperty(silo.from_rail,home)</onload>
+    <onload>SetProperty(silo.episode_id,$INFO[ListItem.DBID],movieinformation)</onload>
+    <onload>SetProperty(silo.episode_number,$INFO[ListItem.Episode],movieinformation)</onload>
     <onunload>ClearProperty(silo.jump,movieinformation)</onunload>
     <backgroundcolor>%(background)s</backgroundcolor>
     <controls>
@@ -167,7 +169,8 @@ def build():
                 <orientation>horizontal</orientation>
                 <itemgap>16</itemgap>
                 <ondown condition="%(show)s">60</ondown>
-                <ondown condition="!%(show)s">50</ondown>
+                <ondown condition="%(episode)s + %(has_season)s">64</ondown>
+                <ondown condition="!%(show)s + ![%(episode)s + %(has_season)s]">50</ondown>
                 <!-- A show: Play or Resume its next episode, as in Silo (Kodi's button 8
                      would Browse); Browse once every episode is watched. Kodi reserves
                      ids 5-15 in this window (12 chooses art), so this is 300. -->
@@ -254,6 +257,35 @@ def build():
                     </focusedlayout>
                 </control>
             </control>
+            <!-- An episode: the rest of its season, as in Silo, on the current one. -->
+            <control type="group">
+                <height>%(episodes_h)d</height>
+                <visible>%(episode)s + [%(has_season)s | Container(64).IsUpdating]</visible>
+                <control type="label">
+                    <left>%(x)d</left>
+                    <width>1000</width><height>46</height>
+                    <font>silo_row</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label>$VAR[SiloEpisodeSeason]</label>
+                </control>
+                <control type="list" id="64">
+                    <visible>%(episode)s + [%(has_season)s | Container(64).IsUpdating]</visible>
+                    <left>%(lx)d</left><top>56</top>
+                    <width>%(lw)d</width><height>%(episode_h)d</height>
+                    <orientation>horizontal</orientation>
+                    <onup>5000</onup>
+                    <ondown condition="Integer.IsGreater(Container(50).NumItems,0)">50</ondown>
+                    <ondown condition="!Integer.IsGreater(Container(50).NumItems,0)">63</ondown>
+                    <scrolltime tween="cubic" easing="out">280</scrolltime>
+                    <onclick>PlayMedia($ESCINFO[ListItem.FileNameAndPath])</onclick>
+                    <onclick>Dialog.Close(movieinformation)</onclick>
+                    <content target="videos">$INFO[ListItem.Property(silo.season_path)]</content>
+                    <itemlayout width="400" height="%(episode_h)d">%(season_card)s
+                    </itemlayout>
+                    <focusedlayout width="400" height="%(episode_h)d">%(season_card_focused)s
+                    </focusedlayout>
+                </control>
+            </control>
             <!-- Cast & crew: Kodi fills list 50. -->
             <control type="group">
                 <height>%(cast_h)d</height>
@@ -272,7 +304,8 @@ def build():
                     <width>%(lw)d</width><height>280</height>
                     <orientation>horizontal</orientation>
                     <onup condition="%(show)s">61</onup>
-                    <onup condition="!%(show)s">5000</onup>
+                    <onup condition="%(episode)s + %(has_season)s">64</onup>
+                    <onup condition="!%(show)s + ![%(episode)s + %(has_season)s]">5000</onup>
                     <onclick>noop</onclick>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <ondown condition="%(has_similar)s">63</ondown>
@@ -331,6 +364,8 @@ def build():
        'has_similar': 'Integer.IsGreater(Container(63).NumItems,0)', 'similar_h': SECTION_H,
        'similar_item_w': POSTER['width'] + POSTER['gap'], 'similar_item_h': POSTER['height'] + 12 + 76,
        'similar_card': card_layout(POSTER, False), 'similar_card_focused': card_layout(POSTER, True, 63),
+       'has_season': 'Integer.IsGreater(Container(64).NumItems,0)',
+       'season_card': episode_card(False, 64), 'season_card_focused': episode_card(True, 64, CURRENT),
        'episode': episode, 'show': SHOW, 'has_next': HAS_NEXT, 'next_path': NEXT_EPISODE, 'lower_top': LOWER_TOP, 'lower_h': 1080 - LOWER_TOP,
        'episodes_h': SECTION_H, 'episode_h': EPISODE_H, 'cast_h': SECTION_H,
        'season': season(False), 'season_focused': season(True),
@@ -338,6 +373,8 @@ def build():
 
 
 SHOW = 'String.IsEqual(ListItem.DBType,tvshow)'
+# On an episode's page: the episode opened (silo.episode_id, set on load).
+CURRENT = 'String.IsEqual(ListItem.DBID,Window(movieinformation).Property(silo.episode_id))'
 HAS_NEXT = 'Integer.IsGreater(Container(62).NumItems,0)'
 NEXT_EPISODE = 'videodb://tvshows/titles/$INFO[ListItem.DBID]/-1/?xsp=' + quote(json.dumps(
     {'type': 'episodes', 'order': {'method': 'episode', 'direction': 'ascending'}, 'limit': 1,
@@ -389,20 +426,23 @@ def season(focused):
                         </control>%(other)s''' % {'pills': pills, 'color': color, 'other': other}
 
 
-def episode_card(focused):
+def episode_card(focused, list_id=61, current='String.IsEqual(ListItem.DBID,Container(62).ListItem.DBID)'):
+    """An episode card: a still with progress and watched marks, then
+    "S1 · E2 · Title" and the runtime. `current` marks Silo's current episode
+    (the next one on a show's page, the opened one on an episode's)."""
     ring = '''
                         <control type="image">
                             <left>0</left><top>0</top>
                             <width>372</width><height>214</height>
-                            <texture colordiffuse="%s">silo/card_landscape_focus.png</texture>
-                            <visible>Control.HasFocus(61)</visible>
+                            <texture colordiffuse="%(text)s">silo/card_landscape_focus.png</texture>
+                            <visible>Control.HasFocus(%(id)d)</visible>
                         </control>
                         <control type="image">
                             <left>0</left><top>0</top>
                             <width>372</width><height>214</height>
                             <texture colordiffuse="B3FFFFFF">silo/card_landscape_focus.png</texture>
-                            <visible>!Control.HasFocus(61) + String.IsEqual(ListItem.DBID,Container(62).ListItem.DBID)</visible>
-                        </control>''' % TEXT if focused else ''
+                            <visible>!Control.HasFocus(%(id)d) + %(current)s</visible>
+                        </control>''' % {'text': TEXT, 'id': list_id, 'current': current} if focused else ''
     return '''
                         <control type="image">
                             <left>6</left><top>6</top>
@@ -566,6 +606,10 @@ VARIABLES = '''
         <value condition="Container(62).IsUpdating">$LOCALIZE[208]</value>
         <value>$LOCALIZE[1024]</value>
     </variable>
+    <variable name="SiloEpisodeSeason">
+        <value condition="Integer.IsEqual(ListItem.Season,0)">Specials</value>
+        <value>Season $INFO[ListItem.Season]</value>
+    </variable>
     <variable name="SiloSeasonLabel">
         <value condition="String.StartsWith(ListItem.Label,*)">All episodes</value>
         <value>$INFO[ListItem.Label]</value>
@@ -617,7 +661,15 @@ def jump_timers():
                     [('String.IsEqual(Container(61).ListItemAbsolute(%d).Episode,%s.Episode)' % (k, NEXT),
                       'SetFocus(61,%d,absolute)' % k) for k in range(MAX_EPISODES)]
                     + [('', 'SetProperty(silo.jump,done,movieinformation)'), ('', 'SetFocus(300)')])
-    return TIMER_START + season + episode + TIMER_END
+    # An episode's page: select the opened episode in its season's rail.
+    opened = timer('silo_this_episode',
+                   'Window.IsActive(movieinformation) + Control.HasFocus(8) + String.IsEmpty(%s) + %s'
+                   % (JUMP, loaded % (64, 64)),
+                   [('String.IsEqual(Container(64).ListItemAbsolute(%d).Episode,'
+                     'Window(movieinformation).Property(silo.episode_number))' % k, 'SetFocus(64,%d,absolute)' % k)
+                    for k in range(MAX_EPISODES)]
+                   + [('', 'SetProperty(silo.jump,done,movieinformation)'), ('', 'SetFocus(8)')])
+    return TIMER_START + season + episode + opened + TIMER_END
 
 
 TIMER_START, TIMER_END = '    <!-- Silo Skyline detail (tools/build_info.py) -->\n', '    <!-- end Silo Skyline detail -->\n'
