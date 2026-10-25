@@ -438,20 +438,27 @@
 			<animation effect="fade" start="0" end="100" time="200">Visible</animation>
 			<animation effect="fade" start="100" end="0" time="200">Hidden</animation>
 			<control type="image">
-				<left>0</left><top>540</top><width>1920</width><height>540</height>
+				<left>0</left><top>420</top><width>1920</width><height>660</height>
 				<texture>silo/scrim_bottom.png</texture>
+			</control>
+			<!-- A second pass: the title stays readable over bright pictures. -->
+			<control type="image">
+				<left>0</left><top>640</top><width>1920</width><height>440</height>
+				<texture colordiffuse="B3FFFFFF">silo/scrim_bottom.png</texture>
 			</control>
 			<control type="label">
 				<left>96</left><top>738</top><width>1600</width><height>28</height>
 				<font>silo_badge</font>
-				<textcolor>C7EDEDED</textcolor>
+				<textcolor>E6EDEDED</textcolor>
 				<label>[UPPERCASE]$VAR[SiloPlayerEyebrow][/UPPERCASE]</label>
+				<shadowcolor>99000000</shadowcolor>
 			</control>
 			<control type="label">
 				<left>96</left><top>766</top><width>1600</width><height>66</height>
 				<font>silo_row</font>
 				<textcolor>FFEDEDED</textcolor>
 				<label>$INFO[VideoPlayer.Title]</label>
+				<shadowcolor>99000000</shadowcolor>
 			</control>
 			<!-- The bar: track, buffered, played. -->
 			<control type="image">
@@ -464,13 +471,19 @@
 				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
 				<midtexture colordiffuse="33FFFFFF">colors/white.png</midtexture>
 			</control>
-			<!-- Silo's marker bands (from SiloKodiConnect), under the played part:
-			     intro cyan, recap green, credits orange, preview purple. -->
+			<control type="progress">
+				<left>96</left><top>862</top><width>1728</width><height>8</height>
+				<info>Player.Progress</info>
+				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+				<midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+			</control>
+			<!-- Silo's marker bands (from SiloKodiConnect), over the bar, the played part too:
+			     intro cyan, recap green, credits orange, preview purple, at 60%. -->
 			<control type="ranges">
 				<left>96</left><top>862</top><width>1728</width><height>8</height>
 				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
 				<lefttexture />
-				<midtexture colordiffuse="6622D3EE">colors/white.png</midtexture>
+				<midtexture colordiffuse="9922D3EE">colors/white.png</midtexture>
 				<righttexture />
 				<info>Window(Home).Property(silokodi.markers.intro)</info>
 			</control>
@@ -478,7 +491,7 @@
 				<left>96</left><top>862</top><width>1728</width><height>8</height>
 				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
 				<lefttexture />
-				<midtexture colordiffuse="668BC34A">colors/white.png</midtexture>
+				<midtexture colordiffuse="998BC34A">colors/white.png</midtexture>
 				<righttexture />
 				<info>Window(Home).Property(silokodi.markers.recap)</info>
 			</control>
@@ -486,7 +499,7 @@
 				<left>96</left><top>862</top><width>1728</width><height>8</height>
 				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
 				<lefttexture />
-				<midtexture colordiffuse="66FFB74D">colors/white.png</midtexture>
+				<midtexture colordiffuse="99FFB74D">colors/white.png</midtexture>
 				<righttexture />
 				<info>Window(Home).Property(silokodi.markers.credits)</info>
 			</control>
@@ -494,15 +507,9 @@
 				<left>96</left><top>862</top><width>1728</width><height>8</height>
 				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
 				<lefttexture />
-				<midtexture colordiffuse="66BA68C8">colors/white.png</midtexture>
+				<midtexture colordiffuse="99BA68C8">colors/white.png</midtexture>
 				<righttexture />
 				<info>Window(Home).Property(silokodi.markers.preview)</info>
-			</control>
-			<control type="progress">
-				<left>96</left><top>862</top><width>1728</width><height>8</height>
-				<info>Player.Progress</info>
-				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
-				<midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
 			</control>
 			<!-- The handle: where playback is, or where a seek will land. -->
 			<control type="slider">
@@ -526,6 +533,7 @@
 				<font>silo_detail</font>
 				<textcolor>FFEDEDED</textcolor>
 				<label>$VAR[SiloPlayerTime]</label>
+				<shadowcolor>99000000</shadowcolor>
 			</control>
 			<control type="label">
 				<left>924</left><top>890</top><width>900</width><height>36</height>
@@ -533,6 +541,7 @@
 				<font>silo_detail</font>
 				<textcolor>99EDEDED</textcolor>
 				<label>$INFO[Player.TimeRemaining,−,]$INFO[Player.FinishTime, · Ends ,]</label>
+				<shadowcolor>99000000</shadowcolor>
 			</control>
 		</control>
 	</controls>
