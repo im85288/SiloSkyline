@@ -355,7 +355,7 @@ def person(focused):
                         <left>20</left><top>6</top>
                         <width>172</width><height>172</height>
                         <aspectratio>scale</aspectratio>
-                        <texture background="true" fallback="DefaultActor.png">$INFO[ListItem.Art(thumb)]</texture>
+                        <texture background="true" fallback="silo/person_placeholder.png">$INFO[ListItem.Art(thumb)]</texture>
                     </control>
                     <control type="image">
                         <left>20</left><top>6</top>

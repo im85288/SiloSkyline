@@ -84,6 +84,35 @@ def scrim(height=256):
     write_png('scrim_bottom.png', 4, height, lambda x, y: smoothstep(y / float(height)) * 0.9, rgb=(0, 0, 0))
 
 
+
+def card_scrim(height=256):
+    """Silo's card scrim: clear over the top half, then darkening to 60% black
+    at the bottom edge. Drawn with the card's mask as its diffuse."""
+    write_png('card_scrim.png', 4, height,
+              lambda x, y: 0.6 * smoothstep((y / float(height) - 0.5) / 0.5), rgb=(0, 0, 0))
+
+
+def person_placeholder(size=172):
+    """A head-and-shoulders silhouette in a grey circle, for cast without a
+    photo (Kodi can't take a name's initials in a skin)."""
+    r = size / 2.0
+
+    def alpha(x, y):
+        hits = 0
+        for sy in range(SUB):
+            for sx in range(SUB):
+                px = x - 0.5 + (sx + 0.5) / SUB
+                py = y - 0.5 + (sy + 0.5) / SUB
+                if (px - r) ** 2 + (py - r) ** 2 > r * r:
+                    continue
+                head = (px - r) ** 2 + (py - size * 0.40) ** 2 <= (size * 0.17) ** 2
+                body = ((px - r) / (size * 0.32)) ** 2 + ((py - size * 0.95) / (size * 0.30)) ** 2 <= 1
+                hits += 1 if not (head or body) else 0
+        return hits / float(SUB * SUB)
+    # The circle is grey; the figure is cut out and drawn lighter under it.
+    write_png('person_placeholder.png', size, size, alpha, rgb=(0x2A, 0x2E, 0x35))
+
+
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
     hero_mask()
@@ -104,5 +133,7 @@ if __name__ == '__main__':
     focus_ring('person_ring.png', 184, 184, 92, 4)
     # The profile avatar in the menu bar, and its focus ring 4 px outside it.
     card_mask('avatar_mask.png', 56, 56, 28)
+    card_scrim()
+    person_placeholder()
     focus_ring('avatar_ring.png', 64, 64, 32, 3)
     print('Wrote', ', '.join(sorted(os.listdir(OUT))))

@@ -24,6 +24,7 @@ BAR_TOP = 56
 TEXT = 'FFEDEDED'
 TEXT_DIM = 'BFEDEDED'      # Silo's secondary text: 75%
 TAB_DIM = 'B3EDEDED'       # Silo's dimmed bar items: 70%
+TITLE_DIM = 'C7EDEDED'     # a card's title until it has focus: 78%
 BACKGROUND = 'FF0D0F12'     # Silo's near-black page
 ROWS_TOP = 612             # row titles sit where Silo's do
 
@@ -31,10 +32,10 @@ ROWS_TOP = 612             # row titles sit where Silo's do
 # (180x101), each with a title and a second line beneath.
 POSTER = {'width': 176, 'height': 264, 'gap': 40, 'mask': 'silo/card_poster_mask.png',
           'ring': 'silo/card_poster_focus.png', 'art': '$VAR[SiloPosterArt]',
-          'sub': '$VAR[SiloCardYear]'}
+          'sub': '$VAR[SiloCardYear]', 'radius': 12}
 LANDSCAPE = {'width': 360, 'height': 202, 'gap': 40, 'mask': 'silo/card_landscape_mask.png',
              'ring': 'silo/card_landscape_focus.png', 'art': '$VAR[SiloLandscapeArt]',
-             'sub': '$VAR[SiloCardEpisode]'}
+             'sub': '$VAR[SiloCardEpisode]', 'radius': 14}
 CAPTION_H = 76             # title and second line under a card
 
 # Fonts (Inter, as the Silo apps use); Font.xml gets these between markers.
@@ -83,6 +84,19 @@ def card_layout(card, focused, control_id=None):
         # not: only the row that has focus shows the ring and the lift.
         zoom = ('\n                        <animation effect="zoom" start="100" end="104" time="160" tween="sine" '
                 'center="auto" condition="Control.HasFocus(%d)">Conditional</animation>' % control_id)
+    # Silo dims a card's title until the card has focus.
+    title_visible = title_focused = ''
+    if focused:
+        title_visible = '\n                            <visible>!Control.HasFocus(%d)</visible>' % control_id
+        title_focused = '''
+                        <control type="label">
+                            <left>6</left><top>%(t1)d</top>
+                            <width>%(w)d</width><height>34</height>
+                            <font>silo_card_title</font>
+                            <textcolor>%(text)s</textcolor>
+                            <label>$VAR[SiloCardTitle]</label>
+                            <visible>Control.HasFocus(%(id)d)</visible>
+                        </control>''' % {'t1': card['height'] + 20, 'w': card['width'], 'text': TEXT, 'id': control_id}
     return '''
                     <control type="group">%(zoom)s
                         <control type="image">
@@ -91,10 +105,15 @@ def card_layout(card, focused, control_id=None):
                             <texture background="true" diffuse="%(mask)s" fallback="colors/grey.png">%(art)s</texture>
                             <aspectratio>scale</aspectratio>
                         </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>%(w)d</width><height>%(h)d</height>
+                            <texture diffuse="%(mask)s">silo/card_scrim.png</texture>
+                        </control>
                         <control type="progress">
-                            <left>18</left><top>%(pt)d</top>
+                            <left>%(px)d</left><top>%(pt)d</top>
                             <width>%(pw)d</width><height>6</height>
-                            <texturebg colordiffuse="66000000">colors/white.png</texturebg>
+                            <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
                             <midtexture colordiffuse="%(text)s">colors/white.png</midtexture>
                             <info>ListItem.PercentPlayed</info>
                             <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
@@ -109,9 +128,9 @@ def card_layout(card, focused, control_id=None):
                             <left>6</left><top>%(t1)d</top>
                             <width>%(w)d</width><height>34</height>
                             <font>silo_card_title</font>
-                            <textcolor>%(text)s</textcolor>
-                            <label>$VAR[SiloCardTitle]</label>
-                        </control>
+                            <textcolor>%(title_color)s</textcolor>
+                            <label>$VAR[SiloCardTitle]</label>%(title_visible)s
+                        </control>%(title_focused)s
                         <control type="label">
                             <left>6</left><top>%(t2)d</top>
                             <width>%(w)d</width><height>32</height>
@@ -120,7 +139,11 @@ def card_layout(card, focused, control_id=None):
                             <label>%(sub)s</label>
                         </control>
                     </control>''' % {'zoom': zoom, 'w': card['width'], 'h': card['height'], 'mask': card['mask'],
-                                    'art': card['art'], 'pt': card['height'] - 12, 'pw': card['width'] - 24,
+                                    'art': card['art'], 'title_color': TITLE_DIM, 'title_visible': title_visible,
+                                    'title_focused': title_focused,
+                                    # On the card's bottom edge, short of the rounded corners
+                                    # (Kodi can't clip a progress bar to the card's mask).
+                                    'px': 6 + card['radius'], 'pt': card['height'], 'pw': card['width'] - 2 * card['radius'],
                                     'text': TEXT, 'dim': TEXT_DIM, 'ring': ring, 'sub': card['sub'],
                                     't1': card['height'] + 20, 't2': card['height'] + 54}
 
