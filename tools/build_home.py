@@ -11,9 +11,7 @@ Layout (Silo TV's 960-unit grid doubled to 1920x1080):
 - a band of rows below that owns all focus, filled from the pages and rows
   SiloKodiConnect publishes as Home window properties (silo.*).
 """
-import json
 import os
-from urllib.parse import quote
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGES = ('home', 'movies', 'series')
@@ -179,7 +177,11 @@ def row(page, page_index, slot, landscape):
     card = LANDSCAPE if landscape else POSTER
     key = 'silo.%s.%d' % (page, slot)
     rules = '$EXP[SiloRow%d]' % list_id(page_index, slot, landscape)
-    path = '$VAR[SiloPath_%s_%d]' % (page, slot)
+    # The library_updated suffix changes when SiloKodiConnect writes the
+    # library, which makes Kodi reload the row. Kodi reads a $VAR in a content
+    # path only once, when the window opens, so this must stay $INFO: a row
+    # without a path logs one harmless error at start-up.
+    path = '$INFO[%s]&amp;refresh=$INFO[%s]' % (prop(key + '.path'), prop('silokodi.library_updated'))
     item_w = card['width'] + card['gap']
     item_h = card['height'] + 12 + CAPTION_H
     return '''
@@ -500,12 +502,6 @@ CARDS = '''
 '''
 
 
-# Movies watched fewer than zero times: none, answered from Kodi's database.
-NO_ROW = ('videodb://movies/titles/?xsp=' + quote(json.dumps(
-    {'type': 'movies', 'rules': {'and': [{'field': 'playcount', 'operator': 'lessthan', 'value': '0'}]}},
-    separators=(',', ':')), safe=''))
-
-
 # Home's message before SiloKodiConnect has published any rows: it publishes
 # silokodi.signed_in as soon as its service starts.
 EMPTY_HOME = '''    <variable name="SiloEmptyHome">
@@ -532,17 +528,6 @@ def variables():
         terms = ['[String.IsEqual(%s,%d) + !String.IsEmpty(Container(%d).ListItem.Property(%s))]'
                  % (prop('silo.row'), row_id, row_id, item_property) for row_id in rows]
         out += '    <expression name="Has%s">%s</expression>\n' % (name, ' | '.join(terms))
-    # Each row's path. The library_updated suffix changes when SiloKodiConnect
-    # writes the library, which makes Kodi reload the row. A row without a
-    # path gets a library query that finds nothing: a list whose path is
-    # empty when Home opens never loads, and the bare suffix logs an error.
-    for page in PAGES:
-        for slot in range(1, MAX_ROWS + 1):
-            key = prop('silo.%s.%d.path' % (page, slot))
-            out += ('    <variable name="SiloPath_%s_%d">\n'
-                    '        <value condition="!String.IsEmpty(%s)">$INFO[%s]&amp;refresh=$INFO[%s]</value>\n'
-                    '        <value>%s</value>\n'
-                    '    </variable>\n' % (page, slot, key, key, prop('silokodi.library_updated'), NO_ROW))
     out += EMPTY_HOME
     for name, entries in HERO:
         out += '    <variable name="%s">\n' % name
