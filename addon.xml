@@ -3,7 +3,7 @@
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0"/>
 		<!-- Fills the home rows; without it the rows stay empty. -->
-		<import addon="plugin.video.silokodiconnect" version="0.9.1" optional="true"/>
+		<import addon="plugin.video.silokodiconnect" version="0.9.2" optional="true"/>
 	</requires>
 	<extension point="xbmc.gui.skin" debugging="false">
 		<res width="1920" height="1440" aspect="4:3" default="false" folder="xml" />
@@ -20,10 +20,14 @@
 		<description lang="en_GB">Silo Skyline gives Kodi the Silo TV apps' Skyline home: the focused title's artwork in the top right, its logo, details and plot below it, and rows of titles underneath, set up automatically from your Silo home and libraries through SiloKodiConnect. Everything else is Estuary, Kodi's default skin by phil65 and Team Kodi. Community project: not made or endorsed by the Silo team.</description>
 		<platform>all</platform>
 		<license>GPL-2.0-only (code), CC-BY-SA-4.0 (Estuary artwork), OFL-1.1 (Inter font)</license>
-		<source>https://github.com/im85288/skin.silo.skyline</source>
+		<source>https://github.com/im85288/SiloSkyline</source>
 		<assets>
 			<icon>resources/icon.png</icon>
 			<fanart>resources/fanart.jpg</fanart>
+			<screenshot>resources/screenshot-01.jpg</screenshot>
+			<screenshot>resources/screenshot-02.jpg</screenshot>
+			<screenshot>resources/screenshot-03.jpg</screenshot>
+			<screenshot>resources/screenshot-04.jpg</screenshot>
 		</assets>
 	</extension>
 </addon>
