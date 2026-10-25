@@ -177,9 +177,7 @@ def row(page, page_index, slot, landscape):
     card = LANDSCAPE if landscape else POSTER
     key = 'silo.%s.%d' % (page, slot)
     rules = '$EXP[SiloRow%d]' % list_id(page_index, slot, landscape)
-    # The library_updated suffix changes when SiloKodiConnect writes the
-    # library, which makes Kodi reload the row.
-    path = '$INFO[%s]&amp;refresh=$INFO[%s]' % (prop(key + '.path'), prop('silokodi.library_updated'))
+    path = '$VAR[SiloPath_%s_%d]' % (page, slot)
     item_w = card['width'] + card['gap']
     item_h = card['height'] + 12 + CAPTION_H
     return '''
@@ -416,7 +414,7 @@ def build():
             <width>1600</width><height>60</height>
             <font>silo_row</font>
             <textcolor>%(dim)s</textcolor>
-            <label>Sign in to Silo in SiloKodiConnect to fill this screen.</label>
+            <label>$VAR[SiloEmptyHome]</label>
             <visible>%(no_rows)s</visible>
         </control>
 
@@ -500,6 +498,16 @@ CARDS = '''
 '''
 
 
+# Home's message before SiloKodiConnect has published any rows: it publishes
+# silokodi.signed_in as soon as its service starts.
+EMPTY_HOME = '''    <variable name="SiloEmptyHome">
+        <value condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Install SiloKodiConnect and sign in to Silo to fill this screen.</value>
+        <value condition="String.IsEqual(Window(Home).Property(silokodi.signed_in),false)">Sign in to Silo in SiloKodiConnect to fill this screen.</value>
+        <value>Loading Silo…</value>
+    </variable>
+'''
+
+
 def variables():
     rows = [list_id(index, slot, landscape) for index in range(len(PAGES))
             for slot in range(1, MAX_ROWS + 1) for landscape in (False, True)]
@@ -516,6 +524,16 @@ def variables():
         terms = ['[String.IsEqual(%s,%d) + !String.IsEmpty(Container(%d).ListItem.Property(%s))]'
                  % (prop('silo.row'), row_id, row_id, item_property) for row_id in rows]
         out += '    <expression name="Has%s">%s</expression>\n' % (name, ' | '.join(terms))
+    # Each row's path, empty while the row has none: Kodi would otherwise
+    # try to load the bare suffix. The library_updated suffix changes when
+    # SiloKodiConnect writes the library, which makes Kodi reload the row.
+    for page in PAGES:
+        for slot in range(1, MAX_ROWS + 1):
+            key = prop('silo.%s.%d.path' % (page, slot))
+            out += ('    <variable name="SiloPath_%s_%d">\n'
+                    '        <value condition="!String.IsEmpty(%s)">$INFO[%s]&amp;refresh=$INFO[%s]</value>\n'
+                    '    </variable>\n' % (page, slot, key, key, prop('silokodi.library_updated')))
+    out += EMPTY_HOME
     for name, entries in HERO:
         out += '    <variable name="%s">\n' % name
         for row_id in rows:
