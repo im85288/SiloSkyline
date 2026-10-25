@@ -179,6 +179,8 @@ if __name__ == '__main__':
     play_circle()
     # Silo's skip pill outline (Up Next's Skip intro), stretched with border="48".
     focus_ring('pill_ring.png', 96, 96, 48, 4)
+    # Silo's season pills: a 2 px outline at the pills' own size, border="28".
+    focus_ring('season_ring.png', 56, 56, 28, 2)
     pill()
     scrim()
     # Cast photos: round, with a ring 6 px outside the photo.

@@ -2899,112 +2899,6 @@
     </variable>
     <!-- end Silo Skyline -->
 
-    <!-- Silo Skyline detail (tools/build_info.py) -->
-    <variable name="SiloDetailArt">
-        <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
-        <value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
-        <value>$INFO[ListItem.Art(landscape)]</value>
-    </variable>
-    <variable name="SiloDetailLogo">
-        <value condition="!String.IsEmpty(ListItem.Art(clearlogo))">$INFO[ListItem.Art(clearlogo)]</value>
-        <value>$INFO[ListItem.Art(tvshow.clearlogo)]</value>
-    </variable>
-    <variable name="SiloDetailTitle">
-        <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.TVShowTitle]</value>
-        <value>$INFO[ListItem.Title]</value>
-    </variable>
-    <variable name="SiloRequestLabel">
-        <value condition="String.IsEqual(ListItem.Property(silo.request.requestable),true)">Request</value>
-        <value condition="!String.IsEmpty(ListItem.Property(silo.request.label))">$INFO[ListItem.Property(silo.request.label)]</value>
-        <value>Not available to request</value>
-    </variable>
-    <variable name="SiloDetailMpaa">
-        <value condition="!String.IsEmpty(ListItem.Mpaa)">$INFO[ListItem.Mpaa]</value>
-        <value>$INFO[ListItem.Property(silo.mpaa)]</value>
-    </variable>
-    <variable name="SiloDetailFacts">
-        <value condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))">$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Property(silo.request.seasons), · , seasons]</value>
-        <value condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Duration(mins), · , min]</value>
-        <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.code))">$INFO[ListItem.Property(silo.code)]$INFO[ListItem.Title, · ,]$INFO[ListItem.Property(silo.aired), · ,]$INFO[ListItem.Duration(mins), · , min]</value>
-        <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Season,S,]$INFO[ListItem.Episode,E,]$INFO[ListItem.Title, · ,]$INFO[ListItem.Premiered, · ,]$INFO[ListItem.Duration(mins), · , min]</value>
-        <value condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Property(silo.genre))">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.genre), · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Property(TotalEpisodes), · , episodes]</value>
-        <value condition="!String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Property(silo.genre))">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.genre), · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Duration(mins), · , min]</value>
-        <value condition="String.IsEqual(ListItem.DBType,tvshow)">$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$VAR[SiloDetailRating]$VAR[SiloDetailSeasons]</value>
-        <value>$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$VAR[SiloDetailRating]$INFO[ListItem.Duration(mins), · , min]</value>
-    </variable>
-    <variable name="SiloDetailCredit">
-        <value condition="!String.IsEmpty(ListItem.Director)">Directed by $INFO[ListItem.Director]</value>
-        <value condition="!String.IsEmpty(ListItem.Property(silo.cast))">$INFO[ListItem.Property(silo.cast)]</value>
-        <value>$INFO[ListItem.Studio]</value>
-    </variable>
-    <variable name="SiloDetailPlayLabel">
-        <value condition="String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)">$LOCALIZE[1024]</value>
-        <value condition="ListItem.IsResumable">Resume</value>
-        <value>$LOCALIZE[208]</value>
-    </variable>
-    <variable name="SiloDetailResolutionSuffix">
-        <value condition="String.IsEqual(ListItem.VideoResolution,4K)"></value>
-        <value>P</value>
-    </variable>
-    <variable name="SiloDetailHdr">
-        <value condition="String.IsEqual(ListItem.HdrType,dolbyvision)">DOLBY VISION</value>
-        <value condition="String.IsEqual(ListItem.HdrType,hdr10)">HDR10</value>
-        <value condition="String.IsEqual(ListItem.HdrType,hlg)">HLG</value>
-        <value>$INFO[ListItem.HdrType]</value>
-    </variable>
-    <!-- Kodi's stream details as Silo's badge: "DTS 5.1", not "dts 6". -->
-    <variable name="SiloDetailAudio">
-        <value>$VAR[SiloDetailAudioCodec]$VAR[SiloDetailAudioLayout]</value>
-    </variable>
-    <variable name="SiloDetailAudioCodec">
-        <value condition="String.IsEqual(ListItem.AudioCodec,eac3)">DD+</value>
-        <value condition="String.IsEqual(ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(ListItem.AudioCodec,truehd)">TRUEHD</value>
-        <value condition="String.IsEqual(ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(ListItem.AudioCodec,dtshd_hra)">DTS-HD</value>
-        <value condition="String.IsEqual(ListItem.AudioCodec,dca)">DTS</value>
-        <value condition="String.IsEqual(ListItem.AudioCodec,dts)">DTS</value>
-        <value condition="String.IsEqual(ListItem.AudioCodec,aac)">AAC</value>
-        <value condition="String.IsEqual(ListItem.AudioCodec,flac)">FLAC</value>
-        <value condition="String.IsEqual(ListItem.AudioCodec,opus)">OPUS</value>
-        <value condition="String.IsEqual(ListItem.AudioCodec,mp3)">MP3</value>
-        <value condition="String.IsEqual(ListItem.AudioCodec,pcm)">PCM</value>
-        <value>$INFO[ListItem.AudioCodec]</value>
-    </variable>
-    <variable name="SiloDetailAudioLayout">
-        <value condition="Integer.IsEqual(ListItem.AudioChannels,1)"> 1.0</value>
-        <value condition="Integer.IsEqual(ListItem.AudioChannels,2)"> 2.0</value>
-        <value condition="Integer.IsEqual(ListItem.AudioChannels,6)"> 5.1</value>
-        <value condition="Integer.IsEqual(ListItem.AudioChannels,8)"> 7.1</value>
-        <value>$INFO[ListItem.AudioChannels, ,]</value>
-    </variable>
-    <!-- The rating named by its source, as Silo shows it (SiloKodiConnect stores
-         IMDb's, else TMDB's). -->
-    <variable name="SiloDetailRating">
-        <value condition="!String.IsEmpty(ListItem.Rating(imdb))">$INFO[ListItem.Rating(imdb), · IMDb ,]</value>
-        <value condition="!String.IsEmpty(ListItem.Rating(themoviedb))">$INFO[ListItem.Rating(themoviedb), · TMDB ,]</value>
-        <value>$INFO[ListItem.Rating, · ★ ,]</value>
-    </variable>
-    <variable name="SiloDetailSeasons">
-        <value condition="Integer.IsEqual(ListItem.Property(TotalSeasons),1)"> · 1 season</value>
-        <value condition="Integer.IsGreater(ListItem.Property(TotalSeasons),1)">$INFO[ListItem.Property(TotalSeasons), · , seasons]</value>
-    </variable>
-    <variable name="SiloDetailNextLabel">
-        <value condition="Integer.IsGreater(Container(62).NumItems,0) + Integer.IsGreater(Container(62).ListItem.PercentPlayed,0)">Resume S$INFO[Container(62).ListItem.Season] · E$INFO[Container(62).ListItem.Episode]</value>
-        <value condition="Integer.IsGreater(Container(62).NumItems,0)">Play S$INFO[Container(62).ListItem.Season] · E$INFO[Container(62).ListItem.Episode]</value>
-        <value condition="Container(62).IsUpdating">$LOCALIZE[208]</value>
-        <value>$LOCALIZE[1024]</value>
-    </variable>
-    <variable name="SiloEpisodeSeason">
-        <value condition="Integer.IsEqual(ListItem.Season,0)">Specials</value>
-        <value>Season $INFO[ListItem.Season]</value>
-    </variable>
-    <variable name="SiloSeasonLabel">
-        <value condition="String.StartsWith(ListItem.Label,*)">All episodes</value>
-        <value>$INFO[ListItem.Label]</value>
-    </variable>
-    <!-- end Silo Skyline detail -->
-
     <!-- Silo Skyline browse (tools/build_browse.py) -->
     <expression name="SiloBrowseGrid">Container.Content(movies) | Container.Content(tvshows) | Container.Content(sets) | Container.Content(seasons)</expression>
     <expression name="SiloBrowseEpisodes">Container.Content(episodes)</expression>
@@ -3128,4 +3022,124 @@
         <value>Auto</value>
     </variable>
     <!-- end Silo Skyline menu editor -->
+
+    <!-- Silo Skyline detail (tools/build_info.py) -->
+    <variable name="SiloDetailArt">
+        <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
+        <value>$INFO[ListItem.Art(landscape)]</value>
+    </variable>
+    <variable name="SiloDetailLogo">
+        <value condition="!String.IsEmpty(ListItem.Art(clearlogo))">$INFO[ListItem.Art(clearlogo)]</value>
+        <value>$INFO[ListItem.Art(tvshow.clearlogo)]</value>
+    </variable>
+    <variable name="SiloDetailTitle">
+        <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.TVShowTitle]</value>
+        <value>$INFO[ListItem.Title]</value>
+    </variable>
+    <variable name="SiloRequestLabel">
+        <value condition="String.IsEqual(ListItem.Property(silo.request.requestable),true)">Request</value>
+        <value condition="!String.IsEmpty(ListItem.Property(silo.request.label))">$INFO[ListItem.Property(silo.request.label)]</value>
+        <value>Not available to request</value>
+    </variable>
+    <variable name="SiloDetailMpaa">
+        <value condition="!String.IsEmpty(ListItem.Mpaa)">$INFO[ListItem.Mpaa]</value>
+        <value>$INFO[ListItem.Property(silo.mpaa)]</value>
+    </variable>
+    <variable name="SiloDetailFacts">
+        <value condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))">$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Property(silo.request.seasons), · , seasons]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Duration(mins), · , min]</value>
+        <!-- Silo's order: date · runtime · IMDb · TMDB · Season · Episode. -->
+        <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.air_date))">$INFO[ListItem.Property(silo.air_date)]$INFO[ListItem.Duration(mins), · , min]$INFO[ListItem.Property(silo.rating.imdb), · IMDb ,]$INFO[ListItem.Property(silo.rating.tmdb), · TMDB ,]$INFO[ListItem.Season, · Season ,]$INFO[ListItem.Episode, · Episode ,]</value>
+        <value condition="String.IsEqual(ListItem.DBType,movie) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]">$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), · , min]$INFO[ListItem.Property(silo.rating.imdb), · IMDb ,]$INFO[ListItem.Property(silo.rating.tmdb), · TMDB ,]$INFO[ListItem.Property(silo.genre), · ,]</value>
+        <value condition="String.IsEqual(ListItem.DBType,tvshow) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.rating.imdb), · IMDb ,]$INFO[ListItem.Property(silo.rating.tmdb), · TMDB ,]$INFO[ListItem.Property(silo.genre), · ,]$VAR[SiloDetailSeasons]</value>
+        <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.code))">$INFO[ListItem.Property(silo.code)]$INFO[ListItem.Title, · ,]$INFO[ListItem.Property(silo.aired), · ,]$INFO[ListItem.Duration(mins), · , min]</value>
+        <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Season,S,]$INFO[ListItem.Episode,E,]$INFO[ListItem.Title, · ,]$INFO[ListItem.Premiered, · ,]$INFO[ListItem.Duration(mins), · , min]</value>
+        <value condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Property(silo.genre))">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.genre), · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Property(TotalEpisodes), · , episodes]</value>
+        <value condition="!String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Property(silo.genre))">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.genre), · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Duration(mins), · , min]</value>
+        <value condition="String.IsEqual(ListItem.DBType,tvshow)">$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$VAR[SiloDetailRating]$VAR[SiloDetailSeasons]</value>
+        <value>$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$VAR[SiloDetailRating]$INFO[ListItem.Duration(mins), · , min]</value>
+    </variable>
+    <variable name="SiloDetailPlot">
+        <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Title,, · ]$INFO[ListItem.Plot]</value>
+        <value>$INFO[ListItem.Plot]</value>
+    </variable>
+    <variable name="SiloDetailTech">
+        <value>$INFO[ListItem.Property(silo.version),[COLOR 8CEDEDED]VERSION[/COLOR]  ,          ]$INFO[ListItem.Property(silo.audio),[COLOR 8CEDEDED]AUDIO[/COLOR]  ,          ]$INFO[ListItem.Property(silo.subtitles),[COLOR 8CEDEDED]SUBTITLES[/COLOR]  ,]</value>
+    </variable>
+    <variable name="SiloDetailCredit">
+        <value condition="!String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.Property(silo.cast))">Starring $INFO[ListItem.Property(silo.cast)]</value>
+        <value condition="!String.IsEmpty(ListItem.Director)">Directed by $INFO[ListItem.Director]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(silo.cast))">Starring $INFO[ListItem.Property(silo.cast)]</value>
+        <value>$INFO[ListItem.Studio]</value>
+    </variable>
+    <variable name="SiloDetailPlayLabel">
+        <value condition="String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)">$LOCALIZE[1024]</value>
+        <value condition="String.IsEqual(ListItem.DBType,episode) + ListItem.IsResumable">Resume S$INFO[ListItem.Season]:E$INFO[ListItem.Episode]</value>
+        <value condition="String.IsEqual(ListItem.DBType,episode)">Play S$INFO[ListItem.Season]:E$INFO[ListItem.Episode]</value>
+        <value condition="ListItem.IsResumable">Resume</value>
+        <value>$LOCALIZE[208]</value>
+    </variable>
+    <variable name="SiloDetailResolutionSuffix">
+        <value condition="String.IsEqual(ListItem.VideoResolution,4K)"></value>
+        <value>P</value>
+    </variable>
+    <variable name="SiloDetailHdr">
+        <value condition="String.IsEqual(ListItem.HdrType,dolbyvision)">DOLBY VISION</value>
+        <value condition="String.IsEqual(ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(ListItem.HdrType,hlg)">HLG</value>
+        <value>$INFO[ListItem.HdrType]</value>
+    </variable>
+    <!-- Kodi's stream details as Silo's badge: "DTS 5.1", not "dts 6". -->
+    <variable name="SiloDetailAudio">
+        <value>$VAR[SiloDetailAudioCodec]$VAR[SiloDetailAudioLayout]</value>
+    </variable>
+    <variable name="SiloDetailAudioCodec">
+        <value condition="String.IsEqual(ListItem.AudioCodec,eac3)">DD+</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,ac3)">DD</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,truehd)">TRUEHD</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,dtshd_hra)">DTS-HD</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,dca)">DTS</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,dts)">DTS</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,aac)">AAC</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,flac)">FLAC</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,opus)">OPUS</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,mp3)">MP3</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,pcm)">PCM</value>
+        <value>$INFO[ListItem.AudioCodec]</value>
+    </variable>
+    <variable name="SiloDetailAudioLayout">
+        <value condition="Integer.IsEqual(ListItem.AudioChannels,1)"> 1.0</value>
+        <value condition="Integer.IsEqual(ListItem.AudioChannels,2)"> 2.0</value>
+        <value condition="Integer.IsEqual(ListItem.AudioChannels,6)"> 5.1</value>
+        <value condition="Integer.IsEqual(ListItem.AudioChannels,8)"> 7.1</value>
+        <value>$INFO[ListItem.AudioChannels, ,]</value>
+    </variable>
+    <!-- The rating named by its source, as Silo shows it (SiloKodiConnect stores
+         IMDb's, else TMDB's). -->
+    <variable name="SiloDetailRating">
+        <value condition="!String.IsEmpty(ListItem.Rating(imdb))">$INFO[ListItem.Rating(imdb), · IMDb ,]</value>
+        <value condition="!String.IsEmpty(ListItem.Rating(themoviedb))">$INFO[ListItem.Rating(themoviedb), · TMDB ,]</value>
+        <value>$INFO[ListItem.Rating, · ★ ,]</value>
+    </variable>
+    <variable name="SiloDetailSeasons">
+        <value condition="Integer.IsEqual(ListItem.Property(TotalSeasons),1)"> · 1 season</value>
+        <value condition="Integer.IsGreater(ListItem.Property(TotalSeasons),1)">$INFO[ListItem.Property(TotalSeasons), · , seasons]</value>
+    </variable>
+    <variable name="SiloDetailNextLabel">
+        <value condition="Integer.IsGreater(Container(62).NumItems,0) + Integer.IsGreater(Container(62).ListItem.PercentPlayed,0)">Resume S$INFO[Container(62).ListItem.Season] · E$INFO[Container(62).ListItem.Episode]</value>
+        <value condition="Integer.IsGreater(Container(62).NumItems,0)">Play S$INFO[Container(62).ListItem.Season] · E$INFO[Container(62).ListItem.Episode]</value>
+        <value condition="Container(62).IsUpdating">$LOCALIZE[208]</value>
+        <value>$LOCALIZE[1024]</value>
+    </variable>
+    <variable name="SiloEpisodeSeason">
+        <value condition="Integer.IsEqual(ListItem.Season,0)">Specials</value>
+        <value>Season $INFO[ListItem.Season]</value>
+    </variable>
+    <variable name="SiloSeasonLabel">
+        <value condition="String.StartsWith(ListItem.Label,*)">All episodes</value>
+        <value>$INFO[ListItem.Label]</value>
+    </variable>
+    <!-- end Silo Skyline detail -->
 </includes>

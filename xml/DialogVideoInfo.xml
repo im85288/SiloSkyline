@@ -81,7 +81,7 @@
                 <width>900</width><height>106</height>
                 <font>silo_plot</font>
                 <textcolor>BFEDEDED</textcolor>
-                <label>$INFO[ListItem.Plot]</label>
+                <label>$VAR[SiloDetailPlot]</label>
             </control>
             <control type="label">
                 <top>362</top>
@@ -89,6 +89,16 @@
                 <font>silo_detail</font>
                 <textcolor>BFEDEDED</textcolor>
                 <label>$VAR[SiloDetailCredit]</label>
+            </control>
+            <!-- Silo's Version / Audio / Subtitles line, else the quality badges. -->
+            <control type="label">
+                <top>400</top>
+                <width>1300</width><height>40</height>
+                <aligny>center</aligny>
+                <font>silo_detail</font>
+                <textcolor>BFEDEDED</textcolor>
+                <label>$VAR[SiloDetailTech]</label>
+                <visible>[!String.IsEmpty(ListItem.Property(silo.version)) | !String.IsEmpty(ListItem.Property(silo.audio))]</visible>
             </control>
             <control type="grouplist">
                 <top>406</top>
@@ -167,6 +177,7 @@
                     <texturefocus border="8">silo/badge_fill.png</texturefocus>
                     <visible>!!String.IsEmpty(ListItem.Property(silo.badge1)) + !String.IsEmpty(ListItem.AudioCodec)</visible>
                 </control>
+                <visible>![!String.IsEmpty(ListItem.Property(silo.version)) | !String.IsEmpty(ListItem.Property(silo.audio))]</visible>
             </control>
             <!-- Actions: Play (or Resume / Browse), then round buttons. -->
             <control type="grouplist" id="5000">
@@ -182,6 +193,12 @@
                      would Browse); Browse once every episode is watched. Kodi reserves
                      ids 5-15 in this window (12 chooses art), so this is 300. -->
                 <control type="button" id="300">
+                    <onright condition="Control.IsVisible(301)">SetFocus(301)</onright>
+                    <onright condition="Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(8)</onright>
+                    <onright condition="Control.IsVisible(1302) + !Control.IsVisible(301) + !Control.IsVisible(1008)">SetFocus(302)</onright>
+                    <onright condition="Control.IsVisible(1011) + !Control.IsVisible(301) + !Control.IsVisible(1008) + !Control.IsVisible(1302)">SetFocus(11)</onright>
+                    <onright condition="Control.IsVisible(1014) + !Control.IsVisible(301) + !Control.IsVisible(1008) + !Control.IsVisible(1302) + !Control.IsVisible(1011)">SetFocus(14)</onright>
+                    <onright condition="Control.IsVisible(1303) + !Control.IsVisible(301) + !Control.IsVisible(1008) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1014)">SetFocus(303)</onright>
                     <width min="220">auto</width><height>64</height>
                     <label>$VAR[SiloDetailNextLabel]</label>
                     <font>silo_tab</font>
@@ -199,6 +216,12 @@
                 </control>
                 <!-- A Requests card: Request it, or its state when Silo already has it. -->
                 <control type="button" id="301">
+                    <onright condition="Control.IsVisible(1008)">SetFocus(8)</onright>
+                    <onright condition="Control.IsVisible(1302) + !Control.IsVisible(1008)">SetFocus(302)</onright>
+                    <onright condition="Control.IsVisible(1011) + !Control.IsVisible(1008) + !Control.IsVisible(1302)">SetFocus(11)</onright>
+                    <onright condition="Control.IsVisible(1014) + !Control.IsVisible(1008) + !Control.IsVisible(1302) + !Control.IsVisible(1011)">SetFocus(14)</onright>
+                    <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1008) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1014)">SetFocus(303)</onright>
+                    <onleft condition="Control.IsVisible(300)">SetFocus(300)</onleft>
                     <visible>!String.IsEmpty(ListItem.Property(silo.request.tmdb))</visible>
                     <width min="220">auto</width><height>64</height>
                     <label>$VAR[SiloRequestLabel]</label>
@@ -213,22 +236,91 @@
                     <onclick condition="String.IsEqual(ListItem.Property(silo.request.requestable),true)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)]&amp;title=$ESCINFO[ListItem.Title])</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.request.requestable),true)">Dialog.Close(movieinformation)</onclick>
                 </control>
-                <control type="button" id="8">
+                <!-- Play or Resume, with Silo's play icon. Its group has an id: the
+                     grouplist moves only between children with ids. -->
+                <control type="group" id="1008">
+                    <width>340</width><height>64</height>
                     <visible>![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + !!String.IsEmpty(ListItem.Property(silo.request.tmdb))</visible>
-                    <width min="220">auto</width><height>64</height>
-                    <label>$VAR[SiloDetailPlayLabel]</label>
-                    <font>silo_tab</font>
-                    <textoffsetx>40</textoffsetx>
-                    <align>center</align><aligny>center</aligny>
-                    <textcolor>FFEDEDED</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
-                    <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
-                    <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
+                    <control type="button" id="8">
+                    <onright condition="Control.IsVisible(1302)">SetFocus(302)</onright>
+                    <onright condition="Control.IsVisible(1011) + !Control.IsVisible(1302)">SetFocus(11)</onright>
+                    <onright condition="Control.IsVisible(1014) + !Control.IsVisible(1302) + !Control.IsVisible(1011)">SetFocus(14)</onright>
+                    <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1014)">SetFocus(303)</onright>
+                    <onleft condition="Control.IsVisible(301)">SetFocus(301)</onleft>
+                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(301)">SetFocus(300)</onleft>
+                        <width>340</width><height>64</height>
+                        <label />
+                        <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+                        <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
+                    </control>
+                    <!-- The label beside the icon (a button's own label is inset on
+                         both sides, and scrolled when it didn't fit). -->
+                    <control type="label">
+                        <left>78</left><width>250</width><height>64</height>
+                        <aligny>center</aligny>
+                        <font>silo_tab</font>
+                        <textcolor>FF000000</textcolor>
+                        <label>$VAR[SiloDetailPlayLabel]</label>
+                        <visible>Control.HasFocus(8)</visible>
+                    </control>
+                    <control type="label">
+                        <left>78</left><width>250</width><height>64</height>
+                        <aligny>center</aligny>
+                        <font>silo_tab</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$VAR[SiloDetailPlayLabel]</label>
+                        <visible>!Control.HasFocus(8)</visible>
+                    </control>
+                    <control type="image">
+                        <left>36</left><top>18</top><width>28</width><height>28</height>
+                        <texture colordiffuse="FF000000">osd/fullscreen/buttons/play.png</texture>
+                        <visible>Control.HasFocus(8)</visible>
+                    </control>
+                    <control type="image">
+                        <left>36</left><top>18</top><width>28</width><height>28</height>
+                        <texture colordiffuse="FFEDEDED">osd/fullscreen/buttons/play.png</texture>
+                        <visible>!Control.HasFocus(8)</visible>
+                    </control>
                 </control>
-                <control type="group">
+                <control type="group" id="1302">
+                    <width>64</width><height>64</height>
+                    <visible>String.IsEqual(ListItem.DBType,episode)</visible>
+                    <control type="button" id="302">
+                    <onright condition="Control.IsVisible(1011)">SetFocus(11)</onright>
+                    <onright condition="Control.IsVisible(1014) + !Control.IsVisible(1011)">SetFocus(14)</onright>
+                    <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1011) + !Control.IsVisible(1014)">SetFocus(303)</onright>
+                    <onleft condition="Control.IsVisible(1008)">SetFocus(8)</onleft>
+                    <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
+                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
+                        <width>64</width><height>64</height>
+                        <label />
+                        <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+                        <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
+                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=previous&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    </control>
+                    <control type="image">
+                        <left>16</left><top>16</top>
+                        <width>32</width><height>32</height>
+                        <texture colordiffuse="FF000000">osd/fullscreen/buttons/previous.png</texture>
+                        <visible>Control.HasFocus(302)</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left><top>16</top>
+                        <width>32</width><height>32</height>
+                        <texture colordiffuse="FFEDEDED">osd/fullscreen/buttons/previous.png</texture>
+                        <visible>!Control.HasFocus(302)</visible>
+                    </control>
+                </control>
+                <control type="group" id="1011">
                     <width>64</width><height>64</height>
                     <visible>!String.IsEmpty(ListItem.Trailer)</visible>
                     <control type="button" id="11">
+                    <onright condition="Control.IsVisible(1014)">SetFocus(14)</onright>
+                    <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1014)">SetFocus(303)</onright>
+                    <onleft condition="Control.IsVisible(1302)">SetFocus(302)</onleft>
+                    <onleft condition="Control.IsVisible(1008) + !Control.IsVisible(1302)">SetFocus(8)</onleft>
+                    <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1302) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
+                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1302) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>64</width><height>64</height>
                         <label />
                         <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
@@ -247,10 +339,16 @@
                         <visible>!Control.HasFocus(11)</visible>
                     </control>
                 </control>
-                <control type="group">
+                <control type="group" id="1014">
                     <width>64</width><height>64</height>
                     <visible>String.IsEqual(ListItem.DBType,movie) + Integer.IsGreater(ListItem.VideoVersionsCount,1)</visible>
                     <control type="button" id="14">
+                    <onright condition="Control.IsVisible(1303)">SetFocus(303)</onright>
+                    <onleft condition="Control.IsVisible(1011)">SetFocus(11)</onleft>
+                    <onleft condition="Control.IsVisible(1302) + !Control.IsVisible(1011)">SetFocus(302)</onleft>
+                    <onleft condition="Control.IsVisible(1008) + !Control.IsVisible(1011) + !Control.IsVisible(1302)">SetFocus(8)</onleft>
+                    <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
+                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>64</width><height>64</height>
                         <label />
                         <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
@@ -267,6 +365,35 @@
                         <width>32</width><height>32</height>
                         <texture colordiffuse="FFEDEDED">icons/infodialogs/versions.png</texture>
                         <visible>!Control.HasFocus(14)</visible>
+                    </control>
+                </control>
+                <control type="group" id="1303">
+                    <width>64</width><height>64</height>
+                    <visible>[String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow)] + String.IsEmpty(ListItem.Property(silo.request.tmdb))</visible>
+                    <control type="button" id="303">
+                    <onleft condition="Control.IsVisible(1014)">SetFocus(14)</onleft>
+                    <onleft condition="Control.IsVisible(1011) + !Control.IsVisible(1014)">SetFocus(11)</onleft>
+                    <onleft condition="Control.IsVisible(1302) + !Control.IsVisible(1014) + !Control.IsVisible(1011)">SetFocus(302)</onleft>
+                    <onleft condition="Control.IsVisible(1008) + !Control.IsVisible(1014) + !Control.IsVisible(1011) + !Control.IsVisible(1302)">SetFocus(8)</onleft>
+                    <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1014) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
+                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1014) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
+                        <width>64</width><height>64</height>
+                        <label />
+                        <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+                        <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
+                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=more&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    </control>
+                    <control type="image">
+                        <left>16</left><top>16</top>
+                        <width>32</width><height>32</height>
+                        <texture colordiffuse="FF000000">icons/menu.png</texture>
+                        <visible>Control.HasFocus(303)</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left><top>16</top>
+                        <width>32</width><height>32</height>
+                        <texture colordiffuse="FFEDEDED">icons/menu.png</texture>
+                        <visible>!Control.HasFocus(303)</visible>
                     </control>
                 </control>
             </control>
@@ -303,40 +430,41 @@
                     <ondown>61</ondown>
                     <scrolltime tween="cubic" easing="out">200</scrolltime>
                     <content target="videos">videodb://tvshows/titles/$INFO[ListItem.DBID]/</content>
-                    <itemlayout width="236" height="56">
+                    <itemlayout width="184" height="56">
+                        <control type="image">
+                            <width>168</width><height>56</height>
+                            <texture border="28" colordiffuse="59FFFFFF">silo/season_ring.png</texture>
+                        </control>
                         <control type="label">
-                            <width>220</width><height>56</height>
+                            <width>168</width><height>56</height>
                             <align>center</align><aligny>center</aligny>
                             <font>silo_meta</font>
                             <textcolor>BFEDEDED</textcolor>
                             <label>$VAR[SiloSeasonLabel]</label>
                         </control>
                     </itemlayout>
-                    <focusedlayout width="236" height="56">
+                    <focusedlayout width="184" height="56">
                         <control type="image">
-                            <width>220</width><height>56</height>
-                            <texture border="28" colordiffuse="FFEDEDED">silo/pill.png</texture>
-                            <visible>Control.HasFocus(60)</visible>
-                        </control>
-                        <control type="image">
-                            <width>220</width><height>56</height>
-                            <texture border="28" colordiffuse="26FFFFFF">silo/pill.png</texture>
-                            <visible>!Control.HasFocus(60)</visible>
+                            <width>168</width><height>56</height>
+                            <texture border="28" colordiffuse="FFEDEDED">silo/pill.png</texture><visible>Control.HasFocus(60)</visible>
                         </control>
                         <control type="label">
-                            <width>220</width><height>56</height>
+                            <width>168</width><height>56</height>
                             <align>center</align><aligny>center</aligny>
                             <font>silo_meta</font>
-                            <textcolor>FF000000</textcolor><visible>Control.HasFocus(60)</visible>
-                            <label>$VAR[SiloSeasonLabel]</label>
+                            <textcolor>FF000000</textcolor>
+                            <label>$VAR[SiloSeasonLabel]</label><visible>Control.HasFocus(60)</visible>
+                        </control>
+                        <control type="image">
+                            <width>168</width><height>56</height>
+                            <texture border="28" colordiffuse="FFEDEDED">silo/season_ring.png</texture><visible>!Control.HasFocus(60)</visible>
                         </control>
                         <control type="label">
-                            <width>220</width><height>56</height>
+                            <width>168</width><height>56</height>
                             <align>center</align><aligny>center</aligny>
                             <font>silo_meta</font>
                             <textcolor>FFEDEDED</textcolor>
-                            <label>$VAR[SiloSeasonLabel]</label>
-                            <visible>!Control.HasFocus(60)</visible>
+                            <label>$VAR[SiloSeasonLabel]</label><visible>!Control.HasFocus(60)</visible>
                         </control>
                     </focusedlayout>
                 </control>
@@ -378,13 +506,6 @@
                             <textcolor>FFEDEDED</textcolor>
                             <label>S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</label>
                         </control>
-                        <control type="label">
-                            <left>6</left><top>256</top>
-                            <width>360</width><height>32</height>
-                            <font>silo_card_sub</font>
-                            <textcolor>BFEDEDED</textcolor>
-                            <label>$INFO[ListItem.Duration(mins),, min]</label>
-                        </control>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                         <control type="image">
@@ -425,14 +546,7 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</label>
-                            <scroll>true</scroll><scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
-                        </control>
-                        <control type="label">
-                            <left>6</left><top>256</top>
-                            <width>360</width><height>32</height>
-                            <font>silo_card_sub</font>
-                            <textcolor>BFEDEDED</textcolor>
-                            <label>$INFO[ListItem.Duration(mins),, min]</label>
+                            <scroll>true</scroll><scrollspeed>50</scrollspeed><scrollsuffix>     ·     </scrollsuffix>
                         </control>
                     </focusedlayout>
                 </control>
@@ -445,50 +559,71 @@
                 <visible>String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(64).NumItems,0) | Container(64).IsUpdating | Integer.IsGreater(Container(65).NumItems,0) | Container(65).IsUpdating]</visible>
                 <!-- Silo's season pills when the show has more than one season, else
                      the season's name. -->
+
+                <control type="button" id="309">
+                    <left>88</left><top>0</top>
+                    <width>118</width><height>56</height>
+                    <label>Show</label>
+                    <font>silo_meta</font>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>BFEDEDED</textcolor>
+                    <focusedcolor>FF000000</focusedcolor>
+                    <texturefocus border="28" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+                    <texturenofocus border="28" colordiffuse="59FFFFFF">silo/season_ring.png</texturenofocus>
+                    <onup>5000</onup>
+                    <onright>65</onright>
+                    <ondown>64</ondown>
+                    <onclick>SetProperty(silo.from_rail,1,home)</onclick>
+                    <onclick>Dialog.Close(movieinformation)</onclick>
+                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=tvshow&amp;dbid=$INFO[ListItem.TvShowDBID])</onclick>
+                    <visible>String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]</visible>
+                </control>
                 <control type="list" id="65">
                     <visible>String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.show_path))</visible>
                     <animation effect="fade" start="0" end="0" time="0" condition="![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">Conditional</animation>
-                    <left>82</left><top>0</top>
+                    <left>216</left><top>0</top>
+                    <onleft>309</onleft>
                     <width>1838</width><height>56</height>
                     <orientation>horizontal</orientation>
                     <onup>5000</onup>
                     <ondown>64</ondown>
                     <scrolltime tween="cubic" easing="out">200</scrolltime>
                     <content target="videos">$INFO[ListItem.Property(silo.show_path)]</content>
-                    <itemlayout width="236" height="56">
+                    <itemlayout width="184" height="56">
+                        <control type="image">
+                            <width>168</width><height>56</height>
+                            <texture border="28" colordiffuse="59FFFFFF">silo/season_ring.png</texture>
+                        </control>
                         <control type="label">
-                            <width>220</width><height>56</height>
+                            <width>168</width><height>56</height>
                             <align>center</align><aligny>center</aligny>
                             <font>silo_meta</font>
                             <textcolor>BFEDEDED</textcolor>
                             <label>$VAR[SiloSeasonLabel]</label>
                         </control>
                     </itemlayout>
-                    <focusedlayout width="236" height="56">
+                    <focusedlayout width="184" height="56">
                         <control type="image">
-                            <width>220</width><height>56</height>
-                            <texture border="28" colordiffuse="FFEDEDED">silo/pill.png</texture>
-                            <visible>Control.HasFocus(65)</visible>
-                        </control>
-                        <control type="image">
-                            <width>220</width><height>56</height>
-                            <texture border="28" colordiffuse="26FFFFFF">silo/pill.png</texture>
-                            <visible>!Control.HasFocus(65)</visible>
+                            <width>168</width><height>56</height>
+                            <texture border="28" colordiffuse="FFEDEDED">silo/pill.png</texture><visible>Control.HasFocus(65)</visible>
                         </control>
                         <control type="label">
-                            <width>220</width><height>56</height>
+                            <width>168</width><height>56</height>
                             <align>center</align><aligny>center</aligny>
                             <font>silo_meta</font>
-                            <textcolor>FF000000</textcolor><visible>Control.HasFocus(65)</visible>
-                            <label>$VAR[SiloSeasonLabel]</label>
+                            <textcolor>FF000000</textcolor>
+                            <label>$VAR[SiloSeasonLabel]</label><visible>Control.HasFocus(65)</visible>
+                        </control>
+                        <control type="image">
+                            <width>168</width><height>56</height>
+                            <texture border="28" colordiffuse="FFEDEDED">silo/season_ring.png</texture><visible>!Control.HasFocus(65)</visible>
                         </control>
                         <control type="label">
-                            <width>220</width><height>56</height>
+                            <width>168</width><height>56</height>
                             <align>center</align><aligny>center</aligny>
                             <font>silo_meta</font>
                             <textcolor>FFEDEDED</textcolor>
-                            <label>$VAR[SiloSeasonLabel]</label>
-                            <visible>!Control.HasFocus(65)</visible>
+                            <label>$VAR[SiloSeasonLabel]</label><visible>!Control.HasFocus(65)</visible>
                         </control>
                     </focusedlayout>
                 </control>
@@ -543,13 +678,6 @@
                             <textcolor>FFEDEDED</textcolor>
                             <label>S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</label>
                         </control>
-                        <control type="label">
-                            <left>6</left><top>256</top>
-                            <width>360</width><height>32</height>
-                            <font>silo_card_sub</font>
-                            <textcolor>BFEDEDED</textcolor>
-                            <label>$INFO[ListItem.Duration(mins),, min]</label>
-                        </control>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                         <control type="image">
@@ -590,14 +718,7 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</label>
-                            <scroll>true</scroll><scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
-                        </control>
-                        <control type="label">
-                            <left>6</left><top>256</top>
-                            <width>360</width><height>32</height>
-                            <font>silo_card_sub</font>
-                            <textcolor>BFEDEDED</textcolor>
-                            <label>$INFO[ListItem.Duration(mins),, min]</label>
+                            <scroll>true</scroll><scrollspeed>50</scrollspeed><scrollsuffix>     ·     </scrollsuffix>
                         </control>
                     </focusedlayout>
                 </control>
