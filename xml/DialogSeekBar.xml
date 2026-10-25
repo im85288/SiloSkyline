@@ -9,6 +9,7 @@
 	<controls>
 		<include>PVRChannelNumberInput</include>
 		<control type="group">
+			<visible>!$EXP[SiloVideoPlayer]</visible>
 			<animation effect="slide" start="0,200" end="0,0" time="300" tween="cubic" easing="out">VisibleChange</animation>
 			<visible>Player.ShowInfo | Window.IsActive(fullscreeninfo) | Player.ShowTime | Window.IsActive(videoosd) | Window.IsActive(musicosd) | Window.IsActive(playerprocessinfo) | Window.IsActive(pvrosdchannels) | Window.IsActive(pvrchannelguide) | ![!String.IsEmpty(Player.SeekNumeric) | Player.Seeking | Player.HasPerformedSeek(3) | Player.Forwarding | Player.Rewinding | Player.Paused] | !String.IsEmpty(PVR.ChannelNumberInput)</visible>
 			<visible>!Player.HasGame</visible>
@@ -427,6 +428,77 @@
 					<label>$VAR[OSDNextLabelVar]</label>
 					<visible>Integer.IsLess(Playlist.Position(video), Playlist.Length(video))</visible>
 				</control>
+			</control>
+		</control>
+		<!-- Silo Skyline: Silo's player chrome for video. Bottom-up, as in Silo's TV
+		     app at 1080p: buttons (VideoOSD) from 950, the clock row, the bar with a
+		     round handle, the title and an uppercase eyebrow, over a gradient. -->
+		<control type="group">
+			<visible>$EXP[SiloVideoPlayer]</visible>
+			<animation effect="fade" start="0" end="100" time="200">Visible</animation>
+			<animation effect="fade" start="100" end="0" time="200">Hidden</animation>
+			<control type="image">
+				<left>0</left><top>540</top><width>1920</width><height>540</height>
+				<texture>silo/scrim_bottom.png</texture>
+			</control>
+			<control type="label">
+				<left>96</left><top>738</top><width>1600</width><height>28</height>
+				<font>silo_badge</font>
+				<textcolor>C7EDEDED</textcolor>
+				<label>[UPPERCASE]$VAR[SiloPlayerEyebrow][/UPPERCASE]</label>
+			</control>
+			<control type="label">
+				<left>96</left><top>766</top><width>1600</width><height>66</height>
+				<font>silo_row</font>
+				<textcolor>FFEDEDED</textcolor>
+				<label>$INFO[VideoPlayer.Title]</label>
+			</control>
+			<!-- The bar: track, buffered, played. -->
+			<control type="image">
+				<left>96</left><top>862</top><width>1728</width><height>8</height>
+				<texture colordiffuse="33FFFFFF">colors/white.png</texture>
+			</control>
+			<control type="progress">
+				<left>96</left><top>862</top><width>1728</width><height>8</height>
+				<info>Player.ProgressCache</info>
+				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+				<midtexture colordiffuse="33FFFFFF">colors/white.png</midtexture>
+			</control>
+			<control type="progress">
+				<left>96</left><top>862</top><width>1728</width><height>8</height>
+				<info>Player.Progress</info>
+				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+				<midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+			</control>
+			<!-- The handle: where playback is, or where a seek will land. -->
+			<control type="slider">
+				<left>81</left><top>851</top><width>1758</width><height>30</height>
+				<info>Player.Progress</info>
+				<texturesliderbar colordiffuse="00FFFFFF">silo/avatar_mask.png</texturesliderbar>
+				<textureslidernib>silo/avatar_mask.png</textureslidernib>
+				<textureslidernibfocus>silo/avatar_mask.png</textureslidernibfocus>
+				<visible>!Player.Seeking</visible>
+			</control>
+			<control type="slider">
+				<left>81</left><top>851</top><width>1758</width><height>30</height>
+				<info>Player.SeekBar</info>
+				<texturesliderbar colordiffuse="00FFFFFF">silo/avatar_mask.png</texturesliderbar>
+				<textureslidernib>silo/avatar_mask.png</textureslidernib>
+				<textureslidernibfocus>silo/avatar_mask.png</textureslidernibfocus>
+				<visible>Player.Seeking</visible>
+			</control>
+			<control type="label">
+				<left>96</left><top>890</top><width>800</width><height>36</height>
+				<font>silo_detail</font>
+				<textcolor>FFEDEDED</textcolor>
+				<label>$VAR[SiloPlayerTime]</label>
+			</control>
+			<control type="label">
+				<left>924</left><top>890</top><width>900</width><height>36</height>
+				<align>right</align>
+				<font>silo_detail</font>
+				<textcolor>99EDEDED</textcolor>
+				<label>$INFO[Player.TimeRemaining,−,]$INFO[Player.FinishTime, · Ends ,]</label>
 			</control>
 		</control>
 	</controls>

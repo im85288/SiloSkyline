@@ -14,11 +14,14 @@ SUB = 4  # supersampling per axis for smooth edges
 
 
 def write_png(name, width, height, alpha_at, rgb=(255, 255, 255)):
+    """alpha_at(x, y) gives a pixel's alpha, or (alpha, (r, g, b)) to colour it too."""
     rows = []
     for y in range(height):
         row = bytearray([0])
         for x in range(width):
-            row += bytes(rgb) + bytes([max(0, min(255, int(alpha_at(x + 0.5, y + 0.5) * 255 + 0.5)))])
+            value = alpha_at(x + 0.5, y + 0.5)
+            alpha, colour = value if isinstance(value, tuple) else (value, rgb)
+            row += bytes(colour) + bytes([max(0, min(255, int(alpha * 255 + 0.5)))])
         rows.append(bytes(row))
 
     def chunk(tag, data):
@@ -53,13 +56,33 @@ def rounded_rect_coverage(x, y, width, height, radius, inset=0.0):
 
 
 def hero_mask(width=640, height=400):
-    """Skyline's corner mask: crisp at the top right, fading out toward the
-    left (over 55% of the width) and the bottom (over 45% of the height)."""
+    """Skyline's corner mask, with Silo's stops (TvRootHeroBackdrop): clear at
+    the left edge to solid at 68% of the width, and solid down to 58% of the
+    height, then clear at the bottom, each a straight ramp."""
     def alpha(x, y):
-        from_left = smoothstep(x / (width * 0.55))
-        from_bottom = smoothstep((height - y) / (height * 0.45))
+        from_left = min(1.0, x / (width * 0.68))
+        from_bottom = min(1.0, max(0.0, (height - y) / (height * 0.42)))
         return from_left * from_bottom
     write_png('hero_mask.png', width, height, alpha)
+
+
+def tint_wash(width=192, height=108):
+    """Silo's ambient wash, drawn in white for the skin to colour with the
+    title's tint: diagonal from the top right (opaque) to the bottom left
+    (18%), through 50% at 45% of the way (TvRootHeroBackdrop's stops)."""
+    stops = [(0.00, 1.0), (0.12, 0.91), (0.26, 0.76), (0.45, 0.5), (0.62, 0.385), (0.80, 0.282), (1.00, 0.18)]
+    # Compose's linearGradient from (w, 0) to (0, h) on a 1920x1080 page.
+    page_w, page_h = 1920.0, 1080.0
+
+    def alpha(x, y):
+        px, py = x / width * page_w, y / height * page_h
+        t = ((page_w - px) * page_w + py * page_h) / (page_w ** 2 + page_h ** 2)
+        t = min(1.0, max(0.0, t))
+        for (t0, a0), (t1, a1) in zip(stops, stops[1:]):
+            if t <= t1:
+                return a0 + (a1 - a0) * (t - t0) / (t1 - t0)
+        return stops[-1][1]
+    write_png('tint_wash.png', width, height, alpha)
 
 
 def card_mask(name, width, height, radius):
@@ -84,9 +107,39 @@ def scrim(height=256):
     write_png('scrim_bottom.png', 4, height, lambda x, y: smoothstep(y / float(height)) * 0.9, rgb=(0, 0, 0))
 
 
+
+def card_scrim(height=256):
+    """Silo's card scrim: clear over the top half, then darkening to 60% black
+    at the bottom edge. Drawn with the card's mask as its diffuse."""
+    write_png('card_scrim.png', 4, height,
+              lambda x, y: 0.6 * smoothstep((y / float(height) - 0.5) / 0.5), rgb=(0, 0, 0))
+
+
+def person_placeholder(size=172):
+    """A head-and-shoulders silhouette in a grey circle, for cast without a
+    photo (Kodi can't take a name's initials in a skin)."""
+    r = size / 2.0
+
+    def alpha(x, y):
+        hits = 0
+        for sy in range(SUB):
+            for sx in range(SUB):
+                px = x - 0.5 + (sx + 0.5) / SUB
+                py = y - 0.5 + (sy + 0.5) / SUB
+                if (px - r) ** 2 + (py - r) ** 2 > r * r:
+                    continue
+                head = (px - r) ** 2 + (py - size * 0.40) ** 2 <= (size * 0.17) ** 2
+                body = ((px - r) / (size * 0.32)) ** 2 + ((py - size * 0.95) / (size * 0.30)) ** 2 <= 1
+                hits += 1 if not (head or body) else 0
+        return hits / float(SUB * SUB)
+    # The circle is grey; the figure is cut out and drawn lighter under it.
+    write_png('person_placeholder.png', size, size, alpha, rgb=(0x2A, 0x2E, 0x35))
+
+
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
     hero_mask()
+    tint_wash()
     card_mask('card_poster_mask.png', 176, 264, 12)
     card_mask('card_landscape_mask.png', 360, 202, 14)
     # Rings sit 6 px outside the card on each side.
@@ -97,9 +150,40 @@ if __name__ == '__main__':
     pill()
     scrim()
     # Cast photos: round, with a ring 6 px outside the photo.
-    # The photo is drawn square and this frame, in the page colour with a round
-    # hole, covers its corners: a diffuse mask would stretch with aspectratio scale.
-    write_png('person_frame.png', 172, 172, lambda x, y: 1.0 - rounded_rect_coverage(x, y, 172, 172, 86),
-              rgb=(0x0D, 0x0F, 0x12))
+    # Cast photos: a round mask, and a ring 6 px outside the photo.
+    card_mask('person_mask.png', 172, 172, 86)
     focus_ring('person_ring.png', 184, 184, 92, 4)
+    # The profile avatar in the menu bar, and its focus ring 4 px outside it.
+    card_mask('avatar_mask.png', 56, 56, 28)
+    card_scrim()
+    # Silo's player buttons at rest: a 38% black disc with a 24% white ring.
+    def osd_button(x, y, size=76, ring=2.0):
+        disc = rounded_rect_coverage(x, y, size, size, size / 2.0)
+        inner = rounded_rect_coverage(x, y, size, size, size / 2.0, inset=ring)
+        ring_part = disc - inner
+        alpha = ring_part * 0.24 + inner * 0.38 + ring_part * 0.38 * (1 - 0.24)
+        if alpha <= 0:
+            return 0.0
+        grey = int(255 * ring_part * 0.24 / alpha)
+        return alpha, (grey, grey, grey)
+    write_png('osd_button_rest.png', 76, 76, osd_button)
+    # Dialog buttons: a rounded bar inset 10 px, so neighbours in a row don't
+    # touch; stretched with border="46".
+    # The busy spinner: Silo's Material arc, three quarters of a 6 px ring.
+    def arc(x, y, size=96.0, stroke=6.0):
+        import math
+        r_out, r_in = size / 2.0, size / 2.0 - stroke
+        hits = 0
+        for sy in range(SUB):
+            for sx in range(SUB):
+                px = x - 0.5 + (sx + 0.5) / SUB - size / 2.0
+                py = y - 0.5 + (sy + 0.5) / SUB - size / 2.0
+                d = math.hypot(px, py)
+                if r_in <= d <= r_out and math.atan2(py, px) % (2 * math.pi) < 1.5 * math.pi:
+                    hits += 1
+        return hits / float(SUB * SUB)
+    write_png('spinner_arc.png', 96, 96, arc)
+    write_png('dialog_button.png', 100, 100, lambda x, y: rounded_rect_coverage(x, y, 100, 100, 36, inset=10))
+    person_placeholder()
+    focus_ring('avatar_ring.png', 64, 64, 32, 3)
     print('Wrote', ', '.join(sorted(os.listdir(OUT))))

@@ -19,6 +19,8 @@
 				<top>82</top>
 				<width>855</width>
 				<height>165</height>
+				<font>silo_plot</font>
+				<textcolor>D9EDEDED</textcolor>
 				<label></label>
 				<autoscroll time="3000" delay="4000" repeat="5000">true</autoscroll>
 			</control>

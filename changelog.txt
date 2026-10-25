@@ -1,3 +1,11 @@
+[B]0.2.0[/B]
+• Series and episode pages: season pills, episode rails, Play or Resume for the next episode, opening on it
+• More Like This, Silo's ambient tint and art fade, round cast photos
+• Profile avatar in the menu bar; Movies and Series sections (Recommended, Browse, Collections)
+• Silo-style search, library browsing, player overlay, dialogs, menus, keyboard, notifications,
+  progress, spinner and settings
+• Home shows only the next row's title; Silo's card scrim, progress bars and dimmed titles
+
 [B]0.1.0[/B]
 • First release: Estuary rebuilt as the Silo TV apps' Skyline layout
 • Home, Movies and Series pages built from the rows SiloKodiConnect publishes from Silo

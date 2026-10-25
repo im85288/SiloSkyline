@@ -3,7 +3,10 @@
 	<defaultcontrol>3</defaultcontrol>
 	<backgroundcolor>background</backgroundcolor>
 	<controls>
-		<include>DefaultBackground</include>
+		<control type="image">
+			<left>0</left><top>0</top><width>1920</width><height>1080</height>
+			<texture colordiffuse="FF0D0F12">colors/white.png</texture>
+		</control>
 		<control type="multiimage">
 			<depth>DepthBackground</depth>
 			<include>FullScreenDimensions</include>
@@ -34,14 +37,14 @@
 				<top>130</top>
 				<right>0</right>
 				<height>2</height>
-				<texture colordiffuse="button_focus" border="2">dialogs/separator-grey.png</texture>
+				<texture colordiffuse="1AFFFFFF" border="2">dialogs/separator-grey.png</texture>
 			</control>
 			<control type="image">
 				<left>470</left>
 				<bottom>135</bottom>
 				<right>0</right>
 				<height>2</height>
-				<texture colordiffuse="button_focus" border="2">dialogs/separator-grey.png</texture>
+				<texture colordiffuse="1AFFFFFF" border="2">dialogs/separator-grey.png</texture>
 			</control>
 		</control>
 		<control type="button" id="7">
@@ -76,9 +79,8 @@
 			<label></label>
 			<align>center</align>
 			<aligny>center</aligny>
-			<font>font25_title</font>
-			<textcolor>grey</textcolor>
-			<shadowcolor>black</shadowcolor>
+			<font>silo_detail</font>
+			<textcolor>99EDEDED</textcolor>
 		</control>
 		<control type="colorbutton" id="15">
 			<description>Default ColorButton</description>
@@ -87,9 +89,6 @@
 		<control type="group">
 			<depth>DepthContentPanel</depth>
 			<include>OpenClose_Left</include>
-			<include content="ContentPanel">
-				<param name="width" value="530" />
-			</include>
 			<control type="grouplist" id="3">
 				<description>button area</description>
 				<left>0</left>
@@ -109,8 +108,10 @@
 				<width>470</width>
 				<textoffsetx>40</textoffsetx>
 				<aligny>center</aligny>
-				<font>font37</font>
-				<texturefocus colordiffuse="button_focus">lists/focus.png</texturefocus>
+				<font>silo_meta</font>
+				<textcolor>C7EDEDED</textcolor>
+				<focusedcolor>FF000000</focusedcolor>
+				<texturefocus border="46" colordiffuse="FFEDEDED">silo/dialog_button.png</texturefocus>
 				<texturenofocus />
 			</control>
 		</control>
@@ -136,10 +137,23 @@
 				<hitrect x="0" y="0" w="60" h="100%" />
 			</control>
 		</control>
-		<include content="TopBar">
-			<param name="breadcrumbs_label" value="$LOCALIZE[5]$INFO[Control.GetLabel(2), / ]" />
-		</include>
-		<include>BottomBar</include>
+		<!-- Silo Skyline: the wordmark and where you are, in place of Estuary's bars. -->
+		<control type="label">
+			<left>48</left><top>20</top>
+			<width>300</width><height>64</height>
+			<aligny>center</aligny>
+			<font>silo_wordmark</font>
+			<textcolor>FFEDEDED</textcolor>
+			<label>Silo</label>
+		</control>
+		<control type="label">
+			<left>470</left><top>20</top>
+			<width>1300</width><height>64</height>
+			<aligny>center</aligny>
+			<font>silo_row</font>
+			<textcolor>FFEDEDED</textcolor>
+			<label>$LOCALIZE[5]$INFO[Control.GetLabel(2), · ]</label>
+		</control>
 		<control type="group">
 			<depth>DepthContentPanel</depth>
 			<include>OpenClose_Left</include>
@@ -152,7 +166,8 @@
 				<onclick>SettingsLevelChange</onclick>
 				<textoffsetx>100</textoffsetx>
 				<textoffsety>0</textoffsety>
-				<texturefocus colordiffuse="button_focus">colors/white.png</texturefocus>
+				<font>silo_meta</font>
+				<texturefocus border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texturefocus>
 				<texturenofocus />
 				<radioposx>40</radioposx>
 				<radioposy>0</radioposy>
@@ -173,12 +188,12 @@
 			<control type="textbox" id="6">
 				<description>description area</description>
 				<left>510</left>
-				<bottom>25</bottom>
+				<bottom>30</bottom>
 				<right>60</right>
-				<height>104</height>
-				<font>font12</font>
-				<align>justify</align>
-				<textcolor>button_focus</textcolor>
+				<height>90</height>
+				<font>silo_detail</font>
+				<align>left</align>
+				<textcolor>99EDEDED</textcolor>
 				<autoscroll time="3000" delay="5000" repeat="5000">true</autoscroll>
 			</control>
 		</control>

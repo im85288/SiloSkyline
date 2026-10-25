@@ -27,7 +27,7 @@ Community project: not made or endorsed by the Silo team.
 
 ## Install
 
-Install and sign in to SiloKodiConnect 0.9.2 or newer first, then build a zip and use Kodi's
+Install and sign in to SiloKodiConnect 0.9.3 or newer first, then build a zip and use Kodi's
 **Add-ons -> Install from zip file**:
 
 ```bash
@@ -43,9 +43,11 @@ The Silo screens are generated: edit the scripts in `tools/`, not the XML they w
 - `tools/build_home.py` writes `xml/Home.xml`, its block in `xml/Variables.xml`, the Inter fonts in
   `xml/Font.xml` and the start-up focus timer in `xml/Timers.xml`.
 - `tools/build_info.py` writes `xml/DialogVideoInfo.xml` and its variables.
+- `tools/build_browse.py` writes `xml/MyVideoNav.xml` (library browsing) and its variables.
+- `tools/build_search.py` writes `xml/Custom_1190_SiloSearch.xml` (search) and its variables.
 - `tools/make_textures.py` draws the masks, focus rings, pills and badges in `media/silo/`.
 
-Run `build_home.py` before `build_info.py`, since both write blocks into `xml/Variables.xml`. Kodi reads a
+Run `build_home.py` first, then the others, since they all write blocks into `xml/Variables.xml`. Kodi reads a
 `$VAR` in a list's content path only once, when the window opens, so content paths stay `$INFO`; check
 changes with a cold Kodi start, not only `ReloadSkin()`.
 
