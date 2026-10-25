@@ -9965,8 +9965,10 @@
             <font>silo_wordmark</font>
             <textcolor>FFEDEDED</textcolor>
             <label>Silo</label>
+            <animation effect="fade" start="100" end="70" time="200" condition="!ControlGroup(9000).HasFocus() + !Control.HasFocus(9011)">Conditional</animation>
         </control>
         <control type="grouplist" id="9000">
+            <animation effect="fade" start="100" end="70" time="200" condition="!ControlGroup(9000).HasFocus() + !Control.HasFocus(9011)">Conditional</animation>
             <left>0</left><top>58</top>
             <width>1920</width><height>60</height>
             <orientation>horizontal</orientation>
@@ -10339,6 +10341,7 @@
             <left>1768</left><top>56</top>
             <width>64</width><height>64</height>
             <visible>!String.IsEmpty(Window(Home).Property(silo.profile_name))</visible>
+            <animation effect="fade" start="100" end="70" time="200" condition="!ControlGroup(9000).HasFocus() + !Control.HasFocus(9011)">Conditional</animation>
             <control type="button" id="9011">
                 <width>64</width><height>64</height>
                 <label />

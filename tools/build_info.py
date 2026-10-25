@@ -451,8 +451,8 @@ VARIABLES = '''
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Season,S,]$INFO[ListItem.Episode,E,]$INFO[ListItem.Title, · ,]$INFO[ListItem.Premiered, · ,]$INFO[ListItem.Duration(mins), · , min]</value>
         <value condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Property(silo.genre))">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.genre), · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Property(TotalEpisodes), · , episodes]</value>
         <value condition="!String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Property(silo.genre))">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.genre), · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Duration(mins), · , min]</value>
-        <value condition="String.IsEqual(ListItem.DBType,tvshow)">$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$INFO[ListItem.Rating, · ★ ,]$VAR[SiloDetailSeasons]</value>
-        <value>$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$INFO[ListItem.Rating, · ★ ,]$INFO[ListItem.Duration(mins), · , min]</value>
+        <value condition="String.IsEqual(ListItem.DBType,tvshow)">$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$VAR[SiloDetailRating]$VAR[SiloDetailSeasons]</value>
+        <value>$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$VAR[SiloDetailRating]$INFO[ListItem.Duration(mins), · , min]</value>
     </variable>
     <variable name="SiloDetailCredit">
         <value condition="!String.IsEmpty(ListItem.Director)">Directed by $INFO[ListItem.Director]</value>
@@ -499,6 +499,13 @@ VARIABLES = '''
         <value condition="Integer.IsEqual(ListItem.AudioChannels,6)"> 5.1</value>
         <value condition="Integer.IsEqual(ListItem.AudioChannels,8)"> 7.1</value>
         <value>$INFO[ListItem.AudioChannels, ,]</value>
+    </variable>
+    <!-- The rating named by its source, as Silo shows it (SiloKodiConnect stores
+         IMDb's, else TMDB's). -->
+    <variable name="SiloDetailRating">
+        <value condition="!String.IsEmpty(ListItem.Rating(imdb))">$INFO[ListItem.Rating(imdb), · IMDb ,]</value>
+        <value condition="!String.IsEmpty(ListItem.Rating(themoviedb))">$INFO[ListItem.Rating(themoviedb), · TMDB ,]</value>
+        <value>$INFO[ListItem.Rating, · ★ ,]</value>
     </variable>
     <variable name="SiloDetailSeasons">
         <value condition="Integer.IsEqual(ListItem.Property(TotalSeasons),1)"> · 1 season</value>

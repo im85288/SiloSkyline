@@ -247,6 +247,8 @@ def row(page, page_index, slot, landscape):
         'focused': card_layout(card, True, list_id(page_index, slot, landscape))}
 
 
+# Silo dims the whole bar to 70% while focus is down in the rows.
+BAR_DIM = '!ControlGroup(9000).HasFocus() + !Control.HasFocus(9011)'
 BAR_ORDER = [9001, 9002, 9003, 9004, 9009, 9010, 9011]  # Search, Home, Movies, Series, Settings, Power, profile
 
 
@@ -331,6 +333,7 @@ def avatar():
             <left>%(left)d</left><top>%(top)d</top>
             <width>64</width><height>64</height>
             <visible>!String.IsEmpty(%(name)s)</visible>
+            <animation effect="fade" start="100" end="70" time="200" condition="%(bar_dim)s">Conditional</animation>
             <control type="button" id="9011">
                 <width>64</width><height>64</height>
                 <label />
@@ -367,7 +370,8 @@ def avatar():
             </control>
         </control>''' % {'left': 1920 - SAFE_X - 64, 'top': BAR_TOP, 'name': prop('silo.profile_name'),
                          'moves': bar_moves(9011), 'has_picture': has_picture, 'text': TEXT,
-                         'initial': prop('silo.profile_initial'), 'picture': prop('silo.avatar')}
+                         'initial': prop('silo.profile_initial'), 'picture': prop('silo.avatar'),
+                         'bar_dim': BAR_DIM}
 
 
 def bar_down(indent='            '):
@@ -508,8 +512,10 @@ def build():
             <font>silo_wordmark</font>
             <textcolor>%(text)s</textcolor>
             <label>Silo</label>
+            <animation effect="fade" start="100" end="70" time="200" condition="%(bar_dim)s">Conditional</animation>
         </control>
         <control type="grouplist" id="9000">
+            <animation effect="fade" start="100" end="70" time="200" condition="%(bar_dim)s">Conditional</animation>
             <left>0</left><top>%(tabs_top)d</top>
             <width>1920</width><height>60</height>
             <orientation>horizontal</orientation>
@@ -522,7 +528,7 @@ def build():
 ''' % {'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'rows_top': ROWS_TOP, 'rows_h': BAND_H,
        'row_overlap': ROW_PITCH - BAND_H,
        'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
-       'bar_down': bar_down(), 'avatar': avatar(), 'row_prop': prop('silo.row'), 'background': BACKGROUND,
+       'bar_down': bar_down(), 'avatar': avatar(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'background': BACKGROUND,
        'mpaa_badge': badge('$VAR[SiloMpaa]', 40, 'silo_meta'),
        'quality_badges': ''.join(badge('$VAR[SiloBadge%d]' % n, 36, 'silo_badge') for n in (1, 2, 3))}
 
