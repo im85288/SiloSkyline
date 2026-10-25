@@ -57,7 +57,11 @@
 			<aligny>center</aligny>
 			<invalidcolor>invalid</invalidcolor>
 			<selectedcolor>selected</selectedcolor>
-			<texturefocus colordiffuse="button_focus">lists/focus.png</texturefocus>
+			<!-- Silo Skyline: Inter, and a soft rounded highlight that keeps the
+			     row's white toggles and arrows readable. -->
+			<font>silo_meta</font>
+			<textcolor>FFEDEDED</textcolor>
+			<texturefocus border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texturefocus>
 			<texturenofocus />
 		</definition>
 	</include>
@@ -71,8 +75,12 @@
 			<aligny>center</aligny>
 			<invalidcolor>invalid</invalidcolor>
 			<selectedcolor>selected</selectedcolor>
-			<texturefocus colordiffuse="button_focus">lists/focus.png</texturefocus>
-			<texturenofocus colordiffuse="dialog_tint">colors/white.png</texturenofocus>
+			<!-- Silo Skyline: Inter, and a soft rounded highlight that keeps the
+			     row's white toggles and arrows readable. -->
+			<font>silo_meta</font>
+			<textcolor>FFEDEDED</textcolor>
+			<texturefocus border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texturefocus>
+			<texturenofocus />
 		</definition>
 	</include>
 	<include name="DefaultSettingLabel">
