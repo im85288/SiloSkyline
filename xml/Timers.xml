@@ -165,9 +165,57 @@
         <onstop condition="Window.IsActive(movieinformation)">SetFocus(300)</onstop>
     </timer>
     <timer>
+        <name>silo_this_season</name>
+        <description>Open a show's page on its next episode (tools/build_info.py)</description>
+        <start reset="true">Window.IsActive(movieinformation) + Control.HasFocus(8) + String.IsEmpty(Window(movieinformation).Property(silo.jump)) + Integer.IsGreater(Container(65).NumItems,0) + !Container(65).IsUpdating + Integer.IsGreater(Container(65).NumItems,1)</start>
+        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_this_season),0)</stop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(0).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,0,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(1).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,1,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(2).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,2,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(3).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,3,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(4).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,4,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(5).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,5,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(6).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,6,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(7).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,7,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(8).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,8,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(9).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,9,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(10).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,10,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(11).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,11,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(12).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,12,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(13).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,13,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(14).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,14,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(15).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,15,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(16).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,16,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(17).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,17,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(18).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,18,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(19).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,19,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(20).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,20,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(21).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,21,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(22).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,22,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(23).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,23,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(24).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,24,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(25).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,25,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(26).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,26,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(27).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,27,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(28).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,28,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(29).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,29,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(30).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,30,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(31).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,31,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(32).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,32,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(33).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,33,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(34).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,34,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(35).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,35,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(36).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,36,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(37).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,37,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(38).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,38,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(39).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,39,absolute)</onstop>
+        <onstop condition="Window.IsActive(movieinformation)">SetProperty(silo.jump,episode_season,movieinformation)</onstop>
+        <onstop condition="Window.IsActive(movieinformation)">SetFocus(8)</onstop>
+    </timer>
+    <timer>
         <name>silo_this_episode</name>
         <description>Open a show's page on its next episode (tools/build_info.py)</description>
-        <start reset="true">Window.IsActive(movieinformation) + Control.HasFocus(8) + String.IsEmpty(Window(movieinformation).Property(silo.jump)) + Integer.IsGreater(Container(64).NumItems,0) + !Container(64).IsUpdating</start>
+        <start reset="true">Window.IsActive(movieinformation) + Control.HasFocus(8) + [String.IsEmpty(Window(movieinformation).Property(silo.jump)) + !Integer.IsGreater(Container(65).NumItems,1) | String.IsEqual(Window(movieinformation).Property(silo.jump),episode_season)] + Integer.IsGreater(Container(64).NumItems,0) + !Container(64).IsUpdating + String.IsEqual(Container(64).ListItemAbsolute(0).Season,Window(movieinformation).Property(silo.episode_season))</start>
         <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_this_episode),0)</stop>
         <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(64).ListItemAbsolute(0).Episode,Window(movieinformation).Property(silo.episode_number))">SetFocus(64,0,absolute)</onstop>
         <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(64).ListItemAbsolute(1).Episode,Window(movieinformation).Property(silo.episode_number))">SetFocus(64,1,absolute)</onstop>

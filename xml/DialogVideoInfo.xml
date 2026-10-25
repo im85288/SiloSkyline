@@ -8,6 +8,7 @@
     <onload>ClearProperty(silo.from_rail,home)</onload>
     <onload>SetProperty(silo.episode_id,$INFO[ListItem.DBID],movieinformation)</onload>
     <onload>SetProperty(silo.episode_number,$INFO[ListItem.Episode],movieinformation)</onload>
+    <onload>SetProperty(silo.episode_season,$INFO[ListItem.Season],movieinformation)</onload>
     <onunload>ClearProperty(silo.jump,movieinformation)</onunload>
     <backgroundcolor>FF0D0F12</backgroundcolor>
     <controls>
@@ -173,7 +174,8 @@
                 <orientation>horizontal</orientation>
                 <itemgap>16</itemgap>
                 <ondown condition="String.IsEqual(ListItem.DBType,tvshow)">60</ondown>
-                <ondown condition="String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
+                <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
+                <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
                 <ondown condition="!String.IsEqual(ListItem.DBType,tvshow) + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">50</ondown>
                 <!-- A show: Play or Resume its next episode, as in Silo (Kodi's button 8
                      would Browse); Browse once every episode is watched. Kodi reserves
@@ -420,26 +422,81 @@
             <!-- An episode: the rest of its season, as in Silo, on the current one. -->
             <control type="group">
                 <height>404</height>
-                <visible>String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(64).NumItems,0) | Container(64).IsUpdating]</visible>
+                <!-- Shown while the pills load too: the rail loads from them, and Kodi
+                     doesn't load a list inside a hidden group. -->
+                <visible>String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(64).NumItems,0) | Container(64).IsUpdating | Integer.IsGreater(Container(65).NumItems,0) | Container(65).IsUpdating]</visible>
+                <!-- Silo's season pills when the show has more than one season, else
+                     the season's name. -->
+                <control type="list" id="65">
+                    <visible>String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.show_path))</visible>
+                    <animation effect="fade" start="0" end="0" time="0" condition="![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">Conditional</animation>
+                    <left>82</left><top>0</top>
+                    <width>1838</width><height>56</height>
+                    <orientation>horizontal</orientation>
+                    <onup>5000</onup>
+                    <ondown>64</ondown>
+                    <scrolltime tween="cubic" easing="out">200</scrolltime>
+                    <content target="videos">$INFO[ListItem.Property(silo.show_path)]</content>
+                    <itemlayout width="236" height="56">
+                        <control type="label">
+                            <width>220</width><height>56</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_meta</font>
+                            <textcolor>BFEDEDED</textcolor>
+                            <label>$VAR[SiloSeasonLabel]</label>
+                        </control>
+                    </itemlayout>
+                    <focusedlayout width="236" height="56">
+                        <control type="image">
+                            <width>220</width><height>56</height>
+                            <texture border="28" colordiffuse="FFEDEDED">silo/pill.png</texture>
+                            <visible>Control.HasFocus(65)</visible>
+                        </control>
+                        <control type="image">
+                            <width>220</width><height>56</height>
+                            <texture border="28" colordiffuse="26FFFFFF">silo/pill.png</texture>
+                            <visible>!Control.HasFocus(65)</visible>
+                        </control>
+                        <control type="label">
+                            <width>220</width><height>56</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_meta</font>
+                            <textcolor>FF000000</textcolor><visible>Control.HasFocus(65)</visible>
+                            <label>$VAR[SiloSeasonLabel]</label>
+                        </control>
+                        <control type="label">
+                            <width>220</width><height>56</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_meta</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$VAR[SiloSeasonLabel]</label>
+                            <visible>!Control.HasFocus(65)</visible>
+                        </control>
+                    </focusedlayout>
+                </control>
                 <control type="label">
                     <left>88</left>
-                    <width>1000</width><height>46</height>
+                    <width>1000</width><height>56</height>
+                    <aligny>center</aligny>
                     <font>silo_row</font>
                     <textcolor>FFEDEDED</textcolor>
                     <label>$VAR[SiloEpisodeSeason]</label>
+                    <visible>![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]</visible>
                 </control>
                 <control type="list" id="64">
-                    <visible>String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(64).NumItems,0) | Container(64).IsUpdating]</visible>
-                    <left>82</left><top>56</top>
+                    <visible>String.IsEqual(ListItem.DBType,episode)</visible>
+                    <left>82</left><top>76</top>
                     <width>1838</width><height>290</height>
                     <orientation>horizontal</orientation>
-                    <onup>5000</onup>
+                    <onup condition="[Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</onup>
+                    <onup condition="![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">5000</onup>
                     <ondown condition="Integer.IsGreater(Container(50).NumItems,0)">50</ondown>
                     <ondown condition="!Integer.IsGreater(Container(50).NumItems,0)">63</ondown>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <onclick>PlayMedia($ESCINFO[ListItem.FileNameAndPath])</onclick>
                     <onclick>Dialog.Close(movieinformation)</onclick>
-                    <content target="videos">$INFO[ListItem.Property(silo.season_path)]</content>
+                    <!-- $INFO, not a $VAR: Kodi reads a $VAR here only when the page opens. -->
+                    <content target="videos">$INFO[Container(65).ListItem.FolderPath]</content>
                     <itemlayout width="400" height="290">
                         <control type="image">
                             <left>6</left><top>6</top>
