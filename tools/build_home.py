@@ -305,7 +305,7 @@ def row(page, page_index, slot, landscape):
 
 # Silo dims the whole bar to 70% while focus is down in the rows.
 BAR_DIM = '!ControlGroup(9000).HasFocus() + !Control.HasFocus(9011)'
-BAR_ORDER = [9001, 9002, 9003, 9004, 9005, 9009, 9010] + CUSTOM_IDS + [9011]  # Search, tabs, Settings, Power, custom items, profile
+BAR_ORDER = [9001, 9002, 9003, 9004, 9005] + CUSTOM_IDS + [9009, 9010, 9011]  # Search, tabs, custom items, Settings, Power, profile
 
 
 def bar_moves(control_id):
@@ -543,9 +543,9 @@ def shortcut(slot, field):
 
 
 def custom_items():
-    """The user's own menu items (Skin Shortcuts), right-aligned beside the
-    avatar so the centred tabs and their dropdowns never move. An item with
-    widgets opens them as rows (the 'custom' page); any other runs its action."""
+    """The user's own menu items (Skin Shortcuts), as tabs after Requests.
+    An item with widgets opens them as rows (the 'custom' page); any other
+    runs its action. Returns the hidden list holding the menu, and the tabs."""
     index = PAGES.index('custom')
     buttons = ''
     for slot, control_id in enumerate(CUSTOM_IDS):
@@ -565,9 +565,6 @@ def custom_items():
                         'SetProperty(silo.custom.%d.style,poster,home)</onclick>' % (has_widgets, wide, n, has_widgets,
                                                                                      wide, n))
         buttons += '''
-            <control type="group">
-                <width>auto</width><height>60</height>
-                <visible>!String.IsEmpty(%(label)s)</visible>
                 <control type="button" id="%(id)d">
                     <visible>!String.IsEmpty(%(label)s)</visible>
                     <width>auto</width><height>60</height>
@@ -583,28 +580,17 @@ def custom_items():
                     <onclick condition="%(has_widgets)s">SetProperty(silo.page,custom,home)</onclick>
                     <onclick condition="%(has_widgets)s">ClearProperty(silo.row,home)</onclick>
                     <onclick condition="%(has_widgets)s">SetProperty(silo.custom.button,%(id)d,home)</onclick>%(actions)s
-                </control>
-            </control>''' % {'label': label, 'id': control_id, 'dim': TAB_DIM, 'text': TEXT, 'has_widgets': has_widgets,
+                </control>''' % {'label': label, 'id': control_id, 'dim': TAB_DIM, 'text': TEXT, 'has_widgets': has_widgets,
                              'path': shortcut(slot, 'Property(path)'), 'actions': actions,
                              'nofocus': '$VAR[SiloCustomTab%d]' % control_id, 'moves': bar_moves(control_id)}
     return '''
         <!-- Skin Shortcuts' main menu, built into script-skinshortcuts-includes.xml. -->
-        <control type="list" id="%(list)d">
+        <control type="list" id="%d">
             <left>-3000</left><top>0</top><width>10</width><height>10</height>
             <itemlayout width="10" height="10" />
             <focusedlayout width="10" height="10" />
             <content><include>skinshortcuts-mainmenu</include></content>
-        </control>
-        <control type="grouplist" id="9030">
-            <right>%(right)d</right><top>%(top)d</top>
-            <width>900</width><height>60</height>
-            <orientation>horizontal</orientation>
-            <align>right</align>
-            <itemgap>8</itemgap>
-            <animation effect="fade" start="100" end="70" time="200" condition="%(bar_dim)s">Conditional</animation>%(buttons)s
-        </control>''' % {'list': SHORTCUTS, 'right': SAFE_X + 64 + 16, 'top': BAR_TOP + 2, 'bar_dim': BAR_DIM,
-                         'buttons': buttons}
-
+        </control>''' % SHORTCUTS, buttons
 
 def custom_tab_variables():
     """A custom item's faint pill while its page shows, as the tabs'."""
@@ -648,6 +634,8 @@ def build():
                    for landscape in (False, True))
     tabs = icon_tab(9001, 'icons/search.png', 'ActivateWindow(1190)')
     tabs += ''.join(tab(9002 + index, page, index) for index, page in enumerate(TABBED))
+    shortcuts_list, custom_tabs = custom_items()
+    tabs += custom_tabs
     tabs += icon_tab(9009, 'icons/settings.png', 'ActivateWindow(Settings)')
     # Estuary keeps the power menu on its home screen; this replaces it.
     tabs += icon_tab(9010, 'icons/power.png', 'ActivateWindow(ShutdownMenu)')
@@ -772,12 +760,13 @@ def build():
             <label>Silo</label>
             <animation effect="fade" start="100" end="70" time="200" condition="%(bar_dim)s">Conditional</animation>
         </control>
+        <!-- Starts where the built-in tabs sit centred, so Movies and Series stay
+             over their dropdowns; the user's own items extend it to the right. -->
         <control type="grouplist" id="9000">
             <animation effect="fade" start="100" end="70" time="200" condition="%(bar_dim)s">Conditional</animation>
-            <left>0</left><top>%(tabs_top)d</top>
-            <width>1920</width><height>60</height>
+            <left>%(bar_left)d</left><top>%(tabs_top)d</top>
+            <width>%(bar_w)d</width><height>60</height>
             <orientation>horizontal</orientation>
-            <align>center</align>
             <itemgap>8</itemgap>%(bar_down)s%(tabs)s
         </control>
 %(avatar)s
@@ -788,7 +777,8 @@ def build():
 ''' % {'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'rows_top': ROWS_TOP, 'rows_h': BAND_H,
        'row_overlap': ROW_PITCH - BAND_H,
        'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
-       'bar_down': bar_down(), 'avatar': avatar(), 'custom': custom_items(), 'shortcuts': SHORTCUTS, 'sections': sections_menus(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'background': BACKGROUND,
+       'bar_down': bar_down(), 'avatar': avatar(), 'custom': shortcuts_list,
+       'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections_menus(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'background': BACKGROUND,
        'mpaa_badge': badge('$VAR[SiloMpaa]', 40, 'silo_meta'),
        'quality_badges': ''.join(badge('$VAR[SiloBadge%d]' % n, 36, 'silo_badge') for n in (1, 2, 3))}
 
@@ -928,11 +918,10 @@ def first_row_timer():
         loaded = ' | '.join('Integer.IsGreater(Container(%d).NumItems,0)' % list_id(index, slot, landscape)
                             for slot, landscape in rows)
         ready.append('[%s + [%s] + [Control.HasFocus(%d) | [!ControlGroup(9000).HasFocus() + '
-                     '!ControlGroup(9030).HasFocus() + !Control.HasFocus(9011)]]]'
-                     % (page_visible(page), loaded, 9002 + index)
+                     '!Control.HasFocus(9011)]]]' % (page_visible(page), loaded, 9002 + index)
                      if page in TABBED else
-                     '[%s + [%s] + [ControlGroup(9030).HasFocus() | [!ControlGroup(9000).HasFocus() + '
-                     '!Control.HasFocus(9011)]]]' % (page_visible(page), loaded))
+                     '[%s + [%s] + [%s | [!ControlGroup(9000).HasFocus() + !Control.HasFocus(9011)]]]'
+                     % (page_visible(page), loaded, ' | '.join('Control.HasFocus(%d)' % k for k in CUSTOM_IDS)))
         shown_rows = [('[%s]' % row_rules(page, index, slot, landscape), list_id(index, slot, landscape))
                       for slot, landscape in rows]
         for position, (rule, target) in enumerate(shown_rows):

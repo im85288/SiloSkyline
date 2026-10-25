@@ -59,41 +59,41 @@
 				<focusedlayout width="560" height="80">
 					<control type="image">
 						<width>560</width><height>80</height>
-						<texture border="46" colordiffuse="FFEDEDED">silo/dialog_button.png</texture>
-						<visible>Control.HasFocus(211)</visible>
+						<texture border="30" colordiffuse="FFEDEDED">silo/pill.png</texture>
+						<visible>!ControlGroup(9000).HasFocus()</visible>
 					</control>
 					<control type="image">
 						<width>560</width><height>80</height>
-						<texture border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texture>
-						<visible>!Control.HasFocus(211)</visible>
+						<texture border="30" colordiffuse="2EFFFFFF">silo/pill.png</texture>
+						<visible>ControlGroup(9000).HasFocus()</visible>
 					</control>
 					<control type="label">
 						<left>24</left><top>8</top><width>512</width><height>36</height>
 						<font>silo_meta</font>
 						<textcolor>FF000000</textcolor>
 						<label>$INFO[ListItem.Label]</label>
-						<visible>Control.HasFocus(211)</visible>
+						<visible>!ControlGroup(9000).HasFocus()</visible>
 					</control>
 					<control type="label">
 						<left>24</left><top>8</top><width>512</width><height>36</height>
 						<font>silo_meta</font>
 						<textcolor>FFEDEDED</textcolor>
 						<label>$INFO[ListItem.Label]</label>
-						<visible>!Control.HasFocus(211)</visible>
+						<visible>ControlGroup(9000).HasFocus()</visible>
 					</control>
 					<control type="label">
 						<left>24</left><top>42</top><width>512</width><height>30</height>
 						<font>silo_detail</font>
 						<textcolor>B3000000</textcolor>
 						<label>$VAR[SiloShortcutDetail]</label>
-						<visible>Control.HasFocus(211)</visible>
+						<visible>!ControlGroup(9000).HasFocus()</visible>
 					</control>
 					<control type="label">
 						<left>24</left><top>42</top><width>512</width><height>30</height>
 						<font>silo_detail</font>
 						<textcolor>99EDEDED</textcolor>
 						<label>$VAR[SiloShortcutDetail]</label>
-						<visible>!Control.HasFocus(211)</visible>
+						<visible>ControlGroup(9000).HasFocus()</visible>
 					</control>
 				</focusedlayout>
 			</control>

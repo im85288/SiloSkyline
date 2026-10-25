@@ -2,4 +2,7 @@
 <overrides>
     <!-- Widgets may be playlists, and an item can have up to four. -->
     <widgetPlaylists>True</widgetPlaylists>
+    <!-- Silo Skyline's own menu, starting empty: not the menu another skin
+         left in Skin Shortcuts' shared files. -->
+    <doNotShareMenu />
 </overrides>
