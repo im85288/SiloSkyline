@@ -416,11 +416,21 @@ def build():
     <onload condition="String.IsEmpty(Window(Home).Property(silo.home.count))">SetFocus(9002)</onload>
     <backgroundcolor>%(background)s</backgroundcolor>
     <controls>
+        <!-- Silo's ambient wash: the focused title's colour, richest behind the art
+             (top right) and carried dimmed to the bottom left. -->
+        <control type="image">
+            <left>0</left><top>0</top><width>1920</width><height>1080</height>
+            <texture colordiffuse="$VAR[SiloHeroTint]">silo/tint_wash.png</texture>
+            <visible>$EXP[HasSiloTint]</visible>
+            <animation effect="fade" start="0" end="100" time="400">Visible</animation>
+        </control>
         <!-- The focused title's artwork, crisp at the top right, fading left and down. -->
         <control type="image">
-            <left>690</left><top>0</top>
-            <width>1230</width><height>756</height>
-            <aspectratio align="right" aligny="top">scale</aspectratio>
+            <!-- 16:9 like the artwork, so Kodi draws it whole: cropped to fit,
+                 the fade mask no longer lines up and the left edge shows. -->
+            <left>576</left><top>0</top>
+            <width>1344</width><height>756</height>
+            <aspectratio>stretch</aspectratio>
             <fadetime>240</fadetime>
             <texture background="true" diffuse="silo/hero_mask.png">$VAR[SiloHeroArt]</texture>
         </control>
@@ -556,6 +566,7 @@ HERO = [
                      '$INFO[LI.Property(silo.cast), · ,]'),
                     (None, '$INFO[LI.Property(silo.cast)]')]),
     ('SiloMpaa', [(None, '$INFO[LI.Property(silo.mpaa)]')]),
+    ('SiloHeroTint', [(None, '$INFO[LI.Property(silo.tint)]')]),
     ('SiloBadge1', [(None, '$INFO[LI.Property(silo.badge1)]')]),
     ('SiloBadge2', [(None, '$INFO[LI.Property(silo.badge2)]')]),
     ('SiloBadge3', [(None, '$INFO[LI.Property(silo.badge3)]')]),
@@ -609,7 +620,8 @@ def variables():
                     list_id(index, slot, landscape), row_rules(page, index, slot, landscape))
     # Kodi's conditions can't test a $VAR, so each badge's "has text" is an
     # expression over the remembered row, like the hero variables.
-    for name, item_property in (('SiloMpaa', 'silo.mpaa'), ('SiloBadge1', 'silo.badge1'),
+    for name, item_property in (('SiloMpaa', 'silo.mpaa'), ('SiloTint', 'silo.tint'),
+                                ('SiloBadge1', 'silo.badge1'),
                                 ('SiloBadge2', 'silo.badge2'), ('SiloBadge3', 'silo.badge3')):
         terms = ['[String.IsEqual(%s,%d) + !String.IsEmpty(Container(%d).ListItem.Property(%s))]'
                  % (prop('silo.row'), row_id, row_id, item_property) for row_id in rows]

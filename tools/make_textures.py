@@ -53,13 +53,33 @@ def rounded_rect_coverage(x, y, width, height, radius, inset=0.0):
 
 
 def hero_mask(width=640, height=400):
-    """Skyline's corner mask: crisp at the top right, fading out toward the
-    left (over 55% of the width) and the bottom (over 45% of the height)."""
+    """Skyline's corner mask, with Silo's stops (TvRootHeroBackdrop): clear at
+    the left edge to solid at 68% of the width, and solid down to 58% of the
+    height, then clear at the bottom, each a straight ramp."""
     def alpha(x, y):
-        from_left = smoothstep(x / (width * 0.55))
-        from_bottom = smoothstep((height - y) / (height * 0.45))
+        from_left = min(1.0, x / (width * 0.68))
+        from_bottom = min(1.0, max(0.0, (height - y) / (height * 0.42)))
         return from_left * from_bottom
     write_png('hero_mask.png', width, height, alpha)
+
+
+def tint_wash(width=192, height=108):
+    """Silo's ambient wash, drawn in white for the skin to colour with the
+    title's tint: diagonal from the top right (opaque) to the bottom left
+    (18%), through 50% at 45% of the way (TvRootHeroBackdrop's stops)."""
+    stops = [(0.00, 1.0), (0.12, 0.91), (0.26, 0.76), (0.45, 0.5), (0.62, 0.385), (0.80, 0.282), (1.00, 0.18)]
+    # Compose's linearGradient from (w, 0) to (0, h) on a 1920x1080 page.
+    page_w, page_h = 1920.0, 1080.0
+
+    def alpha(x, y):
+        px, py = x / width * page_w, y / height * page_h
+        t = ((page_w - px) * page_w + py * page_h) / (page_w ** 2 + page_h ** 2)
+        t = min(1.0, max(0.0, t))
+        for (t0, a0), (t1, a1) in zip(stops, stops[1:]):
+            if t <= t1:
+                return a0 + (a1 - a0) * (t - t0) / (t1 - t0)
+        return stops[-1][1]
+    write_png('tint_wash.png', width, height, alpha)
 
 
 def card_mask(name, width, height, radius):
@@ -116,6 +136,7 @@ def person_placeholder(size=172):
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
     hero_mask()
+    tint_wash()
     card_mask('card_poster_mask.png', 176, 264, 12)
     card_mask('card_landscape_mask.png', 360, 202, 14)
     # Rings sit 6 px outside the card on each side.
@@ -131,6 +152,9 @@ if __name__ == '__main__':
     write_png('person_frame.png', 172, 172, lambda x, y: 1.0 - rounded_rect_coverage(x, y, 172, 172, 86),
               rgb=(0x0D, 0x0F, 0x12))
     focus_ring('person_ring.png', 184, 184, 92, 4)
+    # The same corners in white at 30% (about the wash behind the cast row), coloured with the title's tint over a
+    # tinted page (Kodi doesn't fade controls inside a list's items).
+    write_png('person_frame_tint.png', 172, 172, lambda x, y: 0.30 * (1.0 - rounded_rect_coverage(x, y, 172, 172, 86)))
     # The profile avatar in the menu bar, and its focus ring 4 px outside it.
     card_mask('avatar_mask.png', 56, 56, 28)
     card_scrim()

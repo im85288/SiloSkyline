@@ -11,9 +11,11 @@
         </control>
         <!-- The focused title's artwork, faint in the top right. -->
         <control type="image">
-            <left>690</left><top>0</top>
-            <width>1230</width><height>756</height>
-            <aspectratio align="right" aligny="top">scale</aspectratio>
+            <!-- 16:9 like the artwork, so Kodi draws it whole: cropped to fit,
+                 the fade mask no longer lines up and the left edge shows. -->
+            <left>576</left><top>0</top>
+            <width>1344</width><height>756</height>
+            <aspectratio>stretch</aspectratio>
             <fadetime>240</fadetime>
             <texture background="true" colordiffuse="59FFFFFF" diffuse="silo/hero_mask.png">$INFO[Container.ListItem.Art(fanart)]</texture>
         </control>

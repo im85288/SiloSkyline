@@ -83,6 +83,7 @@ def build():
 <window>
     <defaultcontrol always="true">8</defaultcontrol>
     <onload condition="%(show)s">SetFocus(300)</onload>
+    <onload>SetProperty(silo.tint,$INFO[ListItem.Property(silo.tint)],movieinformation)</onload>
     <onunload>ClearProperty(silo.jump,movieinformation)</onunload>
     <backgroundcolor>%(background)s</backgroundcolor>
     <controls>
@@ -90,10 +91,18 @@ def build():
             <left>0</left><top>0</top><width>1920</width><height>1080</height>
             <texture colordiffuse="%(background)s">colors/white.png</texture>
         </control>
+        <!-- Silo's ambient wash in the title's colour (widget items carry it). -->
         <control type="image">
-            <left>690</left><top>0</top>
-            <width>1230</width><height>756</height>
-            <aspectratio align="right" aligny="top">scale</aspectratio>
+            <left>0</left><top>0</top><width>1920</width><height>1080</height>
+            <texture colordiffuse="$INFO[ListItem.Property(silo.tint)]">silo/tint_wash.png</texture>
+            <visible>!String.IsEmpty(ListItem.Property(silo.tint))</visible>
+        </control>
+        <control type="image">
+            <!-- 16:9 like the artwork, so Kodi draws it whole: cropped to fit,
+                 the fade mask no longer lines up and the left edge shows. -->
+            <left>576</left><top>0</top>
+            <width>1344</width><height>756</height>
+            <aspectratio>stretch</aspectratio>
             <fadetime>240</fadetime>
             <texture background="true" diffuse="silo/hero_mask.png">$VAR[SiloDetailArt]</texture>
         </control>
@@ -408,6 +417,14 @@ def person(focused):
                         <left>20</left><top>6</top>
                         <width>172</width><height>172</height>
                         <texture>silo/person_frame.png</texture>
+                    </control>
+                    <!-- Over the tinted page: the wash's colour at about its strength
+                         behind the cast row, so the corners don't show. -->
+                    <control type="image">
+                        <left>20</left><top>6</top>
+                        <width>172</width><height>172</height>
+                        <texture colordiffuse="$INFO[Window(movieinformation).Property(silo.tint)]">silo/person_frame_tint.png</texture>
+                        <visible>!String.IsEmpty(Window(movieinformation).Property(silo.tint))</visible>
                     </control>%(ring)s
                     <control type="label">
                         <left>0</left><top>196</top>
