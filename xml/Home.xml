@@ -17,7 +17,7 @@
         <!-- Marquee: never focusable; follows whichever card has focus. -->
         <control type="group">
             <left>88</left>
-            <visible>!String.IsEmpty(ListItem.Label)</visible>
+            <visible>!String.IsEmpty(Window(Home).Property(silo.row))</visible>
             <animation effect="fade" start="0" end="100" time="240">Visible</animation>
             <control type="image">
                 <top>228</top>
@@ -25,7 +25,6 @@
                 <aspectratio align="left" aligny="bottom">keep</aspectratio>
                 <fadetime>240</fadetime>
                 <texture background="true">$VAR[SiloLogoArt]</texture>
-                <visible>!String.IsEmpty(ListItem.Art(clearlogo)) | !String.IsEmpty(ListItem.Art(tvshow.clearlogo))</visible>
             </control>
             <control type="label">
                 <top>228</top>
@@ -34,7 +33,6 @@
                 <font>silo_title</font>
                 <textcolor>FFEDEDED</textcolor>
                 <label>$VAR[SiloTitle]</label>
-                <visible>String.IsEmpty(ListItem.Art(clearlogo)) + String.IsEmpty(ListItem.Art(tvshow.clearlogo))</visible>
             </control>
             <control type="label">
                 <top>400</top>
@@ -48,7 +46,7 @@
                 <width>860</width><height>120</height>
                 <font>silo_plot</font>
                 <textcolor>BFEDEDED</textcolor>
-                <label>$INFO[ListItem.Plot]</label>
+                <label>$VAR[SiloPlot]</label>
                 <autoscroll>false</autoscroll>
             </control>
         </control>
@@ -80,6 +78,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5001,home)</onfocus>
                     <ondown condition="Control.IsVisible(5002)">SetFocus(5002)</ondown>
                     <ondown condition="Control.IsVisible(5052) + !Control.IsVisible(5002)">SetFocus(5052)</ondown>
                     <ondown condition="Control.IsVisible(5003) + !Control.IsVisible(5002) + !Control.IsVisible(5052)">SetFocus(5003)</ondown>
@@ -88,7 +87,7 @@
                     <ondown condition="Control.IsVisible(5054) + !Control.IsVisible(5002) + !Control.IsVisible(5052) + !Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5004)">SetFocus(5054)</ondown>
                     <ondown condition="Control.IsVisible(5005) + !Control.IsVisible(5002) + !Control.IsVisible(5052) + !Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5004) + !Control.IsVisible(5054)">SetFocus(5005)</ondown>
                     <ondown condition="Control.IsVisible(5055) + !Control.IsVisible(5002) + !Control.IsVisible(5052) + !Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5004) + !Control.IsVisible(5054) + !Control.IsVisible(5005)">SetFocus(5055)</ondown>
-                    <onup condition="true">SetFocus(9000)</onup>
+                    <onup>SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.1.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -166,6 +165,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5051,home)</onfocus>
                     <ondown condition="Control.IsVisible(5002)">SetFocus(5002)</ondown>
                     <ondown condition="Control.IsVisible(5052) + !Control.IsVisible(5002)">SetFocus(5052)</ondown>
                     <ondown condition="Control.IsVisible(5003) + !Control.IsVisible(5002) + !Control.IsVisible(5052)">SetFocus(5003)</ondown>
@@ -174,7 +174,7 @@
                     <ondown condition="Control.IsVisible(5054) + !Control.IsVisible(5002) + !Control.IsVisible(5052) + !Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5004)">SetFocus(5054)</ondown>
                     <ondown condition="Control.IsVisible(5005) + !Control.IsVisible(5002) + !Control.IsVisible(5052) + !Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5004) + !Control.IsVisible(5054)">SetFocus(5005)</ondown>
                     <ondown condition="Control.IsVisible(5055) + !Control.IsVisible(5002) + !Control.IsVisible(5052) + !Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5004) + !Control.IsVisible(5054) + !Control.IsVisible(5005)">SetFocus(5055)</ondown>
-                    <onup condition="true">SetFocus(9000)</onup>
+                    <onup>SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.1.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -252,6 +252,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5002,home)</onfocus>
                     <ondown condition="Control.IsVisible(5003)">SetFocus(5003)</ondown>
                     <ondown condition="Control.IsVisible(5053) + !Control.IsVisible(5003)">SetFocus(5053)</ondown>
                     <ondown condition="Control.IsVisible(5004) + !Control.IsVisible(5003) + !Control.IsVisible(5053)">SetFocus(5004)</ondown>
@@ -262,7 +263,7 @@
                     <ondown condition="Control.IsVisible(5056) + !Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5004) + !Control.IsVisible(5054) + !Control.IsVisible(5005) + !Control.IsVisible(5055) + !Control.IsVisible(5006)">SetFocus(5056)</ondown>
                     <onup condition="Control.IsVisible(5001)">SetFocus(5001)</onup>
                     <onup condition="Control.IsVisible(5051) + !Control.IsVisible(5001)">SetFocus(5051)</onup>
-                    <onup condition="!Control.IsVisible(5001) + !Control.IsVisible(5051)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5001) + !Control.IsVisible(5051)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.2.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -340,6 +341,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5052,home)</onfocus>
                     <ondown condition="Control.IsVisible(5003)">SetFocus(5003)</ondown>
                     <ondown condition="Control.IsVisible(5053) + !Control.IsVisible(5003)">SetFocus(5053)</ondown>
                     <ondown condition="Control.IsVisible(5004) + !Control.IsVisible(5003) + !Control.IsVisible(5053)">SetFocus(5004)</ondown>
@@ -350,7 +352,7 @@
                     <ondown condition="Control.IsVisible(5056) + !Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5004) + !Control.IsVisible(5054) + !Control.IsVisible(5005) + !Control.IsVisible(5055) + !Control.IsVisible(5006)">SetFocus(5056)</ondown>
                     <onup condition="Control.IsVisible(5001)">SetFocus(5001)</onup>
                     <onup condition="Control.IsVisible(5051) + !Control.IsVisible(5001)">SetFocus(5051)</onup>
-                    <onup condition="!Control.IsVisible(5001) + !Control.IsVisible(5051)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5001) + !Control.IsVisible(5051)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.2.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -428,6 +430,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5003,home)</onfocus>
                     <ondown condition="Control.IsVisible(5004)">SetFocus(5004)</ondown>
                     <ondown condition="Control.IsVisible(5054) + !Control.IsVisible(5004)">SetFocus(5054)</ondown>
                     <ondown condition="Control.IsVisible(5005) + !Control.IsVisible(5004) + !Control.IsVisible(5054)">SetFocus(5005)</ondown>
@@ -440,7 +443,7 @@
                     <onup condition="Control.IsVisible(5052) + !Control.IsVisible(5002)">SetFocus(5052)</onup>
                     <onup condition="Control.IsVisible(5001) + !Control.IsVisible(5002) + !Control.IsVisible(5052)">SetFocus(5001)</onup>
                     <onup condition="Control.IsVisible(5051) + !Control.IsVisible(5002) + !Control.IsVisible(5052) + !Control.IsVisible(5001)">SetFocus(5051)</onup>
-                    <onup condition="!Control.IsVisible(5002) + !Control.IsVisible(5052) + !Control.IsVisible(5001) + !Control.IsVisible(5051)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5002) + !Control.IsVisible(5052) + !Control.IsVisible(5001) + !Control.IsVisible(5051)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.3.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -518,6 +521,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5053,home)</onfocus>
                     <ondown condition="Control.IsVisible(5004)">SetFocus(5004)</ondown>
                     <ondown condition="Control.IsVisible(5054) + !Control.IsVisible(5004)">SetFocus(5054)</ondown>
                     <ondown condition="Control.IsVisible(5005) + !Control.IsVisible(5004) + !Control.IsVisible(5054)">SetFocus(5005)</ondown>
@@ -530,7 +534,7 @@
                     <onup condition="Control.IsVisible(5052) + !Control.IsVisible(5002)">SetFocus(5052)</onup>
                     <onup condition="Control.IsVisible(5001) + !Control.IsVisible(5002) + !Control.IsVisible(5052)">SetFocus(5001)</onup>
                     <onup condition="Control.IsVisible(5051) + !Control.IsVisible(5002) + !Control.IsVisible(5052) + !Control.IsVisible(5001)">SetFocus(5051)</onup>
-                    <onup condition="!Control.IsVisible(5002) + !Control.IsVisible(5052) + !Control.IsVisible(5001) + !Control.IsVisible(5051)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5002) + !Control.IsVisible(5052) + !Control.IsVisible(5001) + !Control.IsVisible(5051)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.3.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -608,6 +612,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5004,home)</onfocus>
                     <ondown condition="Control.IsVisible(5005)">SetFocus(5005)</ondown>
                     <ondown condition="Control.IsVisible(5055) + !Control.IsVisible(5005)">SetFocus(5055)</ondown>
                     <ondown condition="Control.IsVisible(5006) + !Control.IsVisible(5005) + !Control.IsVisible(5055)">SetFocus(5006)</ondown>
@@ -622,7 +627,7 @@
                     <onup condition="Control.IsVisible(5052) + !Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5002)">SetFocus(5052)</onup>
                     <onup condition="Control.IsVisible(5001) + !Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5002) + !Control.IsVisible(5052)">SetFocus(5001)</onup>
                     <onup condition="Control.IsVisible(5051) + !Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5002) + !Control.IsVisible(5052) + !Control.IsVisible(5001)">SetFocus(5051)</onup>
-                    <onup condition="!Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5002) + !Control.IsVisible(5052) + !Control.IsVisible(5001) + !Control.IsVisible(5051)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5002) + !Control.IsVisible(5052) + !Control.IsVisible(5001) + !Control.IsVisible(5051)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.4.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -700,6 +705,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5054,home)</onfocus>
                     <ondown condition="Control.IsVisible(5005)">SetFocus(5005)</ondown>
                     <ondown condition="Control.IsVisible(5055) + !Control.IsVisible(5005)">SetFocus(5055)</ondown>
                     <ondown condition="Control.IsVisible(5006) + !Control.IsVisible(5005) + !Control.IsVisible(5055)">SetFocus(5006)</ondown>
@@ -714,7 +720,7 @@
                     <onup condition="Control.IsVisible(5052) + !Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5002)">SetFocus(5052)</onup>
                     <onup condition="Control.IsVisible(5001) + !Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5002) + !Control.IsVisible(5052)">SetFocus(5001)</onup>
                     <onup condition="Control.IsVisible(5051) + !Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5002) + !Control.IsVisible(5052) + !Control.IsVisible(5001)">SetFocus(5051)</onup>
-                    <onup condition="!Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5002) + !Control.IsVisible(5052) + !Control.IsVisible(5001) + !Control.IsVisible(5051)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5002) + !Control.IsVisible(5052) + !Control.IsVisible(5001) + !Control.IsVisible(5051)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.4.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -792,6 +798,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5005,home)</onfocus>
                     <ondown condition="Control.IsVisible(5006)">SetFocus(5006)</ondown>
                     <ondown condition="Control.IsVisible(5056) + !Control.IsVisible(5006)">SetFocus(5056)</ondown>
                     <ondown condition="Control.IsVisible(5007) + !Control.IsVisible(5006) + !Control.IsVisible(5056)">SetFocus(5007)</ondown>
@@ -806,7 +813,7 @@
                     <onup condition="Control.IsVisible(5053) + !Control.IsVisible(5004) + !Control.IsVisible(5054) + !Control.IsVisible(5003)">SetFocus(5053)</onup>
                     <onup condition="Control.IsVisible(5002) + !Control.IsVisible(5004) + !Control.IsVisible(5054) + !Control.IsVisible(5003) + !Control.IsVisible(5053)">SetFocus(5002)</onup>
                     <onup condition="Control.IsVisible(5052) + !Control.IsVisible(5004) + !Control.IsVisible(5054) + !Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5002)">SetFocus(5052)</onup>
-                    <onup condition="!Control.IsVisible(5004) + !Control.IsVisible(5054) + !Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5002) + !Control.IsVisible(5052)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5004) + !Control.IsVisible(5054) + !Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5002) + !Control.IsVisible(5052)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.5.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -884,6 +891,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5055,home)</onfocus>
                     <ondown condition="Control.IsVisible(5006)">SetFocus(5006)</ondown>
                     <ondown condition="Control.IsVisible(5056) + !Control.IsVisible(5006)">SetFocus(5056)</ondown>
                     <ondown condition="Control.IsVisible(5007) + !Control.IsVisible(5006) + !Control.IsVisible(5056)">SetFocus(5007)</ondown>
@@ -898,7 +906,7 @@
                     <onup condition="Control.IsVisible(5053) + !Control.IsVisible(5004) + !Control.IsVisible(5054) + !Control.IsVisible(5003)">SetFocus(5053)</onup>
                     <onup condition="Control.IsVisible(5002) + !Control.IsVisible(5004) + !Control.IsVisible(5054) + !Control.IsVisible(5003) + !Control.IsVisible(5053)">SetFocus(5002)</onup>
                     <onup condition="Control.IsVisible(5052) + !Control.IsVisible(5004) + !Control.IsVisible(5054) + !Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5002)">SetFocus(5052)</onup>
-                    <onup condition="!Control.IsVisible(5004) + !Control.IsVisible(5054) + !Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5002) + !Control.IsVisible(5052)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5004) + !Control.IsVisible(5054) + !Control.IsVisible(5003) + !Control.IsVisible(5053) + !Control.IsVisible(5002) + !Control.IsVisible(5052)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.5.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -976,6 +984,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5006,home)</onfocus>
                     <ondown condition="Control.IsVisible(5007)">SetFocus(5007)</ondown>
                     <ondown condition="Control.IsVisible(5057) + !Control.IsVisible(5007)">SetFocus(5057)</ondown>
                     <ondown condition="Control.IsVisible(5008) + !Control.IsVisible(5007) + !Control.IsVisible(5057)">SetFocus(5008)</ondown>
@@ -990,7 +999,7 @@
                     <onup condition="Control.IsVisible(5054) + !Control.IsVisible(5005) + !Control.IsVisible(5055) + !Control.IsVisible(5004)">SetFocus(5054)</onup>
                     <onup condition="Control.IsVisible(5003) + !Control.IsVisible(5005) + !Control.IsVisible(5055) + !Control.IsVisible(5004) + !Control.IsVisible(5054)">SetFocus(5003)</onup>
                     <onup condition="Control.IsVisible(5053) + !Control.IsVisible(5005) + !Control.IsVisible(5055) + !Control.IsVisible(5004) + !Control.IsVisible(5054) + !Control.IsVisible(5003)">SetFocus(5053)</onup>
-                    <onup condition="!Control.IsVisible(5005) + !Control.IsVisible(5055) + !Control.IsVisible(5004) + !Control.IsVisible(5054) + !Control.IsVisible(5003) + !Control.IsVisible(5053)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5005) + !Control.IsVisible(5055) + !Control.IsVisible(5004) + !Control.IsVisible(5054) + !Control.IsVisible(5003) + !Control.IsVisible(5053)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.6.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -1068,6 +1077,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5056,home)</onfocus>
                     <ondown condition="Control.IsVisible(5007)">SetFocus(5007)</ondown>
                     <ondown condition="Control.IsVisible(5057) + !Control.IsVisible(5007)">SetFocus(5057)</ondown>
                     <ondown condition="Control.IsVisible(5008) + !Control.IsVisible(5007) + !Control.IsVisible(5057)">SetFocus(5008)</ondown>
@@ -1082,7 +1092,7 @@
                     <onup condition="Control.IsVisible(5054) + !Control.IsVisible(5005) + !Control.IsVisible(5055) + !Control.IsVisible(5004)">SetFocus(5054)</onup>
                     <onup condition="Control.IsVisible(5003) + !Control.IsVisible(5005) + !Control.IsVisible(5055) + !Control.IsVisible(5004) + !Control.IsVisible(5054)">SetFocus(5003)</onup>
                     <onup condition="Control.IsVisible(5053) + !Control.IsVisible(5005) + !Control.IsVisible(5055) + !Control.IsVisible(5004) + !Control.IsVisible(5054) + !Control.IsVisible(5003)">SetFocus(5053)</onup>
-                    <onup condition="!Control.IsVisible(5005) + !Control.IsVisible(5055) + !Control.IsVisible(5004) + !Control.IsVisible(5054) + !Control.IsVisible(5003) + !Control.IsVisible(5053)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5005) + !Control.IsVisible(5055) + !Control.IsVisible(5004) + !Control.IsVisible(5054) + !Control.IsVisible(5003) + !Control.IsVisible(5053)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.6.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -1160,6 +1170,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5007,home)</onfocus>
                     <ondown condition="Control.IsVisible(5008)">SetFocus(5008)</ondown>
                     <ondown condition="Control.IsVisible(5058) + !Control.IsVisible(5008)">SetFocus(5058)</ondown>
                     <ondown condition="Control.IsVisible(5009) + !Control.IsVisible(5008) + !Control.IsVisible(5058)">SetFocus(5009)</ondown>
@@ -1174,7 +1185,7 @@
                     <onup condition="Control.IsVisible(5055) + !Control.IsVisible(5006) + !Control.IsVisible(5056) + !Control.IsVisible(5005)">SetFocus(5055)</onup>
                     <onup condition="Control.IsVisible(5004) + !Control.IsVisible(5006) + !Control.IsVisible(5056) + !Control.IsVisible(5005) + !Control.IsVisible(5055)">SetFocus(5004)</onup>
                     <onup condition="Control.IsVisible(5054) + !Control.IsVisible(5006) + !Control.IsVisible(5056) + !Control.IsVisible(5005) + !Control.IsVisible(5055) + !Control.IsVisible(5004)">SetFocus(5054)</onup>
-                    <onup condition="!Control.IsVisible(5006) + !Control.IsVisible(5056) + !Control.IsVisible(5005) + !Control.IsVisible(5055) + !Control.IsVisible(5004) + !Control.IsVisible(5054)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5006) + !Control.IsVisible(5056) + !Control.IsVisible(5005) + !Control.IsVisible(5055) + !Control.IsVisible(5004) + !Control.IsVisible(5054)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.7.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -1252,6 +1263,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5057,home)</onfocus>
                     <ondown condition="Control.IsVisible(5008)">SetFocus(5008)</ondown>
                     <ondown condition="Control.IsVisible(5058) + !Control.IsVisible(5008)">SetFocus(5058)</ondown>
                     <ondown condition="Control.IsVisible(5009) + !Control.IsVisible(5008) + !Control.IsVisible(5058)">SetFocus(5009)</ondown>
@@ -1266,7 +1278,7 @@
                     <onup condition="Control.IsVisible(5055) + !Control.IsVisible(5006) + !Control.IsVisible(5056) + !Control.IsVisible(5005)">SetFocus(5055)</onup>
                     <onup condition="Control.IsVisible(5004) + !Control.IsVisible(5006) + !Control.IsVisible(5056) + !Control.IsVisible(5005) + !Control.IsVisible(5055)">SetFocus(5004)</onup>
                     <onup condition="Control.IsVisible(5054) + !Control.IsVisible(5006) + !Control.IsVisible(5056) + !Control.IsVisible(5005) + !Control.IsVisible(5055) + !Control.IsVisible(5004)">SetFocus(5054)</onup>
-                    <onup condition="!Control.IsVisible(5006) + !Control.IsVisible(5056) + !Control.IsVisible(5005) + !Control.IsVisible(5055) + !Control.IsVisible(5004) + !Control.IsVisible(5054)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5006) + !Control.IsVisible(5056) + !Control.IsVisible(5005) + !Control.IsVisible(5055) + !Control.IsVisible(5004) + !Control.IsVisible(5054)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.7.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -1344,6 +1356,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5008,home)</onfocus>
                     <ondown condition="Control.IsVisible(5009)">SetFocus(5009)</ondown>
                     <ondown condition="Control.IsVisible(5059) + !Control.IsVisible(5009)">SetFocus(5059)</ondown>
                     <ondown condition="Control.IsVisible(5010) + !Control.IsVisible(5009) + !Control.IsVisible(5059)">SetFocus(5010)</ondown>
@@ -1358,7 +1371,7 @@
                     <onup condition="Control.IsVisible(5056) + !Control.IsVisible(5007) + !Control.IsVisible(5057) + !Control.IsVisible(5006)">SetFocus(5056)</onup>
                     <onup condition="Control.IsVisible(5005) + !Control.IsVisible(5007) + !Control.IsVisible(5057) + !Control.IsVisible(5006) + !Control.IsVisible(5056)">SetFocus(5005)</onup>
                     <onup condition="Control.IsVisible(5055) + !Control.IsVisible(5007) + !Control.IsVisible(5057) + !Control.IsVisible(5006) + !Control.IsVisible(5056) + !Control.IsVisible(5005)">SetFocus(5055)</onup>
-                    <onup condition="!Control.IsVisible(5007) + !Control.IsVisible(5057) + !Control.IsVisible(5006) + !Control.IsVisible(5056) + !Control.IsVisible(5005) + !Control.IsVisible(5055)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5007) + !Control.IsVisible(5057) + !Control.IsVisible(5006) + !Control.IsVisible(5056) + !Control.IsVisible(5005) + !Control.IsVisible(5055)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.8.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -1436,6 +1449,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5058,home)</onfocus>
                     <ondown condition="Control.IsVisible(5009)">SetFocus(5009)</ondown>
                     <ondown condition="Control.IsVisible(5059) + !Control.IsVisible(5009)">SetFocus(5059)</ondown>
                     <ondown condition="Control.IsVisible(5010) + !Control.IsVisible(5009) + !Control.IsVisible(5059)">SetFocus(5010)</ondown>
@@ -1450,7 +1464,7 @@
                     <onup condition="Control.IsVisible(5056) + !Control.IsVisible(5007) + !Control.IsVisible(5057) + !Control.IsVisible(5006)">SetFocus(5056)</onup>
                     <onup condition="Control.IsVisible(5005) + !Control.IsVisible(5007) + !Control.IsVisible(5057) + !Control.IsVisible(5006) + !Control.IsVisible(5056)">SetFocus(5005)</onup>
                     <onup condition="Control.IsVisible(5055) + !Control.IsVisible(5007) + !Control.IsVisible(5057) + !Control.IsVisible(5006) + !Control.IsVisible(5056) + !Control.IsVisible(5005)">SetFocus(5055)</onup>
-                    <onup condition="!Control.IsVisible(5007) + !Control.IsVisible(5057) + !Control.IsVisible(5006) + !Control.IsVisible(5056) + !Control.IsVisible(5005) + !Control.IsVisible(5055)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5007) + !Control.IsVisible(5057) + !Control.IsVisible(5006) + !Control.IsVisible(5056) + !Control.IsVisible(5005) + !Control.IsVisible(5055)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.8.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -1528,6 +1542,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5009,home)</onfocus>
                     <ondown condition="Control.IsVisible(5010)">SetFocus(5010)</ondown>
                     <ondown condition="Control.IsVisible(5060) + !Control.IsVisible(5010)">SetFocus(5060)</ondown>
                     <ondown condition="Control.IsVisible(5011) + !Control.IsVisible(5010) + !Control.IsVisible(5060)">SetFocus(5011)</ondown>
@@ -1540,7 +1555,7 @@
                     <onup condition="Control.IsVisible(5057) + !Control.IsVisible(5008) + !Control.IsVisible(5058) + !Control.IsVisible(5007)">SetFocus(5057)</onup>
                     <onup condition="Control.IsVisible(5006) + !Control.IsVisible(5008) + !Control.IsVisible(5058) + !Control.IsVisible(5007) + !Control.IsVisible(5057)">SetFocus(5006)</onup>
                     <onup condition="Control.IsVisible(5056) + !Control.IsVisible(5008) + !Control.IsVisible(5058) + !Control.IsVisible(5007) + !Control.IsVisible(5057) + !Control.IsVisible(5006)">SetFocus(5056)</onup>
-                    <onup condition="!Control.IsVisible(5008) + !Control.IsVisible(5058) + !Control.IsVisible(5007) + !Control.IsVisible(5057) + !Control.IsVisible(5006) + !Control.IsVisible(5056)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5008) + !Control.IsVisible(5058) + !Control.IsVisible(5007) + !Control.IsVisible(5057) + !Control.IsVisible(5006) + !Control.IsVisible(5056)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.9.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -1618,6 +1633,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5059,home)</onfocus>
                     <ondown condition="Control.IsVisible(5010)">SetFocus(5010)</ondown>
                     <ondown condition="Control.IsVisible(5060) + !Control.IsVisible(5010)">SetFocus(5060)</ondown>
                     <ondown condition="Control.IsVisible(5011) + !Control.IsVisible(5010) + !Control.IsVisible(5060)">SetFocus(5011)</ondown>
@@ -1630,7 +1646,7 @@
                     <onup condition="Control.IsVisible(5057) + !Control.IsVisible(5008) + !Control.IsVisible(5058) + !Control.IsVisible(5007)">SetFocus(5057)</onup>
                     <onup condition="Control.IsVisible(5006) + !Control.IsVisible(5008) + !Control.IsVisible(5058) + !Control.IsVisible(5007) + !Control.IsVisible(5057)">SetFocus(5006)</onup>
                     <onup condition="Control.IsVisible(5056) + !Control.IsVisible(5008) + !Control.IsVisible(5058) + !Control.IsVisible(5007) + !Control.IsVisible(5057) + !Control.IsVisible(5006)">SetFocus(5056)</onup>
-                    <onup condition="!Control.IsVisible(5008) + !Control.IsVisible(5058) + !Control.IsVisible(5007) + !Control.IsVisible(5057) + !Control.IsVisible(5006) + !Control.IsVisible(5056)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5008) + !Control.IsVisible(5058) + !Control.IsVisible(5007) + !Control.IsVisible(5057) + !Control.IsVisible(5006) + !Control.IsVisible(5056)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.9.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -1708,6 +1724,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5010,home)</onfocus>
                     <ondown condition="Control.IsVisible(5011)">SetFocus(5011)</ondown>
                     <ondown condition="Control.IsVisible(5061) + !Control.IsVisible(5011)">SetFocus(5061)</ondown>
                     <ondown condition="Control.IsVisible(5012) + !Control.IsVisible(5011) + !Control.IsVisible(5061)">SetFocus(5012)</ondown>
@@ -1718,7 +1735,7 @@
                     <onup condition="Control.IsVisible(5058) + !Control.IsVisible(5009) + !Control.IsVisible(5059) + !Control.IsVisible(5008)">SetFocus(5058)</onup>
                     <onup condition="Control.IsVisible(5007) + !Control.IsVisible(5009) + !Control.IsVisible(5059) + !Control.IsVisible(5008) + !Control.IsVisible(5058)">SetFocus(5007)</onup>
                     <onup condition="Control.IsVisible(5057) + !Control.IsVisible(5009) + !Control.IsVisible(5059) + !Control.IsVisible(5008) + !Control.IsVisible(5058) + !Control.IsVisible(5007)">SetFocus(5057)</onup>
-                    <onup condition="!Control.IsVisible(5009) + !Control.IsVisible(5059) + !Control.IsVisible(5008) + !Control.IsVisible(5058) + !Control.IsVisible(5007) + !Control.IsVisible(5057)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5009) + !Control.IsVisible(5059) + !Control.IsVisible(5008) + !Control.IsVisible(5058) + !Control.IsVisible(5007) + !Control.IsVisible(5057)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.10.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -1796,6 +1813,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5060,home)</onfocus>
                     <ondown condition="Control.IsVisible(5011)">SetFocus(5011)</ondown>
                     <ondown condition="Control.IsVisible(5061) + !Control.IsVisible(5011)">SetFocus(5061)</ondown>
                     <ondown condition="Control.IsVisible(5012) + !Control.IsVisible(5011) + !Control.IsVisible(5061)">SetFocus(5012)</ondown>
@@ -1806,7 +1824,7 @@
                     <onup condition="Control.IsVisible(5058) + !Control.IsVisible(5009) + !Control.IsVisible(5059) + !Control.IsVisible(5008)">SetFocus(5058)</onup>
                     <onup condition="Control.IsVisible(5007) + !Control.IsVisible(5009) + !Control.IsVisible(5059) + !Control.IsVisible(5008) + !Control.IsVisible(5058)">SetFocus(5007)</onup>
                     <onup condition="Control.IsVisible(5057) + !Control.IsVisible(5009) + !Control.IsVisible(5059) + !Control.IsVisible(5008) + !Control.IsVisible(5058) + !Control.IsVisible(5007)">SetFocus(5057)</onup>
-                    <onup condition="!Control.IsVisible(5009) + !Control.IsVisible(5059) + !Control.IsVisible(5008) + !Control.IsVisible(5058) + !Control.IsVisible(5007) + !Control.IsVisible(5057)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5009) + !Control.IsVisible(5059) + !Control.IsVisible(5008) + !Control.IsVisible(5058) + !Control.IsVisible(5007) + !Control.IsVisible(5057)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.10.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -1884,6 +1902,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5011,home)</onfocus>
                     <ondown condition="Control.IsVisible(5012)">SetFocus(5012)</ondown>
                     <ondown condition="Control.IsVisible(5062) + !Control.IsVisible(5012)">SetFocus(5062)</ondown>
                     <onup condition="Control.IsVisible(5010)">SetFocus(5010)</onup>
@@ -1892,7 +1911,7 @@
                     <onup condition="Control.IsVisible(5059) + !Control.IsVisible(5010) + !Control.IsVisible(5060) + !Control.IsVisible(5009)">SetFocus(5059)</onup>
                     <onup condition="Control.IsVisible(5008) + !Control.IsVisible(5010) + !Control.IsVisible(5060) + !Control.IsVisible(5009) + !Control.IsVisible(5059)">SetFocus(5008)</onup>
                     <onup condition="Control.IsVisible(5058) + !Control.IsVisible(5010) + !Control.IsVisible(5060) + !Control.IsVisible(5009) + !Control.IsVisible(5059) + !Control.IsVisible(5008)">SetFocus(5058)</onup>
-                    <onup condition="!Control.IsVisible(5010) + !Control.IsVisible(5060) + !Control.IsVisible(5009) + !Control.IsVisible(5059) + !Control.IsVisible(5008) + !Control.IsVisible(5058)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5010) + !Control.IsVisible(5060) + !Control.IsVisible(5009) + !Control.IsVisible(5059) + !Control.IsVisible(5008) + !Control.IsVisible(5058)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.11.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -1970,6 +1989,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5061,home)</onfocus>
                     <ondown condition="Control.IsVisible(5012)">SetFocus(5012)</ondown>
                     <ondown condition="Control.IsVisible(5062) + !Control.IsVisible(5012)">SetFocus(5062)</ondown>
                     <onup condition="Control.IsVisible(5010)">SetFocus(5010)</onup>
@@ -1978,7 +1998,7 @@
                     <onup condition="Control.IsVisible(5059) + !Control.IsVisible(5010) + !Control.IsVisible(5060) + !Control.IsVisible(5009)">SetFocus(5059)</onup>
                     <onup condition="Control.IsVisible(5008) + !Control.IsVisible(5010) + !Control.IsVisible(5060) + !Control.IsVisible(5009) + !Control.IsVisible(5059)">SetFocus(5008)</onup>
                     <onup condition="Control.IsVisible(5058) + !Control.IsVisible(5010) + !Control.IsVisible(5060) + !Control.IsVisible(5009) + !Control.IsVisible(5059) + !Control.IsVisible(5008)">SetFocus(5058)</onup>
-                    <onup condition="!Control.IsVisible(5010) + !Control.IsVisible(5060) + !Control.IsVisible(5009) + !Control.IsVisible(5059) + !Control.IsVisible(5008) + !Control.IsVisible(5058)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5010) + !Control.IsVisible(5060) + !Control.IsVisible(5009) + !Control.IsVisible(5059) + !Control.IsVisible(5008) + !Control.IsVisible(5058)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.11.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -2056,13 +2076,14 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5012,home)</onfocus>
                     <onup condition="Control.IsVisible(5011)">SetFocus(5011)</onup>
                     <onup condition="Control.IsVisible(5061) + !Control.IsVisible(5011)">SetFocus(5061)</onup>
                     <onup condition="Control.IsVisible(5010) + !Control.IsVisible(5011) + !Control.IsVisible(5061)">SetFocus(5010)</onup>
                     <onup condition="Control.IsVisible(5060) + !Control.IsVisible(5011) + !Control.IsVisible(5061) + !Control.IsVisible(5010)">SetFocus(5060)</onup>
                     <onup condition="Control.IsVisible(5009) + !Control.IsVisible(5011) + !Control.IsVisible(5061) + !Control.IsVisible(5010) + !Control.IsVisible(5060)">SetFocus(5009)</onup>
                     <onup condition="Control.IsVisible(5059) + !Control.IsVisible(5011) + !Control.IsVisible(5061) + !Control.IsVisible(5010) + !Control.IsVisible(5060) + !Control.IsVisible(5009)">SetFocus(5059)</onup>
-                    <onup condition="!Control.IsVisible(5011) + !Control.IsVisible(5061) + !Control.IsVisible(5010) + !Control.IsVisible(5060) + !Control.IsVisible(5009) + !Control.IsVisible(5059)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5011) + !Control.IsVisible(5061) + !Control.IsVisible(5010) + !Control.IsVisible(5060) + !Control.IsVisible(5009) + !Control.IsVisible(5059)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.12.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -2140,13 +2161,14 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5062,home)</onfocus>
                     <onup condition="Control.IsVisible(5011)">SetFocus(5011)</onup>
                     <onup condition="Control.IsVisible(5061) + !Control.IsVisible(5011)">SetFocus(5061)</onup>
                     <onup condition="Control.IsVisible(5010) + !Control.IsVisible(5011) + !Control.IsVisible(5061)">SetFocus(5010)</onup>
                     <onup condition="Control.IsVisible(5060) + !Control.IsVisible(5011) + !Control.IsVisible(5061) + !Control.IsVisible(5010)">SetFocus(5060)</onup>
                     <onup condition="Control.IsVisible(5009) + !Control.IsVisible(5011) + !Control.IsVisible(5061) + !Control.IsVisible(5010) + !Control.IsVisible(5060)">SetFocus(5009)</onup>
                     <onup condition="Control.IsVisible(5059) + !Control.IsVisible(5011) + !Control.IsVisible(5061) + !Control.IsVisible(5010) + !Control.IsVisible(5060) + !Control.IsVisible(5009)">SetFocus(5059)</onup>
-                    <onup condition="!Control.IsVisible(5011) + !Control.IsVisible(5061) + !Control.IsVisible(5010) + !Control.IsVisible(5060) + !Control.IsVisible(5009) + !Control.IsVisible(5059)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5011) + !Control.IsVisible(5061) + !Control.IsVisible(5010) + !Control.IsVisible(5060) + !Control.IsVisible(5009) + !Control.IsVisible(5059)">SetFocus(9002)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.home.12.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -2224,6 +2246,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5101,home)</onfocus>
                     <ondown condition="Control.IsVisible(5102)">SetFocus(5102)</ondown>
                     <ondown condition="Control.IsVisible(5152) + !Control.IsVisible(5102)">SetFocus(5152)</ondown>
                     <ondown condition="Control.IsVisible(5103) + !Control.IsVisible(5102) + !Control.IsVisible(5152)">SetFocus(5103)</ondown>
@@ -2232,7 +2255,7 @@
                     <ondown condition="Control.IsVisible(5154) + !Control.IsVisible(5102) + !Control.IsVisible(5152) + !Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5104)">SetFocus(5154)</ondown>
                     <ondown condition="Control.IsVisible(5105) + !Control.IsVisible(5102) + !Control.IsVisible(5152) + !Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5104) + !Control.IsVisible(5154)">SetFocus(5105)</ondown>
                     <ondown condition="Control.IsVisible(5155) + !Control.IsVisible(5102) + !Control.IsVisible(5152) + !Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5104) + !Control.IsVisible(5154) + !Control.IsVisible(5105)">SetFocus(5155)</ondown>
-                    <onup condition="true">SetFocus(9000)</onup>
+                    <onup>SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.1.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -2310,6 +2333,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5151,home)</onfocus>
                     <ondown condition="Control.IsVisible(5102)">SetFocus(5102)</ondown>
                     <ondown condition="Control.IsVisible(5152) + !Control.IsVisible(5102)">SetFocus(5152)</ondown>
                     <ondown condition="Control.IsVisible(5103) + !Control.IsVisible(5102) + !Control.IsVisible(5152)">SetFocus(5103)</ondown>
@@ -2318,7 +2342,7 @@
                     <ondown condition="Control.IsVisible(5154) + !Control.IsVisible(5102) + !Control.IsVisible(5152) + !Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5104)">SetFocus(5154)</ondown>
                     <ondown condition="Control.IsVisible(5105) + !Control.IsVisible(5102) + !Control.IsVisible(5152) + !Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5104) + !Control.IsVisible(5154)">SetFocus(5105)</ondown>
                     <ondown condition="Control.IsVisible(5155) + !Control.IsVisible(5102) + !Control.IsVisible(5152) + !Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5104) + !Control.IsVisible(5154) + !Control.IsVisible(5105)">SetFocus(5155)</ondown>
-                    <onup condition="true">SetFocus(9000)</onup>
+                    <onup>SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.1.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -2396,6 +2420,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5102,home)</onfocus>
                     <ondown condition="Control.IsVisible(5103)">SetFocus(5103)</ondown>
                     <ondown condition="Control.IsVisible(5153) + !Control.IsVisible(5103)">SetFocus(5153)</ondown>
                     <ondown condition="Control.IsVisible(5104) + !Control.IsVisible(5103) + !Control.IsVisible(5153)">SetFocus(5104)</ondown>
@@ -2406,7 +2431,7 @@
                     <ondown condition="Control.IsVisible(5156) + !Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5104) + !Control.IsVisible(5154) + !Control.IsVisible(5105) + !Control.IsVisible(5155) + !Control.IsVisible(5106)">SetFocus(5156)</ondown>
                     <onup condition="Control.IsVisible(5101)">SetFocus(5101)</onup>
                     <onup condition="Control.IsVisible(5151) + !Control.IsVisible(5101)">SetFocus(5151)</onup>
-                    <onup condition="!Control.IsVisible(5101) + !Control.IsVisible(5151)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5101) + !Control.IsVisible(5151)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.2.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -2484,6 +2509,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5152,home)</onfocus>
                     <ondown condition="Control.IsVisible(5103)">SetFocus(5103)</ondown>
                     <ondown condition="Control.IsVisible(5153) + !Control.IsVisible(5103)">SetFocus(5153)</ondown>
                     <ondown condition="Control.IsVisible(5104) + !Control.IsVisible(5103) + !Control.IsVisible(5153)">SetFocus(5104)</ondown>
@@ -2494,7 +2520,7 @@
                     <ondown condition="Control.IsVisible(5156) + !Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5104) + !Control.IsVisible(5154) + !Control.IsVisible(5105) + !Control.IsVisible(5155) + !Control.IsVisible(5106)">SetFocus(5156)</ondown>
                     <onup condition="Control.IsVisible(5101)">SetFocus(5101)</onup>
                     <onup condition="Control.IsVisible(5151) + !Control.IsVisible(5101)">SetFocus(5151)</onup>
-                    <onup condition="!Control.IsVisible(5101) + !Control.IsVisible(5151)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5101) + !Control.IsVisible(5151)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.2.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -2572,6 +2598,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5103,home)</onfocus>
                     <ondown condition="Control.IsVisible(5104)">SetFocus(5104)</ondown>
                     <ondown condition="Control.IsVisible(5154) + !Control.IsVisible(5104)">SetFocus(5154)</ondown>
                     <ondown condition="Control.IsVisible(5105) + !Control.IsVisible(5104) + !Control.IsVisible(5154)">SetFocus(5105)</ondown>
@@ -2584,7 +2611,7 @@
                     <onup condition="Control.IsVisible(5152) + !Control.IsVisible(5102)">SetFocus(5152)</onup>
                     <onup condition="Control.IsVisible(5101) + !Control.IsVisible(5102) + !Control.IsVisible(5152)">SetFocus(5101)</onup>
                     <onup condition="Control.IsVisible(5151) + !Control.IsVisible(5102) + !Control.IsVisible(5152) + !Control.IsVisible(5101)">SetFocus(5151)</onup>
-                    <onup condition="!Control.IsVisible(5102) + !Control.IsVisible(5152) + !Control.IsVisible(5101) + !Control.IsVisible(5151)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5102) + !Control.IsVisible(5152) + !Control.IsVisible(5101) + !Control.IsVisible(5151)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.3.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -2662,6 +2689,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5153,home)</onfocus>
                     <ondown condition="Control.IsVisible(5104)">SetFocus(5104)</ondown>
                     <ondown condition="Control.IsVisible(5154) + !Control.IsVisible(5104)">SetFocus(5154)</ondown>
                     <ondown condition="Control.IsVisible(5105) + !Control.IsVisible(5104) + !Control.IsVisible(5154)">SetFocus(5105)</ondown>
@@ -2674,7 +2702,7 @@
                     <onup condition="Control.IsVisible(5152) + !Control.IsVisible(5102)">SetFocus(5152)</onup>
                     <onup condition="Control.IsVisible(5101) + !Control.IsVisible(5102) + !Control.IsVisible(5152)">SetFocus(5101)</onup>
                     <onup condition="Control.IsVisible(5151) + !Control.IsVisible(5102) + !Control.IsVisible(5152) + !Control.IsVisible(5101)">SetFocus(5151)</onup>
-                    <onup condition="!Control.IsVisible(5102) + !Control.IsVisible(5152) + !Control.IsVisible(5101) + !Control.IsVisible(5151)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5102) + !Control.IsVisible(5152) + !Control.IsVisible(5101) + !Control.IsVisible(5151)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.3.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -2752,6 +2780,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5104,home)</onfocus>
                     <ondown condition="Control.IsVisible(5105)">SetFocus(5105)</ondown>
                     <ondown condition="Control.IsVisible(5155) + !Control.IsVisible(5105)">SetFocus(5155)</ondown>
                     <ondown condition="Control.IsVisible(5106) + !Control.IsVisible(5105) + !Control.IsVisible(5155)">SetFocus(5106)</ondown>
@@ -2766,7 +2795,7 @@
                     <onup condition="Control.IsVisible(5152) + !Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5102)">SetFocus(5152)</onup>
                     <onup condition="Control.IsVisible(5101) + !Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5102) + !Control.IsVisible(5152)">SetFocus(5101)</onup>
                     <onup condition="Control.IsVisible(5151) + !Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5102) + !Control.IsVisible(5152) + !Control.IsVisible(5101)">SetFocus(5151)</onup>
-                    <onup condition="!Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5102) + !Control.IsVisible(5152) + !Control.IsVisible(5101) + !Control.IsVisible(5151)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5102) + !Control.IsVisible(5152) + !Control.IsVisible(5101) + !Control.IsVisible(5151)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.4.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -2844,6 +2873,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5154,home)</onfocus>
                     <ondown condition="Control.IsVisible(5105)">SetFocus(5105)</ondown>
                     <ondown condition="Control.IsVisible(5155) + !Control.IsVisible(5105)">SetFocus(5155)</ondown>
                     <ondown condition="Control.IsVisible(5106) + !Control.IsVisible(5105) + !Control.IsVisible(5155)">SetFocus(5106)</ondown>
@@ -2858,7 +2888,7 @@
                     <onup condition="Control.IsVisible(5152) + !Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5102)">SetFocus(5152)</onup>
                     <onup condition="Control.IsVisible(5101) + !Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5102) + !Control.IsVisible(5152)">SetFocus(5101)</onup>
                     <onup condition="Control.IsVisible(5151) + !Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5102) + !Control.IsVisible(5152) + !Control.IsVisible(5101)">SetFocus(5151)</onup>
-                    <onup condition="!Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5102) + !Control.IsVisible(5152) + !Control.IsVisible(5101) + !Control.IsVisible(5151)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5102) + !Control.IsVisible(5152) + !Control.IsVisible(5101) + !Control.IsVisible(5151)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.4.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -2936,6 +2966,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5105,home)</onfocus>
                     <ondown condition="Control.IsVisible(5106)">SetFocus(5106)</ondown>
                     <ondown condition="Control.IsVisible(5156) + !Control.IsVisible(5106)">SetFocus(5156)</ondown>
                     <ondown condition="Control.IsVisible(5107) + !Control.IsVisible(5106) + !Control.IsVisible(5156)">SetFocus(5107)</ondown>
@@ -2950,7 +2981,7 @@
                     <onup condition="Control.IsVisible(5153) + !Control.IsVisible(5104) + !Control.IsVisible(5154) + !Control.IsVisible(5103)">SetFocus(5153)</onup>
                     <onup condition="Control.IsVisible(5102) + !Control.IsVisible(5104) + !Control.IsVisible(5154) + !Control.IsVisible(5103) + !Control.IsVisible(5153)">SetFocus(5102)</onup>
                     <onup condition="Control.IsVisible(5152) + !Control.IsVisible(5104) + !Control.IsVisible(5154) + !Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5102)">SetFocus(5152)</onup>
-                    <onup condition="!Control.IsVisible(5104) + !Control.IsVisible(5154) + !Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5102) + !Control.IsVisible(5152)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5104) + !Control.IsVisible(5154) + !Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5102) + !Control.IsVisible(5152)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.5.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -3028,6 +3059,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5155,home)</onfocus>
                     <ondown condition="Control.IsVisible(5106)">SetFocus(5106)</ondown>
                     <ondown condition="Control.IsVisible(5156) + !Control.IsVisible(5106)">SetFocus(5156)</ondown>
                     <ondown condition="Control.IsVisible(5107) + !Control.IsVisible(5106) + !Control.IsVisible(5156)">SetFocus(5107)</ondown>
@@ -3042,7 +3074,7 @@
                     <onup condition="Control.IsVisible(5153) + !Control.IsVisible(5104) + !Control.IsVisible(5154) + !Control.IsVisible(5103)">SetFocus(5153)</onup>
                     <onup condition="Control.IsVisible(5102) + !Control.IsVisible(5104) + !Control.IsVisible(5154) + !Control.IsVisible(5103) + !Control.IsVisible(5153)">SetFocus(5102)</onup>
                     <onup condition="Control.IsVisible(5152) + !Control.IsVisible(5104) + !Control.IsVisible(5154) + !Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5102)">SetFocus(5152)</onup>
-                    <onup condition="!Control.IsVisible(5104) + !Control.IsVisible(5154) + !Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5102) + !Control.IsVisible(5152)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5104) + !Control.IsVisible(5154) + !Control.IsVisible(5103) + !Control.IsVisible(5153) + !Control.IsVisible(5102) + !Control.IsVisible(5152)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.5.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -3120,6 +3152,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5106,home)</onfocus>
                     <ondown condition="Control.IsVisible(5107)">SetFocus(5107)</ondown>
                     <ondown condition="Control.IsVisible(5157) + !Control.IsVisible(5107)">SetFocus(5157)</ondown>
                     <ondown condition="Control.IsVisible(5108) + !Control.IsVisible(5107) + !Control.IsVisible(5157)">SetFocus(5108)</ondown>
@@ -3134,7 +3167,7 @@
                     <onup condition="Control.IsVisible(5154) + !Control.IsVisible(5105) + !Control.IsVisible(5155) + !Control.IsVisible(5104)">SetFocus(5154)</onup>
                     <onup condition="Control.IsVisible(5103) + !Control.IsVisible(5105) + !Control.IsVisible(5155) + !Control.IsVisible(5104) + !Control.IsVisible(5154)">SetFocus(5103)</onup>
                     <onup condition="Control.IsVisible(5153) + !Control.IsVisible(5105) + !Control.IsVisible(5155) + !Control.IsVisible(5104) + !Control.IsVisible(5154) + !Control.IsVisible(5103)">SetFocus(5153)</onup>
-                    <onup condition="!Control.IsVisible(5105) + !Control.IsVisible(5155) + !Control.IsVisible(5104) + !Control.IsVisible(5154) + !Control.IsVisible(5103) + !Control.IsVisible(5153)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5105) + !Control.IsVisible(5155) + !Control.IsVisible(5104) + !Control.IsVisible(5154) + !Control.IsVisible(5103) + !Control.IsVisible(5153)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.6.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -3212,6 +3245,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5156,home)</onfocus>
                     <ondown condition="Control.IsVisible(5107)">SetFocus(5107)</ondown>
                     <ondown condition="Control.IsVisible(5157) + !Control.IsVisible(5107)">SetFocus(5157)</ondown>
                     <ondown condition="Control.IsVisible(5108) + !Control.IsVisible(5107) + !Control.IsVisible(5157)">SetFocus(5108)</ondown>
@@ -3226,7 +3260,7 @@
                     <onup condition="Control.IsVisible(5154) + !Control.IsVisible(5105) + !Control.IsVisible(5155) + !Control.IsVisible(5104)">SetFocus(5154)</onup>
                     <onup condition="Control.IsVisible(5103) + !Control.IsVisible(5105) + !Control.IsVisible(5155) + !Control.IsVisible(5104) + !Control.IsVisible(5154)">SetFocus(5103)</onup>
                     <onup condition="Control.IsVisible(5153) + !Control.IsVisible(5105) + !Control.IsVisible(5155) + !Control.IsVisible(5104) + !Control.IsVisible(5154) + !Control.IsVisible(5103)">SetFocus(5153)</onup>
-                    <onup condition="!Control.IsVisible(5105) + !Control.IsVisible(5155) + !Control.IsVisible(5104) + !Control.IsVisible(5154) + !Control.IsVisible(5103) + !Control.IsVisible(5153)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5105) + !Control.IsVisible(5155) + !Control.IsVisible(5104) + !Control.IsVisible(5154) + !Control.IsVisible(5103) + !Control.IsVisible(5153)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.6.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -3304,6 +3338,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5107,home)</onfocus>
                     <ondown condition="Control.IsVisible(5108)">SetFocus(5108)</ondown>
                     <ondown condition="Control.IsVisible(5158) + !Control.IsVisible(5108)">SetFocus(5158)</ondown>
                     <ondown condition="Control.IsVisible(5109) + !Control.IsVisible(5108) + !Control.IsVisible(5158)">SetFocus(5109)</ondown>
@@ -3318,7 +3353,7 @@
                     <onup condition="Control.IsVisible(5155) + !Control.IsVisible(5106) + !Control.IsVisible(5156) + !Control.IsVisible(5105)">SetFocus(5155)</onup>
                     <onup condition="Control.IsVisible(5104) + !Control.IsVisible(5106) + !Control.IsVisible(5156) + !Control.IsVisible(5105) + !Control.IsVisible(5155)">SetFocus(5104)</onup>
                     <onup condition="Control.IsVisible(5154) + !Control.IsVisible(5106) + !Control.IsVisible(5156) + !Control.IsVisible(5105) + !Control.IsVisible(5155) + !Control.IsVisible(5104)">SetFocus(5154)</onup>
-                    <onup condition="!Control.IsVisible(5106) + !Control.IsVisible(5156) + !Control.IsVisible(5105) + !Control.IsVisible(5155) + !Control.IsVisible(5104) + !Control.IsVisible(5154)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5106) + !Control.IsVisible(5156) + !Control.IsVisible(5105) + !Control.IsVisible(5155) + !Control.IsVisible(5104) + !Control.IsVisible(5154)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.7.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -3396,6 +3431,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5157,home)</onfocus>
                     <ondown condition="Control.IsVisible(5108)">SetFocus(5108)</ondown>
                     <ondown condition="Control.IsVisible(5158) + !Control.IsVisible(5108)">SetFocus(5158)</ondown>
                     <ondown condition="Control.IsVisible(5109) + !Control.IsVisible(5108) + !Control.IsVisible(5158)">SetFocus(5109)</ondown>
@@ -3410,7 +3446,7 @@
                     <onup condition="Control.IsVisible(5155) + !Control.IsVisible(5106) + !Control.IsVisible(5156) + !Control.IsVisible(5105)">SetFocus(5155)</onup>
                     <onup condition="Control.IsVisible(5104) + !Control.IsVisible(5106) + !Control.IsVisible(5156) + !Control.IsVisible(5105) + !Control.IsVisible(5155)">SetFocus(5104)</onup>
                     <onup condition="Control.IsVisible(5154) + !Control.IsVisible(5106) + !Control.IsVisible(5156) + !Control.IsVisible(5105) + !Control.IsVisible(5155) + !Control.IsVisible(5104)">SetFocus(5154)</onup>
-                    <onup condition="!Control.IsVisible(5106) + !Control.IsVisible(5156) + !Control.IsVisible(5105) + !Control.IsVisible(5155) + !Control.IsVisible(5104) + !Control.IsVisible(5154)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5106) + !Control.IsVisible(5156) + !Control.IsVisible(5105) + !Control.IsVisible(5155) + !Control.IsVisible(5104) + !Control.IsVisible(5154)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.7.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -3488,6 +3524,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5108,home)</onfocus>
                     <ondown condition="Control.IsVisible(5109)">SetFocus(5109)</ondown>
                     <ondown condition="Control.IsVisible(5159) + !Control.IsVisible(5109)">SetFocus(5159)</ondown>
                     <ondown condition="Control.IsVisible(5110) + !Control.IsVisible(5109) + !Control.IsVisible(5159)">SetFocus(5110)</ondown>
@@ -3502,7 +3539,7 @@
                     <onup condition="Control.IsVisible(5156) + !Control.IsVisible(5107) + !Control.IsVisible(5157) + !Control.IsVisible(5106)">SetFocus(5156)</onup>
                     <onup condition="Control.IsVisible(5105) + !Control.IsVisible(5107) + !Control.IsVisible(5157) + !Control.IsVisible(5106) + !Control.IsVisible(5156)">SetFocus(5105)</onup>
                     <onup condition="Control.IsVisible(5155) + !Control.IsVisible(5107) + !Control.IsVisible(5157) + !Control.IsVisible(5106) + !Control.IsVisible(5156) + !Control.IsVisible(5105)">SetFocus(5155)</onup>
-                    <onup condition="!Control.IsVisible(5107) + !Control.IsVisible(5157) + !Control.IsVisible(5106) + !Control.IsVisible(5156) + !Control.IsVisible(5105) + !Control.IsVisible(5155)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5107) + !Control.IsVisible(5157) + !Control.IsVisible(5106) + !Control.IsVisible(5156) + !Control.IsVisible(5105) + !Control.IsVisible(5155)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.8.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -3580,6 +3617,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5158,home)</onfocus>
                     <ondown condition="Control.IsVisible(5109)">SetFocus(5109)</ondown>
                     <ondown condition="Control.IsVisible(5159) + !Control.IsVisible(5109)">SetFocus(5159)</ondown>
                     <ondown condition="Control.IsVisible(5110) + !Control.IsVisible(5109) + !Control.IsVisible(5159)">SetFocus(5110)</ondown>
@@ -3594,7 +3632,7 @@
                     <onup condition="Control.IsVisible(5156) + !Control.IsVisible(5107) + !Control.IsVisible(5157) + !Control.IsVisible(5106)">SetFocus(5156)</onup>
                     <onup condition="Control.IsVisible(5105) + !Control.IsVisible(5107) + !Control.IsVisible(5157) + !Control.IsVisible(5106) + !Control.IsVisible(5156)">SetFocus(5105)</onup>
                     <onup condition="Control.IsVisible(5155) + !Control.IsVisible(5107) + !Control.IsVisible(5157) + !Control.IsVisible(5106) + !Control.IsVisible(5156) + !Control.IsVisible(5105)">SetFocus(5155)</onup>
-                    <onup condition="!Control.IsVisible(5107) + !Control.IsVisible(5157) + !Control.IsVisible(5106) + !Control.IsVisible(5156) + !Control.IsVisible(5105) + !Control.IsVisible(5155)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5107) + !Control.IsVisible(5157) + !Control.IsVisible(5106) + !Control.IsVisible(5156) + !Control.IsVisible(5105) + !Control.IsVisible(5155)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.8.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -3672,6 +3710,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5109,home)</onfocus>
                     <ondown condition="Control.IsVisible(5110)">SetFocus(5110)</ondown>
                     <ondown condition="Control.IsVisible(5160) + !Control.IsVisible(5110)">SetFocus(5160)</ondown>
                     <ondown condition="Control.IsVisible(5111) + !Control.IsVisible(5110) + !Control.IsVisible(5160)">SetFocus(5111)</ondown>
@@ -3684,7 +3723,7 @@
                     <onup condition="Control.IsVisible(5157) + !Control.IsVisible(5108) + !Control.IsVisible(5158) + !Control.IsVisible(5107)">SetFocus(5157)</onup>
                     <onup condition="Control.IsVisible(5106) + !Control.IsVisible(5108) + !Control.IsVisible(5158) + !Control.IsVisible(5107) + !Control.IsVisible(5157)">SetFocus(5106)</onup>
                     <onup condition="Control.IsVisible(5156) + !Control.IsVisible(5108) + !Control.IsVisible(5158) + !Control.IsVisible(5107) + !Control.IsVisible(5157) + !Control.IsVisible(5106)">SetFocus(5156)</onup>
-                    <onup condition="!Control.IsVisible(5108) + !Control.IsVisible(5158) + !Control.IsVisible(5107) + !Control.IsVisible(5157) + !Control.IsVisible(5106) + !Control.IsVisible(5156)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5108) + !Control.IsVisible(5158) + !Control.IsVisible(5107) + !Control.IsVisible(5157) + !Control.IsVisible(5106) + !Control.IsVisible(5156)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.9.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -3762,6 +3801,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5159,home)</onfocus>
                     <ondown condition="Control.IsVisible(5110)">SetFocus(5110)</ondown>
                     <ondown condition="Control.IsVisible(5160) + !Control.IsVisible(5110)">SetFocus(5160)</ondown>
                     <ondown condition="Control.IsVisible(5111) + !Control.IsVisible(5110) + !Control.IsVisible(5160)">SetFocus(5111)</ondown>
@@ -3774,7 +3814,7 @@
                     <onup condition="Control.IsVisible(5157) + !Control.IsVisible(5108) + !Control.IsVisible(5158) + !Control.IsVisible(5107)">SetFocus(5157)</onup>
                     <onup condition="Control.IsVisible(5106) + !Control.IsVisible(5108) + !Control.IsVisible(5158) + !Control.IsVisible(5107) + !Control.IsVisible(5157)">SetFocus(5106)</onup>
                     <onup condition="Control.IsVisible(5156) + !Control.IsVisible(5108) + !Control.IsVisible(5158) + !Control.IsVisible(5107) + !Control.IsVisible(5157) + !Control.IsVisible(5106)">SetFocus(5156)</onup>
-                    <onup condition="!Control.IsVisible(5108) + !Control.IsVisible(5158) + !Control.IsVisible(5107) + !Control.IsVisible(5157) + !Control.IsVisible(5106) + !Control.IsVisible(5156)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5108) + !Control.IsVisible(5158) + !Control.IsVisible(5107) + !Control.IsVisible(5157) + !Control.IsVisible(5106) + !Control.IsVisible(5156)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.9.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -3852,6 +3892,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5110,home)</onfocus>
                     <ondown condition="Control.IsVisible(5111)">SetFocus(5111)</ondown>
                     <ondown condition="Control.IsVisible(5161) + !Control.IsVisible(5111)">SetFocus(5161)</ondown>
                     <ondown condition="Control.IsVisible(5112) + !Control.IsVisible(5111) + !Control.IsVisible(5161)">SetFocus(5112)</ondown>
@@ -3862,7 +3903,7 @@
                     <onup condition="Control.IsVisible(5158) + !Control.IsVisible(5109) + !Control.IsVisible(5159) + !Control.IsVisible(5108)">SetFocus(5158)</onup>
                     <onup condition="Control.IsVisible(5107) + !Control.IsVisible(5109) + !Control.IsVisible(5159) + !Control.IsVisible(5108) + !Control.IsVisible(5158)">SetFocus(5107)</onup>
                     <onup condition="Control.IsVisible(5157) + !Control.IsVisible(5109) + !Control.IsVisible(5159) + !Control.IsVisible(5108) + !Control.IsVisible(5158) + !Control.IsVisible(5107)">SetFocus(5157)</onup>
-                    <onup condition="!Control.IsVisible(5109) + !Control.IsVisible(5159) + !Control.IsVisible(5108) + !Control.IsVisible(5158) + !Control.IsVisible(5107) + !Control.IsVisible(5157)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5109) + !Control.IsVisible(5159) + !Control.IsVisible(5108) + !Control.IsVisible(5158) + !Control.IsVisible(5107) + !Control.IsVisible(5157)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.10.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -3940,6 +3981,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5160,home)</onfocus>
                     <ondown condition="Control.IsVisible(5111)">SetFocus(5111)</ondown>
                     <ondown condition="Control.IsVisible(5161) + !Control.IsVisible(5111)">SetFocus(5161)</ondown>
                     <ondown condition="Control.IsVisible(5112) + !Control.IsVisible(5111) + !Control.IsVisible(5161)">SetFocus(5112)</ondown>
@@ -3950,7 +3992,7 @@
                     <onup condition="Control.IsVisible(5158) + !Control.IsVisible(5109) + !Control.IsVisible(5159) + !Control.IsVisible(5108)">SetFocus(5158)</onup>
                     <onup condition="Control.IsVisible(5107) + !Control.IsVisible(5109) + !Control.IsVisible(5159) + !Control.IsVisible(5108) + !Control.IsVisible(5158)">SetFocus(5107)</onup>
                     <onup condition="Control.IsVisible(5157) + !Control.IsVisible(5109) + !Control.IsVisible(5159) + !Control.IsVisible(5108) + !Control.IsVisible(5158) + !Control.IsVisible(5107)">SetFocus(5157)</onup>
-                    <onup condition="!Control.IsVisible(5109) + !Control.IsVisible(5159) + !Control.IsVisible(5108) + !Control.IsVisible(5158) + !Control.IsVisible(5107) + !Control.IsVisible(5157)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5109) + !Control.IsVisible(5159) + !Control.IsVisible(5108) + !Control.IsVisible(5158) + !Control.IsVisible(5107) + !Control.IsVisible(5157)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.10.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -4028,6 +4070,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5111,home)</onfocus>
                     <ondown condition="Control.IsVisible(5112)">SetFocus(5112)</ondown>
                     <ondown condition="Control.IsVisible(5162) + !Control.IsVisible(5112)">SetFocus(5162)</ondown>
                     <onup condition="Control.IsVisible(5110)">SetFocus(5110)</onup>
@@ -4036,7 +4079,7 @@
                     <onup condition="Control.IsVisible(5159) + !Control.IsVisible(5110) + !Control.IsVisible(5160) + !Control.IsVisible(5109)">SetFocus(5159)</onup>
                     <onup condition="Control.IsVisible(5108) + !Control.IsVisible(5110) + !Control.IsVisible(5160) + !Control.IsVisible(5109) + !Control.IsVisible(5159)">SetFocus(5108)</onup>
                     <onup condition="Control.IsVisible(5158) + !Control.IsVisible(5110) + !Control.IsVisible(5160) + !Control.IsVisible(5109) + !Control.IsVisible(5159) + !Control.IsVisible(5108)">SetFocus(5158)</onup>
-                    <onup condition="!Control.IsVisible(5110) + !Control.IsVisible(5160) + !Control.IsVisible(5109) + !Control.IsVisible(5159) + !Control.IsVisible(5108) + !Control.IsVisible(5158)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5110) + !Control.IsVisible(5160) + !Control.IsVisible(5109) + !Control.IsVisible(5159) + !Control.IsVisible(5108) + !Control.IsVisible(5158)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.11.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -4114,6 +4157,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5161,home)</onfocus>
                     <ondown condition="Control.IsVisible(5112)">SetFocus(5112)</ondown>
                     <ondown condition="Control.IsVisible(5162) + !Control.IsVisible(5112)">SetFocus(5162)</ondown>
                     <onup condition="Control.IsVisible(5110)">SetFocus(5110)</onup>
@@ -4122,7 +4166,7 @@
                     <onup condition="Control.IsVisible(5159) + !Control.IsVisible(5110) + !Control.IsVisible(5160) + !Control.IsVisible(5109)">SetFocus(5159)</onup>
                     <onup condition="Control.IsVisible(5108) + !Control.IsVisible(5110) + !Control.IsVisible(5160) + !Control.IsVisible(5109) + !Control.IsVisible(5159)">SetFocus(5108)</onup>
                     <onup condition="Control.IsVisible(5158) + !Control.IsVisible(5110) + !Control.IsVisible(5160) + !Control.IsVisible(5109) + !Control.IsVisible(5159) + !Control.IsVisible(5108)">SetFocus(5158)</onup>
-                    <onup condition="!Control.IsVisible(5110) + !Control.IsVisible(5160) + !Control.IsVisible(5109) + !Control.IsVisible(5159) + !Control.IsVisible(5108) + !Control.IsVisible(5158)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5110) + !Control.IsVisible(5160) + !Control.IsVisible(5109) + !Control.IsVisible(5159) + !Control.IsVisible(5108) + !Control.IsVisible(5158)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.11.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -4200,13 +4244,14 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5112,home)</onfocus>
                     <onup condition="Control.IsVisible(5111)">SetFocus(5111)</onup>
                     <onup condition="Control.IsVisible(5161) + !Control.IsVisible(5111)">SetFocus(5161)</onup>
                     <onup condition="Control.IsVisible(5110) + !Control.IsVisible(5111) + !Control.IsVisible(5161)">SetFocus(5110)</onup>
                     <onup condition="Control.IsVisible(5160) + !Control.IsVisible(5111) + !Control.IsVisible(5161) + !Control.IsVisible(5110)">SetFocus(5160)</onup>
                     <onup condition="Control.IsVisible(5109) + !Control.IsVisible(5111) + !Control.IsVisible(5161) + !Control.IsVisible(5110) + !Control.IsVisible(5160)">SetFocus(5109)</onup>
                     <onup condition="Control.IsVisible(5159) + !Control.IsVisible(5111) + !Control.IsVisible(5161) + !Control.IsVisible(5110) + !Control.IsVisible(5160) + !Control.IsVisible(5109)">SetFocus(5159)</onup>
-                    <onup condition="!Control.IsVisible(5111) + !Control.IsVisible(5161) + !Control.IsVisible(5110) + !Control.IsVisible(5160) + !Control.IsVisible(5109) + !Control.IsVisible(5159)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5111) + !Control.IsVisible(5161) + !Control.IsVisible(5110) + !Control.IsVisible(5160) + !Control.IsVisible(5109) + !Control.IsVisible(5159)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.12.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -4284,13 +4329,14 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5162,home)</onfocus>
                     <onup condition="Control.IsVisible(5111)">SetFocus(5111)</onup>
                     <onup condition="Control.IsVisible(5161) + !Control.IsVisible(5111)">SetFocus(5161)</onup>
                     <onup condition="Control.IsVisible(5110) + !Control.IsVisible(5111) + !Control.IsVisible(5161)">SetFocus(5110)</onup>
                     <onup condition="Control.IsVisible(5160) + !Control.IsVisible(5111) + !Control.IsVisible(5161) + !Control.IsVisible(5110)">SetFocus(5160)</onup>
                     <onup condition="Control.IsVisible(5109) + !Control.IsVisible(5111) + !Control.IsVisible(5161) + !Control.IsVisible(5110) + !Control.IsVisible(5160)">SetFocus(5109)</onup>
                     <onup condition="Control.IsVisible(5159) + !Control.IsVisible(5111) + !Control.IsVisible(5161) + !Control.IsVisible(5110) + !Control.IsVisible(5160) + !Control.IsVisible(5109)">SetFocus(5159)</onup>
-                    <onup condition="!Control.IsVisible(5111) + !Control.IsVisible(5161) + !Control.IsVisible(5110) + !Control.IsVisible(5160) + !Control.IsVisible(5109) + !Control.IsVisible(5159)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5111) + !Control.IsVisible(5161) + !Control.IsVisible(5110) + !Control.IsVisible(5160) + !Control.IsVisible(5109) + !Control.IsVisible(5159)">SetFocus(9003)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.movies.12.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -4368,6 +4414,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5201,home)</onfocus>
                     <ondown condition="Control.IsVisible(5202)">SetFocus(5202)</ondown>
                     <ondown condition="Control.IsVisible(5252) + !Control.IsVisible(5202)">SetFocus(5252)</ondown>
                     <ondown condition="Control.IsVisible(5203) + !Control.IsVisible(5202) + !Control.IsVisible(5252)">SetFocus(5203)</ondown>
@@ -4376,7 +4423,7 @@
                     <ondown condition="Control.IsVisible(5254) + !Control.IsVisible(5202) + !Control.IsVisible(5252) + !Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5204)">SetFocus(5254)</ondown>
                     <ondown condition="Control.IsVisible(5205) + !Control.IsVisible(5202) + !Control.IsVisible(5252) + !Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5204) + !Control.IsVisible(5254)">SetFocus(5205)</ondown>
                     <ondown condition="Control.IsVisible(5255) + !Control.IsVisible(5202) + !Control.IsVisible(5252) + !Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5204) + !Control.IsVisible(5254) + !Control.IsVisible(5205)">SetFocus(5255)</ondown>
-                    <onup condition="true">SetFocus(9000)</onup>
+                    <onup>SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.1.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -4454,6 +4501,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5251,home)</onfocus>
                     <ondown condition="Control.IsVisible(5202)">SetFocus(5202)</ondown>
                     <ondown condition="Control.IsVisible(5252) + !Control.IsVisible(5202)">SetFocus(5252)</ondown>
                     <ondown condition="Control.IsVisible(5203) + !Control.IsVisible(5202) + !Control.IsVisible(5252)">SetFocus(5203)</ondown>
@@ -4462,7 +4510,7 @@
                     <ondown condition="Control.IsVisible(5254) + !Control.IsVisible(5202) + !Control.IsVisible(5252) + !Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5204)">SetFocus(5254)</ondown>
                     <ondown condition="Control.IsVisible(5205) + !Control.IsVisible(5202) + !Control.IsVisible(5252) + !Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5204) + !Control.IsVisible(5254)">SetFocus(5205)</ondown>
                     <ondown condition="Control.IsVisible(5255) + !Control.IsVisible(5202) + !Control.IsVisible(5252) + !Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5204) + !Control.IsVisible(5254) + !Control.IsVisible(5205)">SetFocus(5255)</ondown>
-                    <onup condition="true">SetFocus(9000)</onup>
+                    <onup>SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.1.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -4540,6 +4588,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5202,home)</onfocus>
                     <ondown condition="Control.IsVisible(5203)">SetFocus(5203)</ondown>
                     <ondown condition="Control.IsVisible(5253) + !Control.IsVisible(5203)">SetFocus(5253)</ondown>
                     <ondown condition="Control.IsVisible(5204) + !Control.IsVisible(5203) + !Control.IsVisible(5253)">SetFocus(5204)</ondown>
@@ -4550,7 +4599,7 @@
                     <ondown condition="Control.IsVisible(5256) + !Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5204) + !Control.IsVisible(5254) + !Control.IsVisible(5205) + !Control.IsVisible(5255) + !Control.IsVisible(5206)">SetFocus(5256)</ondown>
                     <onup condition="Control.IsVisible(5201)">SetFocus(5201)</onup>
                     <onup condition="Control.IsVisible(5251) + !Control.IsVisible(5201)">SetFocus(5251)</onup>
-                    <onup condition="!Control.IsVisible(5201) + !Control.IsVisible(5251)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5201) + !Control.IsVisible(5251)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.2.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -4628,6 +4677,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5252,home)</onfocus>
                     <ondown condition="Control.IsVisible(5203)">SetFocus(5203)</ondown>
                     <ondown condition="Control.IsVisible(5253) + !Control.IsVisible(5203)">SetFocus(5253)</ondown>
                     <ondown condition="Control.IsVisible(5204) + !Control.IsVisible(5203) + !Control.IsVisible(5253)">SetFocus(5204)</ondown>
@@ -4638,7 +4688,7 @@
                     <ondown condition="Control.IsVisible(5256) + !Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5204) + !Control.IsVisible(5254) + !Control.IsVisible(5205) + !Control.IsVisible(5255) + !Control.IsVisible(5206)">SetFocus(5256)</ondown>
                     <onup condition="Control.IsVisible(5201)">SetFocus(5201)</onup>
                     <onup condition="Control.IsVisible(5251) + !Control.IsVisible(5201)">SetFocus(5251)</onup>
-                    <onup condition="!Control.IsVisible(5201) + !Control.IsVisible(5251)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5201) + !Control.IsVisible(5251)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.2.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -4716,6 +4766,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5203,home)</onfocus>
                     <ondown condition="Control.IsVisible(5204)">SetFocus(5204)</ondown>
                     <ondown condition="Control.IsVisible(5254) + !Control.IsVisible(5204)">SetFocus(5254)</ondown>
                     <ondown condition="Control.IsVisible(5205) + !Control.IsVisible(5204) + !Control.IsVisible(5254)">SetFocus(5205)</ondown>
@@ -4728,7 +4779,7 @@
                     <onup condition="Control.IsVisible(5252) + !Control.IsVisible(5202)">SetFocus(5252)</onup>
                     <onup condition="Control.IsVisible(5201) + !Control.IsVisible(5202) + !Control.IsVisible(5252)">SetFocus(5201)</onup>
                     <onup condition="Control.IsVisible(5251) + !Control.IsVisible(5202) + !Control.IsVisible(5252) + !Control.IsVisible(5201)">SetFocus(5251)</onup>
-                    <onup condition="!Control.IsVisible(5202) + !Control.IsVisible(5252) + !Control.IsVisible(5201) + !Control.IsVisible(5251)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5202) + !Control.IsVisible(5252) + !Control.IsVisible(5201) + !Control.IsVisible(5251)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.3.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -4806,6 +4857,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5253,home)</onfocus>
                     <ondown condition="Control.IsVisible(5204)">SetFocus(5204)</ondown>
                     <ondown condition="Control.IsVisible(5254) + !Control.IsVisible(5204)">SetFocus(5254)</ondown>
                     <ondown condition="Control.IsVisible(5205) + !Control.IsVisible(5204) + !Control.IsVisible(5254)">SetFocus(5205)</ondown>
@@ -4818,7 +4870,7 @@
                     <onup condition="Control.IsVisible(5252) + !Control.IsVisible(5202)">SetFocus(5252)</onup>
                     <onup condition="Control.IsVisible(5201) + !Control.IsVisible(5202) + !Control.IsVisible(5252)">SetFocus(5201)</onup>
                     <onup condition="Control.IsVisible(5251) + !Control.IsVisible(5202) + !Control.IsVisible(5252) + !Control.IsVisible(5201)">SetFocus(5251)</onup>
-                    <onup condition="!Control.IsVisible(5202) + !Control.IsVisible(5252) + !Control.IsVisible(5201) + !Control.IsVisible(5251)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5202) + !Control.IsVisible(5252) + !Control.IsVisible(5201) + !Control.IsVisible(5251)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.3.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -4896,6 +4948,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5204,home)</onfocus>
                     <ondown condition="Control.IsVisible(5205)">SetFocus(5205)</ondown>
                     <ondown condition="Control.IsVisible(5255) + !Control.IsVisible(5205)">SetFocus(5255)</ondown>
                     <ondown condition="Control.IsVisible(5206) + !Control.IsVisible(5205) + !Control.IsVisible(5255)">SetFocus(5206)</ondown>
@@ -4910,7 +4963,7 @@
                     <onup condition="Control.IsVisible(5252) + !Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5202)">SetFocus(5252)</onup>
                     <onup condition="Control.IsVisible(5201) + !Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5202) + !Control.IsVisible(5252)">SetFocus(5201)</onup>
                     <onup condition="Control.IsVisible(5251) + !Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5202) + !Control.IsVisible(5252) + !Control.IsVisible(5201)">SetFocus(5251)</onup>
-                    <onup condition="!Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5202) + !Control.IsVisible(5252) + !Control.IsVisible(5201) + !Control.IsVisible(5251)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5202) + !Control.IsVisible(5252) + !Control.IsVisible(5201) + !Control.IsVisible(5251)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.4.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -4988,6 +5041,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5254,home)</onfocus>
                     <ondown condition="Control.IsVisible(5205)">SetFocus(5205)</ondown>
                     <ondown condition="Control.IsVisible(5255) + !Control.IsVisible(5205)">SetFocus(5255)</ondown>
                     <ondown condition="Control.IsVisible(5206) + !Control.IsVisible(5205) + !Control.IsVisible(5255)">SetFocus(5206)</ondown>
@@ -5002,7 +5056,7 @@
                     <onup condition="Control.IsVisible(5252) + !Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5202)">SetFocus(5252)</onup>
                     <onup condition="Control.IsVisible(5201) + !Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5202) + !Control.IsVisible(5252)">SetFocus(5201)</onup>
                     <onup condition="Control.IsVisible(5251) + !Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5202) + !Control.IsVisible(5252) + !Control.IsVisible(5201)">SetFocus(5251)</onup>
-                    <onup condition="!Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5202) + !Control.IsVisible(5252) + !Control.IsVisible(5201) + !Control.IsVisible(5251)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5202) + !Control.IsVisible(5252) + !Control.IsVisible(5201) + !Control.IsVisible(5251)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.4.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -5080,6 +5134,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5205,home)</onfocus>
                     <ondown condition="Control.IsVisible(5206)">SetFocus(5206)</ondown>
                     <ondown condition="Control.IsVisible(5256) + !Control.IsVisible(5206)">SetFocus(5256)</ondown>
                     <ondown condition="Control.IsVisible(5207) + !Control.IsVisible(5206) + !Control.IsVisible(5256)">SetFocus(5207)</ondown>
@@ -5094,7 +5149,7 @@
                     <onup condition="Control.IsVisible(5253) + !Control.IsVisible(5204) + !Control.IsVisible(5254) + !Control.IsVisible(5203)">SetFocus(5253)</onup>
                     <onup condition="Control.IsVisible(5202) + !Control.IsVisible(5204) + !Control.IsVisible(5254) + !Control.IsVisible(5203) + !Control.IsVisible(5253)">SetFocus(5202)</onup>
                     <onup condition="Control.IsVisible(5252) + !Control.IsVisible(5204) + !Control.IsVisible(5254) + !Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5202)">SetFocus(5252)</onup>
-                    <onup condition="!Control.IsVisible(5204) + !Control.IsVisible(5254) + !Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5202) + !Control.IsVisible(5252)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5204) + !Control.IsVisible(5254) + !Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5202) + !Control.IsVisible(5252)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.5.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -5172,6 +5227,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5255,home)</onfocus>
                     <ondown condition="Control.IsVisible(5206)">SetFocus(5206)</ondown>
                     <ondown condition="Control.IsVisible(5256) + !Control.IsVisible(5206)">SetFocus(5256)</ondown>
                     <ondown condition="Control.IsVisible(5207) + !Control.IsVisible(5206) + !Control.IsVisible(5256)">SetFocus(5207)</ondown>
@@ -5186,7 +5242,7 @@
                     <onup condition="Control.IsVisible(5253) + !Control.IsVisible(5204) + !Control.IsVisible(5254) + !Control.IsVisible(5203)">SetFocus(5253)</onup>
                     <onup condition="Control.IsVisible(5202) + !Control.IsVisible(5204) + !Control.IsVisible(5254) + !Control.IsVisible(5203) + !Control.IsVisible(5253)">SetFocus(5202)</onup>
                     <onup condition="Control.IsVisible(5252) + !Control.IsVisible(5204) + !Control.IsVisible(5254) + !Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5202)">SetFocus(5252)</onup>
-                    <onup condition="!Control.IsVisible(5204) + !Control.IsVisible(5254) + !Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5202) + !Control.IsVisible(5252)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5204) + !Control.IsVisible(5254) + !Control.IsVisible(5203) + !Control.IsVisible(5253) + !Control.IsVisible(5202) + !Control.IsVisible(5252)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.5.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -5264,6 +5320,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5206,home)</onfocus>
                     <ondown condition="Control.IsVisible(5207)">SetFocus(5207)</ondown>
                     <ondown condition="Control.IsVisible(5257) + !Control.IsVisible(5207)">SetFocus(5257)</ondown>
                     <ondown condition="Control.IsVisible(5208) + !Control.IsVisible(5207) + !Control.IsVisible(5257)">SetFocus(5208)</ondown>
@@ -5278,7 +5335,7 @@
                     <onup condition="Control.IsVisible(5254) + !Control.IsVisible(5205) + !Control.IsVisible(5255) + !Control.IsVisible(5204)">SetFocus(5254)</onup>
                     <onup condition="Control.IsVisible(5203) + !Control.IsVisible(5205) + !Control.IsVisible(5255) + !Control.IsVisible(5204) + !Control.IsVisible(5254)">SetFocus(5203)</onup>
                     <onup condition="Control.IsVisible(5253) + !Control.IsVisible(5205) + !Control.IsVisible(5255) + !Control.IsVisible(5204) + !Control.IsVisible(5254) + !Control.IsVisible(5203)">SetFocus(5253)</onup>
-                    <onup condition="!Control.IsVisible(5205) + !Control.IsVisible(5255) + !Control.IsVisible(5204) + !Control.IsVisible(5254) + !Control.IsVisible(5203) + !Control.IsVisible(5253)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5205) + !Control.IsVisible(5255) + !Control.IsVisible(5204) + !Control.IsVisible(5254) + !Control.IsVisible(5203) + !Control.IsVisible(5253)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.6.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -5356,6 +5413,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5256,home)</onfocus>
                     <ondown condition="Control.IsVisible(5207)">SetFocus(5207)</ondown>
                     <ondown condition="Control.IsVisible(5257) + !Control.IsVisible(5207)">SetFocus(5257)</ondown>
                     <ondown condition="Control.IsVisible(5208) + !Control.IsVisible(5207) + !Control.IsVisible(5257)">SetFocus(5208)</ondown>
@@ -5370,7 +5428,7 @@
                     <onup condition="Control.IsVisible(5254) + !Control.IsVisible(5205) + !Control.IsVisible(5255) + !Control.IsVisible(5204)">SetFocus(5254)</onup>
                     <onup condition="Control.IsVisible(5203) + !Control.IsVisible(5205) + !Control.IsVisible(5255) + !Control.IsVisible(5204) + !Control.IsVisible(5254)">SetFocus(5203)</onup>
                     <onup condition="Control.IsVisible(5253) + !Control.IsVisible(5205) + !Control.IsVisible(5255) + !Control.IsVisible(5204) + !Control.IsVisible(5254) + !Control.IsVisible(5203)">SetFocus(5253)</onup>
-                    <onup condition="!Control.IsVisible(5205) + !Control.IsVisible(5255) + !Control.IsVisible(5204) + !Control.IsVisible(5254) + !Control.IsVisible(5203) + !Control.IsVisible(5253)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5205) + !Control.IsVisible(5255) + !Control.IsVisible(5204) + !Control.IsVisible(5254) + !Control.IsVisible(5203) + !Control.IsVisible(5253)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.6.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -5448,6 +5506,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5207,home)</onfocus>
                     <ondown condition="Control.IsVisible(5208)">SetFocus(5208)</ondown>
                     <ondown condition="Control.IsVisible(5258) + !Control.IsVisible(5208)">SetFocus(5258)</ondown>
                     <ondown condition="Control.IsVisible(5209) + !Control.IsVisible(5208) + !Control.IsVisible(5258)">SetFocus(5209)</ondown>
@@ -5462,7 +5521,7 @@
                     <onup condition="Control.IsVisible(5255) + !Control.IsVisible(5206) + !Control.IsVisible(5256) + !Control.IsVisible(5205)">SetFocus(5255)</onup>
                     <onup condition="Control.IsVisible(5204) + !Control.IsVisible(5206) + !Control.IsVisible(5256) + !Control.IsVisible(5205) + !Control.IsVisible(5255)">SetFocus(5204)</onup>
                     <onup condition="Control.IsVisible(5254) + !Control.IsVisible(5206) + !Control.IsVisible(5256) + !Control.IsVisible(5205) + !Control.IsVisible(5255) + !Control.IsVisible(5204)">SetFocus(5254)</onup>
-                    <onup condition="!Control.IsVisible(5206) + !Control.IsVisible(5256) + !Control.IsVisible(5205) + !Control.IsVisible(5255) + !Control.IsVisible(5204) + !Control.IsVisible(5254)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5206) + !Control.IsVisible(5256) + !Control.IsVisible(5205) + !Control.IsVisible(5255) + !Control.IsVisible(5204) + !Control.IsVisible(5254)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.7.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -5540,6 +5599,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5257,home)</onfocus>
                     <ondown condition="Control.IsVisible(5208)">SetFocus(5208)</ondown>
                     <ondown condition="Control.IsVisible(5258) + !Control.IsVisible(5208)">SetFocus(5258)</ondown>
                     <ondown condition="Control.IsVisible(5209) + !Control.IsVisible(5208) + !Control.IsVisible(5258)">SetFocus(5209)</ondown>
@@ -5554,7 +5614,7 @@
                     <onup condition="Control.IsVisible(5255) + !Control.IsVisible(5206) + !Control.IsVisible(5256) + !Control.IsVisible(5205)">SetFocus(5255)</onup>
                     <onup condition="Control.IsVisible(5204) + !Control.IsVisible(5206) + !Control.IsVisible(5256) + !Control.IsVisible(5205) + !Control.IsVisible(5255)">SetFocus(5204)</onup>
                     <onup condition="Control.IsVisible(5254) + !Control.IsVisible(5206) + !Control.IsVisible(5256) + !Control.IsVisible(5205) + !Control.IsVisible(5255) + !Control.IsVisible(5204)">SetFocus(5254)</onup>
-                    <onup condition="!Control.IsVisible(5206) + !Control.IsVisible(5256) + !Control.IsVisible(5205) + !Control.IsVisible(5255) + !Control.IsVisible(5204) + !Control.IsVisible(5254)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5206) + !Control.IsVisible(5256) + !Control.IsVisible(5205) + !Control.IsVisible(5255) + !Control.IsVisible(5204) + !Control.IsVisible(5254)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.7.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -5632,6 +5692,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5208,home)</onfocus>
                     <ondown condition="Control.IsVisible(5209)">SetFocus(5209)</ondown>
                     <ondown condition="Control.IsVisible(5259) + !Control.IsVisible(5209)">SetFocus(5259)</ondown>
                     <ondown condition="Control.IsVisible(5210) + !Control.IsVisible(5209) + !Control.IsVisible(5259)">SetFocus(5210)</ondown>
@@ -5646,7 +5707,7 @@
                     <onup condition="Control.IsVisible(5256) + !Control.IsVisible(5207) + !Control.IsVisible(5257) + !Control.IsVisible(5206)">SetFocus(5256)</onup>
                     <onup condition="Control.IsVisible(5205) + !Control.IsVisible(5207) + !Control.IsVisible(5257) + !Control.IsVisible(5206) + !Control.IsVisible(5256)">SetFocus(5205)</onup>
                     <onup condition="Control.IsVisible(5255) + !Control.IsVisible(5207) + !Control.IsVisible(5257) + !Control.IsVisible(5206) + !Control.IsVisible(5256) + !Control.IsVisible(5205)">SetFocus(5255)</onup>
-                    <onup condition="!Control.IsVisible(5207) + !Control.IsVisible(5257) + !Control.IsVisible(5206) + !Control.IsVisible(5256) + !Control.IsVisible(5205) + !Control.IsVisible(5255)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5207) + !Control.IsVisible(5257) + !Control.IsVisible(5206) + !Control.IsVisible(5256) + !Control.IsVisible(5205) + !Control.IsVisible(5255)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.8.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -5724,6 +5785,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5258,home)</onfocus>
                     <ondown condition="Control.IsVisible(5209)">SetFocus(5209)</ondown>
                     <ondown condition="Control.IsVisible(5259) + !Control.IsVisible(5209)">SetFocus(5259)</ondown>
                     <ondown condition="Control.IsVisible(5210) + !Control.IsVisible(5209) + !Control.IsVisible(5259)">SetFocus(5210)</ondown>
@@ -5738,7 +5800,7 @@
                     <onup condition="Control.IsVisible(5256) + !Control.IsVisible(5207) + !Control.IsVisible(5257) + !Control.IsVisible(5206)">SetFocus(5256)</onup>
                     <onup condition="Control.IsVisible(5205) + !Control.IsVisible(5207) + !Control.IsVisible(5257) + !Control.IsVisible(5206) + !Control.IsVisible(5256)">SetFocus(5205)</onup>
                     <onup condition="Control.IsVisible(5255) + !Control.IsVisible(5207) + !Control.IsVisible(5257) + !Control.IsVisible(5206) + !Control.IsVisible(5256) + !Control.IsVisible(5205)">SetFocus(5255)</onup>
-                    <onup condition="!Control.IsVisible(5207) + !Control.IsVisible(5257) + !Control.IsVisible(5206) + !Control.IsVisible(5256) + !Control.IsVisible(5205) + !Control.IsVisible(5255)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5207) + !Control.IsVisible(5257) + !Control.IsVisible(5206) + !Control.IsVisible(5256) + !Control.IsVisible(5205) + !Control.IsVisible(5255)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.8.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -5816,6 +5878,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5209,home)</onfocus>
                     <ondown condition="Control.IsVisible(5210)">SetFocus(5210)</ondown>
                     <ondown condition="Control.IsVisible(5260) + !Control.IsVisible(5210)">SetFocus(5260)</ondown>
                     <ondown condition="Control.IsVisible(5211) + !Control.IsVisible(5210) + !Control.IsVisible(5260)">SetFocus(5211)</ondown>
@@ -5828,7 +5891,7 @@
                     <onup condition="Control.IsVisible(5257) + !Control.IsVisible(5208) + !Control.IsVisible(5258) + !Control.IsVisible(5207)">SetFocus(5257)</onup>
                     <onup condition="Control.IsVisible(5206) + !Control.IsVisible(5208) + !Control.IsVisible(5258) + !Control.IsVisible(5207) + !Control.IsVisible(5257)">SetFocus(5206)</onup>
                     <onup condition="Control.IsVisible(5256) + !Control.IsVisible(5208) + !Control.IsVisible(5258) + !Control.IsVisible(5207) + !Control.IsVisible(5257) + !Control.IsVisible(5206)">SetFocus(5256)</onup>
-                    <onup condition="!Control.IsVisible(5208) + !Control.IsVisible(5258) + !Control.IsVisible(5207) + !Control.IsVisible(5257) + !Control.IsVisible(5206) + !Control.IsVisible(5256)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5208) + !Control.IsVisible(5258) + !Control.IsVisible(5207) + !Control.IsVisible(5257) + !Control.IsVisible(5206) + !Control.IsVisible(5256)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.9.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -5906,6 +5969,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5259,home)</onfocus>
                     <ondown condition="Control.IsVisible(5210)">SetFocus(5210)</ondown>
                     <ondown condition="Control.IsVisible(5260) + !Control.IsVisible(5210)">SetFocus(5260)</ondown>
                     <ondown condition="Control.IsVisible(5211) + !Control.IsVisible(5210) + !Control.IsVisible(5260)">SetFocus(5211)</ondown>
@@ -5918,7 +5982,7 @@
                     <onup condition="Control.IsVisible(5257) + !Control.IsVisible(5208) + !Control.IsVisible(5258) + !Control.IsVisible(5207)">SetFocus(5257)</onup>
                     <onup condition="Control.IsVisible(5206) + !Control.IsVisible(5208) + !Control.IsVisible(5258) + !Control.IsVisible(5207) + !Control.IsVisible(5257)">SetFocus(5206)</onup>
                     <onup condition="Control.IsVisible(5256) + !Control.IsVisible(5208) + !Control.IsVisible(5258) + !Control.IsVisible(5207) + !Control.IsVisible(5257) + !Control.IsVisible(5206)">SetFocus(5256)</onup>
-                    <onup condition="!Control.IsVisible(5208) + !Control.IsVisible(5258) + !Control.IsVisible(5207) + !Control.IsVisible(5257) + !Control.IsVisible(5206) + !Control.IsVisible(5256)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5208) + !Control.IsVisible(5258) + !Control.IsVisible(5207) + !Control.IsVisible(5257) + !Control.IsVisible(5206) + !Control.IsVisible(5256)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.9.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -5996,6 +6060,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5210,home)</onfocus>
                     <ondown condition="Control.IsVisible(5211)">SetFocus(5211)</ondown>
                     <ondown condition="Control.IsVisible(5261) + !Control.IsVisible(5211)">SetFocus(5261)</ondown>
                     <ondown condition="Control.IsVisible(5212) + !Control.IsVisible(5211) + !Control.IsVisible(5261)">SetFocus(5212)</ondown>
@@ -6006,7 +6071,7 @@
                     <onup condition="Control.IsVisible(5258) + !Control.IsVisible(5209) + !Control.IsVisible(5259) + !Control.IsVisible(5208)">SetFocus(5258)</onup>
                     <onup condition="Control.IsVisible(5207) + !Control.IsVisible(5209) + !Control.IsVisible(5259) + !Control.IsVisible(5208) + !Control.IsVisible(5258)">SetFocus(5207)</onup>
                     <onup condition="Control.IsVisible(5257) + !Control.IsVisible(5209) + !Control.IsVisible(5259) + !Control.IsVisible(5208) + !Control.IsVisible(5258) + !Control.IsVisible(5207)">SetFocus(5257)</onup>
-                    <onup condition="!Control.IsVisible(5209) + !Control.IsVisible(5259) + !Control.IsVisible(5208) + !Control.IsVisible(5258) + !Control.IsVisible(5207) + !Control.IsVisible(5257)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5209) + !Control.IsVisible(5259) + !Control.IsVisible(5208) + !Control.IsVisible(5258) + !Control.IsVisible(5207) + !Control.IsVisible(5257)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.10.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -6084,6 +6149,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5260,home)</onfocus>
                     <ondown condition="Control.IsVisible(5211)">SetFocus(5211)</ondown>
                     <ondown condition="Control.IsVisible(5261) + !Control.IsVisible(5211)">SetFocus(5261)</ondown>
                     <ondown condition="Control.IsVisible(5212) + !Control.IsVisible(5211) + !Control.IsVisible(5261)">SetFocus(5212)</ondown>
@@ -6094,7 +6160,7 @@
                     <onup condition="Control.IsVisible(5258) + !Control.IsVisible(5209) + !Control.IsVisible(5259) + !Control.IsVisible(5208)">SetFocus(5258)</onup>
                     <onup condition="Control.IsVisible(5207) + !Control.IsVisible(5209) + !Control.IsVisible(5259) + !Control.IsVisible(5208) + !Control.IsVisible(5258)">SetFocus(5207)</onup>
                     <onup condition="Control.IsVisible(5257) + !Control.IsVisible(5209) + !Control.IsVisible(5259) + !Control.IsVisible(5208) + !Control.IsVisible(5258) + !Control.IsVisible(5207)">SetFocus(5257)</onup>
-                    <onup condition="!Control.IsVisible(5209) + !Control.IsVisible(5259) + !Control.IsVisible(5208) + !Control.IsVisible(5258) + !Control.IsVisible(5207) + !Control.IsVisible(5257)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5209) + !Control.IsVisible(5259) + !Control.IsVisible(5208) + !Control.IsVisible(5258) + !Control.IsVisible(5207) + !Control.IsVisible(5257)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.10.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -6172,6 +6238,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5211,home)</onfocus>
                     <ondown condition="Control.IsVisible(5212)">SetFocus(5212)</ondown>
                     <ondown condition="Control.IsVisible(5262) + !Control.IsVisible(5212)">SetFocus(5262)</ondown>
                     <onup condition="Control.IsVisible(5210)">SetFocus(5210)</onup>
@@ -6180,7 +6247,7 @@
                     <onup condition="Control.IsVisible(5259) + !Control.IsVisible(5210) + !Control.IsVisible(5260) + !Control.IsVisible(5209)">SetFocus(5259)</onup>
                     <onup condition="Control.IsVisible(5208) + !Control.IsVisible(5210) + !Control.IsVisible(5260) + !Control.IsVisible(5209) + !Control.IsVisible(5259)">SetFocus(5208)</onup>
                     <onup condition="Control.IsVisible(5258) + !Control.IsVisible(5210) + !Control.IsVisible(5260) + !Control.IsVisible(5209) + !Control.IsVisible(5259) + !Control.IsVisible(5208)">SetFocus(5258)</onup>
-                    <onup condition="!Control.IsVisible(5210) + !Control.IsVisible(5260) + !Control.IsVisible(5209) + !Control.IsVisible(5259) + !Control.IsVisible(5208) + !Control.IsVisible(5258)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5210) + !Control.IsVisible(5260) + !Control.IsVisible(5209) + !Control.IsVisible(5259) + !Control.IsVisible(5208) + !Control.IsVisible(5258)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.11.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -6258,6 +6325,7 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5261,home)</onfocus>
                     <ondown condition="Control.IsVisible(5212)">SetFocus(5212)</ondown>
                     <ondown condition="Control.IsVisible(5262) + !Control.IsVisible(5212)">SetFocus(5262)</ondown>
                     <onup condition="Control.IsVisible(5210)">SetFocus(5210)</onup>
@@ -6266,7 +6334,7 @@
                     <onup condition="Control.IsVisible(5259) + !Control.IsVisible(5210) + !Control.IsVisible(5260) + !Control.IsVisible(5209)">SetFocus(5259)</onup>
                     <onup condition="Control.IsVisible(5208) + !Control.IsVisible(5210) + !Control.IsVisible(5260) + !Control.IsVisible(5209) + !Control.IsVisible(5259)">SetFocus(5208)</onup>
                     <onup condition="Control.IsVisible(5258) + !Control.IsVisible(5210) + !Control.IsVisible(5260) + !Control.IsVisible(5209) + !Control.IsVisible(5259) + !Control.IsVisible(5208)">SetFocus(5258)</onup>
-                    <onup condition="!Control.IsVisible(5210) + !Control.IsVisible(5260) + !Control.IsVisible(5209) + !Control.IsVisible(5259) + !Control.IsVisible(5208) + !Control.IsVisible(5258)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5210) + !Control.IsVisible(5260) + !Control.IsVisible(5209) + !Control.IsVisible(5259) + !Control.IsVisible(5208) + !Control.IsVisible(5258)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.11.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -6344,13 +6412,14 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5212,home)</onfocus>
                     <onup condition="Control.IsVisible(5211)">SetFocus(5211)</onup>
                     <onup condition="Control.IsVisible(5261) + !Control.IsVisible(5211)">SetFocus(5261)</onup>
                     <onup condition="Control.IsVisible(5210) + !Control.IsVisible(5211) + !Control.IsVisible(5261)">SetFocus(5210)</onup>
                     <onup condition="Control.IsVisible(5260) + !Control.IsVisible(5211) + !Control.IsVisible(5261) + !Control.IsVisible(5210)">SetFocus(5260)</onup>
                     <onup condition="Control.IsVisible(5209) + !Control.IsVisible(5211) + !Control.IsVisible(5261) + !Control.IsVisible(5210) + !Control.IsVisible(5260)">SetFocus(5209)</onup>
                     <onup condition="Control.IsVisible(5259) + !Control.IsVisible(5211) + !Control.IsVisible(5261) + !Control.IsVisible(5210) + !Control.IsVisible(5260) + !Control.IsVisible(5209)">SetFocus(5259)</onup>
-                    <onup condition="!Control.IsVisible(5211) + !Control.IsVisible(5261) + !Control.IsVisible(5210) + !Control.IsVisible(5260) + !Control.IsVisible(5209) + !Control.IsVisible(5259)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5211) + !Control.IsVisible(5261) + !Control.IsVisible(5210) + !Control.IsVisible(5260) + !Control.IsVisible(5209) + !Control.IsVisible(5259)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.12.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="284" height="402">
                     <control type="group">
@@ -6428,13 +6497,14 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
                     <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,5262,home)</onfocus>
                     <onup condition="Control.IsVisible(5211)">SetFocus(5211)</onup>
                     <onup condition="Control.IsVisible(5261) + !Control.IsVisible(5211)">SetFocus(5261)</onup>
                     <onup condition="Control.IsVisible(5210) + !Control.IsVisible(5211) + !Control.IsVisible(5261)">SetFocus(5210)</onup>
                     <onup condition="Control.IsVisible(5260) + !Control.IsVisible(5211) + !Control.IsVisible(5261) + !Control.IsVisible(5210)">SetFocus(5260)</onup>
                     <onup condition="Control.IsVisible(5209) + !Control.IsVisible(5211) + !Control.IsVisible(5261) + !Control.IsVisible(5210) + !Control.IsVisible(5260)">SetFocus(5209)</onup>
                     <onup condition="Control.IsVisible(5259) + !Control.IsVisible(5211) + !Control.IsVisible(5261) + !Control.IsVisible(5210) + !Control.IsVisible(5260) + !Control.IsVisible(5209)">SetFocus(5259)</onup>
-                    <onup condition="!Control.IsVisible(5211) + !Control.IsVisible(5261) + !Control.IsVisible(5210) + !Control.IsVisible(5260) + !Control.IsVisible(5209) + !Control.IsVisible(5259)">SetFocus(9000)</onup>
+                    <onup condition="!Control.IsVisible(5211) + !Control.IsVisible(5261) + !Control.IsVisible(5210) + !Control.IsVisible(5260) + !Control.IsVisible(5209) + !Control.IsVisible(5259)">SetFocus(9004)</onup>
                     <content target="videos">$INFO[Window(Home).Property(silo.series.12.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="384" height="214">
                     <control type="group">
@@ -6611,6 +6681,7 @@
                     <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
                     <texturenofocus />
                     <onclick>SetProperty(silo.page,home,home)</onclick>
+                    <onclick>ClearProperty(silo.row,home)</onclick>
                     <ondown condition="Control.IsVisible(5001)">SetFocus(5001)</ondown>
                     <ondown condition="Control.IsVisible(5051) + !Control.IsVisible(5001)">SetFocus(5051)</ondown>
                     <ondown condition="Control.IsVisible(5002) + !Control.IsVisible(5001) + !Control.IsVisible(5051)">SetFocus(5002)</ondown>
@@ -6669,6 +6740,7 @@
                     <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
                     <texturenofocus />
                     <onclick>SetProperty(silo.page,movies,home)</onclick>
+                    <onclick>ClearProperty(silo.row,home)</onclick>
                     <ondown condition="Control.IsVisible(5001)">SetFocus(5001)</ondown>
                     <ondown condition="Control.IsVisible(5051) + !Control.IsVisible(5001)">SetFocus(5051)</ondown>
                     <ondown condition="Control.IsVisible(5002) + !Control.IsVisible(5001) + !Control.IsVisible(5051)">SetFocus(5002)</ondown>
@@ -6727,6 +6799,7 @@
                     <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
                     <texturenofocus />
                     <onclick>SetProperty(silo.page,series,home)</onclick>
+                    <onclick>ClearProperty(silo.row,home)</onclick>
                     <ondown condition="Control.IsVisible(5001)">SetFocus(5001)</ondown>
                     <ondown condition="Control.IsVisible(5051) + !Control.IsVisible(5001)">SetFocus(5051)</ondown>
                     <ondown condition="Control.IsVisible(5002) + !Control.IsVisible(5001) + !Control.IsVisible(5051)">SetFocus(5002)</ondown>

@@ -113,8 +113,11 @@ def moves(page_index, slot):
     down = page_rows(page_index, range(slot + 1, min(MAX_ROWS, slot + LOOKAHEAD) + 1))
     up = page_rows(page_index, range(slot - 1, max(0, slot - LOOKAHEAD), -1))
     out = first_visible('ondown', down) + first_visible('onup', up)
-    above = ' + '.join('!Control.IsVisible(%d)' % k for k in up) or 'true'
-    out += '\n                    <onup condition="%s">SetFocus(9000)</onup>' % above
+    # The top row goes up to the current page's tab (a button: focusing the
+    # bar's grouplist itself leaves left and right with nowhere to go).
+    above = ' + '.join('!Control.IsVisible(%d)' % k for k in up)
+    out += '\n                    <onup%s>SetFocus(%d)</onup>' % (' condition="%s"' % above if above else '',
+                                                               9002 + page_index)
     return out
 
 
@@ -149,7 +152,8 @@ def row(page, page_index, slot, landscape):
                     <orientation>horizontal</orientation>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
-                    <onclick>Action(Info)</onclick>%(moves)s
+                    <onclick>Action(Info)</onclick>
+                    <onfocus>SetProperty(silo.row,%(id)d,home)</onfocus>%(moves)s
                     <content target="videos">%(path)s</content>
                     <itemlayout width="%(item_w)d" height="%(item_h)d">%(normal)s
                     </itemlayout>
@@ -201,7 +205,8 @@ def tab(control_id, page, page_index):
                     <focusedcolor>FF000000</focusedcolor>
                     <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
                     <texturenofocus />
-                    <onclick>SetProperty(silo.page,%(page)s,home)</onclick>%(moves)s
+                    <onclick>SetProperty(silo.page,%(page)s,home)</onclick>
+                    <onclick>ClearProperty(silo.row,home)</onclick>%(moves)s
 %(focus_rows)s
                 </control>
             </control>''' % {'width': 60 + 17 * len(TAB_LABELS[page]), 'visible': visible,
@@ -273,7 +278,7 @@ def build():
         <!-- Marquee: never focusable; follows whichever card has focus. -->
         <control type="group">
             <left>%(x)d</left>
-            <visible>!String.IsEmpty(ListItem.Label)</visible>
+            <visible>!String.IsEmpty(%(row_prop)s)</visible>
             <animation effect="fade" start="0" end="100" time="240">Visible</animation>
             <control type="image">
                 <top>228</top>
@@ -281,7 +286,6 @@ def build():
                 <aspectratio align="left" aligny="bottom">keep</aspectratio>
                 <fadetime>240</fadetime>
                 <texture background="true">$VAR[SiloLogoArt]</texture>
-                <visible>!String.IsEmpty(ListItem.Art(clearlogo)) | !String.IsEmpty(ListItem.Art(tvshow.clearlogo))</visible>
             </control>
             <control type="label">
                 <top>228</top>
@@ -290,7 +294,6 @@ def build():
                 <font>silo_title</font>
                 <textcolor>%(text)s</textcolor>
                 <label>$VAR[SiloTitle]</label>
-                <visible>String.IsEmpty(ListItem.Art(clearlogo)) + String.IsEmpty(ListItem.Art(tvshow.clearlogo))</visible>
             </control>
             <control type="label">
                 <top>400</top>
@@ -304,7 +307,7 @@ def build():
                 <width>860</width><height>120</height>
                 <font>silo_plot</font>
                 <textcolor>%(dim)s</textcolor>
-                <label>$INFO[ListItem.Plot]</label>
+                <label>$VAR[SiloPlot]</label>
                 <autoscroll>false</autoscroll>
             </control>
         </control>
@@ -357,20 +360,32 @@ def build():
 </window>
 ''' % {'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'rows_top': ROWS_TOP, 'rows_h': 1080 - ROWS_TOP,
        'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
-       'bar_down': bar_down()}
+       'bar_down': bar_down(), 'row_prop': prop('silo.row')}
 
 
-VARIABLES = '''
-    <!-- Silo Skyline (tools/build_home.py) -->
-    <variable name="SiloHeroArt">
-        <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
-        <value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
-        <value>$INFO[ListItem.Art(landscape)]</value>
-    </variable>
-    <variable name="SiloLogoArt">
-        <value condition="!String.IsEmpty(ListItem.Art(clearlogo))">$INFO[ListItem.Art(clearlogo)]</value>
-        <value>$INFO[ListItem.Art(tvshow.clearlogo)]</value>
-    </variable>
+# The hero and marquee read from the row that last had focus (silo.row), so
+# they stay put while the menu bar has focus, as in Silo. Each entry is a
+# (condition, value) template; LI stands for that row's ListItem.
+HERO = [
+    ('SiloHeroArt', [('!String.IsEmpty(LI.Art(fanart))', '$INFO[LI.Art(fanart)]'),
+                     ('!String.IsEmpty(LI.Art(tvshow.fanart))', '$INFO[LI.Art(tvshow.fanart)]'),
+                     (None, '$INFO[LI.Art(landscape)]')]),
+    ('SiloLogoArt', [('!String.IsEmpty(LI.Art(clearlogo))', '$INFO[LI.Art(clearlogo)]'),
+                     (None, '$INFO[LI.Art(tvshow.clearlogo)]')]),
+    # Empty when there is a logo: the logo stands in for the title.
+    ('SiloTitle', [('!String.IsEmpty(LI.Art(clearlogo)) | !String.IsEmpty(LI.Art(tvshow.clearlogo))', ''),
+                   ('String.IsEqual(LI.DBType,episode)', '$INFO[LI.TVShowTitle]'),
+                   (None, '$INFO[LI.Label]')]),
+    ('SiloMetaLine', [('String.IsEqual(LI.DBType,episode)', '$INFO[LI.Season,S,]$INFO[LI.Episode, E,]'
+                       '$INFO[LI.Title,  ·  ,]$INFO[LI.Duration(mins),  ·  , min]'),
+                      ('String.IsEqual(LI.DBType,tvshow)', '$INFO[LI.Year]$INFO[LI.Rating,  ·  ★ ,]'
+                       '$INFO[LI.Mpaa,  ·  ,]'),
+                      (None, '$INFO[LI.Year]$INFO[LI.Rating,  ·  ★ ,]$INFO[LI.Duration(mins),  ·  , min]'
+                       '$INFO[LI.Mpaa,  ·  ,]')]),
+    ('SiloPlot', [(None, '$INFO[LI.Plot]')]),
+]
+
+CARDS = '''
     <variable name="SiloPosterArt">
         <value condition="!String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
         <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
@@ -382,17 +397,23 @@ VARIABLES = '''
         <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
         <value>$INFO[ListItem.Art(tvshow.fanart)]</value>
     </variable>
-    <variable name="SiloTitle">
-        <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.TVShowTitle]</value>
-        <value>$INFO[ListItem.Label]</value>
-    </variable>
-    <variable name="SiloMetaLine">
-        <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Season,S,]$INFO[ListItem.Episode, E,]$INFO[ListItem.Title,  ·  ,]$INFO[ListItem.Duration(mins),  ·  , min]</value>
-        <value condition="String.IsEqual(ListItem.DBType,tvshow)">$INFO[ListItem.Year]$INFO[ListItem.Rating,  ·  ★ ,]$INFO[ListItem.Mpaa,  ·  ,]</value>
-        <value>$INFO[ListItem.Year]$INFO[ListItem.Rating,  ·  ★ ,]$INFO[ListItem.Duration(mins),  ·  , min]$INFO[ListItem.Mpaa,  ·  ,]</value>
-    </variable>
-    <!-- end Silo Skyline -->
 '''
+
+
+def variables():
+    rows = [list_id(index, slot, landscape) for index in range(len(PAGES))
+            for slot in range(1, MAX_ROWS + 1) for landscape in (False, True)]
+    out = '\n    <!-- Silo Skyline (tools/build_home.py) -->' + CARDS
+    for name, entries in HERO:
+        out += '    <variable name="%s">\n' % name
+        for row_id in rows:
+            item = 'Container(%d).ListItem' % row_id
+            mine = 'String.IsEqual(%s,%d)' % (prop('silo.row'), row_id)
+            for condition, value in entries:
+                full = mine + (' + [%s]' % condition.replace('LI', item) if condition else '')
+                out += '        <value condition="%s">%s</value>\n' % (full, value.replace('LI', item))
+        out += '    </variable>\n'
+    return out + '    <!-- end Silo Skyline -->\n'
 
 
 def add_variables():
@@ -401,7 +422,7 @@ def add_variables():
     start, end = '    <!-- Silo Skyline (tools/build_home.py) -->', '    <!-- end Silo Skyline -->\n'
     if start in text:
         text = text[:text.index(start) - 1] + text[text.index(end) + len(end):]
-    text = text.replace('</includes>', VARIABLES + '</includes>')
+    text = text.replace('</includes>', variables() + '</includes>')
     open(path, 'w', encoding='utf-8').write(text)
 
 
