@@ -96,4 +96,10 @@ if __name__ == '__main__':
     focus_ring('badge_outline.png', 32, 32, 8, 2)
     pill()
     scrim()
+    # Cast photos: round, with a ring 6 px outside the photo.
+    # The photo is drawn square and this frame, in the page colour with a round
+    # hole, covers its corners: a diffuse mask would stretch with aspectratio scale.
+    write_png('person_frame.png', 172, 172, lambda x, y: 1.0 - rounded_rect_coverage(x, y, 172, 172, 86),
+              rgb=(0x0D, 0x0F, 0x12))
+    focus_ring('person_ring.png', 184, 184, 92, 4)
     print('Wrote', ', '.join(sorted(os.listdir(OUT))))
