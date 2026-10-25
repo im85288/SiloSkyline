@@ -298,6 +298,7 @@ VARIABLES = '''
     <expression name="SiloBrowseEpisodes">%(episodes)s</expression>
     <variable name="SiloBrowseTitle">
         <value condition="String.IsEqual(Container.FolderPath,plugin://plugin.video.silokodiconnect/)">SiloKodiConnect</value>
+        <value condition="!String.IsEmpty(Container.PluginCategory)">$INFO[Container.PluginCategory]</value>
         <value condition="Container.Content(episodes) + String.IsEqual(Container.FolderName,Container.ShowTitle)">$INFO[Container.ShowTitle]</value>
         <value condition="!String.IsEmpty(Container.ShowTitle) + Container.Content(episodes)">$INFO[Container.ShowTitle] · $INFO[Container.FolderName]</value>
         <value>$INFO[Container.FolderName]</value>
@@ -318,6 +319,7 @@ VARIABLES = '''
         <value>$INFO[ListItem.Year]</value>
     </variable>
     <variable name="SiloBrowseEpisodeTitle">
+        <value condition="Integer.IsGreater(ListItem.Episode,0) + String.IsEmpty(Container.ShowTitle) + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle] · S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</value>
         <value condition="Integer.IsGreater(ListItem.Episode,0)">S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</value>
         <value>$INFO[ListItem.Label]</value>
     </variable>
