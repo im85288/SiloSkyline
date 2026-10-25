@@ -704,7 +704,7 @@ CARDS = '''
         <value>$INFO[ListItem.Year]</value>
     </variable>
     <variable name="SiloCardYear">
-        <value condition="!String.IsEmpty(ListItem.Property(silo.request.label))">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.request.label), · ,]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(silo.request.label))">$INFO[ListItem.Property(silo.request.label)]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code)]</value>
         <value>$INFO[ListItem.Year]</value>
     </variable>

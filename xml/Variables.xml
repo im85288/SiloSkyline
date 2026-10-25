@@ -824,7 +824,7 @@
         <value>$INFO[ListItem.Year]</value>
     </variable>
     <variable name="SiloCardYear">
-        <value condition="!String.IsEmpty(ListItem.Property(silo.request.label))">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.request.label), · ,]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(silo.request.label))">$INFO[ListItem.Property(silo.request.label)]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code)]</value>
         <value>$INFO[ListItem.Year]</value>
     </variable>
@@ -2633,46 +2633,6 @@
     </variable>
     <!-- end Silo Skyline -->
 
-    <!-- Silo Skyline browse (tools/build_browse.py) -->
-    <expression name="SiloBrowseGrid">Container.Content(movies) | Container.Content(tvshows) | Container.Content(sets) | Container.Content(seasons)</expression>
-    <expression name="SiloBrowseEpisodes">Container.Content(episodes)</expression>
-    <variable name="SiloBrowseTitle">
-        <value condition="String.IsEqual(Container.FolderPath,plugin://plugin.video.silokodiconnect/)">SiloKodiConnect</value>
-        <value condition="!String.IsEmpty(Container.PluginCategory)">$INFO[Container.PluginCategory]</value>
-        <value condition="String.StartsWith(Container.FolderPath,videodb://movies/titles/)">Movies</value>
-        <value condition="String.StartsWith(Container.FolderPath,videodb://tvshows/titles/) + Container.Content(tvshows)">Series</value>
-        <value condition="Container.Content(episodes) + String.IsEqual(Container.FolderName,Container.ShowTitle)">$INFO[Container.ShowTitle]</value>
-        <value condition="!String.IsEmpty(Container.ShowTitle) + Container.Content(episodes)">$INFO[Container.ShowTitle] · $INFO[Container.FolderName]</value>
-        <value>$INFO[Container.FolderName]</value>
-    </variable>
-    <!-- Kodi's "* All seasons" folder: the show's poster, and Silo's wording. -->
-    <variable name="SiloBrowsePoster">
-        <value condition="!String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
-        <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
-        <value>$INFO[Container.Art(tvshow.poster)]</value>
-    </variable>
-    <variable name="SiloBrowseLabel">
-        <value condition="Container.Content(seasons) + String.StartsWith(ListItem.Label,*)">All episodes</value>
-        <value>$INFO[ListItem.Label]</value>
-    </variable>
-    <variable name="SiloBrowseSub">
-        <value condition="!String.IsEmpty(ListItem.Property(silo.count))">$INFO[ListItem.Property(silo.count),, titles]</value>
-        <value condition="Container.Content(seasons) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0)">$INFO[ListItem.Property(TotalEpisodes),, episodes]</value>
-        <value condition="Container.Content(tvshows) + Integer.IsGreater(ListItem.Property(TotalSeasons),0)">$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), · , seasons]</value>
-        <value>$INFO[ListItem.Year]</value>
-    </variable>
-    <variable name="SiloBrowseEpisodeTitle">
-        <value condition="Integer.IsGreater(ListItem.Episode,0) + String.IsEmpty(Container.ShowTitle) + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle] · S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</value>
-        <value condition="Integer.IsGreater(ListItem.Episode,0)">S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</value>
-        <value>$INFO[ListItem.Label]</value>
-    </variable>
-    <variable name="SiloBrowseArt">
-        <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
-        <value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
-        <value>$INFO[Container.Art(fanart)]</value>
-    </variable>
-    <!-- end Silo Skyline browse -->
-
     <!-- Silo Skyline detail (tools/build_info.py) -->
     <variable name="SiloDetailArt">
         <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
@@ -2777,6 +2737,46 @@
         <value>$INFO[ListItem.Label]</value>
     </variable>
     <!-- end Silo Skyline detail -->
+
+    <!-- Silo Skyline browse (tools/build_browse.py) -->
+    <expression name="SiloBrowseGrid">Container.Content(movies) | Container.Content(tvshows) | Container.Content(sets) | Container.Content(seasons)</expression>
+    <expression name="SiloBrowseEpisodes">Container.Content(episodes)</expression>
+    <variable name="SiloBrowseTitle">
+        <value condition="String.IsEqual(Container.FolderPath,plugin://plugin.video.silokodiconnect/)">SiloKodiConnect</value>
+        <value condition="!String.IsEmpty(Container.PluginCategory)">$INFO[Container.PluginCategory]</value>
+        <value condition="String.StartsWith(Container.FolderPath,videodb://movies/titles/)">Movies</value>
+        <value condition="String.StartsWith(Container.FolderPath,videodb://tvshows/titles/) + Container.Content(tvshows)">Series</value>
+        <value condition="Container.Content(episodes) + String.IsEqual(Container.FolderName,Container.ShowTitle)">$INFO[Container.ShowTitle]</value>
+        <value condition="!String.IsEmpty(Container.ShowTitle) + Container.Content(episodes)">$INFO[Container.ShowTitle] · $INFO[Container.FolderName]</value>
+        <value>$INFO[Container.FolderName]</value>
+    </variable>
+    <!-- Kodi's "* All seasons" folder: the show's poster, and Silo's wording. -->
+    <variable name="SiloBrowsePoster">
+        <value condition="!String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
+        <value>$INFO[Container.Art(tvshow.poster)]</value>
+    </variable>
+    <variable name="SiloBrowseLabel">
+        <value condition="Container.Content(seasons) + String.StartsWith(ListItem.Label,*)">All episodes</value>
+        <value>$INFO[ListItem.Label]</value>
+    </variable>
+    <variable name="SiloBrowseSub">
+        <value condition="!String.IsEmpty(ListItem.Property(silo.count))">$INFO[ListItem.Property(silo.count),, titles]</value>
+        <value condition="Container.Content(seasons) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0)">$INFO[ListItem.Property(TotalEpisodes),, episodes]</value>
+        <value condition="Container.Content(tvshows) + Integer.IsGreater(ListItem.Property(TotalSeasons),0)">$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons), · , seasons]</value>
+        <value>$INFO[ListItem.Year]</value>
+    </variable>
+    <variable name="SiloBrowseEpisodeTitle">
+        <value condition="Integer.IsGreater(ListItem.Episode,0) + String.IsEmpty(Container.ShowTitle) + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle] · S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</value>
+        <value condition="Integer.IsGreater(ListItem.Episode,0)">S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</value>
+        <value>$INFO[ListItem.Label]</value>
+    </variable>
+    <variable name="SiloBrowseArt">
+        <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
+        <value>$INFO[Container.Art(fanart)]</value>
+    </variable>
+    <!-- end Silo Skyline browse -->
 
     <!-- Silo Skyline search (tools/build_search.py) -->
     <variable name="SiloSearchPill">
