@@ -22,9 +22,10 @@ TAB_LABELS = {'home': 'Home', 'movies': 'Movies', 'series': 'Series', 'requests'
 MAX_ROWS = 12
 # Custom menu items (Skin Shortcuts): bar slots, and widgets per item.
 CUSTOM_SLOTS = 5
-WIDGETS = 4
+WIDGETS = 6
 CUSTOM_IDS = list(range(9031, 9031 + CUSTOM_SLOTS))
 SHORTCUTS = 9100  # hidden list holding Skin Shortcuts' main menu
+SUBMENU = 9240    # the dropdown of a custom item's submenu
 # Rows a page can show; Requests has Your requests and Silo's few discovery
 # rows, and every slot costs Home.xml size.
 PAGE_ROWS = {'requests': 8, 'custom': WIDGETS}
@@ -383,6 +384,57 @@ def bar_positions():
     return out
 
 
+def custom_submenu():
+    """The dropdown of a custom item's submenu: Skin Shortcuts' submenu
+    entries for the item selected in the hidden menu list. It sits under the
+    first custom item (their places vary); each entry draws its own panel,
+    as the count varies too."""
+    x = bar_positions()[9005] + tab_width('requests') + BAR_GAP - 10
+    return '''
+        <control type="group">
+            <left>%(x)d</left><top>%(top)d</top>
+            <animation effect="fade" start="100" end="0" time="120" condition="!Control.HasFocus(%(id)d)">Conditional</animation>
+            <control type="list" id="%(id)d">
+                <width>340</width><height>600</height>
+                <orientation>vertical</orientation>
+                <onup>SetFocus($INFO[%(from)s])</onup>
+                <onback>SetFocus($INFO[%(from)s])</onback>
+                <onleft>noop</onleft><onright>noop</onright>
+                <itemlayout width="340" height="64">
+                    <control type="image">
+                        <width>340</width><height>64</height>
+                        <texture colordiffuse="F21C1F24">colors/white.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>38</left><width>280</width><height>64</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>%(text)s</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                </itemlayout>
+                <focusedlayout width="340" height="64">
+                    <control type="image">
+                        <width>340</width><height>64</height>
+                        <texture colordiffuse="F21C1F24">colors/white.png</texture>
+                    </control>
+                    <control type="image">
+                        <left>10</left><width>320</width><height>64</height>
+                        <texture border="30" colordiffuse="%(text)s">silo/pill.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>38</left><width>280</width><height>64</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FF000000</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                </focusedlayout>
+                <content><include>skinshortcuts-submenu</include></content>
+            </control>
+        </control>''' % {'x': x, 'top': BAR_TOP + 74, 'id': SUBMENU, 'text': TEXT, 'from': prop('silo.submenu.from')}
+
+
 def sections_menus():
     """The dropdowns under the Movies and Series tabs, styled as the power menu."""
     out = ''
@@ -579,16 +631,24 @@ def custom_items():
         has_widgets = '!String.IsEmpty(%s)' % shortcut(slot, 'Property(widgetPath)')
         opened = 'String.IsEqual(%s,custom) + String.IsEqual(%s,%d)' % (prop('silo.page'), prop('silo.custom.button'),
                                                                          control_id)
+        # OK opens the item's submenu, if it has one: at once for an item
+        # without widgets, else once its page shows (as Movies' sections).
+        to_submenu = 'String.IsEqual(%s,True) + [!%s | [%s]]' % (shortcut(slot, 'Property(hasSubmenu)'), has_widgets,
+                                                                 opened)
+        go = '%s + ![%s]' % (has_widgets, to_submenu)
         actions = ''
         for n in range(1, WIDGETS + 1):
             suffix = '' if n == 1 else '.%d' % n
             for key, field in (('title', 'widgetName'), ('path', 'widgetPath')):
                 actions += ('\n                    <onclick condition="%s">SetProperty(silo.custom.%d.%s,$INFO[%s],home)'
-                            '</onclick>' % (has_widgets, n, key, shortcut(slot, 'Property(%s%s)' % (field, suffix))))
-            wide = 'String.IsEqual(%s,episodes)' % shortcut(slot, 'Property(widgetType%s)' % suffix)
+                            '</onclick>' % (go, n, key, shortcut(slot, 'Property(%s%s)' % (field, suffix))))
+            # The card style chosen in the menu editor, else from what it lists.
+            chosen = shortcut(slot, 'Property(widgetStyle%s)' % suffix)
+            wide = ('[String.IsEqual(%s,landscape) | [String.IsEmpty(%s) + String.IsEqual(%s,episodes)]]'
+                    % (chosen, chosen, shortcut(slot, 'Property(widgetType%s)' % suffix)))
             actions += ('\n                    <onclick condition="%s + %s">SetProperty(silo.custom.%d.style,landscape,home)'
                         '</onclick>\n                    <onclick condition="%s + !%s">'
-                        'SetProperty(silo.custom.%d.style,poster,home)</onclick>' % (has_widgets, wide, n, has_widgets,
+                        'SetProperty(silo.custom.%d.style,poster,home)</onclick>' % (go, wide, n, go,
                                                                                      wide, n))
         buttons += '''
                 <control type="button" id="%(id)d">
@@ -602,13 +662,18 @@ def custom_items():
                     <focusedcolor>FF000000</focusedcolor>
                     <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
                     <texturenofocus border="30" colordiffuse="%(nofocus)s">silo/pill.png</texturenofocus>%(moves)s
-                    <onclick condition="!%(has_widgets)s">$INFO[%(path)s]</onclick>
-                    <onclick condition="%(has_widgets)s">SetProperty(silo.page,custom,home)</onclick>
-                    <onclick condition="%(has_widgets)s">ClearProperty(silo.row,home)</onclick>
-                    <onclick condition="%(has_widgets)s">SetProperty(silo.custom.button,%(id)d,home)</onclick>%(actions)s
-                    <onclick condition="%(has_widgets)s">SetProperty(silo.custom.loading,1,home)</onclick>
+                    <onclick condition="!%(has_widgets)s + ![%(to_submenu)s]">$INFO[%(path)s]</onclick>
+                    <onclick condition="%(go)s">SetProperty(silo.page,custom,home)</onclick>
+                    <onclick condition="%(go)s">ClearProperty(silo.row,home)</onclick>
+                    <onclick condition="%(go)s">SetProperty(silo.custom.button,%(id)d,home)</onclick>%(actions)s
+                    <onclick condition="%(go)s">SetProperty(silo.custom.loading,1,home)</onclick>
+                    <onclick condition="%(to_submenu)s">SetProperty(silo.submenu.from,%(id)d,home)</onclick>
+                    <onclick condition="%(to_submenu)s">SetFocus(%(shortcuts)d,%(slot)d,absolute)</onclick>
+                    <onclick condition="%(to_submenu)s">SetFocus(%(submenu)d,0,absolute)</onclick>
                 </control>''' % {'label': label, 'id': control_id, 'dim': TAB_DIM, 'text': TEXT, 'has_widgets': has_widgets,
                              'path': shortcut(slot, 'Property(path)'), 'actions': actions,
+                             'go': go, 'to_submenu': to_submenu, 'shortcuts': SHORTCUTS, 'slot': slot,
+                             'submenu': SUBMENU,
                              'nofocus': '$VAR[SiloCustomTab%d]' % control_id,
                              # Left and right come from the grouplist: Kodi points its direct
                              # children at their neighbours (passing hidden ones), over ours.
@@ -809,7 +874,7 @@ def build():
        'row_overlap': ROW_PITCH - BAND_H,
        'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
        'bar_down': bar_down(), 'avatar': avatar(), 'custom': shortcuts_list,
-       'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections_menus(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'background': BACKGROUND,
+       'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections_menus() + custom_submenu(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'background': BACKGROUND,
        # The age rating as Silo draws it: the quality badges' size, centred on the info line.
        'splash': splash(), 'mpaa_badge': badge('$VAR[SiloMpaa]', 34, 'silo_badge').replace(
            '<width>auto</width><height>34</height>', '<top>3</top><width>auto</width><height>34</height>', 1),

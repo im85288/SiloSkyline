@@ -396,7 +396,7 @@
 	</include>
 	<!-- Silo Skyline: a row in the menu manager (script-skinshortcuts.xml). -->
 	<include name="SiloShortcutButton">
-		<width>734</width>
+		<width>934</width>
 		<height>80</height>
 		<textoffsetx>32</textoffsetx>
 		<aligny>center</aligny>

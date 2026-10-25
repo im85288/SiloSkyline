@@ -3,4 +3,5 @@
      Home opens (RunScript(script.skinshortcuts,type=buildxml...)). -->
 <includes>
     <include name="skinshortcuts-mainmenu" />
+    <include name="skinshortcuts-submenu" />
 </includes>

@@ -49,6 +49,32 @@
 						<onclick>Quit()</onclick>
 						<visible>System.ShowExitButton</visible>
 					</item>
+					<!-- Silo Skyline: quick tools, as Arctic Zephyr's power menu has them. -->
+					<item>
+						<label>Reload skin</label>
+						<onclick>Dialog.Close(shutdownmenu)</onclick>
+						<onclick>ReloadSkin()</onclick>
+					</item>
+					<item>
+						<label>$LOCALIZE[20077]</label>
+						<onclick>Dialog.Close(shutdownmenu)</onclick>
+						<onclick>ActivateWindow(SkinSettings)</onclick>
+					</item>
+					<item>
+						<label>$LOCALIZE[130]</label>
+						<onclick>Dialog.Close(shutdownmenu)</onclick>
+						<onclick>ActivateWindow(SystemInfo)</onclick>
+					</item>
+					<item>
+						<label>$LOCALIZE[7]</label>
+						<onclick>Dialog.Close(shutdownmenu)</onclick>
+						<onclick>ActivateWindow(FileManager)</onclick>
+					</item>
+					<item>
+						<label>$LOCALIZE[5]</label>
+						<onclick>Dialog.Close(shutdownmenu)</onclick>
+						<onclick>ActivateWindow(Settings)</onclick>
+					</item>
 					<item>
 						<label>$LOCALIZE[13016]</label>
 						<onclick>Powerdown()</onclick>

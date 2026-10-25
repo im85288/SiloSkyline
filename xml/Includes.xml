@@ -962,7 +962,7 @@
 				<right>0</right>
 				<bottom>0</bottom>
 				<!-- Silo Skyline: Silo's rounded dialog card, no coloured heading strip. -->
-				<texture border="14" colordiffuse="F4131417">silo/card_landscape_mask.png</texture>
+				<texture border="14" colordiffuse="FF131417">silo/card_landscape_mask.png</texture>
 			</control>
 			<control type="label" id="$PARAM[header_id]">
 				<left>40</left>
