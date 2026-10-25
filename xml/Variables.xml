@@ -2368,4 +2368,18 @@
         <value>$INFO[ListItem.Label]</value>
     </variable>
     <!-- end Silo Skyline detail -->
+	<!-- Silo Skyline player (hand-written) -->
+	<variable name="SiloPlayerEyebrow">
+		<value condition="!String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.TVShowTitle]$INFO[VideoPlayer.Season, · S,]$INFO[VideoPlayer.Episode,:E,]</value>
+		<value condition="VideoPlayer.Content(movies)">Movie$INFO[VideoPlayer.Year, · ,]</value>
+		<value>$INFO[VideoPlayer.Year]</value>
+	</variable>
+	<variable name="SiloOSDIconColor602">
+		<value condition="Control.HasFocus(602)">FF000000</value>
+		<value>FFEDEDED</value>
+	</variable>
+	<variable name="SiloPlayerTime">
+		<value condition="Player.Seeking | !String.IsEmpty(Player.SeekNumeric)">$INFO[Player.SeekTime]</value>
+		<value>$INFO[Player.Time]</value>
+	</variable>
 </includes>

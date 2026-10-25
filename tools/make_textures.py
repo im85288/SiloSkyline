@@ -14,11 +14,14 @@ SUB = 4  # supersampling per axis for smooth edges
 
 
 def write_png(name, width, height, alpha_at, rgb=(255, 255, 255)):
+    """alpha_at(x, y) gives a pixel's alpha, or (alpha, (r, g, b)) to colour it too."""
     rows = []
     for y in range(height):
         row = bytearray([0])
         for x in range(width):
-            row += bytes(rgb) + bytes([max(0, min(255, int(alpha_at(x + 0.5, y + 0.5) * 255 + 0.5)))])
+            value = alpha_at(x + 0.5, y + 0.5)
+            alpha, colour = value if isinstance(value, tuple) else (value, rgb)
+            row += bytes(colour) + bytes([max(0, min(255, int(alpha * 255 + 0.5)))])
         rows.append(bytes(row))
 
     def chunk(tag, data):
@@ -153,6 +156,17 @@ if __name__ == '__main__':
     # The profile avatar in the menu bar, and its focus ring 4 px outside it.
     card_mask('avatar_mask.png', 56, 56, 28)
     card_scrim()
+    # Silo's player buttons at rest: a 38% black disc with a 24% white ring.
+    def osd_button(x, y, size=76, ring=2.0):
+        disc = rounded_rect_coverage(x, y, size, size, size / 2.0)
+        inner = rounded_rect_coverage(x, y, size, size, size / 2.0, inset=ring)
+        ring_part = disc - inner
+        alpha = ring_part * 0.24 + inner * 0.38 + ring_part * 0.38 * (1 - 0.24)
+        if alpha <= 0:
+            return 0.0
+        grey = int(255 * ring_part * 0.24 / alpha)
+        return alpha, (grey, grey, grey)
+    write_png('osd_button_rest.png', 76, 76, osd_button)
     person_placeholder()
     focus_ring('avatar_ring.png', 64, 64, 32, 3)
     print('Wrote', ', '.join(sorted(os.listdir(OUT))))

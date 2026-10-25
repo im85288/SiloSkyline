@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 	<include name="OSDButton">
-		<textureradioonfocus colordiffuse="white">$PARAM[texture]</textureradioonfocus>
+		<!-- Silo Skyline: Silo's player buttons, a dark disc with a ring at rest and
+		     white with a dark icon when focused. -->
+		<textureradioonfocus colordiffuse="FF000000">$PARAM[texture]</textureradioonfocus>
 		<textureradioonnofocus>$PARAM[texture]</textureradioonnofocus>
-		<textureradioofffocus colordiffuse="white">$PARAM[texture]</textureradioofffocus>
+		<textureradioofffocus colordiffuse="FF000000">$PARAM[texture]</textureradioofffocus>
 		<textureradiooffnofocus>$PARAM[texture]</textureradiooffnofocus>
 		<textureradioondisabled colordiffuse="disabled">$PARAM[texture]</textureradioondisabled>
 		<textureradiooffdisabled colordiffuse="disabled">$PARAM[texture]</textureradiooffdisabled>
-		<texturefocus colordiffuse="button_focus">osd/fullscreen/buttons/button-fo.png</texturefocus>
+		<texturefocus colordiffuse="FFEDEDED">silo/avatar_mask.png</texturefocus>
 		<width>76</width>
 		<animation center="38,38" effect="zoom" end="100" reversible="false" start="95" time="480" tween="back">Focus</animation>
 		<height>76</height>
 		<radiowidth>74</radiowidth>
 		<radioheight>74</radioheight>
 		<font></font>
-		<texturenofocus />
+		<texturenofocus>silo/osd_button_rest.png</texturenofocus>
 		<radioposx>1</radioposx>
 		<radioposy>0</radioposy>
 	</include>
