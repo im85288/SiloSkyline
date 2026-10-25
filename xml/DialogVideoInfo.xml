@@ -3,7 +3,9 @@
 <window>
     <defaultcontrol always="true">8</defaultcontrol>
     <onload condition="String.IsEqual(ListItem.DBType,tvshow)">SetFocus(300)</onload>
-    <onload>SetProperty(silo.tint,$INFO[ListItem.Property(silo.tint)],movieinformation)</onload>
+    <onload condition="String.IsEqual(Window(home).Property(silo.from_rail),1) + Integer.IsGreater(Container(50).NumItems,0)">SetFocus(50)</onload>
+    <onload condition="String.IsEqual(Window(home).Property(silo.from_rail),1)">SetFocus(5000)</onload>
+    <onload>ClearProperty(silo.from_rail,home)</onload>
     <onunload>ClearProperty(silo.jump,movieinformation)</onunload>
     <backgroundcolor>FF0D0F12</backgroundcolor>
     <controls>
@@ -415,7 +417,9 @@
             <!-- Cast & crew: Kodi fills list 50. -->
             <control type="group">
                 <height>404</height>
-                <visible>Integer.IsGreater(Container(50).NumItems,0)</visible>
+                <!-- From the title's own cast, not list 50's items: Kodi doesn't
+                     refresh a list inside a hidden group. -->
+                <visible>Integer.IsGreater(Container(50).NumItems,0) | !String.IsEmpty(ListItem.Cast)</visible>
                 <control type="label">
                     <left>88</left>
                     <width>1000</width><height>46</height>
@@ -431,25 +435,15 @@
                     <onup condition="!String.IsEqual(ListItem.DBType,tvshow)">5000</onup>
                     <onclick>noop</onclick>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
+                    <ondown condition="Integer.IsGreater(Container(63).NumItems,0)">63</ondown>
                     <itemlayout width="220" height="280">
                     <control type="image">
                         <left>20</left><top>6</top>
                         <width>172</width><height>172</height>
-                        <aspectratio>scale</aspectratio>
-                        <texture background="true" fallback="silo/person_placeholder.png">$INFO[ListItem.Art(thumb)]</texture>
-                    </control>
-                    <control type="image">
-                        <left>20</left><top>6</top>
-                        <width>172</width><height>172</height>
-                        <texture>silo/person_frame.png</texture>
-                    </control>
-                    <!-- Over the tinted page: the wash's colour at about its strength
-                         behind the cast row, so the corners don't show. -->
-                    <control type="image">
-                        <left>20</left><top>6</top>
-                        <width>172</width><height>172</height>
-                        <texture colordiffuse="$INFO[Window(movieinformation).Property(silo.tint)]">silo/person_frame_tint.png</texture>
-                        <visible>!String.IsEmpty(Window(movieinformation).Property(silo.tint))</visible>
+                        <!-- Cropped to fill the circle; scalediffuse="false" keeps the round
+                             mask on the control instead of stretching it with the photo. -->
+                        <aspectratio scalediffuse="false">scale</aspectratio>
+                        <texture background="true" diffuse="silo/person_mask.png" fallback="silo/person_placeholder.png">$INFO[ListItem.Art(thumb)]</texture>
                     </control>
                     <control type="label">
                         <left>0</left><top>196</top>
@@ -472,21 +466,10 @@
                     <control type="image">
                         <left>20</left><top>6</top>
                         <width>172</width><height>172</height>
-                        <aspectratio>scale</aspectratio>
-                        <texture background="true" fallback="silo/person_placeholder.png">$INFO[ListItem.Art(thumb)]</texture>
-                    </control>
-                    <control type="image">
-                        <left>20</left><top>6</top>
-                        <width>172</width><height>172</height>
-                        <texture>silo/person_frame.png</texture>
-                    </control>
-                    <!-- Over the tinted page: the wash's colour at about its strength
-                         behind the cast row, so the corners don't show. -->
-                    <control type="image">
-                        <left>20</left><top>6</top>
-                        <width>172</width><height>172</height>
-                        <texture colordiffuse="$INFO[Window(movieinformation).Property(silo.tint)]">silo/person_frame_tint.png</texture>
-                        <visible>!String.IsEmpty(Window(movieinformation).Property(silo.tint))</visible>
+                        <!-- Cropped to fill the circle; scalediffuse="false" keeps the round
+                             mask on the control instead of stretching it with the photo. -->
+                        <aspectratio scalediffuse="false">scale</aspectratio>
+                        <texture background="true" diffuse="silo/person_mask.png" fallback="silo/person_placeholder.png">$INFO[ListItem.Art(thumb)]</texture>
                     </control>
                     <control type="image">
                         <left>14</left><top>0</top>
@@ -509,6 +492,139 @@
                         <font>silo_card_sub</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$INFO[ListItem.Label2]</label>
+                    </control>
+                    </focusedlayout>
+                </control>
+            </control>
+            <!-- More Like This: same-genre titles from the library, best rated
+                 first (SiloKodiConnect's silo.similar). -->
+            <control type="group">
+                <height>404</height>
+                <visible>Integer.IsGreater(Container(63).NumItems,0) | Container(63).IsUpdating</visible>
+                <control type="label">
+                    <left>88</left>
+                    <width>1000</width><height>46</height>
+                    <font>silo_row</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>More Like This</label>
+                </control>
+                <control type="list" id="63">
+                    <visible>Integer.IsGreater(Container(63).NumItems,0) | Container(63).IsUpdating</visible>
+                    <left>82</left><top>56</top>
+                    <width>1838</width><height>352</height>
+                    <orientation>horizontal</orientation>
+                    <scrolltime tween="cubic" easing="out">280</scrolltime>
+                    <onup condition="Integer.IsGreater(Container(50).NumItems,0)">50</onup>
+                    <onup condition="!Integer.IsGreater(Container(50).NumItems,0) + String.IsEqual(ListItem.DBType,tvshow)">61</onup>
+                    <onup condition="!Integer.IsGreater(Container(50).NumItems,0) + !String.IsEqual(ListItem.DBType,tvshow)">5000</onup>
+                    <!-- Kodi can't open an info page from inside one: close this one and
+                         have SiloKodiConnect open the chosen title's. That page opens with
+                         the column below still scrolled to this rail; silo.from_rail has
+                         its onload scroll it back to the top. -->
+                    <onclick>SetProperty(silo.from_rail,1,home)</onclick>
+                    <onclick>Dialog.Close(movieinformation)</onclick>
+                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <content target="videos" sortby="rating" sortorder="descending">$INFO[ListItem.Property(silo.similar)]</content>
+                    <itemlayout width="216" height="352">
+                    <control type="group">
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>176</width><height>264</height>
+                            <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloPosterArt]</texture>
+                            <aspectratio>scale</aspectratio>
+                        </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>176</width><height>264</height>
+                            <texture diffuse="silo/card_poster_mask.png">silo/card_scrim.png</texture>
+                        </control>
+                        <control type="progress">
+                            <left>18</left><top>264</top>
+                            <width>152</width><height>6</height>
+                            <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
+                            <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+                            <info>ListItem.PercentPlayed</info>
+                            <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
+                        </control>
+                        <control type="image">
+                            <right>16</right><top>16</top>
+                            <width>32</width><height>32</height>
+                            <texture colordiffuse="FFEDEDED">OverlayWatched.png</texture>
+                            <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>284</top>
+                            <width>176</width><height>34</height>
+                            <font>silo_card_title</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$VAR[SiloCardTitle]</label>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>318</top>
+                            <width>176</width><height>32</height>
+                            <font>silo_card_sub</font>
+                            <textcolor>BFEDEDED</textcolor>
+                            <label>$VAR[SiloCardYear]</label>
+                        </control>
+                    </control>
+                    </itemlayout>
+                    <focusedlayout width="216" height="352">
+                    <control type="group">
+                        <animation effect="zoom" start="100" end="104" time="160" tween="sine" center="auto" condition="Control.HasFocus(63)">Conditional</animation>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>176</width><height>264</height>
+                            <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloPosterArt]</texture>
+                            <aspectratio>scale</aspectratio>
+                        </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>176</width><height>264</height>
+                            <texture diffuse="silo/card_poster_mask.png">silo/card_scrim.png</texture>
+                        </control>
+                        <control type="progress">
+                            <left>18</left><top>264</top>
+                            <width>152</width><height>6</height>
+                            <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
+                            <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+                            <info>ListItem.PercentPlayed</info>
+                            <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
+                        </control>
+                        <control type="image">
+                            <right>16</right><top>16</top>
+                            <width>32</width><height>32</height>
+                            <texture colordiffuse="FFEDEDED">OverlayWatched.png</texture>
+                            <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+                        </control>
+                        <control type="image">
+                            <left>0</left><top>0</top>
+                            <width>188</width><height>276</height>
+                            <texture colordiffuse="FFEDEDED">silo/card_poster_focus.png</texture>
+                            <visible>Control.HasFocus(63)</visible>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>284</top>
+                            <width>176</width><height>34</height>
+                            <font>silo_card_title</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$VAR[SiloCardTitle]</label>
+                            <visible>!Control.HasFocus(63)</visible>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>284</top>
+                            <width>176</width><height>34</height>
+                            <font>silo_card_title</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$VAR[SiloCardTitle]</label>
+                            <visible>Control.HasFocus(63)</visible>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>318</top>
+                            <width>176</width><height>32</height>
+                            <font>silo_card_sub</font>
+                            <textcolor>BFEDEDED</textcolor>
+                            <label>$VAR[SiloCardYear]</label>
+                        </control>
                     </control>
                     </focusedlayout>
                 </control>

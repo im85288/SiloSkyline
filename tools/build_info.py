@@ -17,7 +17,7 @@ import sys
 from urllib.parse import quote
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM  # noqa: E402
+from build_home import BACKGROUND, POSTER, ROOT, SAFE_X, TEXT, TEXT_DIM, card_layout  # noqa: E402
 
 # Silo's detail hero: 100 px down (tvOS 100pt on a 1080pt canvas).
 TOP = 100
@@ -83,7 +83,9 @@ def build():
 <window>
     <defaultcontrol always="true">8</defaultcontrol>
     <onload condition="%(show)s">SetFocus(300)</onload>
-    <onload>SetProperty(silo.tint,$INFO[ListItem.Property(silo.tint)],movieinformation)</onload>
+    <onload condition="String.IsEqual(Window(home).Property(silo.from_rail),1) + Integer.IsGreater(Container(50).NumItems,0)">SetFocus(50)</onload>
+    <onload condition="String.IsEqual(Window(home).Property(silo.from_rail),1)">SetFocus(5000)</onload>
+    <onload>ClearProperty(silo.from_rail,home)</onload>
     <onunload>ClearProperty(silo.jump,movieinformation)</onunload>
     <backgroundcolor>%(background)s</backgroundcolor>
     <controls>
@@ -255,7 +257,9 @@ def build():
             <!-- Cast & crew: Kodi fills list 50. -->
             <control type="group">
                 <height>%(cast_h)d</height>
-                <visible>Integer.IsGreater(Container(50).NumItems,0)</visible>
+                <!-- From the title's own cast, not list 50's items: Kodi doesn't
+                     refresh a list inside a hidden group. -->
+                <visible>Integer.IsGreater(Container(50).NumItems,0) | !String.IsEmpty(ListItem.Cast)</visible>
                 <control type="label">
                     <left>%(x)d</left>
                     <width>1000</width><height>46</height>
@@ -271,9 +275,45 @@ def build():
                     <onup condition="!%(show)s">5000</onup>
                     <onclick>noop</onclick>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
+                    <ondown condition="%(has_similar)s">63</ondown>
                     <itemlayout width="220" height="280">%(person)s
                     </itemlayout>
                     <focusedlayout width="220" height="280">%(person_focused)s
+                    </focusedlayout>
+                </control>
+            </control>
+            <!-- More Like This: same-genre titles from the library, best rated
+                 first (SiloKodiConnect's silo.similar). -->
+            <control type="group">
+                <height>%(similar_h)d</height>
+                <visible>%(has_similar)s | Container(63).IsUpdating</visible>
+                <control type="label">
+                    <left>%(x)d</left>
+                    <width>1000</width><height>46</height>
+                    <font>silo_row</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label>More Like This</label>
+                </control>
+                <control type="list" id="63">
+                    <visible>%(has_similar)s | Container(63).IsUpdating</visible>
+                    <left>%(lx)d</left><top>56</top>
+                    <width>%(lw)d</width><height>%(similar_item_h)d</height>
+                    <orientation>horizontal</orientation>
+                    <scrolltime tween="cubic" easing="out">280</scrolltime>
+                    <onup condition="Integer.IsGreater(Container(50).NumItems,0)">50</onup>
+                    <onup condition="!Integer.IsGreater(Container(50).NumItems,0) + %(show)s">61</onup>
+                    <onup condition="!Integer.IsGreater(Container(50).NumItems,0) + !%(show)s">5000</onup>
+                    <!-- Kodi can't open an info page from inside one: close this one and
+                         have SiloKodiConnect open the chosen title's. That page opens with
+                         the column below still scrolled to this rail; silo.from_rail has
+                         its onload scroll it back to the top. -->
+                    <onclick>SetProperty(silo.from_rail,1,home)</onclick>
+                    <onclick>Dialog.Close(movieinformation)</onclick>
+                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <content target="videos" sortby="rating" sortorder="descending">$INFO[ListItem.Property(silo.similar)]</content>
+                    <itemlayout width="%(similar_item_w)d" height="%(similar_item_h)d">%(similar_card)s
+                    </itemlayout>
+                    <focusedlayout width="%(similar_item_w)d" height="%(similar_item_h)d">%(similar_card_focused)s
                     </focusedlayout>
                 </control>
             </control>
@@ -288,6 +328,9 @@ def build():
        'versions': round_button(14, 'icons/infodialogs/versions.png',
                                 'String.IsEqual(ListItem.DBType,movie) + Integer.IsGreater(ListItem.VideoVersionsCount,1)'),
        'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'person': person(False), 'person_focused': person(True),
+       'has_similar': 'Integer.IsGreater(Container(63).NumItems,0)', 'similar_h': SECTION_H,
+       'similar_item_w': POSTER['width'] + POSTER['gap'], 'similar_item_h': POSTER['height'] + 12 + 76,
+       'similar_card': card_layout(POSTER, False), 'similar_card_focused': card_layout(POSTER, True, 63),
        'episode': episode, 'show': SHOW, 'has_next': HAS_NEXT, 'next_path': NEXT_EPISODE, 'lower_top': LOWER_TOP, 'lower_h': 1080 - LOWER_TOP,
        'episodes_h': SECTION_H, 'episode_h': EPISODE_H, 'cast_h': SECTION_H,
        'season': season(False), 'season_focused': season(True),
@@ -410,21 +453,10 @@ def person(focused):
                     <control type="image">
                         <left>20</left><top>6</top>
                         <width>172</width><height>172</height>
-                        <aspectratio>scale</aspectratio>
-                        <texture background="true" fallback="silo/person_placeholder.png">$INFO[ListItem.Art(thumb)]</texture>
-                    </control>
-                    <control type="image">
-                        <left>20</left><top>6</top>
-                        <width>172</width><height>172</height>
-                        <texture>silo/person_frame.png</texture>
-                    </control>
-                    <!-- Over the tinted page: the wash's colour at about its strength
-                         behind the cast row, so the corners don't show. -->
-                    <control type="image">
-                        <left>20</left><top>6</top>
-                        <width>172</width><height>172</height>
-                        <texture colordiffuse="$INFO[Window(movieinformation).Property(silo.tint)]">silo/person_frame_tint.png</texture>
-                        <visible>!String.IsEmpty(Window(movieinformation).Property(silo.tint))</visible>
+                        <!-- Cropped to fill the circle; scalediffuse="false" keeps the round
+                             mask on the control instead of stretching it with the photo. -->
+                        <aspectratio scalediffuse="false">scale</aspectratio>
+                        <texture background="true" diffuse="silo/person_mask.png" fallback="silo/person_placeholder.png">$INFO[ListItem.Art(thumb)]</texture>
                     </control>%(ring)s
                     <control type="label">
                         <left>0</left><top>196</top>

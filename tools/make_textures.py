@@ -147,14 +147,9 @@ if __name__ == '__main__':
     pill()
     scrim()
     # Cast photos: round, with a ring 6 px outside the photo.
-    # The photo is drawn square and this frame, in the page colour with a round
-    # hole, covers its corners: a diffuse mask would stretch with aspectratio scale.
-    write_png('person_frame.png', 172, 172, lambda x, y: 1.0 - rounded_rect_coverage(x, y, 172, 172, 86),
-              rgb=(0x0D, 0x0F, 0x12))
+    # Cast photos: a round mask, and a ring 6 px outside the photo.
+    card_mask('person_mask.png', 172, 172, 86)
     focus_ring('person_ring.png', 184, 184, 92, 4)
-    # The same corners in white at 30% (about the wash behind the cast row), coloured with the title's tint over a
-    # tinted page (Kodi doesn't fade controls inside a list's items).
-    write_png('person_frame_tint.png', 172, 172, lambda x, y: 0.30 * (1.0 - rounded_rect_coverage(x, y, 172, 172, 86)))
     # The profile avatar in the menu bar, and its focus ring 4 px outside it.
     card_mask('avatar_mask.png', 56, 56, 28)
     card_scrim()
