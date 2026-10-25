@@ -39,6 +39,7 @@
                 <onclick>Skin.SetString(silo.search)</onclick>
                 <ondown condition="Integer.IsGreater(Container(201).NumItems,0)">SetFocus(201)</ondown>
                 <ondown condition="Integer.IsGreater(Container(202).NumItems,0) + !Integer.IsGreater(Container(201).NumItems,0)">SetFocus(202)</ondown>
+                <ondown condition="Integer.IsGreater(Container(203).NumItems,0) + !Integer.IsGreater(Container(201).NumItems,0) + !Integer.IsGreater(Container(202).NumItems,0)">SetFocus(203)</ondown>
             </control>
             <control type="image">
                 <left>24</left><top>16</top>
@@ -76,7 +77,7 @@
             <font>silo_row</font>
             <textcolor>BFEDEDED</textcolor>
             <label>No titles match "$INFO[Skin.String(silo.search)]"</label>
-            <visible>!String.IsEmpty(Skin.String(silo.search)) + !Integer.IsGreater(Container(201).NumItems,0) + !Container(201).IsUpdating + !Integer.IsGreater(Container(202).NumItems,0) + !Container(202).IsUpdating</visible>
+            <visible>!String.IsEmpty(Skin.String(silo.search)) + !Integer.IsGreater(Container(201).NumItems,0) + !Container(201).IsUpdating + !Integer.IsGreater(Container(202).NumItems,0) + !Container(202).IsUpdating + !Integer.IsGreater(Container(203).NumItems,0) + !Container(203).IsUpdating</visible>
         </control>
         <control type="grouplist">
             <top>236</top>
@@ -105,9 +106,11 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <!-- Through SiloKodiConnect, when it is there, so the page has
                          Silo's details and More Like This, as from Home. -->
-                    <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
-                    <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">Action(Info)</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
                     <ondown condition="Integer.IsGreater(Container(202).NumItems,0)">SetFocus(202)</ondown>
+                    <ondown condition="Integer.IsGreater(Container(203).NumItems,0) + !Integer.IsGreater(Container(202).NumItems,0)">SetFocus(203)</ondown>
                     <onup>SetFocus(100)</onup>
                     <content target="videos">videodb://movies/titles/?xsp=%7B%22type%22%3A%22movies%22%2C%22order%22%3A%7B%22method%22%3A%22sorttitle%22%2C%22direction%22%3A%22ascending%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B%22$INFO[Skin.String(silo.search)]%22%5D%7D%5D%7D%7D</content>
                     <itemlayout width="216" height="352">
@@ -234,9 +237,11 @@
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <!-- Through SiloKodiConnect, when it is there, so the page has
                          Silo's details and More Like This, as from Home. -->
-                    <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
-                    <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">Action(Info)</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
                     <onup condition="Integer.IsGreater(Container(201).NumItems,0)">SetFocus(201)</onup>
+                    <ondown condition="Integer.IsGreater(Container(203).NumItems,0)">SetFocus(203)</ondown>
                     <onup condition="!Integer.IsGreater(Container(201).NumItems,0)">SetFocus(100)</onup>
                     <content target="videos">videodb://tvshows/titles/?xsp=%7B%22type%22%3A%22tvshows%22%2C%22order%22%3A%7B%22method%22%3A%22sorttitle%22%2C%22direction%22%3A%22ascending%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B%22$INFO[Skin.String(silo.search)]%22%5D%7D%5D%7D%7D</content>
                     <itemlayout width="216" height="352">
@@ -331,6 +336,137 @@
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
                             <visible>Control.HasFocus(202)</visible>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>318</top>
+                            <width>176</width><height>32</height>
+                            <font>silo_card_sub</font>
+                            <textcolor>BFEDEDED</textcolor>
+                            <label>$VAR[SiloCardYear]</label>
+                        </control>
+                    </control>
+                    </focusedlayout>
+                </control>
+            </control>
+            <control type="group">
+                <height>422</height>
+                <visible>Integer.IsGreater(Container(203).NumItems,0) | Container(203).IsUpdating</visible>
+                <control type="label">
+                    <left>88</left>
+                    <width>1500</width><height>46</height>
+                    <font>silo_row</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>Request$INFO[Container(203).NumItems,  ·  ,]</label>
+                </control>
+                <control type="list" id="203">
+                    <!-- The list's own condition lets Kodi load it while it is hidden:
+                         it doesn't process a list inside a hidden group. -->
+                    <visible>Integer.IsGreater(Container(203).NumItems,0) | Container(203).IsUpdating</visible>
+                    <left>82</left><top>56</top>
+                    <width>1838</width><height>352</height>
+                    <orientation>horizontal</orientation>
+                    <scrolltime tween="cubic" easing="out">280</scrolltime>
+                    <!-- Through SiloKodiConnect, when it is there, so the page has
+                         Silo's details and More Like This, as from Home. -->
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">Action(Info)</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
+                    <onup condition="Integer.IsGreater(Container(202).NumItems,0)">SetFocus(202)</onup>
+                    <onup condition="Integer.IsGreater(Container(201).NumItems,0) + !Integer.IsGreater(Container(202).NumItems,0)">SetFocus(201)</onup>
+                    <onup condition="!Integer.IsGreater(Container(202).NumItems,0) + !Integer.IsGreater(Container(201).NumItems,0)">SetFocus(100)</onup>
+                    <content target="videos">plugin://plugin.video.silokodiconnect/?mode=requests&amp;search=$INFO[Skin.String(silo.search)]</content>
+                    <itemlayout width="216" height="352">
+                    <control type="group">
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>176</width><height>264</height>
+                            <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloPosterArt]</texture>
+                            <aspectratio>scale</aspectratio>
+                        </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>176</width><height>264</height>
+                            <texture diffuse="silo/card_poster_mask.png">silo/card_scrim.png</texture>
+                        </control>
+                        <control type="progress">
+                            <left>18</left><top>264</top>
+                            <width>152</width><height>6</height>
+                            <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
+                            <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+                            <info>ListItem.PercentPlayed</info>
+                            <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
+                        </control>
+                        <control type="image">
+                            <right>16</right><top>16</top>
+                            <width>32</width><height>32</height>
+                            <texture colordiffuse="FFEDEDED">OverlayWatched.png</texture>
+                            <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>284</top>
+                            <width>176</width><height>34</height>
+                            <font>silo_card_title</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$VAR[SiloCardTitle]</label>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>318</top>
+                            <width>176</width><height>32</height>
+                            <font>silo_card_sub</font>
+                            <textcolor>BFEDEDED</textcolor>
+                            <label>$VAR[SiloCardYear]</label>
+                        </control>
+                    </control>
+                    </itemlayout>
+                    <focusedlayout width="216" height="352">
+                    <control type="group">
+                        <animation effect="zoom" start="100" end="104" time="160" tween="sine" center="auto" condition="Control.HasFocus(203)">Conditional</animation>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>176</width><height>264</height>
+                            <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloPosterArt]</texture>
+                            <aspectratio>scale</aspectratio>
+                        </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>176</width><height>264</height>
+                            <texture diffuse="silo/card_poster_mask.png">silo/card_scrim.png</texture>
+                        </control>
+                        <control type="progress">
+                            <left>18</left><top>264</top>
+                            <width>152</width><height>6</height>
+                            <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
+                            <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+                            <info>ListItem.PercentPlayed</info>
+                            <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
+                        </control>
+                        <control type="image">
+                            <right>16</right><top>16</top>
+                            <width>32</width><height>32</height>
+                            <texture colordiffuse="FFEDEDED">OverlayWatched.png</texture>
+                            <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+                        </control>
+                        <control type="image">
+                            <left>0</left><top>0</top>
+                            <width>188</width><height>276</height>
+                            <texture colordiffuse="FFEDEDED">silo/card_poster_focus.png</texture>
+                            <visible>Control.HasFocus(203)</visible>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>284</top>
+                            <width>176</width><height>34</height>
+                            <font>silo_card_title</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$VAR[SiloCardTitle]</label>
+                            <visible>!Control.HasFocus(203)</visible>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>284</top>
+                            <width>176</width><height>34</height>
+                            <font>silo_card_title</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$VAR[SiloCardTitle]</label>
+                            <visible>Control.HasFocus(203)</visible>
                         </control>
                         <control type="label">
                             <left>6</left><top>318</top>

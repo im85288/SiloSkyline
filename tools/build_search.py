@@ -21,16 +21,21 @@ WINDOW_ID = 1190
 QUERY = 'Skin.String(silo.search)'
 PILL_ID = 100
 # (list id, row title, library path, smart-filter type)
+# The third row is Silo's own search for titles to request (SiloKodiConnect),
+# shown only when the add-on is there and found some.
 ROWS = [(201, 'Movies', 'videodb://movies/titles/', 'movies'),
-        (202, 'Shows', 'videodb://tvshows/titles/', 'tvshows')]
+        (202, 'Shows', 'videodb://tvshows/titles/', 'tvshows'),
+        (203, 'Request', 'plugin://plugin.video.silokodiconnect/?mode=requests', None)]
 ROWS_TOP = 236
-# Both rows fit below the pill without scrolling.
-ROW_H = (1080 - ROWS_TOP) // len(ROWS)
+# Two rows fit below the pill; the third scrolls into view.
+ROW_H = (1080 - ROWS_TOP) // 2
 
 
 def search_path(path, kind):
     """The library folder filtered to titles containing the search words. The
     filter is URL-encoded around a marker that becomes the words."""
+    if kind is None:
+        return path + '&amp;search=$INFO[%s]' % QUERY
     marker = 'SILOQUERY'
     rules = {'type': kind, 'order': {'method': 'sorttitle', 'direction': 'ascending'},
              'rules': {'and': [{'field': 'title', 'operator': 'contains', 'value': [marker]}]}}
@@ -78,8 +83,9 @@ def row(index, list_id, title, path, kind):
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <!-- Through SiloKodiConnect, when it is there, so the page has
                          Silo's details and More Like This, as from Home. -->
-                    <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
-                    <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>%(moves)s
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">Action(Info)</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>%(moves)s
                     <content target="videos">%(path)s</content>
                     <itemlayout width="%(item_w)d" height="%(item_h)d">%(normal)s
                     </itemlayout>

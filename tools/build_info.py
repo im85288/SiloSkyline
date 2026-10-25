@@ -83,6 +83,7 @@ def build():
 <window>
     <defaultcontrol always="true">8</defaultcontrol>
     <onload condition="%(show)s">SetFocus(300)</onload>
+    <onload condition="%(request)s">SetFocus(301)</onload>
     <onload condition="String.IsEqual(Window(home).Property(silo.from_rail),1) + Integer.IsGreater(Container(50).NumItems,0)">SetFocus(50)</onload>
     <onload condition="String.IsEqual(Window(home).Property(silo.from_rail),1)">SetFocus(5000)</onload>
     <onload>ClearProperty(silo.from_rail,home)</onload>
@@ -192,8 +193,23 @@ def build():
                     <onclick>Dialog.Close(movieinformation)</onclick>
                     <visible>%(show)s</visible>
                 </control>
+                <!-- A Requests card: Request it, or its state when Silo already has it. -->
+                <control type="button" id="301">
+                    <visible>%(request)s</visible>
+                    <width min="220">auto</width><height>64</height>
+                    <label>$VAR[SiloRequestLabel]</label>
+                    <font>silo_tab</font>
+                    <textoffsetx>40</textoffsetx>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>%(text)s</textcolor>
+                    <focusedcolor>FF000000</focusedcolor>
+                    <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
+                    <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
+                    <onclick condition="String.IsEqual(ListItem.Property(silo.request.requestable),true)">Dialog.Close(movieinformation)</onclick>
+                    <onclick condition="String.IsEqual(ListItem.Property(silo.request.requestable),true)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)]&amp;title=$ESCINFO[ListItem.Title])</onclick>
+                </control>
                 <control type="button" id="8">
-                    <visible>!%(show)s</visible>
+                    <visible>!%(show)s + !%(request)s</visible>
                     <width min="220">auto</width><height>64</height>
                     <label>$VAR[SiloDetailPlayLabel]</label>
                     <font>silo_tab</font>
@@ -392,7 +408,7 @@ def build():
        'has_season': 'Integer.IsGreater(Container(64).NumItems,0)', 'episode_pills': EPISODE_PILLS,
        'episode_season': season(False, 65), 'episode_season_focused': season(True, 65),
        'season_card': episode_card(False, 64), 'season_card_focused': episode_card(True, 64, CURRENT),
-       'episode': episode, 'show': SHOW, 'has_next': HAS_NEXT, 'next_path': NEXT_EPISODE, 'lower_top': LOWER_TOP, 'lower_h': 1080 - LOWER_TOP,
+       'request': '!String.IsEmpty(ListItem.Property(silo.request.tmdb))', 'episode': episode, 'show': SHOW, 'has_next': HAS_NEXT, 'next_path': NEXT_EPISODE, 'lower_top': LOWER_TOP, 'lower_h': 1080 - LOWER_TOP,
        'episodes_h': SECTION_H, 'episode_h': EPISODE_H, 'cast_h': SECTION_H,
        'season': season(False), 'season_focused': season(True),
        'episode_card': episode_card(False), 'episode_card_focused': episode_card(True)}
@@ -558,11 +574,17 @@ VARIABLES = '''
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.TVShowTitle]</value>
         <value>$INFO[ListItem.Title]</value>
     </variable>
+    <variable name="SiloRequestLabel">
+        <value condition="String.IsEqual(ListItem.Property(silo.request.requestable),true)">Request</value>
+        <value condition="!String.IsEmpty(ListItem.Property(silo.request.label))">$INFO[ListItem.Property(silo.request.label)]</value>
+        <value>Not available to request</value>
+    </variable>
     <variable name="SiloDetailMpaa">
         <value condition="!String.IsEmpty(ListItem.Mpaa)">$INFO[ListItem.Mpaa]</value>
         <value>$INFO[ListItem.Property(silo.mpaa)]</value>
     </variable>
     <variable name="SiloDetailFacts">
+        <value condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Property(silo.request.label), · ,]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.code))">$INFO[ListItem.Property(silo.code)]$INFO[ListItem.Title, · ,]$INFO[ListItem.Property(silo.aired), · ,]$INFO[ListItem.Duration(mins), · , min]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Season,S,]$INFO[ListItem.Episode,E,]$INFO[ListItem.Title, · ,]$INFO[ListItem.Premiered, · ,]$INFO[ListItem.Duration(mins), · , min]</value>
         <value condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Property(silo.genre))">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.genre), · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Property(TotalEpisodes), · , episodes]</value>

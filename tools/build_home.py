@@ -14,9 +14,16 @@ Layout (Silo TV's 960-unit grid doubled to 1920x1080):
 import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PAGES = ('home', 'movies', 'series')
-TAB_LABELS = {'home': 'Home', 'movies': 'Movies', 'series': 'Series'}
+PAGES = ('home', 'movies', 'series', 'requests')
+TAB_LABELS = {'home': 'Home', 'movies': 'Movies', 'series': 'Series', 'requests': 'Requests'}
 MAX_ROWS = 12
+# Rows a page can show; Requests has Your requests and Silo's few discovery
+# rows, and every slot costs Home.xml size.
+PAGE_ROWS = {'requests': 8}
+
+
+def rows_of(page):
+    return PAGE_ROWS.get(page, MAX_ROWS)
 LOOKAHEAD = 4  # rows a move may skip over when they are empty
 
 SAFE_X = 88
@@ -193,7 +200,7 @@ def moves(page_index, slot):
     up from the top row to the menu bar. Kodi doesn't move focus between
     lists in groups inside a grouplist, so each row names its neighbours."""
     # Look a few rows ahead: enough to skip empty rows without bloating the XML.
-    down = page_rows(page_index, range(slot + 1, min(MAX_ROWS, slot + LOOKAHEAD) + 1))
+    down = page_rows(page_index, range(slot + 1, min(rows_of(PAGES[page_index]), slot + LOOKAHEAD) + 1))
     up = page_rows(page_index, range(slot - 1, max(0, slot - LOOKAHEAD), -1))
     out = first_visible('ondown', down) + first_visible('onup', up)
     # The top row goes up to the current page's tab (a button: focusing the
@@ -250,7 +257,7 @@ def row(page, page_index, slot, landscape):
 
 # Silo dims the whole bar to 70% while focus is down in the rows.
 BAR_DIM = '!ControlGroup(9000).HasFocus() + !Control.HasFocus(9011)'
-BAR_ORDER = [9001, 9002, 9003, 9004, 9009, 9010, 9011]  # Search, Home, Movies, Series, Settings, Power, profile
+BAR_ORDER = [9001, 9002, 9003, 9004, 9005, 9009, 9010, 9011]  # Search, Home, Movies, Series, Requests, Settings, Power, profile
 
 
 def bar_moves(control_id):
@@ -510,7 +517,7 @@ def badge(label, height, font):
 def build():
     rows = ''.join(row(page, index, slot, landscape)
                    for index, page in enumerate(PAGES)
-                   for slot in range(1, MAX_ROWS + 1)
+                   for slot in range(1, rows_of(page) + 1)
                    for landscape in (False, True))
     tabs = icon_tab(9001, 'icons/search.png', 'ActivateWindow(1190)')
     tabs += ''.join(tab(9002 + index, page, index) for index, page in enumerate(PAGES))
@@ -675,7 +682,9 @@ HERO = [
                        '$INFO[LI.Property(silo.genre), · ,]')]),
     ('SiloPlot', [(None, '$INFO[LI.Plot]')]),
     # "Aired Sep 25, 2026 · Tom Hardy, Helen Mirren, Pierce Brosnan"
-    ('SiloDetail', [('String.IsEqual(LI.DBType,episode)', '$INFO[LI.Property(silo.aired)]'
+    # A Requests card: its state (Requested, Downloading, Available...).
+    ('SiloDetail', [('!String.IsEmpty(LI.Property(silo.request.label))', '$INFO[LI.Property(silo.request.label)]'),
+                    ('String.IsEqual(LI.DBType,episode)', '$INFO[LI.Property(silo.aired)]'
                      '$INFO[LI.Property(silo.cast), · ,]'),
                     (None, '$INFO[LI.Property(silo.cast)]')]),
     ('SiloMpaa', [(None, '$INFO[LI.Property(silo.mpaa)]')]),
@@ -695,6 +704,7 @@ CARDS = '''
         <value>$INFO[ListItem.Year]</value>
     </variable>
     <variable name="SiloCardYear">
+        <value condition="!String.IsEmpty(ListItem.Property(silo.request.label))">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.request.label), · ,]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code)]</value>
         <value>$INFO[ListItem.Year]</value>
     </variable>
@@ -723,11 +733,11 @@ EMPTY_HOME = '''    <variable name="SiloEmptyHome">
 
 
 def variables():
-    rows = [list_id(index, slot, landscape) for index in range(len(PAGES))
-            for slot in range(1, MAX_ROWS + 1) for landscape in (False, True)]
+    rows = [list_id(index, slot, landscape) for index, page in enumerate(PAGES)
+            for slot in range(1, rows_of(page) + 1) for landscape in (False, True)]
     out = '\n    <!-- Silo Skyline (tools/build_home.py) -->' + CARDS
     for index, page in enumerate(PAGES):
-        for slot in range(1, MAX_ROWS + 1):
+        for slot in range(1, rows_of(page) + 1):
             for landscape in (False, True):
                 out += '    <expression name="SiloRow%d">%s</expression>\n' % (
                     list_id(index, slot, landscape), row_rules(page, index, slot, landscape))
