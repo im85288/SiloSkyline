@@ -298,6 +298,7 @@ VARIABLES = '''
     <expression name="SiloBrowseEpisodes">%(episodes)s</expression>
     <variable name="SiloBrowseTitle">
         <value condition="String.IsEqual(Container.FolderPath,plugin://plugin.video.silokodiconnect/)">SiloKodiConnect</value>
+        <value condition="Container.Content(episodes) + String.IsEqual(Container.FolderName,Container.ShowTitle)">$INFO[Container.ShowTitle]</value>
         <value condition="!String.IsEmpty(Container.ShowTitle) + Container.Content(episodes)">$INFO[Container.ShowTitle] · $INFO[Container.FolderName]</value>
         <value>$INFO[Container.FolderName]</value>
     </variable>
