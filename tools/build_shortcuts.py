@@ -98,8 +98,7 @@ def dialog():
     <!-- Skin Shortcuts fills the item list just after the window opens, so the
          default focus finds it empty and nothing has focus: the first key
          press was lost. Focus it again once it has items. -->
-    <onload>AlarmClock(silo_editor_add,SetFocus(301),00:01,silent)</onload>
-    <onload>AlarmClock(silo_editor_focus,SetFocus(211),00:02,silent)</onload>
+    <onload>AlarmClock(silo_editor_focus,SetFocus(399),00:01,silent)</onload>
     <include>Animation_DialogPopupOpenClose</include>
     <controls>
         <control type="image">
@@ -170,6 +169,14 @@ def dialog():
                 <itemgap>0</itemgap>
                 <onleft>211</onleft>
                 <scrolltime tween="cubic" easing="out">200</scrolltime>%(rows)s
+            </control>
+            <!-- The first focus, once the items are in: the list if it has any,
+                 else Add (an alarm can't choose; this off-screen button does). -->
+            <control type="button" id="399">
+                <left>-3000</left><top>0</top><width>10</width><height>10</height>
+                <texturefocus /><texturenofocus />
+                <onfocus condition="Integer.IsGreater(Container(211).NumItems,0)">SetFocus(211)</onfocus>
+                <onfocus condition="!Integer.IsGreater(Container(211).NumItems,0)">SetFocus(301)</onfocus>
             </control>
             <!-- Skin Shortcuts' widget chooser, clicked by the Widget buttons. -->
             <control type="button" id="312">
