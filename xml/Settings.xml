@@ -59,10 +59,18 @@
 						<onclick>ActivateWindow(systeminfo)</onclick>
 						<icon>icons/settings/sysinfo.png</icon>
 					</item>
+					<!-- Silo Skyline: the user's own menu items and widgets (Skin Shortcuts). -->
+					<item>
+						<label>Customise menu</label>
+						<onclick>RunScript(script.skinshortcuts,type=manage&amp;group=mainmenu)</onclick>
+						<icon>icons/settings/skin.png</icon>
+						<visible>System.HasAddon(script.skinshortcuts)</visible>
+					</item>
 					<item>
 						<label>$LOCALIZE[31067]</label>
 						<onclick>ActivateWindow(eventlog)</onclick>
 						<icon>icons/settings/eventlog.png</icon>
+						<visible>!System.HasAddon(script.skinshortcuts)</visible>
 					</item>
 				</content>
 			</control>
@@ -115,6 +123,12 @@
 						<label>$LOCALIZE[13000]</label>
 						<onclick>ActivateWindow(SystemSettings)</onclick>
 						<icon>icons/settings/system.png</icon>
+					</item>
+					<item>
+						<label>$LOCALIZE[31067]</label>
+						<onclick>ActivateWindow(eventlog)</onclick>
+						<icon>icons/settings/eventlog.png</icon>
+						<visible>System.HasAddon(script.skinshortcuts)</visible>
 					</item>
 					<item>
 						<label>LibreELEC</label>

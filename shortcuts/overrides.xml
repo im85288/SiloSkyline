@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<overrides>
+    <!-- Widgets may be playlists, and an item can have up to four. -->
+    <widgetPlaylists>True</widgetPlaylists>
+</overrides>

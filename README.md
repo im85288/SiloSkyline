@@ -25,6 +25,13 @@ Community project: not made or endorsed by the Silo team.
 |---|---|---|
 | ![Movies](resources/screenshot-02.jpg) | ![Episode](resources/screenshot-03.jpg) | ![Film](resources/screenshot-04.jpg) |
 
+## Your own menu items
+
+With [Skin Shortcuts](https://github.com/mikesilvo164/script.skinshortcuts) installed, **Settings -> Customise
+menu** adds items of your own beside the avatar: any add-on, library node, playlist or other shortcut, renamed
+and in your order. Give an item up to four widgets and it opens them as rows on its own page, like Home's;
+an item without widgets runs its action. The Silo tabs stay as they are.
+
 ## Install
 
 Install and sign in to SiloKodiConnect 0.9.3 or newer first, then build a zip and use Kodi's
@@ -45,6 +52,8 @@ The Silo screens are generated: edit the scripts in `tools/`, not the XML they w
 - `tools/build_info.py` writes `xml/DialogVideoInfo.xml` and its variables.
 - `tools/build_browse.py` writes `xml/MyVideoNav.xml` (library browsing) and its variables.
 - `tools/build_search.py` writes `xml/Custom_1190_SiloSearch.xml` (search) and its variables.
+- `xml/script-skinshortcuts.xml` (the menu manager) and `shortcuts/` are hand-written; Skin Shortcuts
+  writes `xml/script-skinshortcuts-includes.xml` on the device, over the placeholder here.
 - `tools/make_textures.py` draws the masks, focus rings, pills and badges in `media/silo/`.
 
 Run `build_home.py` first, then the others, since they all write blocks into `xml/Variables.xml`. Kodi reads a

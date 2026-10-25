@@ -14,12 +14,20 @@ Layout (Silo TV's 960-unit grid doubled to 1920x1080):
 import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PAGES = ('home', 'movies', 'series', 'requests')
+# Pages with a tab in the bar, then 'custom': the rows of a custom menu item
+# (Skin Shortcuts) the user opened.
+TABBED = ('home', 'movies', 'series', 'requests')
+PAGES = TABBED + ('custom',)
 TAB_LABELS = {'home': 'Home', 'movies': 'Movies', 'series': 'Series', 'requests': 'Requests'}
 MAX_ROWS = 12
+# Custom menu items (Skin Shortcuts): bar slots, and widgets per item.
+CUSTOM_SLOTS = 5
+WIDGETS = 4
+CUSTOM_IDS = list(range(9031, 9031 + CUSTOM_SLOTS))
+SHORTCUTS = 9100  # hidden list holding Skin Shortcuts' main menu
 # Rows a page can show; Requests has Your requests and Silo's few discovery
 # rows, and every slot costs Home.xml size.
-PAGE_ROWS = {'requests': 8}
+PAGE_ROWS = {'requests': 8, 'custom': WIDGETS}
 
 
 def rows_of(page):
@@ -209,8 +217,8 @@ def moves(page_index, slot):
     # The top row goes up to the current page's tab (a button: focusing the
     # bar's grouplist itself leaves left and right with nowhere to go).
     above = ' + '.join('!' + shown(k) for k in up)
-    out += '\n                    <onup%s>SetFocus(%d)</onup>' % (' condition="%s"' % above if above else '',
-                                                               9002 + page_index)
+    target = '%d' % (9002 + page_index) if PAGES[page_index] in TABBED else '$INFO[%s]' % prop('silo.custom.button')
+    out += '\n                    <onup%s>SetFocus(%s)</onup>' % (' condition="%s"' % above if above else '', target)
     return out
 
 
@@ -223,6 +231,9 @@ def row(page, page_index, slot, landscape):
     # path only once, when the window opens, so this must stay $INFO: a row
     # without a path logs one harmless error at start-up.
     path = '$INFO[%s]&amp;refresh=$INFO[%s]' % (prop(key + '.path'), prop('silokodi.library_updated'))
+    if page == 'custom':
+        # A Skin Shortcuts widget: any Kodi path, used as it is.
+        path = '$INFO[%s]' % prop(key + '.path')
     item_w = card['width'] + card['gap']
     item_h = card['height'] + 12 + CAPTION_H
     return '''
@@ -260,7 +271,7 @@ def row(page, page_index, slot, landscape):
 
 # Silo dims the whole bar to 70% while focus is down in the rows.
 BAR_DIM = '!ControlGroup(9000).HasFocus() + !Control.HasFocus(9011)'
-BAR_ORDER = [9001, 9002, 9003, 9004, 9005, 9009, 9010, 9011]  # Search, Home, Movies, Series, Requests, Settings, Power, profile
+BAR_ORDER = [9001, 9002, 9003, 9004, 9005, 9009, 9010] + CUSTOM_IDS + [9011]  # Search, tabs, Settings, Power, custom items, profile
 
 
 def bar_moves(control_id):
@@ -304,8 +315,8 @@ def open_sections(page, control_id):
 
 def bar_positions():
     """Each bar button's left edge: the bar is a centred grouplist."""
-    widths = [60] + [tab_width(page) for page in PAGES] + [60, 60]
-    ids = [9001] + [9002 + index for index in range(len(PAGES))] + [9009, 9010]
+    widths = [60] + [tab_width(page) for page in TABBED] + [60, 60]
+    ids = [9001] + [9002 + index for index in range(len(TABBED))] + [9009, 9010]
     total = sum(widths) + BAR_GAP * (len(widths) - 1)
     x, out = (1920 - total) // 2, {}
     for control_id, width in zip(ids, widths):
@@ -493,6 +504,85 @@ def avatar():
                          'bar_dim': BAR_DIM}
 
 
+def shortcut(slot, field):
+    return 'Container(%d).ListItemAbsolute(%d).%s' % (SHORTCUTS, slot, field)
+
+
+def custom_items():
+    """The user's own menu items (Skin Shortcuts), right-aligned beside the
+    avatar so the centred tabs and their dropdowns never move. An item with
+    widgets opens them as rows (the 'custom' page); any other runs its action."""
+    index = PAGES.index('custom')
+    buttons = ''
+    for slot, control_id in enumerate(CUSTOM_IDS):
+        label = shortcut(slot, 'Label')
+        has_widgets = '!String.IsEmpty(%s)' % shortcut(slot, 'Property(widgetPath)')
+        opened = 'String.IsEqual(%s,custom) + String.IsEqual(%s,%d)' % (prop('silo.page'), prop('silo.custom.button'),
+                                                                         control_id)
+        actions = ''
+        for n in range(1, WIDGETS + 1):
+            suffix = '' if n == 1 else '.%d' % n
+            for key, field in (('title', 'widgetName'), ('path', 'widgetPath')):
+                actions += ('\n                    <onclick condition="%s">SetProperty(silo.custom.%d.%s,$INFO[%s],home)'
+                            '</onclick>' % (has_widgets, n, key, shortcut(slot, 'Property(%s%s)' % (field, suffix))))
+            wide = 'String.IsEqual(%s,episodes)' % shortcut(slot, 'Property(widgetType%s)' % suffix)
+            actions += ('\n                    <onclick condition="%s + %s">SetProperty(silo.custom.%d.style,landscape,home)'
+                        '</onclick>\n                    <onclick condition="%s + !%s">'
+                        'SetProperty(silo.custom.%d.style,poster,home)</onclick>' % (has_widgets, wide, n, has_widgets,
+                                                                                     wide, n))
+        buttons += '''
+            <control type="group">
+                <width>auto</width><height>60</height>
+                <visible>!String.IsEmpty(%(label)s)</visible>
+                <control type="button" id="%(id)d">
+                    <visible>!String.IsEmpty(%(label)s)</visible>
+                    <width>auto</width><height>60</height>
+                    <label>$INFO[%(label)s]</label>
+                    <font>silo_tab</font>
+                    <textoffsetx>24</textoffsetx>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>%(dim)s</textcolor>
+                    <focusedcolor>FF000000</focusedcolor>
+                    <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
+                    <texturenofocus border="30" colordiffuse="%(nofocus)s">silo/pill.png</texturenofocus>%(moves)s
+                    <onclick condition="!%(has_widgets)s">$INFO[%(path)s]</onclick>
+                    <onclick condition="%(has_widgets)s">SetProperty(silo.page,custom,home)</onclick>
+                    <onclick condition="%(has_widgets)s">ClearProperty(silo.row,home)</onclick>
+                    <onclick condition="%(has_widgets)s">SetProperty(silo.custom.button,%(id)d,home)</onclick>%(actions)s
+                </control>
+            </control>''' % {'label': label, 'id': control_id, 'dim': TAB_DIM, 'text': TEXT, 'has_widgets': has_widgets,
+                             'path': shortcut(slot, 'Property(path)'), 'actions': actions,
+                             'nofocus': '$VAR[SiloCustomTab%d]' % control_id, 'moves': bar_moves(control_id)}
+    return '''
+        <!-- Skin Shortcuts' main menu, built into script-skinshortcuts-includes.xml. -->
+        <control type="list" id="%(list)d">
+            <left>-3000</left><top>0</top><width>10</width><height>10</height>
+            <itemlayout width="10" height="10" />
+            <focusedlayout width="10" height="10" />
+            <content><include>skinshortcuts-mainmenu</include></content>
+        </control>
+        <control type="grouplist" id="9030">
+            <right>%(right)d</right><top>%(top)d</top>
+            <width>900</width><height>60</height>
+            <orientation>horizontal</orientation>
+            <align>right</align>
+            <itemgap>8</itemgap>
+            <animation effect="fade" start="100" end="70" time="200" condition="%(bar_dim)s">Conditional</animation>%(buttons)s
+        </control>''' % {'list': SHORTCUTS, 'right': SAFE_X + 64 + 16, 'top': BAR_TOP + 2, 'bar_dim': BAR_DIM,
+                         'buttons': buttons}
+
+
+def custom_tab_variables():
+    """A custom item's faint pill while its page shows, as the tabs'."""
+    out = ''
+    for control_id in CUSTOM_IDS:
+        out += ('    <variable name="SiloCustomTab%d">\n'
+                '        <value condition="String.IsEqual(%s,custom) + String.IsEqual(%s,%d)">26FFFFFF</value>\n'
+                '        <value>00FFFFFF</value>\n    </variable>\n' % (control_id, prop('silo.page'),
+                                                                        prop('silo.custom.button'), control_id))
+    return out
+
+
 def bar_down(indent='            '):
     """Down from the bar: the first row showing, on whichever page is shown
     (only one page's rows are ever visible)."""
@@ -523,7 +613,7 @@ def build():
                    for slot in range(1, rows_of(page) + 1)
                    for landscape in (False, True))
     tabs = icon_tab(9001, 'icons/search.png', 'ActivateWindow(1190)')
-    tabs += ''.join(tab(9002 + index, page, index) for index, page in enumerate(PAGES))
+    tabs += ''.join(tab(9002 + index, page, index) for index, page in enumerate(TABBED))
     tabs += icon_tab(9009, 'icons/settings.png', 'ActivateWindow(Settings)')
     # Estuary keeps the power menu on its home screen; this replaces it.
     tabs += icon_tab(9010, 'icons/power.png', 'ActivateWindow(ShutdownMenu)')
@@ -533,6 +623,8 @@ def build():
 <window>
     <defaultcontrol always="true">4000</defaultcontrol>
     <onload condition="String.IsEmpty(Window(Home).Property(silo.home.count))">SetFocus(9002)</onload>
+    <!-- Skin Shortcuts writes the user's menu into script-skinshortcuts-includes.xml when it changed. -->
+    <onload condition="System.HasAddon(script.skinshortcuts)">RunScript(script.skinshortcuts,type=buildxml&amp;mainmenuID=%(shortcuts)d&amp;group=mainmenu)</onload>
     <backgroundcolor>%(background)s</backgroundcolor>
     <controls>
         <!-- Silo's ambient wash: the focused title's colour, richest behind the art
@@ -655,13 +747,14 @@ def build():
             <itemgap>8</itemgap>%(bar_down)s%(tabs)s
         </control>
 %(avatar)s
+%(custom)s
 %(sections)s
     </controls>
 </window>
 ''' % {'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'rows_top': ROWS_TOP, 'rows_h': BAND_H,
        'row_overlap': ROW_PITCH - BAND_H,
        'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
-       'bar_down': bar_down(), 'avatar': avatar(), 'sections': sections_menus(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'background': BACKGROUND,
+       'bar_down': bar_down(), 'avatar': avatar(), 'custom': custom_items(), 'shortcuts': SHORTCUTS, 'sections': sections_menus(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'background': BACKGROUND,
        'mpaa_badge': badge('$VAR[SiloMpaa]', 40, 'silo_meta'),
        'quality_badges': ''.join(badge('$VAR[SiloBadge%d]' % n, 36, 'silo_badge') for n in (1, 2, 3))}
 
@@ -738,7 +831,7 @@ EMPTY_HOME = '''    <variable name="SiloEmptyHome">
 def variables():
     rows = [list_id(index, slot, landscape) for index, page in enumerate(PAGES)
             for slot in range(1, rows_of(page) + 1) for landscape in (False, True)]
-    out = '\n    <!-- Silo Skyline (tools/build_home.py) -->' + CARDS
+    out = '\n    <!-- Silo Skyline (tools/build_home.py) -->' + CARDS + custom_tab_variables()
     for index, page in enumerate(PAGES):
         for slot in range(1, rows_of(page) + 1):
             for landscape in (False, True):
@@ -801,8 +894,11 @@ def first_row_timer():
         loaded = ' | '.join('Integer.IsGreater(Container(%d).NumItems,0)' % list_id(index, slot, landscape)
                             for slot, landscape in rows)
         ready.append('[%s + [%s] + [Control.HasFocus(%d) | [!ControlGroup(9000).HasFocus() + '
-                     '!Control.HasFocus(9011)]]]'
-                     % (page_visible(page), loaded, 9002 + index))
+                     '!ControlGroup(9030).HasFocus() + !Control.HasFocus(9011)]]]'
+                     % (page_visible(page), loaded, 9002 + index)
+                     if page in TABBED else
+                     '[%s + [%s] + [ControlGroup(9030).HasFocus() | [!ControlGroup(9000).HasFocus() + '
+                     '!Control.HasFocus(9011)]]]' % (page_visible(page), loaded))
         shown_rows = [('[%s]' % row_rules(page, index, slot, landscape), list_id(index, slot, landscape))
                       for slot, landscape in rows]
         for position, (rule, target) in enumerate(shown_rows):

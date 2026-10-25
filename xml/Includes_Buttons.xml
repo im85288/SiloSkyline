@@ -394,4 +394,16 @@
 			</control>
 		</focusedlayout>
 	</include>
+	<!-- Silo Skyline: a row in the menu manager (script-skinshortcuts.xml). -->
+	<include name="SiloShortcutButton">
+		<width>734</width>
+		<height>80</height>
+		<textoffsetx>32</textoffsetx>
+		<aligny>center</aligny>
+		<font>silo_meta</font>
+		<textcolor>FFEDEDED</textcolor>
+		<focusedcolor>FF000000</focusedcolor>
+		<texturefocus border="46" colordiffuse="FFEDEDED">silo/dialog_button.png</texturefocus>
+		<texturenofocus border="46" colordiffuse="14FFFFFF">silo/dialog_button.png</texturenofocus>
+	</include>
 </includes>
