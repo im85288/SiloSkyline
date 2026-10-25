@@ -211,8 +211,8 @@
 	<include name="DefaultSimpleListLayout">
 		<param name="align">left</param>
 		<param name="height">70</param>
-		<param name="font">font13</param>
-		<param name="fontcolor">grey</param>
+		<param name="font">silo_meta</param>
+		<param name="fontcolor">C7EDEDED</param>
 		<definition>
 			<itemlayout width="$PARAM[width]" height="$PARAM[height]">
 				<control type="group">
@@ -266,8 +266,13 @@
 					<top>0</top>
 					<right>0</right>
 					<bottom>0</bottom>
-					<texture colordiffuse="button_focus">lists/focus.png</texture>
-					<animation effect="fade" start="100" end="50" time="0">UnFocus</animation>
+					<!-- Silo Skyline: a white pill, faint while the list isn't focused. -->
+					<left>6</left>
+					<right>6</right>
+					<top>6</top>
+					<bottom>6</bottom>
+					<texture border="28" colordiffuse="FFEDEDED">silo/pill.png</texture>
+					<animation effect="fade" start="100" end="15" time="0">UnFocus</animation>
 				</control>
 				<control type="group">
 					<visible>ListItem.Property(PVR.IsRecordingTimer) | ListItem.Property(PVR.IsRemindingTimer)</visible>
@@ -310,6 +315,20 @@
 						<font>$PARAM[font]</font>
 						<aligny>center</aligny>
 						<label>$INFO[ListItem.Label]</label>
+						<textcolor>FF000000</textcolor>
+						<visible>Control.HasFocus($PARAM[list_id])</visible>
+						<scroll>true</scroll>
+					</control>
+					<control type="label">
+						<left>20</left>
+						<top>0</top>
+						<right>20</right>
+						<bottom>0</bottom>
+						<align>$PARAM[align]</align>
+						<font>$PARAM[font]</font>
+						<aligny>center</aligny>
+						<label>$INFO[ListItem.Label]</label>
+						<visible>!Control.HasFocus($PARAM[list_id])</visible>
 						<scroll>true</scroll>
 					</control>
 				</control>
@@ -918,24 +937,18 @@
 				<top>0</top>
 				<right>0</right>
 				<bottom>0</bottom>
-				<texture colordiffuse="dialog_tint">colors/white.png</texture>
-			</control>
-			<control type="image">
-				<left>0</left>
-				<top>0</top>
-				<right>0</right>
-				<height>70</height>
-				<texture colordiffuse="button_focus" border="2">colors/white70.png</texture>
+				<!-- Silo Skyline: Silo's rounded dialog card, no coloured heading strip. -->
+				<texture border="14" colordiffuse="F4131417">silo/card_landscape_mask.png</texture>
 			</control>
 			<control type="label" id="$PARAM[header_id]">
 				<left>40</left>
 				<top>0</top>
 				<right>100</right>
 				<height>70</height>
-				<font>font32_title</font>
+				<font>silo_row</font>
+				<textcolor>FFEDEDED</textcolor>
 				<label>$PARAM[header_label]</label>
 				<aligny>center</aligny>
-				<shadowcolor>black</shadowcolor>
 			</control>
 			<control type="button" id="22002">
 				<description>button overlay to avoid closing in dialog area</description>
@@ -958,9 +971,9 @@
 				<texturenofocus />
 				<label></label>
 				<textureradioofffocus colordiffuse="EEFFFFFF">dialogs/close.png</textureradioofffocus>
-				<textureradiooffnofocus colordiffuse="EEFFFFFF">special://xbmc/media/vendor_icon.png</textureradiooffnofocus>
+				<textureradiooffnofocus />
 				<textureradioonfocus colordiffuse="EEFFFFFF">dialogs/close.png</textureradioonfocus>
-				<textureradioonnofocus colordiffuse="EEFFFFFF">special://xbmc/media/vendor_icon.png</textureradioonnofocus>
+				<textureradioonnofocus />
 				<onclick>Action(close)</onclick>
 				<visible>!Skin.HasSetting(touchmode)</visible>
 			</control>

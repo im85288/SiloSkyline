@@ -167,6 +167,9 @@ if __name__ == '__main__':
         grey = int(255 * ring_part * 0.24 / alpha)
         return alpha, (grey, grey, grey)
     write_png('osd_button_rest.png', 76, 76, osd_button)
+    # Dialog buttons: a rounded bar inset 10 px, so neighbours in a row don't
+    # touch; stretched with border="46".
+    write_png('dialog_button.png', 100, 100, lambda x, y: rounded_rect_coverage(x, y, 100, 100, 36, inset=10))
     person_placeholder()
     focus_ring('avatar_ring.png', 64, 64, 32, 3)
     print('Wrote', ', '.join(sorted(os.listdir(OUT))))
