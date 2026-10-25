@@ -2188,13 +2188,6 @@
     </variable>
     <!-- end Silo Skyline browse -->
 
-    <!-- Silo Skyline search (tools/build_search.py) -->
-    <variable name="SiloSearchPill">
-        <value condition="String.IsEmpty(Skin.String(silo.search))">Search films and shows</value>
-        <value>$INFO[Skin.String(silo.search)]</value>
-    </variable>
-    <!-- end Silo Skyline search -->
-
     <!-- Silo Skyline detail (tools/build_info.py) -->
     <variable name="SiloDetailArt">
         <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
@@ -2241,18 +2234,52 @@
         <value condition="String.IsEqual(ListItem.HdrType,hlg)">HLG</value>
         <value>$INFO[ListItem.HdrType]</value>
     </variable>
+    <!-- Kodi's stream details as Silo's badge: "DTS 5.1", not "dts 6". -->
     <variable name="SiloDetailAudio">
-        <value condition="String.IsEqual(ListItem.AudioCodec,eac3)">DD+$INFO[ListItem.AudioChannels, ,]</value>
-        <value condition="String.IsEqual(ListItem.AudioCodec,truehd)">TRUEHD$INFO[ListItem.AudioChannels, ,]</value>
-        <value>$INFO[ListItem.AudioCodec]$INFO[ListItem.AudioChannels, ,]</value>
+        <value>$VAR[SiloDetailAudioCodec]$VAR[SiloDetailAudioLayout]</value>
+    </variable>
+    <variable name="SiloDetailAudioCodec">
+        <value condition="String.IsEqual(ListItem.AudioCodec,eac3)">DD+</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,ac3)">DD</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,truehd)">TRUEHD</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,dtshd_hra)">DTS-HD</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,dca)">DTS</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,dts)">DTS</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,aac)">AAC</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,flac)">FLAC</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,opus)">OPUS</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,mp3)">MP3</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,pcm)">PCM</value>
+        <value>$INFO[ListItem.AudioCodec]</value>
+    </variable>
+    <variable name="SiloDetailAudioLayout">
+        <value condition="Integer.IsEqual(ListItem.AudioChannels,1)"> 1.0</value>
+        <value condition="Integer.IsEqual(ListItem.AudioChannels,2)"> 2.0</value>
+        <value condition="Integer.IsEqual(ListItem.AudioChannels,6)"> 5.1</value>
+        <value condition="Integer.IsEqual(ListItem.AudioChannels,8)"> 7.1</value>
+        <value>$INFO[ListItem.AudioChannels, ,]</value>
     </variable>
     <variable name="SiloDetailSeasons">
         <value condition="Integer.IsEqual(ListItem.Property(TotalSeasons),1)"> · 1 season</value>
         <value condition="Integer.IsGreater(ListItem.Property(TotalSeasons),1)">$INFO[ListItem.Property(TotalSeasons), · , seasons]</value>
+    </variable>
+    <variable name="SiloDetailNextLabel">
+        <value condition="Integer.IsGreater(Container(62).NumItems,0) + Integer.IsGreater(Container(62).ListItem.PercentPlayed,0)">Resume S$INFO[Container(62).ListItem.Season] · E$INFO[Container(62).ListItem.Episode]</value>
+        <value condition="Integer.IsGreater(Container(62).NumItems,0)">Play S$INFO[Container(62).ListItem.Season] · E$INFO[Container(62).ListItem.Episode]</value>
+        <value condition="Container(62).IsUpdating">$LOCALIZE[208]</value>
+        <value>$LOCALIZE[1024]</value>
     </variable>
     <variable name="SiloSeasonLabel">
         <value condition="String.StartsWith(ListItem.Label,*)">All episodes</value>
         <value>$INFO[ListItem.Label]</value>
     </variable>
     <!-- end Silo Skyline detail -->
+
+    <!-- Silo Skyline search (tools/build_search.py) -->
+    <variable name="SiloSearchPill">
+        <value condition="String.IsEmpty(Skin.String(silo.search))">Search films and shows</value>
+        <value>$INFO[Skin.String(silo.search)]</value>
+    </variable>
+    <!-- end Silo Skyline search -->
 </includes>

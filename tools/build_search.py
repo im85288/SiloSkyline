@@ -2,8 +2,9 @@
 
     python3 tools/build_search.py
 
-The menu bar's Search opens it. It asks for the words at once (Kodi's
-keyboard, kept in Skin.String(silo.search)), shows them in a pill that asks
+The menu bar's Search opens it. It asks for the words when it has none
+(Kodi's keyboard, kept in Skin.String(silo.search), so it reopens on the last
+search and doesn't ask again when playback ends), shows them in a pill that asks
 again when selected, and lists the matching films and shows as Home's poster
 cards, filtered from Kodi's library by title: no add-on is involved. Selecting
 a title opens its detail page.
@@ -100,7 +101,7 @@ def build():
 <window id="%(window)d">
     <defaultcontrol always="true">%(pill)d</defaultcontrol>
     <backgroundcolor>%(background)s</backgroundcolor>
-    <onload>Skin.SetString(silo.search)</onload>
+    <onload condition="String.IsEmpty(%(query)s)">Skin.SetString(silo.search)</onload>
     <controls>
         <control type="image">
             <left>0</left><top>0</top><width>1920</width><height>1080</height>

@@ -3,7 +3,7 @@
 <window id="1190">
     <defaultcontrol always="true">100</defaultcontrol>
     <backgroundcolor>FF0D0F12</backgroundcolor>
-    <onload>Skin.SetString(silo.search)</onload>
+    <onload condition="String.IsEmpty(Skin.String(silo.search))">Skin.SetString(silo.search)</onload>
     <controls>
         <control type="image">
             <left>0</left><top>0</top><width>1920</width><height>1080</height>
