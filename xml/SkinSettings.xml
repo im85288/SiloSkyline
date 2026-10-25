@@ -347,7 +347,7 @@
 					<control type="image">
 						<width>470</width>
 						<height>85</height>
-						<texture border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texture>
+						<texture border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texture>
 						<animation effect="fade" start="100" end="50" time="40" condition="!Control.HasFocus(9000)">Conditional</animation>
 					</control>
 					<control type="label">

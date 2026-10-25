@@ -89,7 +89,7 @@
             </control>
             <control type="textbox">
                 <left>608</left><top>148</top>
-                <width>1000</width><height>72</height>
+                <width>1000</width><height>62</height>
                 <font>silo_detail</font>
                 <textcolor>94EDEDED</textcolor>
                 <label>$INFO[Window.Property(plot)]</label>
@@ -101,7 +101,7 @@
                 <orientation>horizontal</orientation>
                 <itemgap>20</itemgap>
                 <control type="button" id="3012">
-                    <width>300</width><height>80</height>
+                    <width>340</width><height>80</height>
                     <label>Play Now</label>
                     <font>silo_meta</font>
                     <textcolor>FFEDEDED</textcolor>

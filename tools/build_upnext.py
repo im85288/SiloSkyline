@@ -145,13 +145,13 @@ def popup(still_watching):
        'plot': '''
             <control type="textbox">
                 <left>%d</left><top>148</top>
-                <width>%d</width><height>72</height>
+                <width>%d</width><height>62</height>
                 <font>silo_detail</font>
                 <textcolor>94EDEDED</textcolor>
                 <label>$INFO[Window.Property(plot)]</label>
                 <autoscroll>false</autoscroll>
             </control>''' % (TEXT_X, 1000),
-       'main': button(3012, main, 300, onright=3013),
+       'main': button(3012, main, 340, onright=3013),
        'close': button(3013, '$ADDON[%s 30034]' % UPNEXT, 220, onleft=3012)}
 
 

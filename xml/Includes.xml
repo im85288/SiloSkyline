@@ -639,7 +639,7 @@
 						<top>0</top>
 						<right>0</right>
 						<bottom>0</bottom>
-						<texture border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texture>
+						<texture border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texture>
 						<animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus($PARAM[list_id])">Conditional</animation>
 					</control>
 					<control type="image">
@@ -1773,7 +1773,7 @@
 					<top>0</top>
 					<right>0</right>
 					<bottom>0</bottom>
-					<texture border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texture>
+					<texture border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texture>
 					<animation effect="fade" start="100" end="50" time="0">UnFocus</animation>
 				</control>
 				<control type="image">

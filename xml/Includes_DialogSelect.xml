@@ -101,7 +101,7 @@
 						<top>0</top>
 						<right>0</right>
 						<bottom>0</bottom>
-						<texture border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texture>
+						<texture border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texture>
 						<animation effect="fade" start="100" end="50" time="0">UnFocus</animation>
 					</control>
 					<control type="image">
@@ -263,7 +263,7 @@
 						</itemlayout>
 						<focusedlayout width="408" height="374">
 							<control type="image">
-								<texture border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texture>
+								<texture border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texture>
 								<visible>Control.HasFocus(3)</visible>
 							</control>
 							<control type="image">

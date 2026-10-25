@@ -167,7 +167,7 @@
 				<textoffsetx>100</textoffsetx>
 				<textoffsety>0</textoffsety>
 				<font>silo_meta</font>
-				<texturefocus border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texturefocus>
+				<texturefocus border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texturefocus>
 				<texturenofocus />
 				<radioposx>40</radioposx>
 				<radioposy>0</radioposy>

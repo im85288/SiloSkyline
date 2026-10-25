@@ -69,7 +69,7 @@
 							<top>0</top>
 							<right>0</right>
 							<bottom>0</bottom>
-							<texture border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texture>
+							<texture border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texture>
 							<visible>Control.HasFocus(50)</visible>
 						</control>
 						<control type="image">
@@ -133,9 +133,9 @@
 						<aligny>top</aligny>
 						<textoffsetx>40</textoffsetx>
 						<texturenofocus />
-						<texturefocus border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texturefocus>
+						<texturefocus border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texturefocus>
 						<alttexturenofocus></alttexturenofocus>
-						<alttexturefocus border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</alttexturefocus>
+						<alttexturefocus border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</alttexturefocus>
 						<textoffsety>35</textoffsety>
 						<label>$LOCALIZE[31032]: $LOCALIZE[584]</label>
 						<altlabel>$LOCALIZE[31032]: $LOCALIZE[585]</altlabel>
@@ -149,7 +149,7 @@
 						<height>110</height>
 						<aligny>top</aligny>
 						<texturenofocus />
-						<texturefocus border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texturefocus>
+						<texturefocus border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texturefocus>
 						<textoffsetx>40</textoffsetx>
 						<textoffsety>35</textoffsety>
 					</control>

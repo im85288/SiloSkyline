@@ -32,8 +32,8 @@
 				<textoffsetx>16</textoffsetx>
 				<aligny>center</aligny>
 				<font>font12</font>
-				<texturefocus border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texturefocus>
-				<alttexturefocus border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</alttexturefocus>
+				<texturefocus border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texturefocus>
+				<alttexturefocus border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</alttexturefocus>
 				<texturenofocus />
 				<alttexturenofocus />
 				<onclick>noop</onclick>
@@ -61,7 +61,7 @@
 			     row's white toggles and arrows readable. -->
 			<font>silo_meta</font>
 			<textcolor>FFEDEDED</textcolor>
-			<texturefocus border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texturefocus>
+			<texturefocus border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texturefocus>
 			<texturenofocus />
 		</definition>
 	</include>
@@ -79,7 +79,7 @@
 			     row's white toggles and arrows readable. -->
 			<font>silo_meta</font>
 			<textcolor>FFEDEDED</textcolor>
-			<texturefocus border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texturefocus>
+			<texturefocus border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texturefocus>
 			<texturenofocus />
 		</definition>
 	</include>
@@ -188,7 +188,7 @@
 				<height>110</height>
 				<align>left</align>
 				<aligny>top</aligny>
-				<texturefocus border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texturefocus>
+				<texturefocus border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texturefocus>
 				<texturenofocus />
 				<textoffsetx>40</textoffsetx>
 				<textoffsety>35</textoffsety>
@@ -380,7 +380,7 @@
 				<top>0</top>
 				<width>600</width>
 				<height>70</height>
-				<texture border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texture>
+				<texture border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texture>
 			</control>
 			<control type="label">
 				<left>0</left>
