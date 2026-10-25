@@ -87,11 +87,13 @@ def scrim(height=256):
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
     hero_mask()
-    card_mask('card_poster_mask.png', 260, 390, 14)
+    card_mask('card_poster_mask.png', 176, 264, 12)
     card_mask('card_landscape_mask.png', 360, 202, 14)
     # Rings sit 6 px outside the card on each side.
-    focus_ring('card_poster_focus.png', 272, 402, 20, 4)
+    focus_ring('card_poster_focus.png', 188, 276, 18, 4)
     focus_ring('card_landscape_focus.png', 372, 214, 20, 4)
+    # Badges: a 2 px outline, stretched with border="8".
+    focus_ring('badge_outline.png', 32, 32, 8, 2)
     pill()
     scrim()
     print('Wrote', ', '.join(sorted(os.listdir(OUT))))

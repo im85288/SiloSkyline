@@ -24,12 +24,32 @@ BAR_TOP = 56
 TEXT = 'FFEDEDED'
 TEXT_DIM = 'BFEDEDED'      # Silo's secondary text: 75%
 TAB_DIM = 'B3EDEDED'       # Silo's dimmed bar items: 70%
-ROWS_TOP = 600             # Silo TV's home hero is 300 units tall
+BACKGROUND = 'FF0D0F12'     # Silo's near-black page
+ROWS_TOP = 612             # row titles sit where Silo's do
 
-POSTER = {'width': 260, 'height': 390, 'gap': 24, 'mask': 'silo/card_poster_mask.png',
-          'ring': 'silo/card_poster_focus.png', 'art': '$VAR[SiloPosterArt]'}
-LANDSCAPE = {'width': 360, 'height': 202, 'gap': 24, 'mask': 'silo/card_landscape_mask.png',
-             'ring': 'silo/card_landscape_focus.png', 'art': '$VAR[SiloLandscapeArt]'}
+# Cards as Silo TV draws them: dense posters (88x132 units) and backdrops
+# (180x101), each with a title and a second line beneath.
+POSTER = {'width': 176, 'height': 264, 'gap': 40, 'mask': 'silo/card_poster_mask.png',
+          'ring': 'silo/card_poster_focus.png', 'art': '$VAR[SiloPosterArt]',
+          'sub': '$VAR[SiloCardYear]'}
+LANDSCAPE = {'width': 360, 'height': 202, 'gap': 40, 'mask': 'silo/card_landscape_mask.png',
+             'ring': 'silo/card_landscape_focus.png', 'art': '$VAR[SiloLandscapeArt]',
+             'sub': '$VAR[SiloCardEpisode]'}
+CAPTION_H = 76             # title and second line under a card
+
+# Fonts (Inter, as the Silo apps use); Font.xml gets these between markers.
+FONTS = [  # name, file, size
+    ('silo_tab', 'Inter-SemiBold.ttf', 30),
+    ('silo_row', 'Inter-Bold.ttf', 34),
+    ('silo_title', 'Inter-Bold.ttf', 76),
+    ('silo_meta', 'Inter-Medium.ttf', 28),
+    ('silo_plot', 'Inter-Regular.ttf', 28),
+    ('silo_detail', 'Inter-Medium.ttf', 24),
+    ('silo_badge', 'Inter-SemiBold.ttf', 20),
+    ('silo_card_title', 'Inter-SemiBold.ttf', 26),
+    ('silo_card_sub', 'Inter-Medium.ttf', 24),
+    ('silo_wordmark', 'Inter-Bold.ttf', 44),
+]
 
 
 def prop(name):
@@ -85,9 +105,24 @@ def card_layout(card, focused, control_id=None):
                             <texture colordiffuse="%(text)s">OverlayWatched.png</texture>
                             <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
                         </control>%(ring)s
+                        <control type="label">
+                            <left>6</left><top>%(t1)d</top>
+                            <width>%(w)d</width><height>34</height>
+                            <font>silo_card_title</font>
+                            <textcolor>%(text)s</textcolor>
+                            <label>$VAR[SiloCardTitle]</label>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>%(t2)d</top>
+                            <width>%(w)d</width><height>32</height>
+                            <font>silo_card_sub</font>
+                            <textcolor>%(dim)s</textcolor>
+                            <label>%(sub)s</label>
+                        </control>
                     </control>''' % {'zoom': zoom, 'w': card['width'], 'h': card['height'], 'mask': card['mask'],
                                     'art': card['art'], 'pt': card['height'] - 12, 'pw': card['width'] - 24,
-                                    'text': TEXT, 'ring': ring}
+                                    'text': TEXT, 'dim': TEXT_DIM, 'ring': ring, 'sub': card['sub'],
+                                    't1': card['height'] + 20, 't2': card['height'] + 54}
 
 
 def shown(target):
@@ -146,21 +181,21 @@ def row(page, page_index, slot, landscape):
     # library, which makes Kodi reload the row.
     path = '$INFO[%s]&amp;refresh=$INFO[%s]' % (prop(key + '.path'), prop('silokodi.library_updated'))
     item_w = card['width'] + card['gap']
-    item_h = card['height'] + 12
+    item_h = card['height'] + 12 + CAPTION_H
     return '''
             <control type="group">
                 <height>%(group_h)d</height>
                 <visible>%(rules)s</visible>
                 <control type="label">
                     <left>%(x)d</left><top>0</top>
-                    <width>1500</width><height>44</height>
+                    <width>1500</width><height>46</height>
                     <font>silo_row</font>
                     <textcolor>%(text)s</textcolor>
                     <label>$INFO[%(title)s]</label>
                 </control>
                 <control type="list" id="%(id)d">
                     <visible>%(rules)s</visible>
-                    <left>%(lx)d</left><top>52</top>
+                    <left>%(lx)d</left><top>56</top>
                     <width>%(lw)d</width><height>%(item_h)d</height>
                     <orientation>horizontal</orientation>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
@@ -174,13 +209,13 @@ def row(page, page_index, slot, landscape):
                     </focusedlayout>
                 </control>
             </control>''' % {
-        'group_h': 52 + item_h + 40, 'rules': rules, 'x': SAFE_X, 'text': TEXT, 'title': prop(key + '.title'),
+        'group_h': 56 + item_h + 36, 'rules': rules, 'x': SAFE_X, 'text': TEXT, 'title': prop(key + '.title'),
         'id': list_id(page_index, slot, landscape), 'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'item_h': item_h,
         'moves': moves(page_index, slot), 'path': path, 'item_w': item_w, 'normal': card_layout(card, False),
         'focused': card_layout(card, True, list_id(page_index, slot, landscape))}
 
 
-BAR_ORDER = [9001, 9002, 9003, 9004, 9009]  # Search, Home, Movies, Series, Settings
+BAR_ORDER = [9001, 9002, 9003, 9004, 9009, 9010]  # Search, Home, Movies, Series, Settings, Power
 
 
 def bar_moves(control_id):
@@ -262,6 +297,23 @@ def bar_down(indent='            '):
                    for index in range(len(PAGES)))
 
 
+def badge(label, height, font):
+    return '''
+                <control type="button">
+                    <width>auto</width><height>%(h)d</height>
+                    <label>%(label)s</label>
+                    <font>%(font)s</font>
+                    <textoffsetx>12</textoffsetx>
+                    <aligny>center</aligny>
+                    <enable>false</enable>
+                    <disabledcolor>%(text)s</disabledcolor>
+                    <texturenofocus border="8" colordiffuse="99EDEDED">silo/badge_outline.png</texturenofocus>
+                    <texturefocus border="8" colordiffuse="99EDEDED">silo/badge_outline.png</texturefocus>
+                    <visible>$EXP[%(shown)s]</visible>
+                </control>''' % {'h': height, 'label': label, 'font': font, 'text': TEXT,
+                                  'shown': label.replace('$VAR[', 'Has').rstrip(']')}
+
+
 def build():
     rows = ''.join(row(page, index, slot, landscape)
                    for index, page in enumerate(PAGES)
@@ -270,13 +322,15 @@ def build():
     tabs = icon_tab(9001, 'icons/search.png', 'ActivateWindow(1107)')
     tabs += ''.join(tab(9002 + index, page, index) for index, page in enumerate(PAGES))
     tabs += icon_tab(9009, 'icons/settings.png', 'ActivateWindow(Settings)')
+    # Estuary keeps the power menu on its home screen; this replaces it.
+    tabs += icon_tab(9010, 'icons/power.png', 'ActivateWindow(ShutdownMenu)')
     no_rows = ' + '.join('String.IsEmpty(%s)' % prop('silo.%s.count' % page) for page in ('home',))
     return '''<?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated by tools/build_home.py: edit that, not this. -->
 <window>
     <defaultcontrol always="true">4000</defaultcontrol>
     <onload condition="String.IsEmpty(Window(Home).Property(silo.home.count))">SetFocus(9002)</onload>
-    <backgroundcolor>FF000000</backgroundcolor>
+    <backgroundcolor>%(background)s</backgroundcolor>
     <controls>
         <!-- The focused title's artwork, crisp at the top right, fading left and down. -->
         <control type="image">
@@ -293,34 +347,56 @@ def build():
             <visible>!String.IsEmpty(%(row_prop)s)</visible>
             <animation effect="fade" start="0" end="100" time="240">Visible</animation>
             <control type="image">
-                <top>228</top>
-                <width>620</width><height>160</height>
+                <top>190</top>
+                <width>880</width><height>170</height>
                 <aspectratio align="left" aligny="bottom">keep</aspectratio>
                 <fadetime>240</fadetime>
                 <texture background="true">$VAR[SiloLogoArt]</texture>
             </control>
             <control type="label">
-                <top>228</top>
-                <width>1000</width><height>160</height>
+                <top>190</top>
+                <width>1100</width><height>170</height>
                 <aligny>bottom</aligny>
                 <font>silo_title</font>
                 <textcolor>%(text)s</textcolor>
                 <label>$VAR[SiloTitle]</label>
             </control>
-            <control type="label">
-                <top>400</top>
-                <width>1000</width><height>36</height>
-                <font>silo_meta</font>
-                <textcolor>%(text)s</textcolor>
-                <label>$VAR[SiloMetaLine]</label>
+            <!-- Age rating badge, then the info line. -->
+            <control type="grouplist">
+                <top>376</top>
+                <width>1100</width><height>40</height>
+                <orientation>horizontal</orientation>
+                <itemgap>14</itemgap>
+                <usecontrolcoords>true</usecontrolcoords>%(mpaa_badge)s
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label>$VAR[SiloMetaLine]</label>
+                </control>
             </control>
             <control type="textbox">
-                <top>444</top>
-                <width>860</width><height>120</height>
+                <top>424</top>
+                <width>860</width><height>76</height>
                 <font>silo_plot</font>
                 <textcolor>%(dim)s</textcolor>
                 <label>$VAR[SiloPlot]</label>
                 <autoscroll>false</autoscroll>
+            </control>
+            <control type="label">
+                <top>504</top>
+                <width>1000</width><height>34</height>
+                <font>silo_detail</font>
+                <textcolor>%(dim)s</textcolor>
+                <label>$VAR[SiloDetail]</label>
+            </control>
+            <!-- Quality badges. -->
+            <control type="grouplist">
+                <top>548</top>
+                <width>1000</width><height>36</height>
+                <orientation>horizontal</orientation>
+                <itemgap>12</itemgap>%(quality_badges)s
             </control>
         </control>
 
@@ -360,19 +436,13 @@ def build():
             <align>center</align>
             <itemgap>8</itemgap>%(bar_down)s%(tabs)s
         </control>
-        <control type="label">
-            <right>%(x)d</right><top>%(bar_top)d</top>
-            <width>300</width><height>64</height>
-            <align>right</align><aligny>center</aligny>
-            <font>silo_meta</font>
-            <textcolor>%(dim)s</textcolor>
-            <label>$INFO[System.Time]</label>
-        </control>
     </controls>
 </window>
 ''' % {'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'rows_top': ROWS_TOP, 'rows_h': 1080 - ROWS_TOP,
        'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
-       'bar_down': bar_down(), 'row_prop': prop('silo.row')}
+       'bar_down': bar_down(), 'row_prop': prop('silo.row'), 'background': BACKGROUND,
+       'mpaa_badge': badge('$VAR[SiloMpaa]', 40, 'silo_meta'),
+       'quality_badges': ''.join(badge('$VAR[SiloBadge%d]' % n, 36, 'silo_badge') for n in (1, 2, 3))}
 
 
 # The hero and marquee read from the row that last had focus (silo.row), so
@@ -388,16 +458,34 @@ HERO = [
     ('SiloTitle', [('!String.IsEmpty(LI.Art(clearlogo)) | !String.IsEmpty(LI.Art(tvshow.clearlogo))', ''),
                    ('String.IsEqual(LI.DBType,episode)', '$INFO[LI.TVShowTitle]'),
                    (None, '$INFO[LI.Label]')]),
-    ('SiloMetaLine', [('String.IsEqual(LI.DBType,episode)', '$INFO[LI.Season,S,]$INFO[LI.Episode, E,]'
-                       '$INFO[LI.Title,  ·  ,]$INFO[LI.Duration(mins),  ·  , min]'),
-                      ('String.IsEqual(LI.DBType,tvshow)', '$INFO[LI.Year]$INFO[LI.Rating,  ·  ★ ,]'
-                       '$INFO[LI.Mpaa,  ·  ,]'),
-                      (None, '$INFO[LI.Year]$INFO[LI.Rating,  ·  ★ ,]$INFO[LI.Duration(mins),  ·  , min]'
-                       '$INFO[LI.Mpaa,  ·  ,]')]),
+    # Silo: "S02E02 · Song 2" for an episode, "2005 · IMDb 8.4 · Horror" otherwise.
+    ('SiloMetaLine', [('String.IsEqual(LI.DBType,episode)', '$INFO[LI.Property(silo.code)]$INFO[LI.Title, · ,]'),
+                      (None, '$INFO[LI.Year]$INFO[LI.Property(silo.rating), · ,]'
+                       '$INFO[LI.Property(silo.genre), · ,]')]),
     ('SiloPlot', [(None, '$INFO[LI.Plot]')]),
+    # "Aired Sep 25, 2026 · Tom Hardy, Helen Mirren, Pierce Brosnan"
+    ('SiloDetail', [('String.IsEqual(LI.DBType,episode)', '$INFO[LI.Property(silo.aired)]'
+                     '$INFO[LI.Property(silo.cast), · ,]'),
+                    (None, '$INFO[LI.Property(silo.cast)]')]),
+    ('SiloMpaa', [(None, '$INFO[LI.Property(silo.mpaa)]')]),
+    ('SiloBadge1', [(None, '$INFO[LI.Property(silo.badge1)]')]),
+    ('SiloBadge2', [(None, '$INFO[LI.Property(silo.badge2)]')]),
+    ('SiloBadge3', [(None, '$INFO[LI.Property(silo.badge3)]')]),
 ]
 
 CARDS = '''
+    <variable name="SiloCardTitle">
+        <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.TVShowTitle]</value>
+        <value>$INFO[ListItem.Label]</value>
+    </variable>
+    <variable name="SiloCardEpisode">
+        <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code)]$INFO[ListItem.Title, • ,]</value>
+        <value>$INFO[ListItem.Year]</value>
+    </variable>
+    <variable name="SiloCardYear">
+        <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code)]</value>
+        <value>$INFO[ListItem.Year]</value>
+    </variable>
     <variable name="SiloPosterArt">
         <value condition="!String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
         <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
@@ -421,6 +509,13 @@ def variables():
             for landscape in (False, True):
                 out += '    <expression name="SiloRow%d">%s</expression>\n' % (
                     list_id(index, slot, landscape), row_rules(page, index, slot, landscape))
+    # Kodi's conditions can't test a $VAR, so each badge's "has text" is an
+    # expression over the remembered row, like the hero variables.
+    for name, item_property in (('SiloMpaa', 'silo.mpaa'), ('SiloBadge1', 'silo.badge1'),
+                                ('SiloBadge2', 'silo.badge2'), ('SiloBadge3', 'silo.badge3')):
+        terms = ['[String.IsEqual(%s,%d) + !String.IsEmpty(Container(%d).ListItem.Property(%s))]'
+                 % (prop('silo.row'), row_id, row_id, item_property) for row_id in rows]
+        out += '    <expression name="Has%s">%s</expression>\n' % (name, ' | '.join(terms))
     for name, entries in HERO:
         out += '    <variable name="%s">\n' % name
         for row_id in rows:
@@ -431,6 +526,19 @@ def variables():
                 out += '        <value condition="%s">%s</value>\n' % (full, value.replace('LI', item))
         out += '    </variable>\n'
     return out + '    <!-- end Silo Skyline -->\n'
+
+
+def add_fonts():
+    path = os.path.join(ROOT, 'xml', 'Font.xml')
+    text = open(path, encoding='utf-8').read()
+    start, end = '\t\t<!-- Silo Skyline: Inter, as the Silo TV apps use -->\n', '\t\t<!-- end Silo Skyline -->\n'
+    while start in text:
+        text = text[:text.index(start)] + text[text.index(end, text.index(start)) + len(end):] \
+            if end in text[text.index(start):] else text.replace(start, '', 1)
+    block = start + ''.join('\t\t<font>\n\t\t\t<name>%s</name>\n\t\t\t<filename>%s</filename>\n'
+                            '\t\t\t<size>%d</size>\n\t\t</font>\n' % font for font in FONTS) + end
+    text = text.replace('\t</fontset>', block + '\t</fontset>')
+    open(path, 'w', encoding='utf-8').write(text)
 
 
 def add_variables():
@@ -447,4 +555,5 @@ if __name__ == '__main__':
     with open(os.path.join(ROOT, 'xml', 'Home.xml'), 'w', encoding='utf-8') as handle:
         handle.write(build())
     add_variables()
-    print('Wrote xml/Home.xml and the Silo variables in xml/Variables.xml')
+    add_fonts()
+    print('Wrote xml/Home.xml, the Silo variables in xml/Variables.xml and its fonts in xml/Font.xml')

@@ -158,44 +158,55 @@
 		<!-- Silo Skyline: Inter, as the Silo TV apps use -->
 		<font>
 			<name>silo_tab</name>
-			<filename>Inter-Semibold.otf</filename>
+			<filename>Inter-SemiBold.ttf</filename>
 			<size>30</size>
 		</font>
 		<font>
 			<name>silo_row</name>
-			<filename>Inter-Semibold.otf</filename>
-			<size>30</size>
+			<filename>Inter-Bold.ttf</filename>
+			<size>34</size>
 		</font>
 		<font>
 			<name>silo_title</name>
-			<filename>Inter-Bold.otf</filename>
+			<filename>Inter-Bold.ttf</filename>
 			<size>76</size>
 		</font>
 		<font>
 			<name>silo_meta</name>
-			<filename>Inter-Medium.otf</filename>
-			<size>26</size>
-		</font>
-		<font>
-			<name>silo_plot</name>
-			<filename>Inter-Regular.otf</filename>
+			<filename>Inter-Medium.ttf</filename>
 			<size>28</size>
 		</font>
 		<font>
-			<name>silo_card</name>
-			<filename>Inter-Medium.otf</filename>
+			<name>silo_plot</name>
+			<filename>Inter-Regular.ttf</filename>
+			<size>28</size>
+		</font>
+		<font>
+			<name>silo_detail</name>
+			<filename>Inter-Medium.ttf</filename>
 			<size>24</size>
 		</font>
 		<font>
-			<name>silo_small</name>
-			<filename>Inter-Medium.otf</filename>
-			<size>22</size>
+			<name>silo_badge</name>
+			<filename>Inter-SemiBold.ttf</filename>
+			<size>20</size>
+		</font>
+		<font>
+			<name>silo_card_title</name>
+			<filename>Inter-SemiBold.ttf</filename>
+			<size>26</size>
+		</font>
+		<font>
+			<name>silo_card_sub</name>
+			<filename>Inter-Medium.ttf</filename>
+			<size>24</size>
 		</font>
 		<font>
 			<name>silo_wordmark</name>
-			<filename>Inter-Bold.otf</filename>
-			<size>40</size>
+			<filename>Inter-Bold.ttf</filename>
+			<size>44</size>
 		</font>
+		<!-- end Silo Skyline -->
 	</fontset>
 	<fontset id="Arial" idloc="31053">
 		<!-- Arial Font better for non English -->
@@ -345,43 +356,54 @@
 		<!-- Silo Skyline: Inter, as the Silo TV apps use -->
 		<font>
 			<name>silo_tab</name>
-			<filename>Inter-Semibold.otf</filename>
+			<filename>Inter-SemiBold.ttf</filename>
 			<size>30</size>
 		</font>
 		<font>
 			<name>silo_row</name>
-			<filename>Inter-Semibold.otf</filename>
-			<size>30</size>
+			<filename>Inter-Bold.ttf</filename>
+			<size>34</size>
 		</font>
 		<font>
 			<name>silo_title</name>
-			<filename>Inter-Bold.otf</filename>
+			<filename>Inter-Bold.ttf</filename>
 			<size>76</size>
 		</font>
 		<font>
 			<name>silo_meta</name>
-			<filename>Inter-Medium.otf</filename>
-			<size>26</size>
-		</font>
-		<font>
-			<name>silo_plot</name>
-			<filename>Inter-Regular.otf</filename>
+			<filename>Inter-Medium.ttf</filename>
 			<size>28</size>
 		</font>
 		<font>
-			<name>silo_card</name>
-			<filename>Inter-Medium.otf</filename>
+			<name>silo_plot</name>
+			<filename>Inter-Regular.ttf</filename>
+			<size>28</size>
+		</font>
+		<font>
+			<name>silo_detail</name>
+			<filename>Inter-Medium.ttf</filename>
 			<size>24</size>
 		</font>
 		<font>
-			<name>silo_small</name>
-			<filename>Inter-Medium.otf</filename>
-			<size>22</size>
+			<name>silo_badge</name>
+			<filename>Inter-SemiBold.ttf</filename>
+			<size>20</size>
+		</font>
+		<font>
+			<name>silo_card_title</name>
+			<filename>Inter-SemiBold.ttf</filename>
+			<size>26</size>
+		</font>
+		<font>
+			<name>silo_card_sub</name>
+			<filename>Inter-Medium.ttf</filename>
+			<size>24</size>
 		</font>
 		<font>
 			<name>silo_wordmark</name>
-			<filename>Inter-Bold.otf</filename>
-			<size>40</size>
+			<filename>Inter-Bold.ttf</filename>
+			<size>44</size>
 		</font>
+		<!-- end Silo Skyline -->
 	</fontset>
 </fonts>
