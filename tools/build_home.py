@@ -27,6 +27,13 @@ TAB_DIM = 'B3EDEDED'       # Silo's dimmed bar items: 70%
 TITLE_DIM = 'C7EDEDED'     # a card's title until it has focus: 78%
 BACKGROUND = 'FF0D0F12'     # Silo's near-black page
 ROWS_TOP = 612             # row titles sit where Silo's do
+# As in Silo, the row band shows the focused row and a sliver of the next
+# row's title, never its cards. Each row is the band's full height with its
+# content in the top ROW_PITCH, and rows overlap by the rest (a negative
+# item gap): Kodi scrolls a grouplist just far enough to show the focused
+# row whole, which puts it at the top and the next title in the last 48 px.
+BAND_H = 1080 - ROWS_TOP
+ROW_PITCH = BAND_H - 48
 
 # Cards as Silo TV draws them: dense posters (88x132 units) and backdrops
 # (180x101), each with a title and a second line beneath.
@@ -234,7 +241,7 @@ def row(page, page_index, slot, landscape):
                     </focusedlayout>
                 </control>
             </control>''' % {
-        'group_h': 56 + item_h + 36, 'rules': rules, 'x': SAFE_X, 'text': TEXT, 'title': prop(key + '.title'),
+        'group_h': BAND_H, 'rules': rules, 'x': SAFE_X, 'text': TEXT, 'title': prop(key + '.title'),
         'id': list_id(page_index, slot, landscape), 'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'item_h': item_h,
         'moves': moves(page_index, slot), 'path': path, 'item_w': item_w, 'normal': card_layout(card, False),
         'focused': card_layout(card, True, list_id(page_index, slot, landscape))}
@@ -478,7 +485,7 @@ def build():
             <left>0</left><top>%(rows_top)d</top>
             <width>1920</width><height>%(rows_h)d</height>
             <orientation>vertical</orientation>
-            <itemgap>0</itemgap>
+            <itemgap>%(row_overlap)d</itemgap>
             <scrolltime tween="cubic" easing="out">300</scrolltime>
             <onup>9000</onup>%(rows)s
         </control>
@@ -512,7 +519,8 @@ def build():
 %(avatar)s
     </controls>
 </window>
-''' % {'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'rows_top': ROWS_TOP, 'rows_h': 1080 - ROWS_TOP,
+''' % {'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'rows_top': ROWS_TOP, 'rows_h': BAND_H,
+       'row_overlap': ROW_PITCH - BAND_H,
        'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
        'bar_down': bar_down(), 'avatar': avatar(), 'row_prop': prop('silo.row'), 'background': BACKGROUND,
        'mpaa_badge': badge('$VAR[SiloMpaa]', 40, 'silo_meta'),
