@@ -813,6 +813,27 @@
 		<value condition="Player.Seeking | !String.IsEmpty(Player.SeekNumeric)">$INFO[Player.SeekTime]</value>
 		<value>$INFO[Player.Time]</value>
 	</variable>
+	<!-- Silo Skyline menu manager (script-skinshortcuts.xml, hand-written) -->
+	<variable name="SiloShortcutDetail">
+		<value condition="!String.IsEmpty(ListItem.Property(widgetPath))">$INFO[ListItem.Property(widgetName),Widgets: ,]</value>
+		<value>$INFO[ListItem.Label2]</value>
+	</variable>
+	<variable name="SiloShortcutWidget1">
+		<value condition="!String.IsEmpty(Container(211).ListItem.Property(widgetPath))">$INFO[Container(211).ListItem.Property(widgetName)]</value>
+		<value>None</value>
+	</variable>
+	<variable name="SiloShortcutWidget2">
+		<value condition="!String.IsEmpty(Container(211).ListItem.Property(widgetPath.2))">$INFO[Container(211).ListItem.Property(widgetName.2)]</value>
+		<value>None</value>
+	</variable>
+	<variable name="SiloShortcutWidget3">
+		<value condition="!String.IsEmpty(Container(211).ListItem.Property(widgetPath.3))">$INFO[Container(211).ListItem.Property(widgetName.3)]</value>
+		<value>None</value>
+	</variable>
+	<variable name="SiloShortcutWidget4">
+		<value condition="!String.IsEmpty(Container(211).ListItem.Property(widgetPath.4))">$INFO[Container(211).ListItem.Property(widgetName.4)]</value>
+		<value>None</value>
+	</variable>
 
     <!-- Silo Skyline (tools/build_home.py) -->
     <variable name="SiloCardTitle">
@@ -2837,7 +2858,8 @@
         <value>$INFO[ListItem.Property(silo.mpaa)]</value>
     </variable>
     <variable name="SiloDetailFacts">
-        <value condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Property(silo.request.label), · ,]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))">$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Property(silo.request.seasons), · , seasons]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Duration(mins), · , min]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.code))">$INFO[ListItem.Property(silo.code)]$INFO[ListItem.Title, · ,]$INFO[ListItem.Property(silo.aired), · ,]$INFO[ListItem.Duration(mins), · , min]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Season,S,]$INFO[ListItem.Episode,E,]$INFO[ListItem.Title, · ,]$INFO[ListItem.Premiered, · ,]$INFO[ListItem.Duration(mins), · , min]</value>
         <value condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Property(silo.genre))">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.genre), · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Property(TotalEpisodes), · , episodes]</value>
@@ -2964,25 +2986,4 @@
         <value>$INFO[Skin.String(silo.search)]</value>
     </variable>
     <!-- end Silo Skyline search -->
-	<!-- Silo Skyline menu manager (script-skinshortcuts.xml, hand-written) -->
-	<variable name="SiloShortcutDetail">
-		<value condition="!String.IsEmpty(ListItem.Property(widgetPath))">$INFO[ListItem.Property(widgetName),Widgets: ,]</value>
-		<value>$INFO[ListItem.Label2]</value>
-	</variable>
-	<variable name="SiloShortcutWidget1">
-		<value condition="!String.IsEmpty(Container(211).ListItem.Property(widgetPath))">$INFO[Container(211).ListItem.Property(widgetName)]</value>
-		<value>None</value>
-	</variable>
-	<variable name="SiloShortcutWidget2">
-		<value condition="!String.IsEmpty(Container(211).ListItem.Property(widgetPath.2))">$INFO[Container(211).ListItem.Property(widgetName.2)]</value>
-		<value>None</value>
-	</variable>
-	<variable name="SiloShortcutWidget3">
-		<value condition="!String.IsEmpty(Container(211).ListItem.Property(widgetPath.3))">$INFO[Container(211).ListItem.Property(widgetName.3)]</value>
-		<value>None</value>
-	</variable>
-	<variable name="SiloShortcutWidget4">
-		<value condition="!String.IsEmpty(Container(211).ListItem.Property(widgetPath.4))">$INFO[Container(211).ListItem.Property(widgetName.4)]</value>
-		<value>None</value>
-	</variable>
 </includes>
