@@ -14,7 +14,7 @@
 				<itemlayout width="480" height="76">
 					<control type="image">
 						<width>480</width><height>76</height>
-						<texture colordiffuse="F21C1F24">colors/white.png</texture>
+						<texture border="14" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
 					</control>
 					<control type="label">
 						<left>36</left><width>408</width><height>76</height>
@@ -27,7 +27,7 @@
 				<focusedlayout width="480" height="76">
 					<control type="image">
 						<width>480</width><height>76</height>
-						<texture colordiffuse="F21C1F24">colors/white.png</texture>
+						<texture border="14" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
 					</control>
 					<control type="image">
 						<left>10</left><top>8</top>
