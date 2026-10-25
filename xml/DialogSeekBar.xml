@@ -464,6 +464,40 @@
 				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
 				<midtexture colordiffuse="33FFFFFF">colors/white.png</midtexture>
 			</control>
+			<!-- Silo's marker bands (from SiloKodiConnect), under the played part:
+			     intro cyan, recap green, credits orange, preview purple. -->
+			<control type="ranges">
+				<left>96</left><top>862</top><width>1728</width><height>8</height>
+				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+				<lefttexture />
+				<midtexture colordiffuse="6622D3EE">colors/white.png</midtexture>
+				<righttexture />
+				<info>Window(Home).Property(silokodi.markers.intro)</info>
+			</control>
+			<control type="ranges">
+				<left>96</left><top>862</top><width>1728</width><height>8</height>
+				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+				<lefttexture />
+				<midtexture colordiffuse="668BC34A">colors/white.png</midtexture>
+				<righttexture />
+				<info>Window(Home).Property(silokodi.markers.recap)</info>
+			</control>
+			<control type="ranges">
+				<left>96</left><top>862</top><width>1728</width><height>8</height>
+				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+				<lefttexture />
+				<midtexture colordiffuse="66FFB74D">colors/white.png</midtexture>
+				<righttexture />
+				<info>Window(Home).Property(silokodi.markers.credits)</info>
+			</control>
+			<control type="ranges">
+				<left>96</left><top>862</top><width>1728</width><height>8</height>
+				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+				<lefttexture />
+				<midtexture colordiffuse="66BA68C8">colors/white.png</midtexture>
+				<righttexture />
+				<info>Window(Home).Property(silokodi.markers.preview)</info>
+			</control>
 			<control type="progress">
 				<left>96</left><top>862</top><width>1728</width><height>8</height>
 				<info>Player.Progress</info>

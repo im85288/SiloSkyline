@@ -259,8 +259,8 @@
 					<width>100%</width>
 					<height>26</height>
 					<texturesliderbar colordiffuse="00FFFFFF">silo/avatar_mask.png</texturesliderbar>
-					<textureslidernib>silo/avatar_mask.png</textureslidernib>
-					<textureslidernibfocus>silo/avatar_mask.png</textureslidernibfocus>
+					<textureslidernib colordiffuse="$VAR[SiloOsdNib]">silo/avatar_mask.png</textureslidernib>
+					<textureslidernibfocus colordiffuse="$VAR[SiloOsdNib]">silo/avatar_mask.png</textureslidernibfocus>
 					<info>Player.Progress</info>
 					<onup>200</onup>
 					<ondown>200</ondown>
@@ -273,8 +273,8 @@
 					<width>100%</width>
 					<height>26</height>
 					<texturesliderbar colordiffuse="00FFFFFF">silo/avatar_mask.png</texturesliderbar>
-					<textureslidernib>silo/avatar_mask.png</textureslidernib>
-					<textureslidernibfocus>silo/avatar_mask.png</textureslidernibfocus>
+					<textureslidernib colordiffuse="$VAR[SiloOsdNib]">silo/avatar_mask.png</textureslidernib>
+					<textureslidernibfocus colordiffuse="$VAR[SiloOsdNib]">silo/avatar_mask.png</textureslidernibfocus>
 					<info>Player.Progress</info>
 					<onup>200</onup>
 					<ondown>200</ondown>
@@ -287,8 +287,8 @@
 					<width>100%</width>
 					<height>26</height>
 					<texturesliderbar colordiffuse="00FFFFFF">silo/avatar_mask.png</texturesliderbar>
-					<textureslidernib>silo/avatar_mask.png</textureslidernib>
-					<textureslidernibfocus>silo/avatar_mask.png</textureslidernibfocus>
+					<textureslidernib colordiffuse="$VAR[SiloOsdNib]">silo/avatar_mask.png</textureslidernib>
+					<textureslidernibfocus colordiffuse="$VAR[SiloOsdNib]">silo/avatar_mask.png</textureslidernibfocus>
 					<info>PVR.TimeshiftProgressPlayPos</info>
 					<onup>200</onup>
 					<ondown>200</ondown>
@@ -301,8 +301,8 @@
 					<width>100%</width>
 					<height>26</height>
 					<texturesliderbar colordiffuse="00FFFFFF">silo/avatar_mask.png</texturesliderbar>
-					<textureslidernib>silo/avatar_mask.png</textureslidernib>
-					<textureslidernibfocus>silo/avatar_mask.png</textureslidernibfocus>
+					<textureslidernib colordiffuse="$VAR[SiloOsdNib]">silo/avatar_mask.png</textureslidernib>
+					<textureslidernibfocus colordiffuse="$VAR[SiloOsdNib]">silo/avatar_mask.png</textureslidernibfocus>
 					<info>PVR.TimeshiftProgressPlayPos</info>
 					<onup>200</onup>
 					<ondown>200</ondown>

@@ -800,6 +800,12 @@
 		<value>$INFO[ListItem.Duration,$LOCALIZE[180]: ][CR]$VAR[VideoCodecVar,, ]$INFO[ListItem.VideoResolution,| , ]$VAR[VideoResolutionTypeVar,, ]$VAR[VideoHDRVar,| , ]$INFO[ListItem.VideoAspect,| ,:1 ]$VAR[AudioCodecVar,| , ]$VAR[AudioChannelsVar]</value>
 	</variable>
 	<!-- Silo Skyline player (hand-written) -->
+	<!-- The OSD's seek slider keeps working, but Silo's bar (DialogSeekBar) draws
+	     the only handle: a second one sat beside it at a different width. -->
+	<variable name="SiloOsdNib">
+		<value condition="$EXP[SiloVideoPlayer]">00FFFFFF</value>
+		<value>FFFFFFFF</value>
+	</variable>
 	<variable name="SiloPlayerEyebrow">
 		<value condition="!String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.TVShowTitle]$INFO[VideoPlayer.Season, · S,]$INFO[VideoPlayer.Episode,:E,]</value>
 		<value condition="VideoPlayer.Content(movies)">Movie$INFO[VideoPlayer.Year, · ,]</value>
