@@ -404,7 +404,7 @@ VARIABLES = '''
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Season,S,]$INFO[ListItem.Episode,E,]$INFO[ListItem.Title, · ,]$INFO[ListItem.Premiered, · ,]$INFO[ListItem.Duration(mins), · , min]</value>
         <value condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Property(silo.genre))">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.genre), · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Property(TotalEpisodes), · , episodes]</value>
         <value condition="!String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Property(silo.genre))">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.genre), · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Duration(mins), · , min]</value>
-        <value condition="String.IsEqual(ListItem.DBType,tvshow)">$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$INFO[ListItem.Rating, · ★ ,]$INFO[ListItem.Property(TotalSeasons), · , seasons]</value>
+        <value condition="String.IsEqual(ListItem.DBType,tvshow)">$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$INFO[ListItem.Rating, · ★ ,]$VAR[SiloDetailSeasons]</value>
         <value>$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$INFO[ListItem.Rating, · ★ ,]$INFO[ListItem.Duration(mins), · , min]</value>
     </variable>
     <variable name="SiloDetailCredit">
@@ -431,6 +431,10 @@ VARIABLES = '''
         <value condition="String.IsEqual(ListItem.AudioCodec,eac3)">DD+$INFO[ListItem.AudioChannels, ,]</value>
         <value condition="String.IsEqual(ListItem.AudioCodec,truehd)">TRUEHD$INFO[ListItem.AudioChannels, ,]</value>
         <value>$INFO[ListItem.AudioCodec]$INFO[ListItem.AudioChannels, ,]</value>
+    </variable>
+    <variable name="SiloDetailSeasons">
+        <value condition="Integer.IsEqual(ListItem.Property(TotalSeasons),1)"> · 1 season</value>
+        <value condition="Integer.IsGreater(ListItem.Property(TotalSeasons),1)">$INFO[ListItem.Property(TotalSeasons), · , seasons]</value>
     </variable>
     <variable name="SiloSeasonLabel">
         <value condition="String.StartsWith(ListItem.Label,*)">All episodes</value>

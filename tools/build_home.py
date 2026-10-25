@@ -399,7 +399,7 @@ def build():
                    for index, page in enumerate(PAGES)
                    for slot in range(1, MAX_ROWS + 1)
                    for landscape in (False, True))
-    tabs = icon_tab(9001, 'icons/search.png', 'ActivateWindow(1107)')
+    tabs = icon_tab(9001, 'icons/search.png', 'ActivateWindow(1190)')
     tabs += ''.join(tab(9002 + index, page, index) for index, page in enumerate(PAGES))
     tabs += icon_tab(9009, 'icons/settings.png', 'ActivateWindow(Settings)')
     # Estuary keeps the power menu on its home screen; this replaces it.

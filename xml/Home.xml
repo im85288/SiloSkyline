@@ -10003,7 +10003,7 @@
                     <label />
                     <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
                     <texturenofocus />
-                    <onclick>ActivateWindow(1107)</onclick>
+                    <onclick>ActivateWindow(1190)</onclick>
                     <ondown condition="$EXP[SiloRow5001]">SetFocus(5001)</ondown>
                     <ondown condition="$EXP[SiloRow5051] + !$EXP[SiloRow5001]">SetFocus(5051)</ondown>
                     <ondown condition="$EXP[SiloRow5002] + !$EXP[SiloRow5001] + !$EXP[SiloRow5051]">SetFocus(5002)</ondown>

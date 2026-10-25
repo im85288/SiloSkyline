@@ -34,6 +34,20 @@
 				<align>center</align>
 				<aligny>center</aligny>
 				<shadowcolor>black</shadowcolor>
+				<visible>!Window.IsVisible(1190)</visible>
+			</control>
+			<!-- Silo Skyline: Kodi calls the search words "the new label"; the search screen asks plainly. -->
+			<control type="label">
+				<centerleft>50%</centerleft>
+				<top>50</top>
+				<width>1542</width>
+				<height>100</height>
+				<font>font45</font>
+				<label>Search films and shows</label>
+				<align>center</align>
+				<aligny>center</aligny>
+				<shadowcolor>black</shadowcolor>
+				<visible>Window.IsVisible(1190)</visible>
 			</control>
 			<control type="image">
 				<centerleft>50%</centerleft>

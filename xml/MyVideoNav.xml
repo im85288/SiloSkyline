@@ -15,8 +15,7 @@
             <width>1230</width><height>756</height>
             <aspectratio align="right" aligny="top">scale</aspectratio>
             <fadetime>240</fadetime>
-            <colordiffuse>59FFFFFF</colordiffuse>
-            <texture background="true" diffuse="silo/hero_mask.png">$VAR[SiloBrowseArt]</texture>
+            <texture background="true" colordiffuse="59FFFFFF" diffuse="silo/hero_mask.png">$VAR[SiloBrowseArt]</texture>
         </control>
 
         <control type="label">
