@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="skin.silo.skyline" version="0.1.0" name="Silo Skyline" provider-name="im85288">
+<addon id="skin.silo.skyline" version="0.2.0" name="Silo Skyline" provider-name="im85288">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0"/>
 		<!-- Fills the home rows; without it the rows stay empty. -->
-		<import addon="plugin.video.silokodiconnect" version="0.9.2" optional="true"/>
+		<import addon="plugin.video.silokodiconnect" version="0.9.3" optional="true"/>
 	</requires>
 	<extension point="xbmc.gui.skin" debugging="false">
 		<res width="1920" height="1440" aspect="4:3" default="false" folder="xml" />

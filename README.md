@@ -27,7 +27,7 @@ Community project: not made or endorsed by the Silo team.
 
 ## Install
 
-Install and sign in to SiloKodiConnect 0.9.2 or newer first, then build a zip and use Kodi's
+Install and sign in to SiloKodiConnect 0.9.3 or newer first, then build a zip and use Kodi's
 **Add-ons -> Install from zip file**:
 
 ```bash
