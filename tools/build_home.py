@@ -223,8 +223,11 @@ def row_rules(page, page_index, slot, landscape):
     lid = list_id(page_index, slot, landscape)
     style = ('String.IsEqual(%s,landscape)' if landscape else '!String.IsEqual(%s,landscape)') % prop(key + '.style')
     # Empty rows hide, as in Silo; Kodi still loads a list hidden this way.
-    return '%s + !String.IsEmpty(%s) + %s + [Integer.IsGreater(Container(%d).NumItems,0) | Container(%d).IsUpdating]' \
-        % (page_visible(page), prop(key + '.path'), style, lid, lid)
+    # silo.<page>.loading (SiloKodiConnect) keeps rows shown while they load:
+    # Kodi never loads a hidden list whose path changed.
+    return ('%s + !String.IsEmpty(%s) + %s + [Integer.IsGreater(Container(%d).NumItems,0) | Container(%d).IsUpdating'
+            ' | String.IsEqual(%s,1)]' % (page_visible(page), prop(key + '.path'), style, lid, lid,
+                                         prop('silo.%s.loading' % page)))
 
 
 def first_visible(action, candidates, indent='                    '):
@@ -261,15 +264,13 @@ def row(page, page_index, slot, landscape):
     card = LANDSCAPE if landscape else POSTER
     key = 'silo.%s.%d' % (page, slot)
     rules = '$EXP[SiloRow%d]' % list_id(page_index, slot, landscape)
-    # The library_updated suffix changes when SiloKodiConnect writes the
-    # library, which makes Kodi reload the row. Kodi reads a $VAR in a content
-    # path only once, when the window opens, so this must stay $INFO: a row
-    # without a path logs one harmless error at start-up. Each slot has a
-    # poster and a landscape list: each loads from the path SiloKodiConnect
-    # publishes under its own style (empty for the other style, and for pages
-    # not yet opened), so only the list that shows does the work.
-    path = '$INFO[%s]&amp;refresh=$INFO[%s]' % (prop(key + ('.landscape' if landscape else '.poster')),
-                                                prop('silokodi.library_updated'))
+    # SiloKodiConnect publishes each row's path under its style (the slot has
+    # a poster and a landscape list, so only the list that shows loads), empty
+    # until the page has been viewed, and with a refresh token it changes when
+    # it writes the library, which reloads the row. An empty path keeps Kodi
+    # from trying the row too early: a list whose load failed never retries.
+    # Kodi reads a $VAR in a content path only once, so this must stay $INFO.
+    path = '$INFO[%s]' % prop(key + ('.landscape' if landscape else '.poster'))
     if page == 'custom':
         # A Skin Shortcuts widget: any Kodi path, used as it is.
         path = '$INFO[%s]' % prop(key + '.path')
@@ -605,6 +606,7 @@ def custom_items():
                     <onclick condition="%(has_widgets)s">SetProperty(silo.page,custom,home)</onclick>
                     <onclick condition="%(has_widgets)s">ClearProperty(silo.row,home)</onclick>
                     <onclick condition="%(has_widgets)s">SetProperty(silo.custom.button,%(id)d,home)</onclick>%(actions)s
+                    <onclick condition="%(has_widgets)s">SetProperty(silo.custom.loading,1,home)</onclick>
                 </control>''' % {'label': label, 'id': control_id, 'dim': TAB_DIM, 'text': TEXT, 'has_widgets': has_widgets,
                              'path': shortcut(slot, 'Property(path)'), 'actions': actions,
                              'nofocus': '$VAR[SiloCustomTab%d]' % control_id,
@@ -800,7 +802,7 @@ def build():
         </control>
 %(avatar)s
 %(custom)s
-%(sections)s
+%(sections)s%(splash)s
     </controls>
 </window>
 ''' % {'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'rows_top': ROWS_TOP, 'rows_h': BAND_H,
@@ -809,7 +811,7 @@ def build():
        'bar_down': bar_down(), 'avatar': avatar(), 'custom': shortcuts_list,
        'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections_menus(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'background': BACKGROUND,
        # The age rating as Silo draws it: the quality badges' size, centred on the info line.
-       'mpaa_badge': badge('$VAR[SiloMpaa]', 34, 'silo_badge').replace(
+       'splash': splash(), 'mpaa_badge': badge('$VAR[SiloMpaa]', 34, 'silo_badge').replace(
            '<width>auto</width><height>34</height>', '<top>3</top><width>auto</width><height>34</height>', 1),
        'quality_badges': ''.join(badge('$VAR[SiloBadge%d]' % n, 36, 'silo_badge') for n in (1, 2, 3))}
 
@@ -967,7 +969,50 @@ def first_row_timer():
             '        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(%s),1) | !Window.IsActive(home) | '
             '!String.IsEmpty(%s)</stop>\n%s'
             '    </timer>\n' % (name, prop('silo.row'), ' | '.join(ready), name, prop('silo.row'), ''.join(focus))
-            + TIMER_END)
+            + splash_timer() + TIMER_END)
+
+
+SPLASH_MAX = 20  # seconds: the splash never holds longer, whatever happens
+
+
+def splash_timer():
+    """Lifts the splash (silo.ready) once Home's first rows have items, or
+    after SPLASH_MAX seconds (signed out, no rows, Silo unreachable)."""
+    loaded = ' | '.join('Integer.IsGreater(Container(%d).NumItems,0)' % list_id(0, slot, landscape)
+                        for slot in (1, 2) for landscape in (False, True))
+    return ('    <timer>\n'
+            '        <name>silo_splash</name>\n'
+            '        <description>Lift the start-up splash once Home has rows (tools/build_home.py)</description>\n'
+            '        <start>Window.IsActive(home) + String.IsEmpty(%(ready)s)</start>\n'
+            '        <stop>%(loaded)s | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_splash),%(max)d)</stop>\n'
+            '        <onstop>SetProperty(silo.ready,1,home)</onstop>\n'
+            '    </timer>\n' % {'ready': prop('silo.ready'), 'loaded': loaded, 'max': SPLASH_MAX})
+
+
+def splash():
+    """Silo's start-up screen over Home until its first rows are in (a
+    property, so it shows once per Kodi start, never on returning to Home)."""
+    return '''
+        <control type="group">
+            <visible>String.IsEmpty(%(ready)s)</visible>
+            <animation effect="fade" start="100" end="0" time="400">Hidden</animation>
+            <control type="image">
+                <width>1920</width><height>1080</height>
+                <texture colordiffuse="%(background)s">colors/white.png</texture>
+            </control>
+            <control type="label">
+                <left>0</left><top>440</top><width>1920</width><height>110</height>
+                <align>center</align><aligny>center</aligny>
+                <font>silo_title</font>
+                <textcolor>%(text)s</textcolor>
+                <label>Silo</label>
+            </control>
+            <control type="image">
+                <left>936</left><top>600</top><width>48</width><height>48</height>
+                <animation effect="rotate" start="0" end="-360" center="auto" time="900" loop="true" reversible="false" condition="true">Conditional</animation>
+                <texture colordiffuse="99EDEDED">silo/spinner_arc.png</texture>
+            </control>
+        </control>''' % {'ready': prop('silo.ready'), 'background': BACKGROUND, 'text': TEXT}
 
 
 TIMER_START, TIMER_END = '    <!-- Silo Skyline (tools/build_home.py) -->\n', '    <!-- end Silo Skyline -->\n'
