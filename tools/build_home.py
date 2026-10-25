@@ -90,13 +90,30 @@ def card_layout(card, focused, control_id=None):
                                     'text': TEXT, 'ring': ring}
 
 
+def shown(target):
+    """Whether a control is showing. Rows use their own rules ($EXP): Kodi
+    stops refreshing Control.IsVisible() for lists inside a hidden group, so
+    a Home row kept answering visible after leaving the Home page."""
+    if 5000 <= target < 6000:
+        return '$EXP[SiloRow%d]' % target
+    return 'Control.IsVisible(%d)' % target
+
+
+def row_rules(page, page_index, slot, landscape):
+    key = 'silo.%s.%d' % (page, slot)
+    lid = list_id(page_index, slot, landscape)
+    style = ('String.IsEqual(%s,landscape)' if landscape else '!String.IsEqual(%s,landscape)') % prop(key + '.style')
+    # Empty rows hide, as in Silo; Kodi still loads a list hidden this way.
+    return '%s + !String.IsEmpty(%s) + %s + [Integer.IsGreater(Container(%d).NumItems,0) | Container(%d).IsUpdating]' \
+        % (page_visible(page), prop(key + '.path'), style, lid, lid)
+
+
 def first_visible(action, candidates, indent='                    '):
-    """<action> tags that focus the first visible candidate. Kodi runs every
+    """<action> tags that focus the first candidate showing. Kodi runs every
     tag whose condition holds, so each excludes the ones before it."""
     out = ''
     for index, target in enumerate(candidates):
-        condition = ' + '.join(['Control.IsVisible(%d)' % target]
-                               + ['!Control.IsVisible(%d)' % k for k in candidates[:index]])
+        condition = ' + '.join([shown(target)] + ['!' + shown(k) for k in candidates[:index]])
         out += '\n%s<%s condition="%s">SetFocus(%d)</%s>' % (indent, action, condition, target, action)
     return out
 
@@ -115,7 +132,7 @@ def moves(page_index, slot):
     out = first_visible('ondown', down) + first_visible('onup', up)
     # The top row goes up to the current page's tab (a button: focusing the
     # bar's grouplist itself leaves left and right with nowhere to go).
-    above = ' + '.join('!Control.IsVisible(%d)' % k for k in up)
+    above = ' + '.join('!' + shown(k) for k in up)
     out += '\n                    <onup%s>SetFocus(%d)</onup>' % (' condition="%s"' % above if above else '',
                                                                9002 + page_index)
     return out
@@ -124,10 +141,7 @@ def moves(page_index, slot):
 def row(page, page_index, slot, landscape):
     card = LANDSCAPE if landscape else POSTER
     key = 'silo.%s.%d' % (page, slot)
-    style_ok = ('String.IsEqual(%s,landscape)' if landscape else '!String.IsEqual(%s,landscape)') % prop(key + '.style')
-    # Empty rows hide, as in Silo; Kodi still loads a list hidden this way.
-    lid = list_id(page_index, slot, landscape)
-    style_ok += ' + [Integer.IsGreater(Container(%d).NumItems,0) | Container(%d).IsUpdating]' % (lid, lid)
+    rules = '$EXP[SiloRow%d]' % list_id(page_index, slot, landscape)
     # The library_updated suffix changes when SiloKodiConnect writes the
     # library, which makes Kodi reload the row.
     path = '$INFO[%s]&amp;refresh=$INFO[%s]' % (prop(key + '.path'), prop('silokodi.library_updated'))
@@ -136,7 +150,7 @@ def row(page, page_index, slot, landscape):
     return '''
             <control type="group">
                 <height>%(group_h)d</height>
-                <visible>%(page_ok)s + !String.IsEmpty(%(path_prop)s) + %(style_ok)s</visible>
+                <visible>%(rules)s</visible>
                 <control type="label">
                     <left>%(x)d</left><top>0</top>
                     <width>1500</width><height>44</height>
@@ -145,8 +159,7 @@ def row(page, page_index, slot, landscape):
                     <label>$INFO[%(title)s]</label>
                 </control>
                 <control type="list" id="%(id)d">
-                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
-                    <visible>%(page_ok)s + !String.IsEmpty(%(path_prop)s) + %(style_ok)s</visible>
+                    <visible>%(rules)s</visible>
                     <left>%(lx)d</left><top>52</top>
                     <width>%(lw)d</width><height>%(item_h)d</height>
                     <orientation>horizontal</orientation>
@@ -161,8 +174,7 @@ def row(page, page_index, slot, landscape):
                     </focusedlayout>
                 </control>
             </control>''' % {
-        'group_h': 52 + item_h + 40, 'page_ok': page_visible(page), 'path_prop': prop(key + '.path'),
-        'style_ok': style_ok, 'x': SAFE_X, 'text': TEXT, 'title': prop(key + '.title'),
+        'group_h': 52 + item_h + 40, 'rules': rules, 'x': SAFE_X, 'text': TEXT, 'title': prop(key + '.title'),
         'id': list_id(page_index, slot, landscape), 'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'item_h': item_h,
         'moves': moves(page_index, slot), 'path': path, 'item_w': item_w, 'normal': card_layout(card, False),
         'focused': card_layout(card, True, list_id(page_index, slot, landscape))}
@@ -263,7 +275,7 @@ def build():
 <!-- Generated by tools/build_home.py: edit that, not this. -->
 <window>
     <defaultcontrol always="true">4000</defaultcontrol>
-    <onload condition="!Control.IsVisible(5001) + !Control.IsVisible(5051)">SetFocus(9002)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(silo.home.count))">SetFocus(9002)</onload>
     <backgroundcolor>FF000000</backgroundcolor>
     <controls>
         <!-- The focused title's artwork, crisp at the top right, fading left and down. -->
@@ -404,6 +416,11 @@ def variables():
     rows = [list_id(index, slot, landscape) for index in range(len(PAGES))
             for slot in range(1, MAX_ROWS + 1) for landscape in (False, True)]
     out = '\n    <!-- Silo Skyline (tools/build_home.py) -->' + CARDS
+    for index, page in enumerate(PAGES):
+        for slot in range(1, MAX_ROWS + 1):
+            for landscape in (False, True):
+                out += '    <expression name="SiloRow%d">%s</expression>\n' % (
+                    list_id(index, slot, landscape), row_rules(page, index, slot, landscape))
     for name, entries in HERO:
         out += '    <variable name="%s">\n' % name
         for row_id in rows:
