@@ -551,9 +551,54 @@ def add_variables():
     open(path, 'w', encoding='utf-8').write(text)
 
 
+def first_row_timer():
+    """A skin timer (xml/Timers.xml) that puts focus on the first row once it
+    has loaded, so the hero is filled at start-up: rows load after Home opens,
+    and Kodi can't focus an empty list. It waits until no row has been chosen
+    and focus is on the current page's tab or off the bar, then focuses the
+    first row showing a second later; it starts again if that row was still
+    loading. Timers.xml gets its conditions in full: it has no $EXP."""
+    ready, focus = [], []
+    for index, page in enumerate(PAGES):
+        rows = [(slot, landscape) for slot in range(1, LOOKAHEAD + 1) for landscape in (False, True)]
+        loaded = ' | '.join('Integer.IsGreater(Container(%d).NumItems,0)' % list_id(index, slot, landscape)
+                            for slot, landscape in rows)
+        ready.append('[%s + [%s] + [Control.HasFocus(%d) | !ControlGroup(9000).HasFocus()]]'
+                     % (page_visible(page), loaded, 9002 + index))
+        shown_rows = [('[%s]' % row_rules(page, index, slot, landscape), list_id(index, slot, landscape))
+                      for slot, landscape in rows]
+        for position, (rule, target) in enumerate(shown_rows):
+            condition = ' + '.join([rule] + ['![%s]' % earlier[1:-1] for earlier, _ in shown_rows[:position]])
+            focus.append('        <onstop condition="%s + String.IsEmpty(%s)">SetFocus(%d)</onstop>\n'
+                         % (condition, prop('silo.row'), target))
+    name = 'silo_first_row'
+    return (TIMER_START + '    <timer>\n'
+            '        <name>%s</name>\n'
+            '        <description>Focus the first Silo row once it has loaded (tools/build_home.py)</description>\n'
+            '        <start reset="true">Window.IsActive(home) + String.IsEmpty(%s) + [%s]</start>\n'
+            '        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(%s),1) | !Window.IsActive(home) | '
+            '!String.IsEmpty(%s)</stop>\n%s'
+            '    </timer>\n' % (name, prop('silo.row'), ' | '.join(ready), name, prop('silo.row'), ''.join(focus))
+            + TIMER_END)
+
+
+TIMER_START, TIMER_END = '    <!-- Silo Skyline (tools/build_home.py) -->\n', '    <!-- end Silo Skyline -->\n'
+
+
+def add_timer():
+    path = os.path.join(ROOT, 'xml', 'Timers.xml')
+    text = open(path, encoding='utf-8').read()
+    if TIMER_START in text:
+        text = text[:text.index(TIMER_START)] + text[text.index(TIMER_END) + len(TIMER_END):]
+    text = text.replace('</timers>', first_row_timer() + '</timers>')
+    open(path, 'w', encoding='utf-8').write(text)
+
+
 if __name__ == '__main__':
     with open(os.path.join(ROOT, 'xml', 'Home.xml'), 'w', encoding='utf-8') as handle:
         handle.write(build())
     add_variables()
     add_fonts()
-    print('Wrote xml/Home.xml, the Silo variables in xml/Variables.xml and its fonts in xml/Font.xml')
+    add_timer()
+    print('Wrote xml/Home.xml, the Silo variables in xml/Variables.xml, its fonts in xml/Font.xml and its '
+          'start-up focus timer in xml/Timers.xml')
