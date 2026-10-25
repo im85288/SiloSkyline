@@ -169,6 +169,20 @@ if __name__ == '__main__':
     write_png('osd_button_rest.png', 76, 76, osd_button)
     # Dialog buttons: a rounded bar inset 10 px, so neighbours in a row don't
     # touch; stretched with border="46".
+    # The busy spinner: Silo's Material arc, three quarters of a 6 px ring.
+    def arc(x, y, size=96.0, stroke=6.0):
+        import math
+        r_out, r_in = size / 2.0, size / 2.0 - stroke
+        hits = 0
+        for sy in range(SUB):
+            for sx in range(SUB):
+                px = x - 0.5 + (sx + 0.5) / SUB - size / 2.0
+                py = y - 0.5 + (sy + 0.5) / SUB - size / 2.0
+                d = math.hypot(px, py)
+                if r_in <= d <= r_out and math.atan2(py, px) % (2 * math.pi) < 1.5 * math.pi:
+                    hits += 1
+        return hits / float(SUB * SUB)
+    write_png('spinner_arc.png', 96, 96, arc)
     write_png('dialog_button.png', 100, 100, lambda x, y: rounded_rect_coverage(x, y, 100, 100, 36, inset=10))
     person_placeholder()
     focus_ring('avatar_ring.png', 64, 64, 32, 3)
