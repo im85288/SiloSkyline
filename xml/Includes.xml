@@ -3,6 +3,7 @@
 	<include file="Defaults.xml" />
 	<include file="script-skinshortcuts-includes.xml" />
 	<include file="Includes_Home.xml" />
+	<include file="Includes_SiloCards.xml" />
 	<include file="Includes_Animations.xml" />
 	<include file="Includes_Games.xml" />
 	<include file="Includes_MediaMenu.xml" />
