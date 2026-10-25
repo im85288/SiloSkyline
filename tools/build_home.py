@@ -132,6 +132,8 @@ def row(page, page_index, slot, landscape):
                     <label>$INFO[%(title)s]</label>
                 </control>
                 <control type="list" id="%(id)d">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>%(page_ok)s + !String.IsEmpty(%(path_prop)s) + %(style_ok)s</visible>
                     <left>%(lx)d</left><top>52</top>
                     <width>%(lw)d</width><height>%(item_h)d</height>
                     <orientation>horizontal</orientation>
@@ -152,6 +154,23 @@ def row(page, page_index, slot, landscape):
         'focused': card_layout(card, True, list_id(page_index, slot, landscape))}
 
 
+BAR_ORDER = [9001, 9002, 9003, 9004, 9009]  # Search, Home, Movies, Series, Settings
+
+
+def bar_moves(control_id):
+    """Left, right and down for a bar button. Movies and Series can be
+    hidden, so each direction takes the nearest visible button."""
+    out = bar_down('                    ')
+    index = BAR_ORDER.index(control_id)
+    for action, neighbours in (('onright', BAR_ORDER[index + 1:]), ('onleft', BAR_ORDER[:index][::-1])):
+        skipped = []
+        for target in neighbours:
+            condition = ' + '.join(['Control.IsVisible(%d)' % target] + ['!Control.IsVisible(%d)' % k for k in skipped])
+            out += '\n                    <%s condition="%s">SetFocus(%d)</%s>' % (action, condition, target, action)
+            skipped.append(target)
+    return out
+
+
 def tab(control_id, page, page_index):
     first = first_row_ids(page_index)
     visible = '' if page == 'home' else \
@@ -164,7 +183,7 @@ def tab(control_id, page, page_index):
                     <texture border="30" colordiffuse="26FFFFFF">silo/pill.png</texture>
                     <visible>%(selected)s + !Control.HasFocus(%(id)d)</visible>
                 </control>
-                <control type="button" id="%(id)d">
+                <control type="button" id="%(id)d">%(visible)s
                     <width>%(width)d</width><height>60</height>
                     <label>%(label)s</label>
                     <font>silo_tab</font>
@@ -173,13 +192,14 @@ def tab(control_id, page, page_index):
                     <focusedcolor>FF000000</focusedcolor>
                     <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
                     <texturenofocus />
-                    <onclick>SetProperty(silo.page,%(page)s,home)</onclick>
+                    <onclick>SetProperty(silo.page,%(page)s,home)</onclick>%(moves)s
                     <onclick condition="Control.IsVisible(%(p)d)">SetFocus(%(p)d)</onclick>
                     <onclick condition="Control.IsVisible(%(l)d)">SetFocus(%(l)d)</onclick>
                 </control>
             </control>''' % {'width': 60 + 17 * len(TAB_LABELS[page]), 'visible': visible,
                             'selected': page_visible(page), 'id': control_id, 'label': TAB_LABELS[page],
-                            'dim': TAB_DIM, 'text': TEXT, 'page': page, 'p': first[0], 'l': first[1]}
+                            'dim': TAB_DIM, 'text': TEXT, 'page': page, 'p': first[0], 'l': first[1],
+                            'moves': bar_moves(control_id)}
 
 
 def icon_tab(control_id, icon, action):
@@ -191,7 +211,7 @@ def icon_tab(control_id, icon, action):
                     <label />
                     <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
                     <texturenofocus />
-                    <onclick>%(action)s</onclick>
+                    <onclick>%(action)s</onclick>%(moves)s
                 </control>
                 <control type="image">
                     <left>14</left><top>14</top>
@@ -205,14 +225,15 @@ def icon_tab(control_id, icon, action):
                     <texture colordiffuse="%(dim)s">%(icon)s</texture>
                     <visible>!Control.HasFocus(%(id)d)</visible>
                 </control>
-            </control>''' % {'id': control_id, 'text': TEXT, 'action': action, 'icon': icon, 'dim': TAB_DIM}
+            </control>''' % {'id': control_id, 'text': TEXT, 'action': action, 'icon': icon, 'dim': TAB_DIM,
+                            'moves': bar_moves(control_id)}
 
 
-def bar_down():
+def bar_down(indent='            '):
     out = ''
     for index in range(len(PAGES)):
         for target in first_row_ids(index):
-            out += '\n            <ondown condition="Control.IsVisible(%d)">SetFocus(%d)</ondown>' % (target, target)
+            out += '\n%s<ondown condition="Control.IsVisible(%d)">SetFocus(%d)</ondown>' % (indent, target, target)
     return out
 
 

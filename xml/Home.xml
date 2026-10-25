@@ -72,6 +72,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.1.title)]</label>
                 </control>
                 <control type="list" id="5001">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.1.path)) + !String.IsEqual(Window(Home).Property(silo.home.1.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -150,6 +152,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.1.title)]</label>
                 </control>
                 <control type="list" id="5051">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.1.path)) + String.IsEqual(Window(Home).Property(silo.home.1.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -228,6 +232,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.2.title)]</label>
                 </control>
                 <control type="list" id="5002">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.2.path)) + !String.IsEqual(Window(Home).Property(silo.home.2.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -307,6 +313,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.2.title)]</label>
                 </control>
                 <control type="list" id="5052">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.2.path)) + String.IsEqual(Window(Home).Property(silo.home.2.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -386,6 +394,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.3.title)]</label>
                 </control>
                 <control type="list" id="5003">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.3.path)) + !String.IsEqual(Window(Home).Property(silo.home.3.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -465,6 +475,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.3.title)]</label>
                 </control>
                 <control type="list" id="5053">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.3.path)) + String.IsEqual(Window(Home).Property(silo.home.3.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -544,6 +556,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.4.title)]</label>
                 </control>
                 <control type="list" id="5004">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.4.path)) + !String.IsEqual(Window(Home).Property(silo.home.4.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -623,6 +637,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.4.title)]</label>
                 </control>
                 <control type="list" id="5054">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.4.path)) + String.IsEqual(Window(Home).Property(silo.home.4.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -702,6 +718,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.5.title)]</label>
                 </control>
                 <control type="list" id="5005">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.5.path)) + !String.IsEqual(Window(Home).Property(silo.home.5.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -781,6 +799,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.5.title)]</label>
                 </control>
                 <control type="list" id="5055">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.5.path)) + String.IsEqual(Window(Home).Property(silo.home.5.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -860,6 +880,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.6.title)]</label>
                 </control>
                 <control type="list" id="5006">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.6.path)) + !String.IsEqual(Window(Home).Property(silo.home.6.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -939,6 +961,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.6.title)]</label>
                 </control>
                 <control type="list" id="5056">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.6.path)) + String.IsEqual(Window(Home).Property(silo.home.6.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -1018,6 +1042,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.7.title)]</label>
                 </control>
                 <control type="list" id="5007">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.7.path)) + !String.IsEqual(Window(Home).Property(silo.home.7.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -1097,6 +1123,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.7.title)]</label>
                 </control>
                 <control type="list" id="5057">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.7.path)) + String.IsEqual(Window(Home).Property(silo.home.7.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -1176,6 +1204,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.8.title)]</label>
                 </control>
                 <control type="list" id="5008">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.8.path)) + !String.IsEqual(Window(Home).Property(silo.home.8.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -1255,6 +1285,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.8.title)]</label>
                 </control>
                 <control type="list" id="5058">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.8.path)) + String.IsEqual(Window(Home).Property(silo.home.8.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -1334,6 +1366,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.9.title)]</label>
                 </control>
                 <control type="list" id="5009">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.9.path)) + !String.IsEqual(Window(Home).Property(silo.home.9.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -1413,6 +1447,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.9.title)]</label>
                 </control>
                 <control type="list" id="5059">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.9.path)) + String.IsEqual(Window(Home).Property(silo.home.9.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -1492,6 +1528,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.10.title)]</label>
                 </control>
                 <control type="list" id="5010">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.10.path)) + !String.IsEqual(Window(Home).Property(silo.home.10.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -1571,6 +1609,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.10.title)]</label>
                 </control>
                 <control type="list" id="5060">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.10.path)) + String.IsEqual(Window(Home).Property(silo.home.10.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -1650,6 +1690,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.11.title)]</label>
                 </control>
                 <control type="list" id="5011">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.11.path)) + !String.IsEqual(Window(Home).Property(silo.home.11.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -1729,6 +1771,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.11.title)]</label>
                 </control>
                 <control type="list" id="5061">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.11.path)) + String.IsEqual(Window(Home).Property(silo.home.11.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -1808,6 +1852,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.12.title)]</label>
                 </control>
                 <control type="list" id="5012">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.12.path)) + !String.IsEqual(Window(Home).Property(silo.home.12.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -1885,6 +1931,8 @@
                     <label>$INFO[Window(Home).Property(silo.home.12.title)]</label>
                 </control>
                 <control type="list" id="5062">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !String.IsEmpty(Window(Home).Property(silo.home.12.path)) + String.IsEqual(Window(Home).Property(silo.home.12.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -1962,6 +2010,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.1.title)]</label>
                 </control>
                 <control type="list" id="5101">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.1.path)) + !String.IsEqual(Window(Home).Property(silo.movies.1.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -2040,6 +2090,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.1.title)]</label>
                 </control>
                 <control type="list" id="5151">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.1.path)) + String.IsEqual(Window(Home).Property(silo.movies.1.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -2118,6 +2170,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.2.title)]</label>
                 </control>
                 <control type="list" id="5102">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.2.path)) + !String.IsEqual(Window(Home).Property(silo.movies.2.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -2197,6 +2251,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.2.title)]</label>
                 </control>
                 <control type="list" id="5152">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.2.path)) + String.IsEqual(Window(Home).Property(silo.movies.2.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -2276,6 +2332,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.3.title)]</label>
                 </control>
                 <control type="list" id="5103">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.3.path)) + !String.IsEqual(Window(Home).Property(silo.movies.3.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -2355,6 +2413,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.3.title)]</label>
                 </control>
                 <control type="list" id="5153">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.3.path)) + String.IsEqual(Window(Home).Property(silo.movies.3.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -2434,6 +2494,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.4.title)]</label>
                 </control>
                 <control type="list" id="5104">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.4.path)) + !String.IsEqual(Window(Home).Property(silo.movies.4.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -2513,6 +2575,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.4.title)]</label>
                 </control>
                 <control type="list" id="5154">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.4.path)) + String.IsEqual(Window(Home).Property(silo.movies.4.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -2592,6 +2656,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.5.title)]</label>
                 </control>
                 <control type="list" id="5105">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.5.path)) + !String.IsEqual(Window(Home).Property(silo.movies.5.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -2671,6 +2737,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.5.title)]</label>
                 </control>
                 <control type="list" id="5155">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.5.path)) + String.IsEqual(Window(Home).Property(silo.movies.5.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -2750,6 +2818,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.6.title)]</label>
                 </control>
                 <control type="list" id="5106">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.6.path)) + !String.IsEqual(Window(Home).Property(silo.movies.6.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -2829,6 +2899,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.6.title)]</label>
                 </control>
                 <control type="list" id="5156">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.6.path)) + String.IsEqual(Window(Home).Property(silo.movies.6.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -2908,6 +2980,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.7.title)]</label>
                 </control>
                 <control type="list" id="5107">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.7.path)) + !String.IsEqual(Window(Home).Property(silo.movies.7.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -2987,6 +3061,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.7.title)]</label>
                 </control>
                 <control type="list" id="5157">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.7.path)) + String.IsEqual(Window(Home).Property(silo.movies.7.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -3066,6 +3142,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.8.title)]</label>
                 </control>
                 <control type="list" id="5108">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.8.path)) + !String.IsEqual(Window(Home).Property(silo.movies.8.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -3145,6 +3223,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.8.title)]</label>
                 </control>
                 <control type="list" id="5158">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.8.path)) + String.IsEqual(Window(Home).Property(silo.movies.8.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -3224,6 +3304,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.9.title)]</label>
                 </control>
                 <control type="list" id="5109">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.9.path)) + !String.IsEqual(Window(Home).Property(silo.movies.9.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -3303,6 +3385,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.9.title)]</label>
                 </control>
                 <control type="list" id="5159">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.9.path)) + String.IsEqual(Window(Home).Property(silo.movies.9.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -3382,6 +3466,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.10.title)]</label>
                 </control>
                 <control type="list" id="5110">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.10.path)) + !String.IsEqual(Window(Home).Property(silo.movies.10.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -3461,6 +3547,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.10.title)]</label>
                 </control>
                 <control type="list" id="5160">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.10.path)) + String.IsEqual(Window(Home).Property(silo.movies.10.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -3540,6 +3628,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.11.title)]</label>
                 </control>
                 <control type="list" id="5111">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.11.path)) + !String.IsEqual(Window(Home).Property(silo.movies.11.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -3619,6 +3709,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.11.title)]</label>
                 </control>
                 <control type="list" id="5161">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.11.path)) + String.IsEqual(Window(Home).Property(silo.movies.11.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -3698,6 +3790,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.12.title)]</label>
                 </control>
                 <control type="list" id="5112">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.12.path)) + !String.IsEqual(Window(Home).Property(silo.movies.12.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -3775,6 +3869,8 @@
                     <label>$INFO[Window(Home).Property(silo.movies.12.title)]</label>
                 </control>
                 <control type="list" id="5162">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEmpty(Window(Home).Property(silo.movies.12.path)) + String.IsEqual(Window(Home).Property(silo.movies.12.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -3852,6 +3948,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.1.title)]</label>
                 </control>
                 <control type="list" id="5201">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.1.path)) + !String.IsEqual(Window(Home).Property(silo.series.1.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -3930,6 +4028,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.1.title)]</label>
                 </control>
                 <control type="list" id="5251">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.1.path)) + String.IsEqual(Window(Home).Property(silo.series.1.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -4008,6 +4108,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.2.title)]</label>
                 </control>
                 <control type="list" id="5202">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.2.path)) + !String.IsEqual(Window(Home).Property(silo.series.2.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -4087,6 +4189,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.2.title)]</label>
                 </control>
                 <control type="list" id="5252">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.2.path)) + String.IsEqual(Window(Home).Property(silo.series.2.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -4166,6 +4270,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.3.title)]</label>
                 </control>
                 <control type="list" id="5203">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.3.path)) + !String.IsEqual(Window(Home).Property(silo.series.3.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -4245,6 +4351,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.3.title)]</label>
                 </control>
                 <control type="list" id="5253">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.3.path)) + String.IsEqual(Window(Home).Property(silo.series.3.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -4324,6 +4432,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.4.title)]</label>
                 </control>
                 <control type="list" id="5204">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.4.path)) + !String.IsEqual(Window(Home).Property(silo.series.4.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -4403,6 +4513,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.4.title)]</label>
                 </control>
                 <control type="list" id="5254">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.4.path)) + String.IsEqual(Window(Home).Property(silo.series.4.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -4482,6 +4594,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.5.title)]</label>
                 </control>
                 <control type="list" id="5205">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.5.path)) + !String.IsEqual(Window(Home).Property(silo.series.5.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -4561,6 +4675,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.5.title)]</label>
                 </control>
                 <control type="list" id="5255">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.5.path)) + String.IsEqual(Window(Home).Property(silo.series.5.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -4640,6 +4756,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.6.title)]</label>
                 </control>
                 <control type="list" id="5206">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.6.path)) + !String.IsEqual(Window(Home).Property(silo.series.6.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -4719,6 +4837,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.6.title)]</label>
                 </control>
                 <control type="list" id="5256">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.6.path)) + String.IsEqual(Window(Home).Property(silo.series.6.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -4798,6 +4918,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.7.title)]</label>
                 </control>
                 <control type="list" id="5207">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.7.path)) + !String.IsEqual(Window(Home).Property(silo.series.7.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -4877,6 +4999,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.7.title)]</label>
                 </control>
                 <control type="list" id="5257">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.7.path)) + String.IsEqual(Window(Home).Property(silo.series.7.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -4956,6 +5080,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.8.title)]</label>
                 </control>
                 <control type="list" id="5208">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.8.path)) + !String.IsEqual(Window(Home).Property(silo.series.8.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -5035,6 +5161,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.8.title)]</label>
                 </control>
                 <control type="list" id="5258">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.8.path)) + String.IsEqual(Window(Home).Property(silo.series.8.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -5114,6 +5242,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.9.title)]</label>
                 </control>
                 <control type="list" id="5209">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.9.path)) + !String.IsEqual(Window(Home).Property(silo.series.9.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -5193,6 +5323,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.9.title)]</label>
                 </control>
                 <control type="list" id="5259">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.9.path)) + String.IsEqual(Window(Home).Property(silo.series.9.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -5272,6 +5404,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.10.title)]</label>
                 </control>
                 <control type="list" id="5210">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.10.path)) + !String.IsEqual(Window(Home).Property(silo.series.10.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -5351,6 +5485,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.10.title)]</label>
                 </control>
                 <control type="list" id="5260">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.10.path)) + String.IsEqual(Window(Home).Property(silo.series.10.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -5430,6 +5566,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.11.title)]</label>
                 </control>
                 <control type="list" id="5211">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.11.path)) + !String.IsEqual(Window(Home).Property(silo.series.11.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -5509,6 +5647,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.11.title)]</label>
                 </control>
                 <control type="list" id="5261">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.11.path)) + String.IsEqual(Window(Home).Property(silo.series.11.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -5588,6 +5728,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.12.title)]</label>
                 </control>
                 <control type="list" id="5212">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.12.path)) + !String.IsEqual(Window(Home).Property(silo.series.12.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>402</height>
                     <orientation>horizontal</orientation>
@@ -5665,6 +5807,8 @@
                     <label>$INFO[Window(Home).Property(silo.series.12.title)]</label>
                 </control>
                 <control type="list" id="5262">
+                    <!-- Repeated here: Control.IsVisible() ignores the group's condition. -->
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEmpty(Window(Home).Property(silo.series.12.path)) + String.IsEqual(Window(Home).Property(silo.series.12.style),landscape)</visible>
                     <left>82</left><top>52</top>
                     <width>1838</width><height>214</height>
                     <orientation>horizontal</orientation>
@@ -5772,6 +5916,16 @@
                     <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
                     <texturenofocus />
                     <onclick>ActivateWindow(1107)</onclick>
+                    <ondown condition="Control.IsVisible(5001)">SetFocus(5001)</ondown>
+                    <ondown condition="Control.IsVisible(5051)">SetFocus(5051)</ondown>
+                    <ondown condition="Control.IsVisible(5101)">SetFocus(5101)</ondown>
+                    <ondown condition="Control.IsVisible(5151)">SetFocus(5151)</ondown>
+                    <ondown condition="Control.IsVisible(5201)">SetFocus(5201)</ondown>
+                    <ondown condition="Control.IsVisible(5251)">SetFocus(5251)</ondown>
+                    <onright condition="Control.IsVisible(9002)">SetFocus(9002)</onright>
+                    <onright condition="Control.IsVisible(9003) + !Control.IsVisible(9002)">SetFocus(9003)</onright>
+                    <onright condition="Control.IsVisible(9004) + !Control.IsVisible(9002) + !Control.IsVisible(9003)">SetFocus(9004)</onright>
+                    <onright condition="Control.IsVisible(9009) + !Control.IsVisible(9002) + !Control.IsVisible(9003) + !Control.IsVisible(9004)">SetFocus(9009)</onright>
                 </control>
                 <control type="image">
                     <left>14</left><top>14</top>
@@ -5803,6 +5957,16 @@
                     <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
                     <texturenofocus />
                     <onclick>SetProperty(silo.page,home,home)</onclick>
+                    <ondown condition="Control.IsVisible(5001)">SetFocus(5001)</ondown>
+                    <ondown condition="Control.IsVisible(5051)">SetFocus(5051)</ondown>
+                    <ondown condition="Control.IsVisible(5101)">SetFocus(5101)</ondown>
+                    <ondown condition="Control.IsVisible(5151)">SetFocus(5151)</ondown>
+                    <ondown condition="Control.IsVisible(5201)">SetFocus(5201)</ondown>
+                    <ondown condition="Control.IsVisible(5251)">SetFocus(5251)</ondown>
+                    <onright condition="Control.IsVisible(9003)">SetFocus(9003)</onright>
+                    <onright condition="Control.IsVisible(9004) + !Control.IsVisible(9003)">SetFocus(9004)</onright>
+                    <onright condition="Control.IsVisible(9009) + !Control.IsVisible(9003) + !Control.IsVisible(9004)">SetFocus(9009)</onright>
+                    <onleft condition="Control.IsVisible(9001)">SetFocus(9001)</onleft>
                     <onclick condition="Control.IsVisible(5001)">SetFocus(5001)</onclick>
                     <onclick condition="Control.IsVisible(5051)">SetFocus(5051)</onclick>
                 </control>
@@ -5816,6 +5980,7 @@
                     <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !Control.HasFocus(9003)</visible>
                 </control>
                 <control type="button" id="9003">
+                <visible>String.Contains(Window(Home).Property(silo.pages),movies)</visible>
                     <width>162</width><height>60</height>
                     <label>Movies</label>
                     <font>silo_tab</font>
@@ -5825,6 +5990,16 @@
                     <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
                     <texturenofocus />
                     <onclick>SetProperty(silo.page,movies,home)</onclick>
+                    <ondown condition="Control.IsVisible(5001)">SetFocus(5001)</ondown>
+                    <ondown condition="Control.IsVisible(5051)">SetFocus(5051)</ondown>
+                    <ondown condition="Control.IsVisible(5101)">SetFocus(5101)</ondown>
+                    <ondown condition="Control.IsVisible(5151)">SetFocus(5151)</ondown>
+                    <ondown condition="Control.IsVisible(5201)">SetFocus(5201)</ondown>
+                    <ondown condition="Control.IsVisible(5251)">SetFocus(5251)</ondown>
+                    <onright condition="Control.IsVisible(9004)">SetFocus(9004)</onright>
+                    <onright condition="Control.IsVisible(9009) + !Control.IsVisible(9004)">SetFocus(9009)</onright>
+                    <onleft condition="Control.IsVisible(9002)">SetFocus(9002)</onleft>
+                    <onleft condition="Control.IsVisible(9001) + !Control.IsVisible(9002)">SetFocus(9001)</onleft>
                     <onclick condition="Control.IsVisible(5101)">SetFocus(5101)</onclick>
                     <onclick condition="Control.IsVisible(5151)">SetFocus(5151)</onclick>
                 </control>
@@ -5838,6 +6013,7 @@
                     <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !Control.HasFocus(9004)</visible>
                 </control>
                 <control type="button" id="9004">
+                <visible>String.Contains(Window(Home).Property(silo.pages),series)</visible>
                     <width>162</width><height>60</height>
                     <label>Series</label>
                     <font>silo_tab</font>
@@ -5847,6 +6023,16 @@
                     <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
                     <texturenofocus />
                     <onclick>SetProperty(silo.page,series,home)</onclick>
+                    <ondown condition="Control.IsVisible(5001)">SetFocus(5001)</ondown>
+                    <ondown condition="Control.IsVisible(5051)">SetFocus(5051)</ondown>
+                    <ondown condition="Control.IsVisible(5101)">SetFocus(5101)</ondown>
+                    <ondown condition="Control.IsVisible(5151)">SetFocus(5151)</ondown>
+                    <ondown condition="Control.IsVisible(5201)">SetFocus(5201)</ondown>
+                    <ondown condition="Control.IsVisible(5251)">SetFocus(5251)</ondown>
+                    <onright condition="Control.IsVisible(9009)">SetFocus(9009)</onright>
+                    <onleft condition="Control.IsVisible(9003)">SetFocus(9003)</onleft>
+                    <onleft condition="Control.IsVisible(9002) + !Control.IsVisible(9003)">SetFocus(9002)</onleft>
+                    <onleft condition="Control.IsVisible(9001) + !Control.IsVisible(9003) + !Control.IsVisible(9002)">SetFocus(9001)</onleft>
                     <onclick condition="Control.IsVisible(5201)">SetFocus(5201)</onclick>
                     <onclick condition="Control.IsVisible(5251)">SetFocus(5251)</onclick>
                 </control>
@@ -5859,6 +6045,16 @@
                     <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
                     <texturenofocus />
                     <onclick>ActivateWindow(Settings)</onclick>
+                    <ondown condition="Control.IsVisible(5001)">SetFocus(5001)</ondown>
+                    <ondown condition="Control.IsVisible(5051)">SetFocus(5051)</ondown>
+                    <ondown condition="Control.IsVisible(5101)">SetFocus(5101)</ondown>
+                    <ondown condition="Control.IsVisible(5151)">SetFocus(5151)</ondown>
+                    <ondown condition="Control.IsVisible(5201)">SetFocus(5201)</ondown>
+                    <ondown condition="Control.IsVisible(5251)">SetFocus(5251)</ondown>
+                    <onleft condition="Control.IsVisible(9004)">SetFocus(9004)</onleft>
+                    <onleft condition="Control.IsVisible(9003) + !Control.IsVisible(9004)">SetFocus(9003)</onleft>
+                    <onleft condition="Control.IsVisible(9002) + !Control.IsVisible(9004) + !Control.IsVisible(9003)">SetFocus(9002)</onleft>
+                    <onleft condition="Control.IsVisible(9001) + !Control.IsVisible(9004) + !Control.IsVisible(9003) + !Control.IsVisible(9002)">SetFocus(9001)</onleft>
                 </control>
                 <control type="image">
                     <left>14</left><top>14</top>
