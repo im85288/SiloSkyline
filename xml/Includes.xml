@@ -260,6 +260,13 @@
 						<textcolor>$PARAM[fontcolor]</textcolor>
 						<label>$INFO[ListItem.Label]</label>
 					</control>
+					<!-- Silo Skyline: a tick on the items chosen in a multi-select. -->
+					<control type="image">
+						<right>24</right><top>19</top>
+						<width>32</width><height>32</height>
+						<texture colordiffuse="C7EDEDED">OverlayWatched.png</texture>
+						<visible>ListItem.IsSelected</visible>
+					</control>
 				</control>
 			</itemlayout>
 			<focusedlayout width="$PARAM[width]" height="$PARAM[height]">
@@ -318,6 +325,7 @@
 						<aligny>center</aligny>
 						<label>$INFO[ListItem.Label]</label>
 						<textcolor>FF000000</textcolor>
+						<selectedcolor>FF000000</selectedcolor>
 						<visible>Control.HasFocus($PARAM[list_id])</visible>
 						<scroll>true</scroll>
 					</control>
@@ -332,6 +340,20 @@
 						<label>$INFO[ListItem.Label]</label>
 						<visible>!Control.HasFocus($PARAM[list_id])</visible>
 						<scroll>true</scroll>
+					</control>
+					<!-- Silo Skyline: a tick on the items chosen in a multi-select. -->
+					<control type="image">
+						<right>24</right><top>19</top>
+						<width>32</width><height>32</height>
+						<texture colordiffuse="FF000000">OverlayWatched.png</texture>
+						<visible>ListItem.IsSelected + Control.HasFocus($PARAM[list_id])</visible>
+					</control>
+					<!-- Silo Skyline: a tick on the items chosen in a multi-select. -->
+					<control type="image">
+						<right>24</right><top>19</top>
+						<width>32</width><height>32</height>
+						<texture colordiffuse="C7EDEDED">OverlayWatched.png</texture>
+						<visible>ListItem.IsSelected + !Control.HasFocus($PARAM[list_id])</visible>
 					</control>
 				</control>
 			</focusedlayout>

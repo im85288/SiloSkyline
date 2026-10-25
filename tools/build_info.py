@@ -416,11 +416,14 @@ def build():
        'episode_card': episode_card(False), 'episode_card_focused': episode_card(True)}
 
 
-SHOW = 'String.IsEqual(ListItem.DBType,tvshow)'
+# A series Silo can request is a tvshow to Kodi too, but has no library
+# seasons or episodes: those sections are for library shows only.
+NOT_REQUEST = 'String.IsEmpty(ListItem.Property(silo.request.tmdb))'
+SHOW = '[String.IsEqual(ListItem.DBType,tvshow) + %s]' % NOT_REQUEST
 EPISODE_PILLS = '[Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]'
 # On an episode's page: the episode opened (silo.episode_id, set on load).
 CURRENT = 'String.IsEqual(ListItem.DBID,Window(movieinformation).Property(silo.episode_id))'
-HAS_NEXT = 'Integer.IsGreater(Container(62).NumItems,0)'
+HAS_NEXT = '[Integer.IsGreater(Container(62).NumItems,0) + %s]' % NOT_REQUEST
 NEXT_EPISODE = 'videodb://tvshows/titles/$INFO[ListItem.DBID]/-1/?xsp=' + quote(json.dumps(
     {'type': 'episodes', 'order': {'method': 'episode', 'direction': 'ascending'}, 'limit': 1,
      'rules': {'and': [{'field': 'playcount', 'operator': 'is', 'value': ['0']},

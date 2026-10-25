@@ -428,8 +428,10 @@ def sections_menus():
 def tab(control_id, page, page_index):
     visible = '' if page == 'home' else \
         '\n                <visible>String.Contains(%s,%s)</visible>' % (prop('silo.pages'), page)
+    # The group has an id (the button's + 300) so the grouplist can point the
+    # custom buttons beside it here.
     return '''
-            <control type="group">
+            <control type="group" id="%(group)d">
                 <width>%(width)d</width><height>60</height>%(visible)s
                 <control type="image">
                     <width>%(width)d</width><height>60</height>
@@ -449,7 +451,7 @@ def tab(control_id, page, page_index):
                     <onclick%(unless_open)s>ClearProperty(silo.row,home)</onclick>%(moves)s
 %(focus_rows)s
                 </control>
-            </control>''' % {'width': tab_width(page), 'visible': visible,
+            </control>''' % {'width': tab_width(page), 'visible': visible, 'group': control_id + 300,
                             'selected': page_visible(page), 'id': control_id,
                             'label': TAB_LABELS[page],
                             'dim': TAB_DIM, 'text': TEXT, 'page': page,
@@ -463,7 +465,7 @@ def tab(control_id, page, page_index):
 
 def icon_tab(control_id, icon, action):
     return '''
-            <control type="group">
+            <control type="group" id="%(group)d">
                 <width>60</width><height>60</height>
                 <control type="button" id="%(id)d">
                     <width>60</width><height>60</height>
@@ -484,7 +486,7 @@ def icon_tab(control_id, icon, action):
                     <texture colordiffuse="%(dim)s">%(icon)s</texture>
                     <visible>!Control.HasFocus(%(id)d)</visible>
                 </control>
-            </control>''' % {'id': control_id, 'text': TEXT, 'action': action, 'icon': icon, 'dim': TAB_DIM,
+            </control>''' % {'id': control_id, 'group': control_id + 300, 'text': TEXT, 'action': action, 'icon': icon, 'dim': TAB_DIM,
                             'moves': bar_moves(control_id)}
 
 
@@ -582,7 +584,10 @@ def custom_items():
                     <onclick condition="%(has_widgets)s">SetProperty(silo.custom.button,%(id)d,home)</onclick>%(actions)s
                 </control>''' % {'label': label, 'id': control_id, 'dim': TAB_DIM, 'text': TEXT, 'has_widgets': has_widgets,
                              'path': shortcut(slot, 'Property(path)'), 'actions': actions,
-                             'nofocus': '$VAR[SiloCustomTab%d]' % control_id, 'moves': bar_moves(control_id)}
+                             'nofocus': '$VAR[SiloCustomTab%d]' % control_id,
+                             # Left and right come from the grouplist: Kodi points its direct
+                             # children at their neighbours (passing hidden ones), over ours.
+                             'moves': bar_down('                    ')}
     return '''
         <!-- Skin Shortcuts' main menu, built into script-skinshortcuts-includes.xml. -->
         <control type="list" id="%d">
