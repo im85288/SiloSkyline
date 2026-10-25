@@ -300,6 +300,8 @@ VARIABLES = '''
     <variable name="SiloBrowseTitle">
         <value condition="String.IsEqual(Container.FolderPath,plugin://plugin.video.silokodiconnect/)">SiloKodiConnect</value>
         <value condition="!String.IsEmpty(Container.PluginCategory)">$INFO[Container.PluginCategory]</value>
+        <value condition="String.StartsWith(Container.FolderPath,videodb://movies/titles/)">Movies</value>
+        <value condition="String.StartsWith(Container.FolderPath,videodb://tvshows/titles/) + Container.Content(tvshows)">Series</value>
         <value condition="Container.Content(episodes) + String.IsEqual(Container.FolderName,Container.ShowTitle)">$INFO[Container.ShowTitle]</value>
         <value condition="!String.IsEmpty(Container.ShowTitle) + Container.Content(episodes)">$INFO[Container.ShowTitle] · $INFO[Container.FolderName]</value>
         <value>$INFO[Container.FolderName]</value>

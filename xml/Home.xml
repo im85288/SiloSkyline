@@ -10123,25 +10123,26 @@
                 </control>
             </control>
             <control type="group">
-                <width>162</width><height>60</height>
+                <width>190</width><height>60</height>
                 <visible>String.Contains(Window(Home).Property(silo.pages),movies)</visible>
                 <control type="image">
-                    <width>162</width><height>60</height>
+                    <width>190</width><height>60</height>
                     <texture border="30" colordiffuse="26FFFFFF">silo/pill.png</texture>
                     <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !Control.HasFocus(9003)</visible>
                 </control>
                 <control type="button" id="9003">
                 <visible>String.Contains(Window(Home).Property(silo.pages),movies)</visible>
-                    <width>162</width><height>60</height>
-                    <label>Movies</label>
+                    <width>190</width><height>60</height>
+                    <label>Movies </label>
                     <font>silo_tab</font>
                     <align>center</align><aligny>center</aligny>
                     <textcolor>B3EDEDED</textcolor>
                     <focusedcolor>FF000000</focusedcolor>
                     <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
                     <texturenofocus />
-                    <onclick>SetProperty(silo.page,movies,home)</onclick>
-                    <onclick>ClearProperty(silo.row,home)</onclick>
+                    <onclick condition="String.IsEqual(Window(Home).Property(silo.page),movies)">SetFocus(9203,0,absolute)</onclick>
+                    <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),movies)]">SetProperty(silo.page,movies,home)</onclick>
+                    <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),movies)]">ClearProperty(silo.row,home)</onclick>
                     <ondown condition="$EXP[SiloRow5001]">SetFocus(5001)</ondown>
                     <ondown condition="$EXP[SiloRow5051] + !$EXP[SiloRow5001]">SetFocus(5051)</ondown>
                     <ondown condition="$EXP[SiloRow5002] + !$EXP[SiloRow5001] + !$EXP[SiloRow5051]">SetFocus(5002)</ondown>
@@ -10173,36 +10174,47 @@
                     <onleft condition="Control.IsVisible(9002)">SetFocus(9002)</onleft>
                     <onleft condition="Control.IsVisible(9001) + !Control.IsVisible(9002)">SetFocus(9001)</onleft>
 
-                    <onclick condition="$EXP[SiloRow5101]">SetFocus(5101)</onclick>
-                    <onclick condition="$EXP[SiloRow5151] + !$EXP[SiloRow5101]">SetFocus(5151)</onclick>
-                    <onclick condition="$EXP[SiloRow5102] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(5102)</onclick>
-                    <onclick condition="$EXP[SiloRow5152] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102]">SetFocus(5152)</onclick>
-                    <onclick condition="$EXP[SiloRow5103] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(5103)</onclick>
-                    <onclick condition="$EXP[SiloRow5153] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103]">SetFocus(5153)</onclick>
-                    <onclick condition="$EXP[SiloRow5104] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(5104)</onclick>
-                    <onclick condition="$EXP[SiloRow5154] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104]">SetFocus(5154)</onclick>
+                    <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),movies)] + $EXP[SiloRow5101]">SetFocus(5101)</onclick>
+                    <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),movies)] + $EXP[SiloRow5151] + !$EXP[SiloRow5101]">SetFocus(5151)</onclick>
+                    <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),movies)] + $EXP[SiloRow5102] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(5102)</onclick>
+                    <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),movies)] + $EXP[SiloRow5152] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102]">SetFocus(5152)</onclick>
+                    <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),movies)] + $EXP[SiloRow5103] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(5103)</onclick>
+                    <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),movies)] + $EXP[SiloRow5153] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103]">SetFocus(5153)</onclick>
+                    <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),movies)] + $EXP[SiloRow5104] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(5104)</onclick>
+                    <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),movies)] + $EXP[SiloRow5154] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104]">SetFocus(5154)</onclick>
+                </control>
+                <control type="image">
+                    <left>148</left><top>22</top><width>16</width><height>16</height>
+                    <texture colordiffuse="FF000000">overlays/arrowdown.png</texture>
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + Control.HasFocus(9003)</visible>
+                </control>
+                <control type="image">
+                    <left>148</left><top>22</top><width>16</width><height>16</height>
+                    <texture colordiffuse="B3EDEDED">overlays/arrowdown.png</texture>
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !Control.HasFocus(9003)</visible>
                 </control>
             </control>
             <control type="group">
-                <width>162</width><height>60</height>
+                <width>190</width><height>60</height>
                 <visible>String.Contains(Window(Home).Property(silo.pages),series)</visible>
                 <control type="image">
-                    <width>162</width><height>60</height>
+                    <width>190</width><height>60</height>
                     <texture border="30" colordiffuse="26FFFFFF">silo/pill.png</texture>
                     <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !Control.HasFocus(9004)</visible>
                 </control>
                 <control type="button" id="9004">
                 <visible>String.Contains(Window(Home).Property(silo.pages),series)</visible>
-                    <width>162</width><height>60</height>
-                    <label>Series</label>
+                    <width>190</width><height>60</height>
+                    <label>Series </label>
                     <font>silo_tab</font>
                     <align>center</align><aligny>center</aligny>
                     <textcolor>B3EDEDED</textcolor>
                     <focusedcolor>FF000000</focusedcolor>
                     <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
                     <texturenofocus />
-                    <onclick>SetProperty(silo.page,series,home)</onclick>
-                    <onclick>ClearProperty(silo.row,home)</onclick>
+                    <onclick condition="String.IsEqual(Window(Home).Property(silo.page),series)">SetFocus(9204,0,absolute)</onclick>
+                    <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),series)]">SetProperty(silo.page,series,home)</onclick>
+                    <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),series)]">ClearProperty(silo.row,home)</onclick>
                     <ondown condition="$EXP[SiloRow5001]">SetFocus(5001)</ondown>
                     <ondown condition="$EXP[SiloRow5051] + !$EXP[SiloRow5001]">SetFocus(5051)</ondown>
                     <ondown condition="$EXP[SiloRow5002] + !$EXP[SiloRow5001] + !$EXP[SiloRow5051]">SetFocus(5002)</ondown>
@@ -10234,14 +10246,24 @@
                     <onleft condition="Control.IsVisible(9002) + !Control.IsVisible(9003)">SetFocus(9002)</onleft>
                     <onleft condition="Control.IsVisible(9001) + !Control.IsVisible(9003) + !Control.IsVisible(9002)">SetFocus(9001)</onleft>
 
-                    <onclick condition="$EXP[SiloRow5201]">SetFocus(5201)</onclick>
-                    <onclick condition="$EXP[SiloRow5251] + !$EXP[SiloRow5201]">SetFocus(5251)</onclick>
-                    <onclick condition="$EXP[SiloRow5202] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(5202)</onclick>
-                    <onclick condition="$EXP[SiloRow5252] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202]">SetFocus(5252)</onclick>
-                    <onclick condition="$EXP[SiloRow5203] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(5203)</onclick>
-                    <onclick condition="$EXP[SiloRow5253] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203]">SetFocus(5253)</onclick>
-                    <onclick condition="$EXP[SiloRow5204] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(5204)</onclick>
-                    <onclick condition="$EXP[SiloRow5254] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204]">SetFocus(5254)</onclick>
+                    <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),series)] + $EXP[SiloRow5201]">SetFocus(5201)</onclick>
+                    <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),series)] + $EXP[SiloRow5251] + !$EXP[SiloRow5201]">SetFocus(5251)</onclick>
+                    <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),series)] + $EXP[SiloRow5202] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(5202)</onclick>
+                    <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),series)] + $EXP[SiloRow5252] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202]">SetFocus(5252)</onclick>
+                    <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),series)] + $EXP[SiloRow5203] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(5203)</onclick>
+                    <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),series)] + $EXP[SiloRow5253] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203]">SetFocus(5253)</onclick>
+                    <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),series)] + $EXP[SiloRow5204] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(5204)</onclick>
+                    <onclick condition="![String.IsEqual(Window(Home).Property(silo.page),series)] + $EXP[SiloRow5254] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204]">SetFocus(5254)</onclick>
+                </control>
+                <control type="image">
+                    <left>148</left><top>22</top><width>16</width><height>16</height>
+                    <texture colordiffuse="FF000000">overlays/arrowdown.png</texture>
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + Control.HasFocus(9004)</visible>
+                </control>
+                <control type="image">
+                    <left>148</left><top>22</top><width>16</width><height>16</height>
+                    <texture colordiffuse="B3EDEDED">overlays/arrowdown.png</texture>
+                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !Control.HasFocus(9004)</visible>
                 </control>
             </control>
             <control type="group">
@@ -10418,6 +10440,113 @@
                 <width>64</width><height>64</height>
                 <texture colordiffuse="FFEDEDED">silo/avatar_ring.png</texture>
                 <visible>Control.HasFocus(9011)</visible>
+            </control>
+        </control>
+
+        <control type="group">
+            <left>790</left><top>130</top>
+            <!-- Present but faded out until it has focus: Kodi can't focus a hidden control. -->
+            <animation effect="fade" start="100" end="0" time="120" condition="!Control.HasFocus(9203)">Conditional</animation>
+            <control type="image">
+                <width>340</width><height>212</height>
+                <texture border="14" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+            </control>
+            <control type="list" id="9203">
+                <left>10</left><top>10</top>
+                <width>320</width><height>192</height>
+                <orientation>vertical</orientation>
+                <onup>9003</onup>
+                <onback>SetFocus(9003)</onback>
+                <onleft>noop</onleft><onright>noop</onright>
+                <itemlayout width="320" height="64">
+                    <control type="label">
+                        <left>28</left><width>280</width><height>64</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                </itemlayout>
+                <focusedlayout width="320" height="64">
+                    <control type="image">
+                        <width>320</width><height>64</height>
+                        <texture border="30" colordiffuse="FFEDEDED">silo/pill.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>28</left><width>280</width><height>64</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FF000000</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                </focusedlayout>
+                <content>
+                    <item>
+                        <label>Recommended</label>
+                        <onclick>SetFocus(4000)</onclick>
+                    </item>
+                    <item>
+                        <label>Browse</label>
+                        <onclick>ActivateWindow(Videos,videodb://movies/titles/,return)</onclick>
+                    </item>
+                    <item>
+                        <label>Collections</label>
+                        <onclick>ActivateWindow(Videos,plugin://plugin.video.silokodiconnect/?mode=sections&amp;type=collection,return)</onclick>
+                    </item>
+                </content>
+            </control>
+        </control>
+        <control type="group">
+            <left>988</left><top>130</top>
+            <!-- Present but faded out until it has focus: Kodi can't focus a hidden control. -->
+            <animation effect="fade" start="100" end="0" time="120" condition="!Control.HasFocus(9204)">Conditional</animation>
+            <control type="image">
+                <width>340</width><height>212</height>
+                <texture border="14" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+            </control>
+            <control type="list" id="9204">
+                <left>10</left><top>10</top>
+                <width>320</width><height>192</height>
+                <orientation>vertical</orientation>
+                <onup>9004</onup>
+                <onback>SetFocus(9004)</onback>
+                <onleft>noop</onleft><onright>noop</onright>
+                <itemlayout width="320" height="64">
+                    <control type="label">
+                        <left>28</left><width>280</width><height>64</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                </itemlayout>
+                <focusedlayout width="320" height="64">
+                    <control type="image">
+                        <width>320</width><height>64</height>
+                        <texture border="30" colordiffuse="FFEDEDED">silo/pill.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>28</left><width>280</width><height>64</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FF000000</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                </focusedlayout>
+                <content>
+                    <item>
+                        <label>Recommended</label>
+                        <onclick>SetFocus(4000)</onclick>
+                    </item>
+                    <item>
+                        <label>Browse</label>
+                        <onclick>ActivateWindow(Videos,videodb://tvshows/titles/,return)</onclick>
+                    </item>
+                    <item>
+                        <label>Collections</label>
+                        <onclick>ActivateWindow(Videos,plugin://plugin.video.silokodiconnect/?mode=sections&amp;type=collection,return)</onclick>
+                    </item>
+                </content>
             </control>
         </control>
     </controls>

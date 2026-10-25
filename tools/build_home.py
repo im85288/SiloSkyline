@@ -266,6 +266,123 @@ def bar_moves(control_id):
     return out
 
 
+# Silo's library sections for a page's tab (TvLibraryPill.set): OK on the tab of
+# the page you are on opens them; down still goes to the rows. Collections are
+# Silo's collection rows, listed by SiloKodiConnect.
+COLLECTIONS = 'plugin://plugin.video.silokodiconnect/?mode=sections&amp;type=collection'
+SECTIONS = {
+    'movies': [('Recommended', None), ('Browse', 'videodb://movies/titles/'), ('Collections', COLLECTIONS)],
+    'series': [('Recommended', None), ('Browse', 'videodb://tvshows/titles/'), ('Collections', COLLECTIONS)],
+}
+BAR_GAP = 8
+
+
+def tab_width(page):
+    return 60 + 17 * len(TAB_LABELS[page]) + (28 if page in SECTIONS else 0)
+
+
+def open_sections(page, control_id):
+    """OK on the tab of the page you are on opens its sections. Kodi checks a
+    button's click conditions before running any of its actions."""
+    if page not in SECTIONS:
+        return ''
+    return ('                    <onclick condition="%s">SetFocus(%d,0,absolute)</onclick>\n'
+            % (page_visible(page), control_id + 200))
+
+
+def tab_arrow(page, control_id):
+    """A small chevron on the current page's tab: it has sections."""
+    if page not in SECTIONS:
+        return ''
+    image = '''
+                <control type="image">
+                    <left>%(x)d</left><top>22</top><width>16</width><height>16</height>
+                    <texture colordiffuse="%(colour)s">overlays/arrowdown.png</texture>
+                    <visible>%(current)s + %(focus)sControl.HasFocus(%(id)d)</visible>
+                </control>'''
+    values = {'x': tab_width(page) - 42, 'current': page_visible(page), 'id': control_id}
+    return (image % dict(values, colour='FF000000', focus='') +
+            image % dict(values, colour=TAB_DIM, focus='!'))
+
+
+def bar_positions():
+    """Each bar button's left edge: the bar is a centred grouplist."""
+    widths = [60] + [tab_width(page) for page in PAGES] + [60, 60]
+    ids = [9001] + [9002 + index for index in range(len(PAGES))] + [9009, 9010]
+    total = sum(widths) + BAR_GAP * (len(widths) - 1)
+    x, out = (1920 - total) // 2, {}
+    for control_id, width in zip(ids, widths):
+        out[control_id] = x
+        x += width + BAR_GAP
+    return out
+
+
+def sections_menus():
+    """The dropdowns under the Movies and Series tabs, styled as the power menu."""
+    out = ''
+    positions = bar_positions()
+    for index, page in enumerate(PAGES):
+        if page not in SECTIONS:
+            continue
+        tab_id = 9002 + index
+        items = ''
+        for label, path in SECTIONS[page]:
+            if path:
+                action = 'ActivateWindow(Videos,%s,return)' % path
+            else:
+                action = 'SetFocus(4000)'
+            items += '''
+                    <item>
+                        <label>%s</label>
+                        <onclick>%s</onclick>
+                    </item>''' % (label, action)
+        out += '''
+        <control type="group">
+            <left>%(x)d</left><top>%(top)d</top>
+            <!-- Present but faded out until it has focus: Kodi can't focus a hidden control. -->
+            <animation effect="fade" start="100" end="0" time="120" condition="!Control.HasFocus(%(id)d)">Conditional</animation>
+            <control type="image">
+                <width>340</width><height>%(h)d</height>
+                <texture border="14" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+            </control>
+            <control type="list" id="%(id)d">
+                <left>10</left><top>10</top>
+                <width>320</width><height>%(lh)d</height>
+                <orientation>vertical</orientation>
+                <onup>%(tab)d</onup>
+                <onback>SetFocus(%(tab)d)</onback>
+                <onleft>noop</onleft><onright>noop</onright>
+                <itemlayout width="320" height="64">
+                    <control type="label">
+                        <left>28</left><width>280</width><height>64</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>%(text)s</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                </itemlayout>
+                <focusedlayout width="320" height="64">
+                    <control type="image">
+                        <width>320</width><height>64</height>
+                        <texture border="30" colordiffuse="%(text)s">silo/pill.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>28</left><width>280</width><height>64</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FF000000</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                </focusedlayout>
+                <content>%(items)s
+                </content>
+            </control>
+        </control>''' % {'x': positions[tab_id] - 10, 'top': BAR_TOP + 74, 'id': tab_id + 200, 'tab': tab_id,
+                         'h': 20 + 64 * len(SECTIONS[page]), 'lh': 64 * len(SECTIONS[page]), 'text': TEXT,
+                         'items': items}
+    return out
+
+
 def tab(control_id, page, page_index):
     visible = '' if page == 'home' else \
         '\n                <visible>String.Contains(%s,%s)</visible>' % (prop('silo.pages'), page)
@@ -286,15 +403,21 @@ def tab(control_id, page, page_index):
                     <focusedcolor>FF000000</focusedcolor>
                     <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
                     <texturenofocus />
-                    <onclick>SetProperty(silo.page,%(page)s,home)</onclick>
-                    <onclick>ClearProperty(silo.row,home)</onclick>%(moves)s
+%(open_sections)s                    <onclick%(unless_open)s>SetProperty(silo.page,%(page)s,home)</onclick>
+                    <onclick%(unless_open)s>ClearProperty(silo.row,home)</onclick>%(moves)s
 %(focus_rows)s
-                </control>
-            </control>''' % {'width': 60 + 17 * len(TAB_LABELS[page]), 'visible': visible,
-                            'selected': page_visible(page), 'id': control_id, 'label': TAB_LABELS[page],
+                </control>%(arrow)s
+            </control>''' % {'width': tab_width(page), 'visible': visible,
+                            'selected': page_visible(page), 'id': control_id,
+                            # An em space leaves room for the sections chevron.
+                            'label': TAB_LABELS[page] + ('\u2003' if page in SECTIONS else ''),
                             'dim': TAB_DIM, 'text': TEXT, 'page': page,
                             'moves': bar_moves(control_id),
-                            'focus_rows': first_visible('onclick', page_rows(page_index, range(1, LOOKAHEAD + 1)))}
+                            'focus_rows': first_visible('onclick', page_rows(page_index, range(1, LOOKAHEAD + 1)))
+                            .replace('<onclick condition="', '<onclick condition="' + (
+                                '![' + page_visible(page) + '] + ' if page in SECTIONS else '')),
+                            'unless_open': ' condition="![' + page_visible(page) + ']"' if page in SECTIONS else '',
+                            'open_sections': open_sections(page, control_id), 'arrow': tab_arrow(page, control_id)}
 
 
 def icon_tab(control_id, icon, action):
@@ -536,12 +659,13 @@ def build():
             <itemgap>8</itemgap>%(bar_down)s%(tabs)s
         </control>
 %(avatar)s
+%(sections)s
     </controls>
 </window>
 ''' % {'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'rows_top': ROWS_TOP, 'rows_h': BAND_H,
        'row_overlap': ROW_PITCH - BAND_H,
        'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
-       'bar_down': bar_down(), 'avatar': avatar(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'background': BACKGROUND,
+       'bar_down': bar_down(), 'avatar': avatar(), 'sections': sections_menus(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'background': BACKGROUND,
        'mpaa_badge': badge('$VAR[SiloMpaa]', 40, 'silo_meta'),
        'quality_badges': ''.join(badge('$VAR[SiloBadge%d]' % n, 36, 'silo_badge') for n in (1, 2, 3))}
 
