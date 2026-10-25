@@ -33,53 +33,64 @@ def has_widget(n):
     return '!String.IsEmpty(%s.Property(widgetPath%s))' % (ITEM, suffix(n))
 
 
-def row(control_id, label, value='', onclicks=(), visible='', indent=False):
+def row(control_id, label, value='', onclicks=(), visible='', indent=False, title=''):
+    """A row of the right-hand list. A row that starts a section is taller
+    and carries the section's title in its top 50 px."""
     clicks = ''.join('\n                    <onclick>%s</onclick>' % action for action in onclicks)
+    height, top = (130, 50) if title else (80, 0)
     return '''
-                <control type="button" id="%(id)d">
-                    <include>SiloShortcutButton</include>
-                    <label>%(label)s</label>
-                    <label2>%(value)s</label2>
-                    <textoffsetx>%(offset)d</textoffsetx>%(clicks)s%(visible)s
+                <control type="group" id="%(group)d">
+                    <width>934</width><height>%(height)d</height>%(visible)s
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label>%(title)s</label>
+                    </control>
+                    <control type="button" id="%(id)d">
+                        <top>%(top)d</top>
+                        <include>SiloShortcutButton</include>
+                        <label>%(label)s</label>
+                        <label2>%(value)s</label2>
+                        <textoffsetx>%(offset)d</textoffsetx>%(clicks)s
+                        <onleft>211</onleft>
+                        <!--MOVES %(id)d-->
+                    </control>
                 </control>''' % {'id': control_id, 'label': label, 'value': value, 'clicks': clicks,
-                                 'offset': 64 if indent else 32,
+                                 'offset': 64 if indent else 32, 'title': title, 'height': height, 'top': top,
+                                 # The grouplist moves only between children with ids.
+                                 'group': control_id + 20000,
                                  'visible': '\n                    <visible>%s</visible>' % visible if visible else ''}
 
 
-def heading(text, visible=''):
-    return '''
-                <control type="label">
-                    <width>860</width><height>56</height>
-                    <aligny>bottom</aligny>
-                    <font>silo_badge</font>
-                    <textcolor>8CEDEDED</textcolor>
-                    <label>%s</label>%s
-                </control>''' % (text, '\n                    <visible>%s</visible>' % visible if visible else '')
+def heading(text):
+    """A section title, drawn by the next row above itself: Kodi's grouplist
+    stops up/down at any control between buttons, even a disabled one."""
+    return text
 
 
 def widget_rows():
-    out = heading('WIDGETS', MAIN_MENU)
+    out = ''
     for n in range(1, WIDGETS + 1):
         # Widget 1 is the item's own widget properties: no widgetID.
         pick = ['ClearProperty(widgetID)' if n == 1 else 'SetProperty(widgetID,%d)' % n, 'SendClick(312)']
         shown = MAIN_MENU if n == 1 else '%s + [%s | %s]' % (MAIN_MENU, has_widget(n - 1), has_widget(n))
-        out += row(WIDGET_BUTTON + n, 'Widget %d' % n, '$VAR[SiloShortcutWidget%d]' % n, pick, shown)
+        out += row(WIDGET_BUTTON + n, 'Widget %d' % n, '$VAR[SiloShortcutWidget%d]' % n, pick, shown,
+                   title='WIDGETS' if n == 1 else '')
         out += row(STYLE_BUTTON + n, 'Card style', '$VAR[SiloShortcutStyle%d]' % n,
                    visible='%s + %s' % (MAIN_MENU, has_widget(n)), indent=True)
     return out
 
 
 def dialog():
-    rows = (heading('THIS ITEM') +
-            row(313, 'Status', '$VAR[SiloShortcutStatus]') +
+    rows = (row(313, 'Status', '$VAR[SiloShortcutStatus]', title='THIS ITEM') +
             row(401, 'Choose what it opens') +
             row(307, 'Action', '$INFO[%s.Property(path)]' % ITEM) +
             row(305, 'Label', '$INFO[%s.Label]' % ITEM) +
             widget_rows() +
-            heading('OPTIONS', MAIN_MENU) +
-            row(405, 'Submenu', 'Edit', visible=MAIN_MENU) +
-            heading('MENU') +
-            row(301, 'Add an item') +
+            row(405, 'Submenu', 'Edit', visible=MAIN_MENU, title='OPTIONS') +
+            row(301, 'Add an item', title='MENU') +
             row(303, 'Move up') +
             row(304, 'Move down') +
             row(302, 'Delete'))
@@ -88,6 +99,10 @@ def dialog():
      user's own menu items, in Silo's dialog style. -->
 <window>
     <defaultcontrol always="true">211</defaultcontrol>
+    <!-- Skin Shortcuts fills the item list just after the window opens, so the
+         default focus finds it empty and nothing has focus: the first key
+         press was lost. Focus it again once it has items. -->
+    <onload>AlarmClock(silo_editor_focus,SetFocus(211),00:01,silent)</onload>
     <include>Animation_DialogPopupOpenClose</include>
     <controls>
         <control type="image">
@@ -99,7 +114,7 @@ def dialog():
             <width>1600</width><height>940</height>
             <control type="image">
                 <width>1600</width><height>940</height>
-                <texture border="14" colordiffuse="F4131417">silo/card_landscape_mask.png</texture>
+                <texture border="14" colordiffuse="FF131417">silo/card_landscape_mask.png</texture>
             </control>
             <control type="label">
                 <left>48</left><top>28</top>
@@ -144,7 +159,7 @@ def dialog():
                 <left>630</left><top>120</top>
                 <width>934</width><height>790</height>
                 <orientation>vertical</orientation>
-                <itemgap>-8</itemgap>
+                <itemgap>0</itemgap>
                 <onleft>211</onleft>
                 <scrolltime tween="cubic" easing="out">200</scrolltime>%(rows)s
             </control>
@@ -231,7 +246,6 @@ def overrides():
         prop = 'widgetStyle' + suffix(n)
         settings += ('    <propertySettings property="%s" buttonID="%d" title="Card style" />\n'
                      % (prop, STYLE_BUTTON + n))
-        settings += '    <property property="%s" label="Auto"></property>\n' % prop
         for value, label in STYLES:
             settings += '    <property property="%s" label="%s">%s</property>\n' % (prop, label, value)
     return '''<?xml version="1.0" encoding="UTF-8"?>
@@ -242,7 +256,8 @@ def overrides():
     <!-- Silo Skyline's own menu, starting empty: not the menu another skin
          left in Skin Shortcuts' shared files. -->
     <doNotShareMenu />
-    <!-- Each widget's card style: Auto (from what it lists), Poster or Landscape. -->
+    <!-- Each widget's card style: Poster or Landscape; Skin Shortcuts' own
+         "None" leaves it to what the widget lists (shown as Auto). -->
 %s</overrides>
 ''' % settings
 
@@ -265,9 +280,29 @@ def add_variables():
         handle.write(text)
 
 
+def with_moves(xml):
+    """Up and down for each row's button: the next or previous row shown.
+    Its button sits in a group (for its section title), so the grouplist's
+    own moves never reach it."""
+    import re
+    ids = [int(found) for found in re.findall(r'<!--MOVES (\d+)-->', xml)]
+    for index, control_id in enumerate(ids):
+        moves = ''
+        for action, others in (('ondown', ids[index + 1:]), ('onup', ids[:index][::-1])):
+            skipped = []
+            for target in others:
+                condition = ' + '.join(['Control.IsVisible(%d)' % (target + 20000)] +
+                                       ['!Control.IsVisible(%d)' % (k + 20000) for k in skipped])
+                moves += '\n                        <%s condition="%s">SetFocus(%d)</%s>' % (action, condition, target,
+                                                                                        action)
+                skipped.append(target)
+        xml = xml.replace('\n                        <!--MOVES %d-->' % control_id, moves)
+    return xml
+
+
 if __name__ == '__main__':
     with open(os.path.join(ROOT, 'xml', 'script-skinshortcuts.xml'), 'w', encoding='utf-8') as handle:
-        handle.write(dialog())
+        handle.write(with_moves(dialog()))
     with open(os.path.join(ROOT, 'shortcuts', 'overrides.xml'), 'w', encoding='utf-8') as handle:
         handle.write(overrides())
     add_variables()

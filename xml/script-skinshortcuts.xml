@@ -3,6 +3,10 @@
      user's own menu items, in Silo's dialog style. -->
 <window>
     <defaultcontrol always="true">211</defaultcontrol>
+    <!-- Skin Shortcuts fills the item list just after the window opens, so the
+         default focus finds it empty and nothing has focus: the first key
+         press was lost. Focus it again once it has items. -->
+    <onload>AlarmClock(silo_editor_focus,SetFocus(211),00:01,silent)</onload>
     <include>Animation_DialogPopupOpenClose</include>
     <controls>
         <control type="image">
@@ -14,7 +18,7 @@
             <width>1600</width><height>940</height>
             <control type="image">
                 <width>1600</width><height>940</height>
-                <texture border="14" colordiffuse="F4131417">silo/card_landscape_mask.png</texture>
+                <texture border="14" colordiffuse="FF131417">silo/card_landscape_mask.png</texture>
             </control>
             <control type="label">
                 <left>48</left><top>28</top>
@@ -115,189 +119,831 @@
                 <left>630</left><top>120</top>
                 <width>934</width><height>790</height>
                 <orientation>vertical</orientation>
-                <itemgap>-8</itemgap>
+                <itemgap>0</itemgap>
                 <onleft>211</onleft>
                 <scrolltime tween="cubic" easing="out">200</scrolltime>
-                <control type="label">
-                    <width>860</width><height>56</height>
-                    <aligny>bottom</aligny>
-                    <font>silo_badge</font>
-                    <textcolor>8CEDEDED</textcolor>
-                    <label>THIS ITEM</label>
+                <control type="group" id="20313">
+                    <width>934</width><height>130</height>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label>THIS ITEM</label>
+                    </control>
+                    <control type="button" id="313">
+                        <top>50</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Status</label>
+                        <label2>$VAR[SiloShortcutStatus]</label2>
+                        <textoffsetx>32</textoffsetx>
+                        <onleft>211</onleft>
+                        <ondown condition="Control.IsVisible(20401)">SetFocus(401)</ondown>
+                        <ondown condition="Control.IsVisible(20307) + !Control.IsVisible(20401)">SetFocus(307)</ondown>
+                        <ondown condition="Control.IsVisible(20305) + !Control.IsVisible(20401) + !Control.IsVisible(20307)">SetFocus(305)</ondown>
+                        <ondown condition="Control.IsVisible(29451) + !Control.IsVisible(20401) + !Control.IsVisible(20307) + !Control.IsVisible(20305)">SetFocus(9451)</ondown>
+                        <ondown condition="Control.IsVisible(29471) + !Control.IsVisible(20401) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451)">SetFocus(9471)</ondown>
+                        <ondown condition="Control.IsVisible(29452) + !Control.IsVisible(20401) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471)">SetFocus(9452)</ondown>
+                        <ondown condition="Control.IsVisible(29472) + !Control.IsVisible(20401) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452)">SetFocus(9472)</ondown>
+                        <ondown condition="Control.IsVisible(29453) + !Control.IsVisible(20401) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472)">SetFocus(9453)</ondown>
+                        <ondown condition="Control.IsVisible(29473) + !Control.IsVisible(20401) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453)">SetFocus(9473)</ondown>
+                        <ondown condition="Control.IsVisible(29454) + !Control.IsVisible(20401) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473)">SetFocus(9454)</ondown>
+                        <ondown condition="Control.IsVisible(29474) + !Control.IsVisible(20401) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454)">SetFocus(9474)</ondown>
+                        <ondown condition="Control.IsVisible(29455) + !Control.IsVisible(20401) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474)">SetFocus(9455)</ondown>
+                        <ondown condition="Control.IsVisible(29475) + !Control.IsVisible(20401) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455)">SetFocus(9475)</ondown>
+                        <ondown condition="Control.IsVisible(29456) + !Control.IsVisible(20401) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475)">SetFocus(9456)</ondown>
+                        <ondown condition="Control.IsVisible(29476) + !Control.IsVisible(20401) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456)">SetFocus(9476)</ondown>
+                        <ondown condition="Control.IsVisible(20405) + !Control.IsVisible(20401) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476)">SetFocus(405)</ondown>
+                        <ondown condition="Control.IsVisible(20301) + !Control.IsVisible(20401) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405)">SetFocus(301)</ondown>
+                        <ondown condition="Control.IsVisible(20303) + !Control.IsVisible(20401) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301)">SetFocus(303)</ondown>
+                        <ondown condition="Control.IsVisible(20304) + !Control.IsVisible(20401) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303)">SetFocus(304)</ondown>
+                        <ondown condition="Control.IsVisible(20302) + !Control.IsVisible(20401) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303) + !Control.IsVisible(20304)">SetFocus(302)</ondown>
+                    </control>
                 </control>
-                <control type="button" id="313">
-                    <include>SiloShortcutButton</include>
-                    <label>Status</label>
-                    <label2>$VAR[SiloShortcutStatus]</label2>
-                    <textoffsetx>32</textoffsetx>
+                <control type="group" id="20401">
+                    <width>934</width><height>80</height>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label></label>
+                    </control>
+                    <control type="button" id="401">
+                        <top>0</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Choose what it opens</label>
+                        <label2></label2>
+                        <textoffsetx>32</textoffsetx>
+                        <onleft>211</onleft>
+                        <ondown condition="Control.IsVisible(20307)">SetFocus(307)</ondown>
+                        <ondown condition="Control.IsVisible(20305) + !Control.IsVisible(20307)">SetFocus(305)</ondown>
+                        <ondown condition="Control.IsVisible(29451) + !Control.IsVisible(20307) + !Control.IsVisible(20305)">SetFocus(9451)</ondown>
+                        <ondown condition="Control.IsVisible(29471) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451)">SetFocus(9471)</ondown>
+                        <ondown condition="Control.IsVisible(29452) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471)">SetFocus(9452)</ondown>
+                        <ondown condition="Control.IsVisible(29472) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452)">SetFocus(9472)</ondown>
+                        <ondown condition="Control.IsVisible(29453) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472)">SetFocus(9453)</ondown>
+                        <ondown condition="Control.IsVisible(29473) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453)">SetFocus(9473)</ondown>
+                        <ondown condition="Control.IsVisible(29454) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473)">SetFocus(9454)</ondown>
+                        <ondown condition="Control.IsVisible(29474) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454)">SetFocus(9474)</ondown>
+                        <ondown condition="Control.IsVisible(29455) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474)">SetFocus(9455)</ondown>
+                        <ondown condition="Control.IsVisible(29475) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455)">SetFocus(9475)</ondown>
+                        <ondown condition="Control.IsVisible(29456) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475)">SetFocus(9456)</ondown>
+                        <ondown condition="Control.IsVisible(29476) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456)">SetFocus(9476)</ondown>
+                        <ondown condition="Control.IsVisible(20405) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476)">SetFocus(405)</ondown>
+                        <ondown condition="Control.IsVisible(20301) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405)">SetFocus(301)</ondown>
+                        <ondown condition="Control.IsVisible(20303) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301)">SetFocus(303)</ondown>
+                        <ondown condition="Control.IsVisible(20304) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303)">SetFocus(304)</ondown>
+                        <ondown condition="Control.IsVisible(20302) + !Control.IsVisible(20307) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303) + !Control.IsVisible(20304)">SetFocus(302)</ondown>
+                        <onup condition="Control.IsVisible(20313)">SetFocus(313)</onup>
+                    </control>
                 </control>
-                <control type="button" id="401">
-                    <include>SiloShortcutButton</include>
-                    <label>Choose what it opens</label>
-                    <label2></label2>
-                    <textoffsetx>32</textoffsetx>
+                <control type="group" id="20307">
+                    <width>934</width><height>80</height>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label></label>
+                    </control>
+                    <control type="button" id="307">
+                        <top>0</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Action</label>
+                        <label2>$INFO[Container(211).ListItem.Property(path)]</label2>
+                        <textoffsetx>32</textoffsetx>
+                        <onleft>211</onleft>
+                        <ondown condition="Control.IsVisible(20305)">SetFocus(305)</ondown>
+                        <ondown condition="Control.IsVisible(29451) + !Control.IsVisible(20305)">SetFocus(9451)</ondown>
+                        <ondown condition="Control.IsVisible(29471) + !Control.IsVisible(20305) + !Control.IsVisible(29451)">SetFocus(9471)</ondown>
+                        <ondown condition="Control.IsVisible(29452) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471)">SetFocus(9452)</ondown>
+                        <ondown condition="Control.IsVisible(29472) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452)">SetFocus(9472)</ondown>
+                        <ondown condition="Control.IsVisible(29453) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472)">SetFocus(9453)</ondown>
+                        <ondown condition="Control.IsVisible(29473) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453)">SetFocus(9473)</ondown>
+                        <ondown condition="Control.IsVisible(29454) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473)">SetFocus(9454)</ondown>
+                        <ondown condition="Control.IsVisible(29474) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454)">SetFocus(9474)</ondown>
+                        <ondown condition="Control.IsVisible(29455) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474)">SetFocus(9455)</ondown>
+                        <ondown condition="Control.IsVisible(29475) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455)">SetFocus(9475)</ondown>
+                        <ondown condition="Control.IsVisible(29456) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475)">SetFocus(9456)</ondown>
+                        <ondown condition="Control.IsVisible(29476) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456)">SetFocus(9476)</ondown>
+                        <ondown condition="Control.IsVisible(20405) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476)">SetFocus(405)</ondown>
+                        <ondown condition="Control.IsVisible(20301) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405)">SetFocus(301)</ondown>
+                        <ondown condition="Control.IsVisible(20303) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301)">SetFocus(303)</ondown>
+                        <ondown condition="Control.IsVisible(20304) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303)">SetFocus(304)</ondown>
+                        <ondown condition="Control.IsVisible(20302) + !Control.IsVisible(20305) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303) + !Control.IsVisible(20304)">SetFocus(302)</ondown>
+                        <onup condition="Control.IsVisible(20401)">SetFocus(401)</onup>
+                        <onup condition="Control.IsVisible(20313) + !Control.IsVisible(20401)">SetFocus(313)</onup>
+                    </control>
                 </control>
-                <control type="button" id="307">
-                    <include>SiloShortcutButton</include>
-                    <label>Action</label>
-                    <label2>$INFO[Container(211).ListItem.Property(path)]</label2>
-                    <textoffsetx>32</textoffsetx>
+                <control type="group" id="20305">
+                    <width>934</width><height>80</height>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label></label>
+                    </control>
+                    <control type="button" id="305">
+                        <top>0</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Label</label>
+                        <label2>$INFO[Container(211).ListItem.Label]</label2>
+                        <textoffsetx>32</textoffsetx>
+                        <onleft>211</onleft>
+                        <ondown condition="Control.IsVisible(29451)">SetFocus(9451)</ondown>
+                        <ondown condition="Control.IsVisible(29471) + !Control.IsVisible(29451)">SetFocus(9471)</ondown>
+                        <ondown condition="Control.IsVisible(29452) + !Control.IsVisible(29451) + !Control.IsVisible(29471)">SetFocus(9452)</ondown>
+                        <ondown condition="Control.IsVisible(29472) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452)">SetFocus(9472)</ondown>
+                        <ondown condition="Control.IsVisible(29453) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472)">SetFocus(9453)</ondown>
+                        <ondown condition="Control.IsVisible(29473) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453)">SetFocus(9473)</ondown>
+                        <ondown condition="Control.IsVisible(29454) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473)">SetFocus(9454)</ondown>
+                        <ondown condition="Control.IsVisible(29474) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454)">SetFocus(9474)</ondown>
+                        <ondown condition="Control.IsVisible(29455) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474)">SetFocus(9455)</ondown>
+                        <ondown condition="Control.IsVisible(29475) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455)">SetFocus(9475)</ondown>
+                        <ondown condition="Control.IsVisible(29456) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475)">SetFocus(9456)</ondown>
+                        <ondown condition="Control.IsVisible(29476) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456)">SetFocus(9476)</ondown>
+                        <ondown condition="Control.IsVisible(20405) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476)">SetFocus(405)</ondown>
+                        <ondown condition="Control.IsVisible(20301) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405)">SetFocus(301)</ondown>
+                        <ondown condition="Control.IsVisible(20303) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301)">SetFocus(303)</ondown>
+                        <ondown condition="Control.IsVisible(20304) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303)">SetFocus(304)</ondown>
+                        <ondown condition="Control.IsVisible(20302) + !Control.IsVisible(29451) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303) + !Control.IsVisible(20304)">SetFocus(302)</ondown>
+                        <onup condition="Control.IsVisible(20307)">SetFocus(307)</onup>
+                        <onup condition="Control.IsVisible(20401) + !Control.IsVisible(20307)">SetFocus(401)</onup>
+                        <onup condition="Control.IsVisible(20313) + !Control.IsVisible(20307) + !Control.IsVisible(20401)">SetFocus(313)</onup>
+                    </control>
                 </control>
-                <control type="button" id="305">
-                    <include>SiloShortcutButton</include>
-                    <label>Label</label>
-                    <label2>$INFO[Container(211).ListItem.Label]</label2>
-                    <textoffsetx>32</textoffsetx>
-                </control>
-                <control type="label">
-                    <width>860</width><height>56</height>
-                    <aligny>bottom</aligny>
-                    <font>silo_badge</font>
-                    <textcolor>8CEDEDED</textcolor>
-                    <label>WIDGETS</label>
+                <control type="group" id="29451">
+                    <width>934</width><height>130</height>
                     <visible>String.IsEqual(Window.Property(groupname),mainmenu)</visible>
-                </control>
-                <control type="button" id="9451">
-                    <include>SiloShortcutButton</include>
-                    <label>Widget 1</label>
-                    <label2>$VAR[SiloShortcutWidget1]</label2>
-                    <textoffsetx>32</textoffsetx>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label>WIDGETS</label>
+                    </control>
+                    <control type="button" id="9451">
+                        <top>50</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Widget 1</label>
+                        <label2>$VAR[SiloShortcutWidget1]</label2>
+                        <textoffsetx>32</textoffsetx>
                     <onclick>ClearProperty(widgetID)</onclick>
                     <onclick>SendClick(312)</onclick>
-                    <visible>String.IsEqual(Window.Property(groupname),mainmenu)</visible>
+                        <onleft>211</onleft>
+                        <ondown condition="Control.IsVisible(29471)">SetFocus(9471)</ondown>
+                        <ondown condition="Control.IsVisible(29452) + !Control.IsVisible(29471)">SetFocus(9452)</ondown>
+                        <ondown condition="Control.IsVisible(29472) + !Control.IsVisible(29471) + !Control.IsVisible(29452)">SetFocus(9472)</ondown>
+                        <ondown condition="Control.IsVisible(29453) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472)">SetFocus(9453)</ondown>
+                        <ondown condition="Control.IsVisible(29473) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453)">SetFocus(9473)</ondown>
+                        <ondown condition="Control.IsVisible(29454) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473)">SetFocus(9454)</ondown>
+                        <ondown condition="Control.IsVisible(29474) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454)">SetFocus(9474)</ondown>
+                        <ondown condition="Control.IsVisible(29455) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474)">SetFocus(9455)</ondown>
+                        <ondown condition="Control.IsVisible(29475) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455)">SetFocus(9475)</ondown>
+                        <ondown condition="Control.IsVisible(29456) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475)">SetFocus(9456)</ondown>
+                        <ondown condition="Control.IsVisible(29476) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456)">SetFocus(9476)</ondown>
+                        <ondown condition="Control.IsVisible(20405) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476)">SetFocus(405)</ondown>
+                        <ondown condition="Control.IsVisible(20301) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405)">SetFocus(301)</ondown>
+                        <ondown condition="Control.IsVisible(20303) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301)">SetFocus(303)</ondown>
+                        <ondown condition="Control.IsVisible(20304) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303)">SetFocus(304)</ondown>
+                        <ondown condition="Control.IsVisible(20302) + !Control.IsVisible(29471) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303) + !Control.IsVisible(20304)">SetFocus(302)</ondown>
+                        <onup condition="Control.IsVisible(20305)">SetFocus(305)</onup>
+                        <onup condition="Control.IsVisible(20307) + !Control.IsVisible(20305)">SetFocus(307)</onup>
+                        <onup condition="Control.IsVisible(20401) + !Control.IsVisible(20305) + !Control.IsVisible(20307)">SetFocus(401)</onup>
+                        <onup condition="Control.IsVisible(20313) + !Control.IsVisible(20305) + !Control.IsVisible(20307) + !Control.IsVisible(20401)">SetFocus(313)</onup>
+                    </control>
                 </control>
-                <control type="button" id="9471">
-                    <include>SiloShortcutButton</include>
-                    <label>Card style</label>
-                    <label2>$VAR[SiloShortcutStyle1]</label2>
-                    <textoffsetx>64</textoffsetx>
+                <control type="group" id="29471">
+                    <width>934</width><height>80</height>
                     <visible>String.IsEqual(Window.Property(groupname),mainmenu) + !String.IsEmpty(Container(211).ListItem.Property(widgetPath))</visible>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label></label>
+                    </control>
+                    <control type="button" id="9471">
+                        <top>0</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Card style</label>
+                        <label2>$VAR[SiloShortcutStyle1]</label2>
+                        <textoffsetx>64</textoffsetx>
+                        <onleft>211</onleft>
+                        <ondown condition="Control.IsVisible(29452)">SetFocus(9452)</ondown>
+                        <ondown condition="Control.IsVisible(29472) + !Control.IsVisible(29452)">SetFocus(9472)</ondown>
+                        <ondown condition="Control.IsVisible(29453) + !Control.IsVisible(29452) + !Control.IsVisible(29472)">SetFocus(9453)</ondown>
+                        <ondown condition="Control.IsVisible(29473) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453)">SetFocus(9473)</ondown>
+                        <ondown condition="Control.IsVisible(29454) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473)">SetFocus(9454)</ondown>
+                        <ondown condition="Control.IsVisible(29474) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454)">SetFocus(9474)</ondown>
+                        <ondown condition="Control.IsVisible(29455) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474)">SetFocus(9455)</ondown>
+                        <ondown condition="Control.IsVisible(29475) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455)">SetFocus(9475)</ondown>
+                        <ondown condition="Control.IsVisible(29456) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475)">SetFocus(9456)</ondown>
+                        <ondown condition="Control.IsVisible(29476) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456)">SetFocus(9476)</ondown>
+                        <ondown condition="Control.IsVisible(20405) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476)">SetFocus(405)</ondown>
+                        <ondown condition="Control.IsVisible(20301) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405)">SetFocus(301)</ondown>
+                        <ondown condition="Control.IsVisible(20303) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301)">SetFocus(303)</ondown>
+                        <ondown condition="Control.IsVisible(20304) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303)">SetFocus(304)</ondown>
+                        <ondown condition="Control.IsVisible(20302) + !Control.IsVisible(29452) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303) + !Control.IsVisible(20304)">SetFocus(302)</ondown>
+                        <onup condition="Control.IsVisible(29451)">SetFocus(9451)</onup>
+                        <onup condition="Control.IsVisible(20305) + !Control.IsVisible(29451)">SetFocus(305)</onup>
+                        <onup condition="Control.IsVisible(20307) + !Control.IsVisible(29451) + !Control.IsVisible(20305)">SetFocus(307)</onup>
+                        <onup condition="Control.IsVisible(20401) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307)">SetFocus(401)</onup>
+                        <onup condition="Control.IsVisible(20313) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307) + !Control.IsVisible(20401)">SetFocus(313)</onup>
+                    </control>
                 </control>
-                <control type="button" id="9452">
-                    <include>SiloShortcutButton</include>
-                    <label>Widget 2</label>
-                    <label2>$VAR[SiloShortcutWidget2]</label2>
-                    <textoffsetx>32</textoffsetx>
+                <control type="group" id="29452">
+                    <width>934</width><height>80</height>
+                    <visible>String.IsEqual(Window.Property(groupname),mainmenu) + [!String.IsEmpty(Container(211).ListItem.Property(widgetPath)) | !String.IsEmpty(Container(211).ListItem.Property(widgetPath.2))]</visible>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label></label>
+                    </control>
+                    <control type="button" id="9452">
+                        <top>0</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Widget 2</label>
+                        <label2>$VAR[SiloShortcutWidget2]</label2>
+                        <textoffsetx>32</textoffsetx>
                     <onclick>SetProperty(widgetID,2)</onclick>
                     <onclick>SendClick(312)</onclick>
-                    <visible>String.IsEqual(Window.Property(groupname),mainmenu) + [!String.IsEmpty(Container(211).ListItem.Property(widgetPath)) | !String.IsEmpty(Container(211).ListItem.Property(widgetPath.2))]</visible>
+                        <onleft>211</onleft>
+                        <ondown condition="Control.IsVisible(29472)">SetFocus(9472)</ondown>
+                        <ondown condition="Control.IsVisible(29453) + !Control.IsVisible(29472)">SetFocus(9453)</ondown>
+                        <ondown condition="Control.IsVisible(29473) + !Control.IsVisible(29472) + !Control.IsVisible(29453)">SetFocus(9473)</ondown>
+                        <ondown condition="Control.IsVisible(29454) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473)">SetFocus(9454)</ondown>
+                        <ondown condition="Control.IsVisible(29474) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454)">SetFocus(9474)</ondown>
+                        <ondown condition="Control.IsVisible(29455) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474)">SetFocus(9455)</ondown>
+                        <ondown condition="Control.IsVisible(29475) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455)">SetFocus(9475)</ondown>
+                        <ondown condition="Control.IsVisible(29456) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475)">SetFocus(9456)</ondown>
+                        <ondown condition="Control.IsVisible(29476) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456)">SetFocus(9476)</ondown>
+                        <ondown condition="Control.IsVisible(20405) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476)">SetFocus(405)</ondown>
+                        <ondown condition="Control.IsVisible(20301) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405)">SetFocus(301)</ondown>
+                        <ondown condition="Control.IsVisible(20303) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301)">SetFocus(303)</ondown>
+                        <ondown condition="Control.IsVisible(20304) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303)">SetFocus(304)</ondown>
+                        <ondown condition="Control.IsVisible(20302) + !Control.IsVisible(29472) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303) + !Control.IsVisible(20304)">SetFocus(302)</ondown>
+                        <onup condition="Control.IsVisible(29471)">SetFocus(9471)</onup>
+                        <onup condition="Control.IsVisible(29451) + !Control.IsVisible(29471)">SetFocus(9451)</onup>
+                        <onup condition="Control.IsVisible(20305) + !Control.IsVisible(29471) + !Control.IsVisible(29451)">SetFocus(305)</onup>
+                        <onup condition="Control.IsVisible(20307) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305)">SetFocus(307)</onup>
+                        <onup condition="Control.IsVisible(20401) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307)">SetFocus(401)</onup>
+                        <onup condition="Control.IsVisible(20313) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307) + !Control.IsVisible(20401)">SetFocus(313)</onup>
+                    </control>
                 </control>
-                <control type="button" id="9472">
-                    <include>SiloShortcutButton</include>
-                    <label>Card style</label>
-                    <label2>$VAR[SiloShortcutStyle2]</label2>
-                    <textoffsetx>64</textoffsetx>
+                <control type="group" id="29472">
+                    <width>934</width><height>80</height>
                     <visible>String.IsEqual(Window.Property(groupname),mainmenu) + !String.IsEmpty(Container(211).ListItem.Property(widgetPath.2))</visible>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label></label>
+                    </control>
+                    <control type="button" id="9472">
+                        <top>0</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Card style</label>
+                        <label2>$VAR[SiloShortcutStyle2]</label2>
+                        <textoffsetx>64</textoffsetx>
+                        <onleft>211</onleft>
+                        <ondown condition="Control.IsVisible(29453)">SetFocus(9453)</ondown>
+                        <ondown condition="Control.IsVisible(29473) + !Control.IsVisible(29453)">SetFocus(9473)</ondown>
+                        <ondown condition="Control.IsVisible(29454) + !Control.IsVisible(29453) + !Control.IsVisible(29473)">SetFocus(9454)</ondown>
+                        <ondown condition="Control.IsVisible(29474) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454)">SetFocus(9474)</ondown>
+                        <ondown condition="Control.IsVisible(29455) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474)">SetFocus(9455)</ondown>
+                        <ondown condition="Control.IsVisible(29475) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455)">SetFocus(9475)</ondown>
+                        <ondown condition="Control.IsVisible(29456) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475)">SetFocus(9456)</ondown>
+                        <ondown condition="Control.IsVisible(29476) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456)">SetFocus(9476)</ondown>
+                        <ondown condition="Control.IsVisible(20405) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476)">SetFocus(405)</ondown>
+                        <ondown condition="Control.IsVisible(20301) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405)">SetFocus(301)</ondown>
+                        <ondown condition="Control.IsVisible(20303) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301)">SetFocus(303)</ondown>
+                        <ondown condition="Control.IsVisible(20304) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303)">SetFocus(304)</ondown>
+                        <ondown condition="Control.IsVisible(20302) + !Control.IsVisible(29453) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303) + !Control.IsVisible(20304)">SetFocus(302)</ondown>
+                        <onup condition="Control.IsVisible(29452)">SetFocus(9452)</onup>
+                        <onup condition="Control.IsVisible(29471) + !Control.IsVisible(29452)">SetFocus(9471)</onup>
+                        <onup condition="Control.IsVisible(29451) + !Control.IsVisible(29452) + !Control.IsVisible(29471)">SetFocus(9451)</onup>
+                        <onup condition="Control.IsVisible(20305) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451)">SetFocus(305)</onup>
+                        <onup condition="Control.IsVisible(20307) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305)">SetFocus(307)</onup>
+                        <onup condition="Control.IsVisible(20401) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307)">SetFocus(401)</onup>
+                        <onup condition="Control.IsVisible(20313) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307) + !Control.IsVisible(20401)">SetFocus(313)</onup>
+                    </control>
                 </control>
-                <control type="button" id="9453">
-                    <include>SiloShortcutButton</include>
-                    <label>Widget 3</label>
-                    <label2>$VAR[SiloShortcutWidget3]</label2>
-                    <textoffsetx>32</textoffsetx>
+                <control type="group" id="29453">
+                    <width>934</width><height>80</height>
+                    <visible>String.IsEqual(Window.Property(groupname),mainmenu) + [!String.IsEmpty(Container(211).ListItem.Property(widgetPath.2)) | !String.IsEmpty(Container(211).ListItem.Property(widgetPath.3))]</visible>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label></label>
+                    </control>
+                    <control type="button" id="9453">
+                        <top>0</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Widget 3</label>
+                        <label2>$VAR[SiloShortcutWidget3]</label2>
+                        <textoffsetx>32</textoffsetx>
                     <onclick>SetProperty(widgetID,3)</onclick>
                     <onclick>SendClick(312)</onclick>
-                    <visible>String.IsEqual(Window.Property(groupname),mainmenu) + [!String.IsEmpty(Container(211).ListItem.Property(widgetPath.2)) | !String.IsEmpty(Container(211).ListItem.Property(widgetPath.3))]</visible>
+                        <onleft>211</onleft>
+                        <ondown condition="Control.IsVisible(29473)">SetFocus(9473)</ondown>
+                        <ondown condition="Control.IsVisible(29454) + !Control.IsVisible(29473)">SetFocus(9454)</ondown>
+                        <ondown condition="Control.IsVisible(29474) + !Control.IsVisible(29473) + !Control.IsVisible(29454)">SetFocus(9474)</ondown>
+                        <ondown condition="Control.IsVisible(29455) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474)">SetFocus(9455)</ondown>
+                        <ondown condition="Control.IsVisible(29475) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455)">SetFocus(9475)</ondown>
+                        <ondown condition="Control.IsVisible(29456) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475)">SetFocus(9456)</ondown>
+                        <ondown condition="Control.IsVisible(29476) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456)">SetFocus(9476)</ondown>
+                        <ondown condition="Control.IsVisible(20405) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476)">SetFocus(405)</ondown>
+                        <ondown condition="Control.IsVisible(20301) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405)">SetFocus(301)</ondown>
+                        <ondown condition="Control.IsVisible(20303) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301)">SetFocus(303)</ondown>
+                        <ondown condition="Control.IsVisible(20304) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303)">SetFocus(304)</ondown>
+                        <ondown condition="Control.IsVisible(20302) + !Control.IsVisible(29473) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303) + !Control.IsVisible(20304)">SetFocus(302)</ondown>
+                        <onup condition="Control.IsVisible(29472)">SetFocus(9472)</onup>
+                        <onup condition="Control.IsVisible(29452) + !Control.IsVisible(29472)">SetFocus(9452)</onup>
+                        <onup condition="Control.IsVisible(29471) + !Control.IsVisible(29472) + !Control.IsVisible(29452)">SetFocus(9471)</onup>
+                        <onup condition="Control.IsVisible(29451) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471)">SetFocus(9451)</onup>
+                        <onup condition="Control.IsVisible(20305) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451)">SetFocus(305)</onup>
+                        <onup condition="Control.IsVisible(20307) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305)">SetFocus(307)</onup>
+                        <onup condition="Control.IsVisible(20401) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307)">SetFocus(401)</onup>
+                        <onup condition="Control.IsVisible(20313) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307) + !Control.IsVisible(20401)">SetFocus(313)</onup>
+                    </control>
                 </control>
-                <control type="button" id="9473">
-                    <include>SiloShortcutButton</include>
-                    <label>Card style</label>
-                    <label2>$VAR[SiloShortcutStyle3]</label2>
-                    <textoffsetx>64</textoffsetx>
+                <control type="group" id="29473">
+                    <width>934</width><height>80</height>
                     <visible>String.IsEqual(Window.Property(groupname),mainmenu) + !String.IsEmpty(Container(211).ListItem.Property(widgetPath.3))</visible>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label></label>
+                    </control>
+                    <control type="button" id="9473">
+                        <top>0</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Card style</label>
+                        <label2>$VAR[SiloShortcutStyle3]</label2>
+                        <textoffsetx>64</textoffsetx>
+                        <onleft>211</onleft>
+                        <ondown condition="Control.IsVisible(29454)">SetFocus(9454)</ondown>
+                        <ondown condition="Control.IsVisible(29474) + !Control.IsVisible(29454)">SetFocus(9474)</ondown>
+                        <ondown condition="Control.IsVisible(29455) + !Control.IsVisible(29454) + !Control.IsVisible(29474)">SetFocus(9455)</ondown>
+                        <ondown condition="Control.IsVisible(29475) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455)">SetFocus(9475)</ondown>
+                        <ondown condition="Control.IsVisible(29456) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475)">SetFocus(9456)</ondown>
+                        <ondown condition="Control.IsVisible(29476) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456)">SetFocus(9476)</ondown>
+                        <ondown condition="Control.IsVisible(20405) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476)">SetFocus(405)</ondown>
+                        <ondown condition="Control.IsVisible(20301) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405)">SetFocus(301)</ondown>
+                        <ondown condition="Control.IsVisible(20303) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301)">SetFocus(303)</ondown>
+                        <ondown condition="Control.IsVisible(20304) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303)">SetFocus(304)</ondown>
+                        <ondown condition="Control.IsVisible(20302) + !Control.IsVisible(29454) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303) + !Control.IsVisible(20304)">SetFocus(302)</ondown>
+                        <onup condition="Control.IsVisible(29453)">SetFocus(9453)</onup>
+                        <onup condition="Control.IsVisible(29472) + !Control.IsVisible(29453)">SetFocus(9472)</onup>
+                        <onup condition="Control.IsVisible(29452) + !Control.IsVisible(29453) + !Control.IsVisible(29472)">SetFocus(9452)</onup>
+                        <onup condition="Control.IsVisible(29471) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452)">SetFocus(9471)</onup>
+                        <onup condition="Control.IsVisible(29451) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471)">SetFocus(9451)</onup>
+                        <onup condition="Control.IsVisible(20305) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451)">SetFocus(305)</onup>
+                        <onup condition="Control.IsVisible(20307) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305)">SetFocus(307)</onup>
+                        <onup condition="Control.IsVisible(20401) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307)">SetFocus(401)</onup>
+                        <onup condition="Control.IsVisible(20313) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307) + !Control.IsVisible(20401)">SetFocus(313)</onup>
+                    </control>
                 </control>
-                <control type="button" id="9454">
-                    <include>SiloShortcutButton</include>
-                    <label>Widget 4</label>
-                    <label2>$VAR[SiloShortcutWidget4]</label2>
-                    <textoffsetx>32</textoffsetx>
+                <control type="group" id="29454">
+                    <width>934</width><height>80</height>
+                    <visible>String.IsEqual(Window.Property(groupname),mainmenu) + [!String.IsEmpty(Container(211).ListItem.Property(widgetPath.3)) | !String.IsEmpty(Container(211).ListItem.Property(widgetPath.4))]</visible>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label></label>
+                    </control>
+                    <control type="button" id="9454">
+                        <top>0</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Widget 4</label>
+                        <label2>$VAR[SiloShortcutWidget4]</label2>
+                        <textoffsetx>32</textoffsetx>
                     <onclick>SetProperty(widgetID,4)</onclick>
                     <onclick>SendClick(312)</onclick>
-                    <visible>String.IsEqual(Window.Property(groupname),mainmenu) + [!String.IsEmpty(Container(211).ListItem.Property(widgetPath.3)) | !String.IsEmpty(Container(211).ListItem.Property(widgetPath.4))]</visible>
+                        <onleft>211</onleft>
+                        <ondown condition="Control.IsVisible(29474)">SetFocus(9474)</ondown>
+                        <ondown condition="Control.IsVisible(29455) + !Control.IsVisible(29474)">SetFocus(9455)</ondown>
+                        <ondown condition="Control.IsVisible(29475) + !Control.IsVisible(29474) + !Control.IsVisible(29455)">SetFocus(9475)</ondown>
+                        <ondown condition="Control.IsVisible(29456) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475)">SetFocus(9456)</ondown>
+                        <ondown condition="Control.IsVisible(29476) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456)">SetFocus(9476)</ondown>
+                        <ondown condition="Control.IsVisible(20405) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476)">SetFocus(405)</ondown>
+                        <ondown condition="Control.IsVisible(20301) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405)">SetFocus(301)</ondown>
+                        <ondown condition="Control.IsVisible(20303) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301)">SetFocus(303)</ondown>
+                        <ondown condition="Control.IsVisible(20304) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303)">SetFocus(304)</ondown>
+                        <ondown condition="Control.IsVisible(20302) + !Control.IsVisible(29474) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303) + !Control.IsVisible(20304)">SetFocus(302)</ondown>
+                        <onup condition="Control.IsVisible(29473)">SetFocus(9473)</onup>
+                        <onup condition="Control.IsVisible(29453) + !Control.IsVisible(29473)">SetFocus(9453)</onup>
+                        <onup condition="Control.IsVisible(29472) + !Control.IsVisible(29473) + !Control.IsVisible(29453)">SetFocus(9472)</onup>
+                        <onup condition="Control.IsVisible(29452) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472)">SetFocus(9452)</onup>
+                        <onup condition="Control.IsVisible(29471) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452)">SetFocus(9471)</onup>
+                        <onup condition="Control.IsVisible(29451) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471)">SetFocus(9451)</onup>
+                        <onup condition="Control.IsVisible(20305) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451)">SetFocus(305)</onup>
+                        <onup condition="Control.IsVisible(20307) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305)">SetFocus(307)</onup>
+                        <onup condition="Control.IsVisible(20401) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307)">SetFocus(401)</onup>
+                        <onup condition="Control.IsVisible(20313) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307) + !Control.IsVisible(20401)">SetFocus(313)</onup>
+                    </control>
                 </control>
-                <control type="button" id="9474">
-                    <include>SiloShortcutButton</include>
-                    <label>Card style</label>
-                    <label2>$VAR[SiloShortcutStyle4]</label2>
-                    <textoffsetx>64</textoffsetx>
+                <control type="group" id="29474">
+                    <width>934</width><height>80</height>
                     <visible>String.IsEqual(Window.Property(groupname),mainmenu) + !String.IsEmpty(Container(211).ListItem.Property(widgetPath.4))</visible>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label></label>
+                    </control>
+                    <control type="button" id="9474">
+                        <top>0</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Card style</label>
+                        <label2>$VAR[SiloShortcutStyle4]</label2>
+                        <textoffsetx>64</textoffsetx>
+                        <onleft>211</onleft>
+                        <ondown condition="Control.IsVisible(29455)">SetFocus(9455)</ondown>
+                        <ondown condition="Control.IsVisible(29475) + !Control.IsVisible(29455)">SetFocus(9475)</ondown>
+                        <ondown condition="Control.IsVisible(29456) + !Control.IsVisible(29455) + !Control.IsVisible(29475)">SetFocus(9456)</ondown>
+                        <ondown condition="Control.IsVisible(29476) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456)">SetFocus(9476)</ondown>
+                        <ondown condition="Control.IsVisible(20405) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476)">SetFocus(405)</ondown>
+                        <ondown condition="Control.IsVisible(20301) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405)">SetFocus(301)</ondown>
+                        <ondown condition="Control.IsVisible(20303) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301)">SetFocus(303)</ondown>
+                        <ondown condition="Control.IsVisible(20304) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303)">SetFocus(304)</ondown>
+                        <ondown condition="Control.IsVisible(20302) + !Control.IsVisible(29455) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303) + !Control.IsVisible(20304)">SetFocus(302)</ondown>
+                        <onup condition="Control.IsVisible(29454)">SetFocus(9454)</onup>
+                        <onup condition="Control.IsVisible(29473) + !Control.IsVisible(29454)">SetFocus(9473)</onup>
+                        <onup condition="Control.IsVisible(29453) + !Control.IsVisible(29454) + !Control.IsVisible(29473)">SetFocus(9453)</onup>
+                        <onup condition="Control.IsVisible(29472) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453)">SetFocus(9472)</onup>
+                        <onup condition="Control.IsVisible(29452) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472)">SetFocus(9452)</onup>
+                        <onup condition="Control.IsVisible(29471) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452)">SetFocus(9471)</onup>
+                        <onup condition="Control.IsVisible(29451) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471)">SetFocus(9451)</onup>
+                        <onup condition="Control.IsVisible(20305) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451)">SetFocus(305)</onup>
+                        <onup condition="Control.IsVisible(20307) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305)">SetFocus(307)</onup>
+                        <onup condition="Control.IsVisible(20401) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307)">SetFocus(401)</onup>
+                        <onup condition="Control.IsVisible(20313) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307) + !Control.IsVisible(20401)">SetFocus(313)</onup>
+                    </control>
                 </control>
-                <control type="button" id="9455">
-                    <include>SiloShortcutButton</include>
-                    <label>Widget 5</label>
-                    <label2>$VAR[SiloShortcutWidget5]</label2>
-                    <textoffsetx>32</textoffsetx>
+                <control type="group" id="29455">
+                    <width>934</width><height>80</height>
+                    <visible>String.IsEqual(Window.Property(groupname),mainmenu) + [!String.IsEmpty(Container(211).ListItem.Property(widgetPath.4)) | !String.IsEmpty(Container(211).ListItem.Property(widgetPath.5))]</visible>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label></label>
+                    </control>
+                    <control type="button" id="9455">
+                        <top>0</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Widget 5</label>
+                        <label2>$VAR[SiloShortcutWidget5]</label2>
+                        <textoffsetx>32</textoffsetx>
                     <onclick>SetProperty(widgetID,5)</onclick>
                     <onclick>SendClick(312)</onclick>
-                    <visible>String.IsEqual(Window.Property(groupname),mainmenu) + [!String.IsEmpty(Container(211).ListItem.Property(widgetPath.4)) | !String.IsEmpty(Container(211).ListItem.Property(widgetPath.5))]</visible>
+                        <onleft>211</onleft>
+                        <ondown condition="Control.IsVisible(29475)">SetFocus(9475)</ondown>
+                        <ondown condition="Control.IsVisible(29456) + !Control.IsVisible(29475)">SetFocus(9456)</ondown>
+                        <ondown condition="Control.IsVisible(29476) + !Control.IsVisible(29475) + !Control.IsVisible(29456)">SetFocus(9476)</ondown>
+                        <ondown condition="Control.IsVisible(20405) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476)">SetFocus(405)</ondown>
+                        <ondown condition="Control.IsVisible(20301) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405)">SetFocus(301)</ondown>
+                        <ondown condition="Control.IsVisible(20303) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301)">SetFocus(303)</ondown>
+                        <ondown condition="Control.IsVisible(20304) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303)">SetFocus(304)</ondown>
+                        <ondown condition="Control.IsVisible(20302) + !Control.IsVisible(29475) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303) + !Control.IsVisible(20304)">SetFocus(302)</ondown>
+                        <onup condition="Control.IsVisible(29474)">SetFocus(9474)</onup>
+                        <onup condition="Control.IsVisible(29454) + !Control.IsVisible(29474)">SetFocus(9454)</onup>
+                        <onup condition="Control.IsVisible(29473) + !Control.IsVisible(29474) + !Control.IsVisible(29454)">SetFocus(9473)</onup>
+                        <onup condition="Control.IsVisible(29453) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473)">SetFocus(9453)</onup>
+                        <onup condition="Control.IsVisible(29472) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453)">SetFocus(9472)</onup>
+                        <onup condition="Control.IsVisible(29452) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472)">SetFocus(9452)</onup>
+                        <onup condition="Control.IsVisible(29471) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452)">SetFocus(9471)</onup>
+                        <onup condition="Control.IsVisible(29451) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471)">SetFocus(9451)</onup>
+                        <onup condition="Control.IsVisible(20305) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451)">SetFocus(305)</onup>
+                        <onup condition="Control.IsVisible(20307) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305)">SetFocus(307)</onup>
+                        <onup condition="Control.IsVisible(20401) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307)">SetFocus(401)</onup>
+                        <onup condition="Control.IsVisible(20313) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307) + !Control.IsVisible(20401)">SetFocus(313)</onup>
+                    </control>
                 </control>
-                <control type="button" id="9475">
-                    <include>SiloShortcutButton</include>
-                    <label>Card style</label>
-                    <label2>$VAR[SiloShortcutStyle5]</label2>
-                    <textoffsetx>64</textoffsetx>
+                <control type="group" id="29475">
+                    <width>934</width><height>80</height>
                     <visible>String.IsEqual(Window.Property(groupname),mainmenu) + !String.IsEmpty(Container(211).ListItem.Property(widgetPath.5))</visible>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label></label>
+                    </control>
+                    <control type="button" id="9475">
+                        <top>0</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Card style</label>
+                        <label2>$VAR[SiloShortcutStyle5]</label2>
+                        <textoffsetx>64</textoffsetx>
+                        <onleft>211</onleft>
+                        <ondown condition="Control.IsVisible(29456)">SetFocus(9456)</ondown>
+                        <ondown condition="Control.IsVisible(29476) + !Control.IsVisible(29456)">SetFocus(9476)</ondown>
+                        <ondown condition="Control.IsVisible(20405) + !Control.IsVisible(29456) + !Control.IsVisible(29476)">SetFocus(405)</ondown>
+                        <ondown condition="Control.IsVisible(20301) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405)">SetFocus(301)</ondown>
+                        <ondown condition="Control.IsVisible(20303) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301)">SetFocus(303)</ondown>
+                        <ondown condition="Control.IsVisible(20304) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303)">SetFocus(304)</ondown>
+                        <ondown condition="Control.IsVisible(20302) + !Control.IsVisible(29456) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303) + !Control.IsVisible(20304)">SetFocus(302)</ondown>
+                        <onup condition="Control.IsVisible(29455)">SetFocus(9455)</onup>
+                        <onup condition="Control.IsVisible(29474) + !Control.IsVisible(29455)">SetFocus(9474)</onup>
+                        <onup condition="Control.IsVisible(29454) + !Control.IsVisible(29455) + !Control.IsVisible(29474)">SetFocus(9454)</onup>
+                        <onup condition="Control.IsVisible(29473) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454)">SetFocus(9473)</onup>
+                        <onup condition="Control.IsVisible(29453) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473)">SetFocus(9453)</onup>
+                        <onup condition="Control.IsVisible(29472) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453)">SetFocus(9472)</onup>
+                        <onup condition="Control.IsVisible(29452) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472)">SetFocus(9452)</onup>
+                        <onup condition="Control.IsVisible(29471) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452)">SetFocus(9471)</onup>
+                        <onup condition="Control.IsVisible(29451) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471)">SetFocus(9451)</onup>
+                        <onup condition="Control.IsVisible(20305) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451)">SetFocus(305)</onup>
+                        <onup condition="Control.IsVisible(20307) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305)">SetFocus(307)</onup>
+                        <onup condition="Control.IsVisible(20401) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307)">SetFocus(401)</onup>
+                        <onup condition="Control.IsVisible(20313) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307) + !Control.IsVisible(20401)">SetFocus(313)</onup>
+                    </control>
                 </control>
-                <control type="button" id="9456">
-                    <include>SiloShortcutButton</include>
-                    <label>Widget 6</label>
-                    <label2>$VAR[SiloShortcutWidget6]</label2>
-                    <textoffsetx>32</textoffsetx>
+                <control type="group" id="29456">
+                    <width>934</width><height>80</height>
+                    <visible>String.IsEqual(Window.Property(groupname),mainmenu) + [!String.IsEmpty(Container(211).ListItem.Property(widgetPath.5)) | !String.IsEmpty(Container(211).ListItem.Property(widgetPath.6))]</visible>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label></label>
+                    </control>
+                    <control type="button" id="9456">
+                        <top>0</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Widget 6</label>
+                        <label2>$VAR[SiloShortcutWidget6]</label2>
+                        <textoffsetx>32</textoffsetx>
                     <onclick>SetProperty(widgetID,6)</onclick>
                     <onclick>SendClick(312)</onclick>
-                    <visible>String.IsEqual(Window.Property(groupname),mainmenu) + [!String.IsEmpty(Container(211).ListItem.Property(widgetPath.5)) | !String.IsEmpty(Container(211).ListItem.Property(widgetPath.6))]</visible>
+                        <onleft>211</onleft>
+                        <ondown condition="Control.IsVisible(29476)">SetFocus(9476)</ondown>
+                        <ondown condition="Control.IsVisible(20405) + !Control.IsVisible(29476)">SetFocus(405)</ondown>
+                        <ondown condition="Control.IsVisible(20301) + !Control.IsVisible(29476) + !Control.IsVisible(20405)">SetFocus(301)</ondown>
+                        <ondown condition="Control.IsVisible(20303) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301)">SetFocus(303)</ondown>
+                        <ondown condition="Control.IsVisible(20304) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303)">SetFocus(304)</ondown>
+                        <ondown condition="Control.IsVisible(20302) + !Control.IsVisible(29476) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303) + !Control.IsVisible(20304)">SetFocus(302)</ondown>
+                        <onup condition="Control.IsVisible(29475)">SetFocus(9475)</onup>
+                        <onup condition="Control.IsVisible(29455) + !Control.IsVisible(29475)">SetFocus(9455)</onup>
+                        <onup condition="Control.IsVisible(29474) + !Control.IsVisible(29475) + !Control.IsVisible(29455)">SetFocus(9474)</onup>
+                        <onup condition="Control.IsVisible(29454) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474)">SetFocus(9454)</onup>
+                        <onup condition="Control.IsVisible(29473) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454)">SetFocus(9473)</onup>
+                        <onup condition="Control.IsVisible(29453) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473)">SetFocus(9453)</onup>
+                        <onup condition="Control.IsVisible(29472) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453)">SetFocus(9472)</onup>
+                        <onup condition="Control.IsVisible(29452) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472)">SetFocus(9452)</onup>
+                        <onup condition="Control.IsVisible(29471) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452)">SetFocus(9471)</onup>
+                        <onup condition="Control.IsVisible(29451) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471)">SetFocus(9451)</onup>
+                        <onup condition="Control.IsVisible(20305) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451)">SetFocus(305)</onup>
+                        <onup condition="Control.IsVisible(20307) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305)">SetFocus(307)</onup>
+                        <onup condition="Control.IsVisible(20401) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307)">SetFocus(401)</onup>
+                        <onup condition="Control.IsVisible(20313) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307) + !Control.IsVisible(20401)">SetFocus(313)</onup>
+                    </control>
                 </control>
-                <control type="button" id="9476">
-                    <include>SiloShortcutButton</include>
-                    <label>Card style</label>
-                    <label2>$VAR[SiloShortcutStyle6]</label2>
-                    <textoffsetx>64</textoffsetx>
+                <control type="group" id="29476">
+                    <width>934</width><height>80</height>
                     <visible>String.IsEqual(Window.Property(groupname),mainmenu) + !String.IsEmpty(Container(211).ListItem.Property(widgetPath.6))</visible>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label></label>
+                    </control>
+                    <control type="button" id="9476">
+                        <top>0</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Card style</label>
+                        <label2>$VAR[SiloShortcutStyle6]</label2>
+                        <textoffsetx>64</textoffsetx>
+                        <onleft>211</onleft>
+                        <ondown condition="Control.IsVisible(20405)">SetFocus(405)</ondown>
+                        <ondown condition="Control.IsVisible(20301) + !Control.IsVisible(20405)">SetFocus(301)</ondown>
+                        <ondown condition="Control.IsVisible(20303) + !Control.IsVisible(20405) + !Control.IsVisible(20301)">SetFocus(303)</ondown>
+                        <ondown condition="Control.IsVisible(20304) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303)">SetFocus(304)</ondown>
+                        <ondown condition="Control.IsVisible(20302) + !Control.IsVisible(20405) + !Control.IsVisible(20301) + !Control.IsVisible(20303) + !Control.IsVisible(20304)">SetFocus(302)</ondown>
+                        <onup condition="Control.IsVisible(29456)">SetFocus(9456)</onup>
+                        <onup condition="Control.IsVisible(29475) + !Control.IsVisible(29456)">SetFocus(9475)</onup>
+                        <onup condition="Control.IsVisible(29455) + !Control.IsVisible(29456) + !Control.IsVisible(29475)">SetFocus(9455)</onup>
+                        <onup condition="Control.IsVisible(29474) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455)">SetFocus(9474)</onup>
+                        <onup condition="Control.IsVisible(29454) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474)">SetFocus(9454)</onup>
+                        <onup condition="Control.IsVisible(29473) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454)">SetFocus(9473)</onup>
+                        <onup condition="Control.IsVisible(29453) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473)">SetFocus(9453)</onup>
+                        <onup condition="Control.IsVisible(29472) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453)">SetFocus(9472)</onup>
+                        <onup condition="Control.IsVisible(29452) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472)">SetFocus(9452)</onup>
+                        <onup condition="Control.IsVisible(29471) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452)">SetFocus(9471)</onup>
+                        <onup condition="Control.IsVisible(29451) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471)">SetFocus(9451)</onup>
+                        <onup condition="Control.IsVisible(20305) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451)">SetFocus(305)</onup>
+                        <onup condition="Control.IsVisible(20307) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305)">SetFocus(307)</onup>
+                        <onup condition="Control.IsVisible(20401) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307)">SetFocus(401)</onup>
+                        <onup condition="Control.IsVisible(20313) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307) + !Control.IsVisible(20401)">SetFocus(313)</onup>
+                    </control>
                 </control>
-                <control type="label">
-                    <width>860</width><height>56</height>
-                    <aligny>bottom</aligny>
-                    <font>silo_badge</font>
-                    <textcolor>8CEDEDED</textcolor>
-                    <label>OPTIONS</label>
+                <control type="group" id="20405">
+                    <width>934</width><height>130</height>
                     <visible>String.IsEqual(Window.Property(groupname),mainmenu)</visible>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label>OPTIONS</label>
+                    </control>
+                    <control type="button" id="405">
+                        <top>50</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Submenu</label>
+                        <label2>Edit</label2>
+                        <textoffsetx>32</textoffsetx>
+                        <onleft>211</onleft>
+                        <ondown condition="Control.IsVisible(20301)">SetFocus(301)</ondown>
+                        <ondown condition="Control.IsVisible(20303) + !Control.IsVisible(20301)">SetFocus(303)</ondown>
+                        <ondown condition="Control.IsVisible(20304) + !Control.IsVisible(20301) + !Control.IsVisible(20303)">SetFocus(304)</ondown>
+                        <ondown condition="Control.IsVisible(20302) + !Control.IsVisible(20301) + !Control.IsVisible(20303) + !Control.IsVisible(20304)">SetFocus(302)</ondown>
+                        <onup condition="Control.IsVisible(29476)">SetFocus(9476)</onup>
+                        <onup condition="Control.IsVisible(29456) + !Control.IsVisible(29476)">SetFocus(9456)</onup>
+                        <onup condition="Control.IsVisible(29475) + !Control.IsVisible(29476) + !Control.IsVisible(29456)">SetFocus(9475)</onup>
+                        <onup condition="Control.IsVisible(29455) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475)">SetFocus(9455)</onup>
+                        <onup condition="Control.IsVisible(29474) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455)">SetFocus(9474)</onup>
+                        <onup condition="Control.IsVisible(29454) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474)">SetFocus(9454)</onup>
+                        <onup condition="Control.IsVisible(29473) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454)">SetFocus(9473)</onup>
+                        <onup condition="Control.IsVisible(29453) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473)">SetFocus(9453)</onup>
+                        <onup condition="Control.IsVisible(29472) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453)">SetFocus(9472)</onup>
+                        <onup condition="Control.IsVisible(29452) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472)">SetFocus(9452)</onup>
+                        <onup condition="Control.IsVisible(29471) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452)">SetFocus(9471)</onup>
+                        <onup condition="Control.IsVisible(29451) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471)">SetFocus(9451)</onup>
+                        <onup condition="Control.IsVisible(20305) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451)">SetFocus(305)</onup>
+                        <onup condition="Control.IsVisible(20307) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305)">SetFocus(307)</onup>
+                        <onup condition="Control.IsVisible(20401) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307)">SetFocus(401)</onup>
+                        <onup condition="Control.IsVisible(20313) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307) + !Control.IsVisible(20401)">SetFocus(313)</onup>
+                    </control>
                 </control>
-                <control type="button" id="405">
-                    <include>SiloShortcutButton</include>
-                    <label>Submenu</label>
-                    <label2>Edit</label2>
-                    <textoffsetx>32</textoffsetx>
-                    <visible>String.IsEqual(Window.Property(groupname),mainmenu)</visible>
+                <control type="group" id="20301">
+                    <width>934</width><height>130</height>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label>MENU</label>
+                    </control>
+                    <control type="button" id="301">
+                        <top>50</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Add an item</label>
+                        <label2></label2>
+                        <textoffsetx>32</textoffsetx>
+                        <onleft>211</onleft>
+                        <ondown condition="Control.IsVisible(20303)">SetFocus(303)</ondown>
+                        <ondown condition="Control.IsVisible(20304) + !Control.IsVisible(20303)">SetFocus(304)</ondown>
+                        <ondown condition="Control.IsVisible(20302) + !Control.IsVisible(20303) + !Control.IsVisible(20304)">SetFocus(302)</ondown>
+                        <onup condition="Control.IsVisible(20405)">SetFocus(405)</onup>
+                        <onup condition="Control.IsVisible(29476) + !Control.IsVisible(20405)">SetFocus(9476)</onup>
+                        <onup condition="Control.IsVisible(29456) + !Control.IsVisible(20405) + !Control.IsVisible(29476)">SetFocus(9456)</onup>
+                        <onup condition="Control.IsVisible(29475) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456)">SetFocus(9475)</onup>
+                        <onup condition="Control.IsVisible(29455) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475)">SetFocus(9455)</onup>
+                        <onup condition="Control.IsVisible(29474) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455)">SetFocus(9474)</onup>
+                        <onup condition="Control.IsVisible(29454) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474)">SetFocus(9454)</onup>
+                        <onup condition="Control.IsVisible(29473) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454)">SetFocus(9473)</onup>
+                        <onup condition="Control.IsVisible(29453) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473)">SetFocus(9453)</onup>
+                        <onup condition="Control.IsVisible(29472) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453)">SetFocus(9472)</onup>
+                        <onup condition="Control.IsVisible(29452) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472)">SetFocus(9452)</onup>
+                        <onup condition="Control.IsVisible(29471) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452)">SetFocus(9471)</onup>
+                        <onup condition="Control.IsVisible(29451) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471)">SetFocus(9451)</onup>
+                        <onup condition="Control.IsVisible(20305) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451)">SetFocus(305)</onup>
+                        <onup condition="Control.IsVisible(20307) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305)">SetFocus(307)</onup>
+                        <onup condition="Control.IsVisible(20401) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307)">SetFocus(401)</onup>
+                        <onup condition="Control.IsVisible(20313) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307) + !Control.IsVisible(20401)">SetFocus(313)</onup>
+                    </control>
                 </control>
-                <control type="label">
-                    <width>860</width><height>56</height>
-                    <aligny>bottom</aligny>
-                    <font>silo_badge</font>
-                    <textcolor>8CEDEDED</textcolor>
-                    <label>MENU</label>
+                <control type="group" id="20303">
+                    <width>934</width><height>80</height>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label></label>
+                    </control>
+                    <control type="button" id="303">
+                        <top>0</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Move up</label>
+                        <label2></label2>
+                        <textoffsetx>32</textoffsetx>
+                        <onleft>211</onleft>
+                        <ondown condition="Control.IsVisible(20304)">SetFocus(304)</ondown>
+                        <ondown condition="Control.IsVisible(20302) + !Control.IsVisible(20304)">SetFocus(302)</ondown>
+                        <onup condition="Control.IsVisible(20301)">SetFocus(301)</onup>
+                        <onup condition="Control.IsVisible(20405) + !Control.IsVisible(20301)">SetFocus(405)</onup>
+                        <onup condition="Control.IsVisible(29476) + !Control.IsVisible(20301) + !Control.IsVisible(20405)">SetFocus(9476)</onup>
+                        <onup condition="Control.IsVisible(29456) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476)">SetFocus(9456)</onup>
+                        <onup condition="Control.IsVisible(29475) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456)">SetFocus(9475)</onup>
+                        <onup condition="Control.IsVisible(29455) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475)">SetFocus(9455)</onup>
+                        <onup condition="Control.IsVisible(29474) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455)">SetFocus(9474)</onup>
+                        <onup condition="Control.IsVisible(29454) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474)">SetFocus(9454)</onup>
+                        <onup condition="Control.IsVisible(29473) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454)">SetFocus(9473)</onup>
+                        <onup condition="Control.IsVisible(29453) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473)">SetFocus(9453)</onup>
+                        <onup condition="Control.IsVisible(29472) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453)">SetFocus(9472)</onup>
+                        <onup condition="Control.IsVisible(29452) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472)">SetFocus(9452)</onup>
+                        <onup condition="Control.IsVisible(29471) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452)">SetFocus(9471)</onup>
+                        <onup condition="Control.IsVisible(29451) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471)">SetFocus(9451)</onup>
+                        <onup condition="Control.IsVisible(20305) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451)">SetFocus(305)</onup>
+                        <onup condition="Control.IsVisible(20307) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305)">SetFocus(307)</onup>
+                        <onup condition="Control.IsVisible(20401) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307)">SetFocus(401)</onup>
+                        <onup condition="Control.IsVisible(20313) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307) + !Control.IsVisible(20401)">SetFocus(313)</onup>
+                    </control>
                 </control>
-                <control type="button" id="301">
-                    <include>SiloShortcutButton</include>
-                    <label>Add an item</label>
-                    <label2></label2>
-                    <textoffsetx>32</textoffsetx>
+                <control type="group" id="20304">
+                    <width>934</width><height>80</height>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label></label>
+                    </control>
+                    <control type="button" id="304">
+                        <top>0</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Move down</label>
+                        <label2></label2>
+                        <textoffsetx>32</textoffsetx>
+                        <onleft>211</onleft>
+                        <ondown condition="Control.IsVisible(20302)">SetFocus(302)</ondown>
+                        <onup condition="Control.IsVisible(20303)">SetFocus(303)</onup>
+                        <onup condition="Control.IsVisible(20301) + !Control.IsVisible(20303)">SetFocus(301)</onup>
+                        <onup condition="Control.IsVisible(20405) + !Control.IsVisible(20303) + !Control.IsVisible(20301)">SetFocus(405)</onup>
+                        <onup condition="Control.IsVisible(29476) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405)">SetFocus(9476)</onup>
+                        <onup condition="Control.IsVisible(29456) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476)">SetFocus(9456)</onup>
+                        <onup condition="Control.IsVisible(29475) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456)">SetFocus(9475)</onup>
+                        <onup condition="Control.IsVisible(29455) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475)">SetFocus(9455)</onup>
+                        <onup condition="Control.IsVisible(29474) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455)">SetFocus(9474)</onup>
+                        <onup condition="Control.IsVisible(29454) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474)">SetFocus(9454)</onup>
+                        <onup condition="Control.IsVisible(29473) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454)">SetFocus(9473)</onup>
+                        <onup condition="Control.IsVisible(29453) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473)">SetFocus(9453)</onup>
+                        <onup condition="Control.IsVisible(29472) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453)">SetFocus(9472)</onup>
+                        <onup condition="Control.IsVisible(29452) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472)">SetFocus(9452)</onup>
+                        <onup condition="Control.IsVisible(29471) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452)">SetFocus(9471)</onup>
+                        <onup condition="Control.IsVisible(29451) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471)">SetFocus(9451)</onup>
+                        <onup condition="Control.IsVisible(20305) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451)">SetFocus(305)</onup>
+                        <onup condition="Control.IsVisible(20307) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305)">SetFocus(307)</onup>
+                        <onup condition="Control.IsVisible(20401) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307)">SetFocus(401)</onup>
+                        <onup condition="Control.IsVisible(20313) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307) + !Control.IsVisible(20401)">SetFocus(313)</onup>
+                    </control>
                 </control>
-                <control type="button" id="303">
-                    <include>SiloShortcutButton</include>
-                    <label>Move up</label>
-                    <label2></label2>
-                    <textoffsetx>32</textoffsetx>
-                </control>
-                <control type="button" id="304">
-                    <include>SiloShortcutButton</include>
-                    <label>Move down</label>
-                    <label2></label2>
-                    <textoffsetx>32</textoffsetx>
-                </control>
-                <control type="button" id="302">
-                    <include>SiloShortcutButton</include>
-                    <label>Delete</label>
-                    <label2></label2>
-                    <textoffsetx>32</textoffsetx>
+                <control type="group" id="20302">
+                    <width>934</width><height>80</height>
+                    <control type="label">
+                        <width>900</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label></label>
+                    </control>
+                    <control type="button" id="302">
+                        <top>0</top>
+                        <include>SiloShortcutButton</include>
+                        <label>Delete</label>
+                        <label2></label2>
+                        <textoffsetx>32</textoffsetx>
+                        <onleft>211</onleft>
+                        <onup condition="Control.IsVisible(20304)">SetFocus(304)</onup>
+                        <onup condition="Control.IsVisible(20303) + !Control.IsVisible(20304)">SetFocus(303)</onup>
+                        <onup condition="Control.IsVisible(20301) + !Control.IsVisible(20304) + !Control.IsVisible(20303)">SetFocus(301)</onup>
+                        <onup condition="Control.IsVisible(20405) + !Control.IsVisible(20304) + !Control.IsVisible(20303) + !Control.IsVisible(20301)">SetFocus(405)</onup>
+                        <onup condition="Control.IsVisible(29476) + !Control.IsVisible(20304) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405)">SetFocus(9476)</onup>
+                        <onup condition="Control.IsVisible(29456) + !Control.IsVisible(20304) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476)">SetFocus(9456)</onup>
+                        <onup condition="Control.IsVisible(29475) + !Control.IsVisible(20304) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456)">SetFocus(9475)</onup>
+                        <onup condition="Control.IsVisible(29455) + !Control.IsVisible(20304) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475)">SetFocus(9455)</onup>
+                        <onup condition="Control.IsVisible(29474) + !Control.IsVisible(20304) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455)">SetFocus(9474)</onup>
+                        <onup condition="Control.IsVisible(29454) + !Control.IsVisible(20304) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474)">SetFocus(9454)</onup>
+                        <onup condition="Control.IsVisible(29473) + !Control.IsVisible(20304) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454)">SetFocus(9473)</onup>
+                        <onup condition="Control.IsVisible(29453) + !Control.IsVisible(20304) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473)">SetFocus(9453)</onup>
+                        <onup condition="Control.IsVisible(29472) + !Control.IsVisible(20304) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453)">SetFocus(9472)</onup>
+                        <onup condition="Control.IsVisible(29452) + !Control.IsVisible(20304) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472)">SetFocus(9452)</onup>
+                        <onup condition="Control.IsVisible(29471) + !Control.IsVisible(20304) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452)">SetFocus(9471)</onup>
+                        <onup condition="Control.IsVisible(29451) + !Control.IsVisible(20304) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471)">SetFocus(9451)</onup>
+                        <onup condition="Control.IsVisible(20305) + !Control.IsVisible(20304) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451)">SetFocus(305)</onup>
+                        <onup condition="Control.IsVisible(20307) + !Control.IsVisible(20304) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305)">SetFocus(307)</onup>
+                        <onup condition="Control.IsVisible(20401) + !Control.IsVisible(20304) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307)">SetFocus(401)</onup>
+                        <onup condition="Control.IsVisible(20313) + !Control.IsVisible(20304) + !Control.IsVisible(20303) + !Control.IsVisible(20301) + !Control.IsVisible(20405) + !Control.IsVisible(29476) + !Control.IsVisible(29456) + !Control.IsVisible(29475) + !Control.IsVisible(29455) + !Control.IsVisible(29474) + !Control.IsVisible(29454) + !Control.IsVisible(29473) + !Control.IsVisible(29453) + !Control.IsVisible(29472) + !Control.IsVisible(29452) + !Control.IsVisible(29471) + !Control.IsVisible(29451) + !Control.IsVisible(20305) + !Control.IsVisible(20307) + !Control.IsVisible(20401)">SetFocus(313)</onup>
+                    </control>
                 </control>
             </control>
             <!-- Skin Shortcuts' widget chooser, clicked by the Widget buttons. -->
