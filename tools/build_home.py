@@ -110,6 +110,9 @@ def card_layout(card, focused, control_id=None):
                             <font>silo_card_title</font>
                             <textcolor>%(text)s</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(%(id)d)</visible>
                         </control>''' % {'t1': card['height'] + 20, 'w': card['width'], 'text': TEXT, 'id': control_id}
     return '''

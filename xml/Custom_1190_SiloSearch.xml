@@ -204,6 +204,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(201)</visible>
                         </control>
                         <control type="label">
@@ -335,6 +338,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(202)</visible>
                         </control>
                         <control type="label">
@@ -374,7 +380,7 @@
                     <onup condition="Integer.IsGreater(Container(202).NumItems,0)">SetFocus(202)</onup>
                     <onup condition="Integer.IsGreater(Container(201).NumItems,0) + !Integer.IsGreater(Container(202).NumItems,0)">SetFocus(201)</onup>
                     <onup condition="!Integer.IsGreater(Container(202).NumItems,0) + !Integer.IsGreater(Container(201).NumItems,0)">SetFocus(100)</onup>
-                    <content target="videos">plugin://plugin.video.silokodiconnect/?mode=requests&amp;search=$INFO[Skin.String(silo.search)]</content>
+                    <content target="videos">plugin://plugin.video.silokodiconnect/?mode=requests&amp;search=$INFO[Skin.String(silo.search)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <control type="group">
                         <control type="image">
@@ -466,6 +472,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(203)</visible>
                         </control>
                         <control type="label">

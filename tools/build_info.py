@@ -205,8 +205,9 @@ def build():
                     <focusedcolor>FF000000</focusedcolor>
                     <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
                     <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
-                    <onclick condition="String.IsEqual(ListItem.Property(silo.request.requestable),true)">Dialog.Close(movieinformation)</onclick>
+                    <!-- The plugin first: closing the page first loses its title. -->
                     <onclick condition="String.IsEqual(ListItem.Property(silo.request.requestable),true)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)]&amp;title=$ESCINFO[ListItem.Title])</onclick>
+                    <onclick condition="String.IsEqual(ListItem.Property(silo.request.requestable),true)">Dialog.Close(movieinformation)</onclick>
                 </control>
                 <control type="button" id="8">
                     <visible>!%(show)s + !%(request)s</visible>
@@ -512,7 +513,7 @@ def episode_card(focused, list_id=61, current='String.IsEqual(ListItem.DBID,Cont
                             <width>360</width><height>34</height>
                             <font>silo_card_title</font>
                             <textcolor>%(text)s</textcolor>
-                            <label>S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</label>
+                            <label>S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</label>%(scroll)s
                         </control>
                         <control type="label">
                             <left>6</left><top>256</top>
@@ -520,7 +521,9 @@ def episode_card(focused, list_id=61, current='String.IsEqual(ListItem.DBID,Cont
                             <font>silo_card_sub</font>
                             <textcolor>%(dim)s</textcolor>
                             <label>$INFO[ListItem.Duration(mins),, min]</label>
-                        </control>''' % {'ring': ring, 'text': TEXT, 'dim': TEXT_DIM}
+                        </control>''' % {'ring': ring, 'text': TEXT, 'dim': TEXT_DIM,
+                                         'scroll': '\n                            <scroll>true</scroll>'
+                                                   '<scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>' if focused else ''}
 
 
 

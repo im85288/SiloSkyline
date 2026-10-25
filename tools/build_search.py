@@ -35,7 +35,7 @@ def search_path(path, kind):
     """The library folder filtered to titles containing the search words. The
     filter is URL-encoded around a marker that becomes the words."""
     if kind is None:
-        return path + '&amp;search=$INFO[%s]' % QUERY
+        return path + '&amp;search=$INFO[%s]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]' % QUERY
     marker = 'SILOQUERY'
     rules = {'type': kind, 'order': {'method': 'sorttitle', 'direction': 'ascending'},
              'rules': {'and': [{'field': 'title', 'operator': 'contains', 'value': [marker]}]}}

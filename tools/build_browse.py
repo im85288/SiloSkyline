@@ -45,6 +45,8 @@ def poster(focused, view_id):
                         <font>silo_card_title</font>
                         <textcolor>%(text)s</textcolor>
                         <label>$VAR[SiloBrowseLabel]</label>
+                        <scroll>true</scroll>
+                        <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                         <visible>Control.HasFocus(%(id)d)</visible>
                     </control>''' % {'t1': POSTER_H + 20, 'w': POSTER_W, 'text': TEXT, 'id': view_id} \
         if focused else ''

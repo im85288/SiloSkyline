@@ -209,8 +209,9 @@
                     <focusedcolor>FF000000</focusedcolor>
                     <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
                     <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
-                    <onclick condition="String.IsEqual(ListItem.Property(silo.request.requestable),true)">Dialog.Close(movieinformation)</onclick>
+                    <!-- The plugin first: closing the page first loses its title. -->
                     <onclick condition="String.IsEqual(ListItem.Property(silo.request.requestable),true)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)]&amp;title=$ESCINFO[ListItem.Title])</onclick>
+                    <onclick condition="String.IsEqual(ListItem.Property(silo.request.requestable),true)">Dialog.Close(movieinformation)</onclick>
                 </control>
                 <control type="button" id="8">
                     <visible>!String.IsEqual(ListItem.DBType,tvshow) + !!String.IsEmpty(ListItem.Property(silo.request.tmdb))</visible>
@@ -424,6 +425,7 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</label>
+                            <scroll>true</scroll><scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                         </control>
                         <control type="label">
                             <left>6</left><top>256</top>
@@ -588,6 +590,7 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</label>
+                            <scroll>true</scroll><scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                         </control>
                         <control type="label">
                             <left>6</left><top>256</top>
@@ -802,6 +805,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(63)</visible>
                         </control>
                         <control type="label">

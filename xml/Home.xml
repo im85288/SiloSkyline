@@ -262,6 +262,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5001)</visible>
                         </control>
                         <control type="label">
@@ -395,6 +398,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5051)</visible>
                         </control>
                         <control type="label">
@@ -530,6 +536,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5002)</visible>
                         </control>
                         <control type="label">
@@ -665,6 +674,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5052)</visible>
                         </control>
                         <control type="label">
@@ -802,6 +814,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5003)</visible>
                         </control>
                         <control type="label">
@@ -939,6 +954,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5053)</visible>
                         </control>
                         <control type="label">
@@ -1078,6 +1096,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5004)</visible>
                         </control>
                         <control type="label">
@@ -1217,6 +1238,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5054)</visible>
                         </control>
                         <control type="label">
@@ -1356,6 +1380,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5005)</visible>
                         </control>
                         <control type="label">
@@ -1495,6 +1522,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5055)</visible>
                         </control>
                         <control type="label">
@@ -1634,6 +1664,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5006)</visible>
                         </control>
                         <control type="label">
@@ -1773,6 +1806,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5056)</visible>
                         </control>
                         <control type="label">
@@ -1912,6 +1948,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5007)</visible>
                         </control>
                         <control type="label">
@@ -2051,6 +2090,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5057)</visible>
                         </control>
                         <control type="label">
@@ -2190,6 +2232,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5008)</visible>
                         </control>
                         <control type="label">
@@ -2329,6 +2374,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5058)</visible>
                         </control>
                         <control type="label">
@@ -2466,6 +2514,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5009)</visible>
                         </control>
                         <control type="label">
@@ -2603,6 +2654,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5059)</visible>
                         </control>
                         <control type="label">
@@ -2738,6 +2792,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5010)</visible>
                         </control>
                         <control type="label">
@@ -2873,6 +2930,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5060)</visible>
                         </control>
                         <control type="label">
@@ -3006,6 +3066,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5011)</visible>
                         </control>
                         <control type="label">
@@ -3139,6 +3202,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5061)</visible>
                         </control>
                         <control type="label">
@@ -3270,6 +3336,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5012)</visible>
                         </control>
                         <control type="label">
@@ -3401,6 +3470,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5062)</visible>
                         </control>
                         <control type="label">
@@ -3534,6 +3606,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5101)</visible>
                         </control>
                         <control type="label">
@@ -3667,6 +3742,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5151)</visible>
                         </control>
                         <control type="label">
@@ -3802,6 +3880,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5102)</visible>
                         </control>
                         <control type="label">
@@ -3937,6 +4018,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5152)</visible>
                         </control>
                         <control type="label">
@@ -4074,6 +4158,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5103)</visible>
                         </control>
                         <control type="label">
@@ -4211,6 +4298,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5153)</visible>
                         </control>
                         <control type="label">
@@ -4350,6 +4440,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5104)</visible>
                         </control>
                         <control type="label">
@@ -4489,6 +4582,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5154)</visible>
                         </control>
                         <control type="label">
@@ -4628,6 +4724,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5105)</visible>
                         </control>
                         <control type="label">
@@ -4767,6 +4866,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5155)</visible>
                         </control>
                         <control type="label">
@@ -4906,6 +5008,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5106)</visible>
                         </control>
                         <control type="label">
@@ -5045,6 +5150,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5156)</visible>
                         </control>
                         <control type="label">
@@ -5184,6 +5292,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5107)</visible>
                         </control>
                         <control type="label">
@@ -5323,6 +5434,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5157)</visible>
                         </control>
                         <control type="label">
@@ -5462,6 +5576,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5108)</visible>
                         </control>
                         <control type="label">
@@ -5601,6 +5718,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5158)</visible>
                         </control>
                         <control type="label">
@@ -5738,6 +5858,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5109)</visible>
                         </control>
                         <control type="label">
@@ -5875,6 +5998,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5159)</visible>
                         </control>
                         <control type="label">
@@ -6010,6 +6136,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5110)</visible>
                         </control>
                         <control type="label">
@@ -6145,6 +6274,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5160)</visible>
                         </control>
                         <control type="label">
@@ -6278,6 +6410,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5111)</visible>
                         </control>
                         <control type="label">
@@ -6411,6 +6546,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5161)</visible>
                         </control>
                         <control type="label">
@@ -6542,6 +6680,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5112)</visible>
                         </control>
                         <control type="label">
@@ -6673,6 +6814,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5162)</visible>
                         </control>
                         <control type="label">
@@ -6806,6 +6950,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5201)</visible>
                         </control>
                         <control type="label">
@@ -6939,6 +7086,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5251)</visible>
                         </control>
                         <control type="label">
@@ -7074,6 +7224,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5202)</visible>
                         </control>
                         <control type="label">
@@ -7209,6 +7362,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5252)</visible>
                         </control>
                         <control type="label">
@@ -7346,6 +7502,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5203)</visible>
                         </control>
                         <control type="label">
@@ -7483,6 +7642,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5253)</visible>
                         </control>
                         <control type="label">
@@ -7622,6 +7784,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5204)</visible>
                         </control>
                         <control type="label">
@@ -7761,6 +7926,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5254)</visible>
                         </control>
                         <control type="label">
@@ -7900,6 +8068,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5205)</visible>
                         </control>
                         <control type="label">
@@ -8039,6 +8210,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5255)</visible>
                         </control>
                         <control type="label">
@@ -8178,6 +8352,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5206)</visible>
                         </control>
                         <control type="label">
@@ -8317,6 +8494,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5256)</visible>
                         </control>
                         <control type="label">
@@ -8456,6 +8636,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5207)</visible>
                         </control>
                         <control type="label">
@@ -8595,6 +8778,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5257)</visible>
                         </control>
                         <control type="label">
@@ -8734,6 +8920,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5208)</visible>
                         </control>
                         <control type="label">
@@ -8873,6 +9062,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5258)</visible>
                         </control>
                         <control type="label">
@@ -9010,6 +9202,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5209)</visible>
                         </control>
                         <control type="label">
@@ -9147,6 +9342,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5259)</visible>
                         </control>
                         <control type="label">
@@ -9282,6 +9480,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5210)</visible>
                         </control>
                         <control type="label">
@@ -9417,6 +9618,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5260)</visible>
                         </control>
                         <control type="label">
@@ -9550,6 +9754,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5211)</visible>
                         </control>
                         <control type="label">
@@ -9683,6 +9890,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5261)</visible>
                         </control>
                         <control type="label">
@@ -9814,6 +10024,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5212)</visible>
                         </control>
                         <control type="label">
@@ -9945,6 +10158,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5262)</visible>
                         </control>
                         <control type="label">
@@ -10078,6 +10294,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5301)</visible>
                         </control>
                         <control type="label">
@@ -10211,6 +10430,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5351)</visible>
                         </control>
                         <control type="label">
@@ -10346,6 +10568,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5302)</visible>
                         </control>
                         <control type="label">
@@ -10481,6 +10706,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5352)</visible>
                         </control>
                         <control type="label">
@@ -10618,6 +10846,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5303)</visible>
                         </control>
                         <control type="label">
@@ -10755,6 +10986,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5353)</visible>
                         </control>
                         <control type="label">
@@ -10894,6 +11128,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5304)</visible>
                         </control>
                         <control type="label">
@@ -11033,6 +11270,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5354)</visible>
                         </control>
                         <control type="label">
@@ -11170,6 +11410,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5305)</visible>
                         </control>
                         <control type="label">
@@ -11307,6 +11550,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5355)</visible>
                         </control>
                         <control type="label">
@@ -11442,6 +11688,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5306)</visible>
                         </control>
                         <control type="label">
@@ -11577,6 +11826,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5356)</visible>
                         </control>
                         <control type="label">
@@ -11710,6 +11962,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5307)</visible>
                         </control>
                         <control type="label">
@@ -11843,6 +12098,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5357)</visible>
                         </control>
                         <control type="label">
@@ -11974,6 +12232,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5308)</visible>
                         </control>
                         <control type="label">
@@ -12105,6 +12366,9 @@
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(5358)</visible>
                         </control>
                         <control type="label">
