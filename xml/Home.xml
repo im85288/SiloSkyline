@@ -174,7 +174,7 @@
                     <ondown condition="$EXP[SiloRow5005] + !$EXP[SiloRow5002] + !$EXP[SiloRow5052] + !$EXP[SiloRow5003] + !$EXP[SiloRow5053] + !$EXP[SiloRow5004] + !$EXP[SiloRow5054]">SetFocus(5005)</ondown>
                     <ondown condition="$EXP[SiloRow5055] + !$EXP[SiloRow5002] + !$EXP[SiloRow5052] + !$EXP[SiloRow5003] + !$EXP[SiloRow5053] + !$EXP[SiloRow5004] + !$EXP[SiloRow5054] + !$EXP[SiloRow5005]">SetFocus(5055)</ondown>
                     <onup>SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.1.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.1.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -213,7 +213,7 @@
                     <ondown condition="$EXP[SiloRow5005] + !$EXP[SiloRow5002] + !$EXP[SiloRow5052] + !$EXP[SiloRow5003] + !$EXP[SiloRow5053] + !$EXP[SiloRow5004] + !$EXP[SiloRow5054]">SetFocus(5005)</ondown>
                     <ondown condition="$EXP[SiloRow5055] + !$EXP[SiloRow5002] + !$EXP[SiloRow5052] + !$EXP[SiloRow5003] + !$EXP[SiloRow5053] + !$EXP[SiloRow5004] + !$EXP[SiloRow5054] + !$EXP[SiloRow5005]">SetFocus(5055)</ondown>
                     <onup>SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.1.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.1.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -254,7 +254,7 @@
                     <onup condition="$EXP[SiloRow5001]">SetFocus(5001)</onup>
                     <onup condition="$EXP[SiloRow5051] + !$EXP[SiloRow5001]">SetFocus(5051)</onup>
                     <onup condition="!$EXP[SiloRow5001] + !$EXP[SiloRow5051]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.2.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.2.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -295,7 +295,7 @@
                     <onup condition="$EXP[SiloRow5001]">SetFocus(5001)</onup>
                     <onup condition="$EXP[SiloRow5051] + !$EXP[SiloRow5001]">SetFocus(5051)</onup>
                     <onup condition="!$EXP[SiloRow5001] + !$EXP[SiloRow5051]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.2.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.2.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -338,7 +338,7 @@
                     <onup condition="$EXP[SiloRow5001] + !$EXP[SiloRow5002] + !$EXP[SiloRow5052]">SetFocus(5001)</onup>
                     <onup condition="$EXP[SiloRow5051] + !$EXP[SiloRow5002] + !$EXP[SiloRow5052] + !$EXP[SiloRow5001]">SetFocus(5051)</onup>
                     <onup condition="!$EXP[SiloRow5002] + !$EXP[SiloRow5052] + !$EXP[SiloRow5001] + !$EXP[SiloRow5051]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.3.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.3.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -381,7 +381,7 @@
                     <onup condition="$EXP[SiloRow5001] + !$EXP[SiloRow5002] + !$EXP[SiloRow5052]">SetFocus(5001)</onup>
                     <onup condition="$EXP[SiloRow5051] + !$EXP[SiloRow5002] + !$EXP[SiloRow5052] + !$EXP[SiloRow5001]">SetFocus(5051)</onup>
                     <onup condition="!$EXP[SiloRow5002] + !$EXP[SiloRow5052] + !$EXP[SiloRow5001] + !$EXP[SiloRow5051]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.3.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.3.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -426,7 +426,7 @@
                     <onup condition="$EXP[SiloRow5001] + !$EXP[SiloRow5003] + !$EXP[SiloRow5053] + !$EXP[SiloRow5002] + !$EXP[SiloRow5052]">SetFocus(5001)</onup>
                     <onup condition="$EXP[SiloRow5051] + !$EXP[SiloRow5003] + !$EXP[SiloRow5053] + !$EXP[SiloRow5002] + !$EXP[SiloRow5052] + !$EXP[SiloRow5001]">SetFocus(5051)</onup>
                     <onup condition="!$EXP[SiloRow5003] + !$EXP[SiloRow5053] + !$EXP[SiloRow5002] + !$EXP[SiloRow5052] + !$EXP[SiloRow5001] + !$EXP[SiloRow5051]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.4.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.4.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -471,7 +471,7 @@
                     <onup condition="$EXP[SiloRow5001] + !$EXP[SiloRow5003] + !$EXP[SiloRow5053] + !$EXP[SiloRow5002] + !$EXP[SiloRow5052]">SetFocus(5001)</onup>
                     <onup condition="$EXP[SiloRow5051] + !$EXP[SiloRow5003] + !$EXP[SiloRow5053] + !$EXP[SiloRow5002] + !$EXP[SiloRow5052] + !$EXP[SiloRow5001]">SetFocus(5051)</onup>
                     <onup condition="!$EXP[SiloRow5003] + !$EXP[SiloRow5053] + !$EXP[SiloRow5002] + !$EXP[SiloRow5052] + !$EXP[SiloRow5001] + !$EXP[SiloRow5051]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.4.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.4.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -516,7 +516,7 @@
                     <onup condition="$EXP[SiloRow5002] + !$EXP[SiloRow5004] + !$EXP[SiloRow5054] + !$EXP[SiloRow5003] + !$EXP[SiloRow5053]">SetFocus(5002)</onup>
                     <onup condition="$EXP[SiloRow5052] + !$EXP[SiloRow5004] + !$EXP[SiloRow5054] + !$EXP[SiloRow5003] + !$EXP[SiloRow5053] + !$EXP[SiloRow5002]">SetFocus(5052)</onup>
                     <onup condition="!$EXP[SiloRow5004] + !$EXP[SiloRow5054] + !$EXP[SiloRow5003] + !$EXP[SiloRow5053] + !$EXP[SiloRow5002] + !$EXP[SiloRow5052]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.5.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.5.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -561,7 +561,7 @@
                     <onup condition="$EXP[SiloRow5002] + !$EXP[SiloRow5004] + !$EXP[SiloRow5054] + !$EXP[SiloRow5003] + !$EXP[SiloRow5053]">SetFocus(5002)</onup>
                     <onup condition="$EXP[SiloRow5052] + !$EXP[SiloRow5004] + !$EXP[SiloRow5054] + !$EXP[SiloRow5003] + !$EXP[SiloRow5053] + !$EXP[SiloRow5002]">SetFocus(5052)</onup>
                     <onup condition="!$EXP[SiloRow5004] + !$EXP[SiloRow5054] + !$EXP[SiloRow5003] + !$EXP[SiloRow5053] + !$EXP[SiloRow5002] + !$EXP[SiloRow5052]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.5.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.5.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -606,7 +606,7 @@
                     <onup condition="$EXP[SiloRow5003] + !$EXP[SiloRow5005] + !$EXP[SiloRow5055] + !$EXP[SiloRow5004] + !$EXP[SiloRow5054]">SetFocus(5003)</onup>
                     <onup condition="$EXP[SiloRow5053] + !$EXP[SiloRow5005] + !$EXP[SiloRow5055] + !$EXP[SiloRow5004] + !$EXP[SiloRow5054] + !$EXP[SiloRow5003]">SetFocus(5053)</onup>
                     <onup condition="!$EXP[SiloRow5005] + !$EXP[SiloRow5055] + !$EXP[SiloRow5004] + !$EXP[SiloRow5054] + !$EXP[SiloRow5003] + !$EXP[SiloRow5053]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.6.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.6.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -651,7 +651,7 @@
                     <onup condition="$EXP[SiloRow5003] + !$EXP[SiloRow5005] + !$EXP[SiloRow5055] + !$EXP[SiloRow5004] + !$EXP[SiloRow5054]">SetFocus(5003)</onup>
                     <onup condition="$EXP[SiloRow5053] + !$EXP[SiloRow5005] + !$EXP[SiloRow5055] + !$EXP[SiloRow5004] + !$EXP[SiloRow5054] + !$EXP[SiloRow5003]">SetFocus(5053)</onup>
                     <onup condition="!$EXP[SiloRow5005] + !$EXP[SiloRow5055] + !$EXP[SiloRow5004] + !$EXP[SiloRow5054] + !$EXP[SiloRow5003] + !$EXP[SiloRow5053]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.6.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.6.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -696,7 +696,7 @@
                     <onup condition="$EXP[SiloRow5004] + !$EXP[SiloRow5006] + !$EXP[SiloRow5056] + !$EXP[SiloRow5005] + !$EXP[SiloRow5055]">SetFocus(5004)</onup>
                     <onup condition="$EXP[SiloRow5054] + !$EXP[SiloRow5006] + !$EXP[SiloRow5056] + !$EXP[SiloRow5005] + !$EXP[SiloRow5055] + !$EXP[SiloRow5004]">SetFocus(5054)</onup>
                     <onup condition="!$EXP[SiloRow5006] + !$EXP[SiloRow5056] + !$EXP[SiloRow5005] + !$EXP[SiloRow5055] + !$EXP[SiloRow5004] + !$EXP[SiloRow5054]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.7.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.7.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -741,7 +741,7 @@
                     <onup condition="$EXP[SiloRow5004] + !$EXP[SiloRow5006] + !$EXP[SiloRow5056] + !$EXP[SiloRow5005] + !$EXP[SiloRow5055]">SetFocus(5004)</onup>
                     <onup condition="$EXP[SiloRow5054] + !$EXP[SiloRow5006] + !$EXP[SiloRow5056] + !$EXP[SiloRow5005] + !$EXP[SiloRow5055] + !$EXP[SiloRow5004]">SetFocus(5054)</onup>
                     <onup condition="!$EXP[SiloRow5006] + !$EXP[SiloRow5056] + !$EXP[SiloRow5005] + !$EXP[SiloRow5055] + !$EXP[SiloRow5004] + !$EXP[SiloRow5054]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.7.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.7.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -786,7 +786,7 @@
                     <onup condition="$EXP[SiloRow5005] + !$EXP[SiloRow5007] + !$EXP[SiloRow5057] + !$EXP[SiloRow5006] + !$EXP[SiloRow5056]">SetFocus(5005)</onup>
                     <onup condition="$EXP[SiloRow5055] + !$EXP[SiloRow5007] + !$EXP[SiloRow5057] + !$EXP[SiloRow5006] + !$EXP[SiloRow5056] + !$EXP[SiloRow5005]">SetFocus(5055)</onup>
                     <onup condition="!$EXP[SiloRow5007] + !$EXP[SiloRow5057] + !$EXP[SiloRow5006] + !$EXP[SiloRow5056] + !$EXP[SiloRow5005] + !$EXP[SiloRow5055]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.8.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.8.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -831,7 +831,7 @@
                     <onup condition="$EXP[SiloRow5005] + !$EXP[SiloRow5007] + !$EXP[SiloRow5057] + !$EXP[SiloRow5006] + !$EXP[SiloRow5056]">SetFocus(5005)</onup>
                     <onup condition="$EXP[SiloRow5055] + !$EXP[SiloRow5007] + !$EXP[SiloRow5057] + !$EXP[SiloRow5006] + !$EXP[SiloRow5056] + !$EXP[SiloRow5005]">SetFocus(5055)</onup>
                     <onup condition="!$EXP[SiloRow5007] + !$EXP[SiloRow5057] + !$EXP[SiloRow5006] + !$EXP[SiloRow5056] + !$EXP[SiloRow5005] + !$EXP[SiloRow5055]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.8.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.8.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -874,7 +874,7 @@
                     <onup condition="$EXP[SiloRow5006] + !$EXP[SiloRow5008] + !$EXP[SiloRow5058] + !$EXP[SiloRow5007] + !$EXP[SiloRow5057]">SetFocus(5006)</onup>
                     <onup condition="$EXP[SiloRow5056] + !$EXP[SiloRow5008] + !$EXP[SiloRow5058] + !$EXP[SiloRow5007] + !$EXP[SiloRow5057] + !$EXP[SiloRow5006]">SetFocus(5056)</onup>
                     <onup condition="!$EXP[SiloRow5008] + !$EXP[SiloRow5058] + !$EXP[SiloRow5007] + !$EXP[SiloRow5057] + !$EXP[SiloRow5006] + !$EXP[SiloRow5056]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.9.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.9.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -917,7 +917,7 @@
                     <onup condition="$EXP[SiloRow5006] + !$EXP[SiloRow5008] + !$EXP[SiloRow5058] + !$EXP[SiloRow5007] + !$EXP[SiloRow5057]">SetFocus(5006)</onup>
                     <onup condition="$EXP[SiloRow5056] + !$EXP[SiloRow5008] + !$EXP[SiloRow5058] + !$EXP[SiloRow5007] + !$EXP[SiloRow5057] + !$EXP[SiloRow5006]">SetFocus(5056)</onup>
                     <onup condition="!$EXP[SiloRow5008] + !$EXP[SiloRow5058] + !$EXP[SiloRow5007] + !$EXP[SiloRow5057] + !$EXP[SiloRow5006] + !$EXP[SiloRow5056]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.9.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.9.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -958,7 +958,7 @@
                     <onup condition="$EXP[SiloRow5007] + !$EXP[SiloRow5009] + !$EXP[SiloRow5059] + !$EXP[SiloRow5008] + !$EXP[SiloRow5058]">SetFocus(5007)</onup>
                     <onup condition="$EXP[SiloRow5057] + !$EXP[SiloRow5009] + !$EXP[SiloRow5059] + !$EXP[SiloRow5008] + !$EXP[SiloRow5058] + !$EXP[SiloRow5007]">SetFocus(5057)</onup>
                     <onup condition="!$EXP[SiloRow5009] + !$EXP[SiloRow5059] + !$EXP[SiloRow5008] + !$EXP[SiloRow5058] + !$EXP[SiloRow5007] + !$EXP[SiloRow5057]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.10.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.10.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -999,7 +999,7 @@
                     <onup condition="$EXP[SiloRow5007] + !$EXP[SiloRow5009] + !$EXP[SiloRow5059] + !$EXP[SiloRow5008] + !$EXP[SiloRow5058]">SetFocus(5007)</onup>
                     <onup condition="$EXP[SiloRow5057] + !$EXP[SiloRow5009] + !$EXP[SiloRow5059] + !$EXP[SiloRow5008] + !$EXP[SiloRow5058] + !$EXP[SiloRow5007]">SetFocus(5057)</onup>
                     <onup condition="!$EXP[SiloRow5009] + !$EXP[SiloRow5059] + !$EXP[SiloRow5008] + !$EXP[SiloRow5058] + !$EXP[SiloRow5007] + !$EXP[SiloRow5057]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.10.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.10.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -1038,7 +1038,7 @@
                     <onup condition="$EXP[SiloRow5008] + !$EXP[SiloRow5010] + !$EXP[SiloRow5060] + !$EXP[SiloRow5009] + !$EXP[SiloRow5059]">SetFocus(5008)</onup>
                     <onup condition="$EXP[SiloRow5058] + !$EXP[SiloRow5010] + !$EXP[SiloRow5060] + !$EXP[SiloRow5009] + !$EXP[SiloRow5059] + !$EXP[SiloRow5008]">SetFocus(5058)</onup>
                     <onup condition="!$EXP[SiloRow5010] + !$EXP[SiloRow5060] + !$EXP[SiloRow5009] + !$EXP[SiloRow5059] + !$EXP[SiloRow5008] + !$EXP[SiloRow5058]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.11.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.11.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -1077,7 +1077,7 @@
                     <onup condition="$EXP[SiloRow5008] + !$EXP[SiloRow5010] + !$EXP[SiloRow5060] + !$EXP[SiloRow5009] + !$EXP[SiloRow5059]">SetFocus(5008)</onup>
                     <onup condition="$EXP[SiloRow5058] + !$EXP[SiloRow5010] + !$EXP[SiloRow5060] + !$EXP[SiloRow5009] + !$EXP[SiloRow5059] + !$EXP[SiloRow5008]">SetFocus(5058)</onup>
                     <onup condition="!$EXP[SiloRow5010] + !$EXP[SiloRow5060] + !$EXP[SiloRow5009] + !$EXP[SiloRow5059] + !$EXP[SiloRow5008] + !$EXP[SiloRow5058]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.11.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.11.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -1114,7 +1114,7 @@
                     <onup condition="$EXP[SiloRow5009] + !$EXP[SiloRow5011] + !$EXP[SiloRow5061] + !$EXP[SiloRow5010] + !$EXP[SiloRow5060]">SetFocus(5009)</onup>
                     <onup condition="$EXP[SiloRow5059] + !$EXP[SiloRow5011] + !$EXP[SiloRow5061] + !$EXP[SiloRow5010] + !$EXP[SiloRow5060] + !$EXP[SiloRow5009]">SetFocus(5059)</onup>
                     <onup condition="!$EXP[SiloRow5011] + !$EXP[SiloRow5061] + !$EXP[SiloRow5010] + !$EXP[SiloRow5060] + !$EXP[SiloRow5009] + !$EXP[SiloRow5059]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.12.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.12.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -1151,7 +1151,7 @@
                     <onup condition="$EXP[SiloRow5009] + !$EXP[SiloRow5011] + !$EXP[SiloRow5061] + !$EXP[SiloRow5010] + !$EXP[SiloRow5060]">SetFocus(5009)</onup>
                     <onup condition="$EXP[SiloRow5059] + !$EXP[SiloRow5011] + !$EXP[SiloRow5061] + !$EXP[SiloRow5010] + !$EXP[SiloRow5060] + !$EXP[SiloRow5009]">SetFocus(5059)</onup>
                     <onup condition="!$EXP[SiloRow5011] + !$EXP[SiloRow5061] + !$EXP[SiloRow5010] + !$EXP[SiloRow5060] + !$EXP[SiloRow5009] + !$EXP[SiloRow5059]">SetFocus(9002)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.home.12.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.home.12.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -1190,7 +1190,7 @@
                     <ondown condition="$EXP[SiloRow5105] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(5105)</ondown>
                     <ondown condition="$EXP[SiloRow5155] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105]">SetFocus(5155)</ondown>
                     <onup>SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.1.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.1.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -1229,7 +1229,7 @@
                     <ondown condition="$EXP[SiloRow5105] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(5105)</ondown>
                     <ondown condition="$EXP[SiloRow5155] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105]">SetFocus(5155)</ondown>
                     <onup>SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.1.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.1.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -1270,7 +1270,7 @@
                     <onup condition="$EXP[SiloRow5101]">SetFocus(5101)</onup>
                     <onup condition="$EXP[SiloRow5151] + !$EXP[SiloRow5101]">SetFocus(5151)</onup>
                     <onup condition="!$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.2.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.2.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -1311,7 +1311,7 @@
                     <onup condition="$EXP[SiloRow5101]">SetFocus(5101)</onup>
                     <onup condition="$EXP[SiloRow5151] + !$EXP[SiloRow5101]">SetFocus(5151)</onup>
                     <onup condition="!$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.2.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.2.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -1354,7 +1354,7 @@
                     <onup condition="$EXP[SiloRow5101] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(5101)</onup>
                     <onup condition="$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101]">SetFocus(5151)</onup>
                     <onup condition="!$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.3.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.3.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -1397,7 +1397,7 @@
                     <onup condition="$EXP[SiloRow5101] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(5101)</onup>
                     <onup condition="$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101]">SetFocus(5151)</onup>
                     <onup condition="!$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.3.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.3.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -1442,7 +1442,7 @@
                     <onup condition="$EXP[SiloRow5101] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(5101)</onup>
                     <onup condition="$EXP[SiloRow5151] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101]">SetFocus(5151)</onup>
                     <onup condition="!$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.4.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.4.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -1487,7 +1487,7 @@
                     <onup condition="$EXP[SiloRow5101] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(5101)</onup>
                     <onup condition="$EXP[SiloRow5151] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101]">SetFocus(5151)</onup>
                     <onup condition="!$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.4.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.4.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -1532,7 +1532,7 @@
                     <onup condition="$EXP[SiloRow5102] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(5102)</onup>
                     <onup condition="$EXP[SiloRow5152] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102]">SetFocus(5152)</onup>
                     <onup condition="!$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.5.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.5.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -1577,7 +1577,7 @@
                     <onup condition="$EXP[SiloRow5102] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(5102)</onup>
                     <onup condition="$EXP[SiloRow5152] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102]">SetFocus(5152)</onup>
                     <onup condition="!$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.5.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.5.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -1622,7 +1622,7 @@
                     <onup condition="$EXP[SiloRow5103] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(5103)</onup>
                     <onup condition="$EXP[SiloRow5153] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103]">SetFocus(5153)</onup>
                     <onup condition="!$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.6.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.6.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -1667,7 +1667,7 @@
                     <onup condition="$EXP[SiloRow5103] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(5103)</onup>
                     <onup condition="$EXP[SiloRow5153] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103]">SetFocus(5153)</onup>
                     <onup condition="!$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.6.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.6.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -1712,7 +1712,7 @@
                     <onup condition="$EXP[SiloRow5104] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155]">SetFocus(5104)</onup>
                     <onup condition="$EXP[SiloRow5154] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104]">SetFocus(5154)</onup>
                     <onup condition="!$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.7.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.7.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -1757,7 +1757,7 @@
                     <onup condition="$EXP[SiloRow5104] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155]">SetFocus(5104)</onup>
                     <onup condition="$EXP[SiloRow5154] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104]">SetFocus(5154)</onup>
                     <onup condition="!$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.7.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.7.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -1802,7 +1802,7 @@
                     <onup condition="$EXP[SiloRow5105] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156]">SetFocus(5105)</onup>
                     <onup condition="$EXP[SiloRow5155] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105]">SetFocus(5155)</onup>
                     <onup condition="!$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.8.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.8.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -1847,7 +1847,7 @@
                     <onup condition="$EXP[SiloRow5105] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156]">SetFocus(5105)</onup>
                     <onup condition="$EXP[SiloRow5155] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105]">SetFocus(5155)</onup>
                     <onup condition="!$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.8.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.8.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -1890,7 +1890,7 @@
                     <onup condition="$EXP[SiloRow5106] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157]">SetFocus(5106)</onup>
                     <onup condition="$EXP[SiloRow5156] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106]">SetFocus(5156)</onup>
                     <onup condition="!$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.9.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.9.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -1933,7 +1933,7 @@
                     <onup condition="$EXP[SiloRow5106] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157]">SetFocus(5106)</onup>
                     <onup condition="$EXP[SiloRow5156] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106]">SetFocus(5156)</onup>
                     <onup condition="!$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.9.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.9.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -1974,7 +1974,7 @@
                     <onup condition="$EXP[SiloRow5107] + !$EXP[SiloRow5109] + !$EXP[SiloRow5159] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158]">SetFocus(5107)</onup>
                     <onup condition="$EXP[SiloRow5157] + !$EXP[SiloRow5109] + !$EXP[SiloRow5159] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107]">SetFocus(5157)</onup>
                     <onup condition="!$EXP[SiloRow5109] + !$EXP[SiloRow5159] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.10.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.10.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -2015,7 +2015,7 @@
                     <onup condition="$EXP[SiloRow5107] + !$EXP[SiloRow5109] + !$EXP[SiloRow5159] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158]">SetFocus(5107)</onup>
                     <onup condition="$EXP[SiloRow5157] + !$EXP[SiloRow5109] + !$EXP[SiloRow5159] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107]">SetFocus(5157)</onup>
                     <onup condition="!$EXP[SiloRow5109] + !$EXP[SiloRow5159] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.10.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.10.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -2054,7 +2054,7 @@
                     <onup condition="$EXP[SiloRow5108] + !$EXP[SiloRow5110] + !$EXP[SiloRow5160] + !$EXP[SiloRow5109] + !$EXP[SiloRow5159]">SetFocus(5108)</onup>
                     <onup condition="$EXP[SiloRow5158] + !$EXP[SiloRow5110] + !$EXP[SiloRow5160] + !$EXP[SiloRow5109] + !$EXP[SiloRow5159] + !$EXP[SiloRow5108]">SetFocus(5158)</onup>
                     <onup condition="!$EXP[SiloRow5110] + !$EXP[SiloRow5160] + !$EXP[SiloRow5109] + !$EXP[SiloRow5159] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.11.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.11.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -2093,7 +2093,7 @@
                     <onup condition="$EXP[SiloRow5108] + !$EXP[SiloRow5110] + !$EXP[SiloRow5160] + !$EXP[SiloRow5109] + !$EXP[SiloRow5159]">SetFocus(5108)</onup>
                     <onup condition="$EXP[SiloRow5158] + !$EXP[SiloRow5110] + !$EXP[SiloRow5160] + !$EXP[SiloRow5109] + !$EXP[SiloRow5159] + !$EXP[SiloRow5108]">SetFocus(5158)</onup>
                     <onup condition="!$EXP[SiloRow5110] + !$EXP[SiloRow5160] + !$EXP[SiloRow5109] + !$EXP[SiloRow5159] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.11.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.11.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -2130,7 +2130,7 @@
                     <onup condition="$EXP[SiloRow5109] + !$EXP[SiloRow5111] + !$EXP[SiloRow5161] + !$EXP[SiloRow5110] + !$EXP[SiloRow5160]">SetFocus(5109)</onup>
                     <onup condition="$EXP[SiloRow5159] + !$EXP[SiloRow5111] + !$EXP[SiloRow5161] + !$EXP[SiloRow5110] + !$EXP[SiloRow5160] + !$EXP[SiloRow5109]">SetFocus(5159)</onup>
                     <onup condition="!$EXP[SiloRow5111] + !$EXP[SiloRow5161] + !$EXP[SiloRow5110] + !$EXP[SiloRow5160] + !$EXP[SiloRow5109] + !$EXP[SiloRow5159]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.12.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.12.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -2167,7 +2167,7 @@
                     <onup condition="$EXP[SiloRow5109] + !$EXP[SiloRow5111] + !$EXP[SiloRow5161] + !$EXP[SiloRow5110] + !$EXP[SiloRow5160]">SetFocus(5109)</onup>
                     <onup condition="$EXP[SiloRow5159] + !$EXP[SiloRow5111] + !$EXP[SiloRow5161] + !$EXP[SiloRow5110] + !$EXP[SiloRow5160] + !$EXP[SiloRow5109]">SetFocus(5159)</onup>
                     <onup condition="!$EXP[SiloRow5111] + !$EXP[SiloRow5161] + !$EXP[SiloRow5110] + !$EXP[SiloRow5160] + !$EXP[SiloRow5109] + !$EXP[SiloRow5159]">SetFocus(9003)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.movies.12.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.12.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -2206,7 +2206,7 @@
                     <ondown condition="$EXP[SiloRow5205] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(5205)</ondown>
                     <ondown condition="$EXP[SiloRow5255] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205]">SetFocus(5255)</ondown>
                     <onup>SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.1.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.1.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -2245,7 +2245,7 @@
                     <ondown condition="$EXP[SiloRow5205] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(5205)</ondown>
                     <ondown condition="$EXP[SiloRow5255] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205]">SetFocus(5255)</ondown>
                     <onup>SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.1.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.1.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -2286,7 +2286,7 @@
                     <onup condition="$EXP[SiloRow5201]">SetFocus(5201)</onup>
                     <onup condition="$EXP[SiloRow5251] + !$EXP[SiloRow5201]">SetFocus(5251)</onup>
                     <onup condition="!$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.2.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.2.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -2327,7 +2327,7 @@
                     <onup condition="$EXP[SiloRow5201]">SetFocus(5201)</onup>
                     <onup condition="$EXP[SiloRow5251] + !$EXP[SiloRow5201]">SetFocus(5251)</onup>
                     <onup condition="!$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.2.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.2.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -2370,7 +2370,7 @@
                     <onup condition="$EXP[SiloRow5201] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(5201)</onup>
                     <onup condition="$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201]">SetFocus(5251)</onup>
                     <onup condition="!$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.3.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.3.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -2413,7 +2413,7 @@
                     <onup condition="$EXP[SiloRow5201] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(5201)</onup>
                     <onup condition="$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201]">SetFocus(5251)</onup>
                     <onup condition="!$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.3.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.3.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -2458,7 +2458,7 @@
                     <onup condition="$EXP[SiloRow5201] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(5201)</onup>
                     <onup condition="$EXP[SiloRow5251] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201]">SetFocus(5251)</onup>
                     <onup condition="!$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.4.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.4.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -2503,7 +2503,7 @@
                     <onup condition="$EXP[SiloRow5201] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(5201)</onup>
                     <onup condition="$EXP[SiloRow5251] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201]">SetFocus(5251)</onup>
                     <onup condition="!$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.4.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.4.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -2548,7 +2548,7 @@
                     <onup condition="$EXP[SiloRow5202] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(5202)</onup>
                     <onup condition="$EXP[SiloRow5252] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202]">SetFocus(5252)</onup>
                     <onup condition="!$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.5.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.5.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -2593,7 +2593,7 @@
                     <onup condition="$EXP[SiloRow5202] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(5202)</onup>
                     <onup condition="$EXP[SiloRow5252] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202]">SetFocus(5252)</onup>
                     <onup condition="!$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.5.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.5.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -2638,7 +2638,7 @@
                     <onup condition="$EXP[SiloRow5203] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(5203)</onup>
                     <onup condition="$EXP[SiloRow5253] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203]">SetFocus(5253)</onup>
                     <onup condition="!$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.6.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.6.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -2683,7 +2683,7 @@
                     <onup condition="$EXP[SiloRow5203] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(5203)</onup>
                     <onup condition="$EXP[SiloRow5253] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203]">SetFocus(5253)</onup>
                     <onup condition="!$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.6.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.6.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -2728,7 +2728,7 @@
                     <onup condition="$EXP[SiloRow5204] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255]">SetFocus(5204)</onup>
                     <onup condition="$EXP[SiloRow5254] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204]">SetFocus(5254)</onup>
                     <onup condition="!$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.7.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.7.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -2773,7 +2773,7 @@
                     <onup condition="$EXP[SiloRow5204] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255]">SetFocus(5204)</onup>
                     <onup condition="$EXP[SiloRow5254] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204]">SetFocus(5254)</onup>
                     <onup condition="!$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.7.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.7.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -2818,7 +2818,7 @@
                     <onup condition="$EXP[SiloRow5205] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256]">SetFocus(5205)</onup>
                     <onup condition="$EXP[SiloRow5255] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205]">SetFocus(5255)</onup>
                     <onup condition="!$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.8.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.8.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -2863,7 +2863,7 @@
                     <onup condition="$EXP[SiloRow5205] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256]">SetFocus(5205)</onup>
                     <onup condition="$EXP[SiloRow5255] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205]">SetFocus(5255)</onup>
                     <onup condition="!$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.8.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.8.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -2906,7 +2906,7 @@
                     <onup condition="$EXP[SiloRow5206] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257]">SetFocus(5206)</onup>
                     <onup condition="$EXP[SiloRow5256] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206]">SetFocus(5256)</onup>
                     <onup condition="!$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.9.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.9.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -2949,7 +2949,7 @@
                     <onup condition="$EXP[SiloRow5206] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257]">SetFocus(5206)</onup>
                     <onup condition="$EXP[SiloRow5256] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206]">SetFocus(5256)</onup>
                     <onup condition="!$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.9.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.9.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -2990,7 +2990,7 @@
                     <onup condition="$EXP[SiloRow5207] + !$EXP[SiloRow5209] + !$EXP[SiloRow5259] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258]">SetFocus(5207)</onup>
                     <onup condition="$EXP[SiloRow5257] + !$EXP[SiloRow5209] + !$EXP[SiloRow5259] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207]">SetFocus(5257)</onup>
                     <onup condition="!$EXP[SiloRow5209] + !$EXP[SiloRow5259] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.10.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.10.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -3031,7 +3031,7 @@
                     <onup condition="$EXP[SiloRow5207] + !$EXP[SiloRow5209] + !$EXP[SiloRow5259] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258]">SetFocus(5207)</onup>
                     <onup condition="$EXP[SiloRow5257] + !$EXP[SiloRow5209] + !$EXP[SiloRow5259] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207]">SetFocus(5257)</onup>
                     <onup condition="!$EXP[SiloRow5209] + !$EXP[SiloRow5259] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.10.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.10.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -3070,7 +3070,7 @@
                     <onup condition="$EXP[SiloRow5208] + !$EXP[SiloRow5210] + !$EXP[SiloRow5260] + !$EXP[SiloRow5209] + !$EXP[SiloRow5259]">SetFocus(5208)</onup>
                     <onup condition="$EXP[SiloRow5258] + !$EXP[SiloRow5210] + !$EXP[SiloRow5260] + !$EXP[SiloRow5209] + !$EXP[SiloRow5259] + !$EXP[SiloRow5208]">SetFocus(5258)</onup>
                     <onup condition="!$EXP[SiloRow5210] + !$EXP[SiloRow5260] + !$EXP[SiloRow5209] + !$EXP[SiloRow5259] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.11.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.11.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -3109,7 +3109,7 @@
                     <onup condition="$EXP[SiloRow5208] + !$EXP[SiloRow5210] + !$EXP[SiloRow5260] + !$EXP[SiloRow5209] + !$EXP[SiloRow5259]">SetFocus(5208)</onup>
                     <onup condition="$EXP[SiloRow5258] + !$EXP[SiloRow5210] + !$EXP[SiloRow5260] + !$EXP[SiloRow5209] + !$EXP[SiloRow5259] + !$EXP[SiloRow5208]">SetFocus(5258)</onup>
                     <onup condition="!$EXP[SiloRow5210] + !$EXP[SiloRow5260] + !$EXP[SiloRow5209] + !$EXP[SiloRow5259] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.11.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.11.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -3146,7 +3146,7 @@
                     <onup condition="$EXP[SiloRow5209] + !$EXP[SiloRow5211] + !$EXP[SiloRow5261] + !$EXP[SiloRow5210] + !$EXP[SiloRow5260]">SetFocus(5209)</onup>
                     <onup condition="$EXP[SiloRow5259] + !$EXP[SiloRow5211] + !$EXP[SiloRow5261] + !$EXP[SiloRow5210] + !$EXP[SiloRow5260] + !$EXP[SiloRow5209]">SetFocus(5259)</onup>
                     <onup condition="!$EXP[SiloRow5211] + !$EXP[SiloRow5261] + !$EXP[SiloRow5210] + !$EXP[SiloRow5260] + !$EXP[SiloRow5209] + !$EXP[SiloRow5259]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.12.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.12.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -3183,7 +3183,7 @@
                     <onup condition="$EXP[SiloRow5209] + !$EXP[SiloRow5211] + !$EXP[SiloRow5261] + !$EXP[SiloRow5210] + !$EXP[SiloRow5260]">SetFocus(5209)</onup>
                     <onup condition="$EXP[SiloRow5259] + !$EXP[SiloRow5211] + !$EXP[SiloRow5261] + !$EXP[SiloRow5210] + !$EXP[SiloRow5260] + !$EXP[SiloRow5209]">SetFocus(5259)</onup>
                     <onup condition="!$EXP[SiloRow5211] + !$EXP[SiloRow5261] + !$EXP[SiloRow5210] + !$EXP[SiloRow5260] + !$EXP[SiloRow5209] + !$EXP[SiloRow5259]">SetFocus(9004)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.series.12.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.12.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -3222,7 +3222,7 @@
                     <ondown condition="$EXP[SiloRow5305] + !$EXP[SiloRow5302] + !$EXP[SiloRow5352] + !$EXP[SiloRow5303] + !$EXP[SiloRow5353] + !$EXP[SiloRow5304] + !$EXP[SiloRow5354]">SetFocus(5305)</ondown>
                     <ondown condition="$EXP[SiloRow5355] + !$EXP[SiloRow5302] + !$EXP[SiloRow5352] + !$EXP[SiloRow5303] + !$EXP[SiloRow5353] + !$EXP[SiloRow5304] + !$EXP[SiloRow5354] + !$EXP[SiloRow5305]">SetFocus(5355)</ondown>
                     <onup>SetFocus(9005)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.requests.1.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.requests.1.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -3261,7 +3261,7 @@
                     <ondown condition="$EXP[SiloRow5305] + !$EXP[SiloRow5302] + !$EXP[SiloRow5352] + !$EXP[SiloRow5303] + !$EXP[SiloRow5353] + !$EXP[SiloRow5304] + !$EXP[SiloRow5354]">SetFocus(5305)</ondown>
                     <ondown condition="$EXP[SiloRow5355] + !$EXP[SiloRow5302] + !$EXP[SiloRow5352] + !$EXP[SiloRow5303] + !$EXP[SiloRow5353] + !$EXP[SiloRow5304] + !$EXP[SiloRow5354] + !$EXP[SiloRow5305]">SetFocus(5355)</ondown>
                     <onup>SetFocus(9005)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.requests.1.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.requests.1.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -3302,7 +3302,7 @@
                     <onup condition="$EXP[SiloRow5301]">SetFocus(5301)</onup>
                     <onup condition="$EXP[SiloRow5351] + !$EXP[SiloRow5301]">SetFocus(5351)</onup>
                     <onup condition="!$EXP[SiloRow5301] + !$EXP[SiloRow5351]">SetFocus(9005)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.requests.2.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.requests.2.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -3343,7 +3343,7 @@
                     <onup condition="$EXP[SiloRow5301]">SetFocus(5301)</onup>
                     <onup condition="$EXP[SiloRow5351] + !$EXP[SiloRow5301]">SetFocus(5351)</onup>
                     <onup condition="!$EXP[SiloRow5301] + !$EXP[SiloRow5351]">SetFocus(9005)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.requests.2.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.requests.2.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -3386,7 +3386,7 @@
                     <onup condition="$EXP[SiloRow5301] + !$EXP[SiloRow5302] + !$EXP[SiloRow5352]">SetFocus(5301)</onup>
                     <onup condition="$EXP[SiloRow5351] + !$EXP[SiloRow5302] + !$EXP[SiloRow5352] + !$EXP[SiloRow5301]">SetFocus(5351)</onup>
                     <onup condition="!$EXP[SiloRow5302] + !$EXP[SiloRow5352] + !$EXP[SiloRow5301] + !$EXP[SiloRow5351]">SetFocus(9005)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.requests.3.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.requests.3.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -3429,7 +3429,7 @@
                     <onup condition="$EXP[SiloRow5301] + !$EXP[SiloRow5302] + !$EXP[SiloRow5352]">SetFocus(5301)</onup>
                     <onup condition="$EXP[SiloRow5351] + !$EXP[SiloRow5302] + !$EXP[SiloRow5352] + !$EXP[SiloRow5301]">SetFocus(5351)</onup>
                     <onup condition="!$EXP[SiloRow5302] + !$EXP[SiloRow5352] + !$EXP[SiloRow5301] + !$EXP[SiloRow5351]">SetFocus(9005)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.requests.3.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.requests.3.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -3474,7 +3474,7 @@
                     <onup condition="$EXP[SiloRow5301] + !$EXP[SiloRow5303] + !$EXP[SiloRow5353] + !$EXP[SiloRow5302] + !$EXP[SiloRow5352]">SetFocus(5301)</onup>
                     <onup condition="$EXP[SiloRow5351] + !$EXP[SiloRow5303] + !$EXP[SiloRow5353] + !$EXP[SiloRow5302] + !$EXP[SiloRow5352] + !$EXP[SiloRow5301]">SetFocus(5351)</onup>
                     <onup condition="!$EXP[SiloRow5303] + !$EXP[SiloRow5353] + !$EXP[SiloRow5302] + !$EXP[SiloRow5352] + !$EXP[SiloRow5301] + !$EXP[SiloRow5351]">SetFocus(9005)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.requests.4.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.requests.4.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -3519,7 +3519,7 @@
                     <onup condition="$EXP[SiloRow5301] + !$EXP[SiloRow5303] + !$EXP[SiloRow5353] + !$EXP[SiloRow5302] + !$EXP[SiloRow5352]">SetFocus(5301)</onup>
                     <onup condition="$EXP[SiloRow5351] + !$EXP[SiloRow5303] + !$EXP[SiloRow5353] + !$EXP[SiloRow5302] + !$EXP[SiloRow5352] + !$EXP[SiloRow5301]">SetFocus(5351)</onup>
                     <onup condition="!$EXP[SiloRow5303] + !$EXP[SiloRow5353] + !$EXP[SiloRow5302] + !$EXP[SiloRow5352] + !$EXP[SiloRow5301] + !$EXP[SiloRow5351]">SetFocus(9005)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.requests.4.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.requests.4.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -3562,7 +3562,7 @@
                     <onup condition="$EXP[SiloRow5302] + !$EXP[SiloRow5304] + !$EXP[SiloRow5354] + !$EXP[SiloRow5303] + !$EXP[SiloRow5353]">SetFocus(5302)</onup>
                     <onup condition="$EXP[SiloRow5352] + !$EXP[SiloRow5304] + !$EXP[SiloRow5354] + !$EXP[SiloRow5303] + !$EXP[SiloRow5353] + !$EXP[SiloRow5302]">SetFocus(5352)</onup>
                     <onup condition="!$EXP[SiloRow5304] + !$EXP[SiloRow5354] + !$EXP[SiloRow5303] + !$EXP[SiloRow5353] + !$EXP[SiloRow5302] + !$EXP[SiloRow5352]">SetFocus(9005)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.requests.5.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.requests.5.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -3605,7 +3605,7 @@
                     <onup condition="$EXP[SiloRow5302] + !$EXP[SiloRow5304] + !$EXP[SiloRow5354] + !$EXP[SiloRow5303] + !$EXP[SiloRow5353]">SetFocus(5302)</onup>
                     <onup condition="$EXP[SiloRow5352] + !$EXP[SiloRow5304] + !$EXP[SiloRow5354] + !$EXP[SiloRow5303] + !$EXP[SiloRow5353] + !$EXP[SiloRow5302]">SetFocus(5352)</onup>
                     <onup condition="!$EXP[SiloRow5304] + !$EXP[SiloRow5354] + !$EXP[SiloRow5303] + !$EXP[SiloRow5353] + !$EXP[SiloRow5302] + !$EXP[SiloRow5352]">SetFocus(9005)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.requests.5.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.requests.5.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -3646,7 +3646,7 @@
                     <onup condition="$EXP[SiloRow5303] + !$EXP[SiloRow5305] + !$EXP[SiloRow5355] + !$EXP[SiloRow5304] + !$EXP[SiloRow5354]">SetFocus(5303)</onup>
                     <onup condition="$EXP[SiloRow5353] + !$EXP[SiloRow5305] + !$EXP[SiloRow5355] + !$EXP[SiloRow5304] + !$EXP[SiloRow5354] + !$EXP[SiloRow5303]">SetFocus(5353)</onup>
                     <onup condition="!$EXP[SiloRow5305] + !$EXP[SiloRow5355] + !$EXP[SiloRow5304] + !$EXP[SiloRow5354] + !$EXP[SiloRow5303] + !$EXP[SiloRow5353]">SetFocus(9005)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.requests.6.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.requests.6.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -3687,7 +3687,7 @@
                     <onup condition="$EXP[SiloRow5303] + !$EXP[SiloRow5305] + !$EXP[SiloRow5355] + !$EXP[SiloRow5304] + !$EXP[SiloRow5354]">SetFocus(5303)</onup>
                     <onup condition="$EXP[SiloRow5353] + !$EXP[SiloRow5305] + !$EXP[SiloRow5355] + !$EXP[SiloRow5304] + !$EXP[SiloRow5354] + !$EXP[SiloRow5303]">SetFocus(5353)</onup>
                     <onup condition="!$EXP[SiloRow5305] + !$EXP[SiloRow5355] + !$EXP[SiloRow5304] + !$EXP[SiloRow5354] + !$EXP[SiloRow5303] + !$EXP[SiloRow5353]">SetFocus(9005)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.requests.6.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.requests.6.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -3726,7 +3726,7 @@
                     <onup condition="$EXP[SiloRow5304] + !$EXP[SiloRow5306] + !$EXP[SiloRow5356] + !$EXP[SiloRow5305] + !$EXP[SiloRow5355]">SetFocus(5304)</onup>
                     <onup condition="$EXP[SiloRow5354] + !$EXP[SiloRow5306] + !$EXP[SiloRow5356] + !$EXP[SiloRow5305] + !$EXP[SiloRow5355] + !$EXP[SiloRow5304]">SetFocus(5354)</onup>
                     <onup condition="!$EXP[SiloRow5306] + !$EXP[SiloRow5356] + !$EXP[SiloRow5305] + !$EXP[SiloRow5355] + !$EXP[SiloRow5304] + !$EXP[SiloRow5354]">SetFocus(9005)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.requests.7.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.requests.7.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -3765,7 +3765,7 @@
                     <onup condition="$EXP[SiloRow5304] + !$EXP[SiloRow5306] + !$EXP[SiloRow5356] + !$EXP[SiloRow5305] + !$EXP[SiloRow5355]">SetFocus(5304)</onup>
                     <onup condition="$EXP[SiloRow5354] + !$EXP[SiloRow5306] + !$EXP[SiloRow5356] + !$EXP[SiloRow5305] + !$EXP[SiloRow5355] + !$EXP[SiloRow5304]">SetFocus(5354)</onup>
                     <onup condition="!$EXP[SiloRow5306] + !$EXP[SiloRow5356] + !$EXP[SiloRow5305] + !$EXP[SiloRow5355] + !$EXP[SiloRow5304] + !$EXP[SiloRow5354]">SetFocus(9005)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.requests.7.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.requests.7.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>
@@ -3802,7 +3802,7 @@
                     <onup condition="$EXP[SiloRow5305] + !$EXP[SiloRow5307] + !$EXP[SiloRow5357] + !$EXP[SiloRow5306] + !$EXP[SiloRow5356]">SetFocus(5305)</onup>
                     <onup condition="$EXP[SiloRow5355] + !$EXP[SiloRow5307] + !$EXP[SiloRow5357] + !$EXP[SiloRow5306] + !$EXP[SiloRow5356] + !$EXP[SiloRow5305]">SetFocus(5355)</onup>
                     <onup condition="!$EXP[SiloRow5307] + !$EXP[SiloRow5357] + !$EXP[SiloRow5306] + !$EXP[SiloRow5356] + !$EXP[SiloRow5305] + !$EXP[SiloRow5355]">SetFocus(9005)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.requests.8.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.requests.8.poster)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>
@@ -3839,7 +3839,7 @@
                     <onup condition="$EXP[SiloRow5305] + !$EXP[SiloRow5307] + !$EXP[SiloRow5357] + !$EXP[SiloRow5306] + !$EXP[SiloRow5356]">SetFocus(5305)</onup>
                     <onup condition="$EXP[SiloRow5355] + !$EXP[SiloRow5307] + !$EXP[SiloRow5357] + !$EXP[SiloRow5306] + !$EXP[SiloRow5356] + !$EXP[SiloRow5305]">SetFocus(5355)</onup>
                     <onup condition="!$EXP[SiloRow5307] + !$EXP[SiloRow5357] + !$EXP[SiloRow5306] + !$EXP[SiloRow5356] + !$EXP[SiloRow5305] + !$EXP[SiloRow5355]">SetFocus(9005)</onup>
-                    <content target="videos">$INFO[Window(Home).Property(silo.requests.8.path)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">$INFO[Window(Home).Property(silo.requests.8.landscape)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="400" height="290">
                     <include>SiloCardLandscape</include>
                     </itemlayout>

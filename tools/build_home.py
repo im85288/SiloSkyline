@@ -261,8 +261,12 @@ def row(page, page_index, slot, landscape):
     # The library_updated suffix changes when SiloKodiConnect writes the
     # library, which makes Kodi reload the row. Kodi reads a $VAR in a content
     # path only once, when the window opens, so this must stay $INFO: a row
-    # without a path logs one harmless error at start-up.
-    path = '$INFO[%s]&amp;refresh=$INFO[%s]' % (prop(key + '.path'), prop('silokodi.library_updated'))
+    # without a path logs one harmless error at start-up. Each slot has a
+    # poster and a landscape list: each loads from the path SiloKodiConnect
+    # publishes under its own style (empty for the other style, and for pages
+    # not yet opened), so only the list that shows does the work.
+    path = '$INFO[%s]&amp;refresh=$INFO[%s]' % (prop(key + ('.landscape' if landscape else '.poster')),
+                                                prop('silokodi.library_updated'))
     if page == 'custom':
         # A Skin Shortcuts widget: any Kodi path, used as it is.
         path = '$INFO[%s]' % prop(key + '.path')
