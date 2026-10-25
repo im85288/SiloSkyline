@@ -53,7 +53,9 @@ ON_DECK = 3100
 # cards across, played from here (resuming where it was left).
 ON_DECK_CARD = dict(LANDSCAPE, width=288, height=162)
 ON_DECK_PATH = ('plugin://plugin.video.silokodiconnect/?mode=widget&amp;section=continue_watching'
-                '&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]')
+                '&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]'
+                # Not the show Up Next is offering; last, as the title isn't URL-encoded.
+                '&amp;exclude_show=$INFO[Window.Property(tvshowtitle)]')
 
 # Silo TV's grid (1920 wide): 160 px margins, five cards of 288 with 40 px
 # gaps. The video pane spans two cards; the panel takes the rest.

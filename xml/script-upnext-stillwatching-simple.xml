@@ -145,7 +145,7 @@
                 <onfocus condition="!String.IsEqual(Window.Property(silo.deck),1)">SetFocus(3012)</onfocus>
                 <onclick condition="Integer.IsGreater(ListItem.PercentPlayed,0)">PlayMedia($ESCINFO[ListItem.FileNameAndPath],resume)</onclick>
                 <onclick condition="!Integer.IsGreater(ListItem.PercentPlayed,0)">PlayMedia($ESCINFO[ListItem.FileNameAndPath],noresume)</onclick>
-                <content target="videos">plugin://plugin.video.silokodiconnect/?mode=widget&amp;section=continue_watching&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                <content target="videos">plugin://plugin.video.silokodiconnect/?mode=widget&amp;section=continue_watching&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]&amp;exclude_show=$INFO[Window.Property(tvshowtitle)]</content>
                 <itemlayout width="328" height="250">
                     <control type="group">
                         <control type="image">
