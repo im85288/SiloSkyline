@@ -163,11 +163,14 @@
 		<width>120</width>
 		<height>120</height>
 		<textoffsety>27</textoffsety>
-		<texturefocus colordiffuse="button_focus">buttons/roundbutton-fo.png</texturefocus>
+		<!-- Silo Skyline: a white tile with dark text on focus, Inter. -->
+		<texturefocus border="46" colordiffuse="FFEDEDED">silo/dialog_button.png</texturefocus>
 		<texturenofocus />
+		<focusedcolor>FF000000</focusedcolor>
+		<textcolor>FFEDEDED</textcolor>
 		<align>center</align>
 		<aligny>top</aligny>
-		<font>font45</font>
+		<font>silo_key</font>
 	</include>
 	<include name="PlaylistWindowButton">
 		<param name="width">100%</param>

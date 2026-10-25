@@ -57,6 +57,7 @@ FONTS = [  # name, file, size
     ('silo_card_title', 'Inter-SemiBold.ttf', 26),
     ('silo_card_sub', 'Inter-Medium.ttf', 24),
     ('silo_wordmark', 'Inter-Bold.ttf', 44),
+    ('silo_key', 'Inter-Medium.ttf', 40),
 ]
 
 
