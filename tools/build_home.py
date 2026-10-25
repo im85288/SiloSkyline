@@ -17,6 +17,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGES = ('home', 'movies', 'series')
 TAB_LABELS = {'home': 'Home', 'movies': 'Movies', 'series': 'Series'}
 MAX_ROWS = 12
+LOOKAHEAD = 4  # rows a move may skip over when they are empty
 
 SAFE_X = 88
 BAR_TOP = 56
@@ -44,10 +45,6 @@ def page_visible(page):
 
 def list_id(page_index, slot, landscape):
     return 5000 + 100 * page_index + (50 if landscape else 0) + slot
-
-
-def first_row_ids(page_index):
-    return [list_id(page_index, 1, False), list_id(page_index, 1, True)]
 
 
 def card_layout(card, focused, control_id=None):
@@ -93,21 +90,31 @@ def card_layout(card, focused, control_id=None):
                                     'text': TEXT, 'ring': ring}
 
 
-def moves(page_index, slot):
-    """Up and down between rows. Kodi doesn't move focus between lists that
-    sit in groups inside a grouplist, so each row names its neighbours. A
-    slot is one row in one of two card shapes, so at most one is visible."""
+def first_visible(action, candidates, indent='                    '):
+    """<action> tags that focus the first visible candidate. Kodi runs every
+    tag whose condition holds, so each excludes the ones before it."""
     out = ''
-    for action, other in (('ondown', slot + 1), ('onup', slot - 1)):
-        if other < 1:
-            out += '\n                    <onup>9000</onup>'
-            continue
-        if other > MAX_ROWS:
-            continue
-        for landscape in (False, True):
-            target = list_id(page_index, other, landscape)
-            out += '\n                    <%s condition="Control.IsVisible(%d)">SetFocus(%d)</%s>' % (
-                action, target, target, action)
+    for index, target in enumerate(candidates):
+        condition = ' + '.join(['Control.IsVisible(%d)' % target]
+                               + ['!Control.IsVisible(%d)' % k for k in candidates[:index]])
+        out += '\n%s<%s condition="%s">SetFocus(%d)</%s>' % (indent, action, condition, target, action)
+    return out
+
+
+def page_rows(page_index, slots):
+    return [list_id(page_index, slot, landscape) for slot in slots for landscape in (False, True)]
+
+
+def moves(page_index, slot):
+    """Up and down to the nearest row that is showing (empty rows hide), and
+    up from the top row to the menu bar. Kodi doesn't move focus between
+    lists in groups inside a grouplist, so each row names its neighbours."""
+    # Look a few rows ahead: enough to skip empty rows without bloating the XML.
+    down = page_rows(page_index, range(slot + 1, min(MAX_ROWS, slot + LOOKAHEAD) + 1))
+    up = page_rows(page_index, range(slot - 1, max(0, slot - LOOKAHEAD), -1))
+    out = first_visible('ondown', down) + first_visible('onup', up)
+    above = ' + '.join('!Control.IsVisible(%d)' % k for k in up) or 'true'
+    out += '\n                    <onup condition="%s">SetFocus(9000)</onup>' % above
     return out
 
 
@@ -115,6 +122,9 @@ def row(page, page_index, slot, landscape):
     card = LANDSCAPE if landscape else POSTER
     key = 'silo.%s.%d' % (page, slot)
     style_ok = ('String.IsEqual(%s,landscape)' if landscape else '!String.IsEqual(%s,landscape)') % prop(key + '.style')
+    # Empty rows hide, as in Silo; Kodi still loads a list hidden this way.
+    lid = list_id(page_index, slot, landscape)
+    style_ok += ' + [Integer.IsGreater(Container(%d).NumItems,0) | Container(%d).IsUpdating]' % (lid, lid)
     # The library_updated suffix changes when SiloKodiConnect writes the
     # library, which makes Kodi reload the row.
     path = '$INFO[%s]&amp;refresh=$INFO[%s]' % (prop(key + '.path'), prop('silokodi.library_updated'))
@@ -172,7 +182,6 @@ def bar_moves(control_id):
 
 
 def tab(control_id, page, page_index):
-    first = first_row_ids(page_index)
     visible = '' if page == 'home' else \
         '\n                <visible>String.Contains(%s,%s)</visible>' % (prop('silo.pages'), page)
     return '''
@@ -193,13 +202,13 @@ def tab(control_id, page, page_index):
                     <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
                     <texturenofocus />
                     <onclick>SetProperty(silo.page,%(page)s,home)</onclick>%(moves)s
-                    <onclick condition="Control.IsVisible(%(p)d)">SetFocus(%(p)d)</onclick>
-                    <onclick condition="Control.IsVisible(%(l)d)">SetFocus(%(l)d)</onclick>
+%(focus_rows)s
                 </control>
             </control>''' % {'width': 60 + 17 * len(TAB_LABELS[page]), 'visible': visible,
                             'selected': page_visible(page), 'id': control_id, 'label': TAB_LABELS[page],
-                            'dim': TAB_DIM, 'text': TEXT, 'page': page, 'p': first[0], 'l': first[1],
-                            'moves': bar_moves(control_id)}
+                            'dim': TAB_DIM, 'text': TEXT, 'page': page,
+                            'moves': bar_moves(control_id),
+                            'focus_rows': first_visible('onclick', page_rows(page_index, range(1, LOOKAHEAD + 1)))}
 
 
 def icon_tab(control_id, icon, action):
@@ -230,11 +239,10 @@ def icon_tab(control_id, icon, action):
 
 
 def bar_down(indent='            '):
-    out = ''
-    for index in range(len(PAGES)):
-        for target in first_row_ids(index):
-            out += '\n%s<ondown condition="Control.IsVisible(%d)">SetFocus(%d)</ondown>' % (indent, target, target)
-    return out
+    """Down from the bar: the first row showing, on whichever page is shown
+    (only one page's rows are ever visible)."""
+    return ''.join(first_visible('ondown', page_rows(index, range(1, LOOKAHEAD + 1)), indent)
+                   for index in range(len(PAGES)))
 
 
 def build():

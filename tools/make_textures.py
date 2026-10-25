@@ -5,7 +5,6 @@
 Kodi multiplies an image's alpha by its <diffuse> texture, stretched to the
 control's size, so masks are drawn at the size the skin uses them.
 """
-import math
 import os
 import struct
 import zlib
