@@ -2987,6 +2987,11 @@
     </variable>
     <!-- end Silo Skyline search -->
     <!-- Silo Up Next variables (tools/build_upnext.py) -->
+    <variable name="SiloUpNextBackdrop">
+        <value condition="!String.IsEmpty(Window.Property(fanart))">$INFO[Window.Property(fanart)]</value>
+        <value condition="!String.IsEmpty(Window.Property(landscape))">$INFO[Window.Property(landscape)]</value>
+        <value>$INFO[Window.Property(thumb)]</value>
+    </variable>
     <variable name="SiloUpNextArt">
         <value condition="!String.IsEmpty(Window.Property(thumb))">$INFO[Window.Property(thumb)]</value>
         <value condition="!String.IsEmpty(Window.Property(landscape))">$INFO[Window.Property(landscape)]</value>
