@@ -3,7 +3,11 @@
 	<defaultcontrol>9000</defaultcontrol>
 	<backgroundcolor>background</backgroundcolor>
 	<controls>
-		<include>DefaultBackground</include>
+		<!-- Silo Skyline: the page colour and the Silo wordmark. -->
+		<control type="image">
+			<left>0</left><top>0</top><width>1920</width><height>1080</height>
+			<texture colordiffuse="FF0D0F12">colors/white.png</texture>
+		</control>
 		<control type="multiimage">
 			<depth>DepthBackground</depth>
 			<include>FullScreenDimensions</include>
@@ -24,17 +28,18 @@
 			<control type="label">
 				<left>0</left>
 				<right>0</right>
-				<top>420</top>
-				<height>400</height>
+				<top>480</top>
+				<height>56</height>
 				<label>$LOCALIZE[5]</label>
 				<align>center</align>
-				<font>font37</font>
+				<font>silo_row</font>
+				<textcolor>FFEDEDED</textcolor>
 			</control>
 			<control type="panel" id="9000">
 				<left>0</left>
 				<width>100%</width>
-				<top>120</top>
-				<height>300</height>
+				<top>200</top>
+				<height>270</height>
 				<onup>noop</onup>
 				<ondown>Control.SetFocus(9001,$INFO[Container(9000).Position],absolute)</ondown>
 				<include>SettingsPanel</include>
@@ -64,7 +69,7 @@
 			<control type="panel" id="9001">
 				<left>0</left>
 				<right>0</right>
-				<top>470</top>
+				<top>540</top>
 				<bottom>0</bottom>
 				<onup>Control.SetFocus(9000,$INFO[Container(9001).Position],absolute)</onup>
 				<ondown>noop</ondown>
@@ -120,9 +125,21 @@
 				</content>
 			</control>
 		</control>
-		<include content="TopBar">
-			<param name="breadcrumbs_label" value="$LOCALIZE[13000]" />
-		</include>
-		<include>BottomBar</include>
+		<control type="label">
+			<left>88</left><top>56</top>
+			<width>300</width><height>64</height>
+			<aligny>center</aligny>
+			<font>silo_wordmark</font>
+			<textcolor>FFEDEDED</textcolor>
+			<label>Silo</label>
+		</control>
+		<control type="label">
+			<left>88</left><top>124</top>
+			<width>1000</width><height>56</height>
+			<aligny>center</aligny>
+			<font>silo_row</font>
+			<textcolor>FFEDEDED</textcolor>
+			<label>$LOCALIZE[13000]</label>
+		</control>
 	</controls>
 </window>
