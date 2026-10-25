@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Silo Skyline: Silo's dropdown, a dark rounded panel with the focused row
+     a white pill (Estuary's actions and layout logic unchanged). -->
 <window>
 	<defaultcontrol>996</defaultcontrol>
 	<include>Animation_DialogPopupOpenClose</include>
@@ -26,21 +28,20 @@
 			<onclick>Action(close)</onclick>
 		</control>
 		<control type="group">
-			<animation effect="slide" end="0,175" time="0" condition="Window.IsActive(home)">conditional</animation>
 			<control type="image" id="999">
 				<description>background image</description>
 				<left>0</left>
 				<top>0</top>
-				<width>450</width>
+				<width>520</width>
 				<height>780</height>
-				<texture colordiffuse="dialog_tint">colors/white.png</texture>
+				<texture border="14" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
 			</control>
 			<control type="grouplist" id="996">
 				<description>grouplist for context buttons</description>
-				<left>0</left>
-				<top>0</top>
-				<width>450</width>
-				<height max="780">auto</height>
+				<left>10</left>
+				<top>10</top>
+				<width>500</width>
+				<height max="760">auto</height>
 				<usecontrolcoords>true</usecontrolcoords>
 			</control>
 			<include content="UpDownArrows">
@@ -54,10 +55,15 @@
 			<description>button template</description>
 			<left>0</left>
 			<top></top>
-			<width>450</width>
-			<height>65</height>
-			<align>center</align>
-			<texturefocus colordiffuse="button_focus">lists/focus.png</texturefocus>
+			<width>500</width>
+			<height>64</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<textoffsetx>28</textoffsetx>
+			<font>silo_meta</font>
+			<textcolor>FFEDEDED</textcolor>
+			<focusedcolor>FF000000</focusedcolor>
+			<texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
 			<texturenofocus />
 		</control>
 	</controls>
