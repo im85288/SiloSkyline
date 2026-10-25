@@ -33,8 +33,8 @@ def badge(label, condition, font='silo_badge', height=36):
                     <aligny>center</aligny>
                     <enable>false</enable>
                     <disabledcolor>%(text)s</disabledcolor>
-                    <texturenofocus border="8" colordiffuse="99EDEDED">silo/badge_outline.png</texturenofocus>
-                    <texturefocus border="8" colordiffuse="99EDEDED">silo/badge_outline.png</texturefocus>
+                    <texturenofocus border="8">silo/badge_fill.png</texturenofocus>
+                    <texturefocus border="8">silo/badge_fill.png</texturefocus>
                     <visible>%(condition)s</visible>
                 </control>''' % {'h': height, 'label': label, 'font': font, 'text': TEXT, 'condition': condition}
 
@@ -398,7 +398,8 @@ def build():
 </window>
 ''' % {'background': BACKGROUND, 'x': SAFE_X, 'top': TOP, 'text': TEXT, 'dim': TEXT_DIM, 'has_logo': has_logo,
        'mpaa': badge('$VAR[SiloDetailMpaa]', '[!String.IsEmpty(ListItem.Mpaa) | '
-                     '!String.IsEmpty(ListItem.Property(silo.mpaa))]', 'silo_meta', 40),
+                     '!String.IsEmpty(ListItem.Property(silo.mpaa))]', 'silo_badge', 34).replace(
+                         '<height>34</height>', '<top>3</top><height>34</height>', 1),
        'badges': badges,
        'trailer': round_button(11, 'icons/infodialogs/trailer.png', '!String.IsEmpty(ListItem.Trailer)'),
        'versions': round_button(14, 'icons/infodialogs/versions.png',

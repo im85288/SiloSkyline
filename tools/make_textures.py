@@ -97,6 +97,34 @@ def focus_ring(name, width, height, radius, thickness):
     write_png(name, width, height, alpha)
 
 
+def badge_fill(name='badge_fill.png', size=32, radius=8, rim=1.5):
+    """Silo's badge: a faint white fill with a slightly brighter rim (both
+    white; the alpha carries them), stretched with border="8"."""
+    def alpha(x, y):
+        outer = rounded_rect_coverage(x, y, size, size, radius)
+        inner = rounded_rect_coverage(x, y, size, size, radius, inset=rim)
+        return (outer - inner) * 0.34 + inner * 0.14
+    write_png(name, size, size, alpha)
+
+
+def play_circle(name='play_circle.png', size=64):
+    """Silo's Continue Watching mark: a white disc with a play triangle cut out."""
+    def in_triangle(px, py):
+        # Pointing right, centred a little right of the disc's middle, as Silo's.
+        x0, y0, x1, y1, x2, y2 = size * 0.40, size * 0.30, size * 0.40, size * 0.70, size * 0.72, size * 0.50
+        def side(ax, ay, bx, by):
+            return (px - bx) * (ay - by) - (ax - bx) * (py - by)
+        d1, d2, d3 = side(x0, y0, x1, y1), side(x1, y1, x2, y2), side(x2, y2, x0, y0)
+        return not ((d1 < 0 or d2 < 0 or d3 < 0) and (d1 > 0 or d2 > 0 or d3 > 0))
+
+    def alpha(x, y):
+        disc = rounded_rect_coverage(x, y, size, size, size / 2.0)
+        hits = sum(in_triangle(x - 0.5 + (sx + 0.5) / SUB, y - 0.5 + (sy + 0.5) / SUB)
+                   for sy in range(SUB) for sx in range(SUB))
+        return max(0.0, disc - hits / float(SUB * SUB))
+    write_png(name, size, size, alpha)
+
+
 def pill(size=60):
     """A white capsule end: used with border="30" so it stretches to any width."""
     write_png('pill.png', size, size, lambda x, y: rounded_rect_coverage(x, y, size, size, size / 2.0))
@@ -147,6 +175,8 @@ if __name__ == '__main__':
     focus_ring('card_landscape_focus.png', 372, 214, 20, 4)
     # Badges: a 2 px outline, stretched with border="8".
     focus_ring('badge_outline.png', 32, 32, 8, 2)
+    badge_fill()
+    play_circle()
     # Silo's skip pill outline (Up Next's Skip intro), stretched with border="48".
     focus_ring('pill_ring.png', 96, 96, 48, 4)
     pill()

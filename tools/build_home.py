@@ -41,14 +41,17 @@ TEXT_DIM = 'BFEDEDED'      # Silo's secondary text: 75%
 TAB_DIM = 'B3EDEDED'       # Silo's dimmed bar items: 70%
 TITLE_DIM = 'C7EDEDED'     # a card's title until it has focus: 78%
 BACKGROUND = 'FF0D0F12'     # Silo's near-black page
-ROWS_TOP = 612             # row titles sit where Silo's do
+ROWS_TOP = 592             # row titles sit where Silo's do (Silo TV, October 2026)
 # As in Silo, the row band shows the focused row and a sliver of the next
 # row's title, never its cards. Each row is the band's full height with its
 # content in the top ROW_PITCH, and rows overlap by the rest (a negative
 # item gap): Kodi scrolls a grouplist just far enough to show the focused
-# row whole, which puts it at the top and the next title in the last 48 px.
+# row whole, which puts it at the top and the next title in the last 24 px
+# (just below a poster row's captions, as in Silo).
 BAND_H = 1080 - ROWS_TOP
-ROW_PITCH = BAND_H - 48
+ROW_PITCH = BAND_H - 24
+# Cards sit this far below their row's title, leaving Silo's gap between them.
+CARDS_TOP = 96
 
 # Cards as Silo TV draws them: dense posters (88x132 units) and backdrops
 # (180x101), each with a title and a second line beneath.
@@ -276,16 +279,32 @@ def row(page, page_index, slot, landscape):
             <control type="group">
                 <height>%(group_h)d</height>
                 <visible>%(rules)s</visible>
+                <!-- Silo marks Continue Watching with a play icon before its title. -->
+                <control type="image">
+                    <left>%(x)d</left><top>9</top>
+                    <width>28</width><height>28</height>
+                    <texture colordiffuse="%(text)s">silo/play_circle.png</texture>
+                    <visible>String.IsEqual(%(type)s,continue_watching)</visible>
+                </control>
                 <control type="label">
                     <left>%(x)d</left><top>0</top>
                     <width>1500</width><height>46</height>
                     <font>silo_row</font>
                     <textcolor>%(text)s</textcolor>
                     <label>$INFO[%(title)s]</label>
+                    <visible>!String.IsEqual(%(type)s,continue_watching)</visible>
+                </control>
+                <control type="label">
+                    <left>%(icon_x)d</left><top>0</top>
+                    <width>1500</width><height>46</height>
+                    <font>silo_row</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label>$INFO[%(title)s]</label>
+                    <visible>String.IsEqual(%(type)s,continue_watching)</visible>
                 </control>
                 <control type="list" id="%(id)d">
                     <visible>%(rules)s</visible>
-                    <left>%(lx)d</left><top>56</top>
+                    <left>%(lx)d</left><top>%(cards_top)d</top>
                     <width>%(lw)d</width><height>%(item_h)d</height>
                     <orientation>horizontal</orientation>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
@@ -301,8 +320,8 @@ def row(page, page_index, slot, landscape):
                     </focusedlayout>
                 </control>
             </control>''' % {
-        'group_h': BAND_H, 'rules': rules, 'x': SAFE_X, 'text': TEXT, 'title': prop(key + '.title'),
-        'id': list_id(page_index, slot, landscape), 'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'item_h': item_h,
+        'group_h': BAND_H, 'rules': rules, 'x': SAFE_X, 'text': TEXT, 'title': prop(key + '.title'), 'type': prop(key + '.type'), 'icon_x': SAFE_X + 42,
+        'cards_top': CARDS_TOP, 'id': list_id(page_index, slot, landscape), 'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'item_h': item_h,
         'moves': moves(page_index, slot), 'path': path, 'item_w': item_w, 'normal': card_layout(card, False),
         'focused': card_layout(card, True, list_id(page_index, slot, landscape))}
 
@@ -629,8 +648,9 @@ def badge(label, height, font):
                     <aligny>center</aligny>
                     <enable>false</enable>
                     <disabledcolor>%(text)s</disabledcolor>
-                    <texturenofocus border="8" colordiffuse="99EDEDED">silo/badge_outline.png</texturenofocus>
-                    <texturefocus border="8" colordiffuse="99EDEDED">silo/badge_outline.png</texturefocus>
+                    <!-- Silo's badge: a faint fill with a brighter rim. -->
+                    <texturenofocus border="8">silo/badge_fill.png</texturenofocus>
+                    <texturefocus border="8">silo/badge_fill.png</texturefocus>
                     <visible>$EXP[%(shown)s]</visible>
                 </control>''' % {'h': height, 'label': label, 'font': font, 'text': TEXT,
                                   'shown': label.replace('$VAR[', 'Has').rstrip(']')}
@@ -788,7 +808,9 @@ def build():
        'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
        'bar_down': bar_down(), 'avatar': avatar(), 'custom': shortcuts_list,
        'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections_menus(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'background': BACKGROUND,
-       'mpaa_badge': badge('$VAR[SiloMpaa]', 40, 'silo_meta'),
+       # The age rating as Silo draws it: the quality badges' size, centred on the info line.
+       'mpaa_badge': badge('$VAR[SiloMpaa]', 34, 'silo_badge').replace(
+           '<width>auto</width><height>34</height>', '<top>3</top><width>auto</width><height>34</height>', 1),
        'quality_badges': ''.join(badge('$VAR[SiloBadge%d]' % n, 36, 'silo_badge') for n in (1, 2, 3))}
 
 
