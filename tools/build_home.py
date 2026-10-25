@@ -217,7 +217,7 @@ def row(page, page_index, slot, landscape):
         'focused': card_layout(card, True, list_id(page_index, slot, landscape))}
 
 
-BAR_ORDER = [9001, 9002, 9003, 9004, 9009, 9010]  # Search, Home, Movies, Series, Settings, Power
+BAR_ORDER = [9001, 9002, 9003, 9004, 9009, 9010, 9011]  # Search, Home, Movies, Series, Settings, Power, profile
 
 
 def bar_moves(control_id):
@@ -290,6 +290,54 @@ def icon_tab(control_id, icon, action):
                 </control>
             </control>''' % {'id': control_id, 'text': TEXT, 'action': action, 'icon': icon, 'dim': TAB_DIM,
                             'moves': bar_moves(control_id)}
+
+
+def avatar():
+    """The profile's avatar at the bar's right edge, as in Silo: its picture,
+    or its initial in a circle; it opens SiloKodiConnect's menu."""
+    has_picture = '!String.IsEmpty(%s)' % prop('silo.avatar')
+    return '''
+        <control type="group">
+            <left>%(left)d</left><top>%(top)d</top>
+            <width>64</width><height>64</height>
+            <visible>!String.IsEmpty(%(name)s)</visible>
+            <control type="button" id="9011">
+                <width>64</width><height>64</height>
+                <label />
+                <texturefocus />
+                <texturenofocus />
+                <onclick>ActivateWindow(Videos,plugin://plugin.video.silokodiconnect/,return)</onclick>%(moves)s
+            </control>
+            <control type="image">
+                <left>4</left><top>4</top>
+                <width>56</width><height>56</height>
+                <texture colordiffuse="33FFFFFF">silo/avatar_mask.png</texture>
+                <visible>!%(has_picture)s</visible>
+            </control>
+            <control type="label">
+                <left>4</left><top>4</top>
+                <width>56</width><height>56</height>
+                <align>center</align><aligny>center</aligny>
+                <font>silo_tab</font>
+                <textcolor>%(text)s</textcolor>
+                <label>$INFO[%(initial)s]</label>
+                <visible>!%(has_picture)s</visible>
+            </control>
+            <control type="image">
+                <left>4</left><top>4</top>
+                <width>56</width><height>56</height>
+                <aspectratio>scale</aspectratio>
+                <texture background="true" diffuse="silo/avatar_mask.png">$INFO[%(picture)s]</texture>
+                <visible>%(has_picture)s</visible>
+            </control>
+            <control type="image">
+                <width>64</width><height>64</height>
+                <texture colordiffuse="%(text)s">silo/avatar_ring.png</texture>
+                <visible>Control.HasFocus(9011)</visible>
+            </control>
+        </control>''' % {'left': 1920 - SAFE_X - 64, 'top': BAR_TOP, 'name': prop('silo.profile_name'),
+                         'moves': bar_moves(9011), 'has_picture': has_picture, 'text': TEXT,
+                         'initial': prop('silo.profile_initial'), 'picture': prop('silo.avatar')}
 
 
 def bar_down(indent='            '):
@@ -438,11 +486,12 @@ def build():
             <align>center</align>
             <itemgap>8</itemgap>%(bar_down)s%(tabs)s
         </control>
+%(avatar)s
     </controls>
 </window>
 ''' % {'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'rows_top': ROWS_TOP, 'rows_h': 1080 - ROWS_TOP,
        'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
-       'bar_down': bar_down(), 'row_prop': prop('silo.row'), 'background': BACKGROUND,
+       'bar_down': bar_down(), 'avatar': avatar(), 'row_prop': prop('silo.row'), 'background': BACKGROUND,
        'mpaa_badge': badge('$VAR[SiloMpaa]', 40, 'silo_meta'),
        'quality_badges': ''.join(badge('$VAR[SiloBadge%d]' % n, 36, 'silo_badge') for n in (1, 2, 3))}
 
@@ -568,7 +617,7 @@ def first_row_timer():
     """A skin timer (xml/Timers.xml) that puts focus on the first row once it
     has loaded, so the hero is filled at start-up: rows load after Home opens,
     and Kodi can't focus an empty list. It waits until no row has been chosen
-    and focus is on the current page's tab or off the bar, then focuses the
+    and focus is on the current page's tab or off the bar (avatar included), then focuses the
     first row showing a second later; it starts again if that row was still
     loading. Timers.xml gets its conditions in full: it has no $EXP."""
     ready, focus = [], []
@@ -576,7 +625,8 @@ def first_row_timer():
         rows = [(slot, landscape) for slot in range(1, LOOKAHEAD + 1) for landscape in (False, True)]
         loaded = ' | '.join('Integer.IsGreater(Container(%d).NumItems,0)' % list_id(index, slot, landscape)
                             for slot, landscape in rows)
-        ready.append('[%s + [%s] + [Control.HasFocus(%d) | !ControlGroup(9000).HasFocus()]]'
+        ready.append('[%s + [%s] + [Control.HasFocus(%d) | [!ControlGroup(9000).HasFocus() + '
+                     '!Control.HasFocus(9011)]]]'
                      % (page_visible(page), loaded, 9002 + index))
         shown_rows = [('[%s]' % row_rules(page, index, slot, landscape), list_id(index, slot, landscape))
                       for slot, landscape in rows]

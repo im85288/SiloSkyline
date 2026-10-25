@@ -8665,6 +8665,7 @@
                     <onright condition="Control.IsVisible(9004) + !Control.IsVisible(9002) + !Control.IsVisible(9003)">SetFocus(9004)</onright>
                     <onright condition="Control.IsVisible(9009) + !Control.IsVisible(9002) + !Control.IsVisible(9003) + !Control.IsVisible(9004)">SetFocus(9009)</onright>
                     <onright condition="Control.IsVisible(9010) + !Control.IsVisible(9002) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9009)">SetFocus(9010)</onright>
+                    <onright condition="Control.IsVisible(9011) + !Control.IsVisible(9002) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9009) + !Control.IsVisible(9010)">SetFocus(9011)</onright>
                 </control>
                 <control type="image">
                     <left>14</left><top>14</top>
@@ -8725,6 +8726,7 @@
                     <onright condition="Control.IsVisible(9004) + !Control.IsVisible(9003)">SetFocus(9004)</onright>
                     <onright condition="Control.IsVisible(9009) + !Control.IsVisible(9003) + !Control.IsVisible(9004)">SetFocus(9009)</onright>
                     <onright condition="Control.IsVisible(9010) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9009)">SetFocus(9010)</onright>
+                    <onright condition="Control.IsVisible(9011) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9009) + !Control.IsVisible(9010)">SetFocus(9011)</onright>
                     <onleft condition="Control.IsVisible(9001)">SetFocus(9001)</onleft>
 
                     <onclick condition="$EXP[SiloRow5001]">SetFocus(5001)</onclick>
@@ -8784,6 +8786,7 @@
                     <onright condition="Control.IsVisible(9004)">SetFocus(9004)</onright>
                     <onright condition="Control.IsVisible(9009) + !Control.IsVisible(9004)">SetFocus(9009)</onright>
                     <onright condition="Control.IsVisible(9010) + !Control.IsVisible(9004) + !Control.IsVisible(9009)">SetFocus(9010)</onright>
+                    <onright condition="Control.IsVisible(9011) + !Control.IsVisible(9004) + !Control.IsVisible(9009) + !Control.IsVisible(9010)">SetFocus(9011)</onright>
                     <onleft condition="Control.IsVisible(9002)">SetFocus(9002)</onleft>
                     <onleft condition="Control.IsVisible(9001) + !Control.IsVisible(9002)">SetFocus(9001)</onleft>
 
@@ -8843,6 +8846,7 @@
                     <ondown condition="$EXP[SiloRow5254] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204]">SetFocus(5254)</ondown>
                     <onright condition="Control.IsVisible(9009)">SetFocus(9009)</onright>
                     <onright condition="Control.IsVisible(9010) + !Control.IsVisible(9009)">SetFocus(9010)</onright>
+                    <onright condition="Control.IsVisible(9011) + !Control.IsVisible(9009) + !Control.IsVisible(9010)">SetFocus(9011)</onright>
                     <onleft condition="Control.IsVisible(9003)">SetFocus(9003)</onleft>
                     <onleft condition="Control.IsVisible(9002) + !Control.IsVisible(9003)">SetFocus(9002)</onleft>
                     <onleft condition="Control.IsVisible(9001) + !Control.IsVisible(9003) + !Control.IsVisible(9002)">SetFocus(9001)</onleft>
@@ -8890,6 +8894,7 @@
                     <ondown condition="$EXP[SiloRow5204] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(5204)</ondown>
                     <ondown condition="$EXP[SiloRow5254] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204]">SetFocus(5254)</ondown>
                     <onright condition="Control.IsVisible(9010)">SetFocus(9010)</onright>
+                    <onright condition="Control.IsVisible(9011) + !Control.IsVisible(9010)">SetFocus(9011)</onright>
                     <onleft condition="Control.IsVisible(9004)">SetFocus(9004)</onleft>
                     <onleft condition="Control.IsVisible(9003) + !Control.IsVisible(9004)">SetFocus(9003)</onleft>
                     <onleft condition="Control.IsVisible(9002) + !Control.IsVisible(9004) + !Control.IsVisible(9003)">SetFocus(9002)</onleft>
@@ -8940,6 +8945,7 @@
                     <ondown condition="$EXP[SiloRow5253] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203]">SetFocus(5253)</ondown>
                     <ondown condition="$EXP[SiloRow5204] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(5204)</ondown>
                     <ondown condition="$EXP[SiloRow5254] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204]">SetFocus(5254)</ondown>
+                    <onright condition="Control.IsVisible(9011)">SetFocus(9011)</onright>
                     <onleft condition="Control.IsVisible(9009)">SetFocus(9009)</onleft>
                     <onleft condition="Control.IsVisible(9004) + !Control.IsVisible(9009)">SetFocus(9004)</onleft>
                     <onleft condition="Control.IsVisible(9003) + !Control.IsVisible(9009) + !Control.IsVisible(9004)">SetFocus(9003)</onleft>
@@ -8958,6 +8964,76 @@
                     <texture colordiffuse="B3EDEDED">icons/power.png</texture>
                     <visible>!Control.HasFocus(9010)</visible>
                 </control>
+            </control>
+        </control>
+
+        <control type="group">
+            <left>1768</left><top>56</top>
+            <width>64</width><height>64</height>
+            <visible>!String.IsEmpty(Window(Home).Property(silo.profile_name))</visible>
+            <control type="button" id="9011">
+                <width>64</width><height>64</height>
+                <label />
+                <texturefocus />
+                <texturenofocus />
+                <onclick>ActivateWindow(Videos,plugin://plugin.video.silokodiconnect/,return)</onclick>
+                    <ondown condition="$EXP[SiloRow5001]">SetFocus(5001)</ondown>
+                    <ondown condition="$EXP[SiloRow5051] + !$EXP[SiloRow5001]">SetFocus(5051)</ondown>
+                    <ondown condition="$EXP[SiloRow5002] + !$EXP[SiloRow5001] + !$EXP[SiloRow5051]">SetFocus(5002)</ondown>
+                    <ondown condition="$EXP[SiloRow5052] + !$EXP[SiloRow5001] + !$EXP[SiloRow5051] + !$EXP[SiloRow5002]">SetFocus(5052)</ondown>
+                    <ondown condition="$EXP[SiloRow5003] + !$EXP[SiloRow5001] + !$EXP[SiloRow5051] + !$EXP[SiloRow5002] + !$EXP[SiloRow5052]">SetFocus(5003)</ondown>
+                    <ondown condition="$EXP[SiloRow5053] + !$EXP[SiloRow5001] + !$EXP[SiloRow5051] + !$EXP[SiloRow5002] + !$EXP[SiloRow5052] + !$EXP[SiloRow5003]">SetFocus(5053)</ondown>
+                    <ondown condition="$EXP[SiloRow5004] + !$EXP[SiloRow5001] + !$EXP[SiloRow5051] + !$EXP[SiloRow5002] + !$EXP[SiloRow5052] + !$EXP[SiloRow5003] + !$EXP[SiloRow5053]">SetFocus(5004)</ondown>
+                    <ondown condition="$EXP[SiloRow5054] + !$EXP[SiloRow5001] + !$EXP[SiloRow5051] + !$EXP[SiloRow5002] + !$EXP[SiloRow5052] + !$EXP[SiloRow5003] + !$EXP[SiloRow5053] + !$EXP[SiloRow5004]">SetFocus(5054)</ondown>
+                    <ondown condition="$EXP[SiloRow5101]">SetFocus(5101)</ondown>
+                    <ondown condition="$EXP[SiloRow5151] + !$EXP[SiloRow5101]">SetFocus(5151)</ondown>
+                    <ondown condition="$EXP[SiloRow5102] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(5102)</ondown>
+                    <ondown condition="$EXP[SiloRow5152] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102]">SetFocus(5152)</ondown>
+                    <ondown condition="$EXP[SiloRow5103] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(5103)</ondown>
+                    <ondown condition="$EXP[SiloRow5153] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103]">SetFocus(5153)</ondown>
+                    <ondown condition="$EXP[SiloRow5104] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(5104)</ondown>
+                    <ondown condition="$EXP[SiloRow5154] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104]">SetFocus(5154)</ondown>
+                    <ondown condition="$EXP[SiloRow5201]">SetFocus(5201)</ondown>
+                    <ondown condition="$EXP[SiloRow5251] + !$EXP[SiloRow5201]">SetFocus(5251)</ondown>
+                    <ondown condition="$EXP[SiloRow5202] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(5202)</ondown>
+                    <ondown condition="$EXP[SiloRow5252] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202]">SetFocus(5252)</ondown>
+                    <ondown condition="$EXP[SiloRow5203] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(5203)</ondown>
+                    <ondown condition="$EXP[SiloRow5253] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203]">SetFocus(5253)</ondown>
+                    <ondown condition="$EXP[SiloRow5204] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(5204)</ondown>
+                    <ondown condition="$EXP[SiloRow5254] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204]">SetFocus(5254)</ondown>
+                    <onleft condition="Control.IsVisible(9010)">SetFocus(9010)</onleft>
+                    <onleft condition="Control.IsVisible(9009) + !Control.IsVisible(9010)">SetFocus(9009)</onleft>
+                    <onleft condition="Control.IsVisible(9004) + !Control.IsVisible(9010) + !Control.IsVisible(9009)">SetFocus(9004)</onleft>
+                    <onleft condition="Control.IsVisible(9003) + !Control.IsVisible(9010) + !Control.IsVisible(9009) + !Control.IsVisible(9004)">SetFocus(9003)</onleft>
+                    <onleft condition="Control.IsVisible(9002) + !Control.IsVisible(9010) + !Control.IsVisible(9009) + !Control.IsVisible(9004) + !Control.IsVisible(9003)">SetFocus(9002)</onleft>
+                    <onleft condition="Control.IsVisible(9001) + !Control.IsVisible(9010) + !Control.IsVisible(9009) + !Control.IsVisible(9004) + !Control.IsVisible(9003) + !Control.IsVisible(9002)">SetFocus(9001)</onleft>
+            </control>
+            <control type="image">
+                <left>4</left><top>4</top>
+                <width>56</width><height>56</height>
+                <texture colordiffuse="33FFFFFF">silo/avatar_mask.png</texture>
+                <visible>!!String.IsEmpty(Window(Home).Property(silo.avatar))</visible>
+            </control>
+            <control type="label">
+                <left>4</left><top>4</top>
+                <width>56</width><height>56</height>
+                <align>center</align><aligny>center</aligny>
+                <font>silo_tab</font>
+                <textcolor>FFEDEDED</textcolor>
+                <label>$INFO[Window(Home).Property(silo.profile_initial)]</label>
+                <visible>!!String.IsEmpty(Window(Home).Property(silo.avatar))</visible>
+            </control>
+            <control type="image">
+                <left>4</left><top>4</top>
+                <width>56</width><height>56</height>
+                <aspectratio>scale</aspectratio>
+                <texture background="true" diffuse="silo/avatar_mask.png">$INFO[Window(Home).Property(silo.avatar)]</texture>
+                <visible>!String.IsEmpty(Window(Home).Property(silo.avatar))</visible>
+            </control>
+            <control type="image">
+                <width>64</width><height>64</height>
+                <texture colordiffuse="FFEDEDED">silo/avatar_ring.png</texture>
+                <visible>Control.HasFocus(9011)</visible>
             </control>
         </control>
     </controls>

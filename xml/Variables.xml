@@ -2202,5 +2202,9 @@
         <value condition="String.IsEqual(ListItem.AudioCodec,truehd)">TRUEHD$INFO[ListItem.AudioChannels, ,]</value>
         <value>$INFO[ListItem.AudioCodec]$INFO[ListItem.AudioChannels, ,]</value>
     </variable>
+    <variable name="SiloSeasonLabel">
+        <value condition="String.StartsWith(ListItem.Label,*)">All episodes</value>
+        <value>$INFO[ListItem.Label]</value>
+    </variable>
     <!-- end Silo Skyline detail -->
 </includes>

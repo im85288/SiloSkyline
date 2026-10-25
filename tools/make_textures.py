@@ -102,4 +102,7 @@ if __name__ == '__main__':
     write_png('person_frame.png', 172, 172, lambda x, y: 1.0 - rounded_rect_coverage(x, y, 172, 172, 86),
               rgb=(0x0D, 0x0F, 0x12))
     focus_ring('person_ring.png', 184, 184, 92, 4)
+    # The profile avatar in the menu bar, and its focus ring 4 px outside it.
+    card_mask('avatar_mask.png', 56, 56, 28)
+    focus_ring('avatar_ring.png', 64, 64, 32, 3)
     print('Wrote', ', '.join(sorted(os.listdir(OUT))))

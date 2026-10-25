@@ -157,7 +157,8 @@
                 <width>1200</width><height>64</height>
                 <orientation>horizontal</orientation>
                 <itemgap>16</itemgap>
-                <ondown>50</ondown>
+                <ondown condition="String.IsEqual(ListItem.DBType,tvshow)">60</ondown>
+                <ondown condition="!String.IsEqual(ListItem.DBType,tvshow)">50</ondown>
                 <control type="button" id="8">
                     <width min="220">auto</width><height>64</height>
                     <label>$VAR[SiloDetailPlayLabel]</label>
@@ -216,25 +217,173 @@
             </control>
         </control>
 
-        <!-- Cast & crew: Kodi fills list 50. -->
-        <control type="group">
-            <top>696</top>
-            <visible>Integer.IsGreater(Container(50).NumItems,0)</visible>
-            <control type="label">
-                <left>88</left>
-                <width>1000</width><height>46</height>
-                <font>silo_row</font>
-                <textcolor>FFEDEDED</textcolor>
-                <label>Cast &amp; Crew</label>
+        <!-- Below the actions: a show's seasons and episodes, then the cast;
+             the column scrolls to whichever has focus. -->
+        <control type="grouplist" id="7000">
+            <top>676</top>
+            <width>1920</width><height>404</height>
+            <orientation>vertical</orientation>
+            <itemgap>0</itemgap>
+            <scrolltime tween="cubic" easing="out">300</scrolltime>
+            <!-- Seasons (Kodi's own season folders), then the chosen season's episodes. -->
+            <control type="group">
+                <height>404</height>
+                <visible>String.IsEqual(ListItem.DBType,tvshow)</visible>
+                <control type="list" id="60">
+                    <left>82</left><top>0</top>
+                    <width>1838</width><height>56</height>
+                    <orientation>horizontal</orientation>
+                    <onup>5000</onup>
+                    <ondown>61</ondown>
+                    <scrolltime tween="cubic" easing="out">200</scrolltime>
+                    <content target="videos">videodb://tvshows/titles/$INFO[ListItem.DBID]/</content>
+                    <itemlayout width="236" height="56">
+                        <control type="label">
+                            <width>220</width><height>56</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_meta</font>
+                            <textcolor>BFEDEDED</textcolor>
+                            <label>$VAR[SiloSeasonLabel]</label>
+                        </control>
+                    </itemlayout>
+                    <focusedlayout width="236" height="56">
+                        <control type="image">
+                            <width>220</width><height>56</height>
+                            <texture border="28" colordiffuse="FFEDEDED">silo/pill.png</texture>
+                            <visible>Control.HasFocus(60)</visible>
+                        </control>
+                        <control type="image">
+                            <width>220</width><height>56</height>
+                            <texture border="28" colordiffuse="26FFFFFF">silo/pill.png</texture>
+                            <visible>!Control.HasFocus(60)</visible>
+                        </control>
+                        <control type="label">
+                            <width>220</width><height>56</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_meta</font>
+                            <textcolor>FF000000</textcolor><visible>Control.HasFocus(60)</visible>
+                            <label>$VAR[SiloSeasonLabel]</label>
+                        </control>
+                        <control type="label">
+                            <width>220</width><height>56</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_meta</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$VAR[SiloSeasonLabel]</label>
+                            <visible>!Control.HasFocus(60)</visible>
+                        </control>
+                    </focusedlayout>
+                </control>
+                <control type="list" id="61">
+                    <left>82</left><top>76</top>
+                    <width>1838</width><height>290</height>
+                    <orientation>horizontal</orientation>
+                    <onup>60</onup>
+                    <ondown condition="Integer.IsGreater(Container(50).NumItems,0)">50</ondown>
+                    <scrolltime tween="cubic" easing="out">280</scrolltime>
+                    <onclick>PlayMedia($ESCINFO[ListItem.FileNameAndPath])</onclick>
+                    <onclick>Dialog.Close(movieinformation)</onclick>
+                    <content target="videos">$INFO[Container(60).ListItem.FolderPath]</content>
+                    <itemlayout width="400" height="290">
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>202</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="DefaultTVShows.png">$INFO[ListItem.Art(thumb)]</texture>
+                        </control>
+                        <control type="progress">
+                            <left>18</left><top>192</top>
+                            <width>336</width><height>6</height>
+                            <info>ListItem.PercentPlayed</info>
+                            <texturebg colordiffuse="66FFFFFF">colors/white.png</texturebg>
+                            <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+                            <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
+                        </control>
+                        <control type="image">
+                            <left>326</left><top>16</top>
+                            <width>30</width><height>30</height>
+                            <texture>OverlayWatched.png</texture>
+                            <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>222</top>
+                            <width>360</width><height>34</height>
+                            <font>silo_card_title</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</label>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>256</top>
+                            <width>360</width><height>32</height>
+                            <font>silo_card_sub</font>
+                            <textcolor>BFEDEDED</textcolor>
+                            <label>$INFO[ListItem.Duration(mins),, min]</label>
+                        </control>
+                    </itemlayout>
+                    <focusedlayout width="400" height="290">
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>202</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="DefaultTVShows.png">$INFO[ListItem.Art(thumb)]</texture>
+                        </control>
+                        <control type="progress">
+                            <left>18</left><top>192</top>
+                            <width>336</width><height>6</height>
+                            <info>ListItem.PercentPlayed</info>
+                            <texturebg colordiffuse="66FFFFFF">colors/white.png</texturebg>
+                            <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+                            <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
+                        </control>
+                        <control type="image">
+                            <left>326</left><top>16</top>
+                            <width>30</width><height>30</height>
+                            <texture>OverlayWatched.png</texture>
+                            <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+                        </control>
+                        <control type="image">
+                            <left>0</left><top>0</top>
+                            <width>372</width><height>214</height>
+                            <texture colordiffuse="FFEDEDED">silo/card_landscape_focus.png</texture>
+                            <visible>Control.HasFocus(61)</visible>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>222</top>
+                            <width>360</width><height>34</height>
+                            <font>silo_card_title</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</label>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>256</top>
+                            <width>360</width><height>32</height>
+                            <font>silo_card_sub</font>
+                            <textcolor>BFEDEDED</textcolor>
+                            <label>$INFO[ListItem.Duration(mins),, min]</label>
+                        </control>
+                    </focusedlayout>
+                </control>
             </control>
-            <control type="list" id="50">
-                <left>82</left><top>60</top>
-                <width>1838</width><height>280</height>
-                <orientation>horizontal</orientation>
-                <onup>5000</onup>
-                <onclick>noop</onclick>
-                <scrolltime tween="cubic" easing="out">280</scrolltime>
-                <itemlayout width="220" height="280">
+            <!-- Cast & crew: Kodi fills list 50. -->
+            <control type="group">
+                <height>404</height>
+                <visible>Integer.IsGreater(Container(50).NumItems,0)</visible>
+                <control type="label">
+                    <left>88</left>
+                    <width>1000</width><height>46</height>
+                    <font>silo_row</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>Cast &amp; Crew</label>
+                </control>
+                <control type="list" id="50">
+                    <left>82</left><top>60</top>
+                    <width>1838</width><height>280</height>
+                    <orientation>horizontal</orientation>
+                    <onup condition="String.IsEqual(ListItem.DBType,tvshow)">61</onup>
+                    <onup condition="!String.IsEqual(ListItem.DBType,tvshow)">5000</onup>
+                    <onclick>noop</onclick>
+                    <scrolltime tween="cubic" easing="out">280</scrolltime>
+                    <itemlayout width="220" height="280">
                     <control type="image">
                         <left>20</left><top>6</top>
                         <width>172</width><height>172</height>
@@ -262,8 +411,8 @@
                         <textcolor>BFEDEDED</textcolor>
                         <label>$INFO[ListItem.Label2]</label>
                     </control>
-                </itemlayout>
-                <focusedlayout width="220" height="280">
+                    </itemlayout>
+                    <focusedlayout width="220" height="280">
                     <control type="image">
                         <left>20</left><top>6</top>
                         <width>172</width><height>172</height>
@@ -297,7 +446,8 @@
                         <textcolor>BFEDEDED</textcolor>
                         <label>$INFO[ListItem.Label2]</label>
                     </control>
-                </focusedlayout>
+                    </focusedlayout>
+                </control>
             </control>
         </control>
     </controls>

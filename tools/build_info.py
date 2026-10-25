@@ -151,7 +151,8 @@ def build():
                 <width>1200</width><height>64</height>
                 <orientation>horizontal</orientation>
                 <itemgap>16</itemgap>
-                <ondown>50</ondown>
+                <ondown condition="%(show)s">60</ondown>
+                <ondown condition="!%(show)s">50</ondown>
                 <control type="button" id="8">
                     <width min="220">auto</width><height>64</height>
                     <label>$VAR[SiloDetailPlayLabel]</label>
@@ -166,28 +167,71 @@ def build():
             </control>
         </control>
 
-        <!-- Cast & crew: Kodi fills list 50. -->
-        <control type="group">
-            <top>696</top>
-            <visible>Integer.IsGreater(Container(50).NumItems,0)</visible>
-            <control type="label">
-                <left>%(x)d</left>
-                <width>1000</width><height>46</height>
-                <font>silo_row</font>
-                <textcolor>%(text)s</textcolor>
-                <label>Cast &amp; Crew</label>
+        <!-- Below the actions: a show's seasons and episodes, then the cast;
+             the column scrolls to whichever has focus. -->
+        <control type="grouplist" id="7000">
+            <top>%(lower_top)d</top>
+            <width>1920</width><height>%(lower_h)d</height>
+            <orientation>vertical</orientation>
+            <itemgap>0</itemgap>
+            <scrolltime tween="cubic" easing="out">300</scrolltime>
+            <!-- Seasons (Kodi's own season folders), then the chosen season's episodes. -->
+            <control type="group">
+                <height>%(episodes_h)d</height>
+                <visible>%(show)s</visible>
+                <control type="list" id="60">
+                    <left>%(lx)d</left><top>0</top>
+                    <width>%(lw)d</width><height>56</height>
+                    <orientation>horizontal</orientation>
+                    <onup>5000</onup>
+                    <ondown>61</ondown>
+                    <scrolltime tween="cubic" easing="out">200</scrolltime>
+                    <content target="videos">videodb://tvshows/titles/$INFO[ListItem.DBID]/</content>
+                    <itemlayout width="236" height="56">%(season)s
+                    </itemlayout>
+                    <focusedlayout width="236" height="56">%(season_focused)s
+                    </focusedlayout>
+                </control>
+                <control type="list" id="61">
+                    <left>%(lx)d</left><top>76</top>
+                    <width>%(lw)d</width><height>%(episode_h)d</height>
+                    <orientation>horizontal</orientation>
+                    <onup>60</onup>
+                    <ondown condition="Integer.IsGreater(Container(50).NumItems,0)">50</ondown>
+                    <scrolltime tween="cubic" easing="out">280</scrolltime>
+                    <onclick>PlayMedia($ESCINFO[ListItem.FileNameAndPath])</onclick>
+                    <onclick>Dialog.Close(movieinformation)</onclick>
+                    <content target="videos">$INFO[Container(60).ListItem.FolderPath]</content>
+                    <itemlayout width="400" height="%(episode_h)d">%(episode_card)s
+                    </itemlayout>
+                    <focusedlayout width="400" height="%(episode_h)d">%(episode_card_focused)s
+                    </focusedlayout>
+                </control>
             </control>
-            <control type="list" id="50">
-                <left>%(lx)d</left><top>60</top>
-                <width>%(lw)d</width><height>280</height>
-                <orientation>horizontal</orientation>
-                <onup>5000</onup>
-                <onclick>noop</onclick>
-                <scrolltime tween="cubic" easing="out">280</scrolltime>
-                <itemlayout width="220" height="280">%(person)s
-                </itemlayout>
-                <focusedlayout width="220" height="280">%(person_focused)s
-                </focusedlayout>
+            <!-- Cast & crew: Kodi fills list 50. -->
+            <control type="group">
+                <height>%(cast_h)d</height>
+                <visible>Integer.IsGreater(Container(50).NumItems,0)</visible>
+                <control type="label">
+                    <left>%(x)d</left>
+                    <width>1000</width><height>46</height>
+                    <font>silo_row</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label>Cast &amp; Crew</label>
+                </control>
+                <control type="list" id="50">
+                    <left>%(lx)d</left><top>60</top>
+                    <width>%(lw)d</width><height>280</height>
+                    <orientation>horizontal</orientation>
+                    <onup condition="%(show)s">61</onup>
+                    <onup condition="!%(show)s">5000</onup>
+                    <onclick>noop</onclick>
+                    <scrolltime tween="cubic" easing="out">280</scrolltime>
+                    <itemlayout width="220" height="280">%(person)s
+                    </itemlayout>
+                    <focusedlayout width="220" height="280">%(person_focused)s
+                    </focusedlayout>
+                </control>
             </control>
         </control>
     </controls>
@@ -200,7 +244,102 @@ def build():
        'versions': round_button(14, 'icons/infodialogs/versions.png',
                                 'String.IsEqual(ListItem.DBType,movie) + Integer.IsGreater(ListItem.VideoVersionsCount,1)'),
        'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'person': person(False), 'person_focused': person(True),
-       'episode': episode}
+       'episode': episode, 'show': SHOW, 'lower_top': LOWER_TOP, 'lower_h': 1080 - LOWER_TOP,
+       'episodes_h': SECTION_H, 'episode_h': EPISODE_H, 'cast_h': SECTION_H,
+       'season': season(False), 'season_focused': season(True),
+       'episode_card': episode_card(False), 'episode_card_focused': episode_card(True)}
+
+
+SHOW = 'String.IsEqual(ListItem.DBType,tvshow)'
+LOWER_TOP = 676
+# An episode card: a 360x202 still, then "S1 · E2 · Title" and its runtime.
+EPISODE_H = 202 + 12 + 76
+# Each section below the actions is exactly as tall as the column, so the
+# column scrolls a whole section at a time: no strip of the one above.
+SECTION_H = 1080 - LOWER_TOP
+
+
+def season(focused):
+    """A season pill: white with dark text while focused, dimmed for the
+    chosen season while focus is elsewhere, plain text otherwise."""
+    if focused:
+        pills = '''
+                        <control type="image">
+                            <width>220</width><height>56</height>
+                            <texture border="28" colordiffuse="%(text)s">silo/pill.png</texture>
+                            <visible>Control.HasFocus(60)</visible>
+                        </control>
+                        <control type="image">
+                            <width>220</width><height>56</height>
+                            <texture border="28" colordiffuse="26FFFFFF">silo/pill.png</texture>
+                            <visible>!Control.HasFocus(60)</visible>
+                        </control>''' % {'text': TEXT}
+        color = '<textcolor>FF000000</textcolor><visible>Control.HasFocus(60)</visible>'
+        other = '''
+                        <control type="label">
+                            <width>220</width><height>56</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_meta</font>
+                            <textcolor>%s</textcolor>
+                            <label>$VAR[SiloSeasonLabel]</label>
+                            <visible>!Control.HasFocus(60)</visible>
+                        </control>''' % TEXT
+    else:
+        pills, color, other = '', '<textcolor>%s</textcolor>' % TEXT_DIM, ''
+    return '''%(pills)s
+                        <control type="label">
+                            <width>220</width><height>56</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_meta</font>
+                            %(color)s
+                            <label>$VAR[SiloSeasonLabel]</label>
+                        </control>%(other)s''' % {'pills': pills, 'color': color, 'other': other}
+
+
+def episode_card(focused):
+    ring = '''
+                        <control type="image">
+                            <left>0</left><top>0</top>
+                            <width>372</width><height>214</height>
+                            <texture colordiffuse="%s">silo/card_landscape_focus.png</texture>
+                            <visible>Control.HasFocus(61)</visible>
+                        </control>''' % TEXT if focused else ''
+    return '''
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>202</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="DefaultTVShows.png">$INFO[ListItem.Art(thumb)]</texture>
+                        </control>
+                        <control type="progress">
+                            <left>18</left><top>192</top>
+                            <width>336</width><height>6</height>
+                            <info>ListItem.PercentPlayed</info>
+                            <texturebg colordiffuse="66FFFFFF">colors/white.png</texturebg>
+                            <midtexture colordiffuse="%(text)s">colors/white.png</midtexture>
+                            <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
+                        </control>
+                        <control type="image">
+                            <left>326</left><top>16</top>
+                            <width>30</width><height>30</height>
+                            <texture>OverlayWatched.png</texture>
+                            <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+                        </control>%(ring)s
+                        <control type="label">
+                            <left>6</left><top>222</top>
+                            <width>360</width><height>34</height>
+                            <font>silo_card_title</font>
+                            <textcolor>%(text)s</textcolor>
+                            <label>S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</label>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>256</top>
+                            <width>360</width><height>32</height>
+                            <font>silo_card_sub</font>
+                            <textcolor>%(dim)s</textcolor>
+                            <label>$INFO[ListItem.Duration(mins),, min]</label>
+                        </control>''' % {'ring': ring, 'text': TEXT, 'dim': TEXT_DIM}
+
 
 
 def person(focused):
@@ -292,6 +431,10 @@ VARIABLES = '''
         <value condition="String.IsEqual(ListItem.AudioCodec,eac3)">DD+$INFO[ListItem.AudioChannels, ,]</value>
         <value condition="String.IsEqual(ListItem.AudioCodec,truehd)">TRUEHD$INFO[ListItem.AudioChannels, ,]</value>
         <value>$INFO[ListItem.AudioCodec]$INFO[ListItem.AudioChannels, ,]</value>
+    </variable>
+    <variable name="SiloSeasonLabel">
+        <value condition="String.StartsWith(ListItem.Label,*)">All episodes</value>
+        <value>$INFO[ListItem.Label]</value>
     </variable>
     <!-- end Silo Skyline detail -->
 '''
