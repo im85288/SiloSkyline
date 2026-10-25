@@ -19,7 +19,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import ROOT, SAFE_X, TEXT  # noqa: E402
+from build_home import LANDSCAPE, ROOT, SAFE_X, TEXT, card_body  # noqa: E402
 
 UPNEXT = 'service.upnext'
 
@@ -30,6 +30,10 @@ def button(control_id, label, width, onleft=None, onright=None):
         moves += '\n                    <onleft>%d</onleft>' % onleft
     if onright:
         moves += '\n                    <onright>%d</onright>' % onright
+    # The row keeps focus only when asked (silo.deck): Kodi hands it focus as
+    # the window opens, and OK would then play that title, not the next episode.
+    moves += ('\n                    <ondown>SetProperty(silo.deck,1)</ondown>'
+              '\n                    <ondown>SetFocus(%d)</ondown>' % ON_DECK)
     return '''
                 <control type="button" id="%(id)d">
                     <width>%(w)d</width><height>80</height>
@@ -43,6 +47,13 @@ def button(control_id, label, width, onleft=None, onright=None):
                     <pulseonselect>false</pulseonselect>%(moves)s
                 </control>''' % {'id': control_id, 'w': width, 'label': label, 'text': TEXT, 'moves': moves}
 
+
+ON_DECK = 3100
+# Silo's On Deck under the panel: SiloKodiConnect's Continue Watching, five
+# cards across, played from here (resuming where it was left).
+ON_DECK_CARD = dict(LANDSCAPE, width=288, height=162)
+ON_DECK_PATH = ('plugin://plugin.video.silokodiconnect/?mode=widget&amp;section=continue_watching'
+                '&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]')
 
 # Silo TV's grid (1920 wide): 160 px margins, five cards of 288 with 40 px
 # gaps. The video pane spans two cards; the panel takes the rest.
@@ -155,12 +166,43 @@ def popup(still_watching):
                 <orientation>horizontal</orientation>
                 <itemgap>20</itemgap>%(main)s%(close)s
             </control>
+            <!-- On Deck: the rest of Continue Watching. -->
+            <control type="label">
+                <left>%(x)d</left><top>%(deck_top)d</top>
+                <width>1200</width><height>46</height>
+                <font>silo_row</font>
+                <textcolor>%(text)s</textcolor>
+                <label>Continue Watching</label>
+                <visible>Integer.IsGreater(Container(%(deck)d).NumItems,0) | Container(%(deck)d).IsUpdating</visible>
+            </control>
+            <control type="list" id="%(deck)d">
+                <left>%(deck_x)d</left><top>%(deck_list_top)d</top>
+                <width>%(deck_w)d</width><height>%(deck_h)d</height>
+                <orientation>horizontal</orientation>
+                <scrolltime tween="cubic" easing="out">280</scrolltime>
+                <onup>ClearProperty(silo.deck)</onup>
+                <onup>SetFocus(3012)</onup>
+                <visible>Integer.IsGreater(Container(%(deck)d).NumItems,0) | Container(%(deck)d).IsUpdating</visible>
+                <onfocus condition="!String.IsEqual(Window.Property(silo.deck),1)">SetFocus(3012)</onfocus>
+                <onclick condition="Integer.IsGreater(ListItem.PercentPlayed,0)">PlayMedia($ESCINFO[ListItem.FileNameAndPath],resume)</onclick>
+                <onclick condition="!Integer.IsGreater(ListItem.PercentPlayed,0)">PlayMedia($ESCINFO[ListItem.FileNameAndPath],noresume)</onclick>
+                <content target="videos">%(deck_path)s</content>
+                <itemlayout width="%(deck_item_w)d" height="%(deck_h)d">%(deck_card)s
+                </itemlayout>
+                <focusedlayout width="%(deck_item_w)d" height="%(deck_h)d">%(deck_card_focused)s
+                </focusedlayout>
+            </control>
         </control>
     </controls>
 </window>
 ''' % {'what': what, 'x': MARGIN, 'pane_top': PANE_TOP, 'pane_w': PANE_W, 'pane_h': PANE_H,
        'bar_x': MARGIN + 18, 'bar_top': PANE_TOP + PANE_H - 6, 'bar_w': PANE_W - 36, 'text': TEXT,
        'panel_x': PANEL_X, 'panel_w': PANEL_W, 'buttons_top': PANE_TOP + PANE_H - 80, 'eyebrows': eyebrows,
+       'deck': ON_DECK, 'deck_top': PANE_TOP + PANE_H + 56, 'deck_list_top': PANE_TOP + PANE_H + 112,
+       # Cards start at the margin (their focus ring sits 6 px outside).
+       'deck_x': MARGIN - 6, 'deck_w': 1920 - MARGIN + 6, 'deck_h': ON_DECK_CARD['height'] + 12 + 76,
+       'deck_item_w': ON_DECK_CARD['width'] + GAP, 'deck_path': ON_DECK_PATH,
+       'deck_card': card_body(ON_DECK_CARD, False), 'deck_card_focused': card_body(ON_DECK_CARD, True, ON_DECK),
        'show': label(top + 44, 60, 'silo_wordmark', TEXT, '$INFO[Window.Property(tvshowtitle)]'),
        'episode': label(top + 110, 40, 'silo_meta', '9EEDEDED',
                         '$INFO[Window.Property(season),S,]$INFO[Window.Property(episode),·E,  ]'

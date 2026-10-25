@@ -107,6 +107,8 @@
                     <texturenofocus border="46" colordiffuse="26FFFFFF">silo/dialog_button.png</texturenofocus>
                     <pulseonselect>false</pulseonselect>
                     <onright>3013</onright>
+                    <ondown>SetProperty(silo.deck,1)</ondown>
+                    <ondown>SetFocus(3100)</ondown>
                 </control>
                 <control type="button" id="3013">
                     <width>220</width><height>80</height>
@@ -119,7 +121,136 @@
                     <texturenofocus border="46" colordiffuse="26FFFFFF">silo/dialog_button.png</texturenofocus>
                     <pulseonselect>false</pulseonselect>
                     <onleft>3012</onleft>
+                    <ondown>SetProperty(silo.deck,1)</ondown>
+                    <ondown>SetFocus(3100)</ondown>
                 </control>
+            </control>
+            <!-- On Deck: the rest of Continue Watching. -->
+            <control type="label">
+                <left>160</left><top>592</top>
+                <width>1200</width><height>46</height>
+                <font>silo_row</font>
+                <textcolor>FFEDEDED</textcolor>
+                <label>Continue Watching</label>
+                <visible>Integer.IsGreater(Container(3100).NumItems,0) | Container(3100).IsUpdating</visible>
+            </control>
+            <control type="list" id="3100">
+                <left>154</left><top>648</top>
+                <width>1766</width><height>250</height>
+                <orientation>horizontal</orientation>
+                <scrolltime tween="cubic" easing="out">280</scrolltime>
+                <onup>ClearProperty(silo.deck)</onup>
+                <onup>SetFocus(3012)</onup>
+                <visible>Integer.IsGreater(Container(3100).NumItems,0) | Container(3100).IsUpdating</visible>
+                <onfocus condition="!String.IsEqual(Window.Property(silo.deck),1)">SetFocus(3012)</onfocus>
+                <onclick condition="Integer.IsGreater(ListItem.PercentPlayed,0)">PlayMedia($ESCINFO[ListItem.FileNameAndPath],resume)</onclick>
+                <onclick condition="!Integer.IsGreater(ListItem.PercentPlayed,0)">PlayMedia($ESCINFO[ListItem.FileNameAndPath],noresume)</onclick>
+                <content target="videos">plugin://plugin.video.silokodiconnect/?mode=widget&amp;section=continue_watching&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                <itemlayout width="328" height="250">
+                    <control type="group">
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>288</width><height>162</height>
+                            <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloLandscapeArt]</texture>
+                            <aspectratio>scale</aspectratio>
+                        </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>288</width><height>162</height>
+                            <texture diffuse="silo/card_landscape_mask.png">silo/card_scrim.png</texture>
+                        </control>
+                        <control type="progress">
+                            <left>20</left><top>162</top>
+                            <width>260</width><height>6</height>
+                            <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
+                            <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+                            <info>ListItem.PercentPlayed</info>
+                            <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
+                        </control>
+                        <control type="image">
+                            <right>16</right><top>16</top>
+                            <width>32</width><height>32</height>
+                            <texture colordiffuse="FFEDEDED">OverlayWatched.png</texture>
+                            <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>182</top>
+                            <width>288</width><height>34</height>
+                            <font>silo_card_title</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$VAR[SiloCardTitle]</label>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>216</top>
+                            <width>288</width><height>32</height>
+                            <font>silo_card_sub</font>
+                            <textcolor>BFEDEDED</textcolor>
+                            <label>$VAR[SiloCardEpisode]</label>
+                        </control>
+                    </control>
+                </itemlayout>
+                <focusedlayout width="328" height="250">
+                    <control type="group">
+                        <animation effect="zoom" start="100" end="104" time="160" tween="sine" center="auto" condition="Control.HasFocus(3100)">Conditional</animation>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>288</width><height>162</height>
+                            <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloLandscapeArt]</texture>
+                            <aspectratio>scale</aspectratio>
+                        </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>288</width><height>162</height>
+                            <texture diffuse="silo/card_landscape_mask.png">silo/card_scrim.png</texture>
+                        </control>
+                        <control type="progress">
+                            <left>20</left><top>162</top>
+                            <width>260</width><height>6</height>
+                            <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
+                            <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+                            <info>ListItem.PercentPlayed</info>
+                            <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
+                        </control>
+                        <control type="image">
+                            <right>16</right><top>16</top>
+                            <width>32</width><height>32</height>
+                            <texture colordiffuse="FFEDEDED">OverlayWatched.png</texture>
+                            <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+                        </control>
+                        <control type="image">
+                            <left>0</left><top>0</top>
+                            <width>300</width><height>174</height>
+                            <texture colordiffuse="FFEDEDED">silo/card_landscape_focus.png</texture>
+                            <visible>Control.HasFocus(3100)</visible>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>182</top>
+                            <width>288</width><height>34</height>
+                            <font>silo_card_title</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$VAR[SiloCardTitle]</label>
+                            <visible>!Control.HasFocus(3100)</visible>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>182</top>
+                            <width>288</width><height>34</height>
+                            <font>silo_card_title</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
+                            <visible>Control.HasFocus(3100)</visible>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>216</top>
+                            <width>288</width><height>32</height>
+                            <font>silo_card_sub</font>
+                            <textcolor>BFEDEDED</textcolor>
+                            <label>$VAR[SiloCardEpisode]</label>
+                        </control>
+                    </control>
+                </focusedlayout>
             </control>
         </control>
     </controls>
