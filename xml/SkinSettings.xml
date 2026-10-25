@@ -90,7 +90,9 @@
 					<onclick>Skin.ToggleSetting(no_fanart)</onclick>
 					<selected>!Skin.HasSetting(no_fanart)</selected>
 				</control>
+				<!-- Silo Skyline: no background patterns (Silo's page is plain). -->
 				<control type="button" id="607">
+					<visible>false</visible>
 					<label>$LOCALIZE[31156]</label>
 					<label2>$VAR[BackgroundOverlayTypeVar]</label2>
 					<include>DefaultSettingButton</include>
@@ -345,7 +347,7 @@
 					<control type="image">
 						<width>470</width>
 						<height>85</height>
-						<texture colordiffuse="button_focus">lists/focus.png</texture>
+						<texture border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texture>
 						<animation effect="fade" start="100" end="50" time="40" condition="!Control.HasFocus(9000)">Conditional</animation>
 					</control>
 					<control type="label">

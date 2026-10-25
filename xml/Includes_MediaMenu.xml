@@ -8,9 +8,9 @@
 		<radioposx>370</radioposx>
 		<aligny>center</aligny>
 		<invalidcolor>invalid</invalidcolor>
-		<texturefocus colordiffuse="button_focus">lists/focus.png</texturefocus>
+		<texturefocus border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texturefocus>
 		<texturenofocus />
-		<alttexturefocus colordiffuse="button_focus">lists/focus.png</alttexturefocus>
+		<alttexturefocus border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</alttexturefocus>
 		<alttexturenofocus></alttexturenofocus>
 	</include>
 	<include name="PVRQuickNavItemsCommon">

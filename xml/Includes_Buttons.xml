@@ -32,8 +32,8 @@
 				<textoffsetx>16</textoffsetx>
 				<aligny>center</aligny>
 				<font>font12</font>
-				<texturefocus colordiffuse="button_focus">lists/focus.png</texturefocus>
-				<alttexturefocus colordiffuse="button_focus">lists/focus.png</alttexturefocus>
+				<texturefocus border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texturefocus>
+				<alttexturefocus border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</alttexturefocus>
 				<texturenofocus />
 				<alttexturenofocus />
 				<onclick>noop</onclick>
@@ -188,7 +188,7 @@
 				<height>110</height>
 				<align>left</align>
 				<aligny>top</aligny>
-				<texturefocus colordiffuse="button_focus">lists/focus.png</texturefocus>
+				<texturefocus border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texturefocus>
 				<texturenofocus />
 				<textoffsetx>40</textoffsetx>
 				<textoffsety>35</textoffsety>
@@ -380,7 +380,7 @@
 				<top>0</top>
 				<width>600</width>
 				<height>70</height>
-				<texture colordiffuse="button_focus">lists/focus.png</texture>
+				<texture border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texture>
 			</control>
 			<control type="label">
 				<left>0</left>
