@@ -3,6 +3,8 @@
 <window type="dialog" id="1180">
     <defaultcontrol always="true">101</defaultcontrol>
     <onload>ClearProperty(silo.options.tab,home)</onload>
+    <!-- SiloKodiConnect publishes the playing video's tracks (tracks.py). -->
+    <onload>NotifyAll(silokodi,tracks.refresh)</onload>
     <include>Animation_DialogPopupOpenClose</include>
     <controls>
         <!-- Anywhere outside the sheet closes it. -->
@@ -238,35 +240,176 @@
                 <left>60</left><top>32</top><width>600</width><height>40</height>
                 <font>silo_badge</font>
                 <textcolor>BFEDEDED</textcolor>
-                <label>[UPPERCASE]Options[/UPPERCASE]</label>
+                <label>[UPPERCASE]Tracks$INFO[Window(Home).Property(silo.tracks.audio.count), · ,][/UPPERCASE]</label>
             </control>
             <control type="label">
-                <left>800</left><top>32</top><width>600</width><height>40</height>
+                <left>816</left><top>32</top><width>600</width><height>40</height>
                 <font>silo_badge</font>
                 <textcolor>BFEDEDED</textcolor>
-                <label>[UPPERCASE]Now playing[/UPPERCASE]</label>
+                <label>[UPPERCASE]Settings[/UPPERCASE]</label>
             </control>
-            <control type="grouplist" id="202">
+            <control type="list" id="202">
                 <left>28</left><top>80</top>
+                <width>720</width><height>410</height>
+                <orientation>vertical</orientation>
+                <onup>102</onup>
+                <onleft>noop</onleft><onright>302</onright>
+                <itemlayout width="720" height="60">
+                    <control type="image">
+                        <left>24</left><top>16</top><width>28</width><height>28</height>
+                        <texture colordiffuse="FFEDEDED">OverlayWatched.png</texture>
+                        <visible>String.IsEqual(ListItem.Property(current),true)</visible>
+                    <visible>true</visible>
+                    </control>
+                    <control type="label">
+                        <left>68</left><width>300</width><height>60</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    <visible>true</visible>
+                    </control>
+                    <control type="label">
+                        <left>360</left><width>332</width><height>60</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>BFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                    <visible>true</visible>
+                    </control>
+                </itemlayout>
+                <focusedlayout width="720" height="60">
+                    <control type="image">
+                        <width>720</width><height>60</height>
+                        <texture border="30" colordiffuse="FFEDEDED">silo/pill.png</texture>
+                        <visible>Control.HasFocus(202)</visible>
+                    </control>
+                    <control type="image">
+                        <left>24</left><top>16</top><width>28</width><height>28</height>
+                        <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                        <visible>String.IsEqual(ListItem.Property(current),true)</visible>
+                    <visible>Control.HasFocus(202)</visible>
+                    </control>
+                    <control type="label">
+                        <left>68</left><width>300</width><height>60</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FF000000</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    <visible>Control.HasFocus(202)</visible>
+                    </control>
+                    <control type="label">
+                        <left>360</left><width>332</width><height>60</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>99000000</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                    <visible>Control.HasFocus(202)</visible>
+                    </control>
+                    <control type="image">
+                        <left>24</left><top>16</top><width>28</width><height>28</height>
+                        <texture colordiffuse="FFEDEDED">OverlayWatched.png</texture>
+                        <visible>String.IsEqual(ListItem.Property(current),true)</visible>
+                    <visible>!Control.HasFocus(202)</visible>
+                    </control>
+                    <control type="label">
+                        <left>68</left><width>300</width><height>60</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    <visible>!Control.HasFocus(202)</visible>
+                    </control>
+                    <control type="label">
+                        <left>360</left><width>332</width><height>60</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>BFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                    <visible>!Control.HasFocus(202)</visible>
+                    </control>
+                </focusedlayout>
+                <content>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.audio.1.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.audio.1.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.audio.1.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.audio.$INFO[Window(Home).Property(silo.tracks.audio.1.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.audio.1.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.audio.2.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.audio.2.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.audio.2.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.audio.$INFO[Window(Home).Property(silo.tracks.audio.2.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.audio.2.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.audio.3.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.audio.3.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.audio.3.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.audio.$INFO[Window(Home).Property(silo.tracks.audio.3.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.audio.3.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.audio.4.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.audio.4.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.audio.4.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.audio.$INFO[Window(Home).Property(silo.tracks.audio.4.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.audio.4.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.audio.5.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.audio.5.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.audio.5.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.audio.$INFO[Window(Home).Property(silo.tracks.audio.5.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.audio.5.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.audio.6.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.audio.6.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.audio.6.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.audio.$INFO[Window(Home).Property(silo.tracks.audio.6.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.audio.6.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.audio.7.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.audio.7.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.audio.7.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.audio.$INFO[Window(Home).Property(silo.tracks.audio.7.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.audio.7.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.audio.8.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.audio.8.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.audio.8.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.audio.$INFO[Window(Home).Property(silo.tracks.audio.8.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.audio.8.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.audio.9.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.audio.9.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.audio.9.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.audio.$INFO[Window(Home).Property(silo.tracks.audio.9.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.audio.9.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.audio.10.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.audio.10.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.audio.10.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.audio.$INFO[Window(Home).Property(silo.tracks.audio.10.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.audio.10.label))</visible>
+                    </item>
+                </content>
+            </control>
+            <control type="grouplist" id="302">
+                <left>784</left><top>80</top>
                 <width>720</width><height>410</height>
                 <orientation>vertical</orientation>
                 <itemgap>0</itemgap>
                 <onup>102</onup>
-                <onleft>noop</onleft><onright>noop</onright>
+                <onleft>202</onleft><onright>noop</onright>
                 <control type="button" id="2020">
-                    <width>720</width><height>68</height>
-                    <label>Audio track</label>
-                    <label2>$INFO[VideoPlayer.AudioLanguage][UPPERCASE]$INFO[VideoPlayer.AudioCodec, · ,][/UPPERCASE]</label2>
-                    <font>silo_meta</font>
-                    <textoffsetx>32</textoffsetx>
-                    <aligny>center</aligny>
-                    <textcolor>FFEDEDED</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
-                    <texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
-                    <texturenofocus />
-                    <onclick>AudioNextLanguage</onclick>
-                </control>
-                <control type="button" id="2021">
                     <width>720</width><height>68</height>
                     <label>Audio settings</label>
                     <label2></label2>
@@ -281,48 +424,6 @@
                     <onclick>ActivateWindow(osdaudiosettings)</onclick>
                 </control>
             </control>
-            <control type="label">
-                <left>800</left><top>80</top><width>220</width><height>68</height>
-                <aligny>center</aligny>
-                <font>silo_meta</font>
-                <textcolor>BFEDEDED</textcolor>
-                <label>Codec</label>
-            </control>
-            <control type="label">
-                <left>1020</left><top>80</top><width>480</width><height>68</height>
-                <align>right</align><aligny>center</aligny>
-                <font>silo_meta</font>
-                <textcolor>FFEDEDED</textcolor>
-                <label>[UPPERCASE]$INFO[VideoPlayer.AudioCodec][/UPPERCASE]</label>
-            </control>
-            <control type="label">
-                <left>800</left><top>148</top><width>220</width><height>68</height>
-                <aligny>center</aligny>
-                <font>silo_meta</font>
-                <textcolor>BFEDEDED</textcolor>
-                <label>Channels</label>
-            </control>
-            <control type="label">
-                <left>1020</left><top>148</top><width>480</width><height>68</height>
-                <align>right</align><aligny>center</aligny>
-                <font>silo_meta</font>
-                <textcolor>FFEDEDED</textcolor>
-                <label>$INFO[VideoPlayer.AudioChannels]</label>
-            </control>
-            <control type="label">
-                <left>800</left><top>216</top><width>220</width><height>68</height>
-                <aligny>center</aligny>
-                <font>silo_meta</font>
-                <textcolor>BFEDEDED</textcolor>
-                <label>Language</label>
-            </control>
-            <control type="label">
-                <left>1020</left><top>216</top><width>480</width><height>68</height>
-                <align>right</align><aligny>center</aligny>
-                <font>silo_meta</font>
-                <textcolor>FFEDEDED</textcolor>
-                <label>$INFO[VideoPlayer.AudioLanguage]</label>
-            </control>
         </control>
         <control type="group">
             <left>180</left><top>150</top>
@@ -331,48 +432,323 @@
                 <left>60</left><top>32</top><width>600</width><height>40</height>
                 <font>silo_badge</font>
                 <textcolor>BFEDEDED</textcolor>
-                <label>[UPPERCASE]Options[/UPPERCASE]</label>
+                <label>[UPPERCASE]Tracks$INFO[Window(Home).Property(silo.tracks.sub.count), · ,][/UPPERCASE]</label>
             </control>
             <control type="label">
-                <left>800</left><top>32</top><width>600</width><height>40</height>
+                <left>816</left><top>32</top><width>600</width><height>40</height>
                 <font>silo_badge</font>
                 <textcolor>BFEDEDED</textcolor>
-                <label>[UPPERCASE]Now playing[/UPPERCASE]</label>
+                <label>[UPPERCASE]Settings[/UPPERCASE]</label>
             </control>
-            <control type="grouplist" id="203">
+            <control type="list" id="203">
                 <left>28</left><top>80</top>
+                <width>720</width><height>410</height>
+                <orientation>vertical</orientation>
+                <onup>103</onup>
+                <onleft>noop</onleft><onright>303</onright>
+                <itemlayout width="720" height="60">
+                    <control type="image">
+                        <left>24</left><top>16</top><width>28</width><height>28</height>
+                        <texture colordiffuse="FFEDEDED">OverlayWatched.png</texture>
+                        <visible>String.IsEqual(ListItem.Property(current),true)</visible>
+                    <visible>true</visible>
+                    </control>
+                    <control type="label">
+                        <left>68</left><width>300</width><height>60</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    <visible>true</visible>
+                    </control>
+                    <control type="label">
+                        <left>360</left><width>332</width><height>60</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>BFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                    <visible>true</visible>
+                    </control>
+                </itemlayout>
+                <focusedlayout width="720" height="60">
+                    <control type="image">
+                        <width>720</width><height>60</height>
+                        <texture border="30" colordiffuse="FFEDEDED">silo/pill.png</texture>
+                        <visible>Control.HasFocus(203)</visible>
+                    </control>
+                    <control type="image">
+                        <left>24</left><top>16</top><width>28</width><height>28</height>
+                        <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                        <visible>String.IsEqual(ListItem.Property(current),true)</visible>
+                    <visible>Control.HasFocus(203)</visible>
+                    </control>
+                    <control type="label">
+                        <left>68</left><width>300</width><height>60</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FF000000</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    <visible>Control.HasFocus(203)</visible>
+                    </control>
+                    <control type="label">
+                        <left>360</left><width>332</width><height>60</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>99000000</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                    <visible>Control.HasFocus(203)</visible>
+                    </control>
+                    <control type="image">
+                        <left>24</left><top>16</top><width>28</width><height>28</height>
+                        <texture colordiffuse="FFEDEDED">OverlayWatched.png</texture>
+                        <visible>String.IsEqual(ListItem.Property(current),true)</visible>
+                    <visible>!Control.HasFocus(203)</visible>
+                    </control>
+                    <control type="label">
+                        <left>68</left><width>300</width><height>60</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    <visible>!Control.HasFocus(203)</visible>
+                    </control>
+                    <control type="label">
+                        <left>360</left><width>332</width><height>60</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>BFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                    <visible>!Control.HasFocus(203)</visible>
+                    </control>
+                </focusedlayout>
+                <content>
+                    <item>
+                        <label>Off</label>
+                        <label2></label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.off)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.off)</onclick>
+                        <visible>true</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.1.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.1.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.1.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.1.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.1.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.2.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.2.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.2.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.2.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.2.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.3.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.3.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.3.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.3.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.3.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.4.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.4.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.4.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.4.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.4.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.5.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.5.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.5.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.5.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.5.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.6.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.6.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.6.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.6.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.6.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.7.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.7.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.7.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.7.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.7.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.8.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.8.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.8.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.8.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.8.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.9.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.9.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.9.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.9.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.9.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.10.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.10.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.10.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.10.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.10.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.11.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.11.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.11.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.11.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.11.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.12.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.12.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.12.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.12.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.12.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.13.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.13.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.13.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.13.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.13.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.14.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.14.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.14.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.14.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.14.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.15.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.15.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.15.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.15.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.15.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.16.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.16.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.16.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.16.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.16.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.17.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.17.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.17.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.17.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.17.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.18.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.18.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.18.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.18.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.18.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.19.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.19.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.19.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.19.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.19.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.20.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.20.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.20.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.20.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.20.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.21.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.21.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.21.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.21.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.21.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.22.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.22.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.22.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.22.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.22.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.23.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.23.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.23.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.23.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.23.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.24.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.24.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.24.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.24.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.24.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.25.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.25.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.25.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.25.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.25.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.26.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.26.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.26.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.26.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.26.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.27.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.27.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.27.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.27.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.27.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.28.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.28.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.28.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.28.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.28.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.29.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.29.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.29.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.29.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.29.label))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Home).Property(silo.tracks.sub.30.label)]</label>
+                        <label2>$INFO[Window(Home).Property(silo.tracks.sub.30.detail)]</label2>
+                        <property name="current">$INFO[Window(Home).Property(silo.tracks.sub.30.current)]</property>
+                        <onclick>NotifyAll(silokodi,tracks.sub.$INFO[Window(Home).Property(silo.tracks.sub.30.index)])</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(silo.tracks.sub.30.label))</visible>
+                    </item>
+                </content>
+            </control>
+            <control type="grouplist" id="303">
+                <left>784</left><top>80</top>
                 <width>720</width><height>410</height>
                 <orientation>vertical</orientation>
                 <itemgap>0</itemgap>
                 <onup>103</onup>
-                <onleft>noop</onleft><onright>noop</onright>
+                <onleft>203</onleft><onright>noop</onright>
                 <control type="button" id="2030">
-                    <width>720</width><height>68</height>
-                    <label>Subtitles</label>
-                    <label2>$VAR[SiloOptionsSubtitlesOnOff]</label2>
-                    <font>silo_meta</font>
-                    <textoffsetx>32</textoffsetx>
-                    <aligny>center</aligny>
-                    <textcolor>FFEDEDED</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
-                    <texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
-                    <texturenofocus />
-                    <onclick>ShowSubtitles</onclick>
-                </control>
-                <control type="button" id="2031">
-                    <width>720</width><height>68</height>
-                    <label>Next subtitle</label>
-                    <label2>$INFO[VideoPlayer.SubtitlesLanguage]</label2>
-                    <font>silo_meta</font>
-                    <textoffsetx>32</textoffsetx>
-                    <aligny>center</aligny>
-                    <textcolor>FFEDEDED</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
-                    <texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
-                    <texturenofocus />
-                    <onclick>NextSubtitle</onclick>
-                </control>
-                <control type="button" id="2032">
                     <width>720</width><height>68</height>
                     <label>Subtitle settings</label>
                     <label2></label2>
@@ -386,7 +762,7 @@
                     <onclick>Dialog.Close(1180)</onclick>
                     <onclick>ActivateWindow(osdsubtitlesettings)</onclick>
                 </control>
-                <control type="button" id="2033">
+                <control type="button" id="2031">
                     <width>720</width><height>68</height>
                     <label>Search online</label>
                     <label2></label2>
@@ -400,20 +776,6 @@
                     <onclick>Dialog.Close(1180)</onclick>
                     <onclick>ActivateWindow(SubtitleSearch)</onclick>
                 </control>
-            </control>
-            <control type="label">
-                <left>800</left><top>80</top><width>220</width><height>68</height>
-                <aligny>center</aligny>
-                <font>silo_meta</font>
-                <textcolor>BFEDEDED</textcolor>
-                <label>Showing</label>
-            </control>
-            <control type="label">
-                <left>1020</left><top>80</top><width>480</width><height>68</height>
-                <align>right</align><aligny>center</aligny>
-                <font>silo_meta</font>
-                <textcolor>FFEDEDED</textcolor>
-                <label>$VAR[SiloOptionsSubtitles]</label>
             </control>
         </control>
         <control type="group">

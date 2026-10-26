@@ -38,7 +38,6 @@ TABS = [
         ('Subtitles', '$VAR[SiloOptionsSubtitles]'),
     ]),
     ('audio', 'Audio', [
-        ('Audio track', '$INFO[VideoPlayer.AudioLanguage][UPPERCASE]$INFO[VideoPlayer.AudioCodec, · ,][/UPPERCASE]', ['AudioNextLanguage']),
         ('Audio settings', '', ['Dialog.Close(1180)', 'ActivateWindow(osdaudiosettings)']),
     ], [
         ('Codec', '[UPPERCASE]$INFO[VideoPlayer.AudioCodec][/UPPERCASE]'),
@@ -46,8 +45,6 @@ TABS = [
         ('Language', '$INFO[VideoPlayer.AudioLanguage]'),
     ]),
     ('subtitles', 'Subtitles', [
-        ('Subtitles', '$VAR[SiloOptionsSubtitlesOnOff]', ['ShowSubtitles']),
-        ('Next subtitle', '$INFO[VideoPlayer.SubtitlesLanguage]', ['NextSubtitle']),
         ('Subtitle settings', '', ['Dialog.Close(1180)', 'ActivateWindow(osdsubtitlesettings)']),
         ('Search online', '', ['Dialog.Close(1180)', 'ActivateWindow(SubtitleSearch)']),
     ], [
@@ -72,6 +69,84 @@ TABS = [
         ('Now', '$INFO[Player.ChapterName]'),
     ]),
 ]
+
+
+# Tabs that list the playing video's tracks (SiloKodiConnect's tracks.py),
+# with how many it publishes: the list on the left, settings on the right.
+TRACKS = {'audio': ('audio', 10), 'subtitles': ('sub', 30)}
+TRACK_H = 60
+
+
+def track_list(list_id, rows_id, tab_id, kind, count):
+    """The tracks, the current one ticked; OK switches to it."""
+    item = '''
+                    <item>
+                        <label>%(label)s</label>
+                        <label2>%(detail)s</label2>
+                        <property name="current">%(current)s</property>
+                        <onclick>NotifyAll(silokodi,tracks.%(kind)s.%(value)s)</onclick>
+                        <visible>%(visible)s</visible>
+                    </item>'''
+    prop = 'Window(Home).Property(silo.tracks.%s.%%d.%%s)' % kind
+    items = ''
+    if kind == 'sub':
+        items += item % {'label': 'Off', 'detail': '', 'current': '$INFO[Window(Home).Property(silo.tracks.sub.off)]',
+                         'kind': kind, 'value': 'off', 'visible': 'true'}
+    for n in range(1, count + 1):
+        items += item % {'label': '$INFO[%s]' % (prop % (n, 'label')), 'detail': '$INFO[%s]' % (prop % (n, 'detail')),
+                         'current': '$INFO[%s]' % (prop % (n, 'current')), 'kind': kind,
+                         'value': '$INFO[%s]' % (prop % (n, 'index')),
+                         'visible': '!String.IsEmpty(%s)' % (prop % (n, 'label'))}
+    def layout(focused):
+        # The list's selected row only looks focused while the list has focus.
+        lit = 'Control.HasFocus(%d)' % list_id
+        if focused:
+            return ('''
+                    <control type="image">
+                        <width>%d</width><height>%d</height>
+                        <texture border="30" colordiffuse="%s">silo/pill.png</texture>
+                        <visible>%s</visible>
+                    </control>''' % (PANEL_W // 2 - 60, TRACK_H, TEXT, lit)
+                    + rows_text('FF000000', '99000000', lit) + rows_text(TEXT, TEXT_DIM, '!' + lit))
+        return rows_text(TEXT, TEXT_DIM, 'true')
+
+    def rows_text(colour, dim, visible):
+        return ('''
+                    <control type="image">
+                        <left>24</left><top>%(it)d</top><width>28</width><height>28</height>
+                        <texture colordiffuse="%(colour)s">OverlayWatched.png</texture>
+                        <visible>String.IsEqual(ListItem.Property(current),true)</visible>
+                    </control>
+                    <control type="label">
+                        <left>68</left><width>300</width><height>%(h)d</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>%(colour)s</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="label">
+                        <left>360</left><width>%(dw)d</width><height>%(h)d</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>%(dim)s</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                    </control>''' % {'it': (TRACK_H - 28) // 2, 'colour': colour, 'dim': dim, 'h': TRACK_H,
+                                 'dw': PANEL_W // 2 - 60 - 360 - 28}).replace('</control>', '<visible>%s</visible>\n                    </control>' % visible)
+    return '''
+            <control type="list" id="%(id)d">
+                <left>28</left><top>80</top>
+                <width>%(w)d</width><height>%(h)d</height>
+                <orientation>vertical</orientation>
+                <onup>%(tab)d</onup>
+                <onleft>noop</onleft><onright>%(rows)d</onright>
+                <itemlayout width="%(w)d" height="%(th)d">%(normal)s
+                </itemlayout>
+                <focusedlayout width="%(w)d" height="%(th)d">%(focused)s
+                </focusedlayout>
+                <content>%(items)s
+                </content>
+            </control>''' % {'id': list_id, 'w': PANEL_W // 2 - 60, 'h': PANEL_H - 110, 'tab': tab_id, 'rows': rows_id,
+                         'th': TRACK_H, 'normal': layout(False), 'focused': layout(True), 'items': items}
 
 
 def tab_visible(key):
@@ -140,6 +215,8 @@ def fact(label, value, top):
 def panel(index, key, rows, facts):
     first = 201 + index
     buttons = ''.join(row(first * 10 + n, *r) for n, r in enumerate(rows))
+    if key in TRACKS:
+        return tracks_panel(index, key, first, buttons)
     heading = '''
             <control type="label">
                 <left>%(x)d</left><top>%(top)d</top><width>600</width><height>40</height>
@@ -167,6 +244,37 @@ def panel(index, key, rows, facts):
         'facts': ''.join(fact(label, value, 80 + n * ROW_H) for n, (label, value) in enumerate(facts))}
 
 
+def tracks_panel(index, key, first, buttons):
+    """A track tab: the tracks on the left, the settings rows on the right."""
+    kind, count = TRACKS[key]
+    rows_id = 301 + index
+    heading = '''
+            <control type="label">
+                <left>%d</left><top>32</top><width>600</width><height>40</height>
+                <font>silo_badge</font>
+                <textcolor>%s</textcolor>
+                <label>[UPPERCASE]%s[/UPPERCASE]</label>
+            </control>'''
+    return '''
+        <control type="group">
+            <left>%(px)d</left><top>%(pt)d</top>
+            <visible>%(visible)s</visible>%(h1)s%(h2)s%(list)s
+            <control type="grouplist" id="%(rows)d">
+                <left>%(rx)d</left><top>80</top>
+                <width>%(w)d</width><height>%(gh)d</height>
+                <orientation>vertical</orientation>
+                <itemgap>0</itemgap>
+                <onup>%(tab)d</onup>
+                <onleft>%(first)d</onleft><onright>noop</onright>%(buttons)s
+            </control>
+        </control>''' % {
+        'px': PANEL_X, 'pt': PANEL_TOP, 'visible': tab_visible(key), 'rows': rows_id, 'first': first,
+        'rx': PANEL_W // 2 + 4, 'w': PANEL_W // 2 - 60, 'gh': PANEL_H - 110, 'tab': 101 + index, 'buttons': buttons,
+        'h1': heading % (60, TEXT_DIM, 'Tracks$INFO[Window(Home).Property(silo.tracks.%s.count), · ,]' % kind),
+        'h2': heading % (PANEL_W // 2 + 36, TEXT_DIM, 'Settings'),
+        'list': track_list(first, rows_id, 101 + index, kind, count)}
+
+
 def build():
     tabs = ''.join(tab_button(i, key, title) for i, (key, title, _, _) in enumerate(TABS))
     panels = ''.join(panel(i, key, rows, facts) for i, (key, _, rows, facts) in enumerate(TABS))
@@ -175,6 +283,8 @@ def build():
 <window type="dialog" id="%(window)d">
     <defaultcontrol always="true">101</defaultcontrol>
     <onload>ClearProperty(silo.options.tab,home)</onload>
+    <!-- SiloKodiConnect publishes the playing video's tracks (tracks.py). -->
+    <onload>NotifyAll(silokodi,tracks.refresh)</onload>
     <include>Animation_DialogPopupOpenClose</include>
     <controls>
         <!-- Anywhere outside the sheet closes it. -->

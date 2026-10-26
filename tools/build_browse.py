@@ -15,7 +15,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM  # noqa: E402
+from build_home import wordmark, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM  # noqa: E402
 
 GRID = 'Container.Content(movies) | Container.Content(tvshows) | Container.Content(sets) | Container.Content(seasons)'
 EPISODES = 'Container.Content(episodes)'
@@ -218,37 +218,98 @@ def jump_bar(left):
                          'layout': layout, 'focused': focused, 'items': items}
 
 
+ROW_W, ROW_H, CARD_H = 1110, 104, 92
+MENU_ICON = 'Property(silo.menu.icon)'
+PROFILE = 'String.IsEqual(ListItem.Property(silo.menu.icon),profile)'
+HAS_ICON = '[!String.IsEmpty(ListItem.%s) | !String.StartsWith(ListItem.Icon,Default)]' % MENU_ICON
+# Kodi can't test a $VAR, so "has a description" checks what SiloRowDescription reads.
+HAS_TEXT = ('[!String.IsEmpty(ListItem.Property(silo.menu.description)) | !String.IsEmpty(ListItem.Plot) | %s]'
+            % PROFILE)
+# The skin's icons have different margins: each menu icon's box, so the
+# glyphs come out about the same size (the rest: ListItem.Icon, 48).
+ICON_SIZES = {44: ('sync', 'remove'), 50: ('rewrite',), 56: ('play',), 80: ('rows', 'libraries', 'signout')}
+
+
 def pill_row(focused, view_id):
-    pill = '''
-                    <control type="image">
-                        <left>0</left><top>6</top>
-                        <width>%(w)d</width><height>64</height>
-                        <texture border="30" colordiffuse="%(text)s">silo/pill.png</texture>
-                        <visible>Control.HasFocus(%(id)d)</visible>
-                    </control>''' % {'w': 1100, 'text': TEXT, 'id': view_id} if focused else ''
-    labels = []
-    for color, visible in ((('FF000000', 'Control.HasFocus(%d)' % view_id), (TEXT, '!Control.HasFocus(%d)' % view_id))
-                           if focused else ((TEXT, ''),)):
-        labels.append('''
+    """One row of the list view (add-on menus, folders): a rounded card with
+    an icon tile, the label and a one-line description; white when focused.
+    SiloKodiConnect's profile row shows the avatar instead of an icon."""
+    has_focus = 'Control.HasFocus(%d)' % view_id if focused else 'false'
+    fg = 'FF000000'
+    def text(colour, condition):
+        return '''
                     <control type="label">
-                        <left>36</left><top>6</top>
-                        <width>800</width><height>64</height>
+                        <left>%(lx)d</left><top>%(t1)d</top>
+                        <width>%(w)d</width><height>40</height>
                         <aligny>center</aligny>
                         <font>silo_meta</font>
-                        <textcolor>%(color)s</textcolor>
-                        <label>$INFO[ListItem.Label]</label>%(visible)s
+                        <textcolor>%(colour)s</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>%(cond)s + %(has_text)s</visible>
                     </control>
                     <control type="label">
-                        <left>840</left><top>6</top>
-                        <width>224</width><height>64</height>
+                        <left>%(lx)d</left><top>%(t2)d</top>
+                        <width>%(w)d</width><height>32</height>
+                        <aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>%(dim)s</textcolor>
+                        <label>$VAR[SiloRowDescription]</label>
+                        <visible>%(cond)s + %(has_text)s</visible>
+                    </control>
+                    <control type="label">
+                        <left>%(lx)d</left><top>0</top>
+                        <width>%(w)d</width><height>%(ch)d</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>%(colour)s</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>%(cond)s + !%(has_text)s</visible>
+                    </control>
+                    <control type="label">
+                        <left>%(l2x)d</left><top>0</top>
+                        <width>220</width><height>%(ch)d</height>
                         <align>right</align><aligny>center</aligny>
                         <font>silo_detail</font>
-                        <textcolor>%(color)s</textcolor>
-                        <label>$INFO[ListItem.Label2]</label>%(visible)s
-                    </control>''' % {'color': color, 'visible': '\n                        <visible>%s</visible>' % visible
-                                     if visible else ''})
-    return pill + ''.join(labels)
-
+                        <textcolor>%(colour)s</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                        <visible>%(cond)s</visible>
+                    </control>''' % {'lx': 112, 't1': 12, 't2': 50, 'w': ROW_W - 112 - 260, 'colour': colour,
+                                 'dim': '99000000' if colour == fg else TEXT_DIM, 'cond': condition, 'has_text': HAS_TEXT,
+                                 'ch': CARD_H, 'l2x': ROW_W - 250}
+    def icon(colour, condition):
+        named = ' | '.join('String.IsEqual(ListItem.%s,%s)' % (MENU_ICON, key)
+                           for keys in ICON_SIZES.values() for key in keys)
+        boxes = [(size, '[%s]' % ' | '.join('String.IsEqual(ListItem.%s,%s)' % (MENU_ICON, key) for key in keys))
+                 for size, keys in ICON_SIZES.items()]
+        boxes.append((48, '!%s + !%s + [%s]' % (PROFILE, '[%s]' % named, HAS_ICON)))
+        return ''.join('''
+                    <control type="image">
+                        <left>%(x)d</left><top>%(y)d</top><width>%(s)d</width><height>%(s)d</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture colordiffuse="%(colour)s">$VAR[SiloRowIcon]</texture>
+                        <visible>%(cond)s + %(which)s</visible>
+                    </control>''' % {'x': 54 - size // 2, 'y': (CARD_H - size) // 2, 's': size, 'colour': colour,
+                                 'cond': condition, 'which': which} for size, which in boxes)
+    return '''
+                    <control type="image">
+                        <width>%(rw)d</width><height>%(ch)d</height>
+                        <texture border="24" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+                        <visible>!%(focus)s</visible>
+                    </control>
+                    <control type="image">
+                        <width>%(rw)d</width><height>%(ch)d</height>
+                        <texture border="24" colordiffuse="%(text)s">silo/card_landscape_mask.png</texture>
+                        <visible>%(focus)s</visible>
+                    </control>
+                    <!-- SiloKodiConnect's profile row: the profile's avatar. -->
+                    <control type="image">
+                        <left>24</left><top>%(at)d</top><width>60</width><height>60</height>
+                        <texture background="true" diffuse="silo/avatar_mask.png">$INFO[Window(Home).Property(silo.avatar)]</texture>
+                        <visible>%(profile)s</visible>
+                    </control>%(icon_fg)s%(icon_bg)s%(text_fg)s%(text_bg)s''' % {
+        'rw': ROW_W, 'ch': CARD_H, 'text': TEXT, 'focus': has_focus, 'at': (CARD_H - 60) // 2, 'profile': PROFILE,
+        'icon_fg': icon(fg, has_focus), 'icon_bg': icon(TEXT, '!' + has_focus),
+        'text_fg': text(fg, has_focus), 'text_bg': text(TEXT, '!' + has_focus)}
 
 def build():
     poster_item_w = POSTER_W + POSTER_GAP
@@ -274,14 +335,7 @@ def build():
             <texture background="true" colordiffuse="59FFFFFF" diffuse="silo/hero_mask.png">$VAR[SiloBrowseArt]</texture>
         </control>
 
-        <control type="label">
-            <left>%(x)d</left><top>56</top>
-            <width>300</width><height>64</height>
-            <aligny>center</aligny>
-            <font>silo_wordmark</font>
-            <textcolor>%(text)s</textcolor>
-            <label>Silo</label>
-        </control>
+%(wordmark)s
         <control type="grouplist">
             <left>%(x)d</left><top>124</top>
             <width>1600</width><height>56</height>
@@ -312,9 +366,9 @@ def build():
             <scrolltime tween="cubic" easing="out">240</scrolltime>
             <viewtype label="List">list</viewtype>
             <visible>!$EXP[SiloBrowseGrid] + !$EXP[SiloBrowseEpisodes]</visible>
-            <itemlayout width="1110" height="76">%(row)s
+            <itemlayout width="1110" height="%(row_h)d">%(row)s
             </itemlayout>
-            <focusedlayout width="1110" height="76">%(row_focused)s
+            <focusedlayout width="1110" height="%(row_h)d">%(row_focused)s
             </focusedlayout>
         </control>
 
@@ -349,11 +403,11 @@ def build():
         </control>
     </controls>
 </window>
-''' % {'background': BACKGROUND, 'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'lx': SAFE_X - 36,
+''' % {'wordmark': wordmark(SAFE_X, 56), 'background': BACKGROUND, 'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'lx': SAFE_X - 36,
        'views_top': VIEWS_TOP, 'views_h': 1080 - VIEWS_TOP, 'gx': SAFE_X - 6,
        'gw': 1920 - 2 * (SAFE_X - 6), 'pw': poster_item_w, 'ph': POSTER_ITEM_H,
        'ew': 1920 - 2 * (SAFE_X - 6), 'eh': EPISODE_ITEM_H,
-       'row': pill_row(False, 50), 'row_focused': pill_row(True, 50),
+       'row': pill_row(False, 50), 'row_h': ROW_H, 'row_focused': pill_row(True, 50),
        'poster': poster(False, 51), 'poster_focused': poster(True, 51),
        'episode': episode(False, 52), 'episode_focused': episode(True, 52),
        'bar': JUMP_BAR, 'jump': JUMP_ID, 'jump_bar': jump_bar(SAFE_X - 6 + 7 * poster_item_w + 30)}
@@ -392,6 +446,22 @@ VARIABLES = '''
         <value condition="Integer.IsGreater(ListItem.Episode,0) + String.IsEmpty(Container.ShowTitle) + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle] · S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</value>
         <value condition="Integer.IsGreater(ListItem.Episode,0)">S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</value>
         <value>$INFO[ListItem.Label]</value>
+    </variable>
+    <!-- List rows: SiloKodiConnect's menu names an icon of the skin's own. -->
+    <variable name="SiloRowIcon">
+        <value condition="String.IsEqual(ListItem.Property(silo.menu.icon),play)">icons/infodialogs/play.png</value>
+        <value condition="String.IsEqual(ListItem.Property(silo.menu.icon),rows)">icons/sidemenu/tv.png</value>
+        <value condition="String.IsEqual(ListItem.Property(silo.menu.icon),sync)">icons/infodialogs/update.png</value>
+        <value condition="String.IsEqual(ListItem.Property(silo.menu.icon),libraries)">icons/sidemenu/videos.png</value>
+        <value condition="String.IsEqual(ListItem.Property(silo.menu.icon),rewrite)">silo/start_over.png</value>
+        <value condition="String.IsEqual(ListItem.Property(silo.menu.icon),signout)">icons/settings/profiles.png</value>
+        <value condition="String.IsEqual(ListItem.Property(silo.menu.icon),remove)">icons/infodialogs/uninstall.png</value>
+        <value>$INFO[ListItem.Icon]</value>
+    </variable>
+    <variable name="SiloRowDescription">
+        <value condition="!String.IsEmpty(ListItem.Property(silo.menu.description))">$INFO[ListItem.Property(silo.menu.description)]</value>
+        <value condition="String.IsEqual(ListItem.Property(silo.menu.icon),profile)">Profile</value>
+        <value>$INFO[ListItem.Plot]</value>
     </variable>
     <variable name="SiloBrowseArt">
         <value condition="Control.HasFocus(%(jump)d)">$INFO[Container(51).ListItem.Art(fanart)]</value>

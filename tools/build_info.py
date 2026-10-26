@@ -701,6 +701,7 @@ VARIABLES = '''
     </variable>
     <variable name="SiloDetailHdr">
         <value condition="String.IsEqual(ListItem.HdrType,dolbyvision)">DOLBY VISION</value>
+        <value condition="String.IsEqual(ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(ListItem.HdrType,hdr10)">HDR10</value>
         <value condition="String.IsEqual(ListItem.HdrType,hlg)">HLG</value>
         <value>$INFO[ListItem.HdrType]</value>
@@ -710,6 +711,7 @@ VARIABLES = '''
         <value>$VAR[SiloDetailAudioCodec]$VAR[SiloDetailAudioLayout]</value>
     </variable>
     <variable name="SiloDetailAudioCodec">
+        <value condition="String.IsEqual(ListItem.AudioCodec,eac3_ddp_atmos) | String.IsEqual(ListItem.AudioCodec,truehd_atmos)">ATMOS</value>
         <value condition="String.IsEqual(ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(ListItem.AudioCodec,ac3)">DD</value>
         <value condition="String.IsEqual(ListItem.AudioCodec,truehd)">TRUEHD</value>

@@ -304,6 +304,62 @@ if __name__ == '__main__':
                         break
         return hits / float(SUB * SUB)
     write_png('options.png', 96, 96, sliders)
+    # Silo Skyline's mark: a skyline of grain silos (domed towers with two
+    # hoops) in Silo's blue, crimson and orange.
+    SILO_BLUE, SILO_CRIMSON, SILO_ORANGE = (0x0A, 0x33, 0xD1), (0xC8, 0x14, 0x47), (0xD6, 0x69, 0x0C)
+    towers = ((0.06, 0.40, SILO_BLUE), (0.29, 0.10, SILO_BLUE), (0.52, 0.26, SILO_CRIMSON), (0.75, 0.46, SILO_ORANGE))
+
+    def skyline(x, y, size=192.0, width=0.19, base=0.94):
+        hits, colour = 0, SILO_BLUE
+        for sy in range(SUB):
+            for sx in range(SUB):
+                px = (x - 0.5 + (sx + 0.5) / SUB) / size
+                py = (y - 0.5 + (sy + 0.5) / SUB) / size
+                for left, top, tint in towers:
+                    r = width / 2
+                    cx = left + r
+                    if not left <= px <= left + width or py > base:
+                        continue
+                    shaft = py >= top + r
+                    dome = (px - cx) ** 2 + (py - (top + r)) ** 2 <= r * r
+                    # Two hoops: thin gaps across the shaft.
+                    hoops = any(abs(py - h) < 0.012 for h in (top + r + 0.07, top + r + 0.16))
+                    if (shaft or dome) and not hoops:
+                        hits += 1
+                        colour = tint
+                        break
+        return hits / float(SUB * SUB), colour
+    write_png('skyline_mark.png', 192, 192, skyline)
+    # The bar's up chevron (a tab with a sub-menu): two strokes meeting at the top.
+    def chevron_up(x, y, w=56.0, h=32.0, stroke=5.0):
+        hits = 0
+        for sy in range(SUB):
+            for sx in range(SUB):
+                px = x - 0.5 + (sx + 0.5) / SUB
+                py = y - 0.5 + (sy + 0.5) / SUB
+                # Distance to the polyline (6, h-6) -> (w/2, 6) -> (w-6, h-6).
+                import math
+                def seg(ax, ay, bx, by):
+                    t = max(0.0, min(1.0, ((px - ax) * (bx - ax) + (py - ay) * (by - ay)) / ((bx - ax) ** 2 + (by - ay) ** 2)))
+                    return math.hypot(px - ax - t * (bx - ax), py - ay - t * (by - ay))
+                d = min(seg(6, h - 6, w / 2, 6), seg(w / 2, 6, w - 6, h - 6))
+                hits += d <= stroke / 2
+        return hits / float(SUB * SUB)
+    write_png('chevron_up.png', 56, 32, chevron_up)
+
+    # The splash: Silo's near-black with soft glows of the mark's colours
+    # rising from the bottom (drawn small; Kodi stretches it smoothly).
+    def splash_bg(x, y, w=384.0, h=216.0):
+        import math
+        u, v = x / w, y / h
+        rgb = [0x0D, 0x0F, 0x12]
+        for (gx, gy, radius, strength, tint) in ((0.12, 1.08, 0.75, 0.42, SILO_BLUE), (0.62, 1.12, 0.45, 0.20, SILO_ORANGE),
+                                                  (0.92, 1.0, 0.55, 0.30, SILO_CRIMSON)):
+            d = math.hypot((u - gx) * w / h, v - gy) / radius
+            glow = strength * max(0.0, 1 - d) ** 2
+            rgb = [c + (t - c) * glow for c, t in zip(rgb, tint)]
+        return 1.0, tuple(int(c + 0.5) for c in rgb)
+    write_png('splash_bg.png', 384, 216, splash_bg)
     person_placeholder()
     focus_ring('avatar_ring.png', 64, 64, 32, 3)
     print('Wrote', ', '.join(sorted(os.listdir(OUT))))

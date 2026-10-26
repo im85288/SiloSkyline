@@ -19,13 +19,31 @@
             <fadetime>240</fadetime>
             <texture background="true" colordiffuse="59FFFFFF" diffuse="silo/hero_mask.png">$INFO[Container.ListItem.Art(fanart)]</texture>
         </control>
-        <control type="label">
+        <!-- Silo Skyline's mark and name (media/silo/skyline_mark.png). -->
+        <control type="grouplist">
             <left>88</left><top>56</top>
-            <width>300</width><height>64</height>
-            <aligny>center</aligny>
-            <font>silo_wordmark</font>
-            <textcolor>FFEDEDED</textcolor>
-            <label>Silo</label>
+            <width>440</width><height>64</height>
+            <orientation>horizontal</orientation>
+            <itemgap>12</itemgap>
+            <usecontrolcoords>true</usecontrolcoords>
+            <control type="image">
+                <top>6</top><width>52</width><height>52</height>
+                <texture>silo/skyline_mark.png</texture>
+            </control>
+            <control type="label">
+                <width>auto</width><height>64</height>
+                <aligny>center</aligny>
+                <font>silo_wordmark</font>
+                <textcolor>FFEDEDED</textcolor>
+                <label>Silo</label>
+            </control>
+            <control type="label">
+                <width>auto</width><height>64</height>
+                <aligny>center</aligny>
+                <font>silo_wordmark_light</font>
+                <textcolor>BFEDEDED</textcolor>
+                <label>Skyline</label>
+            </control>
         </control>
 
         <!-- The search words, in a pill that asks for them again. -->

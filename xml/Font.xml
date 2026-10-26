@@ -190,6 +190,16 @@
 			<size>44</size>
 		</font>
 		<font>
+			<name>silo_wordmark_light</name>
+			<filename>Inter-Medium.ttf</filename>
+			<size>44</size>
+		</font>
+		<font>
+			<name>silo_title_light</name>
+			<filename>Inter-Medium.ttf</filename>
+			<size>76</size>
+		</font>
+		<font>
 			<name>silo_key</name>
 			<filename>Inter-Medium.ttf</filename>
 			<size>40</size>
@@ -396,6 +406,16 @@
 			<name>silo_wordmark</name>
 			<filename>Inter-Bold.ttf</filename>
 			<size>44</size>
+		</font>
+		<font>
+			<name>silo_wordmark_light</name>
+			<filename>Inter-Medium.ttf</filename>
+			<size>44</size>
+		</font>
+		<font>
+			<name>silo_title_light</name>
+			<filename>Inter-Medium.ttf</filename>
+			<size>76</size>
 		</font>
 		<font>
 			<name>silo_key</name>
