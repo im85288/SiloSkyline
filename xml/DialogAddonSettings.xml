@@ -20,7 +20,7 @@
 				<top>80</top>
 				<width>400</width>
 				<height>596</height>
-				<itemgap>-25</itemgap>
+				<itemgap>4</itemgap>
 				<orientation>vertical</orientation>
 				<onleft>9000</onleft>
 				<onright>5</onright>
@@ -29,20 +29,16 @@
 			</control>
 			<control type="button" id="10">
 				<description>Default Category Button</description>
-				<height>120</height>
+				<height>70</height>
 				<width>390</width>
 				<textoffsetx>20</textoffsetx>
-				<align>center</align>
+				<align>left</align>
 				<aligny>center</aligny>
-				<font>font25_title</font>
-				<texturenofocus border="40">buttons/dialogbutton-nofo.png</texturenofocus>
-			</control>
-			<control type="image">
-				<left>410</left>
-				<top>80</top>
-				<width>1100</width>
-				<height>740</height>
-				<texture border="40">buttons/dialogbutton-nofo.png</texture>
+				<font>silo_meta</font>
+				<texturenofocus />
+				<textcolor>FFEDEDED</textcolor>
+				<focusedcolor>FF000000</focusedcolor>
+				<texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
 			</control>
 			<control type="grouplist" id="5">
 				<description>control area</description>
@@ -62,9 +58,9 @@
 				<top>815</top>
 				<right>50</right>
 				<height>70</height>
-				<font>font12</font>
+				<font>silo_detail</font>
 				<align>justify</align>
-				<textcolor>button_focus</textcolor>
+				<textcolor>BFEDEDED</textcolor>
 				<autoscroll time="3000" delay="5000" repeat="5000">true</autoscroll>
 			</control>
 			<control type="button" id="7">
@@ -83,7 +79,7 @@
 			<control type="image" id="11">
 				<description>separator image</description>
 				<height>3</height>
-				<texture colordiffuse="AAAAAAAA" border="3">dialogs/separator-grey.png</texture>
+				<texture colordiffuse="14FFFFFF">colors/white.png</texture>
 			</control>
 			<control type="edit" id="12">
 				<include>DefaultSettingButton</include>
@@ -128,7 +124,7 @@
 				<top>700</top>
 				<width>390</width>
 				<height>120</height>
-				<font>font25_title</font>
+				<font>silo_meta</font>
 				<aligny>center</aligny>
 				<onclick>SettingsLevelChange</onclick>
 				<textoffsetx>100</textoffsetx>

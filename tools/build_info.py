@@ -517,8 +517,9 @@ def show_pill():
                     <onright>65</onright>
                     <ondown>64</ondown>
                     <onclick>SetProperty(silo.from_rail,1,home)</onclick>
+                    <!-- The episode's id while this page is open (RunPlugin runs later). -->
+                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=show&amp;episode=$INFO[ListItem.DBID])</onclick>
                     <onclick>Dialog.Close(movieinformation)</onclick>
-                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=tvshow&amp;dbid=$INFO[ListItem.TvShowDBID])</onclick>
                     <visible>%(episode)s + %(pills)s</visible>
                 </control>''' % {'x': SAFE_X, 'dim': TEXT_DIM, 'text': TEXT, 'episode': 'String.IsEqual(ListItem.DBType,episode)',
                          'pills': EPISODE_PILLS}

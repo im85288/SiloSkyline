@@ -824,6 +824,40 @@ def system_info_window():
        'cpu_label': small % {'w': right_w, 'dim': TEXT_DIM, 'visible': cpu, 'label': '$LOCALIZE[13271] $INFO[System.CPUUsage]'},
        'cpu_bar': bar % {'w': 720, 'text': TEXT, 'info': 'System.CPUUsage', 'visible': cpu}}
 
+DIALOGS = ('DialogAddonSettings', 'DialogSettings', 'DialogSlider', 'DialogTextViewer', 'DialogNumeric')
+FONTS = {'font10': 'silo_detail', 'font12': 'silo_detail', 'font13': 'silo_meta', 'font14': 'silo_meta',
+         'font25_title': 'silo_meta', 'font27': 'silo_meta', 'font37': 'silo_row'}
+
+
+def silo_dialog(text):
+    """Kodi's small dialogs (from tools/source) in the frame's look: no
+    Estuary panels behind rows, the white pill on focus with black text,
+    Silo's dimmed white for Estuary's blue accent, Inter, faint separators."""
+    # Estuary's grey panels (a category's resting button, the settings well): gone.
+    text = re.sub(r'\s*<texturenofocus border="40">buttons/dialogbutton-nofo.png</texturenofocus>', '\n\t\t\t\t<texturenofocus />', text)
+    text = re.sub(r'\t*<control type="image">\s*(<left>[^<]*</left>\s*)?(<top>[^<]*</top>\s*)?(<width>[^<]*</width>\s*)?(<height>[^<]*</height>\s*)?<texture border="40">buttons/dialogbutton-nofo.png</texture>\s*</control>\n',
+                  '', text)
+    # Focus: the white pill, black text.
+    text = re.sub(r'<texturefocus border="40" colordiffuse="button_focus">buttons/dialogbutton-fo.png</texturefocus>',
+                  '<texturefocus border="30" colordiffuse="%s">%s</texturefocus>\n\t\t\t\t\t<focusedcolor>FF000000</focusedcolor>' % (TEXT, FOCUS_ROW), text)
+    text = re.sub(r'<texturefocus colordiffuse="button_focus">buttons/roundbutton-fo.png</texturefocus>',
+                  '<texturefocus colordiffuse="%s">silo/avatar_mask.png</texturefocus>\n\t\t\t\t\t\t<focusedcolor>FF000000</focusedcolor>' % TEXT, text)
+    # The add-on settings' category buttons: rows with the pill.
+    text = re.sub(r'(<control type="button" id="10">\s*<description>Default Category Button</description>\s*)<height>120</height>(.*?)<align>center</align>(.*?)</control>',
+                  lambda m: m.group(1) + '<height>70</height>' + m.group(2) + '<align>left</align>' + m.group(3)
+                  + '\t<textcolor>%s</textcolor>\n\t\t\t\t<focusedcolor>FF000000</focusedcolor>\n\t\t\t\t<texturefocus border="30" colordiffuse="%s">%s</texturefocus>\n\t\t\t</control>' % (TEXT, TEXT, FOCUS_ROW),
+                  text, count=1, flags=re.S)
+    text = text.replace('<itemgap>-25</itemgap>', '<itemgap>4</itemgap>')
+    # Colours, separators, fonts.
+    text = re.sub(r'colordiffuse="button_focus"', 'colordiffuse="%s"' % TEXT, text)
+    text = text.replace('<textcolor>button_focus</textcolor>', '<textcolor>%s</textcolor>' % TEXT_DIM)
+    text = text.replace('[COLOR=button_focus]', '[COLOR=%s]' % TEXT)
+    text = re.sub(r'<texture colordiffuse="AAAAAAAA" border="3">dialogs/separator-grey.png</texture>',
+                  '<texture colordiffuse="14FFFFFF">colors/white.png</texture>', text)
+    text = re.sub(r'<font>(%s)</font>' % '|'.join(FONTS), lambda m: '<font>%s</font>' % FONTS[m.group(1)], text)
+    return text
+
+
 def replace_include(text, name, new):
     start = text.index('\n\t<include name="%s">' % name) + 1
     end = text.index('\n\t</include>\n', start) + len('\n\t</include>\n')
@@ -1096,11 +1130,17 @@ def main():
     # Estuary's side panel behind lists: Silo's page shows instead.
     path = xml_path('Includes.xml')
     text = open(path, encoding='utf-8').read()
+    # Kodi's lists start below the frame's header, not at Estuary's top bar.
+    text = re.sub(r'<constant name="list_top_offset">\d+</constant>', '<constant name="list_top_offset">%d</constant>' % (PANEL_Y + 4), text)
     text = text.replace('<texture flipx="$PARAM[flipx]" colordiffuse="EDFFFFFF">lists/panel.png</texture>\n\t\t\t\t<bordertexture border="21" infill="false">overlays/shadow.png</bordertexture>\n\t\t\t\t<bordersize>20</bordersize>',
                         '<texture colordiffuse="00FFFFFF">colors/white.png</texture>')
     open(path, 'w', encoding='utf-8').write(text)
     with open(xml_path('SettingsSystemInfo.xml'), 'w', encoding='utf-8') as handle:
         handle.write(system_info_window())
+    for name in DIALOGS:
+        source = os.path.join(ROOT, 'tools', 'source', name + '.xml')
+        with open(xml_path(name + '.xml'), 'w', encoding='utf-8') as handle:
+            handle.write(silo_dialog(open(source, encoding='utf-8').read()))
     with open(xml_path('LoginScreen.xml'), 'w', encoding='utf-8') as handle:
         handle.write(login_screen_window())
     with open(xml_path('SettingsProfile.xml'), 'w', encoding='utf-8') as handle:
