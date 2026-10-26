@@ -108,6 +108,14 @@ def list_id(page_index, slot, landscape):
     return 5000 + 100 * page_index + (50 if landscape else 0) + slot
 
 
+def home_waiting(row):
+    """Home before a row has focus, showing its published row `row`'s first
+    card (row 1's, or row 2's when row 1 has none)."""
+    condition = ('String.IsEmpty(%s) + [String.IsEqual(%s,home) | String.IsEmpty(%s)] + Integer.IsGreater(%s,0)'
+                 % (prop('silo.row'), prop('silo.page'), prop('silo.page'), prop('silo.home.%d.cards' % row)))
+    return condition if row == 1 else condition + ' + !Integer.IsGreater(%s,0)' % prop('silo.home.1.cards')
+
+
 def waiting_rows():
     """[(condition, list id)]: on a page other than Home, before any row has
     had focus, the hero shows the selected item of the page's first loaded
@@ -828,6 +836,9 @@ def build():
 <window>
     <defaultcontrol always="true">4000</defaultcontrol>
     <onload condition="String.IsEmpty(Window(Home).Property(silo.home.count))">SetFocus(9002)</onload>
+    <!-- Kodi starting: the first-row timer may take focus from the bar for a while. -->
+    <onload condition="String.IsEmpty(Window(Home).Property(silo.home.count))">SetProperty(silo.startup,1,home)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(silo.home.count))">AlarmClock(silostartup,ClearProperty(silo.startup,home),00:%(splash_max)d,silent)</onload>
     <!-- Skin Shortcuts writes the user's menu into script-skinshortcuts-includes.xml when it changed. -->
     <onload condition="System.HasAddon(script.skinshortcuts)">RunScript(script.skinshortcuts,type=buildxml&amp;mainmenuID=%(shortcuts)d&amp;group=mainmenu)</onload>
     <backgroundcolor>%(background)s</backgroundcolor>
@@ -962,7 +973,7 @@ def build():
        'row_overlap': ROW_PITCH - BAND_H,
        'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
        'bar_down': bar_down(), 'avatar': avatar(), 'custom': shortcuts_list,
-       'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections_menus() + custom_submenu(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'waiting': ' | '.join('[%s]' % c for c, _ in waiting_rows()), 'background': BACKGROUND,
+       'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections_menus() + custom_submenu(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'waiting': ' | '.join('[%s]' % c for c, _ in waiting_rows()), 'background': BACKGROUND, 'splash_max': SPLASH_MAX,
        # The age rating as Silo draws it: the quality badges' size, centred on the info line.
        'splash': splash(), 'mpaa_badge': badge('$VAR[SiloMpaa]', 34, 'silo_badge').replace(
            '<width>auto</width><height>34</height>', '<top>3</top><width>auto</width><height>34</height>', 1),
@@ -1068,6 +1079,8 @@ def variables():
         terms += ['[%s + [!String.IsEmpty(Container(%d).ListItem.Property(%s)) | '
                   '!String.IsEmpty(Container(%d).ListItem.Property(%s))]]'
                   % (waiting, row_id, item_property, row_id, home_property) for waiting, row_id in waiting_rows()]
+        terms += ['[%s + !String.IsEmpty(%s)]' % (home_waiting(row), prop('silo.home.%d.1.%s' % (row, home_property[5:])))
+                  for row in (1, 2)]
         out += '    <expression name="Has%s">%s</expression>\n' % (name, ' | '.join(terms))
     out += EMPTY_HOME
     for name, entries in HERO:
@@ -1085,11 +1098,8 @@ def variables():
         if name in HERO_STATIC:
             field = HERO_STATIC[name][len('home.'):]
             for row in (1, 2):
-                waiting = ('String.IsEmpty(%s) + [String.IsEqual(%s,home) | String.IsEmpty(%s)] + '
-                           'Integer.IsGreater(%s,0)' % (prop('silo.row'), prop('silo.page'), prop('silo.page'),
-                                                        prop('silo.home.%d.cards' % row)))
                 out += '        <value condition="%s">$INFO[%s]</value>\n' % (
-                    waiting, prop('silo.home.%d.1.%s' % (row, field)))
+                    home_waiting(row), prop('silo.home.%d.1.%s' % (row, field)))
         # Another page before a row has focus: its first loaded row's item.
         for waiting, row_id in waiting_rows():
             item = 'Container(%d).ListItem' % row_id
@@ -1127,19 +1137,18 @@ def first_row_timer():
     """A skin timer (xml/Timers.xml) that puts focus on the first row once it
     has loaded, so the hero is filled at start-up: rows load after Home opens,
     and Kodi can't focus an empty list. It waits until no row has been chosen
-    and focus is on the current page's tab or off the bar (avatar included), then focuses the
-    first row showing a second later; it starts again if that row was still
-    loading. Timers.xml gets its conditions in full: it has no $EXP."""
+    and focus is nowhere (Home's default row couldn't take it), never on the
+    bar or the avatar, then focuses the first row showing a second later; it
+    starts again if that row was still loading. Timers.xml gets its conditions in full: it has no $EXP."""
     ready, focus = [], []
     for index, page in enumerate(PAGES):
         rows = [(slot, landscape) for slot in range(1, LOOKAHEAD + 1) for landscape in (False, True)]
         loaded = ' | '.join('Integer.IsGreater(Container(%d).NumItems,0)' % list_id(index, slot, landscape)
                             for slot, landscape in rows)
-        ready.append('[%s + [%s] + [Control.HasFocus(%d) | [!ControlGroup(9000).HasFocus() + '
-                     '!Control.HasFocus(9011)]]]' % (page_visible(page), loaded, 9002 + index)
-                     if page in TABBED else
-                     '[%s + [%s] + [%s | [!ControlGroup(9000).HasFocus() + !Control.HasFocus(9011)]]]'
-                     % (page_visible(page), loaded, ' | '.join('Control.HasFocus(%d)' % k for k in CUSTOM_IDS)))
+        # Not from the bar, where someone chose to be (a tab's page fills its
+        # hero from its first row without focus), except as Kodi starts.
+        ready.append('[%s + [%s] + [[!ControlGroup(9000).HasFocus() + !Control.HasFocus(9011)] | '
+                     '!String.IsEmpty(%s)]]' % (page_visible(page), loaded, prop('silo.startup')))
         shown_rows = [('[%s]' % row_rules(page, index, slot, landscape), list_id(index, slot, landscape))
                       for slot, landscape in rows]
         for position, (rule, target) in enumerate(shown_rows):

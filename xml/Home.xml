@@ -3,6 +3,9 @@
 <window>
     <defaultcontrol always="true">4000</defaultcontrol>
     <onload condition="String.IsEmpty(Window(Home).Property(silo.home.count))">SetFocus(9002)</onload>
+    <!-- Kodi starting: the first-row timer may take focus from the bar for a while. -->
+    <onload condition="String.IsEmpty(Window(Home).Property(silo.home.count))">SetProperty(silo.startup,1,home)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(silo.home.count))">AlarmClock(silostartup,ClearProperty(silo.startup,home),00:20,silent)</onload>
     <!-- Skin Shortcuts writes the user's menu into script-skinshortcuts-includes.xml when it changed. -->
     <onload condition="System.HasAddon(script.skinshortcuts)">RunScript(script.skinshortcuts,type=buildxml&amp;mainmenuID=9100&amp;group=mainmenu)</onload>
     <backgroundcolor>FF0D0F12</backgroundcolor>
