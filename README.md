@@ -21,9 +21,9 @@ Community project: not made or endorsed by the Silo team.
   Browse pill, Trailer and Versions buttons when a title has them, and the cast as round photos.
 - **Inter** throughout, as the Silo apps use.
 
-| Movies | Episode | Film |
+| Movies | Series | Film |
 |---|---|---|
-| ![Movies](resources/screenshot-02.jpg) | ![Episode](resources/screenshot-03.jpg) | ![Film](resources/screenshot-04.jpg) |
+| ![Movies](resources/screenshot-02.jpg) | ![Series](resources/screenshot-03.jpg) | ![Film](resources/screenshot-04.jpg) |
 
 ## Your own menu items
 
