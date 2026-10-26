@@ -83,6 +83,25 @@
 			<texturenofocus />
 		</definition>
 	</include>
+	<include name="OSDSettingButton">
+		<!-- Silo Skyline: the player's settings list (Custom_1101), as Silo's
+		     sheets: solid rows continuing the dialog card, the focused row a
+		     white pill with dark text. -->
+		<param name="height">70</param>
+		<definition>
+			<textoffsetx>40</textoffsetx>
+			<top>0</top>
+			<height>$PARAM[height]</height>
+			<aligny>center</aligny>
+			<font>silo_meta</font>
+			<textcolor>FFEDEDED</textcolor>
+			<focusedcolor>FF000000</focusedcolor>
+			<invalidcolor>invalid</invalidcolor>
+			<selectedcolor>selected</selectedcolor>
+			<texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
+			<texturenofocus colordiffuse="FF131417">colors/white.png</texturenofocus>
+		</definition>
+	</include>
 	<include name="DefaultSettingLabel">
 		<left>0</left>
 		<top>0</top>

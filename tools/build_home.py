@@ -82,6 +82,7 @@ FONTS = [  # name, file, size
     ('silo_tab', 'Inter-SemiBold.ttf', 30),
     ('silo_row', 'Inter-Bold.ttf', 34),
     ('silo_title', 'Inter-Bold.ttf', 76),
+    ('silo_osd_title', 'Inter-Bold.ttf', 46),  # the player's episode or film title
     ('silo_meta', 'Inter-Medium.ttf', 28),
     ('silo_plot', 'Inter-Regular.ttf', 28),
     ('silo_detail', 'Inter-Medium.ttf', 24),

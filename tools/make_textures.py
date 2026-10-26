@@ -218,6 +218,92 @@ if __name__ == '__main__':
         return hits / float(SUB * SUB)
     write_png('spinner_arc.png', 96, 96, arc)
     write_png('dialog_button.png', 100, 100, lambda x, y: rounded_rect_coverage(x, y, 100, 100, 36, inset=10))
+    # A focused row in the player's settings list: the white bar on the
+    # dialog's own colour, as a Kodi button draws only its focus texture.
+    def dialog_row_focus(x, y):
+        bar = rounded_rect_coverage(x, y, 100, 100, 36, inset=10)
+        grey = int(0xED * bar + 0x13 * (1 - bar))
+        return 1.0, (grey, int(0xED * bar + 0x14 * (1 - bar)), int(0xED * bar + 0x17 * (1 - bar)))
+    write_png('dialog_row_focus.png', 100, 100, dialog_row_focus)
+    # Start over (an info page's Play from beginning): a ring open at its top
+    # left, an arrowhead on the open end turning it anticlockwise, and a
+    # small play triangle inside.
+    def start_over(x, y, size=64.0, stroke=6.0):
+        import math
+        c, r = size / 2.0, size * 0.34
+        end = math.radians(200)  # the ring runs from here round to 290 degrees
+        tip_x, tip_y = c + r * math.cos(end), c + r * math.sin(end)
+        hits = 0
+        for sy in range(SUB):
+            for sx in range(SUB):
+                px = x - 0.5 + (sx + 0.5) / SUB
+                py = y - 0.5 + (sy + 0.5) / SUB
+                dx, dy = px - c, py - c
+                angle = math.degrees(math.atan2(dy, dx)) % 360
+                ring = abs(math.hypot(dx, dy) - r) <= stroke / 2 and not 200 < angle < 290
+                # Arrowhead: a triangle on the ring's end, pointing up (along the turn).
+                hx, hy = px - tip_x, tip_y - py
+                head = 0 <= hy <= size * 0.16 and abs(hx) <= size * 0.12 * (1 - hy / (size * 0.16))
+                # Play triangle, pointing right, centred.
+                tx, ty = px - c + size * 0.02, py - c
+                play = -size * 0.09 <= tx <= size * 0.11 and abs(ty) <= (size * 0.11 - tx) * 0.58
+                hits += ring or head or play
+        return hits / float(SUB * SUB)
+    write_png('start_over.png', 64, 64, start_over)
+    # Silo's player skips (back 10 s, forward 30 s): an open ring with an
+    # arrowhead on its top end; the skin writes the seconds inside.
+    def skip_ring(x, y, forward, size=64.0, stroke=5.0):
+        import math
+        c, r = size / 2.0 + 2, size * 0.36
+        hits = 0
+        for sy in range(SUB):
+            for sx in range(SUB):
+                px = x - 0.5 + (sx + 0.5) / SUB
+                py = y - 0.5 + (sy + 0.5) / SUB
+                if forward:
+                    px = size - px  # the mirror image
+                dx, dy = px - c, py - c
+                angle = math.degrees(math.atan2(dy, dx)) % 360
+                ring = abs(math.hypot(dx, dy) - r) <= stroke / 2 and not 225 < angle < 275
+                # Arrowhead at the ring's top end (275 degrees), pointing left.
+                tip_x = c + r * math.cos(math.radians(275))
+                tip_y = c + r * math.sin(math.radians(275))
+                hx, hy = tip_x - px, py - tip_y
+                head = -size * 0.02 <= hx <= size * 0.15 and abs(hy) <= size * 0.11 * (1 - hx / (size * 0.15))
+                hits += ring or head
+        return hits / float(SUB * SUB)
+    write_png('skip_back.png', 64, 64, lambda x, y: skip_ring(x, y, False))
+    write_png('skip_forward.png', 64, 64, lambda x, y: skip_ring(x, y, True))
+    # Player button icons at a button's full size (Kodi stretches a radio
+    # button's icon to it), so drawn in its middle: close (an X) and Silo's
+    # Options (three sliders, each with a knob).
+    def close_x(x, y, size=96.0, stroke=6.5):
+        hits = 0
+        for sy in range(SUB):
+            for sx in range(SUB):
+                px = x - 0.5 + (sx + 0.5) / SUB - size / 2
+                py = y - 0.5 + (sy + 0.5) / SUB - size / 2
+                inside = max(abs(px), abs(py)) <= size * 0.17
+                diagonal = min(abs(px - py), abs(px + py)) / 1.4142 <= stroke / 2
+                hits += inside and diagonal
+        return hits / float(SUB * SUB)
+    write_png('close.png', 96, 96, close_x)
+
+    def sliders(x, y, size=96.0, stroke=5.0):
+        knobs = ((0.36, 0.40), (0.50, 0.60), (0.64, 0.46))  # (row, knob position) as fractions
+        hits = 0
+        for sy in range(SUB):
+            for sx in range(SUB):
+                px = (x - 0.5 + (sx + 0.5) / SUB) / size
+                py = (y - 0.5 + (sy + 0.5) / SUB) / size
+                for row, knob in knobs:
+                    line = abs(py - row) <= stroke / 2 / size and 0.32 <= px <= 0.68
+                    handle = abs(py - row) <= 0.055 and abs(px - knob) <= 0.03
+                    if line or handle:
+                        hits += 1
+                        break
+        return hits / float(SUB * SUB)
+    write_png('options.png', 96, 96, sliders)
     person_placeholder()
     focus_ring('avatar_ring.png', 64, 64, 32, 3)
     print('Wrote', ', '.join(sorted(os.listdir(OUT))))

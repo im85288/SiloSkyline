@@ -190,7 +190,7 @@
     <timer>
         <name>silo_this_season</name>
         <description>Open a show's page on its next episode (tools/build_info.py)</description>
-        <start reset="true">Window.IsActive(movieinformation) + Control.HasFocus(8) + String.IsEmpty(Window(movieinformation).Property(silo.jump)) + Integer.IsGreater(Container(65).NumItems,0) + !Container(65).IsUpdating + Integer.IsGreater(Container(65).NumItems,1)</start>
+        <start reset="true">Window.IsActive(movieinformation) + Control.HasFocus(308) + String.IsEmpty(Window(movieinformation).Property(silo.jump)) + Integer.IsGreater(Container(65).NumItems,0) + !Container(65).IsUpdating + Integer.IsGreater(Container(65).NumItems,1)</start>
         <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_this_season),0)</stop>
         <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(0).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,0,absolute)</onstop>
         <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(1).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,1,absolute)</onstop>
@@ -233,12 +233,12 @@
         <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(38).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,38,absolute)</onstop>
         <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(65).ListItemAbsolute(39).Season,Window(movieinformation).Property(silo.episode_season))">SetFocus(65,39,absolute)</onstop>
         <onstop condition="Window.IsActive(movieinformation)">SetProperty(silo.jump,episode_season,movieinformation)</onstop>
-        <onstop condition="Window.IsActive(movieinformation)">SetFocus(8)</onstop>
+        <onstop condition="Window.IsActive(movieinformation)">SetFocus(308)</onstop>
     </timer>
     <timer>
         <name>silo_this_episode</name>
         <description>Open a show's page on its next episode (tools/build_info.py)</description>
-        <start reset="true">Window.IsActive(movieinformation) + Control.HasFocus(8) + [String.IsEmpty(Window(movieinformation).Property(silo.jump)) + !Integer.IsGreater(Container(65).NumItems,1) | String.IsEqual(Window(movieinformation).Property(silo.jump),episode_season)] + Integer.IsGreater(Container(64).NumItems,0) + !Container(64).IsUpdating + String.IsEqual(Container(64).ListItemAbsolute(0).Season,Window(movieinformation).Property(silo.episode_season))</start>
+        <start reset="true">Window.IsActive(movieinformation) + Control.HasFocus(308) + [String.IsEmpty(Window(movieinformation).Property(silo.jump)) + !Integer.IsGreater(Container(65).NumItems,1) | String.IsEqual(Window(movieinformation).Property(silo.jump),episode_season)] + Integer.IsGreater(Container(64).NumItems,0) + !Container(64).IsUpdating + String.IsEqual(Container(64).ListItemAbsolute(0).Season,Window(movieinformation).Property(silo.episode_season))</start>
         <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_this_episode),0)</stop>
         <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(64).ListItemAbsolute(0).Episode,Window(movieinformation).Property(silo.episode_number))">SetFocus(64,0,absolute)</onstop>
         <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(64).ListItemAbsolute(1).Episode,Window(movieinformation).Property(silo.episode_number))">SetFocus(64,1,absolute)</onstop>
@@ -301,7 +301,7 @@
         <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(64).ListItemAbsolute(58).Episode,Window(movieinformation).Property(silo.episode_number))">SetFocus(64,58,absolute)</onstop>
         <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Container(64).ListItemAbsolute(59).Episode,Window(movieinformation).Property(silo.episode_number))">SetFocus(64,59,absolute)</onstop>
         <onstop condition="Window.IsActive(movieinformation)">SetProperty(silo.jump,done,movieinformation)</onstop>
-        <onstop condition="Window.IsActive(movieinformation)">SetFocus(8)</onstop>
+        <onstop condition="Window.IsActive(movieinformation)">SetFocus(308)</onstop>
     </timer>
     <!-- end Silo Skyline detail -->
 </timers>

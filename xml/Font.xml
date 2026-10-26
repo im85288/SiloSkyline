@@ -150,6 +150,11 @@
 			<size>76</size>
 		</font>
 		<font>
+			<name>silo_osd_title</name>
+			<filename>Inter-Bold.ttf</filename>
+			<size>46</size>
+		</font>
+		<font>
 			<name>silo_meta</name>
 			<filename>Inter-Medium.ttf</filename>
 			<size>28</size>
@@ -351,6 +356,11 @@
 			<name>silo_title</name>
 			<filename>Inter-Bold.ttf</filename>
 			<size>76</size>
+		</font>
+		<font>
+			<name>silo_osd_title</name>
+			<filename>Inter-Bold.ttf</filename>
+			<size>46</size>
 		</font>
 		<font>
 			<name>silo_meta</name>

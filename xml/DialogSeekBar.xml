@@ -447,15 +447,15 @@
 				<texture colordiffuse="B3FFFFFF">silo/scrim_bottom.png</texture>
 			</control>
 			<control type="label">
-				<left>96</left><top>738</top><width>1600</width><height>28</height>
+				<left>96</left><top>684</top><width>1600</width><height>28</height>
 				<font>silo_badge</font>
 				<textcolor>E6EDEDED</textcolor>
 				<label>[UPPERCASE]$VAR[SiloPlayerEyebrow][/UPPERCASE]</label>
 				<shadowcolor>99000000</shadowcolor>
 			</control>
 			<control type="label">
-				<left>96</left><top>766</top><width>1600</width><height>66</height>
-				<font>silo_row</font>
+				<left>96</left><top>716</top><width>1600</width><height>80</height>
+				<font>silo_osd_title</font>
 				<textcolor>FFEDEDED</textcolor>
 				<label>$INFO[VideoPlayer.Title]</label>
 				<shadowcolor>99000000</shadowcolor>
