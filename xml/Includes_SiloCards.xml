@@ -26,6 +26,8 @@
                 <property name="home.art.landscape">$INFO[Window(Home).Property($PARAM[p].art.landscape)]</property>
                 <property name="home.art.fanart">$INFO[Window(Home).Property($PARAM[p].art.fanart)]</property>
                 <property name="home.art.clearlogo">$INFO[Window(Home).Property($PARAM[p].art.clearlogo)]</property>
+                <property name="home.request.type">$INFO[Window(Home).Property($PARAM[p].request.type)]</property>
+                <property name="home.request.tmdb">$INFO[Window(Home).Property($PARAM[p].request.tmdb)]</property>
                 <visible>!String.IsEmpty(Window(Home).Property($PARAM[p].type))</visible>
             </item>
         </definition>

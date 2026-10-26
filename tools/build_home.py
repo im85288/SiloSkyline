@@ -26,13 +26,19 @@ WIDGETS = 6
 CUSTOM_IDS = list(range(9031, 9031 + CUSTOM_SLOTS))
 SHORTCUTS = 9100  # hidden list holding Skin Shortcuts' main menu
 SUBMENU = 9240    # the dropdown of a custom item's submenu
-HOME_CARDS = 25   # cards in a Home row (SiloKodiConnect rows.CARDS)
+HOME_CARDS = 25   # cards in a published row (SiloKodiConnect rows.CARDS)
+PUBLISHED_PAGES = ('home',)  # Movies' and Series' rows are native Kodi lists where they can be
+# Cards per published row: every slot is parsed as the skin loads (on a SHIELD,
+# 2,200 slots took 25 s; Home's 600, 1 s), so other pages show fewer.
+PAGE_CARDS = {'home': HOME_CARDS}
+OTHER_CARDS = 12
 HOME_CARD_FIELDS = ('type', 'dbid', 'card.title', 'card.sub', 'card.wide_sub', 'hero.title', 'hero.meta',
                     'hero.detail', 'plot', 'mpaa', 'badge1', 'badge2', 'badge3', 'tint', 'percent', 'playcount',
-                    'art.poster', 'art.landscape', 'art.fanart', 'art.clearlogo')
+                    'art.poster', 'art.landscape', 'art.fanart', 'art.clearlogo', 'request.type', 'request.tmdb')
 # Rows a page can show; Requests has Your requests and Silo's few discovery
 # rows, and every slot costs Home.xml size.
-PAGE_ROWS = {'requests': 8, 'custom': WIDGETS}
+# Silo's libraries have 6 rows each: fewer slots keep Home.xml quick to load.
+PAGE_ROWS = {'movies': 8, 'series': 8, 'requests': 8, 'custom': WIDGETS}
 
 
 def rows_of(page):
@@ -99,6 +105,22 @@ def list_id(page_index, slot, landscape):
     return 5000 + 100 * page_index + (50 if landscape else 0) + slot
 
 
+def waiting_rows():
+    """[(condition, list id)]: on a page other than Home, before any row has
+    had focus, the hero shows the selected item of the page's first loaded
+    row (Kodi gives a list's item without focus), not a black hero."""
+    out = []
+    for index, page in enumerate(PAGES):
+        if page == 'home':
+            continue
+        for slot in (1, 2):
+            for landscape in (False, True):
+                target = list_id(index, slot, landscape)
+                out.append(('String.IsEmpty(%s) + %s + Integer.IsGreater(Container(%d).NumItems,0)'
+                            % (prop('silo.row'), page_visible(page), target), target))
+    return out
+
+
 def card_layout(card, focused, control_id=None):
     """A row's card: the shared include from Includes_SiloCards.xml (a
     focused card is told its list's id), which keeps Home.xml small."""
@@ -106,6 +128,14 @@ def card_layout(card, focused, control_id=None):
         return '\n                    <include>SiloCard%s</include>' % card['name']
     return ('\n                    <include content="SiloCardFocused%s"><param name="id" value="%d" /></include>'
             % (card['name'], control_id))
+
+
+def published_item(prefix):
+    """One card slot of a published row: its fields from the Home window."""
+    return ('\n                        <item><label>$INFO[Window(Home).Property(%s.label)]</label>' % prefix +
+            ''.join('<property name="home.%s">$INFO[Window(Home).Property(%s.%s)]</property>' % (field, prefix, field)
+                    for field in HOME_CARD_FIELDS) +
+            '<visible>!String.IsEmpty(Window(Home).Property(%s.type))</visible></item>' % prefix)
 
 
 def write_card_includes():
@@ -299,13 +329,24 @@ def row(page, page_index, slot, landscape):
     if page == 'custom':
         # A Skin Shortcuts widget: any Kodi path, used as it is.
         path = '$INFO[%s]' % prop(key + '.path')
-    # Home's rows: the cards SiloKodiConnect publishes, in Silo's order, so the
-    # row draws at once (no plugin, no Python) and keeps Silo's ranking.
+    # Home's, Movies', Series' and Requests' rows: the cards SiloKodiConnect
+    # publishes, in Silo's order, so a row draws at once (no plugin, no
+    # Python) and keeps Silo's ranking. A custom page's widgets are any
+    # Kodi path, so they load as they are.
     content = '<content target="videos">%s</content>' % path
-    if page == 'home':
+    if page != 'custom':
+        # A Kodi library row (Movies' and Series' Recently Added, say) comes
+        # in its sort from SiloKodiConnect: Kodi ignores a videodb path's own
+        # order, and sorts before it cuts the row to its limit. Empty for a
+        # plugin row, which keeps its order.
+        content = '<content target="videos" sortby="$INFO[%s]" sortorder="$INFO[%s]" limit="$INFO[%s]">%s</content>' % (
+            prop(key + '.sort'), prop(key + '.order'), prop(key + '.limit'), path)
+    if page in PUBLISHED_PAGES:
+        # Written out, not an include with a parameter: Kodi expands those
+        # slowly as the skin loads (thousands of them took 25 s on a SHIELD).
         content = '<content>%s\n                    </content>' % ''.join(
-            '\n                        <include content="SiloHomeCard"><param name="p" value="silo.home.%d.%d" /></include>'
-            % (slot, card) for card in range(1, HOME_CARDS + 1))
+            published_item('silo.%s.%d.%d' % (page, slot, card))
+            for card in range(1, PAGE_CARDS.get(page, OTHER_CARDS) + 1))
     item_w = card['width'] + card['gap']
     item_h = card['height'] + 12 + CAPTION_H
     return '''
@@ -344,8 +385,10 @@ def row(page, page_index, slot, landscape):
                     <preloaditems>2</preloaditems>
                     <!-- A title Silo can request opens with Silo's full details. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
-                    <!-- A Home card opens its info page through SiloKodiConnect. -->
-                    <onclick condition="!String.IsEmpty(ListItem.Property(home.type))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
+                    <!-- A published card opens its info page through SiloKodiConnect:
+                         a title Silo can request, its request page. -->
+                    <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
                     <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,%(id)d,home)</onfocus>%(moves)s
                     %(content)s
@@ -800,10 +843,11 @@ def build():
             <texture background="true" diffuse="silo/hero_mask.png">$VAR[SiloHeroArt]</texture>
         </control>
 
-        <!-- Marquee: never focusable; follows whichever card has focus. -->
+        <!-- Marquee: never focusable; follows whichever card has focus (on
+             Home, its first card until a row has focus). -->
         <control type="group">
             <left>%(x)d</left>
-            <visible>!String.IsEmpty(%(row_prop)s)</visible>
+            <visible>!String.IsEmpty(%(row_prop)s) | [[String.IsEqual(Window(Home).Property(silo.page),home) | String.IsEmpty(Window(Home).Property(silo.page))] + [Integer.IsGreater(Window(Home).Property(silo.home.1.cards),0) | Integer.IsGreater(Window(Home).Property(silo.home.2.cards),0)]] | %(waiting)s</visible>
             <animation effect="fade" start="0" end="100" time="240">Visible</animation>
             <control type="image">
                 <top>190</top>
@@ -907,7 +951,7 @@ def build():
        'row_overlap': ROW_PITCH - BAND_H,
        'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
        'bar_down': bar_down(), 'avatar': avatar(), 'custom': shortcuts_list,
-       'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections_menus() + custom_submenu(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'background': BACKGROUND,
+       'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections_menus() + custom_submenu(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'waiting': ' | '.join('[%s]' % c for c, _ in waiting_rows()), 'background': BACKGROUND,
        # The age rating as Silo draws it: the quality badges' size, centred on the info line.
        'splash': splash(), 'mpaa_badge': badge('$VAR[SiloMpaa]', 34, 'silo_badge').replace(
            '<width>auto</width><height>34</height>', '<top>3</top><width>auto</width><height>34</height>', 1),
@@ -1010,6 +1054,9 @@ def variables():
         terms = ['[String.IsEqual(%s,%d) + [!String.IsEmpty(Container(%d).ListItem.Property(%s)) | '
                  '!String.IsEmpty(Container(%d).ListItem.Property(%s))]]'
                  % (prop('silo.row'), row_id, row_id, item_property, row_id, home_property) for row_id in rows]
+        terms += ['[%s + [!String.IsEmpty(Container(%d).ListItem.Property(%s)) | '
+                  '!String.IsEmpty(Container(%d).ListItem.Property(%s))]]'
+                  % (waiting, row_id, item_property, row_id, home_property) for waiting, row_id in waiting_rows()]
         out += '    <expression name="Has%s">%s</expression>\n' % (name, ' | '.join(terms))
     out += EMPTY_HOME
     for name, entries in HERO:
@@ -1021,6 +1068,22 @@ def variables():
             mine = 'String.IsEqual(%s,%d)' % (prop('silo.row'), row_id)
             for condition, value in entries:
                 full = mine + (' + [%s]' % condition.replace('LI', item) if condition else '')
+                out += '        <value condition="%s">%s</value>\n' % (full, value.replace('LI', item))
+        # Switching to Home clears the remembered row until the first row takes
+        # focus (a timer): show Home's first card meanwhile, not a black hero.
+        if name in HERO_STATIC:
+            field = HERO_STATIC[name][len('home.'):]
+            for row in (1, 2):
+                waiting = ('String.IsEmpty(%s) + [String.IsEqual(%s,home) | String.IsEmpty(%s)] + '
+                           'Integer.IsGreater(%s,0)' % (prop('silo.row'), prop('silo.page'), prop('silo.page'),
+                                                        prop('silo.home.%d.cards' % row)))
+                out += '        <value condition="%s">$INFO[%s]</value>\n' % (
+                    waiting, prop('silo.home.%d.1.%s' % (row, field)))
+        # Another page before a row has focus: its first loaded row's item.
+        for waiting, row_id in waiting_rows():
+            item = 'Container(%d).ListItem' % row_id
+            for condition, value in entries:
+                full = waiting + (' + [%s]' % condition.replace('LI', item) if condition else '')
                 out += '        <value condition="%s">%s</value>\n' % (full, value.replace('LI', item))
         out += '    </variable>\n'
     return out + '    <!-- end Silo Skyline -->\n'
