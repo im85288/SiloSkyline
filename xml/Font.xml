@@ -195,6 +195,11 @@
 			<size>58</size>
 		</font>
 		<font>
+			<name>silo_mono</name>
+			<filename>NotoMono-Regular.ttf</filename>
+			<size>21</size>
+		</font>
+		<font>
 			<name>silo_wordmark_light</name>
 			<filename>Inter-Medium.ttf</filename>
 			<size>44</size>
@@ -416,6 +421,11 @@
 			<name>silo_clock</name>
 			<filename>Inter-SemiBold.ttf</filename>
 			<size>58</size>
+		</font>
+		<font>
+			<name>silo_mono</name>
+			<filename>NotoMono-Regular.ttf</filename>
+			<size>21</size>
 		</font>
 		<font>
 			<name>silo_wordmark_light</name>

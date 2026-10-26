@@ -1367,9 +1367,7 @@
 		<param name="flipx">false</param>
 		<definition>
 			<control type="image">
-				<texture flipx="$PARAM[flipx]" colordiffuse="EDFFFFFF">lists/panel.png</texture>
-				<bordertexture border="21" infill="false">overlays/shadow.png</bordertexture>
-				<bordersize>20</bordersize>
+				<texture colordiffuse="00FFFFFF">colors/white.png</texture>
 				<width>$PARAM[width]</width>
 				<left>$PARAM[left]</left>
 				<right>$PARAM[right]</right>

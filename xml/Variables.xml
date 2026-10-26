@@ -4211,37 +4211,6 @@
         <value>$INFO[Window.Property(fanart)]</value>
     </variable>
     <!-- end Silo Up Next variables -->
-
-    <!-- Silo Skyline options (tools/build_options.py) -->
-    <variable name="SiloOptionsSubtitles">
-        <value condition="!VideoPlayer.SubtitlesEnabled">Off</value>
-        <value>$INFO[VideoPlayer.SubtitlesLanguage]</value>
-    </variable>
-    <variable name="SiloOptionsSubtitlesOnOff">
-        <value condition="VideoPlayer.SubtitlesEnabled">On</value>
-        <value>Off</value>
-    </variable>
-    <variable name="SiloOptionsTabInfo">
-        <value condition="[String.IsEqual(Window(Home).Property(silo.options.tab),info) | String.IsEmpty(Window(Home).Property(silo.options.tab))]">33FFFFFF</value>
-        <value>00FFFFFF</value>
-    </variable>
-    <variable name="SiloOptionsTabAudio">
-        <value condition="String.IsEqual(Window(Home).Property(silo.options.tab),audio)">33FFFFFF</value>
-        <value>00FFFFFF</value>
-    </variable>
-    <variable name="SiloOptionsTabSubtitles">
-        <value condition="String.IsEqual(Window(Home).Property(silo.options.tab),subtitles)">33FFFFFF</value>
-        <value>00FFFFFF</value>
-    </variable>
-    <variable name="SiloOptionsTabVideo">
-        <value condition="String.IsEqual(Window(Home).Property(silo.options.tab),video)">33FFFFFF</value>
-        <value>00FFFFFF</value>
-    </variable>
-    <variable name="SiloOptionsTabChapters">
-        <value condition="String.IsEqual(Window(Home).Property(silo.options.tab),chapters)">33FFFFFF</value>
-        <value>00FFFFFF</value>
-    </variable>
-    <!-- end Silo Skyline options -->
     <!-- Silo Skyline menu editor (tools/build_shortcuts.py) -->
     <variable name="SiloShortcutDetail">
         <value condition="String.IsEqual(ListItem.Property(skinshortcuts-disabled),True)">Hidden$INFO[ListItem.Property(widgetName), · ,]</value>
@@ -4307,4 +4276,35 @@
         <value>Auto</value>
     </variable>
     <!-- end Silo Skyline menu editor -->
+
+    <!-- Silo Skyline options (tools/build_options.py) -->
+    <variable name="SiloOptionsSubtitles">
+        <value condition="!VideoPlayer.SubtitlesEnabled">Off</value>
+        <value>$INFO[VideoPlayer.SubtitlesLanguage]</value>
+    </variable>
+    <variable name="SiloOptionsSubtitlesOnOff">
+        <value condition="VideoPlayer.SubtitlesEnabled">On</value>
+        <value>Off</value>
+    </variable>
+    <variable name="SiloOptionsTabInfo">
+        <value condition="[String.IsEqual(Window(Home).Property(silo.options.tab),info) | String.IsEmpty(Window(Home).Property(silo.options.tab))]">33FFFFFF</value>
+        <value>00FFFFFF</value>
+    </variable>
+    <variable name="SiloOptionsTabAudio">
+        <value condition="String.IsEqual(Window(Home).Property(silo.options.tab),audio)">33FFFFFF</value>
+        <value>00FFFFFF</value>
+    </variable>
+    <variable name="SiloOptionsTabSubtitles">
+        <value condition="String.IsEqual(Window(Home).Property(silo.options.tab),subtitles)">33FFFFFF</value>
+        <value>00FFFFFF</value>
+    </variable>
+    <variable name="SiloOptionsTabVideo">
+        <value condition="String.IsEqual(Window(Home).Property(silo.options.tab),video)">33FFFFFF</value>
+        <value>00FFFFFF</value>
+    </variable>
+    <variable name="SiloOptionsTabChapters">
+        <value condition="String.IsEqual(Window(Home).Property(silo.options.tab),chapters)">33FFFFFF</value>
+        <value>00FFFFFF</value>
+    </variable>
+    <!-- end Silo Skyline options -->
 </includes>
