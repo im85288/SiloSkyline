@@ -21,7 +21,7 @@
         </control>
         <!-- The shared frame (tools/build_frame.py). -->
         <include content="SiloFrame">
-            <param name="title">Search</param>
+            <param name="title">$VAR[SiloSearchTitle]</param>
         </include>
 
         <!-- The search words, in a pill that asks for them again. -->
@@ -38,9 +38,9 @@
                      every row shows while the new words load. -->
                 <onclick>SetProperty(silo.search.loading,1,home)</onclick>
                 <onclick>AlarmClock(silosearch,ClearProperty(silo.search.loading,home),00:04,silent)</onclick>
-                <ondown condition="Integer.IsGreater(Container(201).NumItems,0)">SetFocus(201)</ondown>
-                <ondown condition="Integer.IsGreater(Container(202).NumItems,0) + !Integer.IsGreater(Container(201).NumItems,0)">SetFocus(202)</ondown>
-                <ondown condition="Integer.IsGreater(Container(203).NumItems,0) + !Integer.IsGreater(Container(201).NumItems,0) + !Integer.IsGreater(Container(202).NumItems,0)">SetFocus(203)</ondown>
+                <ondown condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)]">SetFocus(201)</ondown>
+                <ondown condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)]">SetFocus(202)</ondown>
+                <ondown condition="Integer.IsGreater(Container(203).NumItems,0) + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)]">SetFocus(203)</ondown>
             </control>
             <control type="image">
                 <left>24</left><top>16</top>
@@ -78,7 +78,7 @@
             <font>silo_row</font>
             <textcolor>BFEDEDED</textcolor>
             <label>No titles match "$INFO[Skin.String(silo.search)]"</label>
-            <visible>!String.IsEmpty(Skin.String(silo.search)) + !Integer.IsGreater(Container(201).NumItems,0) + !Container(201).IsUpdating + !Integer.IsGreater(Container(202).NumItems,0) + !Container(202).IsUpdating + !Integer.IsGreater(Container(203).NumItems,0) + !Container(203).IsUpdating + !String.IsEqual(Window(Home).Property(silo.search.loading),1)</visible>
+            <visible>!String.IsEmpty(Skin.String(silo.search)) + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)] + !Container(201).IsUpdating + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)] + !Container(202).IsUpdating + !Integer.IsGreater(Container(203).NumItems,0) + !Container(203).IsUpdating + !String.IsEqual(Window(Home).Property(silo.search.loading),1)</visible>
         </control>
         <control type="grouplist">
             <top>236</top>
@@ -89,19 +89,19 @@
             <visible>!String.IsEmpty(Skin.String(silo.search))</visible>
             <control type="group">
                 <height>422</height>
-                <visible>Integer.IsGreater(Container(201).NumItems,0) | Container(201).IsUpdating | String.IsEqual(Window(Home).Property(silo.search.loading),1)</visible>
+                <visible>!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + [[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)] | Container(201).IsUpdating | String.IsEqual(Window(Home).Property(silo.search.loading),1)]</visible>
                 <control type="label">
                     <left>88</left>
                     <width>1500</width><height>46</height>
                     <font>silo_row</font>
                     <textcolor>FFEDEDED</textcolor>
                     <label>Movies$INFO[Container(201).NumItems,  ·  ,]</label>
-                    <visible>Integer.IsGreater(Container(201).NumItems,0) | Container(201).IsUpdating</visible>
+                    <visible>!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + [[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)] | Container(201).IsUpdating]</visible>
                 </control>
                 <control type="list" id="201">
                     <!-- The list's own condition lets Kodi load it while it is hidden:
                          it doesn't process a list inside a hidden group. -->
-                    <visible>Integer.IsGreater(Container(201).NumItems,0) | Container(201).IsUpdating | String.IsEqual(Window(Home).Property(silo.search.loading),1)</visible>
+                    <visible>!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + [[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)] | Container(201).IsUpdating | String.IsEqual(Window(Home).Property(silo.search.loading),1)]</visible>
                     <left>82</left><top>56</top>
                     <width>1838</width><height>352</height>
                     <orientation>horizontal</orientation>
@@ -112,8 +112,8 @@
                     <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
                     <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
                     <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
-                    <ondown condition="Integer.IsGreater(Container(202).NumItems,0)">SetFocus(202)</ondown>
-                    <ondown condition="Integer.IsGreater(Container(203).NumItems,0) + !Integer.IsGreater(Container(202).NumItems,0)">SetFocus(203)</ondown>
+                    <ondown condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)]">SetFocus(202)</ondown>
+                    <ondown condition="Integer.IsGreater(Container(203).NumItems,0) + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)]">SetFocus(203)</ondown>
                     <onup>SetFocus(100)</onup>
                     <content target="videos">videodb://movies/titles/?xsp=%7B%22type%22%3A%22movies%22%2C%22order%22%3A%7B%22method%22%3A%22sorttitle%22%2C%22direction%22%3A%22ascending%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B%22$INFO[Skin.String(silo.search)]%22%5D%7D%5D%7D%7D</content>
                     <itemlayout width="216" height="352">
@@ -126,19 +126,19 @@
             </control>
             <control type="group">
                 <height>422</height>
-                <visible>Integer.IsGreater(Container(202).NumItems,0) | Container(202).IsUpdating | String.IsEqual(Window(Home).Property(silo.search.loading),1)</visible>
+                <visible>!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + [[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)] | Container(202).IsUpdating | String.IsEqual(Window(Home).Property(silo.search.loading),1)]</visible>
                 <control type="label">
                     <left>88</left>
                     <width>1500</width><height>46</height>
                     <font>silo_row</font>
                     <textcolor>FFEDEDED</textcolor>
                     <label>Shows$INFO[Container(202).NumItems,  ·  ,]</label>
-                    <visible>Integer.IsGreater(Container(202).NumItems,0) | Container(202).IsUpdating</visible>
+                    <visible>!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + [[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)] | Container(202).IsUpdating]</visible>
                 </control>
                 <control type="list" id="202">
                     <!-- The list's own condition lets Kodi load it while it is hidden:
                          it doesn't process a list inside a hidden group. -->
-                    <visible>Integer.IsGreater(Container(202).NumItems,0) | Container(202).IsUpdating | String.IsEqual(Window(Home).Property(silo.search.loading),1)</visible>
+                    <visible>!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + [[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)] | Container(202).IsUpdating | String.IsEqual(Window(Home).Property(silo.search.loading),1)]</visible>
                     <left>82</left><top>56</top>
                     <width>1838</width><height>352</height>
                     <orientation>horizontal</orientation>
@@ -149,9 +149,9 @@
                     <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
                     <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
                     <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
-                    <onup condition="Integer.IsGreater(Container(201).NumItems,0)">SetFocus(201)</onup>
+                    <onup condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)]">SetFocus(201)</onup>
                     <ondown condition="Integer.IsGreater(Container(203).NumItems,0)">SetFocus(203)</ondown>
-                    <onup condition="!Integer.IsGreater(Container(201).NumItems,0)">SetFocus(100)</onup>
+                    <onup condition="![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)]">SetFocus(100)</onup>
                     <content target="videos">videodb://tvshows/titles/?xsp=%7B%22type%22%3A%22tvshows%22%2C%22order%22%3A%7B%22method%22%3A%22sorttitle%22%2C%22direction%22%3A%22ascending%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B%22$INFO[Skin.String(silo.search)]%22%5D%7D%5D%7D%7D</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
@@ -186,9 +186,9 @@
                     <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
                     <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
                     <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
-                    <onup condition="Integer.IsGreater(Container(202).NumItems,0)">SetFocus(202)</onup>
-                    <onup condition="Integer.IsGreater(Container(201).NumItems,0) + !Integer.IsGreater(Container(202).NumItems,0)">SetFocus(201)</onup>
-                    <onup condition="!Integer.IsGreater(Container(202).NumItems,0) + !Integer.IsGreater(Container(201).NumItems,0)">SetFocus(100)</onup>
+                    <onup condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)]">SetFocus(202)</onup>
+                    <onup condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)]">SetFocus(201)</onup>
+                    <onup condition="![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)]">SetFocus(100)</onup>
                     <content target="videos">plugin://plugin.video.silokodiconnect/?mode=requests&amp;search=$INFO[Skin.String(silo.search)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>

@@ -26,4 +26,14 @@
     <propertySettings property="widgetStyle.6" buttonID="9476" title="Card style" />
     <property property="widgetStyle.6" label="Poster">poster</property>
     <property property="widgetStyle.6" label="Landscape">landscape</property>
+    <propertySettings property="siloIcon" buttonID="9480" title="Icon" />
+    <property property="siloIcon" label="List">silo/menu_default.png</property>
+    <property property="siloIcon" label="Sparkle">silo/menu_recommended.png</property>
+    <property property="siloIcon" label="Grid">silo/menu_browse.png</property>
+    <property property="siloIcon" label="Collection">silo/menu_collections.png</property>
+    <property property="siloIcon" label="Play">silo/play_circle.png</property>
+    <property property="siloIcon" label="Search">icons/search.png</property>
+    <property property="siloIcon" label="Film">icons/sidemenu/movies.png</property>
+    <property property="siloIcon" label="TV">icons/sidemenu/tv.png</property>
+    <property property="siloIcon" label="Star">icons/sidemenu/favourites.png</property>
 </overrides>

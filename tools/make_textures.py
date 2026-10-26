@@ -304,31 +304,30 @@ if __name__ == '__main__':
                         break
         return hits / float(SUB * SUB)
     write_png('options.png', 96, 96, sliders)
-    # Silo Skyline's mark: a skyline of grain silos (domed towers with two
-    # hoops) in Silo's blue, crimson and orange.
-    SILO_BLUE, SILO_CRIMSON, SILO_ORANGE = (0x0A, 0x33, 0xD1), (0xC8, 0x14, 0x47), (0xD6, 0x69, 0x0C)
-    towers = ((0.06, 0.40, SILO_BLUE), (0.29, 0.10, SILO_BLUE), (0.52, 0.26, SILO_CRIMSON), (0.75, 0.46, SILO_ORANGE))
+    # Skyline's mark: its own shape, not Silo's (Silo's brand policy keeps
+    # its three-bar logo and colours for Silo itself): a round dusk sky,
+    # violet to coral, with a white city skyline across its lower half.
+    DUSK_TOP, DUSK_BOTTOM, CITY = (0x6C, 0x4D, 0xF2), (0xFF, 0x86, 0x5E), (0xF7, 0xF4, 0xF2)
+    buildings = ((0.10, 0.58), (0.20, 0.47), (0.30, 0.62), (0.38, 0.36), (0.48, 0.55), (0.58, 0.44),
+                 (0.68, 0.60), (0.76, 0.50), (0.86, 0.64))  # (left edge, roof) as fractions, 0.10 wide
 
-    def skyline(x, y, size=192.0, width=0.19, base=0.94):
-        hits, colour = 0, SILO_BLUE
+    def skyline(x, y, size=192.0):
+        disc = rounded_rect_coverage(x, y, size, size, size / 2.0)
+        if disc <= 0:
+            return 0.0
+        u, v = x / size, y / size
+        sky = tuple(int(a + (b - a) * v) for a, b in zip(DUSK_TOP, DUSK_BOTTOM))
+        hits = 0
         for sy in range(SUB):
             for sx in range(SUB):
-                px = (x - 0.5 + (sx + 0.5) / SUB) / size
-                py = (y - 0.5 + (sy + 0.5) / SUB) / size
-                for left, top, tint in towers:
-                    r = width / 2
-                    cx = left + r
-                    if not left <= px <= left + width or py > base:
-                        continue
-                    shaft = py >= top + r
-                    dome = (px - cx) ** 2 + (py - (top + r)) ** 2 <= r * r
-                    # Two hoops: thin gaps across the shaft.
-                    hoops = any(abs(py - h) < 0.012 for h in (top + r + 0.07, top + r + 0.16))
-                    if (shaft or dome) and not hoops:
-                        hits += 1
-                        colour = tint
-                        break
-        return hits / float(SUB * SUB), colour
+                pu = (x - 0.5 + (sx + 0.5) / SUB) / size
+                pv = (y - 0.5 + (sy + 0.5) / SUB) / size
+                city = pv >= 0.80 or any(left <= pu < left + 0.10 and pv >= roof for left, roof in buildings)
+                spire = abs(pu - 0.43) < 0.012 and 0.24 <= pv < 0.36  # one tower's mast
+                hits += city or spire
+        lit = hits / float(SUB * SUB)
+        colour = tuple(int(c * (1 - lit) + w * lit) for c, w in zip(sky, CITY))
+        return disc, colour
     write_png('skyline_mark.png', 192, 192, skyline)
     # The bar's up chevron (a tab with a sub-menu): two strokes meeting at the top.
     def chevron_up(x, y, w=56.0, h=32.0, stroke=5.0):
@@ -347,14 +346,95 @@ if __name__ == '__main__':
         return hits / float(SUB * SUB)
     write_png('chevron_up.png', 56, 32, chevron_up)
 
-    # The splash: Silo's near-black with soft glows of the mark's colours
+    # The sub-menu's icons (Silo's dropdown): Recommended (a four-point
+    # sparkle and a small one), Browse (a 2x2 grid), Collections (stacked cards).
+    def sparkle(x, y, size=48.0):
+        def star(px, py, cx, cy, r):
+            dx, dy = abs(px - cx) / r, abs(py - cy) / r
+            return dx ** 0.5 + dy ** 0.5 <= 1
+        hits = 0
+        for sy in range(SUB):
+            for sx in range(SUB):
+                px = x - 0.5 + (sx + 0.5) / SUB
+                py = y - 0.5 + (sy + 0.5) / SUB
+                hits += star(px, py, size * 0.42, size * 0.56, size * 0.36) or star(px, py, size * 0.78, size * 0.22, size * 0.16)
+        return hits / float(SUB * SUB)
+    write_png('menu_recommended.png', 48, 48, sparkle)
+    write_png('menu_browse.png', 48, 48, lambda x, y: max(
+        rounded_rect_coverage(x - ox, y - oy, 16, 16, 4) for ox in (6, 26) for oy in (6, 26)))
+    def stack(x, y):
+        back = rounded_rect_coverage(x - 14, y - 6, 28, 22, 4) - rounded_rect_coverage(x - 14, y - 6, 28, 22, 4, inset=3)
+        front = rounded_rect_coverage(x - 6, y - 16, 30, 26, 4)
+        return max(back if x < 8 or y < 18 or x > 42 else 0, front)
+    write_png('menu_collections.png', 48, 48, stack)
+
+    # The avatar card's icons (Silo's profile menu), drawn as shapes on a 48 px grid.
+    import math
+    def shape(inside):
+        def alpha(x, y):
+            hits = 0
+            for sy in range(SUB):
+                for sx in range(SUB):
+                    hits += bool(inside(x - 0.5 + (sx + 0.5) / SUB, y - 0.5 + (sy + 0.5) / SUB))
+            return hits / float(SUB * SUB)
+        return alpha
+    def person(x, y):
+        head = (x - 24) ** 2 + (y - 15) ** 2 <= 8 ** 2
+        body = y <= 41 and ((x - 24) / 16.0) ** 2 + ((y - 42) / 14.0) ** 2 <= 1
+        return head or body
+    def bookmark(x, y):
+        return 12 <= x <= 36 and 6 <= y <= 42 and y <= 42 - (10 - abs(x - 24) * 10 / 12.0) * (y > 30)
+    def heart(x, y):
+        u, v = (x - 24) / 17.0, (27 - y) / 17.0
+        return (u * u + v * v - 1) ** 3 - u * u * v ** 3 <= 0
+    def clock(x, y):
+        r = math.hypot(x - 24, y - 24)
+        return 15 <= r <= 19 or (22 <= x <= 26 and 12 <= y <= 26) or (22 <= x <= 33 and 22 <= y <= 26)
+    def gear(x, y):
+        r = math.hypot(x - 24, y - 24)
+        outer = 19 if math.cos(8 * math.atan2(y - 24, x - 24)) > 0.1 else 14.5
+        return 6.5 <= r <= outer
+    def sign_out(x, y):
+        frame = (8 <= x <= 12 and 8 <= y <= 40) or (8 <= x <= 25 and (8 <= y <= 12 or 36 <= y <= 40))
+        arrow = (18 <= x <= 34 and 22 <= y <= 26) or (31 <= x <= 42 and abs(y - 24) <= (42 - x) * 0.85)
+        return frame or arrow
+    def magnifier(x, y):
+        return 13 <= math.hypot(x - 20, y - 20) <= 17.5 or (abs((x - y)) <= 3.2 and 30 <= (x + y) / 2 <= 42)
+    # Silo's Sort icons (Material SwapVert, Check, ArrowUpward/Downward).
+    def seg_dist(px, py, ax, ay, bx, by):
+        t = max(0.0, min(1.0, ((px - ax) * (bx - ax) + (py - ay) * (by - ay)) / float((bx - ax) ** 2 + (by - ay) ** 2)))
+        return math.hypot(px - ax - t * (bx - ax), py - ay - t * (by - ay))
+    def arrow(x, y, up=True):
+        yy = y if up else 48 - y
+        head = seg_dist(x, yy, 24, 8, 12, 20) <= 2.6 or seg_dist(x, yy, 24, 8, 36, 20) <= 2.6
+        return head or (abs(x - 24) <= 2.6 and 9 <= yy <= 40)
+    def swap_vert(x, y):
+        def small(px, py):  # an up arrow in a 24-wide column
+            head = seg_dist(px, py, 16, 8, 8, 16) <= 2.4 or seg_dist(px, py, 16, 8, 24, 16) <= 2.4
+            return head or (abs(px - 16) <= 2.4 and 9 <= py <= 34)
+        return small(x, y) or small(48 - x, 48 - y)
+    def check(x, y):
+        return seg_dist(x, y, 10, 25, 20, 35) <= 3 or seg_dist(x, y, 20, 35, 39, 14) <= 3
+    for name, inside in (('sort', swap_vert), ('check', check), ('arrow_up', lambda x, y: arrow(x, y, True)),
+                         ('arrow_down', lambda x, y: arrow(x, y, False))):
+        write_png('%s.png' % name, 48, 48, shape(inside))
+    # A sub-menu entry's default icon (none chosen in Customise home menu):
+    # a list, three rows each with a dot.
+    def list_rows(x, y):
+        rows = (12, 24, 36)
+        return any((x - 9) ** 2 + (y - r) ** 2 <= 3.4 ** 2 or (16 <= x <= 40 and abs(y - r) <= 2.4) for r in rows)
+    for name, inside in (('default', list_rows), ('search', magnifier), ('profile', person), ('watchlist', bookmark), ('favorites', heart),
+                         ('history', clock), ('settings', gear), ('signout', sign_out)):
+        write_png('menu_%s.png' % name, 48, 48, shape(inside))
+
+    # The splash: a near-black with soft glows of the mark's dusk colours
     # rising from the bottom (drawn small; Kodi stretches it smoothly).
     def splash_bg(x, y, w=384.0, h=216.0):
         import math
         u, v = x / w, y / h
         rgb = [0x0D, 0x0F, 0x12]
-        for (gx, gy, radius, strength, tint) in ((0.12, 1.08, 0.75, 0.42, SILO_BLUE), (0.62, 1.12, 0.45, 0.20, SILO_ORANGE),
-                                                  (0.92, 1.0, 0.55, 0.30, SILO_CRIMSON)):
+        for (gx, gy, radius, strength, tint) in ((0.12, 1.08, 0.75, 0.40, DUSK_TOP), (0.62, 1.12, 0.45, 0.18, DUSK_BOTTOM),
+                                                  (0.92, 1.0, 0.55, 0.28, (0xC2, 0x4F, 0xB8))):
             d = math.hypot((u - gx) * w / h, v - gy) / radius
             glow = strength * max(0.0, 1 - d) ** 2
             rgb = [c + (t - c) * glow for c, t in zip(rgb, tint)]

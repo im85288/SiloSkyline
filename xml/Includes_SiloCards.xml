@@ -28,6 +28,11 @@
                 <property name="home.art.clearlogo">$INFO[Window(Home).Property($PARAM[p].art.clearlogo)]</property>
                 <property name="home.request.type">$INFO[Window(Home).Property($PARAM[p].request.type)]</property>
                 <property name="home.request.tmdb">$INFO[Window(Home).Property($PARAM[p].request.tmdb)]</property>
+                <property name="home.status.tint">$INFO[Window(Home).Property($PARAM[p].status.tint)]</property>
+                <property name="home.status.seg1">$INFO[Window(Home).Property($PARAM[p].status.seg1)]</property>
+                <property name="home.status.seg2">$INFO[Window(Home).Property($PARAM[p].status.seg2)]</property>
+                <property name="home.status.seg3">$INFO[Window(Home).Property($PARAM[p].status.seg3)]</property>
+                <property name="home.status.seg4">$INFO[Window(Home).Property($PARAM[p].status.seg4)]</property>
                 <visible>!String.IsEmpty(Window(Home).Property($PARAM[p].type))</visible>
             </item>
         </definition>

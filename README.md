@@ -1,6 +1,6 @@
-# Silo Skyline
+# Skyline
 
-A Kodi skin laid out like the [Silo](https://github.com/Silo-Server/silo-server) TV apps' Skyline home, for
+Skyline is a Kodi skin laid out like the [Silo](https://github.com/Silo-Server/silo-server) TV apps' Skyline home, for
 Kodi 21 (Omega). It works with [SiloKodiConnect](https://github.com/im85288/SiloKodiConnect), which puts a
 Silo server's movies and TV shows into Kodi's library: the skin builds its pages from the rows on your Silo
 home screen, so they follow whatever Silo shows.

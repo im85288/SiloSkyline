@@ -27,6 +27,10 @@ PILL_ID = 100
 ROWS = [(201, 'Movies', 'videodb://movies/titles/', 'movies'),
         (202, 'Shows', 'videodb://tvshows/titles/', 'tvshows'),
         (203, 'Request', 'plugin://plugin.video.silokodiconnect/?mode=requests', None)]
+# Requests' "Search to request" sets Window(Home).Property(silo.search.mode)
+# to requests: only Silo's row shows (the menu bar's Search clears it).
+REQUEST_ONLY = 'String.IsEqual(Window(Home).Property(silo.search.mode),requests)'
+LIBRARY_LISTS = (201, 202)
 ROWS_TOP = 236
 # Two rows fit below the pill; the third scrolls into view.
 ROW_H = (1080 - ROWS_TOP) // 2
@@ -45,7 +49,13 @@ def search_path(path, kind):
 
 
 def has_items(list_id):
-    return 'Integer.IsGreater(Container(%d).NumItems,0)' % list_id
+    has = 'Integer.IsGreater(Container(%d).NumItems,0)' % list_id
+    return '[!%s + %s]' % (REQUEST_ONLY, has) if list_id in LIBRARY_LISTS else has
+
+
+def shown(list_id, condition):
+    """A row's visibility: a library row never shows in request-only mode."""
+    return '!%s + [%s]' % (REQUEST_ONLY, condition) if list_id in LIBRARY_LISTS else condition
 
 
 def row(index, list_id, title, path, kind):
@@ -66,19 +76,19 @@ def row(index, list_id, title, path, kind):
     return '''
             <control type="group">
                 <height>%(row_h)d</height>
-                <visible>%(has)s | Container(%(id)d).IsUpdating | String.IsEqual(Window(Home).Property(%(loading)s),1)</visible>
+                <visible>%(group_shown)s</visible>
                 <control type="label">
                     <left>%(x)d</left>
                     <width>1500</width><height>46</height>
                     <font>silo_row</font>
                     <textcolor>%(text)s</textcolor>
                     <label>%(title)s$INFO[Container(%(id)d).NumItems,  ·  ,]</label>
-                    <visible>%(has)s | Container(%(id)d).IsUpdating</visible>
+                    <visible>%(title_shown)s</visible>
                 </control>
                 <control type="list" id="%(id)d">
                     <!-- The list's own condition lets Kodi load it while it is hidden:
                          it doesn't process a list inside a hidden group. -->
-                    <visible>%(has)s | Container(%(id)d).IsUpdating | String.IsEqual(Window(Home).Property(%(loading)s),1)</visible>
+                    <visible>%(group_shown)s</visible>
                     <left>%(lx)d</left><top>56</top>
                     <width>%(lw)d</width><height>%(item_h)d</height>
                     <orientation>horizontal</orientation>
@@ -99,7 +109,10 @@ def row(index, list_id, title, path, kind):
                              'title': title, 'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'item_h': item_h,
                              'item_w': item_w, 'moves': moves, 'path': search_path(path, kind),
                              'normal': card_layout(POSTER, False), 'focused': card_layout(POSTER, True, list_id),
-                             'loading': LOADING}
+                             'loading': LOADING,
+                             'group_shown': shown(list_id, '%s | Container(%d).IsUpdating | String.IsEqual(Window(Home).Property(%s),1)'
+                                                  % (has_items(list_id), list_id, LOADING)),
+                             'title_shown': shown(list_id, '%s | Container(%d).IsUpdating' % (has_items(list_id), list_id))}
 
 
 def build():
@@ -133,7 +146,7 @@ def build():
         </control>
         <!-- The shared frame (tools/build_frame.py). -->
         <include content="SiloFrame">
-            <param name="title">Search</param>
+            <param name="title">$VAR[SiloSearchTitle]</param>
         </include>
 
         <!-- The search words, in a pill that asks for them again. -->
@@ -206,12 +219,17 @@ def build():
 
 VARIABLES = '''
     <!-- Silo Skyline search (tools/build_search.py) -->
+    <variable name="SiloSearchTitle">
+        <value condition="%(request_only)s">Search to request</value>
+        <value>Search</value>
+    </variable>
     <variable name="SiloSearchPill">
+        <value condition="String.IsEmpty(%(query)s) + %(request_only)s">Find a film or show to request</value>
         <value condition="String.IsEmpty(%(query)s)">Search films and shows</value>
         <value>$INFO[%(query)s]</value>
     </variable>
     <!-- end Silo Skyline search -->
-''' % {'query': QUERY}
+''' % {'query': QUERY, 'request_only': REQUEST_ONLY}
 
 
 def add_variables():

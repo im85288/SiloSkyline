@@ -37,7 +37,8 @@ PAGE_CARDS = {'home': HOME_CARDS}
 OTHER_CARDS = 12
 HOME_CARD_FIELDS = ('type', 'dbid', 'card.title', 'card.sub', 'card.wide_sub', 'hero.title', 'hero.meta',
                     'hero.detail', 'plot', 'mpaa', 'badge1', 'badge2', 'badge3', 'tint', 'percent', 'playcount',
-                    'art.poster', 'art.landscape', 'art.fanart', 'art.clearlogo', 'request.type', 'request.tmdb')
+                    'art.poster', 'art.landscape', 'art.fanart', 'art.clearlogo', 'request.type', 'request.tmdb',
+                    'status.tint', 'status.seg1', 'status.seg2', 'status.seg3', 'status.seg4')
 # Rows a page can show; Requests has Your requests and Silo's few discovery
 # rows, and every slot costs Home.xml size.
 # Silo's libraries have 6 rows each: fewer slots keep Home.xml quick to load.
@@ -92,8 +93,6 @@ FONTS = [  # name, file, size
     ('silo_wordmark', 'Inter-Bold.ttf', 44),
     ('silo_clock', 'Inter-SemiBold.ttf', 58),
     ('silo_mono', 'NotoMono-Regular.ttf', 21),  # System info's columns (build_frame.py)  # the shared frame's clock (build_frame.py)
-    ('silo_wordmark_light', 'Inter-Medium.ttf', 44),  # "Skyline" beside "Silo"
-    ('silo_title_light', 'Inter-Medium.ttf', 76),
     ('silo_key', 'Inter-Medium.ttf', 40),
 ]
 
@@ -433,10 +432,18 @@ BAR_DIM = '!ControlGroup(9000).HasFocus() + !Control.HasFocus(9011)'
 BAR_ORDER = [9001, 9002, 9003, 9004, 9005] + CUSTOM_IDS + [9009, 9010, 9011]  # Search, tabs, custom items, Settings, Power, profile
 
 
-def bar_moves(control_id):
+def bar_moves(control_id, down=None, menu=None):
     """Left, right and down for a bar button. Movies and Series can be
-    hidden, so each direction takes the nearest visible button."""
-    out = bar_down('                    ')
+    hidden, so each direction takes the nearest visible button. down: the
+    button's own Down (a tab's sub-menu), in place of the rows."""
+    # Leaving a button opens its dropdown again next time (Back closed it).
+    clear = 'ClearProperty(silo.drop.closed,home)'
+    out = ''.join('\n                    <%s>%s</%s>' % (a, clear, a) for a in ('onleft', 'onright', 'ondown'))
+    if menu:
+        # Back on the button closes its open dropdown, as in Silo; when it is
+        # closed, Back does what it always did.
+        out += close_on_back(menu)
+    out += ('\n                    <ondown>%s</ondown>' % down) if down else bar_down('                    ')
     index = BAR_ORDER.index(control_id)
     for action, neighbours in (('onright', BAR_ORDER[index + 1:]), ('onleft', BAR_ORDER[:index][::-1])):
         skipped = []
@@ -447,14 +454,24 @@ def bar_moves(control_id):
     return out
 
 
-# Silo's library sections for a page's tab (TvLibraryPill.set): Up from the tab
-# shows them as a row of pills above the bar; OK and Down go to the page. Collections are
+def close_on_back(menu, condition=None):
+    shown = '!String.IsEqual(%s,%d)' % (prop('silo.drop.closed'), menu)
+    return '\n                    <onback condition="%s">SetProperty(silo.drop.closed,%d,home)</onback>' % (
+        ' + '.join(c for c in (condition, shown) if c), menu)
+
+
+# Silo's library sections for a page's tab (TvLibraryPill.set): a dropdown
+# under the tab whenever it has focus, as Silo's; Down goes into it, OK on the
+# tab opens the page. Collections are
 # the page's libraries' collections, linked by SiloKodiConnect.
 SECTIONS = {
     'movies': [('Recommended', None), ('Browse', 'videodb://movies/titles/'),
                ('Collections', '$INFO[Window(Home).Property(silo.movies.collections)]')],
     'series': [('Recommended', None), ('Browse', 'videodb://tvshows/titles/'),
                ('Collections', '$INFO[Window(Home).Property(silo.series.collections)]')],
+    # Silo has no search on its Requests page; this finds a title not yet in
+    # the library: Search with only Silo's request results, asking for words.
+    'requests': [('Discover', None), ('Search to request', None)],
 }
 BAR_GAP = 8
 
@@ -464,11 +481,8 @@ def tab_width(page):
 
 
 def open_sections(page, control_id):
-    """Up from a tab with sections opens them: a row of pills above the bar
-    (a chevron over the focused tab says it has them); Down comes back."""
-    if page not in SECTIONS:
-        return ''
-    return '                    <onup>SetFocus(%d,0,absolute)</onup>\n' % (control_id + 200)
+    """A tab's sections open with Down (see bar_moves); nothing here now."""
+    return ''
 
 
 def bar_positions():
@@ -483,88 +497,128 @@ def bar_positions():
     return out
 
 
-SUB_ITEM_W = 280  # a sub-menu entry's width (a list's items are all one width)
-SUB_IDS = []      # every sub-menu list, so the bar hides while one has focus
+DROP_W, DROP_ROW = 460, 64  # Silo's dropdown under a tab
 
 
-def submenu_row(list_id, back, content):
-    """A tab's sub-menu, as Arctic Zephyr's: it takes the bar's place (the
-    bar fades out while it has focus), in the tabs' own style, with a down
-    chevron under the focused entry; Down and Back return to the tab."""
-    SUB_IDS.append(list_id)
+def dropdown(x, list_id, back, heading, content, shown, rows, fit=False, hint='OK opens · Back closes'):
+    """Silo's dropdown under a tab: a heading, the entries (icon and label,
+    the focused one a white pill) and a hint. It shows while the tab or the
+    dropdown has focus (Kodi can't focus a hidden control, so it's there
+    whenever its tab is); Up from the first entry and Back return to the tab."""
     def entry(focused):
         lit = 'Control.HasFocus(%d)' % list_id
-        pill = '''
+        def body(colour, visible):
+            return '''
                     <control type="image">
-                        <left>4</left><width>%(pw)d</width><height>60</height>
-                        <texture border="30" colordiffuse="%(text)s">silo/pill.png</texture>
-                        <visible>%(lit)s</visible>
+                        <left>24</left><top>%(it)d</top><width>22</width><height>22</height>
+                        <texture colordiffuse="%(colour)s">$VAR[SiloDropIcon]</texture>%(v)s
                     </control>
-                    <control type="image">
-                        <left>%(cx)d</left><top>66</top><width>28</width><height>16</height>
-                        <texture colordiffuse="%(text)s" flipy="true">silo/chevron_up.png</texture>
-                        <visible>%(lit)s</visible>
-                    </control>''' if focused else ''
-        label = '''
                     <control type="label">
-                        <left>16</left><width>%(lw)d</width><height>60</height>
-                        <align>center</align><aligny>center</aligny>
-                        <font>silo_tab</font>
+                        <left>%(lx)s</left><width>%(lw)d</width><height>%(h)d</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
                         <textcolor>%(colour)s</textcolor>
-                        <label>$INFO[ListItem.Label]</label>%(visible)s
-                    </control>'''
-        if focused:
-            text = (label % {'lw': SUB_ITEM_W - 32, 'colour': 'FF000000', 'visible': '\n                        <visible>%s</visible>' % lit}
-                    + label % {'lw': SUB_ITEM_W - 32, 'colour': TEXT, 'visible': '\n                        <visible>!%s</visible>' % lit})
-        else:
-            text = label % {'lw': SUB_ITEM_W - 32, 'colour': TAB_DIM, 'visible': ''}
-        return (pill % {'pw': SUB_ITEM_W - 8, 'text': TEXT, 'lit': lit, 'cx': (SUB_ITEM_W - 28) // 2}) + text
+                        <label>$INFO[ListItem.Label]</label>%(v)s
+                    </control>''' % {'it': (DROP_ROW - 22) // 2, 'colour': colour, 'v': visible, 'h': DROP_ROW,
+                                 'lx': 62, 'lw': DROP_W - 100}
+        if not focused:
+            return body(TEXT, '')
+        on, off = '\n                        <visible>%s</visible>' % lit, '\n                        <visible>!%s</visible>' % lit
+        return ('''
+                    <control type="image">
+                        <left>4</left><top>4</top><width>%d</width><height>%d</height>
+                        <texture border="28" colordiffuse="%s">silo/pill.png</texture>%s
+                    </control>''' % (DROP_W - 40, DROP_ROW - 8, TEXT, on) + body('FF000000', on) + body(TEXT, off))
+    height = 64 + rows * DROP_ROW + 96
+    def frame(n, visible):
+        return '''
+            <control type="group">%(v)s
+                <control type="image">
+                    <width>%(w)d</width><height>%(h)d</height>
+                    <texture border="24" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+                </control>
+                <control type="image">
+                    <left>28</left><top>%(sy)d</top><width>%(sw)d</width><height>2</height>
+                    <texture colordiffuse="1AFFFFFF">colors/white.png</texture>
+                </control>
+                <control type="textbox">
+                    <left>28</left><top>%(hy)d</top><width>%(sw)d</width><height>64</height>
+                    <font>silo_detail</font>
+                    <textcolor>80EDEDED</textcolor>
+                    <label>%(hint)s</label>
+                </control>
+            </control>''' % {'hint': hint, 'v': '\n                <visible>%s</visible>' % visible if visible else '', 'w': DROP_W,
+                             'h': 64 + n * DROP_ROW + 96, 'sy': 58 + n * DROP_ROW + 10, 'sw': DROP_W - 56,
+                             'hy': 58 + n * DROP_ROW + 22}
+    # A submenu's length varies (fit): one frame per length, the right one shown.
+    frames = ''.join(frame(n, 'Integer.IsEqual(Container(%d).NumItems,%d)' % (list_id, n)) for n in range(1, rows + 1)) \
+        if fit else frame(rows, '')
     return '''
         <control type="group">
             <left>%(x)d</left><top>%(top)d</top>
-            <animation effect="fade" start="100" end="0" time="120" condition="!Control.HasFocus(%(id)d)">Conditional</animation>
+            <visible>%(shown)s</visible>
+            <animation effect="fade" start="0" end="100" time="140">Visible</animation>
+            <animation effect="slide" start="0,-10" end="0,0" time="140" tween="cubic" easing="out">Visible</animation>
+            <!-- Back closes it, as in Silo: faded out rather than hidden, since
+                 Kodi can't focus a hidden control (Down opens it again). -->
+            <animation effect="fade" start="100" end="0" time="120" condition="String.IsEqual(%(closed)s,%(id)d)">Conditional</animation>
+%(frames)s
+            <control type="label">
+                <left>28</left><top>16</top><width>%(lw)d</width><height>40</height>
+                <aligny>center</aligny>
+                <font>silo_badge</font>
+                <textcolor>99EDEDED</textcolor>
+                <label>[UPPERCASE]%(heading)s[/UPPERCASE]</label>
+            </control>
             <control type="list" id="%(id)d">
-                <width>%(w)d</width><height>90</height>
-                <orientation>horizontal</orientation>
-                <ondown>%(back)s</ondown>
+                <left>16</left><top>58</top><width>%(liw)d</width><height>%(lh)d</height>
+                <orientation>vertical</orientation>
+                <onup>%(back)s</onup>
+                <onback>SetProperty(silo.drop.closed,%(id)d,home)</onback>
                 <onback>%(back)s</onback>
-                <onup>noop</onup><onleft>noop</onleft><onright>noop</onright>
-                <itemlayout width="%(iw)d" height="90">%(normal)s
+                <onleft>noop</onleft><onright>noop</onright><ondown>noop</ondown>
+                <itemlayout width="%(liw)d" height="%(row)d">%(normal)s
                 </itemlayout>
-                <focusedlayout width="%(iw)d" height="90">%(focused)s
+                <focusedlayout width="%(liw)d" height="%(row)d">%(focused)s
                 </focusedlayout>
                 <content>%(content)s
                 </content>
             </control>
-        </control>''' % {'x': bar_positions()[9001], 'top': BAR_TOP + 2, 'id': list_id,
-                         'w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'iw': SUB_ITEM_W,
-                         'back': back, 'normal': entry(False), 'focused': entry(True), 'content': content}
-
-
-def chevron(x, width, visible):
-    """A small up chevron over a tab: Up opens its sub-menu."""
-    return '''
-        <control type="image">
-            <left>%d</left><top>%d</top><width>28</width><height>16</height>
-            <texture colordiffuse="%s">silo/chevron_up.png</texture>
-            <visible>%s</visible>
-        </control>''' % (x + (width - 28) // 2, BAR_TOP - 22, TEXT, visible)
+        </control>''' % {'x': x, 'top': BAR_TOP + 76, 'shown': shown, 'w': DROP_W, 'h': height, 'lw': DROP_W - 56,
+                         'closed': prop('silo.drop.closed'), 'heading': heading, 'id': list_id, 'liw': DROP_W - 32, 'lh': rows * DROP_ROW, 'back': back,
+                         'row': DROP_ROW, 'normal': entry(False), 'focused': entry(True), 'content': content, 'frames': frames,
+                         'sy': 58 + rows * DROP_ROW + 10, 'sw': DROP_W - 56, 'hy': 58 + rows * DROP_ROW + 22}
 
 
 def custom_submenu():
     """A custom item's submenu (Skin Shortcuts' entries for the item selected
-    in the hidden menu list), as a row of pills above the first custom item
-    (their places vary), with its chevron."""
-    x = bar_positions()[9005] + tab_width('requests') + BAR_GAP
-    first = CUSTOM_IDS[0]
-    has = 'String.IsEqual(%s,True)' % shortcut(0, 'Property(hasSubmenu)')
-    return (submenu_row(SUBMENU, 'SetFocus($INFO[%s])' % prop('silo.submenu.from'),
-                        '<include>skinshortcuts-submenu</include>')
-            + chevron(x, 120, 'Control.HasFocus(%d) + %s' % (first, has)))
+    in the hidden menu list): the dropdown under the first custom item (their
+    places vary), shown while an item that has one has focus, entered with Down."""
+    x = bar_positions()[9005] + tab_width('requests') + BAR_GAP - 16
+    return dropdown(x, SUBMENU, 'SetFocus($INFO[%s])' % prop('silo.submenu.from'),
+                    '$INFO[Container(%d).ListItem.Label]' % SHORTCUTS, '<include>skinshortcuts-submenu</include>',
+                    # Shown while an item with a submenu has focus (Kodi can't focus a hidden
+                    # control), as the tabs' sections.
+                    ' | '.join(['Control.HasFocus(%d)' % SUBMENU] + [
+                        '[Control.HasFocus(%d) + String.IsEqual(%s,True)]' % (control_id, shortcut(slot, 'Property(hasSubmenu)'))
+                        for slot, control_id in enumerate(CUSTOM_IDS)]), 5, fit=True)
+
+
+# A dropdown entry's icon: one chosen in the menu editor (siloIcon), the
+# section's own, else a plain list mark (a play mark read as "plays it").
+DROP_ICON = '''    <variable name="SiloDropIcon">
+        <value condition="!String.IsEmpty(ListItem.Property(siloIcon))">$INFO[ListItem.Property(siloIcon)]</value>
+        <value condition="String.StartsWith(ListItem.Icon,silo/)">$INFO[ListItem.Icon]</value>
+        <value>silo/menu_default.png</value>
+    </variable>
+'''
+SECTION_ICONS = {'Recommended': 'silo/menu_recommended.png', 'Browse': 'silo/menu_browse.png',
+                 'Collections': 'silo/menu_collections.png', 'Discover': 'silo/menu_recommended.png',
+                 'Search to request': 'silo/menu_search.png'}
 
 
 def sections_menus():
-    """The Movies and Series sections, as rows of pills above their tabs."""
+    """The Movies and Series sections: Silo's dropdown under their tabs."""
     out = ''
     positions = bar_positions()
     for index, page in enumerate(PAGES):
@@ -573,16 +627,62 @@ def sections_menus():
         tab_id = 9002 + index
         items = ''
         for label, path in SECTIONS[page]:
-            # Recommended: the page itself (its rows).
-            actions = ['ActivateWindow(Videos,%s,return)' % path] if path else \
-                ['SetProperty(silo.page,%s,home)' % page, 'ClearProperty(silo.row,home)', 'SetFocus(4000)']
+            if label == 'Browse':
+                # Silo's Browse: Silo Skyline's own grid (tools/build_library.py).
+                kind = 'movies' if page == 'movies' else 'tvshows'
+                actions = ['SetProperty(silo.browse.type,%s,home)' % kind, 'ClearProperty(silo.browse.letter,home)',
+                           'ClearProperty(silo.browse.list,home)',
+                           'SetProperty(silo.browse.path,videodb://%s/titles/,home)' % kind, 'ActivateWindow(1191)']
+            elif label == 'Search to request':
+                actions = ['Skin.Reset(silo.search)', 'SetProperty(silo.search.mode,requests,home)', 'ActivateWindow(1190)']
+            elif path:
+                actions = ['ActivateWindow(Videos,%s,return)' % path]
+            else:  # Recommended: the page itself (its rows).
+                actions = ['SetProperty(silo.page,%s,home)' % page, 'ClearProperty(silo.row,home)', 'SetFocus(4000)']
             items += '''
                     <item>
-                        <label>%s</label>%s
-                    </item>''' % (label, ''.join('\n                        <onclick>%s</onclick>' % a for a in actions))
-        out += submenu_row(tab_id + 200, tab_id, items)
-        out += chevron(positions[tab_id], tab_width(page), 'Control.HasFocus(%d)' % tab_id)
+                        <label>%s</label>
+                        <icon>%s</icon>%s
+                    </item>''' % (label, SECTION_ICONS.get(label, ''),
+                                ''.join('\n                        <onclick>%s</onclick>' % a for a in actions))
+        out += dropdown(positions[tab_id] - 16, tab_id + 200, 'SetFocus(%d)' % tab_id, TAB_LABELS[page], items,
+                        'Control.HasFocus(%d) | Control.HasFocus(%d)' % (tab_id, tab_id + 200), len(SECTIONS[page]))
     return out
+
+AVATAR_MENU = 9211
+PLUGIN_URL = 'plugin://plugin.video.silokodiconnect/'
+
+
+def avatar_menu():
+    """Silo's profile menu: a card under the avatar, shown while it has focus;
+    Down or OK goes in. Switch Profile is Kodi's own profile switch when Kodi
+    has profiles, else SiloKodiConnect's switch of the Silo profile."""
+    def personal(key):
+        return ['SetProperty(silo.browse.type,%s,home)' % key, 'ClearProperty(silo.browse.letter,home)',
+                'SetProperty(silo.browse.list,%s?mode=widget&amp;section=%s,home)' % (PLUGIN_URL, key),
+                'ActivateWindow(1191)']
+    entries = [
+        ('Switch Profile', 'profile', [('Integer.IsGreater(System.ProfileCount,1)', 'System.LogOff'),
+                                       ('!Integer.IsGreater(System.ProfileCount,1)', 'RunPlugin(%s?mode=profile)' % PLUGIN_URL)]),
+        ('Watchlist', 'watchlist', personal('watchlist')),
+        ('Favorites', 'favorites', personal('favorites')),
+        ('History', 'history', personal('history')),
+        ('Settings', 'settings', ['ActivateWindow(Videos,%s,return)' % PLUGIN_URL]),
+        ('Sign Out', 'signout', ['RunPlugin(%s?mode=signout)' % PLUGIN_URL]),
+    ]
+    items = ''
+    for label, icon, actions in entries:
+        clicks = ''.join('\n                        <onclick condition="%s">%s</onclick>' % a if isinstance(a, tuple)
+                         else '\n                        <onclick>%s</onclick>' % a for a in actions)
+        items += '''
+                    <item>
+                        <label>%s</label>
+                        <icon>silo/menu_%s.png</icon>%s
+                    </item>''' % (label, icon, clicks)
+    return dropdown(1920 - SAFE_X - DROP_W, AVATAR_MENU, 'SetFocus(9011)', '$INFO[%s]' % prop('silo.profile_name'),
+                    items, 'Control.HasFocus(9011) | Control.HasFocus(%d)' % AVATAR_MENU, len(entries),
+                    hint='Back closes')
+
 
 def tab(control_id, page, page_index):
     visible = '' if page == 'home' else \
@@ -614,7 +714,9 @@ def tab(control_id, page, page_index):
                             'selected': page_visible(page), 'id': control_id,
                             'label': TAB_LABELS[page],
                             'dim': TAB_DIM, 'text': TEXT, 'page': page,
-                            'moves': bar_moves(control_id),
+                            'moves': bar_moves(control_id, 'SetFocus(%d,0,absolute)' % (control_id + 200)
+                                               if page in SECTIONS else None,
+                                               control_id + 200 if page in SECTIONS else None),
                             'focus_rows': first_visible('onclick', page_rows(page_index, range(1, LOOKAHEAD + 1))),
                             'unless_open': '',
                             'open_sections': open_sections(page, control_id)}
@@ -649,7 +751,7 @@ def icon_tab(control_id, icon, action):
 
 def avatar():
     """The profile's avatar at the bar's right edge, as in Silo: its picture,
-    or its initial in a circle; it opens SiloKodiConnect's menu."""
+    or its initial in a circle; its card (avatar_menu) drops under it."""
     has_picture = '!String.IsEmpty(%s)' % prop('silo.avatar')
     return '''
         <control type="group">
@@ -662,7 +764,7 @@ def avatar():
                 <label />
                 <texturefocus />
                 <texturenofocus />
-                <onclick>ActivateWindow(Videos,plugin://plugin.video.silokodiconnect/,return)</onclick>%(moves)s
+                <onclick>SetFocus(%(menu)d,0,absolute)</onclick>%(moves)s
             </control>
             <control type="image">
                 <left>4</left><top>4</top>
@@ -692,7 +794,7 @@ def avatar():
                 <visible>Control.HasFocus(9011)</visible>
             </control>
         </control>''' % {'left': 1920 - SAFE_X - 64, 'top': BAR_TOP, 'name': prop('silo.profile_name'),
-                         'moves': bar_moves(9011), 'has_picture': has_picture, 'text': TEXT,
+                         'moves': bar_moves(9011, 'SetFocus(%d,0,absolute)' % AVATAR_MENU, AVATAR_MENU), 'menu': AVATAR_MENU, 'has_picture': has_picture, 'text': TEXT,
                          'initial': prop('silo.profile_initial'), 'picture': prop('silo.avatar'),
                          'bar_dim': BAR_DIM}
 
@@ -748,17 +850,19 @@ def custom_items():
                     <onclick condition="%(to_submenu)s">SetProperty(silo.submenu.from,%(id)d,home)</onclick>
                     <onclick condition="%(to_submenu)s">SetFocus(%(shortcuts)d,%(slot)d,absolute)</onclick>
                     <onclick condition="%(to_submenu)s">SetFocus(%(submenu)d,0,absolute)</onclick>
-                    <onup condition="%(has_submenu)s">SetProperty(silo.submenu.from,%(id)d,home)</onup>
-                    <onup condition="%(has_submenu)s">SetFocus(%(shortcuts)d,%(slot)d,absolute)</onup>
-                    <onup condition="%(has_submenu)s">SetFocus(%(submenu)d,0,absolute)</onup>
-                </control>''' % {'label': label, 'id': control_id, 'dim': TAB_DIM, 'text': TEXT, 'has_widgets': has_widgets,
+                    <ondown condition="%(has_submenu)s">SetProperty(silo.submenu.from,%(id)d,home)</ondown>
+                    <ondown condition="%(has_submenu)s">SetFocus(%(shortcuts)d,%(slot)d,absolute)</ondown>
+                    <ondown condition="%(has_submenu)s">SetFocus(%(submenu)d,0,absolute)</ondown>
+                    <!-- Leaving it opens its submenu again next time (Back closed it). -->
+                    <onunfocus>ClearProperty(silo.drop.closed,home)</onunfocus>%(close)s
+                </control>''' % {'label': label, 'close': close_on_back(SUBMENU, 'String.IsEqual(%s,True)' % shortcut(slot, 'Property(hasSubmenu)')), 'id': control_id, 'dim': TAB_DIM, 'text': TEXT, 'has_widgets': has_widgets,
                              'path': shortcut(slot, 'Property(path)'), 'actions': actions,
                              'go': go, 'to_submenu': to_submenu, 'shortcuts': SHORTCUTS, 'slot': slot,
                              'submenu': SUBMENU, 'has_submenu': 'String.IsEqual(%s,True)' % shortcut(slot, 'Property(hasSubmenu)'),
                              'nofocus': '$VAR[SiloCustomTab%d]' % control_id,
                              # Left and right come from the grouplist: Kodi points its direct
                              # children at their neighbours (passing hidden ones), over ours.
-                             'moves': bar_down('                    ')}
+                             'moves': bar_down('                    ').replace('<ondown condition="', '<ondown condition="!%s + ' % 'String.IsEqual(%s,True)' % shortcut(slot, 'Property(hasSubmenu)'))}
     return '''
         <!-- Skin Shortcuts' main menu, built into script-skinshortcuts-includes.xml. -->
         <control type="list" id="%d">
@@ -809,7 +913,8 @@ def build():
                    for index, page in enumerate(PAGES)
                    for slot in range(1, rows_of(page) + 1)
                    for landscape in (False, True))
-    tabs = icon_tab(9001, 'icons/search.png', 'ActivateWindow(1190)')
+    tabs = icon_tab(9001, 'icons/search.png', 'ClearProperty(silo.search.mode,home)</onclick>\n'
+                    '                    <onclick>ActivateWindow(1190)')
     tabs += ''.join(tab(9002 + index, page, index) for index, page in enumerate(TABBED))
     shortcuts_list, custom_tabs = custom_items()
     tabs += custom_tabs
@@ -895,12 +1000,17 @@ def build():
                 <label>$VAR[SiloPlot]</label>
                 <autoscroll>false</autoscroll>
             </control>
-            <control type="label">
+            <control type="grouplist">
                 <top>504</top>
                 <width>1000</width><height>34</height>
-                <font>silo_detail</font>
-                <textcolor>%(dim)s</textcolor>
-                <label>$VAR[SiloDetail]</label>
+                <orientation>horizontal</orientation>
+                <itemgap>8</itemgap>
+                <control type="label">
+                    <width>auto</width><height>34</height>
+                    <font>silo_detail</font>
+                    <textcolor>%(dim)s</textcolor>
+                    <label>$VAR[SiloStatusDot]$VAR[SiloDetail]</label>
+                </control>%(status_track)s
             </control>
             <!-- Quality badges. -->
             <control type="grouplist">
@@ -937,8 +1047,6 @@ def build():
              over their dropdowns; the user's own items extend it to the right. -->
         <control type="grouplist" id="9000">
             <animation effect="fade" start="100" end="70" time="200" condition="%(bar_dim)s">Conditional</animation>
-            <!-- A sub-menu takes the bar's place while it has focus. -->
-            <animation effect="fade" start="100" end="0" time="120" condition="%(in_submenu)s">Conditional</animation>
             <left>%(bar_left)d</left><top>%(tabs_top)d</top>
             <width>%(bar_w)d</width><height>60</height>
             <orientation>horizontal</orientation>
@@ -953,11 +1061,17 @@ def build():
        'row_overlap': ROW_PITCH - BAND_H,
        'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
        'bar_down': bar_down(), 'avatar': avatar(), 'custom': shortcuts_list,
-       'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections_menus() + custom_submenu(), 'in_submenu': ' | '.join('Control.HasFocus(%d)' % i for i in SUB_IDS), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'wordmark': wordmark(SAFE_X, BAR_TOP, '\n            <animation effect="fade" start="100" end="70" time="200" condition="%s">Conditional</animation>' % BAR_DIM), 'waiting': ' | '.join('[%s]' % c for c, _ in waiting_rows()), 'background': BACKGROUND, 'splash_max': SPLASH_MAX,
+       'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections_menus() + custom_submenu() + avatar_menu(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'wordmark': wordmark(SAFE_X, BAR_TOP, '\n            <animation effect="fade" start="100" end="70" time="200" condition="%s">Conditional</animation>' % BAR_DIM), 'waiting': ' | '.join('[%s]' % c for c, _ in waiting_rows()), 'background': BACKGROUND, 'splash_max': SPLASH_MAX,
        # The age rating as Silo draws it: the quality badges' size, centred on the info line.
        'splash': splash(), 'mpaa_badge': badge('$VAR[SiloMpaa]', 34, 'silo_badge').replace(
            '<width>auto</width><height>34</height>', '<top>3</top><width>auto</width><height>34</height>', 1),
-       'quality_badges': ''.join(badge('$VAR[SiloBadge%d]' % n, 36, 'silo_badge') for n in (1, 2, 3))}
+       'quality_badges': ''.join(badge('$VAR[SiloBadge%d]' % n, 36, 'silo_badge') for n in (1, 2, 3)),
+       # Silo's request stage track: four short bars, empty for anything else.
+       'status_track': ''.join('''
+                <control type="image">
+                    <top>15</top><width>36</width><height>4</height>
+                    <texture colordiffuse="$VAR[SiloStatusSeg%d]">$VAR[SiloStatusBar]</texture>
+                </control>''' % n for n in range(1, 5))}
 
 
 # The hero and marquee read from the row that last had focus (silo.row), so
@@ -989,6 +1103,13 @@ HERO = [
                      '$INFO[LI.Property(silo.cast), · ,]'),
                     (None, '$INFO[LI.Property(silo.cast)]')]),
     ('SiloMpaa', [(None, '$INFO[LI.Property(silo.mpaa)]')]),
+    # A request's dot before its phrase, and Silo's four-step track after it.
+    ('SiloStatusDot', [(HOME_CARD + ' + !String.IsEmpty(LI.Property(home.status.tint))',
+                        '[COLOR $INFO[LI.Property(home.status.tint)]]•[/COLOR]  '),
+                       ('!String.IsEmpty(LI.Property(silo.request.tint))',
+                        '[COLOR $INFO[LI.Property(silo.request.tint)]]•[/COLOR]  ')]),
+    ('SiloStatusBar', [(HOME_CARD + ' + !String.IsEmpty(LI.Property(home.status.seg1))', 'colors/white.png')]),
+] + [('SiloStatusSeg%d' % n, [(HOME_CARD, '$INFO[LI.Property(home.status.seg%d)]' % n)]) for n in range(1, 5)] + [
     ('SiloHeroTint', [(None, '$INFO[LI.Property(silo.tint)]')]),
     ('SiloBadge1', [(None, '$INFO[LI.Property(silo.badge1)]')]),
     ('SiloBadge2', [(None, '$INFO[LI.Property(silo.badge2)]')]),
@@ -1002,12 +1123,15 @@ CARDS = '''
         <value>$INFO[ListItem.Label]</value>
     </variable>
     <variable name="SiloCardEpisode">
+        <value condition="!String.IsEmpty(ListItem.Property(home.status.tint))">[COLOR $INFO[ListItem.Property(home.status.tint)]]•[/COLOR] $INFO[ListItem.Property(home.card.wide_sub)]</value>
         <value condition="!String.IsEmpty(ListItem.Property(home.type))">$INFO[ListItem.Property(home.card.wide_sub)]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code)]$INFO[ListItem.Title, • ,]</value>
         <value>$INFO[ListItem.Year]</value>
     </variable>
     <variable name="SiloCardYear">
+        <value condition="!String.IsEmpty(ListItem.Property(home.status.tint))">[COLOR $INFO[ListItem.Property(home.status.tint)]]•[/COLOR] $INFO[ListItem.Property(home.card.sub)]</value>
         <value condition="!String.IsEmpty(ListItem.Property(home.type))">$INFO[ListItem.Property(home.card.sub)]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(silo.request.tint))">[COLOR $INFO[ListItem.Property(silo.request.tint)]]•[/COLOR] $INFO[ListItem.Property(silo.request.label)]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.request.label))">$INFO[ListItem.Property(silo.request.label)]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code)]</value>
         <value>$INFO[ListItem.Year]</value>
@@ -1041,7 +1165,7 @@ EMPTY_HOME = '''    <variable name="SiloEmptyHome">
 def variables():
     rows = [list_id(index, slot, landscape) for index, page in enumerate(PAGES)
             for slot in range(1, rows_of(page) + 1) for landscape in (False, True)]
-    out = '\n    <!-- Silo Skyline (tools/build_home.py) -->' + CARDS + custom_tab_variables()
+    out = '\n    <!-- Silo Skyline (tools/build_home.py) -->' + CARDS + custom_tab_variables() + DROP_ICON
     for index, page in enumerate(PAGES):
         for slot in range(1, rows_of(page) + 1):
             for landscape in (False, True):
@@ -1065,7 +1189,8 @@ def variables():
     out += EMPTY_HOME
     for name, entries in HERO:
         # A Home card (SiloKodiConnect's published rows) carries its text ready.
-        entries = [(HOME_CARD, '$INFO[LI.Property(%s)]' % HERO_STATIC[name])] + entries
+        if name in HERO_STATIC:
+            entries = [(HOME_CARD, '$INFO[LI.Property(%s)]' % HERO_STATIC[name])] + entries
         out += '    <variable name="%s">\n' % name
         for row_id in rows:
             item = 'Container(%d).ListItem' % row_id
@@ -1164,8 +1289,8 @@ def splash_timer():
 
 
 def wordmark(x, top, extra=''):
-    """Silo Skyline's mark and name, top left on Home, Browse and Search."""
-    return '''        <!-- Silo Skyline's mark and name (media/silo/skyline_mark.png). -->
+    """Skyline's mark and name, top left on Home."""
+    return '''        <!-- Skyline's mark and name (media/silo/skyline_mark.png). -->
         <control type="grouplist">
             <left>%(x)d</left><top>%(top)d</top>
             <width>440</width><height>64</height>
@@ -1181,20 +1306,13 @@ def wordmark(x, top, extra=''):
                 <aligny>center</aligny>
                 <font>silo_wordmark</font>
                 <textcolor>%(text)s</textcolor>
-                <label>Silo</label>
-            </control>
-            <control type="label">
-                <width>auto</width><height>64</height>
-                <aligny>center</aligny>
-                <font>silo_wordmark_light</font>
-                <textcolor>%(dim)s</textcolor>
                 <label>Skyline</label>
             </control>
         </control>''' % {'x': x, 'top': top, 'extra': extra, 'text': TEXT, 'dim': TEXT_DIM}
 
 
 def splash():
-    """Silo's start-up screen over Home until its first rows are in (a
+    """Skyline's start-up screen over Home until its first rows are in (a
     property, so it shows once per Kodi start, never on returning to Home)."""
     return '''
         <control type="group">
@@ -1218,13 +1336,6 @@ def splash():
                     <aligny>center</aligny>
                     <font>silo_title</font>
                     <textcolor>%(text)s</textcolor>
-                    <label>Silo</label>
-                </control>
-                <control type="label">
-                    <width>auto</width><height>110</height>
-                    <aligny>center</aligny>
-                    <font>silo_title_light</font>
-                    <textcolor>BFEDEDED</textcolor>
                     <label>Skyline</label>
                 </control>
             </control>

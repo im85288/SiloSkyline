@@ -15,13 +15,9 @@ bold = lambda n: ImageFont.truetype(root + '/fonts/Inter-Bold.ttf', n)
 medium = lambda n: ImageFont.truetype(root + '/fonts/Inter-Medium.ttf', n)
 
 def wordmark(draw, cx, y, size):
-    a, b = 'Silo', 'Skyline'
-    fa, fb = bold(size), medium(size)
-    gap = int(size * 0.28)
-    wa = draw.textlength(a, font=fa); wb = draw.textlength(b, font=fb)
-    x = cx - (wa + gap + wb) / 2
-    draw.text((x, y), a, font=fa, fill=(0xED, 0xED, 0xED))
-    draw.text((x + wa + gap, y), b, font=fb, fill=(0xB2, 0xB2, 0xB2))
+    """Skyline's name, centred on cx."""
+    font = bold(size)
+    draw.text((cx - draw.textlength('Skyline', font=font) / 2, y), 'Skyline', font=font, fill=(0xED, 0xED, 0xED))
 
 # Fanart (1920x1080): the splash.
 fan = bg.copy().convert('RGBA')
