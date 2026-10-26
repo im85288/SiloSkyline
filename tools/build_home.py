@@ -27,7 +27,10 @@ CUSTOM_IDS = list(range(9031, 9031 + CUSTOM_SLOTS))
 SHORTCUTS = 9100  # hidden list holding Skin Shortcuts' main menu
 SUBMENU = 9240    # the dropdown of a custom item's submenu
 HOME_CARDS = 25   # cards in a published row (SiloKodiConnect rows.CARDS)
-PUBLISHED_PAGES = ('home',)  # Movies' and Series' rows are native Kodi lists where they can be
+# Pages whose rows are SiloKodiConnect's published cards (Movies' and
+# Series' rows are native Kodi lists where they can be, plugin rows otherwise).
+PUBLISHED_PAGES = ('home', 'requests')
+POSTER_ONLY = ('requests',)  # Silo's request rows are all posters
 # Cards per published row: every slot is parsed as the skin loads (on a SHIELD,
 # 2,200 slots took 25 s; Home's 600, 1 s), so other pages show fewer.
 PAGE_CARDS = {'home': HOME_CARDS}
@@ -277,6 +280,12 @@ def row_rules(page, page_index, slot, landscape):
     key = 'silo.%s.%d' % (page, slot)
     lid = list_id(page_index, slot, landscape)
     style = ('String.IsEqual(%s,landscape)' if landscape else '!String.IsEqual(%s,landscape)') % prop(key + '.style')
+    if page in PUBLISHED_PAGES:
+        # Published cards: the row shows when SiloKodiConnect has cards for
+        # it. Not the list's item count: Kodi doesn't evaluate a hidden list's
+        # items, so the row would wait for the page's loading flag.
+        return '%s + !String.IsEmpty(%s) + %s + Integer.IsGreater(%s,0)' % (
+            page_visible(page), prop(key + '.path'), style, prop(key + '.cards'))
     # Empty rows hide, as in Silo; Kodi still loads a list hidden this way.
     # silo.<page>.loading (SiloKodiConnect) keeps rows shown while they load:
     # Kodi never loads a hidden list whose path changed.
@@ -341,7 +350,9 @@ def row(page, page_index, slot, landscape):
         # plugin row, which keeps its order.
         content = '<content target="videos" sortby="$INFO[%s]" sortorder="$INFO[%s]" limit="$INFO[%s]">%s</content>' % (
             prop(key + '.sort'), prop(key + '.order'), prop(key + '.limit'), path)
-    if page in PUBLISHED_PAGES:
+    if page in POSTER_ONLY and landscape:
+        content = '<content></content>'  # never shown: no slots to parse
+    elif page in PUBLISHED_PAGES:
         # Written out, not an include with a parameter: Kodi expands those
         # slowly as the skin loads (thousands of them took 25 s on a SHIELD).
         content = '<content>%s\n                    </content>' % ''.join(
