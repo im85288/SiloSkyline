@@ -26,6 +26,10 @@ WIDGETS = 6
 CUSTOM_IDS = list(range(9031, 9031 + CUSTOM_SLOTS))
 SHORTCUTS = 9100  # hidden list holding Skin Shortcuts' main menu
 SUBMENU = 9240    # the dropdown of a custom item's submenu
+HOME_CARDS = 25   # cards in a Home row (SiloKodiConnect rows.CARDS)
+HOME_CARD_FIELDS = ('type', 'dbid', 'card.title', 'card.sub', 'card.wide_sub', 'hero.title', 'hero.meta',
+                    'hero.detail', 'plot', 'mpaa', 'badge1', 'badge2', 'badge3', 'tint', 'percent', 'playcount',
+                    'art.poster', 'art.landscape', 'art.fanart', 'art.clearlogo')
 # Rows a page can show; Requests has Your requests and Silo's few discovery
 # rows, and every slot costs Home.xml size.
 PAGE_ROWS = {'requests': 8, 'custom': WIDGETS}
@@ -105,8 +109,20 @@ def card_layout(card, focused, control_id=None):
 
 
 def write_card_includes():
-    """The card includes every row (Home, Search, More Like This) uses."""
-    includes = ''.join('''
+    """The card includes every row (Home, Search, More Like This) uses, and
+    a Home card: one item of SiloKodiConnect's published rows."""
+    home_card = '''
+    <include name="SiloHomeCard">
+        <param name="p" />
+        <definition>
+            <item>
+                <label>$INFO[Window(Home).Property($PARAM[p].label)]</label>%s
+                <visible>!String.IsEmpty(Window(Home).Property($PARAM[p].type))</visible>
+            </item>
+        </definition>
+    </include>''' % ''.join('\n                <property name="home.%s">$INFO[Window(Home).Property($PARAM[p].%s)]</property>'
+                            % (field, field) for field in HOME_CARD_FIELDS)
+    includes = home_card + ''.join('''
     <include name="SiloCard%(name)s">%(normal)s
     </include>
     <include name="SiloCardFocused%(name)s">
@@ -180,11 +196,19 @@ def card_body(card, focused, control_id='$PARAM[id]'):
                             <info>ListItem.PercentPlayed</info>
                             <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                         </control>
+                        <control type="progress">
+                            <left>%(px)d</left><top>%(pt)d</top>
+                            <width>%(pw)d</width><height>6</height>
+                            <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
+                            <midtexture colordiffuse="%(text)s">colors/white.png</midtexture>
+                            <info>ListItem.Property(home.percent)</info>
+                            <visible>!String.IsEmpty(ListItem.Property(home.percent))</visible>
+                        </control>
                         <control type="image">
                             <right>16</right><top>16</top>
                             <width>32</width><height>32</height>
                             <texture colordiffuse="%(text)s">OverlayWatched.png</texture>
-                            <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+                            <visible>Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))</visible>
                         </control>%(ring)s
                         <control type="label">
                             <left>6</left><top>%(t1)d</top>
@@ -275,6 +299,13 @@ def row(page, page_index, slot, landscape):
     if page == 'custom':
         # A Skin Shortcuts widget: any Kodi path, used as it is.
         path = '$INFO[%s]' % prop(key + '.path')
+    # Home's rows: the cards SiloKodiConnect publishes, in Silo's order, so the
+    # row draws at once (no plugin, no Python) and keeps Silo's ranking.
+    content = '<content target="videos">%s</content>' % path
+    if page == 'home':
+        content = '<content>%s\n                    </content>' % ''.join(
+            '\n                        <include content="SiloHomeCard"><param name="p" value="silo.home.%d.%d" /></include>'
+            % (slot, card) for card in range(1, HOME_CARDS + 1))
     item_w = card['width'] + card['gap']
     item_h = card['height'] + 12 + CAPTION_H
     return '''
@@ -313,9 +344,11 @@ def row(page, page_index, slot, landscape):
                     <preloaditems>2</preloaditems>
                     <!-- A title Silo can request opens with Silo's full details. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
+                    <!-- A Home card opens its info page through SiloKodiConnect. -->
+                    <onclick condition="!String.IsEmpty(ListItem.Property(home.type))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,%(id)d,home)</onfocus>%(moves)s
-                    <content target="videos">%(path)s</content>
+                    %(content)s
                     <itemlayout width="%(item_w)d" height="%(item_h)d">%(normal)s
                     </itemlayout>
                     <focusedlayout width="%(item_w)d" height="%(item_h)d">%(focused)s
@@ -324,7 +357,7 @@ def row(page, page_index, slot, landscape):
             </control>''' % {
         'group_h': BAND_H, 'rules': rules, 'x': SAFE_X, 'text': TEXT, 'title': prop(key + '.title'), 'type': prop(key + '.type'), 'icon_x': SAFE_X + 42,
         'cards_top': CARDS_TOP, 'id': list_id(page_index, slot, landscape), 'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'item_h': item_h,
-        'moves': moves(page_index, slot), 'path': path, 'item_w': item_w, 'normal': card_layout(card, False),
+        'moves': moves(page_index, slot), 'path': path, 'content': content, 'item_w': item_w, 'normal': card_layout(card, False),
         'focused': card_layout(card, True, list_id(page_index, slot, landscape))}
 
 
@@ -884,6 +917,10 @@ def build():
 # The hero and marquee read from the row that last had focus (silo.row), so
 # they stay put while the menu bar has focus, as in Silo. Each entry is a
 # (condition, value) template; LI stands for that row's ListItem.
+# A Home card: an item SiloKodiConnect published as properties (rows.py).
+HOME_CARD = '!String.IsEmpty(LI.Property(home.type))'
+HERO_STATIC = {'SiloHeroArt': 'home.art.fanart', 'SiloLogoArt': 'home.art.clearlogo', 'SiloTitle': 'home.hero.title', 'SiloMetaLine': 'home.hero.meta', 'SiloPlot': 'home.plot', 'SiloDetail': 'home.hero.detail', 'SiloMpaa': 'home.mpaa', 'SiloHeroTint': 'home.tint', 'SiloBadge1': 'home.badge1', 'SiloBadge2': 'home.badge2', 'SiloBadge3': 'home.badge3'}
+
 HERO = [
     ('SiloHeroArt', [('!String.IsEmpty(LI.Art(fanart))', '$INFO[LI.Art(fanart)]'),
                      ('!String.IsEmpty(LI.Art(tvshow.fanart))', '$INFO[LI.Art(tvshow.fanart)]'),
@@ -914,24 +951,29 @@ HERO = [
 
 CARDS = '''
     <variable name="SiloCardTitle">
+        <value condition="!String.IsEmpty(ListItem.Property(home.type))">$INFO[ListItem.Property(home.card.title)]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.TVShowTitle]</value>
         <value>$INFO[ListItem.Label]</value>
     </variable>
     <variable name="SiloCardEpisode">
+        <value condition="!String.IsEmpty(ListItem.Property(home.type))">$INFO[ListItem.Property(home.card.wide_sub)]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code)]$INFO[ListItem.Title, • ,]</value>
         <value>$INFO[ListItem.Year]</value>
     </variable>
     <variable name="SiloCardYear">
+        <value condition="!String.IsEmpty(ListItem.Property(home.type))">$INFO[ListItem.Property(home.card.sub)]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.request.label))">$INFO[ListItem.Property(silo.request.label)]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code)]</value>
         <value>$INFO[ListItem.Year]</value>
     </variable>
     <variable name="SiloPosterArt">
+        <value condition="!String.IsEmpty(ListItem.Property(home.type))">$INFO[ListItem.Property(home.art.poster)]</value>
         <value condition="!String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
         <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
         <value>$INFO[ListItem.Art(thumb)]</value>
     </variable>
     <variable name="SiloLandscapeArt">
+        <value condition="!String.IsEmpty(ListItem.Property(home.type))">$INFO[ListItem.Property(home.art.landscape)]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
         <value condition="!String.IsEmpty(ListItem.Art(landscape))">$INFO[ListItem.Art(landscape)]</value>
         <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
@@ -964,11 +1006,15 @@ def variables():
     for name, item_property in (('SiloMpaa', 'silo.mpaa'), ('SiloTint', 'silo.tint'),
                                 ('SiloBadge1', 'silo.badge1'),
                                 ('SiloBadge2', 'silo.badge2'), ('SiloBadge3', 'silo.badge3')):
-        terms = ['[String.IsEqual(%s,%d) + !String.IsEmpty(Container(%d).ListItem.Property(%s))]'
-                 % (prop('silo.row'), row_id, row_id, item_property) for row_id in rows]
+        home_property = 'home.' + item_property.split('.', 1)[1]
+        terms = ['[String.IsEqual(%s,%d) + [!String.IsEmpty(Container(%d).ListItem.Property(%s)) | '
+                 '!String.IsEmpty(Container(%d).ListItem.Property(%s))]]'
+                 % (prop('silo.row'), row_id, row_id, item_property, row_id, home_property) for row_id in rows]
         out += '    <expression name="Has%s">%s</expression>\n' % (name, ' | '.join(terms))
     out += EMPTY_HOME
     for name, entries in HERO:
+        # A Home card (SiloKodiConnect's published rows) carries its text ready.
+        entries = [(HOME_CARD, '$INFO[LI.Property(%s)]' % HERO_STATIC[name])] + entries
         out += '    <variable name="%s">\n' % name
         for row_id in rows:
             item = 'Container(%d).ListItem' % row_id
