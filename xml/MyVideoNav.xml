@@ -129,6 +129,7 @@
             <orientation>vertical</orientation>
             <scrolltime tween="cubic" easing="out">280</scrolltime>
             <viewtype label="Posters">poster</viewtype>
+            <onright condition="[Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(Container.NumItems,20)">60</onright>
             <visible>$EXP[SiloBrowseGrid]</visible>
             <itemlayout width="236" height="412">
                     <control type="image">
@@ -230,6 +231,175 @@
                         <label>$VAR[SiloBrowseSub]</label>
                     </control>
             </focusedlayout>
+        </control>
+
+        <!-- A-Z: jump the poster grid to a letter (SiloKodiConnect's jump.py). -->
+        <control type="list" id="60">
+            <left>1764</left><top>208</top>
+            <width>68</width><height>864</height>
+            <orientation>vertical</orientation>
+            <onleft>51</onleft>
+            <visible>$EXP[SiloBrowseGrid] + [Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(Container.NumItems,20)</visible>
+            <itemlayout width="68" height="32">
+                    <control type="label">
+                        <width>68</width><height>32</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>String.IsEqual(ListItem.Label,Container(51).ListItem.SortLetter)</visible>
+                    </control>
+                    <control type="label">
+                        <width>68</width><height>32</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>66EDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>!String.IsEqual(ListItem.Label,Container(51).ListItem.SortLetter)</visible>
+                    </control>
+            </itemlayout>
+            <focusedlayout width="68" height="32">
+                    <control type="image">
+                        <left>18</left><top>0</top>
+                        <width>32</width><height>32</height>
+                        <texture border="15" colordiffuse="FFEDEDED">silo/pill.png</texture>
+                        <visible>Control.HasFocus(60)</visible>
+                    </control>
+                    <control type="label">
+                        <width>68</width><height>32</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FF000000</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>Control.HasFocus(60)</visible>
+                    </control>
+                    <control type="label">
+                        <width>68</width><height>32</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>!Control.HasFocus(60) + String.IsEqual(ListItem.Label,Container(51).ListItem.SortLetter)</visible>
+                    </control>
+                    <control type="label">
+                        <width>68</width><height>32</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>66EDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>!Control.HasFocus(60) + !String.IsEqual(ListItem.Label,Container(51).ListItem.SortLetter)</visible>
+                    </control>
+            </focusedlayout>
+            <content>
+                <item>
+                    <label>#</label>
+                    <onclick>NotifyAll(silokodi,jump.51.#)</onclick>
+                </item>
+                <item>
+                    <label>A</label>
+                    <onclick>NotifyAll(silokodi,jump.51.A)</onclick>
+                </item>
+                <item>
+                    <label>B</label>
+                    <onclick>NotifyAll(silokodi,jump.51.B)</onclick>
+                </item>
+                <item>
+                    <label>C</label>
+                    <onclick>NotifyAll(silokodi,jump.51.C)</onclick>
+                </item>
+                <item>
+                    <label>D</label>
+                    <onclick>NotifyAll(silokodi,jump.51.D)</onclick>
+                </item>
+                <item>
+                    <label>E</label>
+                    <onclick>NotifyAll(silokodi,jump.51.E)</onclick>
+                </item>
+                <item>
+                    <label>F</label>
+                    <onclick>NotifyAll(silokodi,jump.51.F)</onclick>
+                </item>
+                <item>
+                    <label>G</label>
+                    <onclick>NotifyAll(silokodi,jump.51.G)</onclick>
+                </item>
+                <item>
+                    <label>H</label>
+                    <onclick>NotifyAll(silokodi,jump.51.H)</onclick>
+                </item>
+                <item>
+                    <label>I</label>
+                    <onclick>NotifyAll(silokodi,jump.51.I)</onclick>
+                </item>
+                <item>
+                    <label>J</label>
+                    <onclick>NotifyAll(silokodi,jump.51.J)</onclick>
+                </item>
+                <item>
+                    <label>K</label>
+                    <onclick>NotifyAll(silokodi,jump.51.K)</onclick>
+                </item>
+                <item>
+                    <label>L</label>
+                    <onclick>NotifyAll(silokodi,jump.51.L)</onclick>
+                </item>
+                <item>
+                    <label>M</label>
+                    <onclick>NotifyAll(silokodi,jump.51.M)</onclick>
+                </item>
+                <item>
+                    <label>N</label>
+                    <onclick>NotifyAll(silokodi,jump.51.N)</onclick>
+                </item>
+                <item>
+                    <label>O</label>
+                    <onclick>NotifyAll(silokodi,jump.51.O)</onclick>
+                </item>
+                <item>
+                    <label>P</label>
+                    <onclick>NotifyAll(silokodi,jump.51.P)</onclick>
+                </item>
+                <item>
+                    <label>Q</label>
+                    <onclick>NotifyAll(silokodi,jump.51.Q)</onclick>
+                </item>
+                <item>
+                    <label>R</label>
+                    <onclick>NotifyAll(silokodi,jump.51.R)</onclick>
+                </item>
+                <item>
+                    <label>S</label>
+                    <onclick>NotifyAll(silokodi,jump.51.S)</onclick>
+                </item>
+                <item>
+                    <label>T</label>
+                    <onclick>NotifyAll(silokodi,jump.51.T)</onclick>
+                </item>
+                <item>
+                    <label>U</label>
+                    <onclick>NotifyAll(silokodi,jump.51.U)</onclick>
+                </item>
+                <item>
+                    <label>V</label>
+                    <onclick>NotifyAll(silokodi,jump.51.V)</onclick>
+                </item>
+                <item>
+                    <label>W</label>
+                    <onclick>NotifyAll(silokodi,jump.51.W)</onclick>
+                </item>
+                <item>
+                    <label>X</label>
+                    <onclick>NotifyAll(silokodi,jump.51.X)</onclick>
+                </item>
+                <item>
+                    <label>Y</label>
+                    <onclick>NotifyAll(silokodi,jump.51.Y)</onclick>
+                </item>
+                <item>
+                    <label>Z</label>
+                    <onclick>NotifyAll(silokodi,jump.51.Z)</onclick>
+                </item>
+            </content>
         </control>
 
         <!-- Episodes: stills with their details. -->

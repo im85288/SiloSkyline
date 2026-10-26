@@ -37,6 +37,11 @@
                 <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
                 <texturenofocus border="30" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
                 <onclick>Skin.SetString(silo.search)</onclick>
+                <!-- Kodi never loads a hidden list whose path changed: a row with
+                     no titles for the last words would stay hidden and empty, so
+                     every row shows while the new words load. -->
+                <onclick>SetProperty(silo.search.loading,1,home)</onclick>
+                <onclick>AlarmClock(silosearch,ClearProperty(silo.search.loading,home),00:04,silent)</onclick>
                 <ondown condition="Integer.IsGreater(Container(201).NumItems,0)">SetFocus(201)</ondown>
                 <ondown condition="Integer.IsGreater(Container(202).NumItems,0) + !Integer.IsGreater(Container(201).NumItems,0)">SetFocus(202)</ondown>
                 <ondown condition="Integer.IsGreater(Container(203).NumItems,0) + !Integer.IsGreater(Container(201).NumItems,0) + !Integer.IsGreater(Container(202).NumItems,0)">SetFocus(203)</ondown>
@@ -77,7 +82,7 @@
             <font>silo_row</font>
             <textcolor>BFEDEDED</textcolor>
             <label>No titles match "$INFO[Skin.String(silo.search)]"</label>
-            <visible>!String.IsEmpty(Skin.String(silo.search)) + !Integer.IsGreater(Container(201).NumItems,0) + !Container(201).IsUpdating + !Integer.IsGreater(Container(202).NumItems,0) + !Container(202).IsUpdating + !Integer.IsGreater(Container(203).NumItems,0) + !Container(203).IsUpdating</visible>
+            <visible>!String.IsEmpty(Skin.String(silo.search)) + !Integer.IsGreater(Container(201).NumItems,0) + !Container(201).IsUpdating + !Integer.IsGreater(Container(202).NumItems,0) + !Container(202).IsUpdating + !Integer.IsGreater(Container(203).NumItems,0) + !Container(203).IsUpdating + !String.IsEqual(Window(Home).Property(silo.search.loading),1)</visible>
         </control>
         <control type="grouplist">
             <top>236</top>
@@ -88,18 +93,19 @@
             <visible>!String.IsEmpty(Skin.String(silo.search))</visible>
             <control type="group">
                 <height>422</height>
-                <visible>Integer.IsGreater(Container(201).NumItems,0) | Container(201).IsUpdating</visible>
+                <visible>Integer.IsGreater(Container(201).NumItems,0) | Container(201).IsUpdating | String.IsEqual(Window(Home).Property(silo.search.loading),1)</visible>
                 <control type="label">
                     <left>88</left>
                     <width>1500</width><height>46</height>
                     <font>silo_row</font>
                     <textcolor>FFEDEDED</textcolor>
                     <label>Movies$INFO[Container(201).NumItems,  ·  ,]</label>
+                    <visible>Integer.IsGreater(Container(201).NumItems,0) | Container(201).IsUpdating</visible>
                 </control>
                 <control type="list" id="201">
                     <!-- The list's own condition lets Kodi load it while it is hidden:
                          it doesn't process a list inside a hidden group. -->
-                    <visible>Integer.IsGreater(Container(201).NumItems,0) | Container(201).IsUpdating</visible>
+                    <visible>Integer.IsGreater(Container(201).NumItems,0) | Container(201).IsUpdating | String.IsEqual(Window(Home).Property(silo.search.loading),1)</visible>
                     <left>82</left><top>56</top>
                     <width>1838</width><height>352</height>
                     <orientation>horizontal</orientation>
@@ -124,18 +130,19 @@
             </control>
             <control type="group">
                 <height>422</height>
-                <visible>Integer.IsGreater(Container(202).NumItems,0) | Container(202).IsUpdating</visible>
+                <visible>Integer.IsGreater(Container(202).NumItems,0) | Container(202).IsUpdating | String.IsEqual(Window(Home).Property(silo.search.loading),1)</visible>
                 <control type="label">
                     <left>88</left>
                     <width>1500</width><height>46</height>
                     <font>silo_row</font>
                     <textcolor>FFEDEDED</textcolor>
                     <label>Shows$INFO[Container(202).NumItems,  ·  ,]</label>
+                    <visible>Integer.IsGreater(Container(202).NumItems,0) | Container(202).IsUpdating</visible>
                 </control>
                 <control type="list" id="202">
                     <!-- The list's own condition lets Kodi load it while it is hidden:
                          it doesn't process a list inside a hidden group. -->
-                    <visible>Integer.IsGreater(Container(202).NumItems,0) | Container(202).IsUpdating</visible>
+                    <visible>Integer.IsGreater(Container(202).NumItems,0) | Container(202).IsUpdating | String.IsEqual(Window(Home).Property(silo.search.loading),1)</visible>
                     <left>82</left><top>56</top>
                     <width>1838</width><height>352</height>
                     <orientation>horizontal</orientation>
@@ -160,18 +167,19 @@
             </control>
             <control type="group">
                 <height>422</height>
-                <visible>Integer.IsGreater(Container(203).NumItems,0) | Container(203).IsUpdating</visible>
+                <visible>Integer.IsGreater(Container(203).NumItems,0) | Container(203).IsUpdating | String.IsEqual(Window(Home).Property(silo.search.loading),1)</visible>
                 <control type="label">
                     <left>88</left>
                     <width>1500</width><height>46</height>
                     <font>silo_row</font>
                     <textcolor>FFEDEDED</textcolor>
                     <label>Request$INFO[Container(203).NumItems,  ·  ,]</label>
+                    <visible>Integer.IsGreater(Container(203).NumItems,0) | Container(203).IsUpdating</visible>
                 </control>
                 <control type="list" id="203">
                     <!-- The list's own condition lets Kodi load it while it is hidden:
                          it doesn't process a list inside a hidden group. -->
-                    <visible>Integer.IsGreater(Container(203).NumItems,0) | Container(203).IsUpdating</visible>
+                    <visible>Integer.IsGreater(Container(203).NumItems,0) | Container(203).IsUpdating | String.IsEqual(Window(Home).Property(silo.search.loading),1)</visible>
                     <left>82</left><top>56</top>
                     <width>1838</width><height>352</height>
                     <orientation>horizontal</orientation>
