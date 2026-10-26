@@ -190,6 +190,11 @@
 			<size>44</size>
 		</font>
 		<font>
+			<name>silo_clock</name>
+			<filename>Inter-SemiBold.ttf</filename>
+			<size>58</size>
+		</font>
+		<font>
 			<name>silo_wordmark_light</name>
 			<filename>Inter-Medium.ttf</filename>
 			<size>44</size>
@@ -406,6 +411,11 @@
 			<name>silo_wordmark</name>
 			<filename>Inter-Bold.ttf</filename>
 			<size>44</size>
+		</font>
+		<font>
+			<name>silo_clock</name>
+			<filename>Inter-SemiBold.ttf</filename>
+			<size>58</size>
 		</font>
 		<font>
 			<name>silo_wordmark_light</name>

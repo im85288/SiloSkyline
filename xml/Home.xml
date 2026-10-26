@@ -6064,6 +6064,8 @@
              over their dropdowns; the user's own items extend it to the right. -->
         <control type="grouplist" id="9000">
             <animation effect="fade" start="100" end="70" time="200" condition="!ControlGroup(9000).HasFocus() + !Control.HasFocus(9011)">Conditional</animation>
+            <!-- A sub-menu takes the bar's place while it has focus. -->
+            <animation effect="fade" start="100" end="0" time="120" condition="Control.HasFocus(9203) | Control.HasFocus(9204) | Control.HasFocus(9240)">Conditional</animation>
             <left>522</left><top>58</top>
             <width>1230</width><height>60</height>
             <orientation>horizontal</orientation>
@@ -7201,38 +7203,49 @@
         </control>
 
         <control type="group">
-            <left>720</left><top>0</top>
+            <left>522</left><top>58</top>
             <animation effect="fade" start="100" end="0" time="120" condition="!Control.HasFocus(9203)">Conditional</animation>
             <control type="list" id="9203">
-                <width>1160</width><height>52</height>
+                <width>1230</width><height>90</height>
                 <orientation>horizontal</orientation>
                 <ondown>9003</ondown>
                 <onback>9003</onback>
                 <onup>noop</onup><onleft>noop</onleft><onright>noop</onright>
-                <itemlayout width="250" height="52">
-                    <control type="image">
-                        <top>4</top><width>238</width><height>44</height>
-                        <texture border="22" colordiffuse="E61C1F24">silo/pill.png</texture>
-                    </control>
+                <itemlayout width="280" height="90">
                     <control type="label">
-                        <top>4</top><width>238</width><height>44</height>
+                        <left>16</left><width>248</width><height>60</height>
                         <align>center</align><aligny>center</aligny>
-                        <font>silo_meta</font>
-                        <textcolor>FFEDEDED</textcolor>
+                        <font>silo_tab</font>
+                        <textcolor>B3EDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                 </itemlayout>
-                <focusedlayout width="250" height="52">
+                <focusedlayout width="280" height="90">
                     <control type="image">
-                        <top>4</top><width>238</width><height>44</height>
-                        <texture border="22" colordiffuse="FFEDEDED">silo/pill.png</texture>
+                        <left>4</left><width>272</width><height>60</height>
+                        <texture border="30" colordiffuse="FFEDEDED">silo/pill.png</texture>
+                        <visible>Control.HasFocus(9203)</visible>
+                    </control>
+                    <control type="image">
+                        <left>126</left><top>66</top><width>28</width><height>16</height>
+                        <texture colordiffuse="FFEDEDED" flipy="true">silo/chevron_up.png</texture>
+                        <visible>Control.HasFocus(9203)</visible>
                     </control>
                     <control type="label">
-                        <top>4</top><width>238</width><height>44</height>
+                        <left>16</left><width>248</width><height>60</height>
                         <align>center</align><aligny>center</aligny>
-                        <font>silo_meta</font>
+                        <font>silo_tab</font>
                         <textcolor>FF000000</textcolor>
                         <label>$INFO[ListItem.Label]</label>
+                        <visible>Control.HasFocus(9203)</visible>
+                    </control>
+                    <control type="label">
+                        <left>16</left><width>248</width><height>60</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_tab</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>!Control.HasFocus(9203)</visible>
                     </control>
                 </focusedlayout>
                 <content>
@@ -7259,38 +7272,49 @@
             <visible>Control.HasFocus(9003)</visible>
         </control>
         <control type="group">
-            <left>890</left><top>0</top>
+            <left>522</left><top>58</top>
             <animation effect="fade" start="100" end="0" time="120" condition="!Control.HasFocus(9204)">Conditional</animation>
             <control type="list" id="9204">
-                <width>990</width><height>52</height>
+                <width>1230</width><height>90</height>
                 <orientation>horizontal</orientation>
                 <ondown>9004</ondown>
                 <onback>9004</onback>
                 <onup>noop</onup><onleft>noop</onleft><onright>noop</onright>
-                <itemlayout width="250" height="52">
-                    <control type="image">
-                        <top>4</top><width>238</width><height>44</height>
-                        <texture border="22" colordiffuse="E61C1F24">silo/pill.png</texture>
-                    </control>
+                <itemlayout width="280" height="90">
                     <control type="label">
-                        <top>4</top><width>238</width><height>44</height>
+                        <left>16</left><width>248</width><height>60</height>
                         <align>center</align><aligny>center</aligny>
-                        <font>silo_meta</font>
-                        <textcolor>FFEDEDED</textcolor>
+                        <font>silo_tab</font>
+                        <textcolor>B3EDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                 </itemlayout>
-                <focusedlayout width="250" height="52">
+                <focusedlayout width="280" height="90">
                     <control type="image">
-                        <top>4</top><width>238</width><height>44</height>
-                        <texture border="22" colordiffuse="FFEDEDED">silo/pill.png</texture>
+                        <left>4</left><width>272</width><height>60</height>
+                        <texture border="30" colordiffuse="FFEDEDED">silo/pill.png</texture>
+                        <visible>Control.HasFocus(9204)</visible>
+                    </control>
+                    <control type="image">
+                        <left>126</left><top>66</top><width>28</width><height>16</height>
+                        <texture colordiffuse="FFEDEDED" flipy="true">silo/chevron_up.png</texture>
+                        <visible>Control.HasFocus(9204)</visible>
                     </control>
                     <control type="label">
-                        <top>4</top><width>238</width><height>44</height>
+                        <left>16</left><width>248</width><height>60</height>
                         <align>center</align><aligny>center</aligny>
-                        <font>silo_meta</font>
+                        <font>silo_tab</font>
                         <textcolor>FF000000</textcolor>
                         <label>$INFO[ListItem.Label]</label>
+                        <visible>Control.HasFocus(9204)</visible>
+                    </control>
+                    <control type="label">
+                        <left>16</left><width>248</width><height>60</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_tab</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>!Control.HasFocus(9204)</visible>
                     </control>
                 </focusedlayout>
                 <content>
@@ -7317,38 +7341,49 @@
             <visible>Control.HasFocus(9004)</visible>
         </control>
         <control type="group">
-            <left>1264</left><top>0</top>
+            <left>522</left><top>58</top>
             <animation effect="fade" start="100" end="0" time="120" condition="!Control.HasFocus(9240)">Conditional</animation>
             <control type="list" id="9240">
-                <width>616</width><height>52</height>
+                <width>1230</width><height>90</height>
                 <orientation>horizontal</orientation>
                 <ondown>SetFocus($INFO[Window(Home).Property(silo.submenu.from)])</ondown>
                 <onback>SetFocus($INFO[Window(Home).Property(silo.submenu.from)])</onback>
                 <onup>noop</onup><onleft>noop</onleft><onright>noop</onright>
-                <itemlayout width="250" height="52">
-                    <control type="image">
-                        <top>4</top><width>238</width><height>44</height>
-                        <texture border="22" colordiffuse="E61C1F24">silo/pill.png</texture>
-                    </control>
+                <itemlayout width="280" height="90">
                     <control type="label">
-                        <top>4</top><width>238</width><height>44</height>
+                        <left>16</left><width>248</width><height>60</height>
                         <align>center</align><aligny>center</aligny>
-                        <font>silo_meta</font>
-                        <textcolor>FFEDEDED</textcolor>
+                        <font>silo_tab</font>
+                        <textcolor>B3EDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                 </itemlayout>
-                <focusedlayout width="250" height="52">
+                <focusedlayout width="280" height="90">
                     <control type="image">
-                        <top>4</top><width>238</width><height>44</height>
-                        <texture border="22" colordiffuse="FFEDEDED">silo/pill.png</texture>
+                        <left>4</left><width>272</width><height>60</height>
+                        <texture border="30" colordiffuse="FFEDEDED">silo/pill.png</texture>
+                        <visible>Control.HasFocus(9240)</visible>
+                    </control>
+                    <control type="image">
+                        <left>126</left><top>66</top><width>28</width><height>16</height>
+                        <texture colordiffuse="FFEDEDED" flipy="true">silo/chevron_up.png</texture>
+                        <visible>Control.HasFocus(9240)</visible>
                     </control>
                     <control type="label">
-                        <top>4</top><width>238</width><height>44</height>
+                        <left>16</left><width>248</width><height>60</height>
                         <align>center</align><aligny>center</aligny>
-                        <font>silo_meta</font>
+                        <font>silo_tab</font>
                         <textcolor>FF000000</textcolor>
                         <label>$INFO[ListItem.Label]</label>
+                        <visible>Control.HasFocus(9240)</visible>
+                    </control>
+                    <control type="label">
+                        <left>16</left><width>248</width><height>60</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_tab</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>!Control.HasFocus(9240)</visible>
                     </control>
                 </focusedlayout>
                 <content><include>skinshortcuts-submenu</include>

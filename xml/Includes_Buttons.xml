@@ -49,7 +49,7 @@
 	</include>
 	<include name="DefaultSettingButton">
 		<param name="height">70</param>
-		<param name="textoffsetx">40</param>
+		<param name="textoffsetx">24</param>
 		<definition>
 			<textoffsetx>$PARAM[textoffsetx]</textoffsetx>
 			<top>0</top>
@@ -57,12 +57,18 @@
 			<aligny>center</aligny>
 			<invalidcolor>invalid</invalidcolor>
 			<selectedcolor>selected</selectedcolor>
-			<!-- Silo Skyline: Inter, and a soft rounded highlight that keeps the
-			     row's white toggles and arrows readable. -->
+			<!-- Silo Skyline (tools/build_frame.py): Silo's white pill on the focused row. -->
 			<font>silo_meta</font>
 			<textcolor>FFEDEDED</textcolor>
-			<texturefocus border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texturefocus>
+			<focusedcolor>FF000000</focusedcolor>
+			<disabledcolor>66EDEDED</disabledcolor>
+			<texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
 			<texturenofocus />
+			<textureradioonfocus colordiffuse="FF000000">buttons/radio-button-on.png</textureradioonfocus>
+			<textureradioofffocus colordiffuse="FF000000">buttons/radio-button-off.png</textureradioofffocus>
+			<textureupfocus colordiffuse="FF000000">buttons/spinctrl/arrow-light-up.png</textureupfocus>
+			<texturedownfocus colordiffuse="FF000000">buttons/spinctrl/arrow-light-down.png</texturedownfocus>
+			<textureslidernibfocus colordiffuse="FF000000">buttons/slider-nib.png</textureslidernibfocus>
 		</definition>
 	</include>
 	<include name="DialogSettingButton">
@@ -415,14 +421,15 @@
 	</include>
 	<!-- Silo Skyline: a row in the menu manager (script-skinshortcuts.xml). -->
 	<include name="SiloShortcutButton">
-		<width>934</width>
-		<height>80</height>
+		<!-- As the settings rows (tools/build_frame.py): plain, the focused one a white pill. -->
+		<width>1060</width>
+		<height>70</height>
 		<textoffsetx>32</textoffsetx>
 		<aligny>center</aligny>
 		<font>silo_meta</font>
 		<textcolor>FFEDEDED</textcolor>
 		<focusedcolor>FF000000</focusedcolor>
-		<texturefocus border="46" colordiffuse="FFEDEDED">silo/dialog_button.png</texturefocus>
-		<texturenofocus border="46" colordiffuse="14FFFFFF">silo/dialog_button.png</texturenofocus>
+		<texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+		<texturenofocus />
 	</include>
 </includes>

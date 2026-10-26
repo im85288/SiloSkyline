@@ -20,53 +20,11 @@
             <texture background="true" colordiffuse="59FFFFFF" diffuse="silo/hero_mask.png">$VAR[SiloBrowseArt]</texture>
         </control>
 
-        <!-- Silo Skyline's mark and name (media/silo/skyline_mark.png). -->
-        <control type="grouplist">
-            <left>88</left><top>56</top>
-            <width>440</width><height>64</height>
-            <orientation>horizontal</orientation>
-            <itemgap>12</itemgap>
-            <usecontrolcoords>true</usecontrolcoords>
-            <control type="image">
-                <top>6</top><width>52</width><height>52</height>
-                <texture>silo/skyline_mark.png</texture>
-            </control>
-            <control type="label">
-                <width>auto</width><height>64</height>
-                <aligny>center</aligny>
-                <font>silo_wordmark</font>
-                <textcolor>FFEDEDED</textcolor>
-                <label>Silo</label>
-            </control>
-            <control type="label">
-                <width>auto</width><height>64</height>
-                <aligny>center</aligny>
-                <font>silo_wordmark_light</font>
-                <textcolor>BFEDEDED</textcolor>
-                <label>Skyline</label>
-            </control>
-        </control>
-        <control type="grouplist">
-            <left>88</left><top>124</top>
-            <width>1600</width><height>56</height>
-            <orientation>horizontal</orientation>
-            <itemgap>20</itemgap>
-            <control type="label">
-                <width>auto</width><height>56</height>
-                <aligny>center</aligny>
-                <font>silo_row</font>
-                <textcolor>FFEDEDED</textcolor>
-                <label>$VAR[SiloBrowseTitle]</label>
-            </control>
-            <control type="label">
-                <width>auto</width><height>56</height>
-                <aligny>center</aligny>
-                <font>silo_meta</font>
-                <textcolor>BFEDEDED</textcolor>
-                <label>$INFO[Container.NumItems]</label>
-                <visible>Integer.IsGreater(Container.NumItems,0) + [$EXP[SiloBrowseGrid] | $EXP[SiloBrowseEpisodes]]</visible>
-            </control>
-        </control>
+        <!-- The shared frame (tools/build_frame.py): where you are and the clock. -->
+        <include content="SiloFrame">
+            <param name="title">$VAR[SiloBrowseTitle]</param>
+            <param name="sub">$VAR[SiloBrowseFacts]</param>
+        </include>
 
         <!-- Everything else: a list of pills. -->
         <control type="list" id="50">

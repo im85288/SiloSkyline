@@ -4,27 +4,31 @@
 	<backgroundcolor>background</backgroundcolor>
 	<onload condition="String.IsEmpty(Skin.String(background_overlay))">Skin.SetString(background_overlay,1)</onload>
 	<controls>
-		<include>DefaultBackground</include>
-		<control type="multiimage">
-			<depth>DepthBackground</depth>
-			<include>FullScreenDimensions</include>
-			<aspectratio>scale</aspectratio>
-			<fadetime>600</fadetime>
-			<animation effect="zoom" center="auto" end="102,102" time="0" condition="Integer.IsGreater(System.StereoscopicMode,0)">conditional</animation>
-			<animation effect="fade" start="0" end="100" time="400">WindowOpen</animation>
-			<animation effect="fade" start="100" end="0" time="300">WindowClose</animation>
-			<animation effect="fade" time="400">VisibleChange</animation>
-			<imagepath background="true" colordiffuse="bg_overlay">$INFO[Skin.String(HomeFanart.path)]settings$INFO[Skin.String(HomeFanart.ext)]</imagepath>
-			<visible>!Player.HasMedia + !String.IsEmpty(Skin.String(HomeFanart.path))</visible>
+		<include>SiloPage</include>
+		<!-- Silo Skyline frame (tools/build_frame.py) -->
+		<include>SiloPanel</include>
+		<control type="image">
+			<left>554</left><top>228</top><width>2</width><height>756</height>
+			<texture colordiffuse="14FFFFFF">colors/white.png</texture>
+		</control>
+		<control type="label">
+			<left>580</left><top>222</top><width>1212</width><height>56</height>
+			<font>silo_row</font>
+			<textcolor>FFEDEDED</textcolor>
+			<label>$INFO[Container(9000).ListItem.Label]</label>
+		</control>
+		<control type="image">
+			<left>580</left><top>354</top><width>1212</width><height>2</height>
+			<texture colordiffuse="14FFFFFF">colors/white.png</texture>
 		</control>
 		<control type="group" id="10000">
-			<left>470</left>
+			<left>556</left><width>1236</width>
 			<include>OpenClose_Right</include>
 			<control type="grouplist" id="700">
-				<top>133</top>
+				<top>366</top>
 				<left>0</left>
 				<right>0</right>
-				<bottom>140</bottom>
+				<height>630</height>
 				<onleft>9000</onleft>
 				<onright>60</onright>
 				<onup>700</onup>
@@ -75,10 +79,10 @@
 				</control>
 			</control>
 			<control type="grouplist" id="600">
-				<top>133</top>
+				<top>366</top>
 				<left>0</left>
 				<right>0</right>
-				<bottom>140</bottom>
+				<height>630</height>
 				<onleft>9000</onleft>
 				<onright>60</onright>
 				<onup>600</onup>
@@ -139,10 +143,10 @@
 				</control>
 			</control>
 			<control type="grouplist" id="610">
-				<top>133</top>
+				<top>366</top>
 				<left>0</left>
 				<right>0</right>
-				<bottom>140</bottom>
+				<height>630</height>
 				<onleft>9000</onleft>
 				<onright>60</onright>
 				<onup>610</onup>
@@ -275,10 +279,10 @@
 				</control>
 			</control>
 			<control type="grouplist" id="622">
-				<top>133</top>
+				<top>366</top>
 				<left>0</left>
 				<right>0</right>
-				<bottom>140</bottom>
+				<height>630</height>
 				<onleft>9000</onleft>
 				<onright>60</onright>
 				<onup>610</onup>
@@ -299,62 +303,39 @@
 					<enable>Skin.HasSetting(OSDAutoClose)</enable>
 				</control>
 			</control>
-			<control type="image">
-				<description>Dialog Header image</description>
-				<left>0</left>
-				<top>130</top>
-				<right>0</right>
-				<height>3</height>
-				<texture colordiffuse="button_focus" border="2">dialogs/separator-grey.png</texture>
-			</control>
-			<control type="image">
-				<description>Dialog Header image</description>
-				<left>0</left>
-				<bottom>134</bottom>
-				<right>0</right>
-				<height>3</height>
-				<texture colordiffuse="button_focus" border="2">dialogs/separator-grey.png</texture>
-			</control>
 		</control>
 		<control type="group">
 			<depth>DepthContentPanel</depth>
 			<left>0</left>
 			<include>OpenClose_Left</include>
-			<include content="ContentPanel">
-				<param name="width" value="530" />
-			</include>
 			<control type="list" id="9000">
 				<description>button area</description>
-				<left>0</left>
-				<top>130</top>
-				<width>470</width>
-				<height>700</height>
+				<left>106</left><top>218</top><width>434</width><height>776</height>
 				<onleft>10000</onleft>
 				<onright>10000</onright>
 				<onup>9000</onup>
 				<ondown>9000</ondown>
-				<itemlayout height="85" width="470">
+				<itemlayout height="70" width="434">
 					<control type="label">
-						<textoffsetx>30</textoffsetx>
-						<width>470</width>
-						<height>85</height>
-						<label>$INFO[ListItem.Label]</label>
-						<font>font37</font>
+						<textoffsetx>32</textoffsetx>
+						<width>434</width><height>70</height>
+						<font>silo_meta</font>
+						<textcolor>FFEDEDED</textcolor>
 						<aligny>center</aligny>
+						<label>$INFO[ListItem.Label]</label>
 					</control>
 				</itemlayout>
-				<focusedlayout height="85" width="470">
+				<focusedlayout height="70" width="434">
 					<control type="image">
-						<width>470</width>
-						<height>85</height>
-						<texture border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texture>
-						<animation effect="fade" start="100" end="50" time="40" condition="!Control.HasFocus(9000)">Conditional</animation>
+						<width>434</width><height>70</height>
+						<texture border="30" colordiffuse="FFEDEDED">silo/pill.png</texture>
+						<animation effect="fade" start="100" end="40" time="100" condition="!Control.HasFocus(9000)">Conditional</animation>
 					</control>
 					<control type="label">
-						<textoffsetx>30</textoffsetx>
-						<width>470</width>
-						<height>85</height>
-						<font>font37</font>
+						<textoffsetx>32</textoffsetx>
+						<width>434</width><height>70</height>
+						<font>silo_meta</font>
+						<textcolor>FF000000</textcolor>
 						<aligny>center</aligny>
 						<label>$INFO[ListItem.Label]</label>
 					</control>
@@ -381,7 +362,7 @@
 		</control>
 		<control type="group">
 			<right>0</right>
-			<top>133</top>
+			<top>366</top>
 			<bottom>137</bottom>
 			<width>60</width>
 			<control type="scrollbar" id="60">
@@ -405,17 +386,12 @@
 		<include content="TopBar">
 			<param name="breadcrumbs_label" value="$LOCALIZE[5] / $LOCALIZE[20077]" />
 		</include>
-		<include>BottomBar</include>
 		<control type="textbox" id="6">
 			<include>OpenClose_Right</include>
 			<description>description area</description>
-			<left>510</left>
-			<bottom>27</bottom>
-			<width>1350</width>
-			<height>100</height>
-			<font>font12</font>
-			<align>justify</align>
-			<textcolor>button_focus</textcolor>
+			<left>580</left><top>280</top><width>1212</width><height>66</height>
+			<font>silo_detail</font>
+			<textcolor>BFEDEDED</textcolor>
 			<label>$VAR[SkinSettingsHelpTextVar]</label>
 			<autoscroll time="3000" delay="5000" repeat="5000">true</autoscroll>
 		</control>

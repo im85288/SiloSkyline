@@ -131,11 +131,14 @@ def build():
             <fadetime>240</fadetime>
             <texture background="true" colordiffuse="59FFFFFF" diffuse="silo/hero_mask.png">$INFO[Container.ListItem.Art(fanart)]</texture>
         </control>
-%(wordmark)s
+        <!-- The shared frame (tools/build_frame.py). -->
+        <include content="SiloFrame">
+            <param name="title">Search</param>
+        </include>
 
         <!-- The search words, in a pill that asks for them again. -->
         <control type="group">
-            <left>%(x)d</left><top>140</top>
+            <left>%(x)d</left><top>158</top>
             <control type="button" id="%(pill)d">
                 <width>900</width><height>64</height>
                 <label />

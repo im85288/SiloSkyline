@@ -90,6 +90,7 @@ FONTS = [  # name, file, size
     ('silo_card_title', 'Inter-SemiBold.ttf', 26),
     ('silo_card_sub', 'Inter-Medium.ttf', 24),
     ('silo_wordmark', 'Inter-Bold.ttf', 44),
+    ('silo_clock', 'Inter-SemiBold.ttf', 58),  # the shared frame's clock (build_frame.py)
     ('silo_wordmark_light', 'Inter-Medium.ttf', 44),  # "Skyline" beside "Silo"
     ('silo_title_light', 'Inter-Medium.ttf', 76),
     ('silo_key', 'Inter-Medium.ttf', 40),
@@ -481,54 +482,62 @@ def bar_positions():
     return out
 
 
-SUB_TOP, SUB_H, SUB_ITEM_W = 0, 52, 250  # the row of sub-menu pills above the bar
+SUB_ITEM_W = 280  # a sub-menu entry's width (a list's items are all one width)
+SUB_IDS = []      # every sub-menu list, so the bar hides while one has focus
 
 
-def submenu_row(x, list_id, back, content):
-    """A row of sub-menu pills above the bar, from x: present but faded out
-    until it has focus (Kodi can't focus a hidden control); Down and Back
-    return to the tab."""
+def submenu_row(list_id, back, content):
+    """A tab's sub-menu, as Arctic Zephyr's: it takes the bar's place (the
+    bar fades out while it has focus), in the tabs' own style, with a down
+    chevron under the focused entry; Down and Back return to the tab."""
+    SUB_IDS.append(list_id)
+    def entry(focused):
+        lit = 'Control.HasFocus(%d)' % list_id
+        pill = '''
+                    <control type="image">
+                        <left>4</left><width>%(pw)d</width><height>60</height>
+                        <texture border="30" colordiffuse="%(text)s">silo/pill.png</texture>
+                        <visible>%(lit)s</visible>
+                    </control>
+                    <control type="image">
+                        <left>%(cx)d</left><top>66</top><width>28</width><height>16</height>
+                        <texture colordiffuse="%(text)s" flipy="true">silo/chevron_up.png</texture>
+                        <visible>%(lit)s</visible>
+                    </control>''' if focused else ''
+        label = '''
+                    <control type="label">
+                        <left>16</left><width>%(lw)d</width><height>60</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_tab</font>
+                        <textcolor>%(colour)s</textcolor>
+                        <label>$INFO[ListItem.Label]</label>%(visible)s
+                    </control>'''
+        if focused:
+            text = (label % {'lw': SUB_ITEM_W - 32, 'colour': 'FF000000', 'visible': '\n                        <visible>%s</visible>' % lit}
+                    + label % {'lw': SUB_ITEM_W - 32, 'colour': TEXT, 'visible': '\n                        <visible>!%s</visible>' % lit})
+        else:
+            text = label % {'lw': SUB_ITEM_W - 32, 'colour': TAB_DIM, 'visible': ''}
+        return (pill % {'pw': SUB_ITEM_W - 8, 'text': TEXT, 'lit': lit, 'cx': (SUB_ITEM_W - 28) // 2}) + text
     return '''
         <control type="group">
             <left>%(x)d</left><top>%(top)d</top>
             <animation effect="fade" start="100" end="0" time="120" condition="!Control.HasFocus(%(id)d)">Conditional</animation>
             <control type="list" id="%(id)d">
-                <width>%(w)d</width><height>%(h)d</height>
+                <width>%(w)d</width><height>90</height>
                 <orientation>horizontal</orientation>
                 <ondown>%(back)s</ondown>
                 <onback>%(back)s</onback>
                 <onup>noop</onup><onleft>noop</onleft><onright>noop</onright>
-                <itemlayout width="%(iw)d" height="%(h)d">
-                    <control type="image">
-                        <top>4</top><width>%(pw)d</width><height>44</height>
-                        <texture border="22" colordiffuse="E61C1F24">silo/pill.png</texture>
-                    </control>
-                    <control type="label">
-                        <top>4</top><width>%(pw)d</width><height>44</height>
-                        <align>center</align><aligny>center</aligny>
-                        <font>silo_meta</font>
-                        <textcolor>%(text)s</textcolor>
-                        <label>$INFO[ListItem.Label]</label>
-                    </control>
+                <itemlayout width="%(iw)d" height="90">%(normal)s
                 </itemlayout>
-                <focusedlayout width="%(iw)d" height="%(h)d">
-                    <control type="image">
-                        <top>4</top><width>%(pw)d</width><height>44</height>
-                        <texture border="22" colordiffuse="%(text)s">silo/pill.png</texture>
-                    </control>
-                    <control type="label">
-                        <top>4</top><width>%(pw)d</width><height>44</height>
-                        <align>center</align><aligny>center</aligny>
-                        <font>silo_meta</font>
-                        <textcolor>FF000000</textcolor>
-                        <label>$INFO[ListItem.Label]</label>
-                    </control>
+                <focusedlayout width="%(iw)d" height="90">%(focused)s
                 </focusedlayout>
                 <content>%(content)s
                 </content>
             </control>
-        </control>''' % {'x': x, 'top': SUB_TOP, 'id': list_id, 'w': 1920 - x - 40, 'h': SUB_H, 'iw': SUB_ITEM_W,
-                         'pw': SUB_ITEM_W - 12, 'back': back, 'text': TEXT, 'content': content}
+        </control>''' % {'x': bar_positions()[9001], 'top': BAR_TOP + 2, 'id': list_id,
+                         'w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'iw': SUB_ITEM_W,
+                         'back': back, 'normal': entry(False), 'focused': entry(True), 'content': content}
 
 
 def chevron(x, width, visible):
@@ -548,7 +557,7 @@ def custom_submenu():
     x = bar_positions()[9005] + tab_width('requests') + BAR_GAP
     first = CUSTOM_IDS[0]
     has = 'String.IsEqual(%s,True)' % shortcut(0, 'Property(hasSubmenu)')
-    return (submenu_row(x - 6, SUBMENU, 'SetFocus($INFO[%s])' % prop('silo.submenu.from'),
+    return (submenu_row(SUBMENU, 'SetFocus($INFO[%s])' % prop('silo.submenu.from'),
                         '<include>skinshortcuts-submenu</include>')
             + chevron(x, 120, 'Control.HasFocus(%d) + %s' % (first, has)))
 
@@ -570,7 +579,7 @@ def sections_menus():
                     <item>
                         <label>%s</label>%s
                     </item>''' % (label, ''.join('\n                        <onclick>%s</onclick>' % a for a in actions))
-        out += submenu_row(positions[tab_id] - 6, tab_id + 200, tab_id, items)
+        out += submenu_row(tab_id + 200, tab_id, items)
         out += chevron(positions[tab_id], tab_width(page), 'Control.HasFocus(%d)' % tab_id)
     return out
 
@@ -927,6 +936,8 @@ def build():
              over their dropdowns; the user's own items extend it to the right. -->
         <control type="grouplist" id="9000">
             <animation effect="fade" start="100" end="70" time="200" condition="%(bar_dim)s">Conditional</animation>
+            <!-- A sub-menu takes the bar's place while it has focus. -->
+            <animation effect="fade" start="100" end="0" time="120" condition="%(in_submenu)s">Conditional</animation>
             <left>%(bar_left)d</left><top>%(tabs_top)d</top>
             <width>%(bar_w)d</width><height>60</height>
             <orientation>horizontal</orientation>
@@ -941,7 +952,7 @@ def build():
        'row_overlap': ROW_PITCH - BAND_H,
        'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
        'bar_down': bar_down(), 'avatar': avatar(), 'custom': shortcuts_list,
-       'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections_menus() + custom_submenu(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'wordmark': wordmark(SAFE_X, BAR_TOP, '\n            <animation effect="fade" start="100" end="70" time="200" condition="%s">Conditional</animation>' % BAR_DIM), 'waiting': ' | '.join('[%s]' % c for c, _ in waiting_rows()), 'background': BACKGROUND, 'splash_max': SPLASH_MAX,
+       'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections_menus() + custom_submenu(), 'in_submenu': ' | '.join('Control.HasFocus(%d)' % i for i in SUB_IDS), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'wordmark': wordmark(SAFE_X, BAR_TOP, '\n            <animation effect="fade" start="100" end="70" time="200" condition="%s">Conditional</animation>' % BAR_DIM), 'waiting': ' | '.join('[%s]' % c for c, _ in waiting_rows()), 'background': BACKGROUND, 'splash_max': SPLASH_MAX,
        # The age rating as Silo draws it: the quality badges' size, centred on the info line.
        'splash': splash(), 'mpaa_badge': badge('$VAR[SiloMpaa]', 34, 'silo_badge').replace(
            '<width>auto</width><height>34</height>', '<top>3</top><width>auto</width><height>34</height>', 1),

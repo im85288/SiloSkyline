@@ -335,28 +335,11 @@ def build():
             <texture background="true" colordiffuse="59FFFFFF" diffuse="silo/hero_mask.png">$VAR[SiloBrowseArt]</texture>
         </control>
 
-%(wordmark)s
-        <control type="grouplist">
-            <left>%(x)d</left><top>124</top>
-            <width>1600</width><height>56</height>
-            <orientation>horizontal</orientation>
-            <itemgap>20</itemgap>
-            <control type="label">
-                <width>auto</width><height>56</height>
-                <aligny>center</aligny>
-                <font>silo_row</font>
-                <textcolor>%(text)s</textcolor>
-                <label>$VAR[SiloBrowseTitle]</label>
-            </control>
-            <control type="label">
-                <width>auto</width><height>56</height>
-                <aligny>center</aligny>
-                <font>silo_meta</font>
-                <textcolor>%(dim)s</textcolor>
-                <label>$INFO[Container.NumItems]</label>
-                <visible>Integer.IsGreater(Container.NumItems,0) + [$EXP[SiloBrowseGrid] | $EXP[SiloBrowseEpisodes]]</visible>
-            </control>
-        </control>
+        <!-- The shared frame (tools/build_frame.py): where you are and the clock. -->
+        <include content="SiloFrame">
+            <param name="title">$VAR[SiloBrowseTitle]</param>
+            <param name="sub">$VAR[SiloBrowseFacts]</param>
+        </include>
 
         <!-- Everything else: a list of pills. -->
         <control type="list" id="50">
@@ -417,6 +400,10 @@ VARIABLES = '''
     <!-- Silo Skyline browse (tools/build_browse.py) -->
     <expression name="SiloBrowseGrid">%(grid)s</expression>
     <expression name="SiloBrowseEpisodes">%(episodes)s</expression>
+    <variable name="SiloBrowseFacts">
+        <value condition="Integer.IsGreater(Container.NumItems,0) + [$EXP[SiloBrowseGrid] | $EXP[SiloBrowseEpisodes]]">$INFO[Container.NumItems,, titles]</value>
+        <value>$INFO[Window(Home).Property(silo.library.facts)]</value>
+    </variable>
     <variable name="SiloBrowseTitle">
         <value condition="String.IsEqual(Container.FolderPath,plugin://plugin.video.silokodiconnect/)">SiloKodiConnect</value>
         <value condition="!String.IsEmpty(Container.PluginCategory)">$INFO[Container.PluginCategory]</value>
