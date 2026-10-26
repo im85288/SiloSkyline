@@ -28,6 +28,12 @@
 			<onclick>Action(close)</onclick>
 		</control>
 		<control type="group">
+			<!-- An info page's More (SiloKodiConnect sets silo.popover to its row
+			     count): under the More button, where Kodi can't place it. -->
+			<animation effect="slide" end="604,85" time="0" condition="String.IsEqual(Window(Home).Property(silo.popover),1)">Conditional</animation>
+			<animation effect="slide" end="604,117" time="0" condition="String.IsEqual(Window(Home).Property(silo.popover),2)">Conditional</animation>
+			<animation effect="slide" end="604,149" time="0" condition="String.IsEqual(Window(Home).Property(silo.popover),3)">Conditional</animation>
+			<animation effect="slide" end="604,181" time="0" condition="String.IsEqual(Window(Home).Property(silo.popover),4)">Conditional</animation>
 			<control type="image" id="999">
 				<description>background image</description>
 				<left>0</left>
