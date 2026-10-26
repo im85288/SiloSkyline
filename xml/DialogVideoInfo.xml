@@ -98,7 +98,7 @@
                 <font>silo_detail</font>
                 <textcolor>BFEDEDED</textcolor>
                 <label>$VAR[SiloDetailTech]</label>
-                <visible>[!String.IsEmpty(ListItem.Property(silo.version)) | !String.IsEmpty(ListItem.Property(silo.audio))]</visible>
+                <visible>[!String.IsEmpty(ListItem.Property(silo.version)) | !String.IsEmpty(ListItem.Property(silo.audio)) | Control.HasFocus(64)]</visible>
             </control>
             <control type="grouplist">
                 <top>406</top>
@@ -177,7 +177,7 @@
                     <texturefocus border="8">silo/badge_fill.png</texturefocus>
                     <visible>!!String.IsEmpty(ListItem.Property(silo.badge1)) + !String.IsEmpty(ListItem.AudioCodec)</visible>
                 </control>
-                <visible>![!String.IsEmpty(ListItem.Property(silo.version)) | !String.IsEmpty(ListItem.Property(silo.audio))]</visible>
+                <visible>![!String.IsEmpty(ListItem.Property(silo.version)) | !String.IsEmpty(ListItem.Property(silo.audio)) | Control.HasFocus(64)]</visible>
             </control>
             <!-- Actions: Play (or Resume / Browse), then round buttons. -->
             <control type="grouplist" id="5000">

@@ -4210,6 +4210,7 @@
         <value>$INFO[ListItem.Property(silo.mpaa)]</value>
     </variable>
     <variable name="SiloDetailFacts">
+        <value condition="Control.HasFocus(64)">$INFO[Container(64).ListItem.Premiered]$INFO[Container(64).ListItem.Duration(mins), · , min]$INFO[Container(64).ListItem.Rating(imdb), · IMDb ,]$INFO[Container(64).ListItem.Rating(themoviedb), · TMDB ,]$INFO[Container(64).ListItem.Season, · Season ,]$INFO[Container(64).ListItem.Episode, · Episode ,]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))">$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Property(silo.request.seasons), · , seasons]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Duration(mins), · , min]</value>
         <!-- Silo's order: date · runtime · IMDb · TMDB · Season · Episode. -->
@@ -4224,11 +4225,33 @@
         <value>$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$VAR[SiloDetailRating]$INFO[ListItem.Duration(mins), · , min]</value>
     </variable>
     <variable name="SiloDetailPlot">
+        <value condition="Control.HasFocus(64)">$INFO[Container(64).ListItem.Title,, · ]$INFO[Container(64).ListItem.Plot]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Title,, · ]$INFO[ListItem.Plot]</value>
         <value>$INFO[ListItem.Plot]</value>
     </variable>
     <variable name="SiloDetailTech">
+        <value condition="Control.HasFocus(64)">$INFO[Container(64).ListItem.VideoResolution,[COLOR 8CEDEDED]VERSION[/COLOR]  ,]$VAR[SiloFocusHdr]          [COLOR 8CEDEDED]AUDIO[/COLOR]  $VAR[SiloFocusAudio]</value>
         <value>$INFO[ListItem.Property(silo.version),[COLOR 8CEDEDED]VERSION[/COLOR]  ,          ]$INFO[ListItem.Property(silo.audio),[COLOR 8CEDEDED]AUDIO[/COLOR]  ,          ]$INFO[ListItem.Property(silo.subtitles),[COLOR 8CEDEDED]SUBTITLES[/COLOR]  ,]</value>
+    </variable>
+    <!-- The episode row's focused card: its formats, as the tech line names them. -->
+    <variable name="SiloFocusHdr">
+        <value condition="String.IsEqual(Container(64).ListItem.HdrType,dolbyvision)"> · Dolby Vision</value>
+        <value condition="String.IsEqual(Container(64).ListItem.HdrType,hdr10plus)"> · HDR10+</value>
+        <value condition="String.IsEqual(Container(64).ListItem.HdrType,hdr10)"> · HDR10</value>
+        <value condition="String.IsEqual(Container(64).ListItem.HdrType,hlg)"> · HLG</value>
+    </variable>
+    <variable name="SiloFocusAudio">
+        <value condition="String.IsEqual(Container(64).ListItem.AudioCodec,eac3_ddp_atmos)">EAC3 Atmos$VAR[SiloFocusLayout]</value>
+        <value condition="String.IsEqual(Container(64).ListItem.AudioCodec,truehd_atmos)">TrueHD Atmos$VAR[SiloFocusLayout]</value>
+        <value condition="String.IsEqual(Container(64).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA$VAR[SiloFocusLayout]</value>
+        <value condition="String.IsEqual(Container(64).ListItem.AudioCodec,dca)">DTS$VAR[SiloFocusLayout]</value>
+        <value>[UPPERCASE]$INFO[Container(64).ListItem.AudioCodec][/UPPERCASE]$VAR[SiloFocusLayout]</value>
+    </variable>
+    <variable name="SiloFocusLayout">
+        <value condition="Integer.IsEqual(Container(64).ListItem.AudioChannels,2)"> · 2.0</value>
+        <value condition="Integer.IsEqual(Container(64).ListItem.AudioChannels,6)"> · 5.1</value>
+        <value condition="Integer.IsEqual(Container(64).ListItem.AudioChannels,8)"> · 7.1</value>
+        <value>$INFO[Container(64).ListItem.AudioChannels, · , ch]</value>
     </variable>
     <variable name="SiloDetailCredit">
         <value condition="!String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.Property(silo.cast))">Starring $INFO[ListItem.Property(silo.cast)]</value>
