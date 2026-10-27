@@ -860,22 +860,27 @@
     </variable>
     <variable name="SiloCustomTab9031">
         <value condition="String.IsEqual(Window(Home).Property(silo.page),custom) + String.IsEqual(Window(Home).Property(silo.custom.button),9031)">26FFFFFF</value>
+        <value condition="Control.HasFocus(9240) + String.IsEqual(Window(Home).Property(silo.submenu.from),9031)">26FFFFFF</value>
         <value>00FFFFFF</value>
     </variable>
     <variable name="SiloCustomTab9032">
         <value condition="String.IsEqual(Window(Home).Property(silo.page),custom) + String.IsEqual(Window(Home).Property(silo.custom.button),9032)">26FFFFFF</value>
+        <value condition="Control.HasFocus(9240) + String.IsEqual(Window(Home).Property(silo.submenu.from),9032)">26FFFFFF</value>
         <value>00FFFFFF</value>
     </variable>
     <variable name="SiloCustomTab9033">
         <value condition="String.IsEqual(Window(Home).Property(silo.page),custom) + String.IsEqual(Window(Home).Property(silo.custom.button),9033)">26FFFFFF</value>
+        <value condition="Control.HasFocus(9240) + String.IsEqual(Window(Home).Property(silo.submenu.from),9033)">26FFFFFF</value>
         <value>00FFFFFF</value>
     </variable>
     <variable name="SiloCustomTab9034">
         <value condition="String.IsEqual(Window(Home).Property(silo.page),custom) + String.IsEqual(Window(Home).Property(silo.custom.button),9034)">26FFFFFF</value>
+        <value condition="Control.HasFocus(9240) + String.IsEqual(Window(Home).Property(silo.submenu.from),9034)">26FFFFFF</value>
         <value>00FFFFFF</value>
     </variable>
     <variable name="SiloCustomTab9035">
         <value condition="String.IsEqual(Window(Home).Property(silo.page),custom) + String.IsEqual(Window(Home).Property(silo.custom.button),9035)">26FFFFFF</value>
+        <value condition="Control.HasFocus(9240) + String.IsEqual(Window(Home).Property(silo.submenu.from),9035)">26FFFFFF</value>
         <value>00FFFFFF</value>
     </variable>
     <variable name="SiloDropIcon">

@@ -4585,6 +4585,15 @@
             <visible>String.IsEmpty(Window(Home).Property(silo.home.count))</visible>
         </control>
 
+        <!-- The page darkens behind an open dropdown; the bar stays lit. -->
+        <control type="image">
+            <left>0</left><top>0</top><width>1920</width><height>1080</height>
+            <texture colordiffuse="8C000000">colors/white.png</texture>
+            <visible>[[Control.HasFocus(9003) | Control.HasFocus(9203)] + !String.IsEqual(Window(Home).Property(silo.drop.closed),9203)] | [[Control.HasFocus(9004) | Control.HasFocus(9204)] + !String.IsEqual(Window(Home).Property(silo.drop.closed),9204)] | [[Control.HasFocus(9005) | Control.HasFocus(9205)] + !String.IsEqual(Window(Home).Property(silo.drop.closed),9205)] | [[Control.HasFocus(9240) | [Control.HasFocus(9031) + String.IsEqual(Container(9100).ListItemAbsolute(0).Property(hasSubmenu),True)] | [Control.HasFocus(9032) + String.IsEqual(Container(9100).ListItemAbsolute(1).Property(hasSubmenu),True)] | [Control.HasFocus(9033) + String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)] | [Control.HasFocus(9034) + String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)] | [Control.HasFocus(9035) + String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)]] + !String.IsEqual(Window(Home).Property(silo.drop.closed),9240)] | [[Control.HasFocus(9011) | Control.HasFocus(9211)] + !String.IsEqual(Window(Home).Property(silo.drop.closed),9211)]</visible>
+            <animation effect="fade" start="0" end="100" time="150" delay="250">Visible</animation>
+            <animation effect="fade" start="100" end="0" time="150">Hidden</animation>
+        </control>
+
         <!-- Top menu bar. -->
         <!-- Skyline's mark and name (media/silo/skyline_mark.png). -->
         <control type="grouplist">
@@ -4721,7 +4730,7 @@
                 <control type="image">
                     <width>128</width><height>60</height>
                     <texture border="30" colordiffuse="26FFFFFF">silo/pill.png</texture>
-                    <visible>[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] + !Control.HasFocus(9002)</visible>
+                    <visible>[[String.IsEmpty(Window(Home).Property(silo.page)) | String.IsEqual(Window(Home).Property(silo.page),home)] | Control.HasFocus(0)] + !Control.HasFocus(9002)</visible>
                 </control>
                 <control type="button" id="9002">
                     <width>128</width><height>60</height>
@@ -4794,7 +4803,7 @@
                 <control type="image">
                     <width>162</width><height>60</height>
                     <texture border="30" colordiffuse="26FFFFFF">silo/pill.png</texture>
-                    <visible>String.IsEqual(Window(Home).Property(silo.page),movies) + !Control.HasFocus(9003)</visible>
+                    <visible>[String.IsEqual(Window(Home).Property(silo.page),movies) | Control.HasFocus(9203)] + !Control.HasFocus(9003)</visible>
                 </control>
                 <control type="button" id="9003">
                 <visible>String.Contains(Window(Home).Property(silo.pages),movies)</visible>
@@ -4874,7 +4883,7 @@
                 <control type="image">
                     <width>162</width><height>60</height>
                     <texture border="30" colordiffuse="26FFFFFF">silo/pill.png</texture>
-                    <visible>String.IsEqual(Window(Home).Property(silo.page),series) + !Control.HasFocus(9004)</visible>
+                    <visible>[String.IsEqual(Window(Home).Property(silo.page),series) | Control.HasFocus(9204)] + !Control.HasFocus(9004)</visible>
                 </control>
                 <control type="button" id="9004">
                 <visible>String.Contains(Window(Home).Property(silo.pages),series)</visible>
@@ -4954,7 +4963,7 @@
                 <control type="image">
                     <width>196</width><height>60</height>
                     <texture border="30" colordiffuse="26FFFFFF">silo/pill.png</texture>
-                    <visible>String.IsEqual(Window(Home).Property(silo.page),requests) + !Control.HasFocus(9005)</visible>
+                    <visible>[String.IsEqual(Window(Home).Property(silo.page),requests) | Control.HasFocus(9205)] + !Control.HasFocus(9005)</visible>
                 </control>
                 <control type="button" id="9005">
                 <visible>String.Contains(Window(Home).Property(silo.pages),requests)</visible>
@@ -5662,6 +5671,12 @@
                 <texture colordiffuse="SkylineFocus">silo/avatar_ring.png</texture>
                 <visible>Control.HasFocus(9011)</visible>
             </control>
+            <!-- Its card has focus: a faint ring, as a tab's "selected" pill. -->
+            <control type="image">
+                <width>64</width><height>64</height>
+                <texture colordiffuse="66FFFFFF">silo/avatar_ring.png</texture>
+                <visible>Control.HasFocus(9211)</visible>
+            </control>
         </control>
 
         <!-- Skin Shortcuts' main menu, built into script-skinshortcuts-includes.xml. -->
@@ -5675,8 +5690,10 @@
         <control type="group">
             <left>710</left><top>132</top>
             <visible>Control.HasFocus(9003) | Control.HasFocus(9203)</visible>
-            <animation effect="fade" start="0" end="100" time="140">Visible</animation>
-            <animation effect="slide" start="0,-10" end="0,0" time="140" tween="cubic" easing="out">Visible</animation>
+            <!-- It opens once the tab has held focus a moment (Silo's 250 ms
+                 dwell), so sweeping across the bar doesn't flash every menu. -->
+            <animation effect="fade" start="0" end="100" time="180" delay="250">Visible</animation>
+            <animation effect="zoom" start="96" end="100" center="230,0" time="180" delay="250" tween="cubic" easing="out">Visible</animation>
             <!-- Back closes it, as in Silo: faded out rather than hidden, since
                  Kodi can't focus a hidden control (Down opens it again). -->
             <animation effect="fade" start="100" end="0" time="120" condition="String.IsEqual(Window(Home).Property(silo.drop.closed),9203)">Conditional</animation>
@@ -5812,8 +5829,10 @@
         <control type="group">
             <left>880</left><top>132</top>
             <visible>Control.HasFocus(9004) | Control.HasFocus(9204)</visible>
-            <animation effect="fade" start="0" end="100" time="140">Visible</animation>
-            <animation effect="slide" start="0,-10" end="0,0" time="140" tween="cubic" easing="out">Visible</animation>
+            <!-- It opens once the tab has held focus a moment (Silo's 250 ms
+                 dwell), so sweeping across the bar doesn't flash every menu. -->
+            <animation effect="fade" start="0" end="100" time="180" delay="250">Visible</animation>
+            <animation effect="zoom" start="96" end="100" center="230,0" time="180" delay="250" tween="cubic" easing="out">Visible</animation>
             <!-- Back closes it, as in Silo: faded out rather than hidden, since
                  Kodi can't focus a hidden control (Down opens it again). -->
             <animation effect="fade" start="100" end="0" time="120" condition="String.IsEqual(Window(Home).Property(silo.drop.closed),9204)">Conditional</animation>
@@ -5949,8 +5968,10 @@
         <control type="group">
             <left>1050</left><top>132</top>
             <visible>Control.HasFocus(9005) | Control.HasFocus(9205)</visible>
-            <animation effect="fade" start="0" end="100" time="140">Visible</animation>
-            <animation effect="slide" start="0,-10" end="0,0" time="140" tween="cubic" easing="out">Visible</animation>
+            <!-- It opens once the tab has held focus a moment (Silo's 250 ms
+                 dwell), so sweeping across the bar doesn't flash every menu. -->
+            <animation effect="fade" start="0" end="100" time="180" delay="250">Visible</animation>
+            <animation effect="zoom" start="96" end="100" center="230,0" time="180" delay="250" tween="cubic" easing="out">Visible</animation>
             <!-- Back closes it, as in Silo: faded out rather than hidden, since
                  Kodi can't focus a hidden control (Down opens it again). -->
             <animation effect="fade" start="100" end="0" time="120" condition="String.IsEqual(Window(Home).Property(silo.drop.closed),9205)">Conditional</animation>
@@ -6076,8 +6097,10 @@
         <control type="group">
             <left>1254</left><top>132</top>
             <visible>Control.HasFocus(9240) | [Control.HasFocus(9031) + String.IsEqual(Container(9100).ListItemAbsolute(0).Property(hasSubmenu),True)] | [Control.HasFocus(9032) + String.IsEqual(Container(9100).ListItemAbsolute(1).Property(hasSubmenu),True)] | [Control.HasFocus(9033) + String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)] | [Control.HasFocus(9034) + String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)] | [Control.HasFocus(9035) + String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)]</visible>
-            <animation effect="fade" start="0" end="100" time="140">Visible</animation>
-            <animation effect="slide" start="0,-10" end="0,0" time="140" tween="cubic" easing="out">Visible</animation>
+            <!-- It opens once the tab has held focus a moment (Silo's 250 ms
+                 dwell), so sweeping across the bar doesn't flash every menu. -->
+            <animation effect="fade" start="0" end="100" time="180" delay="250">Visible</animation>
+            <animation effect="zoom" start="96" end="100" center="230,0" time="180" delay="250" tween="cubic" easing="out">Visible</animation>
             <!-- Back closes it, as in Silo: faded out rather than hidden, since
                  Kodi can't focus a hidden control (Down opens it again). -->
             <animation effect="fade" start="100" end="0" time="120" condition="String.IsEqual(Window(Home).Property(silo.drop.closed),9240)">Conditional</animation>
@@ -6218,8 +6241,10 @@
         <control type="group">
             <left>1372</left><top>132</top>
             <visible>Control.HasFocus(9011) | Control.HasFocus(9211)</visible>
-            <animation effect="fade" start="0" end="100" time="140">Visible</animation>
-            <animation effect="slide" start="0,-10" end="0,0" time="140" tween="cubic" easing="out">Visible</animation>
+            <!-- It opens once the tab has held focus a moment (Silo's 250 ms
+                 dwell), so sweeping across the bar doesn't flash every menu. -->
+            <animation effect="fade" start="0" end="100" time="180" delay="250">Visible</animation>
+            <animation effect="zoom" start="96" end="100" center="230,0" time="180" delay="250" tween="cubic" easing="out">Visible</animation>
             <!-- Back closes it, as in Silo: faded out rather than hidden, since
                  Kodi can't focus a hidden control (Down opens it again). -->
             <animation effect="fade" start="100" end="0" time="120" condition="String.IsEqual(Window(Home).Property(silo.drop.closed),9211)">Conditional</animation>

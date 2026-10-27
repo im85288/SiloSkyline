@@ -571,7 +571,27 @@ def bar_positions():
 DROP_W, DROP_ROW = 460, 64  # Silo's dropdown under a tab
 
 
+DROP_DWELL = 250  # ms a tab holds focus before its dropdown opens
+DROPDOWNS = []    # (shown condition, list id) of every dropdown built, for the dim behind them
+
+
+def dropdown_dim():
+    """Silo's scrim behind an open dropdown: the page darkens to 55% (Kodi
+    can't blur) while one is open and Back hasn't closed it, under the bar."""
+    open_ = ' | '.join('[[%s] + !String.IsEqual(%s,%d)]' % (shown, prop('silo.drop.closed'), list_id)
+                       for shown, list_id in DROPDOWNS)
+    return '''
+        <control type="image">
+            <left>0</left><top>0</top><width>1920</width><height>1080</height>
+            <texture colordiffuse="8C000000">colors/white.png</texture>
+            <visible>%s</visible>
+            <animation effect="fade" start="0" end="100" time="150" delay="%d">Visible</animation>
+            <animation effect="fade" start="100" end="0" time="150">Hidden</animation>
+        </control>''' % (open_, DROP_DWELL)
+
+
 def dropdown(x, list_id, back, heading, content, shown, rows, fit=False):
+    DROPDOWNS.append((shown, list_id))
     """Silo's dropdown under a tab: a heading and the entries (icon and label,
     the focused one a white pill), with no hint, as Silo's Apple TV app. It
     shows while the tab or the dropdown has focus (Kodi can't focus a hidden
@@ -618,8 +638,10 @@ def dropdown(x, list_id, back, heading, content, shown, rows, fit=False):
         <control type="group">
             <left>%(x)d</left><top>%(top)d</top>
             <visible>%(shown)s</visible>
-            <animation effect="fade" start="0" end="100" time="140">Visible</animation>
-            <animation effect="slide" start="0,-10" end="0,0" time="140" tween="cubic" easing="out">Visible</animation>
+            <!-- It opens once the tab has held focus a moment (Silo's 250 ms
+                 dwell), so sweeping across the bar doesn't flash every menu. -->
+            <animation effect="fade" start="0" end="100" time="180" delay="%(dwell)d">Visible</animation>
+            <animation effect="zoom" start="96" end="100" center="%(cx)d,0" time="180" delay="%(dwell)d" tween="cubic" easing="out">Visible</animation>
             <!-- Back closes it, as in Silo: faded out rather than hidden, since
                  Kodi can't focus a hidden control (Down opens it again). -->
             <animation effect="fade" start="100" end="0" time="120" condition="String.IsEqual(%(closed)s,%(id)d)">Conditional</animation>
@@ -650,7 +672,7 @@ def dropdown(x, list_id, back, heading, content, shown, rows, fit=False):
         </control>''' % {'x': x, 'top': BAR_TOP + 76, 'shown': shown, 'w': DROP_W, 'h': height, 'lw': DROP_W - 56,
                          'closed': prop('silo.drop.closed'), 'heading': heading, 'id': list_id, 'liw': DROP_W - 32, 'lh': rows * DROP_ROW, 'back': back,
                          'row': DROP_ROW, 'normal': entry(False), 'focused': entry(True), 'content': content, 'frames': frames,
-                         'to_rows': bar_down('                ')}
+                         'to_rows': bar_down('                '), 'dwell': DROP_DWELL, 'cx': DROP_W // 2}
 
 
 def custom_submenu():
@@ -764,7 +786,7 @@ def tab(control_id, page, page_index):
                 <control type="image">
                     <width>%(width)d</width><height>60</height>
                     <texture border="30" colordiffuse="26FFFFFF">silo/pill.png</texture>
-                    <visible>%(selected)s + !Control.HasFocus(%(id)d)</visible>
+                    <visible>[%(selected)s | Control.HasFocus(%(menu)d)] + !Control.HasFocus(%(id)d)</visible>
                 </control>
                 <control type="button" id="%(id)d">%(visible)s
                     <width>%(width)d</width><height>60</height>
@@ -781,6 +803,9 @@ def tab(control_id, page, page_index):
                 </control>
             </control>''' % {'width': tab_width(page), 'visible': visible, 'group': control_id + 300,
                             'selected': page_visible(page), 'id': control_id,
+                            # While focus is in its dropdown the tab keeps the
+                            # faint "selected" pill, as Silo's Apple TV app.
+                            'menu': control_id + 200 if page in SECTIONS else 0,
                             'label': TAB_LABELS[page],
                             'dim': TAB_DIM, 'text': TEXT, 'page': page,
                             'moves': bar_moves(control_id, 'SetFocus(%d,0,absolute)' % (control_id + 200)
@@ -861,6 +886,12 @@ def avatar():
                 <width>64</width><height>64</height>
                 <texture colordiffuse="%(text)s">silo/avatar_ring.png</texture>
                 <visible>Control.HasFocus(9011)</visible>
+            </control>
+            <!-- Its card has focus: a faint ring, as a tab's "selected" pill. -->
+            <control type="image">
+                <width>64</width><height>64</height>
+                <texture colordiffuse="66FFFFFF">silo/avatar_ring.png</texture>
+                <visible>Control.HasFocus(%(menu)d)</visible>
             </control>
         </control>''' % {'left': 1920 - SAFE_X - 64, 'top': BAR_TOP, 'name': prop('silo.profile_name'),
                          'moves': bar_moves(9011, 'SetFocus(%d,0,absolute)' % AVATAR_MENU, AVATAR_MENU), 'menu': AVATAR_MENU, 'has_picture': has_picture, 'text': TEXT,
@@ -951,8 +982,11 @@ def custom_tab_variables():
     for control_id in CUSTOM_IDS:
         out += ('    <variable name="SiloCustomTab%d">\n'
                 '        <value condition="String.IsEqual(%s,custom) + String.IsEqual(%s,%d)">26FFFFFF</value>\n'
+                # Its submenu has focus: the same faint pill.
+                '        <value condition="Control.HasFocus(%d) + String.IsEqual(%s,%d)">26FFFFFF</value>\n'
                 '        <value>00FFFFFF</value>\n    </variable>\n' % (control_id, prop('silo.page'),
-                                                                        prop('silo.custom.button'), control_id))
+                                                                        prop('silo.custom.button'), control_id,
+                                                                        SUBMENU, prop('silo.submenu.from'), control_id))
     return out
 
 
@@ -982,6 +1016,8 @@ def badge(label, height, font):
 
 
 def build():
+    del DROPDOWNS[:]
+    sections = sections_menus() + custom_submenu() + avatar_menu()
     rows = ''.join(row(page, index, slot, landscape)
                    for index, page in enumerate(PAGES)
                    for slot in range(1, rows_of(page) + 1)
@@ -1114,6 +1150,8 @@ def build():
             <visible>%(no_rows)s</visible>
         </control>
 
+        <!-- The page darkens behind an open dropdown; the bar stays lit. -->%(drop_dim)s
+
         <!-- Top menu bar. -->
 %(wordmark)s
         <!-- Starts where the built-in tabs sit centred, so Movies and Series stay
@@ -1134,7 +1172,7 @@ def build():
        'row_overlap': ROW_PITCH - BAND_H,
        'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
        'bar_down': bar_down(), 'avatar': avatar(), 'custom': shortcuts_list,
-       'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections_menus() + custom_submenu() + avatar_menu(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'wordmark': wordmark(SAFE_X, BAR_TOP, '\n            <animation effect="fade" start="100" end="70" time="200" condition="%s">Conditional</animation>' % BAR_DIM), 'waiting': ' | '.join('[%s]' % c for c, _ in waiting_rows()), 'background': BACKGROUND, 'splash_max': SPLASH_MAX,
+       'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections, 'drop_dim': dropdown_dim(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'wordmark': wordmark(SAFE_X, BAR_TOP, '\n            <animation effect="fade" start="100" end="70" time="200" condition="%s">Conditional</animation>' % BAR_DIM), 'waiting': ' | '.join('[%s]' % c for c, _ in waiting_rows()), 'background': BACKGROUND, 'splash_max': SPLASH_MAX,
        # The age rating as Silo draws it: the quality badges' size, centred on the info line.
        'splash': splash(), 'mpaa_badge': badge('$VAR[SiloMpaa]', 34, 'silo_badge').replace(
            '<width>auto</width><height>34</height>', '<top>3</top><width>auto</width><height>34</height>', 1),
