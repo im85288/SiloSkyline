@@ -652,9 +652,10 @@ def sections_menus():
             if label == 'Browse':
                 # Silo's Browse: Silo Skyline's own grid (tools/build_library.py).
                 kind = 'movies' if page == 'movies' else 'tvshows'
-                actions = ['SetProperty(silo.browse.type,%s,home)' % kind, 'ClearProperty(silo.browse.letter,home)',
-                           'ClearProperty(silo.browse.list,home)',
-                           'SetProperty(silo.browse.path,videodb://%s/titles/,home)' % kind, 'ActivateWindow(1191)']
+                actions = (['SetProperty(silo.browse.type,%s,home)' % kind, 'ClearProperty(silo.browse.letter,home)',
+                            'ClearProperty(silo.browse.list,home)']
+                           + ['ClearProperty(silo.browse.list.%s,home)' % key for key in PERSONAL_KEYS]
+                           + ['SetProperty(silo.browse.path,videodb://%s/titles/,home)' % kind, 'ActivateWindow(1191)'])
             elif label == 'Search to request':
                 actions = ['Skin.Reset(silo.search)', 'SetProperty(silo.search.mode,requests,home)', 'ActivateWindow(1190)']
             elif path:
@@ -673,6 +674,10 @@ def sections_menus():
 
 AVATAR_MENU = 9211
 PLUGIN_URL = 'plugin://plugin.video.silokodiconnect/'
+# The avatar card's lists. Each has its own grid in Browse with its own path
+# (silo.browse.list.<key>); only the open one's is set, since Kodi loads a
+# grid's path even while the grid is hidden.
+PERSONAL_KEYS = ('watchlist', 'favorites', 'history')
 
 
 def avatar_menu():
@@ -680,9 +685,11 @@ def avatar_menu():
     Down or OK goes in. Switch Profile is Kodi's own profile switch when Kodi
     has profiles, else SiloKodiConnect's switch of the Silo profile."""
     def personal(key):
-        return ['SetProperty(silo.browse.type,%s,home)' % key, 'ClearProperty(silo.browse.letter,home)',
-                'SetProperty(silo.browse.list,%s?mode=widget&amp;section=%s,home)' % (PLUGIN_URL, key),
-                'ActivateWindow(1191)']
+        path = '%s?mode=widget&amp;section=%s' % (PLUGIN_URL, key)
+        return (['SetProperty(silo.browse.type,%s,home)' % key, 'ClearProperty(silo.browse.letter,home)',
+                 'SetProperty(silo.browse.list,%s,home)' % path, 'SetProperty(silo.browse.list.%s,%s,home)' % (key, path)]
+                + ['ClearProperty(silo.browse.list.%s,home)' % other for other in PERSONAL_KEYS if other != key]
+                + ['ActivateWindow(1191)'])
     entries = [
         ('Switch Profile', 'profile', [('Integer.IsGreater(System.ProfileCount,1)', 'System.LogOff'),
                                        ('!Integer.IsGreater(System.ProfileCount,1)', 'RunPlugin(%s?mode=profile)' % PLUGIN_URL)]),

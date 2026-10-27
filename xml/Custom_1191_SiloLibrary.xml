@@ -473,7 +473,7 @@
                     <label>$INFO[ListItem.Year]</label>
                 </control>
             </focusedlayout>
-            <content target="videos">$INFO[Window(Home).Property(silo.browse.list)]</content>
+            <content target="videos">$INFO[Window(Home).Property(silo.browse.list.watchlist)]</content>
         </control>
         <control type="label">
             <left>88</left><top>272</top>
@@ -567,7 +567,7 @@
                     <label>$INFO[ListItem.Year]</label>
                 </control>
             </focusedlayout>
-            <content target="videos">$INFO[Window(Home).Property(silo.browse.list)]</content>
+            <content target="videos">$INFO[Window(Home).Property(silo.browse.list.favorites)]</content>
         </control>
         <control type="label">
             <left>88</left><top>272</top>
@@ -661,7 +661,7 @@
                     <label>$INFO[ListItem.Year]</label>
                 </control>
             </focusedlayout>
-            <content target="videos">$INFO[Window(Home).Property(silo.browse.list)]</content>
+            <content target="videos">$INFO[Window(Home).Property(silo.browse.list.history)]</content>
         </control>
         <control type="label">
             <left>88</left><top>272</top>

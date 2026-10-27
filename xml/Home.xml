@@ -7503,6 +7503,9 @@
                         <onclick>SetProperty(silo.browse.type,movies,home)</onclick>
                         <onclick>ClearProperty(silo.browse.letter,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                         <onclick>SetProperty(silo.browse.path,videodb://movies/titles/,home)</onclick>
                         <onclick>ActivateWindow(1191)</onclick>
                     </item>
@@ -7613,6 +7616,9 @@
                         <onclick>SetProperty(silo.browse.type,tvshows,home)</onclick>
                         <onclick>ClearProperty(silo.browse.letter,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                         <onclick>SetProperty(silo.browse.path,videodb://tvshows/titles/,home)</onclick>
                         <onclick>ActivateWindow(1191)</onclick>
                     </item>
@@ -7983,6 +7989,9 @@
                         <onclick>SetProperty(silo.browse.type,watchlist,home)</onclick>
                         <onclick>ClearProperty(silo.browse.letter,home)</onclick>
                         <onclick>SetProperty(silo.browse.list,plugin://plugin.video.silokodiconnect/?mode=widget&amp;section=watchlist,home)</onclick>
+                        <onclick>SetProperty(silo.browse.list.watchlist,plugin://plugin.video.silokodiconnect/?mode=widget&amp;section=watchlist,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                         <onclick>ActivateWindow(1191)</onclick>
                     </item>
                     <item>
@@ -7991,6 +8000,9 @@
                         <onclick>SetProperty(silo.browse.type,favorites,home)</onclick>
                         <onclick>ClearProperty(silo.browse.letter,home)</onclick>
                         <onclick>SetProperty(silo.browse.list,plugin://plugin.video.silokodiconnect/?mode=widget&amp;section=favorites,home)</onclick>
+                        <onclick>SetProperty(silo.browse.list.favorites,plugin://plugin.video.silokodiconnect/?mode=widget&amp;section=favorites,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                         <onclick>ActivateWindow(1191)</onclick>
                     </item>
                     <item>
@@ -7999,6 +8011,9 @@
                         <onclick>SetProperty(silo.browse.type,history,home)</onclick>
                         <onclick>ClearProperty(silo.browse.letter,home)</onclick>
                         <onclick>SetProperty(silo.browse.list,plugin://plugin.video.silokodiconnect/?mode=widget&amp;section=history,home)</onclick>
+                        <onclick>SetProperty(silo.browse.list.history,plugin://plugin.video.silokodiconnect/?mode=widget&amp;section=history,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                         <onclick>ActivateWindow(1191)</onclick>
                     </item>
                     <item>

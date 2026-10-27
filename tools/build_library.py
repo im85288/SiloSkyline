@@ -440,7 +440,10 @@ def build():
        'panels': panel(GRID_ID, '<content target="videos" sortby="$INFO[%s]" sortorder="$INFO[%s]">'
                        '$INFO[%s]</content>' % (SORT_BY, SORT_ORDER, PATH), str(AZ_ID), '!' + IS_PERSONAL, str(SORT_ID))
                  + sort_controls()
-                 + ''.join(panel(list_id, '<content target="videos">$INFO[%s]</content>' % LIST, 'noop', is_list(key))
+                 # Each grid has its own path (only the open list's is set: Kodi
+                 # loads a grid's path even while it is hidden).
+                 + ''.join(panel(list_id, '<content target="videos">$INFO[Window(Home).Property(silo.browse.list.%s)]'
+                                 '</content>' % key, 'noop', is_list(key))
                            + empty_note(key, list_id) for key, (_, list_id) in PERSONAL.items()),
        'ax': 1920 - SAFE_X - AZ_W,
        'aw': AZ_W, 'layouts': letter_layouts(), 'items': letter_items()}
