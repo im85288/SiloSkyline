@@ -292,7 +292,7 @@
                     <onclick condition="String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + ![String.IsEqual(Skin.String(silo.sort.tvshows),title) | String.IsEmpty(Skin.String(silo.sort.tvshows))]">SetProperty(silo.browse.sort,title,home)</onclick>
                     <onclick condition="String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + ![String.IsEqual(Skin.String(silo.sort.tvshows),title) | String.IsEmpty(Skin.String(silo.sort.tvshows))]">Skin.SetString(silo.sort.tvshows,title)</onclick>
                     <onclick>SetFocus(50,0,absolute)</onclick>
-                    <onclick>AlarmClock(silosorttop,SetFocus(50&#44;0&#44;absolute),00:02,silent)</onclick>
+                    <onclick>SetProperty(silo.browse.resort,1,home)</onclick>
                     <visible>String.IsEqual(Window(Home).Property(silo.browse.type),movies) | String.IsEqual(Window(Home).Property(silo.browse.type),tvshows)</visible>
                 </item>
                 <item>
@@ -313,7 +313,7 @@
                     <onclick condition="String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + !String.IsEqual(Skin.String(silo.sort.tvshows),dateadded)">SetProperty(silo.browse.sort,dateadded,home)</onclick>
                     <onclick condition="String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + !String.IsEqual(Skin.String(silo.sort.tvshows),dateadded)">Skin.SetString(silo.sort.tvshows,dateadded)</onclick>
                     <onclick>SetFocus(50,0,absolute)</onclick>
-                    <onclick>AlarmClock(silosorttop,SetFocus(50&#44;0&#44;absolute),00:02,silent)</onclick>
+                    <onclick>SetProperty(silo.browse.resort,1,home)</onclick>
                     <visible>String.IsEqual(Window(Home).Property(silo.browse.type),movies) | String.IsEqual(Window(Home).Property(silo.browse.type),tvshows)</visible>
                 </item>
                 <item>
@@ -334,7 +334,7 @@
                     <onclick condition="String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + !String.IsEqual(Skin.String(silo.sort.tvshows),year)">SetProperty(silo.browse.sort,year,home)</onclick>
                     <onclick condition="String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + !String.IsEqual(Skin.String(silo.sort.tvshows),year)">Skin.SetString(silo.sort.tvshows,year)</onclick>
                     <onclick>SetFocus(50,0,absolute)</onclick>
-                    <onclick>AlarmClock(silosorttop,SetFocus(50&#44;0&#44;absolute),00:02,silent)</onclick>
+                    <onclick>SetProperty(silo.browse.resort,1,home)</onclick>
                     <visible>String.IsEqual(Window(Home).Property(silo.browse.type),movies) | String.IsEqual(Window(Home).Property(silo.browse.type),tvshows)</visible>
                 </item>
                 <item>
@@ -355,7 +355,7 @@
                     <onclick condition="String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + !String.IsEqual(Skin.String(silo.sort.tvshows),rating)">SetProperty(silo.browse.sort,rating,home)</onclick>
                     <onclick condition="String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + !String.IsEqual(Skin.String(silo.sort.tvshows),rating)">Skin.SetString(silo.sort.tvshows,rating)</onclick>
                     <onclick>SetFocus(50,0,absolute)</onclick>
-                    <onclick>AlarmClock(silosorttop,SetFocus(50&#44;0&#44;absolute),00:02,silent)</onclick>
+                    <onclick>SetProperty(silo.browse.resort,1,home)</onclick>
                     <visible>String.IsEqual(Window(Home).Property(silo.browse.type),movies) | String.IsEqual(Window(Home).Property(silo.browse.type),tvshows)</visible>
                 </item>
                 <item>
@@ -369,7 +369,7 @@
                     <onclick condition="String.IsEqual(Window(Home).Property(silo.browse.type),movies) + !String.IsEqual(Skin.String(silo.sort.movies),runtime)">SetProperty(silo.browse.sort,runtime,home)</onclick>
                     <onclick condition="String.IsEqual(Window(Home).Property(silo.browse.type),movies) + !String.IsEqual(Skin.String(silo.sort.movies),runtime)">Skin.SetString(silo.sort.movies,runtime)</onclick>
                     <onclick>SetFocus(50,0,absolute)</onclick>
-                    <onclick>AlarmClock(silosorttop,SetFocus(50&#44;0&#44;absolute),00:02,silent)</onclick>
+                    <onclick>SetProperty(silo.browse.resort,1,home)</onclick>
                     <visible>String.IsEqual(Window(Home).Property(silo.browse.type),movies)</visible>
                 </item>
                 <item>
@@ -383,7 +383,7 @@
                     <onclick condition="String.IsEqual(Window(Home).Property(silo.browse.type),movies) + !String.IsEqual(Skin.String(silo.sort.movies),videoresolution)">SetProperty(silo.browse.sort,videoresolution,home)</onclick>
                     <onclick condition="String.IsEqual(Window(Home).Property(silo.browse.type),movies) + !String.IsEqual(Skin.String(silo.sort.movies),videoresolution)">Skin.SetString(silo.sort.movies,videoresolution)</onclick>
                     <onclick>SetFocus(50,0,absolute)</onclick>
-                    <onclick>AlarmClock(silosorttop,SetFocus(50&#44;0&#44;absolute),00:02,silent)</onclick>
+                    <onclick>SetProperty(silo.browse.resort,1,home)</onclick>
                     <visible>String.IsEqual(Window(Home).Property(silo.browse.type),movies)</visible>
                 </item>
                 </content>

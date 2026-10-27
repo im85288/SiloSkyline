@@ -113,6 +113,14 @@ def list_id(page_index, slot, landscape):
     return 5000 + 100 * page_index + (50 if landscape else 0) + slot
 
 
+def styles(page):
+    """A row slot's lists: a poster and a landscape list (only the one for the
+    row's style shows, so only its path loads), or, for published cards, one
+    list that draws either style. Published cards are written into Home.xml,
+    so a second list doubled what Kodi parses as the skin loads."""
+    return (False,) if page in PUBLISHED_PAGES else (False, True)
+
+
 def home_waiting(row):
     """Home before a row has focus, showing its published row `row`'s first
     card (row 1's, or row 2's when row 1 has none)."""
@@ -130,7 +138,7 @@ def waiting_rows():
         if page == 'home':
             continue
         for slot in (1, 2):
-            for landscape in (False, True):
+            for landscape in styles(page):
                 target = list_id(index, slot, landscape)
                 out.append(('String.IsEmpty(%s) + %s + Integer.IsGreater(Container(%d).NumItems,0)'
                             % (prop('silo.row'), page_visible(page), target), target))
@@ -296,9 +304,10 @@ def row_rules(page, page_index, slot, landscape):
     if page in PUBLISHED_PAGES:
         # Published cards: the row shows when SiloKodiConnect has cards for
         # it. Not the list's item count: Kodi doesn't evaluate a hidden list's
-        # items, so the row would wait for the page's loading flag.
-        return '%s + !String.IsEmpty(%s) + %s + Integer.IsGreater(%s,0)' % (
-            page_visible(page), prop(key + '.path'), style, prop(key + '.cards'))
+        # items, so the row would wait for the page's loading flag. Its one
+        # list draws either style (styles()).
+        return '%s + !String.IsEmpty(%s) + Integer.IsGreater(%s,0)' % (
+            page_visible(page), prop(key + '.path'), prop(key + '.cards'))
     # Empty rows hide, as in Silo; Kodi still loads a list hidden this way.
     # silo.<page>.loading (SiloKodiConnect) keeps rows shown while they load:
     # Kodi never loads a hidden list whose path changed.
@@ -318,7 +327,7 @@ def first_visible(action, candidates, indent='                    '):
 
 
 def page_rows(page_index, slots):
-    return [list_id(page_index, slot, landscape) for slot in slots for landscape in (False, True)]
+    return [list_id(page_index, slot, landscape) for slot in slots for landscape in styles(PAGES[page_index])]
 
 
 def moves(page_index, slot):
@@ -378,8 +387,20 @@ def row(page, page_index, slot, landscape):
         content = '<content>%s\n                    </content>' % ''.join(
             published_item('silo.%s.%d.%d' % (page, slot, card))
             for card in range(1, PAGE_CARDS.get(page, OTHER_CARDS) + 1))
-    item_w = card['width'] + card['gap']
-    item_h = card['height'] + 12 + CAPTION_H
+    def layouts(card, condition=''):
+        when = ' condition="%s"' % condition if condition else ''
+        size = 'width="%d" height="%d"%s' % (card['width'] + card['gap'], card['height'] + 12 + CAPTION_H, when)
+        return ('\n                    <itemlayout %s>%s\n                    </itemlayout>'
+                '\n                    <focusedlayout %s>%s\n                    </focusedlayout>'
+                % (size, card_layout(card, False), size, card_layout(card, True, list_id(page_index, slot, landscape))))
+    if page in PUBLISHED_PAGES and page not in POSTER_ONLY:
+        # One list for either style: Kodi picks the item layout by condition.
+        wide = 'String.IsEqual(%s,landscape)' % prop(key + '.style')
+        item_layouts = layouts(LANDSCAPE, wide) + layouts(POSTER, '!' + wide)
+        item_h = max(c['height'] for c in (POSTER, LANDSCAPE)) + 12 + CAPTION_H
+    else:
+        item_layouts = layouts(card)
+        item_h = card['height'] + 12 + CAPTION_H
     return '''
             <control type="group">
                 <height>%(group_h)d</height>
@@ -422,17 +443,12 @@ def row(page, page_index, slot, landscape):
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
                     <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,%(id)d,home)</onfocus>%(moves)s
-                    %(content)s
-                    <itemlayout width="%(item_w)d" height="%(item_h)d">%(normal)s
-                    </itemlayout>
-                    <focusedlayout width="%(item_w)d" height="%(item_h)d">%(focused)s
-                    </focusedlayout>
+                    %(content)s%(layouts)s
                 </control>
             </control>''' % {
         'group_h': BAND_H, 'rules': rules, 'x': SAFE_X, 'text': TEXT, 'title': prop(key + '.title'), 'type': prop(key + '.type'), 'icon_x': SAFE_X + 42,
         'cards_top': CARDS_TOP, 'id': list_id(page_index, slot, landscape), 'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'item_h': item_h,
-        'moves': moves(page_index, slot), 'path': path, 'content': content, 'item_w': item_w, 'normal': card_layout(card, False),
-        'focused': card_layout(card, True, list_id(page_index, slot, landscape))}
+        'moves': moves(page_index, slot), 'path': path, 'content': content, 'layouts': item_layouts}
 
 
 # Silo dims the whole bar to 70% while focus is down in the rows.
@@ -945,7 +961,7 @@ def build():
     rows = ''.join(row(page, index, slot, landscape)
                    for index, page in enumerate(PAGES)
                    for slot in range(1, rows_of(page) + 1)
-                   for landscape in (False, True))
+                   for landscape in styles(page))
     tabs = icon_tab(9001, 'icons/search.png', 'ClearProperty(silo.search.mode,home)</onclick>\n'
                     '                    <onclick>ActivateWindow(1190)')
     tabs += ''.join(tab(9002 + index, page, index) for index, page in enumerate(TABBED))
@@ -1197,11 +1213,11 @@ EMPTY_HOME = '''    <variable name="SiloEmptyHome">
 
 def variables():
     rows = [list_id(index, slot, landscape) for index, page in enumerate(PAGES)
-            for slot in range(1, rows_of(page) + 1) for landscape in (False, True)]
+            for slot in range(1, rows_of(page) + 1) for landscape in styles(page)]
     out = '\n    <!-- Silo Skyline (tools/build_home.py) -->' + CARDS + custom_tab_variables() + DROP_ICON
     for index, page in enumerate(PAGES):
         for slot in range(1, rows_of(page) + 1):
-            for landscape in (False, True):
+            for landscape in styles(page):
                 out += '    <expression name="SiloRow%d">%s</expression>\n' % (
                     list_id(index, slot, landscape), row_rules(page, index, slot, landscape))
     # Kodi's conditions can't test a $VAR, so each badge's "has text" is an
@@ -1280,7 +1296,7 @@ def first_row_timer():
     starts again if that row was still loading. Timers.xml gets its conditions in full: it has no $EXP."""
     ready, focus = [], []
     for index, page in enumerate(PAGES):
-        rows = [(slot, landscape) for slot in range(1, LOOKAHEAD + 1) for landscape in (False, True)]
+        rows = [(slot, landscape) for slot in range(1, LOOKAHEAD + 1) for landscape in styles(page)]
         loaded = ' | '.join('Integer.IsGreater(Container(%d).NumItems,0)' % list_id(index, slot, landscape)
                             for slot, landscape in rows)
         # Not from the bar, where someone chose to be (a tab's page fills its
@@ -1311,7 +1327,7 @@ def splash_timer():
     """Lifts the splash (silo.ready) once Home's first rows have items, or
     after SPLASH_MAX seconds (signed out, no rows, Silo unreachable)."""
     loaded = ' | '.join('Integer.IsGreater(Container(%d).NumItems,0)' % list_id(0, slot, landscape)
-                        for slot in (1, 2) for landscape in (False, True))
+                        for slot in (1, 2) for landscape in styles('home'))
     return ('    <timer>\n'
             '        <name>silo_splash</name>\n'
             '        <description>Lift the start-up splash once Home has rows (tools/build_home.py)</description>\n'

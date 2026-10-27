@@ -234,10 +234,10 @@ def sort_controls():
                        (other, 'SetProperty(silo.browse.order,%s,home)' % ('descending' if desc else 'ascending')),
                        (other, 'SetProperty(silo.browse.sort,%s,home)' % value),
                        (other, 'Skin.SetString(silo.sort.%s,%s)' % (kind, value))]
-        # Back to the grid's top; again two seconds later (one is too soon), since Kodi reselects
-        # the title that was selected when the re-sorted list arrives.
+        # Back to the grid's top, and again once the re-sorted list is in
+        # (the silo_sort_top timer): Kodi reselects the title that was selected.
         clicks.append((None, 'SetFocus(%d,0,absolute)' % GRID_ID))
-        clicks.append((None, 'AlarmClock(silosorttop,SetFocus(%d&#44;0&#44;absolute),00:02,silent)' % GRID_ID))
+        clicks.append((None, 'SetProperty(silo.browse.resort,1,home)'))
         items += '''
                 <item>
                     <label>%s</label>
@@ -516,8 +516,33 @@ def add_variables():
     open(path, 'w', encoding='utf-8').write(text)
 
 
+TIMER_START, TIMER_END = '    <!-- Silo Skyline library (tools/build_library.py) -->\n', '    <!-- end Silo Skyline library -->\n'
+# After a sort change, the grid's top once the re-sorted list is in: a second
+# at least (the change reaches the grid on a later frame) and until it has
+# stopped updating (a big library takes longer), not a fixed wait.
+TIMERS = '''    <timer>
+        <name>silo_sort_top</name>
+        <start reset="true">String.IsEqual(Window(Home).Property(silo.browse.resort),1)</start>
+        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_sort_top),1) + !Container(%(grid)d).IsUpdating | !Window.IsActive(%(window)d)</stop>
+        <onstop condition="Window.IsActive(%(window)d)">SetFocus(%(grid)d,0,absolute)</onstop>
+        <onstop>ClearProperty(silo.browse.resort,home)</onstop>
+    </timer>
+''' % {'grid': GRID_ID, 'window': WINDOW_ID}
+
+
+def add_timers():
+    path = os.path.join(ROOT, 'xml', 'Timers.xml')
+    text = open(path, encoding='utf-8').read()
+    if TIMER_START in text:
+        text = text[:text.index(TIMER_START)] + text[text.index(TIMER_END) + len(TIMER_END):]
+    text = text.replace('</timers>', TIMER_START + TIMERS + TIMER_END + '</timers>')
+    open(path, 'w', encoding='utf-8').write(text)
+
+
 if __name__ == '__main__':
     with open(os.path.join(ROOT, 'xml', 'Custom_%d_SiloLibrary.xml' % WINDOW_ID), 'w', encoding='utf-8') as handle:
         handle.write(build())
     add_variables()
-    print('Wrote xml/Custom_%d_SiloLibrary.xml and its variables in xml/Variables.xml' % WINDOW_ID)
+    add_timers()
+    print('Wrote xml/Custom_%d_SiloLibrary.xml, its variables in xml/Variables.xml and its timer in xml/Timers.xml'
+          % WINDOW_ID)
