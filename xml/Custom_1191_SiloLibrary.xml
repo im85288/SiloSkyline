@@ -911,5 +911,7 @@
                 </item>
             </content>
         </control>
+        <!-- A trailer from an info page: its cover (Includes_SiloFrame.xml). -->
+        <include>SiloTrailerCover</include>
     </controls>
 </window>

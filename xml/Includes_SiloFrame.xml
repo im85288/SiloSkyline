@@ -70,6 +70,30 @@
 		<value condition="String.IsEqual(Skin.CurrentColourTheme,SKINDEFAULT)">Silo</value>
 		<value>$INFO[Skin.CurrentColourTheme]</value>
 	</variable>
+	<!-- Over a window while a trailer from its info page starts and on the way
+	     back to that page (silokodi.trailer_playing): the title's fanart and a
+	     spinner, never the grid or rows under the page. -->
+	<include name="SiloTrailerCover">
+		<control type="group">
+			<!-- Up until the page is back (it clears the flag as it opens);
+			     SiloKodiConnect clears it after a few seconds if it isn't. -->
+			<visible>!String.IsEmpty(Window(Home).Property(silokodi.trailer_playing))</visible>
+			<control type="image">
+				<left>0</left><top>0</top><width>1920</width><height>1080</height>
+				<texture colordiffuse="SkylineBackground">colors/white.png</texture>
+			</control>
+			<control type="image">
+				<left>0</left><top>0</top><width>1920</width><height>1080</height>
+				<aspectratio>scale</aspectratio>
+				<texture background="true" colordiffuse="59FFFFFF">$INFO[Window(Home).Property(silokodi.trailer_art)]</texture>
+			</control>
+			<control type="image">
+				<left>928</left><top>508</top><width>64</width><height>64</height>
+				<texture colordiffuse="FFEDEDED">silo/spinner_arc.png</texture>
+				<animation effect="rotate" start="0" end="-360" center="auto" time="900" loop="true" condition="true">Conditional</animation>
+			</control>
+		</control>
+	</include>
 	<!-- The event log's count, "1 event" or "12 events". -->
 	<variable name="SiloEventCount">
 		<value condition="Integer.IsEqual(Container(50).NumItems,1)">1 event</value>

@@ -210,6 +210,8 @@ def build():
             <scrolltime tween="cubic" easing="out">300</scrolltime>
             <visible>!String.IsEmpty(%(query)s)</visible>%(rows)s
         </control>
+        <!-- A trailer from an info page: its cover (Includes_SiloFrame.xml). -->
+        <include>SiloTrailerCover</include>
     </controls>
 </window>
 ''' % {'wordmark': wordmark(SAFE_X, 56), 'window': WINDOW_ID, 'pill': PILL_ID, 'background': BACKGROUND, 'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM,

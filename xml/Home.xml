@@ -5700,7 +5700,7 @@
 
             <control type="group">
                 <control type="image">
-                    <width>460</width><height>266</height>
+                    <width>460</width><height>394</height>
                     <texture border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
                 </control>
             </control>
@@ -5712,7 +5712,7 @@
                 <label>[UPPERCASE]Movies[/UPPERCASE]</label>
             </control>
             <control type="list" id="9203">
-                <left>16</left><top>58</top><width>428</width><height>192</height>
+                <left>16</left><top>58</top><width>428</width><height>320</height>
                 <orientation>vertical</orientation>
                 <onup>SetFocus(9003)</onup>
                 <onback>SetProperty(silo.drop.closed,9203,home)</onback>
@@ -5819,6 +5819,25 @@
                         <onclick>ActivateWindow(1191)</onclick>
                     </item>
                     <item>
+                        <label>Recently Added</label>
+                        <icon>silo/menu_history.png</icon>
+                        <onclick>Skin.SetString(silo.sort.movies,dateadded)</onclick>
+                        <onclick>Skin.SetBool(silo.sort.movies.desc)</onclick>
+                        <onclick>SetProperty(silo.browse.type,movies,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.letter,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                        <onclick>SetProperty(silo.browse.path,videodb://movies/titles/,home)</onclick>
+                        <onclick>ActivateWindow(1191)</onclick>
+                    </item>
+                    <item>
+                        <label>Genres</label>
+                        <icon>silo/menu_default.png</icon>
+                        <onclick>ActivateWindow(Videos,videodb://movies/genres/,return)</onclick>
+                    </item>
+                    <item>
                         <label>Collections</label>
                         <icon>silo/menu_collections.png</icon>
                         <onclick>ActivateWindow(Videos,$INFO[Window(Home).Property(silo.movies.collections)],return)</onclick>
@@ -5839,7 +5858,7 @@
 
             <control type="group">
                 <control type="image">
-                    <width>460</width><height>266</height>
+                    <width>460</width><height>394</height>
                     <texture border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
                 </control>
             </control>
@@ -5851,7 +5870,7 @@
                 <label>[UPPERCASE]Series[/UPPERCASE]</label>
             </control>
             <control type="list" id="9204">
-                <left>16</left><top>58</top><width>428</width><height>192</height>
+                <left>16</left><top>58</top><width>428</width><height>320</height>
                 <orientation>vertical</orientation>
                 <onup>SetFocus(9004)</onup>
                 <onback>SetProperty(silo.drop.closed,9204,home)</onback>
@@ -5956,6 +5975,25 @@
                         <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                         <onclick>SetProperty(silo.browse.path,videodb://tvshows/titles/,home)</onclick>
                         <onclick>ActivateWindow(1191)</onclick>
+                    </item>
+                    <item>
+                        <label>Recently Added</label>
+                        <icon>silo/menu_history.png</icon>
+                        <onclick>Skin.SetString(silo.sort.tvshows,dateadded)</onclick>
+                        <onclick>Skin.SetBool(silo.sort.tvshows.desc)</onclick>
+                        <onclick>SetProperty(silo.browse.type,tvshows,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.letter,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                        <onclick>SetProperty(silo.browse.path,videodb://tvshows/titles/,home)</onclick>
+                        <onclick>ActivateWindow(1191)</onclick>
+                    </item>
+                    <item>
+                        <label>Genres</label>
+                        <icon>silo/menu_default.png</icon>
+                        <onclick>ActivateWindow(Videos,videodb://tvshows/genres/,return)</onclick>
                     </item>
                     <item>
                         <label>Collections</label>
@@ -6251,19 +6289,49 @@
 
             <control type="group">
                 <control type="image">
-                    <width>460</width><height>458</height>
+                    <width>460</width><height>510</height>
                     <texture border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
                 </control>
             </control>
+            <control type="image">
+                <left>28</left><top>22</top><width>56</width><height>56</height>
+                <texture colordiffuse="33FFFFFF">silo/avatar_mask.png</texture>
+                <visible>!!String.IsEmpty(Window(Home).Property(silo.avatar))</visible>
+            </control>
             <control type="label">
-                <left>28</left><top>16</top><width>404</width><height>40</height>
+                <left>28</left><top>22</top><width>56</width><height>56</height>
+                <align>center</align><aligny>center</aligny>
+                <font>silo_tab</font>
+                <textcolor>FFEDEDED</textcolor>
+                <label>$INFO[Window(Home).Property(silo.profile_initial)]</label>
+                <visible>!!String.IsEmpty(Window(Home).Property(silo.avatar))</visible>
+            </control>
+            <control type="image">
+                <left>28</left><top>22</top><width>56</width><height>56</height>
+                <aspectratio>scale</aspectratio>
+                <texture background="true" diffuse="silo/avatar_mask.png">$INFO[Window(Home).Property(silo.avatar)]</texture>
+                <visible>!String.IsEmpty(Window(Home).Property(silo.avatar))</visible>
+            </control>
+            <control type="label">
+                <left>100</left><top>20</top><width>332</width><height>34</height>
                 <aligny>center</aligny>
-                <font>silo_badge</font>
+                <font>silo_meta</font>
+                <textcolor>FFEDEDED</textcolor>
+                <label>$INFO[Window(Home).Property(silo.profile_name)]</label>
+            </control>
+            <control type="label">
+                <left>100</left><top>52</top><width>332</width><height>28</height>
+                <aligny>center</aligny>
+                <font>silo_mono</font>
                 <textcolor>99EDEDED</textcolor>
-                <label>[UPPERCASE]$INFO[Window(Home).Property(silo.profile_name)][/UPPERCASE]</label>
+                <label>$INFO[Window(Home).Property(silo.server)]</label>
+            </control>
+            <control type="image">
+                <left>28</left><top>98</top><width>404</width><height>2</height>
+                <texture colordiffuse="1AFFFFFF">colors/white.png</texture>
             </control>
             <control type="list" id="9211">
-                <left>16</left><top>58</top><width>428</width><height>384</height>
+                <left>16</left><top>110</top><width>428</width><height>384</height>
                 <orientation>vertical</orientation>
                 <onup>SetFocus(9011)</onup>
                 <onback>SetProperty(silo.drop.closed,9211,home)</onback>
@@ -6432,5 +6500,7 @@
                 <texture colordiffuse="99EDEDED">silo/spinner_arc.png</texture>
             </control>
         </control>
+        <!-- A trailer from an info page: its cover (Includes_SiloFrame.xml). -->
+        <include>SiloTrailerCover</include>
     </controls>
 </window>

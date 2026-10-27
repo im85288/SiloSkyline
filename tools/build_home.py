@@ -536,9 +536,13 @@ def close_on_back(menu, condition=None):
 # tab opens the page. Collections are
 # the page's libraries' collections, linked by SiloKodiConnect.
 SECTIONS = {
-    'movies': [('Recommended', None), ('Browse', 'videodb://movies/titles/'),
+    # As Silo's Apple TV app: Browse, its newest-first Recently Added, Genres
+    # (Kodi's genre list) and Collections.
+    'movies': [('Recommended', None), ('Browse', 'videodb://movies/titles/'), ('Recently Added', None),
+               ('Genres', 'videodb://movies/genres/'),
                ('Collections', '$INFO[Window(Home).Property(silo.movies.collections)]')],
-    'series': [('Recommended', None), ('Browse', 'videodb://tvshows/titles/'),
+    'series': [('Recommended', None), ('Browse', 'videodb://tvshows/titles/'), ('Recently Added', None),
+               ('Genres', 'videodb://tvshows/genres/'),
                ('Collections', '$INFO[Window(Home).Property(silo.series.collections)]')],
     # Silo has no search on its Requests page; this finds a title not yet in
     # the library: Search with only Silo's request results, asking for words.
@@ -590,13 +594,14 @@ def dropdown_dim():
         </control>''' % (open_, DROP_DWELL)
 
 
-def dropdown(x, list_id, back, heading, content, shown, rows, fit=False):
-    DROPDOWNS.append((shown, list_id))
+def dropdown(x, list_id, back, heading, content, shown, rows, fit=False, header=None, head_h=58):
     """Silo's dropdown under a tab: a heading and the entries (icon and label,
     the focused one a white pill), with no hint, as Silo's Apple TV app. It
     shows while the tab or the dropdown has focus (Kodi can't focus a hidden
     control, so it's there whenever its tab is); Up from the first entry and
-    Back return to the tab, Down past the last closes it and goes to the rows."""
+    Back return to the tab, Down past the last closes it and goes to the rows.
+    header: XML in place of the heading, head_h tall (the avatar card's profile)."""
+    DROPDOWNS.append((shown, list_id))
     def entry(focused):
         lit = 'Control.HasFocus(%d)' % list_id
         def body(colour, visible):
@@ -621,7 +626,7 @@ def dropdown(x, list_id, back, heading, content, shown, rows, fit=False):
                         <left>4</left><top>4</top><width>%d</width><height>%d</height>
                         <texture border="28" colordiffuse="%s">silo/pill.png</texture>%s
                     </control>''' % (DROP_W - 40, DROP_ROW - 8, TEXT, on) + body('FF000000', on) + body(TEXT, off))
-    height = 58 + rows * DROP_ROW + 16
+    height = head_h + rows * DROP_ROW + 16
     def frame(n, visible):
         return '''
             <control type="group">%(v)s
@@ -630,7 +635,7 @@ def dropdown(x, list_id, back, heading, content, shown, rows, fit=False):
                     <texture border="24" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
                 </control>
             </control>''' % {'v': '\n                <visible>%s</visible>' % visible if visible else '', 'w': DROP_W,
-                             'h': 58 + n * DROP_ROW + 16}
+                             'h': head_h + n * DROP_ROW + 16}
     # A submenu's length varies (fit): one frame per length, the right one shown.
     frames = ''.join(frame(n, 'Integer.IsEqual(Container(%d).NumItems,%d)' % (list_id, n)) for n in range(1, rows + 1)) \
         if fit else frame(rows, '')
@@ -645,16 +650,9 @@ def dropdown(x, list_id, back, heading, content, shown, rows, fit=False):
             <!-- Back closes it, as in Silo: faded out rather than hidden, since
                  Kodi can't focus a hidden control (Down opens it again). -->
             <animation effect="fade" start="100" end="0" time="120" condition="String.IsEqual(%(closed)s,%(id)d)">Conditional</animation>
-%(frames)s
-            <control type="label">
-                <left>28</left><top>16</top><width>%(lw)d</width><height>40</height>
-                <aligny>center</aligny>
-                <font>silo_badge</font>
-                <textcolor>99EDEDED</textcolor>
-                <label>[UPPERCASE]%(heading)s[/UPPERCASE]</label>
-            </control>
+%(frames)s%(header)s
             <control type="list" id="%(id)d">
-                <left>16</left><top>58</top><width>%(liw)d</width><height>%(lh)d</height>
+                <left>16</left><top>%(head_h)d</top><width>%(liw)d</width><height>%(lh)d</height>
                 <orientation>vertical</orientation>
                 <onup>%(back)s</onup>
                 <onback>SetProperty(silo.drop.closed,%(id)d,home)</onback>
@@ -672,7 +670,15 @@ def dropdown(x, list_id, back, heading, content, shown, rows, fit=False):
         </control>''' % {'x': x, 'top': BAR_TOP + 76, 'shown': shown, 'w': DROP_W, 'h': height, 'lw': DROP_W - 56,
                          'closed': prop('silo.drop.closed'), 'heading': heading, 'id': list_id, 'liw': DROP_W - 32, 'lh': rows * DROP_ROW, 'back': back,
                          'row': DROP_ROW, 'normal': entry(False), 'focused': entry(True), 'content': content, 'frames': frames,
-                         'to_rows': bar_down('                '), 'dwell': DROP_DWELL, 'cx': DROP_W // 2}
+                         'to_rows': bar_down('                '), 'dwell': DROP_DWELL, 'cx': DROP_W // 2,
+                         'head_h': head_h, 'header': header if header is not None else '''
+            <control type="label">
+                <left>28</left><top>16</top><width>%d</width><height>40</height>
+                <aligny>center</aligny>
+                <font>silo_badge</font>
+                <textcolor>99EDEDED</textcolor>
+                <label>[UPPERCASE]%s[/UPPERCASE]</label>
+            </control>''' % (DROP_W - 56, heading)}
 
 
 def custom_submenu():
@@ -699,7 +705,8 @@ DROP_ICON = '''    <variable name="SiloDropIcon">
 '''
 SECTION_ICONS = {'Recommended': 'silo/menu_recommended.png', 'Browse': 'silo/menu_browse.png',
                  'Collections': 'silo/menu_collections.png', 'Discover': 'silo/menu_recommended.png',
-                 'Search to request': 'silo/menu_search.png'}
+                 'Search to request': 'silo/menu_search.png', 'Recently Added': 'silo/menu_history.png',
+                 'Genres': 'silo/menu_default.png'}
 
 
 def sections_menus():
@@ -712,10 +719,14 @@ def sections_menus():
         tab_id = 9002 + index
         items = ''
         for label, path in SECTIONS[page]:
-            if label == 'Browse':
-                # Silo's Browse: Silo Skyline's own grid (tools/build_library.py).
+            if label in ('Browse', 'Recently Added'):
+                # Silo's Browse: Silo Skyline's own grid (tools/build_library.py);
+                # Recently Added is the same grid sorted newest first (Browse's
+                # Sort remembers it).
                 kind = 'movies' if page == 'movies' else 'tvshows'
-                actions = (['SetProperty(silo.browse.type,%s,home)' % kind, 'ClearProperty(silo.browse.letter,home)',
+                newest = (['Skin.SetString(silo.sort.%s,dateadded)' % kind, 'Skin.SetBool(silo.sort.%s.desc)' % kind]
+                          if label == 'Recently Added' else [])
+                actions = newest + (['SetProperty(silo.browse.type,%s,home)' % kind, 'ClearProperty(silo.browse.letter,home)',
                             'ClearProperty(silo.browse.list,home)']
                            + ['ClearProperty(silo.browse.list.%s,home)' % key for key in PERSONAL_KEYS]
                            + ['SetProperty(silo.browse.path,videodb://%s/titles/,home)' % kind, 'ActivateWindow(1191)'])
@@ -771,8 +782,52 @@ def avatar_menu():
                         <label>%s</label>
                         <icon>silo/menu_%s.png</icon>%s
                     </item>''' % (label, icon, clicks)
-    return dropdown(1920 - SAFE_X - DROP_W, AVATAR_MENU, 'SetFocus(9011)', '$INFO[%s]' % prop('silo.profile_name'),
-                    items, 'Control.HasFocus(9011) | Control.HasFocus(%d)' % AVATAR_MENU, len(entries))
+    # Silo's profile header: the picture (or initial), the name and the
+    # server's host in mono, over a hairline.
+    has_picture = '!String.IsEmpty(%s)' % prop('silo.avatar')
+    header = '''
+            <control type="image">
+                <left>28</left><top>22</top><width>56</width><height>56</height>
+                <texture colordiffuse="33FFFFFF">silo/avatar_mask.png</texture>
+                <visible>!%(has_picture)s</visible>
+            </control>
+            <control type="label">
+                <left>28</left><top>22</top><width>56</width><height>56</height>
+                <align>center</align><aligny>center</aligny>
+                <font>silo_tab</font>
+                <textcolor>%(text)s</textcolor>
+                <label>$INFO[%(initial)s]</label>
+                <visible>!%(has_picture)s</visible>
+            </control>
+            <control type="image">
+                <left>28</left><top>22</top><width>56</width><height>56</height>
+                <aspectratio>scale</aspectratio>
+                <texture background="true" diffuse="silo/avatar_mask.png">$INFO[%(picture)s]</texture>
+                <visible>%(has_picture)s</visible>
+            </control>
+            <control type="label">
+                <left>100</left><top>20</top><width>%(lw)d</width><height>34</height>
+                <aligny>center</aligny>
+                <font>silo_meta</font>
+                <textcolor>%(text)s</textcolor>
+                <label>$INFO[%(name)s]</label>
+            </control>
+            <control type="label">
+                <left>100</left><top>52</top><width>%(lw)d</width><height>28</height>
+                <aligny>center</aligny>
+                <font>silo_mono</font>
+                <textcolor>99EDEDED</textcolor>
+                <label>$INFO[%(server)s]</label>
+            </control>
+            <control type="image">
+                <left>28</left><top>98</top><width>%(rule)d</width><height>2</height>
+                <texture colordiffuse="1AFFFFFF">colors/white.png</texture>
+            </control>''' % {'has_picture': has_picture, 'text': TEXT, 'initial': prop('silo.profile_initial'),
+                             'picture': prop('silo.avatar'), 'name': prop('silo.profile_name'),
+                             'server': prop('silo.server'), 'lw': DROP_W - 128, 'rule': DROP_W - 56}
+    return dropdown(1920 - SAFE_X - DROP_W, AVATAR_MENU, 'SetFocus(9011)', '', items,
+                    'Control.HasFocus(9011) | Control.HasFocus(%d)' % AVATAR_MENU, len(entries),
+                    header=header, head_h=110)
 
 
 def tab(control_id, page, page_index):
@@ -1166,6 +1221,8 @@ def build():
 %(avatar)s
 %(custom)s
 %(sections)s%(splash)s
+        <!-- A trailer from an info page: its cover (Includes_SiloFrame.xml). -->
+        <include>SiloTrailerCover</include>
     </controls>
 </window>
 ''' % {'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'rows_top': ROWS_TOP, 'rows_h': BAND_H,

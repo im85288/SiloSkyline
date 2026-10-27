@@ -384,6 +384,8 @@ def build():
             <focusedlayout width="%(ew)d" height="%(eh)d">%(episode_focused)s
             </focusedlayout>
         </control>
+        <!-- A trailer from an info page: its cover (Includes_SiloFrame.xml). -->
+        <include>SiloTrailerCover</include>
     </controls>
 </window>
 ''' % {'wordmark': wordmark(SAFE_X, 56), 'background': BACKGROUND, 'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'lx': SAFE_X - 36,

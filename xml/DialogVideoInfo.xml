@@ -11,8 +11,15 @@
     <onload>SetProperty(silo.episode_number,$INFO[ListItem.Episode],movieinformation)</onload>
     <onload>SetProperty(silo.episode_season,$INFO[ListItem.Season],movieinformation)</onload>
     <onunload>ClearProperty(silo.jump,movieinformation)</onunload>
-    <backgroundcolor>SkylineBackground</backgroundcolor>
+    <!-- Back from its trailer: the cover under the page can go. -->
+    <onload>ClearProperty(silokodi.trailer_playing,home)</onload>
+    <onload>ClearProperty(silokodi.trailer_return,home)</onload>
+    <!-- Clear: the page draws its own background, so it can fade out while
+         its trailer plays (Kodi keeps it open over the video). -->
+    <backgroundcolor>00000000</backgroundcolor>
     <controls>
+        <control type="group">
+        <animation effect="fade" start="100" end="0" time="300" condition="Player.HasVideo + !String.IsEmpty(Window(Home).Property(silokodi.trailer_playing))">Conditional</animation>
         <control type="image">
             <left>0</left><top>0</top><width>1920</width><height>1080</height>
             <texture colordiffuse="SkylineBackground">colors/white.png</texture>
@@ -202,8 +209,10 @@
                     <onright condition="Control.IsVisible(1304) + !Control.IsVisible(301) + !Control.IsVisible(1008)">SetFocus(304)</onright>
                     <onright condition="Control.IsVisible(1302) + !Control.IsVisible(301) + !Control.IsVisible(1008) + !Control.IsVisible(1304)">SetFocus(302)</onright>
                     <onright condition="Control.IsVisible(1011) + !Control.IsVisible(301) + !Control.IsVisible(1008) + !Control.IsVisible(1304) + !Control.IsVisible(1302)">SetFocus(11)</onright>
-                    <onright condition="Control.IsVisible(1014) + !Control.IsVisible(301) + !Control.IsVisible(1008) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011)">SetFocus(14)</onright>
-                    <onright condition="Control.IsVisible(1303) + !Control.IsVisible(301) + !Control.IsVisible(1008) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1014)">SetFocus(303)</onright>
+                    <onright condition="Control.IsVisible(1351) + !Control.IsVisible(301) + !Control.IsVisible(1008) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011)">SetFocus(351)</onright>
+                    <onright condition="Control.IsVisible(1352) + !Control.IsVisible(301) + !Control.IsVisible(1008) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351)">SetFocus(352)</onright>
+                    <onright condition="Control.IsVisible(1014) + !Control.IsVisible(301) + !Control.IsVisible(1008) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352)">SetFocus(14)</onright>
+                    <onright condition="Control.IsVisible(1303) + !Control.IsVisible(301) + !Control.IsVisible(1008) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352) + !Control.IsVisible(1014)">SetFocus(303)</onright>
                     <width min="220">auto</width><height>64</height>
                     <label>$VAR[SiloDetailNextLabel]</label>
                     <font>silo_tab</font>
@@ -229,8 +238,10 @@
                     <onright condition="Control.IsVisible(1304) + !Control.IsVisible(1008)">SetFocus(304)</onright>
                     <onright condition="Control.IsVisible(1302) + !Control.IsVisible(1008) + !Control.IsVisible(1304)">SetFocus(302)</onright>
                     <onright condition="Control.IsVisible(1011) + !Control.IsVisible(1008) + !Control.IsVisible(1304) + !Control.IsVisible(1302)">SetFocus(11)</onright>
-                    <onright condition="Control.IsVisible(1014) + !Control.IsVisible(1008) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011)">SetFocus(14)</onright>
-                    <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1008) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1014)">SetFocus(303)</onright>
+                    <onright condition="Control.IsVisible(1351) + !Control.IsVisible(1008) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011)">SetFocus(351)</onright>
+                    <onright condition="Control.IsVisible(1352) + !Control.IsVisible(1008) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351)">SetFocus(352)</onright>
+                    <onright condition="Control.IsVisible(1014) + !Control.IsVisible(1008) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352)">SetFocus(14)</onright>
+                    <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1008) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352) + !Control.IsVisible(1014)">SetFocus(303)</onright>
                     <onleft condition="Control.IsVisible(300)">SetFocus(300)</onleft>
                     <visible>!String.IsEmpty(ListItem.Property(silo.request.tmdb))</visible>
                     <width min="220">auto</width><height>64</height>
@@ -261,8 +272,10 @@
                     <onright condition="Control.IsVisible(1304)">SetFocus(304)</onright>
                     <onright condition="Control.IsVisible(1302) + !Control.IsVisible(1304)">SetFocus(302)</onright>
                     <onright condition="Control.IsVisible(1011) + !Control.IsVisible(1304) + !Control.IsVisible(1302)">SetFocus(11)</onright>
-                    <onright condition="Control.IsVisible(1014) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011)">SetFocus(14)</onright>
-                    <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1014)">SetFocus(303)</onright>
+                    <onright condition="Control.IsVisible(1351) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011)">SetFocus(351)</onright>
+                    <onright condition="Control.IsVisible(1352) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351)">SetFocus(352)</onright>
+                    <onright condition="Control.IsVisible(1014) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352)">SetFocus(14)</onright>
+                    <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352) + !Control.IsVisible(1014)">SetFocus(303)</onright>
                     <onleft condition="Control.IsVisible(301)">SetFocus(301)</onleft>
                     <onleft condition="Control.IsVisible(300) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>340</width><height>64</height>
@@ -312,8 +325,10 @@
                     <ondown condition="![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">50</ondown>
                     <onright condition="Control.IsVisible(1302)">SetFocus(302)</onright>
                     <onright condition="Control.IsVisible(1011) + !Control.IsVisible(1302)">SetFocus(11)</onright>
-                    <onright condition="Control.IsVisible(1014) + !Control.IsVisible(1302) + !Control.IsVisible(1011)">SetFocus(14)</onright>
-                    <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1014)">SetFocus(303)</onright>
+                    <onright condition="Control.IsVisible(1351) + !Control.IsVisible(1302) + !Control.IsVisible(1011)">SetFocus(351)</onright>
+                    <onright condition="Control.IsVisible(1352) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351)">SetFocus(352)</onright>
+                    <onright condition="Control.IsVisible(1014) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352)">SetFocus(14)</onright>
+                    <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352) + !Control.IsVisible(1014)">SetFocus(303)</onright>
                     <onleft condition="Control.IsVisible(1008)">SetFocus(308)</onleft>
                     <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
                     <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
@@ -346,8 +361,10 @@
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
                     <ondown condition="![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">50</ondown>
                     <onright condition="Control.IsVisible(1011)">SetFocus(11)</onright>
-                    <onright condition="Control.IsVisible(1014) + !Control.IsVisible(1011)">SetFocus(14)</onright>
-                    <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1011) + !Control.IsVisible(1014)">SetFocus(303)</onright>
+                    <onright condition="Control.IsVisible(1351) + !Control.IsVisible(1011)">SetFocus(351)</onright>
+                    <onright condition="Control.IsVisible(1352) + !Control.IsVisible(1011) + !Control.IsVisible(1351)">SetFocus(352)</onright>
+                    <onright condition="Control.IsVisible(1014) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352)">SetFocus(14)</onright>
+                    <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352) + !Control.IsVisible(1014)">SetFocus(303)</onright>
                     <onleft condition="Control.IsVisible(1304)">SetFocus(304)</onleft>
                     <onleft condition="Control.IsVisible(1008) + !Control.IsVisible(1304)">SetFocus(308)</onleft>
                     <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1304) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
@@ -379,8 +396,10 @@
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
                     <ondown condition="![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">50</ondown>
-                    <onright condition="Control.IsVisible(1014)">SetFocus(14)</onright>
-                    <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1014)">SetFocus(303)</onright>
+                    <onright condition="Control.IsVisible(1351)">SetFocus(351)</onright>
+                    <onright condition="Control.IsVisible(1352) + !Control.IsVisible(1351)">SetFocus(352)</onright>
+                    <onright condition="Control.IsVisible(1014) + !Control.IsVisible(1351) + !Control.IsVisible(1352)">SetFocus(14)</onright>
+                    <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1351) + !Control.IsVisible(1352) + !Control.IsVisible(1014)">SetFocus(303)</onright>
                     <onleft condition="Control.IsVisible(1302)">SetFocus(302)</onleft>
                     <onleft condition="Control.IsVisible(1304) + !Control.IsVisible(1302)">SetFocus(304)</onleft>
                     <onleft condition="Control.IsVisible(1008) + !Control.IsVisible(1302) + !Control.IsVisible(1304)">SetFocus(308)</onleft>
@@ -404,6 +423,85 @@
                         <visible>!Control.HasFocus(11)</visible>
                     </control>
                 </control>
+                <control type="group" id="1351">
+                    <width>64</width><height>64</height>
+                    <visible>String.IsEmpty(ListItem.Trailer) + !String.IsEmpty(ListItem.Property(silo.trailer))</visible>
+                    <control type="button" id="351">
+                    <ondown condition="[String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">60</ondown>
+                    <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
+                    <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
+                    <ondown condition="![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">50</ondown>
+                    <onright condition="Control.IsVisible(1352)">SetFocus(352)</onright>
+                    <onright condition="Control.IsVisible(1014) + !Control.IsVisible(1352)">SetFocus(14)</onright>
+                    <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1352) + !Control.IsVisible(1014)">SetFocus(303)</onright>
+                    <onleft condition="Control.IsVisible(1011)">SetFocus(11)</onleft>
+                    <onleft condition="Control.IsVisible(1302) + !Control.IsVisible(1011)">SetFocus(302)</onleft>
+                    <onleft condition="Control.IsVisible(1304) + !Control.IsVisible(1011) + !Control.IsVisible(1302)">SetFocus(304)</onleft>
+                    <onleft condition="Control.IsVisible(1008) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304)">SetFocus(308)</onleft>
+                    <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
+                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
+                        <width>64</width><height>64</height>
+                        <label />
+                        <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                        <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
+                    <onclick>noop</onclick>
+                    <onclick condition="System.HasAddon(plugin.video.youtube)">SetProperty(silokodi.trailer_art,$INFO[ListItem.Art(fanart)],home)</onclick>
+                    <onclick condition="System.HasAddon(plugin.video.youtube)">SetProperty(silokodi.trailer_return,$INFO[ListItem.DBType]|$INFO[ListItem.DBID],home)</onclick>
+                    <onclick condition="System.HasAddon(plugin.video.youtube)">SetProperty(silokodi.trailer_playing,1,home)</onclick>
+                    <onclick condition="System.HasAddon(plugin.video.youtube)">PlayMedia(plugin://plugin.video.youtube/play/?video_id=$INFO[ListItem.Property(silo.trailer)])</onclick>
+                    <onclick condition="!System.HasAddon(plugin.video.youtube)">InstallAddon(plugin.video.youtube)</onclick>
+                    </control>
+                    <control type="image">
+                        <left>16</left><top>16</top>
+                        <width>32</width><height>32</height>
+                        <texture colordiffuse="SkylineFocusText">icons/infodialogs/trailer.png</texture>
+                        <visible>Control.HasFocus(351)</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left><top>16</top>
+                        <width>32</width><height>32</height>
+                        <texture colordiffuse="FFEDEDED">icons/infodialogs/trailer.png</texture>
+                        <visible>!Control.HasFocus(351)</visible>
+                    </control>
+                </control>
+                <control type="group" id="1352">
+                    <width>64</width><height>64</height>
+                    <visible>!String.IsEmpty(ListItem.Property(silo.watchlist))</visible>
+                    <control type="button" id="352">
+                    <ondown condition="[String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">60</ondown>
+                    <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
+                    <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
+                    <ondown condition="![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">50</ondown>
+                    <onright condition="Control.IsVisible(1014)">SetFocus(14)</onright>
+                    <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1014)">SetFocus(303)</onright>
+                    <onleft condition="Control.IsVisible(1351)">SetFocus(351)</onleft>
+                    <onleft condition="Control.IsVisible(1011) + !Control.IsVisible(1351)">SetFocus(11)</onleft>
+                    <onleft condition="Control.IsVisible(1302) + !Control.IsVisible(1351) + !Control.IsVisible(1011)">SetFocus(302)</onleft>
+                    <onleft condition="Control.IsVisible(1304) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302)">SetFocus(304)</onleft>
+                    <onleft condition="Control.IsVisible(1008) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304)">SetFocus(308)</onleft>
+                    <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
+                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
+                        <width>64</width><height>64</height>
+                        <label />
+                        <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                        <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
+                    <onclick>noop</onclick>
+                    <onclick condition="$EXP[SiloOnWatchlist]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=watchlist&amp;id=$INFO[ListItem.Property(silo.content_id)]&amp;add=0)</onclick>
+                    <onclick condition="!$EXP[SiloOnWatchlist]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=watchlist&amp;id=$INFO[ListItem.Property(silo.content_id)]&amp;add=1)</onclick>
+                    </control>
+                    <control type="image">
+                        <left>16</left><top>16</top>
+                        <width>32</width><height>32</height>
+                        <texture colordiffuse="SkylineFocusText">$VAR[SiloWatchlistIcon]</texture>
+                        <visible>Control.HasFocus(352)</visible>
+                    </control>
+                    <control type="image">
+                        <left>16</left><top>16</top>
+                        <width>32</width><height>32</height>
+                        <texture colordiffuse="FFEDEDED">$VAR[SiloWatchlistIcon]</texture>
+                        <visible>!Control.HasFocus(352)</visible>
+                    </control>
+                </control>
                 <control type="group" id="1014">
                     <width>64</width><height>64</height>
                     <visible>String.IsEqual(ListItem.DBType,movie) + Integer.IsGreater(ListItem.VideoVersionsCount,1)</visible>
@@ -413,12 +511,14 @@
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
                     <ondown condition="![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">50</ondown>
                     <onright condition="Control.IsVisible(1303)">SetFocus(303)</onright>
-                    <onleft condition="Control.IsVisible(1011)">SetFocus(11)</onleft>
-                    <onleft condition="Control.IsVisible(1302) + !Control.IsVisible(1011)">SetFocus(302)</onleft>
-                    <onleft condition="Control.IsVisible(1304) + !Control.IsVisible(1011) + !Control.IsVisible(1302)">SetFocus(304)</onleft>
-                    <onleft condition="Control.IsVisible(1008) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304)">SetFocus(308)</onleft>
-                    <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
-                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
+                    <onleft condition="Control.IsVisible(1352)">SetFocus(352)</onleft>
+                    <onleft condition="Control.IsVisible(1351) + !Control.IsVisible(1352)">SetFocus(351)</onleft>
+                    <onleft condition="Control.IsVisible(1011) + !Control.IsVisible(1352) + !Control.IsVisible(1351)">SetFocus(11)</onleft>
+                    <onleft condition="Control.IsVisible(1302) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011)">SetFocus(302)</onleft>
+                    <onleft condition="Control.IsVisible(1304) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302)">SetFocus(304)</onleft>
+                    <onleft condition="Control.IsVisible(1008) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304)">SetFocus(308)</onleft>
+                    <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
+                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>64</width><height>64</height>
                         <label />
                         <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
@@ -446,12 +546,14 @@
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
                     <ondown condition="![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">50</ondown>
                     <onleft condition="Control.IsVisible(1014)">SetFocus(14)</onleft>
-                    <onleft condition="Control.IsVisible(1011) + !Control.IsVisible(1014)">SetFocus(11)</onleft>
-                    <onleft condition="Control.IsVisible(1302) + !Control.IsVisible(1014) + !Control.IsVisible(1011)">SetFocus(302)</onleft>
-                    <onleft condition="Control.IsVisible(1304) + !Control.IsVisible(1014) + !Control.IsVisible(1011) + !Control.IsVisible(1302)">SetFocus(304)</onleft>
-                    <onleft condition="Control.IsVisible(1008) + !Control.IsVisible(1014) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304)">SetFocus(308)</onleft>
-                    <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1014) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
-                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1014) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
+                    <onleft condition="Control.IsVisible(1352) + !Control.IsVisible(1014)">SetFocus(352)</onleft>
+                    <onleft condition="Control.IsVisible(1351) + !Control.IsVisible(1014) + !Control.IsVisible(1352)">SetFocus(351)</onleft>
+                    <onleft condition="Control.IsVisible(1011) + !Control.IsVisible(1014) + !Control.IsVisible(1352) + !Control.IsVisible(1351)">SetFocus(11)</onleft>
+                    <onleft condition="Control.IsVisible(1302) + !Control.IsVisible(1014) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011)">SetFocus(302)</onleft>
+                    <onleft condition="Control.IsVisible(1304) + !Control.IsVisible(1014) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302)">SetFocus(304)</onleft>
+                    <onleft condition="Control.IsVisible(1008) + !Control.IsVisible(1014) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304)">SetFocus(308)</onleft>
+                    <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1014) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
+                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1014) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>64</width><height>64</height>
                         <label />
                         <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
@@ -920,6 +1022,7 @@
                     </focusedlayout>
                 </control>
             </control>
+        </control>
         </control>
     </controls>
 </window>

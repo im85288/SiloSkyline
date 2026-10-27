@@ -3990,6 +3990,13 @@
         <value condition="String.IsEqual(ListItem.VideoResolution,4K)"></value>
         <value>P</value>
     </variable>
+    <!-- On the watchlist: a toggle on this page (SiloKodiConnect sets
+         Window(movieinformation) silo.watchlist.for/.now), else as it opened. -->
+    <expression name="SiloOnWatchlist">[String.IsEqual(Window(movieinformation).Property(silo.watchlist.for),ListItem.Property(silo.content_id)) + String.IsEqual(Window(movieinformation).Property(silo.watchlist.now),true)] | [!String.IsEqual(Window(movieinformation).Property(silo.watchlist.for),ListItem.Property(silo.content_id)) + String.IsEqual(ListItem.Property(silo.watchlist),true)]</expression>
+    <variable name="SiloWatchlistIcon">
+        <value condition="$EXP[SiloOnWatchlist]">silo/menu_watchlist.png</value>
+        <value>silo/menu_watchlist_add.png</value>
+    </variable>
     <variable name="SiloDetailHdr">
         <value condition="String.IsEqual(ListItem.HdrType,dolbyvision)">DOLBY VISION</value>
         <value condition="String.IsEqual(ListItem.HdrType,hdr10plus)">HDR10+</value>

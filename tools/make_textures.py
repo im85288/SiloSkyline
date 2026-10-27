@@ -403,6 +403,10 @@ if __name__ == '__main__':
         return head or body
     def bookmark(x, y):
         return 12 <= x <= 36 and 6 <= y <= 42 and y <= 42 - (10 - abs(x - 24) * 10 / 12.0) * (y > 30)
+    def bookmark_outline(x, y):
+        """Not on the watchlist: the bookmark's outline, 3.5 px."""
+        inner = 15.5 <= x <= 32.5 and 9.5 <= y <= 42 and y <= 37.5 - (6.5 - abs(x - 24) * 6.5 / 8.5) * (y > 30)
+        return bookmark(x, y) and not inner
     def heart(x, y):
         u, v = (x - 24) / 17.0, (27 - y) / 17.0
         return (u * u + v * v - 1) ** 3 - u * u * v ** 3 <= 0
@@ -442,7 +446,7 @@ if __name__ == '__main__':
     def list_rows(x, y):
         rows = (12, 24, 36)
         return any((x - 9) ** 2 + (y - r) ** 2 <= 3.4 ** 2 or (16 <= x <= 40 and abs(y - r) <= 2.4) for r in rows)
-    for name, inside in (('default', list_rows), ('search', magnifier), ('profile', person), ('watchlist', bookmark), ('favorites', heart),
+    for name, inside in (('default', list_rows), ('search', magnifier), ('profile', person), ('watchlist', bookmark), ('watchlist_add', bookmark_outline), ('favorites', heart),
                          ('history', clock), ('settings', gear), ('signout', sign_out)):
         write_png('menu_%s.png' % name, 48, 48, shape(inside))
 

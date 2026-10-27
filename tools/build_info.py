@@ -93,8 +93,15 @@ def build():
     <onload>SetProperty(silo.episode_number,$INFO[ListItem.Episode],movieinformation)</onload>
     <onload>SetProperty(silo.episode_season,$INFO[ListItem.Season],movieinformation)</onload>
     <onunload>ClearProperty(silo.jump,movieinformation)</onunload>
-    <backgroundcolor>%(background)s</backgroundcolor>
+    <!-- Back from its trailer: the cover under the page can go. -->
+    <onload>ClearProperty(silokodi.trailer_playing,home)</onload>
+    <onload>ClearProperty(silokodi.trailer_return,home)</onload>
+    <!-- Clear: the page draws its own background, so it can fade out while
+         its trailer plays (Kodi keeps it open over the video). -->
+    <backgroundcolor>00000000</backgroundcolor>
     <controls>
+        <control type="group">
+        <animation effect="fade" start="100" end="0" time="300" condition="Player.HasVideo + !String.IsEmpty(Window(Home).Property(silokodi.trailer_playing))">Conditional</animation>
         <control type="image">
             <left>0</left><top>0</top><width>1920</width><height>1080</height>
             <texture colordiffuse="%(background)s">colors/white.png</texture>
@@ -266,7 +273,7 @@ def build():
                         <texture colordiffuse="%(text)s">osd/fullscreen/buttons/play.png</texture>
                         <visible>!Control.HasFocus(308)</visible>
                     </control>
-                </control>%(start_over)s%(previous)s%(trailer)s%(versions)s%(more)s
+                </control>%(start_over)s%(previous)s%(trailer)s%(silo_trailer)s%(watchlist)s%(versions)s%(more)s
             </control>
         </control>
 
@@ -442,6 +449,7 @@ def build():
                 </control>
             </control>
         </control>
+        </control>
     </controls>
 </window>
 ''' % {'background': BACKGROUND, 'x': SAFE_X, 'top': TOP, 'text': TEXT, 'dim': TEXT_DIM, 'has_logo': has_logo,
@@ -461,6 +469,36 @@ def build():
                             '[String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow)] + String.IsEmpty(ListItem.Property(silo.request.tmdb))',
                             'RunPlugin(plugin://plugin.video.silokodiconnect/?mode=more&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])'),
        'trailer': round_button(11, 'icons/infodialogs/trailer.png', '!String.IsEmpty(ListItem.Trailer)'),
+       # Silo's trailer (SiloKodiConnect's silo.trailer, a YouTube id) when the
+       # library has none: played by the YouTube add-on, which it offers to
+       # install when it's missing.
+       'silo_trailer': round_button(
+           351, 'icons/infodialogs/trailer.png',
+           'String.IsEmpty(ListItem.Trailer) + !String.IsEmpty(ListItem.Property(silo.trailer))',
+           'noop</onclick>\n'
+           # The page fades out while its trailer plays (Kodi keeps it open
+           # over the video) and Kodi closes it when the trailer stops, so
+           # SiloKodiConnect reopens it (silokodi.trailer_return). Before the
+           # first frame and on the way back, the window under it shows a
+           # cover with the title's fanart (SiloTrailerCover, while
+           # silokodi.trailer_playing is set); the page clears it as it opens.
+           '                    <onclick condition="System.HasAddon(plugin.video.youtube)">'
+           'SetProperty(silokodi.trailer_art,$INFO[ListItem.Art(fanart)],home)</onclick>\n'
+           '                    <onclick condition="System.HasAddon(plugin.video.youtube)">'
+           'SetProperty(silokodi.trailer_return,$INFO[ListItem.DBType]|$INFO[ListItem.DBID],home)</onclick>\n'
+           '                    <onclick condition="System.HasAddon(plugin.video.youtube)">'
+           'SetProperty(silokodi.trailer_playing,1,home)</onclick>\n'
+           '                    <onclick condition="System.HasAddon(plugin.video.youtube)">'
+           'PlayMedia(plugin://plugin.video.youtube/play/?video_id=$INFO[ListItem.Property(silo.trailer)])</onclick>\n'
+           '                    <onclick condition="!System.HasAddon(plugin.video.youtube)">InstallAddon(plugin.video.youtube)'),
+       # Silo's watchlist, for a film or series: a filled bookmark when on it.
+       'watchlist': round_button(
+           352, '$VAR[SiloWatchlistIcon]', '!String.IsEmpty(ListItem.Property(silo.watchlist))',
+           'noop</onclick>\n'
+           '                    <onclick condition="$EXP[SiloOnWatchlist]">RunPlugin(plugin://plugin.video.silokodiconnect/'
+           '?mode=watchlist&amp;id=$INFO[ListItem.Property(silo.content_id)]&amp;add=0)</onclick>\n'
+           '                    <onclick condition="!$EXP[SiloOnWatchlist]">RunPlugin(plugin://plugin.video.silokodiconnect/'
+           '?mode=watchlist&amp;id=$INFO[ListItem.Property(silo.content_id)]&amp;add=1)'),
        'versions': round_button(14, 'icons/infodialogs/versions.png',
                                 'String.IsEqual(ListItem.DBType,movie) + Integer.IsGreater(ListItem.VideoVersionsCount,1)'),
        'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'person': person(False), 'person_focused': person(True),
@@ -723,6 +761,13 @@ VARIABLES = '''
         <value condition="String.IsEqual(ListItem.VideoResolution,4K)"></value>
         <value>P</value>
     </variable>
+    <!-- On the watchlist: a toggle on this page (SiloKodiConnect sets
+         Window(movieinformation) silo.watchlist.for/.now), else as it opened. -->
+    <expression name="SiloOnWatchlist">[String.IsEqual(Window(movieinformation).Property(silo.watchlist.for),ListItem.Property(silo.content_id)) + String.IsEqual(Window(movieinformation).Property(silo.watchlist.now),true)] | [!String.IsEqual(Window(movieinformation).Property(silo.watchlist.for),ListItem.Property(silo.content_id)) + String.IsEqual(ListItem.Property(silo.watchlist),true)]</expression>
+    <variable name="SiloWatchlistIcon">
+        <value condition="$EXP[SiloOnWatchlist]">silo/menu_watchlist.png</value>
+        <value>silo/menu_watchlist_add.png</value>
+    </variable>
     <variable name="SiloDetailHdr">
         <value condition="String.IsEqual(ListItem.HdrType,dolbyvision)">DOLBY VISION</value>
         <value condition="String.IsEqual(ListItem.HdrType,hdr10plus)">HDR10+</value>
@@ -866,7 +911,8 @@ def add_timers():
 # The action row's buttons in order, with the control whose visibility counts
 # (round buttons and Play sit in groups, which Kodi's grouplist can't move
 # between, so each button names its neighbours).
-ACTIONS = [(300, 300), (301, 301), (308, 1008), (304, 1304), (302, 1302), (11, 1011), (14, 1014), (303, 1303)]
+ACTIONS = [(300, 300), (301, 301), (308, 1008), (304, 1304), (302, 1302), (11, 1011), (351, 1351), (352, 1352),
+           (14, 1014), (303, 1303)]
 
 
 def with_action_moves(xml):
