@@ -62,7 +62,12 @@ BAR_TOP = 56
 TEXT = 'FFEDEDED'
 TEXT_DIM = 'BFEDEDED'      # Silo's secondary text: 75%
 TAB_DIM = 'B3EDEDED'       # Silo's dimmed bar items: 70%
-TITLE_DIM = 'C7EDEDED'     # a card's title until it has focus: 78%
+# Measured on Silo's Apple TV app (October 2026) against Kodi on the SHIELD.
+TITLE_DIM = '66EDEDED'     # a card's title until it has focus: 40%
+SUB_DIM = '4AEDEDED'       # its second line until it has focus: 29%
+HERO_META = '87EDEDED'     # the hero's info line: 53%
+PLOT = '8AEDEDED'          # its plot: 54%
+CAST = '73EDEDED'          # its cast line: 45%
 BACKGROUND = 'FF0D0F12'     # Silo's near-black page
 ROWS_TOP = 592             # row titles sit where Silo's do (Silo TV, October 2026)
 # As in Silo, the row band shows the focused row and a sliver of the next
@@ -78,13 +83,55 @@ CARDS_TOP = 96
 
 # Cards as Silo TV draws them: dense posters (88x132 units) and backdrops
 # (180x101), each with a title and a second line beneath.
-POSTER = {'name': 'Poster', 'width': 176, 'height': 264, 'gap': 40, 'mask': 'silo/card_poster_mask.png',
-          'ring': 'silo/card_poster_focus.png', 'art': '$VAR[SiloPosterArt]',
-          'sub': '$VAR[SiloCardYear]', 'radius': 12}
-LANDSCAPE = {'name': 'Landscape', 'width': 360, 'height': 202, 'gap': 40, 'mask': 'silo/card_landscape_mask.png',
-             'ring': 'silo/card_landscape_focus.png', 'art': '$VAR[SiloLandscapeArt]',
-             'sub': '$VAR[SiloCardEpisode]', 'radius': 14}
+POSTER = {'name': 'Poster', 'width': 176, 'height': 264, 'gap': 40, 'mask': 'silo/card_poster_mask.png', 'rim': 'silo/card_poster_rim.png',
+          'art': '$VAR[SiloPosterArt]', 'sub': '$VAR[SiloCardYear]', 'radius': 18}
+LANDSCAPE = {'name': 'Landscape', 'width': 360, 'height': 202, 'gap': 40, 'mask': 'silo/card_landscape_mask.png', 'rim': 'silo/card_landscape_rim.png',
+             'art': '$VAR[SiloLandscapeArt]', 'sub': '$VAR[SiloCardEpisode]', 'radius': 20}
 CAPTION_H = 76             # title and second line under a card
+# Focus as Silo's Apple TV app shows it: the card grows, with no ring.
+FOCUS_ZOOM = 110
+
+
+def focus_zoom(condition, indent=24):
+    return ('\n%s<animation effect="zoom" start="100" end="%d" time="180" tween="sine" easing="out" '
+            'center="auto" condition="%s">Conditional</animation>' % (' ' * indent, FOCUS_ZOOM, condition))
+
+
+def watched_disc(x, y, visible, indent=24):
+    """Silo's watched mark: a black tick on an off-white disc, inside the poster's corner."""
+    pad = ' ' * indent
+    return '''
+%(p)s<control type="group">
+%(p)s    <left>%(x)d</left><top>%(y)d</top>
+%(p)s    <visible>%(visible)s</visible>
+%(p)s    <control type="image">
+%(p)s        <width>40</width><height>40</height>
+%(p)s        <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+%(p)s    </control>
+%(p)s    <control type="image">
+%(p)s        <left>9</left><top>9</top><width>22</width><height>22</height>
+%(p)s        <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+%(p)s    </control>
+%(p)s</control>''' % {'p': pad, 'x': x, 'y': y, 'visible': visible}
+
+
+def focus_sheen(width, height, mask, rim, condition, indent=24):
+    """Silo's Apple TV focus over the art, as measured there: a 6% white veil
+    and a hairline rim at 20%."""
+    pad = ' ' * indent
+    return '''
+%(p)s<control type="group">
+%(p)s    <left>6</left><top>6</top>
+%(p)s    <visible>%(condition)s</visible>
+%(p)s    <control type="image">
+%(p)s        <width>%(w)d</width><height>%(h)d</height>
+%(p)s        <texture diffuse="%(mask)s" colordiffuse="0FFFFFFF">colors/white.png</texture>
+%(p)s    </control>
+%(p)s    <control type="image">
+%(p)s        <width>%(w)d</width><height>%(h)d</height>
+%(p)s        <texture colordiffuse="33FFFFFF">%(rim)s</texture>
+%(p)s    </control>
+%(p)s</control>''' % {'p': pad, 'w': width, 'h': height, 'mask': mask, 'rim': rim, 'condition': condition}
 
 # Fonts (Inter, as the Silo apps use); Font.xml gets these between markers.
 FONTS = [  # name, file, size
@@ -205,23 +252,11 @@ def write_card_includes():
 
 
 def card_body(card, focused, control_id='$PARAM[id]'):
-    ring = ''
-    zoom = ''
-    if focused:
-        ring = '''
-                        <control type="image">
-                            <left>0</left><top>0</top>
-                            <width>%(rw)d</width><height>%(rh)d</height>
-                            <texture colordiffuse="%(text)s">%(ring)s</texture>
-                            <visible>Control.HasFocus(%(id)s)</visible>
-                        </control>''' % {'rw': card['width'] + 12, 'rh': card['height'] + 12, 'text': TEXT,
-                                         'ring': card['ring'], 'id': control_id}
-        # Kodi draws every row's selected item with this layout, focused or
-        # not: only the row that has focus shows the ring and the lift.
-        zoom = ('\n                        <animation effect="zoom" start="100" end="104" time="160" tween="sine" '
-                'center="auto" condition="Control.HasFocus(%s)">Conditional</animation>' % control_id)
+    # Kodi draws every row's selected item with this layout, focused or
+    # not: only the row that has focus lifts its card.
+    zoom = focus_zoom('Control.HasFocus(%s)' % control_id) if focused else ''
     # Silo dims a card's title until the card has focus.
-    title_visible = title_focused = ''
+    title_visible = title_focused = sub_focused = ''
     if focused:
         title_visible = '\n                            <visible>!Control.HasFocus(%s)</visible>' % control_id
         title_focused = '''
@@ -236,6 +271,16 @@ def card_body(card, focused, control_id='$PARAM[id]'):
                             <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
                             <visible>Control.HasFocus(%(id)s)</visible>
                         </control>''' % {'t1': card['height'] + 20, 'w': card['width'], 'text': TEXT, 'id': control_id}
+        sub_focused = '''
+                        <control type="label">
+                            <left>6</left><top>%(t2)d</top>
+                            <width>%(w)d</width><height>32</height>
+                            <font>silo_card_sub</font>
+                            <textcolor>%(text)s</textcolor>
+                            <label>%(sub)s</label>
+                            <visible>Control.HasFocus(%(id)s)</visible>
+                        </control>''' % {'t2': card['height'] + 54, 'w': card['width'], 'text': TEXT, 'sub': card['sub'],
+                                         'id': control_id}
     return '''
                     <control type="group">%(zoom)s
                         <control type="image">
@@ -264,13 +309,7 @@ def card_body(card, focused, control_id='$PARAM[id]'):
                             <midtexture colordiffuse="%(text)s">colors/white.png</midtexture>
                             <info>ListItem.Property(home.percent)</info>
                             <visible>!String.IsEmpty(ListItem.Property(home.percent))</visible>
-                        </control>
-                        <control type="image">
-                            <right>16</right><top>16</top>
-                            <width>32</width><height>32</height>
-                            <texture colordiffuse="%(text)s">OverlayWatched.png</texture>
-                            <visible>Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))</visible>
-                        </control>%(ring)s
+                        </control>%(sheen)s%(watched)s
                         <control type="label">
                             <left>6</left><top>%(t1)d</top>
                             <width>%(w)d</width><height>34</height>
@@ -282,17 +321,23 @@ def card_body(card, focused, control_id='$PARAM[id]'):
                             <left>6</left><top>%(t2)d</top>
                             <width>%(w)d</width><height>32</height>
                             <font>silo_card_sub</font>
-                            <textcolor>%(dim)s</textcolor>
-                            <label>%(sub)s</label>
-                        </control>
+                            <textcolor>%(sub_dim)s</textcolor>
+                            <label>%(sub)s</label>%(title_visible)s
+                        </control>%(sub_focused)s
                     </control>''' % {'zoom': zoom, 'w': card['width'], 'h': card['height'], 'mask': card['mask'],
                                     'art': card['art'], 'title_color': TITLE_DIM, 'title_visible': title_visible,
-                                    'title_focused': title_focused,
+                                    'title_focused': title_focused, 'sub_focused': sub_focused,
                                     # On the card's bottom edge, short of the rounded corners
                                     # (Kodi can't clip a progress bar to the card's mask).
                                     'px': 6 + card['radius'], 'pt': card['height'], 'pw': card['width'] - 2 * card['radius'],
-                                    'text': TEXT, 'dim': TEXT_DIM, 'ring': ring, 'sub': card['sub'],
+                                    'text': TEXT, 'sub_dim': SUB_DIM, 'sub': card['sub'],
                                     't1': card['height'] + 20, 't2': card['height'] + 54,
+                                    'sheen': focus_sheen(card['width'], card['height'], card['mask'], card['rim'],
+                                                         'Control.HasFocus(%s)' % control_id) if focused else '',
+                                    # From the poster's left: <right> is the item's edge, gap included.
+                                    'watched': watched_disc(6 + card['width'] - 10 - 40, 16,
+                                                            'Integer.IsGreater(ListItem.PlayCount,0) | '
+                                                            '!String.IsEmpty(ListItem.Property(home.playcount))'),
                                     'no_art': no_art_card(card)}
 
 
@@ -950,14 +995,7 @@ def fan_row_card(focused, list_id_):
                             <animation effect="rotate" end="%(a)d" center="auto" time="0" condition="true">Conditional</animation>
                             <visible>!String.IsEmpty(ListItem.Property(silo.fan%(n)d))</visible>
                         </control>''' % {'x': x, 'y': (FAN_CARD_H - 156) // 2 + 6, 'n': number, 'a': -angle}
-    ring = '''
-                    <control type="image">
-                        <width>%d</width><height>%d</height>
-                        <texture border="20" colordiffuse="%s">silo/card_landscape_focus.png</texture>
-                        <visible>%s</visible>
-                    </control>''' % (FAN_CARD_W + 12, FAN_CARD_H + 12, TEXT, lit) if focused else ''
-    zoom = ('\n                    <animation effect="zoom" start="100" end="104" center="auto" time="160" '
-            'tween="sine" easing="out" condition="%s">Conditional</animation>' % lit) if focused else ''
+    zoom = focus_zoom(lit, 20) if focused else ''
     return '''
                     <control type="group">%(zoom)s
                         <control type="image">
@@ -986,9 +1024,9 @@ def fan_row_card(focused, list_id_):
                             <textcolor>%(text)s</textcolor>
                             <label>$INFO[ListItem.Label]  ›</label>
                             <visible>%(see_all)s</visible>
-                        </control>%(ring)s
+                        </control>
                     </control>''' % {'zoom': zoom, 'w': FAN_CARD_W, 'h': FAN_CARD_H, 'minis': minis, 'text': TEXT,
-                                     'cy': FAN_CARD_H - 54, 'see_all': see_all, 'ring': ring}
+                                     'cy': FAN_CARD_H - 54, 'see_all': see_all}
 
 
 def sections_menus():
@@ -1327,9 +1365,9 @@ def badge(label, height, font):
                     <aligny>center</aligny>
                     <enable>false</enable>
                     <disabledcolor>%(text)s</disabledcolor>
-                    <!-- Silo's badge: a faint fill with a brighter rim. -->
-                    <texturenofocus border="8">silo/badge_fill.png</texturenofocus>
-                    <texturefocus border="8">silo/badge_fill.png</texturefocus>
+                    <!-- Silo's Apple TV badge: an outline only. -->
+                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
                     <visible>$EXP[%(shown)s]</visible>
                 </control>''' % {'h': height, 'label': label, 'font': font, 'text': TEXT,
                                   'shown': label.replace('$VAR[', 'Has').rstrip(']')}
@@ -1395,22 +1433,6 @@ def build():
             <left>%(x)d</left>
             <visible>!String.IsEmpty(%(row_prop)s) | [[String.IsEqual(Window(Home).Property(silo.page),home) | String.IsEmpty(Window(Home).Property(silo.page))] + [Integer.IsGreater(Window(Home).Property(silo.home.1.cards),0) | Integer.IsGreater(Window(Home).Property(silo.home.2.cards),0)]] | %(waiting)s</visible>
             <animation effect="fade" start="0" end="100" time="240">Visible</animation>
-            <!-- Silo's eyebrow: a short dash, then the focused row's name in capitals. -->
-            <control type="group">
-                <top>146</top>
-                <visible>!String.IsEmpty(Window(Home).Property(silo.row)) + %(no_pills)s</visible>
-                <control type="image">
-                    <top>14</top><width>26</width><height>3</height>
-                    <texture colordiffuse="D9FFFFFF">colors/white.png</texture>
-                </control>
-                <control type="label">
-                    <left>40</left><width>1000</width><height>30</height>
-                    <aligny>center</aligny>
-                    <font>silo_badge</font>
-                    <textcolor>D9EDEDED</textcolor>
-                    <label>[UPPERCASE]$VAR[SiloEyebrow][/UPPERCASE]</label>
-                </control>
-            </control>
             <control type="image">
                 <top>190</top>
                 <width>880</width><height>170</height>
@@ -1437,7 +1459,7 @@ def build():
                     <width>auto</width><height>40</height>
                     <aligny>center</aligny>
                     <font>silo_meta</font>
-                    <textcolor>%(text)s</textcolor>
+                    <textcolor>%(meta)s</textcolor>
                     <label>$VAR[SiloMetaLine]</label>
                 </control>
             </control>
@@ -1445,7 +1467,7 @@ def build():
                 <top>424</top>
                 <width>860</width><height>76</height>
                 <font>silo_plot</font>
-                <textcolor>%(dim)s</textcolor>
+                <textcolor>%(plot)s</textcolor>
                 <label>$VAR[SiloPlot]</label>
                 <autoscroll>false</autoscroll>
             </control>
@@ -1457,7 +1479,7 @@ def build():
                 <control type="label">
                     <width>auto</width><height>34</height>
                     <font>silo_detail</font>
-                    <textcolor>%(dim)s</textcolor>
+                    <textcolor>%(cast)s</textcolor>
                     <label>$VAR[SiloStatusDot]$VAR[SiloDetail]</label>
                 </control>%(status_track)s
             </control>
@@ -1512,12 +1534,12 @@ def build():
         <include>SiloTrailerCover</include>
     </controls>
 </window>
-''' % {'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'rows_top': ROWS_TOP, 'rows_h': BAND_H,
+''' % {'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'meta': HERO_META, 'plot': PLOT, 'cast': CAST, 'rows_top': ROWS_TOP, 'rows_h': BAND_H,
        'row_overlap': ROW_PITCH - BAND_H,
        'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
        'bar_down': bar_down(), 'avatar': avatar(), 'custom': shortcuts_list,
        'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections, 'drop_dim': dropdown_dim(), 'pills': page_pills() + custom_pills(),
-       'no_pills': ' + '.join(['!' + page_visible(p) for p in PILL_PAGES] + ['![%s + %s]' % (page_visible('custom'), CUSTOM_HAS_PILLS)]), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'wordmark': wordmark(SAFE_X, BAR_TOP, '\n            <animation effect="fade" start="100" end="70" time="200" condition="%s">Conditional</animation>' % BAR_DIM), 'waiting': ' | '.join('[%s]' % c for c, _ in waiting_rows()), 'background': BACKGROUND, 'splash_max': SPLASH_MAX,
+       'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'wordmark': wordmark(SAFE_X, BAR_TOP, '\n            <animation effect="fade" start="100" end="70" time="200" condition="%s">Conditional</animation>' % BAR_DIM), 'waiting': ' | '.join('[%s]' % c for c, _ in waiting_rows()), 'background': BACKGROUND, 'splash_max': SPLASH_MAX,
        # The age rating as Silo draws it: the quality badges' size, centred on the info line.
        'splash': splash(), 'mpaa_badge': badge('$VAR[SiloMpaa]', 34, 'silo_badge').replace(
            '<width>auto</width><height>34</height>', '<top>3</top><width>auto</width><height>34</height>', 1),
@@ -1547,10 +1569,10 @@ HERO = [
     ('SiloTitle', [('!String.IsEmpty(LI.Art(clearlogo)) | !String.IsEmpty(LI.Art(tvshow.clearlogo))', ''),
                    ('String.IsEqual(LI.DBType,episode)', '$INFO[LI.TVShowTitle]'),
                    (None, '$INFO[LI.Label]')]),
-    # Silo: "S02E02 · Song 2" for an episode, "2005 · IMDb 8.4 · Horror" otherwise.
+    # Silo: "S02E02 · Song 2" for an episode, "2005 · Horror · IMDb 8.4" otherwise.
     ('SiloMetaLine', [('String.IsEqual(LI.DBType,episode)', '$INFO[LI.Property(silo.code)]$INFO[LI.Title, · ,]'),
-                      (None, '$INFO[LI.Year]$INFO[LI.Property(silo.rating), · ,]'
-                       '$INFO[LI.Property(silo.genre), · ,]')]),
+                      (None, '$INFO[LI.Year]$INFO[LI.Property(silo.genre), · ,]'
+                       '$INFO[LI.Property(silo.rating), · ,]')]),
     ('SiloPlot', [(None, '$INFO[LI.Plot]')]),
     # "Aired Sep 25, 2026 · Tom Hardy, Helen Mirren, Pierce Brosnan"
     # A Requests card: its state (Requested, Downloading, Available...).
@@ -1652,17 +1674,6 @@ def variables():
                   for row in (1, 2)]
         out += '    <expression name="Has%s">%s</expression>\n' % (name, ' | '.join(terms))
     out += EMPTY_HOME
-    # The hero's eyebrow: the name of the row that last had focus.
-    out += '    <variable name="SiloEyebrow">\n'
-    for index, page in enumerate(PAGES):
-        for slot in range(1, rows_of(page) + 1):
-            for landscape in styles(page):
-                out += '        <value condition="String.IsEqual(%s,%d)">$INFO[%s]</value>\n' % (
-                    prop('silo.row'), list_id(index, slot, landscape), prop('silo.%s.%d.title' % (page, slot)))
-        if page in COLLECTION_PAGES:
-            out += '        <value condition="String.IsEqual(%s,%d)">Collections</value>\n' % (
-                prop('silo.row'), collection_id(index))
-    out += '    </variable>\n'
     for name, entries in HERO:
         # A Home card (SiloKodiConnect's published rows) carries its text ready.
         if name in HERO_STATIC:

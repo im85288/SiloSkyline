@@ -348,6 +348,7 @@
             <onright condition="[Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(Container.NumItems,20)">60</onright>
             <visible>$EXP[SiloBrowseGrid]</visible>
             <itemlayout width="270" height="481">
+                <control type="group">
                     <control type="image">
                         <left>6</left><top>6</top>
                         <width>246</width><height>369</height>
@@ -368,28 +369,38 @@
                         <info>ListItem.PercentPlayed</info>
                         <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                     </control>
-                    <control type="image">
-                        <left>214</left><top>16</top>
-                        <width>32</width><height>32</height>
-                        <texture colordiffuse="FFEDEDED">OverlayWatched.png</texture>
+
+                    <control type="group">
+                        <left>202</left><top>16</top>
                         <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
+                        <control type="image">
+                            <width>40</width><height>40</height>
+                            <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+                        </control>
+                        <control type="image">
+                            <left>9</left><top>9</top><width>22</width><height>22</height>
+                            <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                        </control>
                     </control>
                     <control type="label">
                         <left>6</left><top>389</top>
                         <width>246</width><height>34</height>
                         <font>silo_card_title</font>
-                        <textcolor>C7EDEDED</textcolor>
+                        <textcolor>66EDEDED</textcolor>
                         <label>$VAR[SiloBrowseLabel]</label>
                     </control>
                     <control type="label">
                         <left>6</left><top>423</top>
                         <width>246</width><height>32</height>
                         <font>silo_card_sub</font>
-                        <textcolor>BFEDEDED</textcolor>
+                        <textcolor>4AEDEDED</textcolor>
                         <label>$VAR[SiloBrowseSub]</label>
                     </control>
+                </control>
             </itemlayout>
             <focusedlayout width="270" height="481">
+                <control type="group">
+                        <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus(51)">Conditional</animation>
                     <control type="image">
                         <left>6</left><top>6</top>
                         <width>246</width><height>369</height>
@@ -410,22 +421,36 @@
                         <info>ListItem.PercentPlayed</info>
                         <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                     </control>
-                    <control type="image">
-                        <left>214</left><top>16</top>
-                        <width>32</width><height>32</height>
-                        <texture colordiffuse="FFEDEDED">OverlayWatched.png</texture>
-                        <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
-                    </control>
-                    <control type="image">
-                        <width>258</width><height>381</height>
-                        <texture colordiffuse="SkylineFocus">silo/card_poster_focus.png</texture>
+
+                    <control type="group">
+                        <left>6</left><top>6</top>
                         <visible>Control.HasFocus(51)</visible>
+                        <control type="image">
+                            <width>246</width><height>369</height>
+                            <texture diffuse="silo/card_poster_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
+                        </control>
+                        <control type="image">
+                            <width>246</width><height>369</height>
+                            <texture colordiffuse="33FFFFFF">silo/card_poster_rim.png</texture>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <left>202</left><top>16</top>
+                        <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
+                        <control type="image">
+                            <width>40</width><height>40</height>
+                            <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+                        </control>
+                        <control type="image">
+                            <left>9</left><top>9</top><width>22</width><height>22</height>
+                            <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                        </control>
                     </control>
                     <control type="label">
                         <left>6</left><top>389</top>
                         <width>246</width><height>34</height>
                         <font>silo_card_title</font>
-                        <textcolor>C7EDEDED</textcolor>
+                        <textcolor>66EDEDED</textcolor>
                         <label>$VAR[SiloBrowseLabel]</label>
                         <visible>!Control.HasFocus(51)</visible>
                     </control>
@@ -443,9 +468,10 @@
                         <left>6</left><top>423</top>
                         <width>246</width><height>32</height>
                         <font>silo_card_sub</font>
-                        <textcolor>BFEDEDED</textcolor>
+                        <textcolor>FFEDEDED</textcolor>
                         <label>$VAR[SiloBrowseSub]</label>
                     </control>
+                </control>
             </focusedlayout>
         </control>
 
@@ -731,7 +757,7 @@
             </itemlayout>
             <focusedlayout width="576" height="308">
                 <control type="group">
-                    <animation effect="zoom" start="100" end="104" center="auto" time="160" tween="sine" easing="out" condition="Control.HasFocus(53)">Conditional</animation>
+                    <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus(53)">Conditional</animation>
                     <control type="image">
                         <left>6</left><top>6</top><width>548</width><height>280</height>
                         <texture border="24" colordiffuse="FF1E2024">silo/card_landscape_mask.png</texture>
@@ -769,11 +795,6 @@
                         <textcolor>99EDEDED</textcolor>
                         <label>[UPPERCASE]$INFO[ListItem.Property(silo.count),, titles][/UPPERCASE]</label>
                     </control>
-                    <control type="image">
-                        <width>560</width><height>292</height>
-                        <texture border="20" colordiffuse="SkylineFocus">silo/card_landscape_focus.png</texture>
-                        <visible>Control.HasFocus(53)</visible>
-                    </control>
                 </control>
             </focusedlayout>
         </control>
@@ -787,6 +808,7 @@
             <viewtype label="Episodes">list</viewtype>
             <visible>$EXP[SiloBrowseEpisodes]</visible>
             <itemlayout width="1756" height="246">
+                <control type="group">
                     <control type="image">
                         <left>6</left><top>6</top>
                         <width>360</width><height>202</height>
@@ -807,17 +829,25 @@
                         <info>ListItem.PercentPlayed</info>
                         <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                     </control>
-                    <control type="image">
-                        <left>328</left><top>16</top>
-                        <width>32</width><height>32</height>
-                        <texture colordiffuse="FFEDEDED">OverlayWatched.png</texture>
-                        <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
-                    </control>
+
+                        <control type="group">
+                            <left>316</left><top>16</top>
+                            <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+                            <control type="image">
+                                <width>40</width><height>40</height>
+                                <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+                            </control>
+                            <control type="image">
+                                <left>9</left><top>9</top><width>22</width><height>22</height>
+                                <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                            </control>
+                        </control>
+                </control>
                     <control type="label">
                         <left>412</left><top>14</top>
                         <width>1100</width><height>40</height>
                         <font>silo_meta</font>
-                        <textcolor>C7EDEDED</textcolor>
+                        <textcolor>66EDEDED</textcolor>
                         <label>$VAR[SiloBrowseEpisodeTitle]</label>
                     </control>
                     <control type="label">
@@ -836,6 +866,8 @@
                     </control>
             </itemlayout>
             <focusedlayout width="1756" height="246">
+                <control type="group">
+                        <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus(52)">Conditional</animation>
                     <control type="image">
                         <left>6</left><top>6</top>
                         <width>360</width><height>202</height>
@@ -856,17 +888,32 @@
                         <info>ListItem.PercentPlayed</info>
                         <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                     </control>
-                    <control type="image">
-                        <left>328</left><top>16</top>
-                        <width>32</width><height>32</height>
-                        <texture colordiffuse="FFEDEDED">OverlayWatched.png</texture>
-                        <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
-                    </control>
-                    <control type="image">
-                        <width>372</width><height>214</height>
-                        <texture colordiffuse="SkylineFocus">silo/card_landscape_focus.png</texture>
+
+                    <control type="group">
+                        <left>6</left><top>6</top>
                         <visible>Control.HasFocus(52)</visible>
+                        <control type="image">
+                            <width>360</width><height>202</height>
+                            <texture diffuse="silo/card_landscape_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
+                        </control>
+                        <control type="image">
+                            <width>360</width><height>202</height>
+                            <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
+                        </control>
                     </control>
+                        <control type="group">
+                            <left>316</left><top>16</top>
+                            <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+                            <control type="image">
+                                <width>40</width><height>40</height>
+                                <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+                            </control>
+                            <control type="image">
+                                <left>9</left><top>9</top><width>22</width><height>22</height>
+                                <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                            </control>
+                        </control>
+                </control>
                     <control type="label">
                         <left>412</left><top>14</top>
                         <width>1100</width><height>40</height>

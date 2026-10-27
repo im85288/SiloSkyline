@@ -62,6 +62,45 @@
         <onstop>SetProperty(silo.ready,1,home)</onstop>
     </timer>
     <!-- end Silo Skyline -->
+    <!-- Silo Skyline library (tools/build_library.py) -->
+    <timer>
+        <name>silo_sort_top</name>
+        <start reset="true">String.IsEqual(Window(Home).Property(silo.browse.resort),1)</start>
+        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_sort_top),1) + !Container(50).IsUpdating | !Window.IsActive(1191)</stop>
+        <onstop condition="Window.IsActive(1191)">SetFocus(50,0,absolute)</onstop>
+        <onstop>ClearProperty(silo.browse.resort,home)</onstop>
+    </timer>
+    <timer>
+        <name>silo_focus_collections</name>
+        <start reset="true">[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + String.IsEqual(Window(Home).Property(silo.browse.type),collections) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Integer.IsGreater(Container(56).NumItems,0) + !Control.HasFocus(56) + !Control.HasFocus(61)</start>
+        <stop>true</stop>
+        <onstop condition="[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + !Control.HasFocus(56)">SetFocus(56)</onstop>
+    </timer>
+    <timer>
+        <name>silo_focus_collection</name>
+        <start reset="true">[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + String.IsEqual(Window(Home).Property(silo.browse.type),collection) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Integer.IsGreater(Container(55).NumItems,0) + !Control.HasFocus(55) + !Control.HasFocus(61)</start>
+        <stop>true</stop>
+        <onstop condition="[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + !Control.HasFocus(55)">SetFocus(55)</onstop>
+    </timer>
+    <timer>
+        <name>silo_focus_watchlist</name>
+        <start reset="true">[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + String.IsEqual(Window(Home).Property(silo.browse.type),watchlist) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Integer.IsGreater(Container(51).NumItems,0) + !Control.HasFocus(51) + !Control.HasFocus(61)</start>
+        <stop>true</stop>
+        <onstop condition="[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + !Control.HasFocus(51)">SetFocus(51)</onstop>
+    </timer>
+    <timer>
+        <name>silo_focus_favorites</name>
+        <start reset="true">[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + String.IsEqual(Window(Home).Property(silo.browse.type),favorites) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Integer.IsGreater(Container(52).NumItems,0) + !Control.HasFocus(52) + !Control.HasFocus(61)</start>
+        <stop>true</stop>
+        <onstop condition="[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + !Control.HasFocus(52)">SetFocus(52)</onstop>
+    </timer>
+    <timer>
+        <name>silo_focus_history</name>
+        <start reset="true">[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Integer.IsGreater(Container(53).NumItems,0) + !Control.HasFocus(53) + !Control.HasFocus(61)</start>
+        <stop>true</stop>
+        <onstop condition="[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + !Control.HasFocus(53)">SetFocus(53)</onstop>
+    </timer>
+    <!-- end Silo Skyline library -->
     <!-- Silo Skyline detail (tools/build_info.py) -->
     <timer>
         <name>silo_next_season</name>
@@ -296,43 +335,4 @@
         <onstop condition="Window.IsActive(movieinformation)">SetFocus(308)</onstop>
     </timer>
     <!-- end Silo Skyline detail -->
-    <!-- Silo Skyline library (tools/build_library.py) -->
-    <timer>
-        <name>silo_sort_top</name>
-        <start reset="true">String.IsEqual(Window(Home).Property(silo.browse.resort),1)</start>
-        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_sort_top),1) + !Container(50).IsUpdating | !Window.IsActive(1191)</stop>
-        <onstop condition="Window.IsActive(1191)">SetFocus(50,0,absolute)</onstop>
-        <onstop>ClearProperty(silo.browse.resort,home)</onstop>
-    </timer>
-    <timer>
-        <name>silo_focus_collections</name>
-        <start reset="true">[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + String.IsEqual(Window(Home).Property(silo.browse.type),collections) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Integer.IsGreater(Container(56).NumItems,0) + !Control.HasFocus(56) + !Control.HasFocus(61)</start>
-        <stop>true</stop>
-        <onstop condition="[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + !Control.HasFocus(56)">SetFocus(56)</onstop>
-    </timer>
-    <timer>
-        <name>silo_focus_collection</name>
-        <start reset="true">[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + String.IsEqual(Window(Home).Property(silo.browse.type),collection) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Integer.IsGreater(Container(55).NumItems,0) + !Control.HasFocus(55) + !Control.HasFocus(61)</start>
-        <stop>true</stop>
-        <onstop condition="[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + !Control.HasFocus(55)">SetFocus(55)</onstop>
-    </timer>
-    <timer>
-        <name>silo_focus_watchlist</name>
-        <start reset="true">[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + String.IsEqual(Window(Home).Property(silo.browse.type),watchlist) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Integer.IsGreater(Container(51).NumItems,0) + !Control.HasFocus(51) + !Control.HasFocus(61)</start>
-        <stop>true</stop>
-        <onstop condition="[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + !Control.HasFocus(51)">SetFocus(51)</onstop>
-    </timer>
-    <timer>
-        <name>silo_focus_favorites</name>
-        <start reset="true">[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + String.IsEqual(Window(Home).Property(silo.browse.type),favorites) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Integer.IsGreater(Container(52).NumItems,0) + !Control.HasFocus(52) + !Control.HasFocus(61)</start>
-        <stop>true</stop>
-        <onstop condition="[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + !Control.HasFocus(52)">SetFocus(52)</onstop>
-    </timer>
-    <timer>
-        <name>silo_focus_history</name>
-        <start reset="true">[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Integer.IsGreater(Container(53).NumItems,0) + !Control.HasFocus(53) + !Control.HasFocus(61)</start>
-        <stop>true</stop>
-        <onstop condition="[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + !Control.HasFocus(53)">SetFocus(53)</onstop>
-    </timer>
-    <!-- end Silo Skyline library -->
 </timers>

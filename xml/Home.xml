@@ -40,22 +40,6 @@
             <left>88</left>
             <visible>!String.IsEmpty(Window(Home).Property(silo.row)) | [[String.IsEqual(Window(Home).Property(silo.page),home) | String.IsEmpty(Window(Home).Property(silo.page))] + [Integer.IsGreater(Window(Home).Property(silo.home.1.cards),0) | Integer.IsGreater(Window(Home).Property(silo.home.2.cards),0)]] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),movies) + Integer.IsGreater(Container(5101).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),movies) + Integer.IsGreater(Container(5151).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),movies) + Integer.IsGreater(Container(5102).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),movies) + Integer.IsGreater(Container(5152).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),series) + Integer.IsGreater(Container(5201).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),series) + Integer.IsGreater(Container(5251).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),series) + Integer.IsGreater(Container(5202).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),series) + Integer.IsGreater(Container(5252).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),requests) + Integer.IsGreater(Container(5301).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),requests) + Integer.IsGreater(Container(5302).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),custom) + Integer.IsGreater(Container(5401).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),custom) + Integer.IsGreater(Container(5451).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),custom) + Integer.IsGreater(Container(5402).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),custom) + Integer.IsGreater(Container(5452).NumItems,0)]</visible>
             <animation effect="fade" start="0" end="100" time="240">Visible</animation>
-            <!-- Silo's eyebrow: a short dash, then the focused row's name in capitals. -->
-            <control type="group">
-                <top>146</top>
-                <visible>!String.IsEmpty(Window(Home).Property(silo.row)) + !String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEqual(Window(Home).Property(silo.page),series) + !String.IsEqual(Window(Home).Property(silo.page),requests) + ![String.IsEqual(Window(Home).Property(silo.page),custom) + String.IsEqual(Container(9100).ListItem.Property(hasSubmenu),True)]</visible>
-                <control type="image">
-                    <top>14</top><width>26</width><height>3</height>
-                    <texture colordiffuse="D9FFFFFF">colors/white.png</texture>
-                </control>
-                <control type="label">
-                    <left>40</left><width>1000</width><height>30</height>
-                    <aligny>center</aligny>
-                    <font>silo_badge</font>
-                    <textcolor>D9EDEDED</textcolor>
-                    <label>[UPPERCASE]$VAR[SiloEyebrow][/UPPERCASE]</label>
-                </control>
-            </control>
             <control type="image">
                 <top>190</top>
                 <width>880</width><height>170</height>
@@ -86,16 +70,16 @@
                     <aligny>center</aligny>
                     <enable>false</enable>
                     <disabledcolor>FFEDEDED</disabledcolor>
-                    <!-- Silo's badge: a faint fill with a brighter rim. -->
-                    <texturenofocus border="8">silo/badge_fill.png</texturenofocus>
-                    <texturefocus border="8">silo/badge_fill.png</texturefocus>
+                    <!-- Silo's Apple TV badge: an outline only. -->
+                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
                     <visible>$EXP[HasSiloMpaa]</visible>
                 </control>
                 <control type="label">
                     <width>auto</width><height>40</height>
                     <aligny>center</aligny>
                     <font>silo_meta</font>
-                    <textcolor>FFEDEDED</textcolor>
+                    <textcolor>87EDEDED</textcolor>
                     <label>$VAR[SiloMetaLine]</label>
                 </control>
             </control>
@@ -103,7 +87,7 @@
                 <top>424</top>
                 <width>860</width><height>76</height>
                 <font>silo_plot</font>
-                <textcolor>BFEDEDED</textcolor>
+                <textcolor>8AEDEDED</textcolor>
                 <label>$VAR[SiloPlot]</label>
                 <autoscroll>false</autoscroll>
             </control>
@@ -115,7 +99,7 @@
                 <control type="label">
                     <width>auto</width><height>34</height>
                     <font>silo_detail</font>
-                    <textcolor>BFEDEDED</textcolor>
+                    <textcolor>73EDEDED</textcolor>
                     <label>$VAR[SiloStatusDot]$VAR[SiloDetail]</label>
                 </control>
                 <control type="image">
@@ -149,9 +133,9 @@
                     <aligny>center</aligny>
                     <enable>false</enable>
                     <disabledcolor>FFEDEDED</disabledcolor>
-                    <!-- Silo's badge: a faint fill with a brighter rim. -->
-                    <texturenofocus border="8">silo/badge_fill.png</texturenofocus>
-                    <texturefocus border="8">silo/badge_fill.png</texturefocus>
+                    <!-- Silo's Apple TV badge: an outline only. -->
+                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
                     <visible>$EXP[HasSiloBadge1]</visible>
                 </control>
                 <control type="button">
@@ -162,9 +146,9 @@
                     <aligny>center</aligny>
                     <enable>false</enable>
                     <disabledcolor>FFEDEDED</disabledcolor>
-                    <!-- Silo's badge: a faint fill with a brighter rim. -->
-                    <texturenofocus border="8">silo/badge_fill.png</texturenofocus>
-                    <texturefocus border="8">silo/badge_fill.png</texturefocus>
+                    <!-- Silo's Apple TV badge: an outline only. -->
+                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
                     <visible>$EXP[HasSiloBadge2]</visible>
                 </control>
                 <control type="button">
@@ -175,9 +159,9 @@
                     <aligny>center</aligny>
                     <enable>false</enable>
                     <disabledcolor>FFEDEDED</disabledcolor>
-                    <!-- Silo's badge: a faint fill with a brighter rim. -->
-                    <texturenofocus border="8">silo/badge_fill.png</texturenofocus>
-                    <texturefocus border="8">silo/badge_fill.png</texturefocus>
+                    <!-- Silo's Apple TV badge: an outline only. -->
+                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
                     <visible>$EXP[HasSiloBadge3]</visible>
                 </control>
             </control>
@@ -4676,7 +4660,7 @@
                     </itemlayout>
                     <focusedlayout width="470" height="270">
                     <control type="group">
-                    <animation effect="zoom" start="100" end="104" center="auto" time="160" tween="sine" easing="out" condition="Control.HasFocus(5149)">Conditional</animation>
+                    <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus(5149)">Conditional</animation>
                         <control type="image">
                             <left>6</left><top>6</top><width>430</width><height>234</height>
                             <texture border="24" colordiffuse="FF1E2024">silo/card_landscape_mask.png</texture>
@@ -4725,11 +4709,6 @@
                             <label>$INFO[ListItem.Label]  ›</label>
                             <visible>String.IsEqual(ListItem.Property(silo.see_all),true)</visible>
                         </control>
-                    <control type="image">
-                        <width>442</width><height>246</height>
-                        <texture border="20" colordiffuse="SkylineFocus">silo/card_landscape_focus.png</texture>
-                        <visible>Control.HasFocus(5149)</visible>
-                    </control>
                     </control>
                     </focusedlayout>
                 </control>
@@ -4847,7 +4826,7 @@
                     </itemlayout>
                     <focusedlayout width="470" height="270">
                     <control type="group">
-                    <animation effect="zoom" start="100" end="104" center="auto" time="160" tween="sine" easing="out" condition="Control.HasFocus(5249)">Conditional</animation>
+                    <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus(5249)">Conditional</animation>
                         <control type="image">
                             <left>6</left><top>6</top><width>430</width><height>234</height>
                             <texture border="24" colordiffuse="FF1E2024">silo/card_landscape_mask.png</texture>
@@ -4896,11 +4875,6 @@
                             <label>$INFO[ListItem.Label]  ›</label>
                             <visible>String.IsEqual(ListItem.Property(silo.see_all),true)</visible>
                         </control>
-                    <control type="image">
-                        <width>442</width><height>246</height>
-                        <texture border="20" colordiffuse="SkylineFocus">silo/card_landscape_focus.png</texture>
-                        <visible>Control.HasFocus(5249)</visible>
-                    </control>
                     </control>
                     </focusedlayout>
                 </control>

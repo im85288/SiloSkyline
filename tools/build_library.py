@@ -21,7 +21,7 @@ import sys
 from urllib.parse import quote
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM  # noqa: E402
+from build_home import focus_sheen, focus_zoom, watched_disc, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM  # noqa: E402
 
 WINDOW_ID = 1191
 TYPE = 'Window(Home).Property(silo.browse.type)'
@@ -79,12 +79,7 @@ def letter_path(kind, letter):
 
 def card(focused, control_id=GRID_ID):
     lit = 'Control.HasFocus(%d)' % control_id
-    ring = '''
-                <control type="image">
-                    <width>%(rw)d</width><height>%(rh)d</height>
-                    <texture colordiffuse="%(text)s">silo/card_poster_focus.png</texture>
-                    <visible>%(lit)s</visible>
-                </control>''' % {'rw': POSTER_W + 12, 'rh': POSTER_H + 12, 'text': TEXT, 'lit': lit} if focused else ''
+    zoom = focus_zoom(lit, 20) if focused else ''
     title = '''
                 <control type="label">
                     <left>6</left><top>%(ty)d</top><width>%(w)d</width><height>44</height>
@@ -93,33 +88,28 @@ def card(focused, control_id=GRID_ID):
                     <label>$INFO[ListItem.Label]</label>%(scroll)s
                 </control>''' % {'ty': POSTER_H + 18, 'w': POSTER_W, 'colour': TEXT if focused else TITLE_DIM,
                                   'scroll': '\n                    <scroll>true</scroll>' if focused else ''}
-    return ring + '''
+    return '''
+                <control type="group">%(zoom)s
                 <control type="image">
                     <left>6</left><top>6</top><width>%(pw)d</width><height>%(ph)d</height>
                     <aspectratio>scale</aspectratio>
                     <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
                 </control>
                 <!-- The rating is in Silo's poster art itself (top left). -->
-                <!-- Watched: a white disc with a dark tick, top right. -->
-                <control type="group">
-                    <left>%(wx)d</left><top>16</top>
-                    <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
-                    <control type="image">
-                        <width>44</width><height>44</height>
-                        <texture colordiffuse="F2FFFFFF">silo/avatar_mask.png</texture>
-                    </control>
-                    <control type="image">
-                        <left>10</left><top>10</top><width>24</width><height>24</height>
-                        <texture colordiffuse="FF000000">OverlayWatched.png</texture>
-                    </control>
-                </control>%(title)s
+                <!-- Watched: Silo's frosted disc with a white tick, top right. -->%(sheen)s%(watched)s%(title)s
                 <control type="label">
                     <left>6</left><top>%(yy)d</top><width>%(w)d</width><height>34</height>
                     <font>silo_detail</font>
                     <textcolor>%(dim)s</textcolor>
                     <label>$INFO[ListItem.Year]</label>
-                </control>''' % {'pw': POSTER_W, 'ph': POSTER_H, 'text': TEXT, 'wx': POSTER_W - 50, 'title': title,
-                                 'yy': POSTER_H + 58, 'w': POSTER_W, 'dim': TEXT_DIM}
+                </control>
+                </control>''' % {'pw': POSTER_W, 'ph': POSTER_H, 'zoom': zoom, 'title': title,
+                                 'sheen': focus_sheen(POSTER_W, POSTER_H, 'silo/card_poster_mask.png', 'silo/card_poster_rim.png',
+                                                      lit, 16) if focused else '',
+                                 'watched': watched_disc(POSTER_W - 44, 16, 'Integer.IsGreater(ListItem.PlayCount,0) | '
+                                                         '[Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + '
+                                                         'Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]', 16),
+                                 'yy': POSTER_H + 58, 'w': POSTER_W, 'dim': TEXT if focused else SUB_DIM}
 
 
 def letter_layouts(list_id=AZ_ID, chosen=None):

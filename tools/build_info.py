@@ -18,7 +18,7 @@ import sys
 from urllib.parse import quote
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import BACKGROUND, POSTER, ROOT, SAFE_X, TEXT, TEXT_DIM, card_layout  # noqa: E402
+from build_home import focus_sheen, focus_zoom, watched_disc, BACKGROUND, POSTER, ROOT, SAFE_X, TEXT, TEXT_DIM, card_layout  # noqa: E402
 
 # Silo's detail hero: 100 px down (tvOS 100pt on a 1080pt canvas).
 TOP = 100
@@ -34,38 +34,167 @@ def badge(label, condition, font='silo_badge', height=36):
                     <aligny>center</aligny>
                     <enable>false</enable>
                     <disabledcolor>%(text)s</disabledcolor>
-                    <texturenofocus border="8">silo/badge_fill.png</texturenofocus>
-                    <texturefocus border="8">silo/badge_fill.png</texturefocus>
+                    <!-- Outlined, as on Silo's Apple TV app. -->
+                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
                     <visible>%(condition)s</visible>
                 </control>''' % {'h': height, 'label': label, 'font': font, 'text': TEXT, 'condition': condition}
 
 
+# The round buttons in the row's order, with their names: the focused one
+# opens into a white pill with its name, as in Silo's Apple TV app.
+ROUND_BUTTONS = [(304, 'Start over'), (302, 'Previous'), (11, 'Trailer'), (351, 'Trailer'), (352, 'Watchlist'),
+                 (14, 'Versions'), (303, 'More')]
+
+
+MORE_WINDOW, MORE_LIST = 1194, 3810
+MORE = 'Window(Home).Property(silo.more.%s)'
+MORE_OPEN = 'Window.IsActive(%d)' % MORE_WINDOW
+# A title watched (a show: every episode), or as the More menu just set it.
+WATCHED = ('[String.IsEqual(Window(movieinformation).Property(silo.marked),watched) | '
+           '[String.IsEmpty(Window(movieinformation).Property(silo.marked)) + [Integer.IsGreater(ListItem.PlayCount,0) | '
+           '[String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + '
+           'Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]]]')
+
+
+def more_opener():
+    """More's onclick (after its first): hand the menu the title, whether it's
+    watched and which round buttons come before More (the menu is its own
+    window, so Back closes only it), then open it."""
+    steps = ['SetProperty(silo.more.type,$INFO[ListItem.DBType],home)',
+             'SetProperty(silo.more.dbid,$INFO[ListItem.DBID],home)',
+             'ClearProperty(silo.more.watched,home)',
+             ('SetProperty(silo.more.watched,1,home)', WATCHED)]
+    for other, _ in ROUND_BUTTONS[:-1]:
+        steps += ['ClearProperty(silo.more.b%d,home)' % other,
+                  ('SetProperty(silo.more.b%d,1,home)' % other, 'Control.IsVisible(%d)' % (other + 1000))]
+    steps.append('ActivateWindow(%d)' % MORE_WINDOW)
+    out = 'noop</onclick>'
+    for step in steps:
+        action, condition = step if isinstance(step, tuple) else (step, None)
+        out += '\n                    <onclick%s>%s</onclick>' % (
+            ' condition="%s"' % condition if condition else '', action)
+    # round_button closes the last <onclick>.
+    return out[:-len('</onclick>')].replace('noop</onclick>\n                    <onclick>', '', 1)
+
+
+def more_menu():
+    """More's menu, as Silo's Apple TV app draws its menus: a dark glass panel
+    under the button with a small heading, the focused row a white bar. A
+    dialog of its own (Back closes it, not the info page), hung under More
+    wherever More is: Play is 340 wide and each round button before More 80
+    (64 and the row's gap)."""
+    def row(control_id, label, action, visible):
+        return '''
+                <control type="button" id="%(id)d">
+                    <width>536</width><height>64</height>
+                    <label>%(label)s</label>
+                    <font>silo_meta</font>
+                    <textoffsetx>24</textoffsetx>
+                    <aligny>center</aligny>
+                    <textcolor>%(text)s</textcolor>
+                    <focusedcolor>FF000000</focusedcolor>
+                    <texturefocus border="20" colordiffuse="%(text)s">silo/card_landscape_mask.png</texturefocus>
+                    <texturenofocus />
+                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=mark&amp;type=$INFO[%(type)s]&amp;dbid=$INFO[%(dbid)s]&amp;action=%(action)s)</onclick>
+                    <onclick>Dialog.Close(%(window)d)</onclick>
+                    <onup>Dialog.Close(%(window)d)</onup>
+                    <visible>%(visible)s</visible>
+                </control>''' % {'id': control_id, 'label': label, 'text': TEXT, 'action': action, 'visible': visible,
+                                  'type': MORE % 'type', 'dbid': MORE % 'dbid', 'window': MORE_WINDOW}
+    slides = ''.join('\n        <animation effect="slide" end="80,0" time="0" condition="String.IsEqual(%s,1)">'
+                     'Conditional</animation>' % (MORE % ('b%d' % other)) for other, _ in ROUND_BUTTONS[:-1])
+    watched = 'String.IsEqual(%s,1)' % (MORE % 'watched')
+    return '''<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated by tools/build_info.py: the info page's More menu. -->
+<window id="%(window)d" type="dialog">
+    <defaultcontrol always="true">%(list)d</defaultcontrol>
+    <controls>
+    <control type="group">
+        <left>%(x)d</left><top>%(y)d</top>
+        <animation effect="fade" start="0" end="100" time="160">WindowOpen</animation>
+        <animation effect="slide" start="0,-12" end="0,0" time="160" tween="sine" easing="out">WindowOpen</animation>
+        <animation effect="fade" start="100" end="0" time="120">WindowClose</animation>%(slides)s
+        <control type="image">
+            <width>560</width><height>140</height>
+            <texture border="28">silo/menu_panel.png</texture>
+        </control>
+        <control type="label">
+            <left>36</left><top>14</top><width>480</width><height>32</height>
+            <font>silo_badge</font>
+            <textcolor>80EDEDED</textcolor>
+            <label>[UPPERCASE]$VAR[SiloMoreHeading][/UPPERCASE]</label>
+        </control>
+        <control type="grouplist" id="%(list)d">
+            <left>12</left><top>58</top><width>536</width><height>64</height>
+            <orientation>vertical</orientation>%(rows)s
+        </control>
+    </control>
+    </controls>
+</window>
+''' % {'x': SAFE_X + 340 + 16, 'y': TOP + 470 + 64 + 14, 'slides': slides, 'list': MORE_LIST, 'window': MORE_WINDOW,
+       'rows': row(MORE_LIST + 1, '$VAR[SiloMoreWatched]', 'watched', '!' + watched) +
+       row(MORE_LIST + 2, '$VAR[SiloMoreUnwatched]', 'unwatched', watched)}
+
+
+def opened_by(label):
+    """How much wider a round button is open: its name in silo_tab (about 16 px
+    a character) and the pill's end."""
+    return 16 * len(label) + 30
+
+
 def round_button(control_id, icon, visible, onclick=''):
+    """A round icon at rest; with focus, a white pill with its name. The
+    button stays round and in place (Kodi's grouplist can't resize it): the
+    pill reaches past it, and the buttons after it slide over to make room."""
     action = '\n                    <onclick>%s</onclick>' % onclick if onclick else ''
+    lit = 'Control.HasFocus(%d)' % control_id
+    if control_id == 303:
+        lit = '[%s | %s]' % (lit, MORE_OPEN)
+    label = dict(ROUND_BUTTONS)[control_id]
+    earlier = [(other, opened_by(name)) for other, name in ROUND_BUTTONS[:[i for i, _ in ROUND_BUTTONS].index(control_id)]]
+    slides = ''.join('\n                    <animation effect="slide" end="%d,0" time="180" tween="sine" easing="out" '
+                     'condition="Control.HasFocus(%d)">Conditional</animation>' % (width, other) for other, width in earlier)
     return '''
                 <control type="group" id="%(group)d">
                     <width>64</width><height>64</height>
-                    <visible>%(visible)s</visible>
+                    <visible>%(visible)s</visible>%(slides)s
                     <control type="button" id="%(id)d">
                         <width>64</width><height>64</height>
                         <label />
-                        <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
+                        <texturefocus />
                         <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>%(action)s
+                    </control>
+                    <control type="group">
+                        <visible>%(lit)s</visible>
+                        <animation effect="zoom" start="40,100" end="100,100" center="0,32" time="180" tween="sine" easing="out">Visible</animation>
+                        <control type="image">
+                            <width>%(open_w)d</width><height>64</height>
+                            <texture border="30" colordiffuse="%(text)s">silo/pill.png</texture>
+                        </control>
+                        <control type="label">
+                            <left>62</left><width>%(label_w)d</width><height>64</height>
+                            <aligny>center</aligny>
+                            <font>silo_tab</font>
+                            <textcolor>FF000000</textcolor>
+                            <label>%(label)s</label>
+                        </control>
                     </control>
                     <control type="image">
                         <left>16</left><top>16</top>
                         <width>32</width><height>32</height>
                         <texture colordiffuse="FF000000">%(icon)s</texture>
-                        <visible>Control.HasFocus(%(id)d)</visible>
+                        <visible>%(lit)s</visible>
                     </control>
                     <control type="image">
                         <left>16</left><top>16</top>
                         <width>32</width><height>32</height>
                         <texture colordiffuse="%(text)s">%(icon)s</texture>
-                        <visible>!Control.HasFocus(%(id)d)</visible>
+                        <visible>!%(lit)s</visible>
                     </control>
                 </control>''' % {'id': control_id, 'icon': icon, 'visible': visible, 'text': TEXT, 'action': action,
-                                        'group': control_id + 1000}
+                                  'group': control_id + 1000, 'lit': lit, 'label': label, 'slides': slides,
+                                  'open_w': 64 + opened_by(label), 'label_w': opened_by(label) - 4}
 
 
 def build():
@@ -89,6 +218,7 @@ def build():
     <onload condition="String.IsEqual(Window(home).Property(silo.from_rail),1) + Integer.IsGreater(Container(50).NumItems,0)">SetFocus(50)</onload>
     <onload condition="String.IsEqual(Window(home).Property(silo.from_rail),1)">SetFocus(5000)</onload>
     <onload>ClearProperty(silo.from_rail,home)</onload>
+    <onload>SetProperty(silo.tint,$INFO[ListItem.Property(silo.tint)],movieinformation)</onload>
     <onload>SetProperty(silo.episode_id,$INFO[ListItem.DBID],movieinformation)</onload>
     <onload>SetProperty(silo.episode_number,$INFO[ListItem.Episode],movieinformation)</onload>
     <onload>SetProperty(silo.episode_season,$INFO[ListItem.Season],movieinformation)</onload>
@@ -105,8 +235,10 @@ def build():
         <!-- Silo's ambient wash in the title's colour (widget items carry it). -->
         <control type="image">
             <left>0</left><top>0</top><width>1920</width><height>1080</height>
-            <texture colordiffuse="$INFO[ListItem.Property(silo.tint)]">silo/tint_wash.png</texture>
-            <visible>!String.IsEmpty(ListItem.Property(silo.tint))</visible>
+            <!-- The page's own copy: with another dialog over it (More's menu), ListItem
+                 is that dialog's, and an empty colour would draw the wash white. -->
+            <texture colordiffuse="$INFO[Window(movieinformation).Property(silo.tint)]">silo/tint_wash.png</texture>
+            <visible>!String.IsEmpty(Window(movieinformation).Property(silo.tint))</visible>
         </control>
         <control type="image">
             <!-- 16:9 like the artwork, so Kodi draws it whole: cropped to fit,
@@ -140,7 +272,13 @@ def build():
                 <top>180</top>
                 <width>1200</width><height>40</height>
                 <orientation>horizontal</orientation>
-                <itemgap>14</itemgap>%(mpaa)s
+                <itemgap>0</itemgap>
+                <usecontrolcoords>true</usecontrolcoords>%(mpaa)s
+                <control type="image">
+                    <width>14</width><height>40</height>
+                    <texture />
+                    <visible>[!String.IsEmpty(ListItem.Mpaa) | !String.IsEmpty(ListItem.Property(silo.mpaa))]</visible>
+                </control>
                 <control type="label">
                     <width>auto</width><height>40</height>
                     <aligny>center</aligny>
@@ -148,19 +286,61 @@ def build():
                     <textcolor>%(text)s</textcolor>
                     <label>$VAR[SiloDetailFacts]</label>
                 </control>
+                <!-- The rating sources' marks are images (IMDb in its colours, TMDB as
+                     Silo's Apple TV app shows it), so the line is in parts around them. -->
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label>%(facts_dot)s</label>
+                    <visible>%(imdb_shown)s</visible>
+                </control>
+                <control type="image">
+                    <top>6</top><width>60</width><height>28</height>
+                    <texture>silo/imdb.png</texture>
+                    <visible>%(imdb_shown)s</visible>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label>$VAR[SiloDetailFactsImdb]</label>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label>%(facts_dot)s</label>
+                    <visible>%(tmdb_shown)s</visible>
+                </control>
+                <control type="image">
+                    <top>5</top><width>165</width><height>30</height>
+                    <texture>silo/tmdb.png</texture>
+                    <visible>%(tmdb_shown)s</visible>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label>$VAR[SiloDetailFactsTmdb]</label>
+                </control>
             </control>
             <control type="textbox">
                 <top>236</top>
-                <width>900</width><height>106</height>
+                <width>1080</width><height>106</height>
                 <font>silo_plot</font>
-                <textcolor>%(dim)s</textcolor>
+                <textcolor>%(text)s</textcolor>
                 <label>$VAR[SiloDetailPlot]</label>
             </control>
             <control type="label">
                 <top>362</top>
                 <width>1000</width><height>34</height>
                 <font>silo_detail</font>
-                <textcolor>%(dim)s</textcolor>
+                <textcolor>B3EDEDED</textcolor>
                 <label>$VAR[SiloDetailCredit]</label>
             </control>
             <!-- Silo's Version / Audio / Subtitles line, else the quality badges. -->
@@ -169,7 +349,7 @@ def build():
                 <width>1300</width><height>40</height>
                 <aligny>center</aligny>
                 <font>silo_detail</font>
-                <textcolor>%(dim)s</textcolor>
+                <textcolor>E6EDEDED</textcolor>
                 <label>$VAR[SiloDetailTech]</label>
                 <visible>%(has_tech)s</visible>
             </control>
@@ -194,7 +374,7 @@ def build():
                      would Browse); Browse once every episode is watched. Kodi reserves
                      ids 5-15 in this window (12 chooses art), so this is 300. -->
                 <control type="button" id="300">
-                    <width min="220">auto</width><height>64</height>
+                    <width>340</width><height>64</height>
                     <label>$VAR[SiloDetailNextLabel]</label>
                     <font>silo_tab</font>
                     <textoffsetx>40</textoffsetx>
@@ -203,16 +383,18 @@ def build():
                     <focusedcolor>FF000000</focusedcolor>
                     <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
                     <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
-                    <onclick condition="%(has_next)s + Integer.IsGreater(Container(62).ListItem.PercentPlayed,0)">PlayMedia($ESCINFO[Container(62).ListItem.FileNameAndPath],resume)</onclick>
-                    <onclick condition="%(has_next)s + !Integer.IsGreater(Container(62).ListItem.PercentPlayed,0)">PlayMedia($ESCINFO[Container(62).ListItem.FileNameAndPath],noresume)</onclick>
-                    <onclick condition="!%(has_next)s">ActivateWindow(Videos,videodb://tvshows/titles/$INFO[ListItem.DBID]/,return)</onclick>
+                    <!-- Another season chosen: its first episode, as Silo's Apple TV app does. -->
+                    <onclick condition="%(other_season)s">PlayMedia($ESCINFO[Container(61).ListItemAbsolute(0).FileNameAndPath],noresume)</onclick>
+                    <onclick condition="!%(other_season)s + %(has_next)s + Integer.IsGreater(Container(62).ListItem.PercentPlayed,0)">PlayMedia($ESCINFO[Container(62).ListItem.FileNameAndPath],resume)</onclick>
+                    <onclick condition="!%(other_season)s + %(has_next)s + !Integer.IsGreater(Container(62).ListItem.PercentPlayed,0)">PlayMedia($ESCINFO[Container(62).ListItem.FileNameAndPath],noresume)</onclick>
+                    <onclick condition="!%(other_season)s + !%(has_next)s">ActivateWindow(Videos,videodb://tvshows/titles/$INFO[ListItem.DBID]/,return)</onclick>
                     <onclick>Dialog.Close(movieinformation)</onclick>
                     <visible>%(show)s</visible>
                 </control>
                 <!-- A Requests card: Request it, or its state when Silo already has it. -->
                 <control type="button" id="301">
                     <visible>%(request)s</visible>
-                    <width min="220">auto</width><height>64</height>
+                    <width>340</width><height>64</height>
                     <label>$VAR[SiloRequestLabel]</label>
                     <font>silo_tab</font>
                     <textoffsetx>40</textoffsetx>
@@ -448,11 +630,12 @@ def build():
     </controls>
 </window>
 ''' % {'background': BACKGROUND, 'x': SAFE_X, 'top': TOP, 'text': TEXT, 'dim': TEXT_DIM, 'has_logo': has_logo,
+       'facts_dot': FACTS_DOT, 'imdb_shown': split_ratings(VARIABLES)[1], 'tmdb_shown': split_ratings(VARIABLES)[2], 'other_season': OTHER_SEASON,
        'mpaa': badge('$VAR[SiloDetailMpaa]', '[!String.IsEmpty(ListItem.Mpaa) | '
                      '!String.IsEmpty(ListItem.Property(silo.mpaa))]', 'silo_badge', 34).replace(
                          '<height>34</height>', '<top>3</top><height>34</height>', 1),
        'badges': badges, 'pills_x': SAFE_X - 6 + PILL_ITEM_W - 50, 'pill_item': PILL_ITEM_W, 'show_pill': show_pill(),
-       'has_tech': '[!String.IsEmpty(ListItem.Property(silo.version)) | !String.IsEmpty(ListItem.Property(silo.audio)) | %s]' % 'Control.HasFocus(64)',
+       'has_tech': '[!String.IsEmpty(ListItem.Property(silo.version)) | !String.IsEmpty(ListItem.Property(silo.audio)) | %s]' % 'Control.HasFocus(64) | Control.HasFocus(65) | Control.HasFocus(61) | Control.HasFocus(60)',
        # Play from the beginning, when Play would resume (Silo's More menu has it;
        # here it's a button, as there's no other way to it).
        'start_over': round_button(304, 'silo/start_over.png', '!%s + %s + ListItem.IsResumable' % (SHOW, NOT_REQUEST),
@@ -462,7 +645,7 @@ def build():
                                 'RunPlugin(plugin://plugin.video.silokodiconnect/?mode=previous&amp;dbid=$INFO[ListItem.DBID])'),
        'more': round_button(303, 'icons/menu.png',
                             '[String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow)] + String.IsEmpty(ListItem.Property(silo.request.tmdb))',
-                            'RunPlugin(plugin://plugin.video.silokodiconnect/?mode=more&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])'),
+                            more_opener()),
        'trailer': round_button(11, 'icons/infodialogs/trailer.png', '!String.IsEmpty(ListItem.Trailer)'),
        # Silo's trailer (SiloKodiConnect's silo.trailer, a YouTube id) when the
        # library has none: played by the YouTube add-on, which it offers to
@@ -561,8 +744,8 @@ def show_pill():
 
 
 def season(focused, list_id=60):
-    """A season pill as Silo draws them: outlined, the chosen season outlined
-    in white, and white with dark text while focused."""
+    """A season pill as Silo's Apple TV app draws them: a faint chip, the
+    chosen season a lighter one, and white with dark text while focused."""
     def pill(texture, colour, visible=''):
         return '''
                         <control type="image">
@@ -584,28 +767,41 @@ def season(focused, list_id=60):
     has = 'Control.HasFocus(%d)' % list_id
     if focused:
         return (pill('silo/pill.png', TEXT, has) + label('FF000000', has) +
-                pill('silo/season_ring.png', TEXT, '!' + has) + label(TEXT, '!' + has))
-    return pill('silo/season_ring.png', '59FFFFFF') + label(TEXT_DIM)
+                pill('silo/pill.png', '38FFFFFF', '!' + has) + label(TEXT, '!' + has))
+    return pill('silo/pill.png', '14FFFFFF') + label(TEXT)
+
+
+def episode_title(scroll, visible):
+    """An episode card's "S01E01 · Title": scrolling only while its row has focus."""
+    return '''
+                        <control type="label">
+                            <left>6</left><top>222</top>
+                            <width>360</width><height>34</height>
+                            <font>silo_card_title</font>
+                            <textcolor>%(text)s</textcolor>
+                            <label>$VAR[SiloEpisodeCode]$INFO[ListItem.Title, · ,]</label>%(scroll)s%(visible)s
+                        </control>''' % {'text': TEXT,
+                                         'scroll': '\n                            <scroll>true</scroll><scrollspeed>50</scrollspeed>'
+                                                   '<scrollsuffix>     ·     </scrollsuffix>' if scroll else '',
+                                         'visible': '\n                            <visible>%s</visible>' % visible if visible else ''}
 
 
 def episode_card(focused, list_id=61, current='String.IsEqual(ListItem.DBID,Container(62).ListItem.DBID)'):
     """An episode card: a still with progress and watched marks, then
     "S1 · E2 · Title" and the runtime. `current` marks Silo's current episode
     (the next one on a show's page, the opened one on an episode's)."""
-    ring = '''
+    lit = 'Control.HasFocus(%d)' % list_id
+    zoom = focus_zoom(lit) if focused else ''
+    # Focus as on Silo's Apple TV app; Silo's current episode keeps the rim alone.
+    sheen = (focus_sheen(360, 202, 'silo/card_landscape_mask.png', 'silo/card_landscape_rim.png', lit) + '''
                         <control type="image">
-                            <left>0</left><top>0</top>
-                            <width>372</width><height>214</height>
-                            <texture colordiffuse="%(text)s">silo/card_landscape_focus.png</texture>
-                            <visible>Control.HasFocus(%(id)d)</visible>
-                        </control>
-                        <control type="image">
-                            <left>0</left><top>0</top>
-                            <width>372</width><height>214</height>
-                            <texture colordiffuse="B3FFFFFF">silo/card_landscape_focus.png</texture>
-                            <visible>!Control.HasFocus(%(id)d) + %(current)s</visible>
-                        </control>''' % {'text': TEXT, 'id': list_id, 'current': current} if focused else ''
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>202</height>
+                            <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
+                            <visible>!%s + %s</visible>
+                        </control>''' % (lit, current)) if focused else ''
     return '''
+                    <control type="group">%(zoom)s
                         <control type="image">
                             <left>6</left><top>6</top>
                             <width>360</width><height>202</height>
@@ -620,32 +816,25 @@ def episode_card(focused, list_id=61, current='String.IsEqual(ListItem.DBID,Cont
                             <midtexture colordiffuse="%(text)s">colors/white.png</midtexture>
                             <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                         </control>
-                        <control type="image">
-                            <left>326</left><top>16</top>
-                            <width>30</width><height>30</height>
-                            <texture>OverlayWatched.png</texture>
-                            <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
-                        </control>%(ring)s
+%(sheen)s%(watched)s
+%(titles)s
                         <control type="label">
-                            <left>6</left><top>222</top>
-                            <width>360</width><height>34</height>
-                            <font>silo_card_title</font>
-                            <textcolor>%(text)s</textcolor>
-                            <label>S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</label>%(scroll)s
-                        </control>''' % {'ring': ring, 'text': TEXT, 'dim': TEXT_DIM,
-                                         'scroll': '\n                            <scroll>true</scroll>'
-                                                   '<scrollspeed>50</scrollspeed><scrollsuffix>     ·     </scrollsuffix>' if focused else ''}
+                            <left>6</left><top>256</top>
+                            <width>360</width><height>30</height>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[ListItem.Premiered]$INFO[ListItem.Duration(mins), · , min]</label>
+                        </control>
+                    </control>''' % {'zoom': zoom, 'sheen': sheen, 'text': TEXT, 'dim': TEXT_DIM,
+                                         'watched': watched_disc(366 - 10 - 40, 16, 'Integer.IsGreater(ListItem.PlayCount,0)'),
+                                         'titles': ''.join(episode_title(scroll, visible) for scroll, visible in
+                                                           (((True, lit), (False, '!' + lit)) if focused else ((False, ''),)))}
 
 
 
 def person(focused):
-    ring = '''
-                    <control type="image">
-                        <left>14</left><top>0</top>
-                        <width>184</width><height>184</height>
-                        <texture colordiffuse="%s">silo/person_ring.png</texture>
-                        <visible>Control.HasFocus(50)</visible>
-                    </control>''' % TEXT if focused else ''
+    # Silo's Apple TV app grows the photo on focus; no ring.
+    zoom = focus_zoom('Control.HasFocus(50)', 20) if focused else ''
     return '''
                     <control type="image">
                         <left>20</left><top>6</top>
@@ -653,8 +842,8 @@ def person(focused):
                         <!-- Cropped to fill the circle; scalediffuse="false" keeps the round
                              mask on the control instead of stretching it with the photo. -->
                         <aspectratio scalediffuse="false">scale</aspectratio>
-                        <texture background="true" diffuse="silo/person_mask.png" fallback="silo/person_placeholder.png">$INFO[ListItem.Art(thumb)]</texture>
-                    </control>%(ring)s
+                        <texture background="true" diffuse="silo/person_mask.png" fallback="silo/person_placeholder.png">$INFO[ListItem.Art(thumb)]</texture>%(zoom)s
+                    </control>
                     <control type="label">
                         <left>0</left><top>196</top>
                         <width>212</width><height>34</height>
@@ -670,7 +859,7 @@ def person(focused):
                         <font>silo_card_sub</font>
                         <textcolor>%(dim)s</textcolor>
                         <label>$INFO[ListItem.Label2]</label>
-                    </control>''' % {'ring': ring, 'text': TEXT, 'dim': TEXT_DIM}
+                    </control>''' % {'zoom': zoom, 'text': TEXT, 'dim': TEXT_DIM}
 
 
 VARIABLES = '''
@@ -698,13 +887,14 @@ VARIABLES = '''
         <value>$INFO[ListItem.Property(silo.mpaa)]</value>
     </variable>
     <variable name="SiloDetailFacts">
-        <value condition="Control.HasFocus(64)">$INFO[Container(64).ListItem.Premiered]$INFO[Container(64).ListItem.Duration(mins), · , min]$INFO[Container(64).ListItem.Rating(imdb), · IMDb ,]$INFO[Container(64).ListItem.Rating(themoviedb), · TMDB ,]$INFO[Container(64).ListItem.Season, · Season ,]$INFO[Container(64).ListItem.Episode, · Episode ,]</value>
+        <value condition="Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]">$INFO[Container(64).ListItem.Premiered]$INFO[Container(64).ListItem.Duration(mins), · , min]$INFO[Container(64).ListItem.Rating(imdb), · [COLOR BFEDEDED]IMDb[/COLOR] [B],[/B]]$INFO[Container(64).ListItem.Rating(themoviedb), · [COLOR BFEDEDED]TMDB[/COLOR] [B],[/B]]$INFO[Container(64).ListItem.Season, · Season ,]$INFO[Container(64).ListItem.Episode, · Episode ,]</value>
+        <value condition="Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]">$INFO[Container(61).ListItem.Premiered]$INFO[Container(61).ListItem.Duration(mins), · , min]$INFO[Container(61).ListItem.Rating(imdb), · [COLOR BFEDEDED]IMDb[/COLOR] [B],[/B]]$INFO[Container(61).ListItem.Rating(themoviedb), · [COLOR BFEDEDED]TMDB[/COLOR] [B],[/B]]$INFO[Container(61).ListItem.Season, · Season ,]$INFO[Container(61).ListItem.Episode, · Episode ,]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))">$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Property(silo.request.seasons), · , seasons]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Duration(mins), · , min]</value>
         <!-- Silo's order: date · runtime · IMDb · TMDB · Season · Episode. -->
-        <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.air_date))">$INFO[ListItem.Property(silo.air_date)]$INFO[ListItem.Duration(mins), · , min]$INFO[ListItem.Property(silo.rating.imdb), · IMDb ,]$INFO[ListItem.Property(silo.rating.tmdb), · TMDB ,]$INFO[ListItem.Season, · Season ,]$INFO[ListItem.Episode, · Episode ,]</value>
-        <value condition="String.IsEqual(ListItem.DBType,movie) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]">$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), · , min]$INFO[ListItem.Property(silo.rating.imdb), · IMDb ,]$INFO[ListItem.Property(silo.rating.tmdb), · TMDB ,]$INFO[ListItem.Property(silo.genre), · ,]</value>
-        <value condition="String.IsEqual(ListItem.DBType,tvshow) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.rating.imdb), · IMDb ,]$INFO[ListItem.Property(silo.rating.tmdb), · TMDB ,]$INFO[ListItem.Property(silo.genre), · ,]$VAR[SiloDetailSeasons]</value>
+        <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.air_date))">$INFO[ListItem.Property(silo.air_date)]$INFO[ListItem.Duration(mins), · , min]$INFO[ListItem.Property(silo.rating.imdb), · [COLOR BFEDEDED]IMDb[/COLOR] [B],[/B]]$INFO[ListItem.Property(silo.rating.tmdb), · [COLOR BFEDEDED]TMDB[/COLOR] [B],[/B]]$INFO[ListItem.Season, · Season ,]$INFO[ListItem.Episode, · Episode ,]</value>
+        <value condition="String.IsEqual(ListItem.DBType,movie) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]">$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), · , min]$INFO[ListItem.Property(silo.rating.imdb), · [COLOR BFEDEDED]IMDb[/COLOR] [B],[/B]]$INFO[ListItem.Property(silo.rating.tmdb), · [COLOR BFEDEDED]TMDB[/COLOR] [B],[/B]]$VAR[SiloDetailGenres]</value>
+        <value condition="String.IsEqual(ListItem.DBType,tvshow) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]">$INFO[ListItem.Year]$VAR[SiloDetailSeasons]$INFO[ListItem.Property(silo.rating.imdb), · [COLOR BFEDEDED]IMDb[/COLOR] [B],[/B]]$INFO[ListItem.Property(silo.rating.tmdb), · [COLOR BFEDEDED]TMDB[/COLOR] [B],[/B]]$VAR[SiloDetailGenres]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.code))">$INFO[ListItem.Property(silo.code)]$INFO[ListItem.Title, · ,]$INFO[ListItem.Property(silo.aired), · ,]$INFO[ListItem.Duration(mins), · , min]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Season,S,]$INFO[ListItem.Episode,E,]$INFO[ListItem.Title, · ,]$INFO[ListItem.Premiered, · ,]$INFO[ListItem.Duration(mins), · , min]</value>
         <value condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Property(silo.genre))">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.genre), · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Property(TotalEpisodes), · , episodes]</value>
@@ -713,12 +903,14 @@ VARIABLES = '''
         <value>$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$VAR[SiloDetailRating]$INFO[ListItem.Duration(mins), · , min]</value>
     </variable>
     <variable name="SiloDetailPlot">
-        <value condition="Control.HasFocus(64)">$INFO[Container(64).ListItem.Title,, · ]$INFO[Container(64).ListItem.Plot]</value>
+        <value condition="Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]">$INFO[Container(64).ListItem.Title,, · ]$INFO[Container(64).ListItem.Plot]</value>
+        <value condition="Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]">$INFO[Container(61).ListItem.Title,, · ]$INFO[Container(61).ListItem.Plot]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Title,, · ]$INFO[ListItem.Plot]</value>
         <value>$INFO[ListItem.Plot]</value>
     </variable>
     <variable name="SiloDetailTech">
-        <value condition="Control.HasFocus(64)">$INFO[Container(64).ListItem.VideoResolution,[COLOR 8CEDEDED]VERSION[/COLOR]  ,]$VAR[SiloFocusHdr]          [COLOR 8CEDEDED]AUDIO[/COLOR]  $VAR[SiloFocusAudio]</value>
+        <value condition="Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]">$INFO[Container(64).ListItem.VideoResolution,[COLOR 8CEDEDED]VERSION[/COLOR]  ,]$VAR[SiloFocusHdr]          [COLOR 8CEDEDED]AUDIO[/COLOR]  $VAR[SiloFocusAudio]</value>
+        <value condition="Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]">$INFO[Container(61).ListItem.VideoResolution,[COLOR 8CEDEDED]VERSION[/COLOR]  ,]$VAR[SiloFocusHdr61]          [COLOR 8CEDEDED]AUDIO[/COLOR]  $VAR[SiloFocusAudio61]</value>
         <value>$INFO[ListItem.Property(silo.version),[COLOR 8CEDEDED]VERSION[/COLOR]  ,          ]$INFO[ListItem.Property(silo.audio),[COLOR 8CEDEDED]AUDIO[/COLOR]  ,          ]$INFO[ListItem.Property(silo.subtitles),[COLOR 8CEDEDED]SUBTITLES[/COLOR]  ,]</value>
     </variable>
     <!-- The episode row's focused card: its formats, as the tech line names them. -->
@@ -728,6 +920,12 @@ VARIABLES = '''
         <value condition="String.IsEqual(Container(64).ListItem.HdrType,hdr10)"> · HDR10</value>
         <value condition="String.IsEqual(Container(64).ListItem.HdrType,hlg)"> · HLG</value>
     </variable>
+    <variable name="SiloFocusHdr61">
+        <value condition="String.IsEqual(Container(61).ListItem.HdrType,dolbyvision)"> · Dolby Vision</value>
+        <value condition="String.IsEqual(Container(61).ListItem.HdrType,hdr10plus)"> · HDR10+</value>
+        <value condition="String.IsEqual(Container(61).ListItem.HdrType,hdr10)"> · HDR10</value>
+        <value condition="String.IsEqual(Container(61).ListItem.HdrType,hlg)"> · HLG</value>
+    </variable>
     <variable name="SiloFocusAudio">
         <value condition="String.IsEqual(Container(64).ListItem.AudioCodec,eac3_ddp_atmos)">EAC3 Atmos$VAR[SiloFocusLayout]</value>
         <value condition="String.IsEqual(Container(64).ListItem.AudioCodec,truehd_atmos)">TrueHD Atmos$VAR[SiloFocusLayout]</value>
@@ -735,11 +933,24 @@ VARIABLES = '''
         <value condition="String.IsEqual(Container(64).ListItem.AudioCodec,dca)">DTS$VAR[SiloFocusLayout]</value>
         <value>[UPPERCASE]$INFO[Container(64).ListItem.AudioCodec][/UPPERCASE]$VAR[SiloFocusLayout]</value>
     </variable>
+    <variable name="SiloFocusAudio61">
+        <value condition="String.IsEqual(Container(61).ListItem.AudioCodec,eac3_ddp_atmos)">EAC3 Atmos$VAR[SiloFocusLayout61]</value>
+        <value condition="String.IsEqual(Container(61).ListItem.AudioCodec,truehd_atmos)">TrueHD Atmos$VAR[SiloFocusLayout61]</value>
+        <value condition="String.IsEqual(Container(61).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA$VAR[SiloFocusLayout61]</value>
+        <value condition="String.IsEqual(Container(61).ListItem.AudioCodec,dca)">DTS$VAR[SiloFocusLayout61]</value>
+        <value>[UPPERCASE]$INFO[Container(61).ListItem.AudioCodec][/UPPERCASE]$VAR[SiloFocusLayout61]</value>
+    </variable>
     <variable name="SiloFocusLayout">
         <value condition="Integer.IsEqual(Container(64).ListItem.AudioChannels,2)"> · 2.0</value>
         <value condition="Integer.IsEqual(Container(64).ListItem.AudioChannels,6)"> · 5.1</value>
         <value condition="Integer.IsEqual(Container(64).ListItem.AudioChannels,8)"> · 7.1</value>
         <value>$INFO[Container(64).ListItem.AudioChannels, · , ch]</value>
+    </variable>
+    <variable name="SiloFocusLayout61">
+        <value condition="Integer.IsEqual(Container(61).ListItem.AudioChannels,2)"> · 2.0</value>
+        <value condition="Integer.IsEqual(Container(61).ListItem.AudioChannels,6)"> · 5.1</value>
+        <value condition="Integer.IsEqual(Container(61).ListItem.AudioChannels,8)"> · 7.1</value>
+        <value>$INFO[Container(61).ListItem.AudioChannels, · , ch]</value>
     </variable>
     <variable name="SiloDetailCredit">
         <value condition="!String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.Property(silo.cast))">Starring $INFO[ListItem.Property(silo.cast)]</value>
@@ -802,17 +1013,47 @@ VARIABLES = '''
     <!-- The rating named by its source, as Silo shows it (SiloKodiConnect stores
          IMDb's, else TMDB's). -->
     <variable name="SiloDetailRating">
-        <value condition="!String.IsEmpty(ListItem.Rating(imdb))">$INFO[ListItem.Rating(imdb), · IMDb ,]</value>
-        <value condition="!String.IsEmpty(ListItem.Rating(themoviedb))">$INFO[ListItem.Rating(themoviedb), · TMDB ,]</value>
+        <value condition="!String.IsEmpty(ListItem.Rating(imdb))">$INFO[ListItem.Rating(imdb), · [COLOR BFEDEDED]IMDb[/COLOR] [B],[/B]]</value>
+        <value condition="!String.IsEmpty(ListItem.Rating(themoviedb))">$INFO[ListItem.Rating(themoviedb), · [COLOR BFEDEDED]TMDB[/COLOR] [B],[/B]]</value>
         <value>$INFO[ListItem.Rating, · ★ ,]</value>
     </variable>
     <variable name="SiloDetailSeasons">
-        <value condition="Integer.IsEqual(ListItem.Property(TotalSeasons),1)"> · 1 season</value>
-        <value condition="Integer.IsGreater(ListItem.Property(TotalSeasons),1)">$INFO[ListItem.Property(TotalSeasons), · , seasons]</value>
+        <value condition="Integer.IsEqual(ListItem.Property(TotalSeasons),1)"> · 1 Season</value>
+        <value condition="Integer.IsGreater(ListItem.Property(TotalSeasons),1)">$INFO[ListItem.Property(TotalSeasons), · , Seasons]</value>
+        <!-- Kodi gives this page no TotalSeasons: count its season pills. -->
+        <value condition="String.IsEqual(ListItem.DBType,tvshow) + Integer.IsEqual(Container(60).NumItems,1)"> · 1 Season</value>
+        <value condition="String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(Container(60).NumItems,1)">$INFO[Container(60).NumItems, · , Seasons]</value>
+    </variable>
+    <!-- Silo's first two genres ("Drama, Crime"), from SiloKodiConnect. -->
+    <!-- More's menu: its heading, and its rows' names (a show's are for every episode). -->
+    <variable name="SiloMoreHeading">
+        <value condition="String.IsEqual(Window(Home).Property(silo.more.type),tvshow)">Series</value>
+        <value condition="String.IsEqual(Window(Home).Property(silo.more.type),episode)">Episode</value>
+        <value>Film</value>
+    </variable>
+    <variable name="SiloMoreWatched">
+        <value condition="String.IsEqual(Window(Home).Property(silo.more.type),tvshow)">Mark series as watched</value>
+        <value>Mark as watched</value>
+    </variable>
+    <variable name="SiloMoreUnwatched">
+        <value condition="String.IsEqual(Window(Home).Property(silo.more.type),tvshow)">Mark series as unwatched</value>
+        <value>Mark as unwatched</value>
+    </variable>
+    <variable name="SiloDetailGenres">
+        <value condition="!String.IsEmpty(ListItem.Property(silo.genres))">$INFO[ListItem.Property(silo.genres), · ,]</value>
+        <value>$INFO[ListItem.Property(silo.genre), · ,]</value>
+    </variable>
+    <!-- An episode card's code, as Silo writes it: S01E01. -->
+    <variable name="SiloEpisodeCode">
+        <value condition="Integer.IsLess(ListItem.Season,10) + Integer.IsLess(ListItem.Episode,10)">S0$INFO[ListItem.Season]E0$INFO[ListItem.Episode]</value>
+        <value condition="Integer.IsLess(ListItem.Season,10)">S0$INFO[ListItem.Season]E$INFO[ListItem.Episode]</value>
+        <value condition="Integer.IsLess(ListItem.Episode,10)">S$INFO[ListItem.Season]E0$INFO[ListItem.Episode]</value>
+        <value>S$INFO[ListItem.Season]E$INFO[ListItem.Episode]</value>
     </variable>
     <variable name="SiloDetailNextLabel">
-        <value condition="Integer.IsGreater(Container(62).NumItems,0) + Integer.IsGreater(Container(62).ListItem.PercentPlayed,0)">Resume S$INFO[Container(62).ListItem.Season] · E$INFO[Container(62).ListItem.Episode]</value>
-        <value condition="Integer.IsGreater(Container(62).NumItems,0)">Play S$INFO[Container(62).ListItem.Season] · E$INFO[Container(62).ListItem.Episode]</value>
+        <value condition="[Integer.IsGreater(Container(61).NumItems,0) + !String.IsEqual(Container(61).ListItemAbsolute(0).Season,Container(62).ListItem.Season)]">Play S$INFO[Container(61).ListItemAbsolute(0).Season]:E$INFO[Container(61).ListItemAbsolute(0).Episode]</value>
+        <value condition="Integer.IsGreater(Container(62).NumItems,0) + Integer.IsGreater(Container(62).ListItem.PercentPlayed,0)">Resume S$INFO[Container(62).ListItem.Season]:E$INFO[Container(62).ListItem.Episode]</value>
+        <value condition="Integer.IsGreater(Container(62).NumItems,0)">Play S$INFO[Container(62).ListItem.Season]:E$INFO[Container(62).ListItem.Episode]</value>
         <value condition="Container(62).IsUpdating">$LOCALIZE[208]</value>
         <value>$LOCALIZE[1024]</value>
     </variable>
@@ -828,17 +1069,74 @@ VARIABLES = '''
 '''
 
 
+FACTS_DOT = '  [COLOR 80EDEDED]·[/COLOR]  '
+
+
+def rating_mark(source):
+    # The score's info label alone: no brackets, so it can't reach back into the labels before it.
+    return re.compile(r'\$INFO\[([^,\[\]$]+), · \[COLOR BFEDEDED\]%s\[/COLOR\] \[B\],\[/B\]\]' % source)
+
+
+IMDB_MARK, TMDB_MARK = rating_mark('IMDb'), rating_mark('TMDB')
+
+
+def split_ratings(variables):
+    """The facts line around the rating sources' marks (images): SiloDetailFacts
+    up to IMDb's, SiloDetailFactsImdb from its score up to TMDB's,
+    SiloDetailFactsTmdb from that score on; and when each mark shows (the
+    value Kodi picks has that score)."""
+    block = re.search(r'    <variable name="SiloDetailFacts">\n(.*?)    </variable>\n', variables, re.S)
+    parts = ([], [], [])
+    shown = {'imdb': [], 'tmdb': []}
+    earlier = []
+    for condition, value in re.findall(r'        <value(?: condition="([^"]*)")?>(.*)</value>\n', block.group(1)):
+        attribute = ' condition="%s"' % condition if condition else ''
+        imdb, tmdb = IMDB_MARK.search(value), TMDB_MARK.search(value)
+        pieces = ['', '', '']
+        rest = value
+        if tmdb:
+            pieces[2] = '$INFO[%s,  [B],[/B]]%s' % (tmdb.group(1), rest[tmdb.end():])
+            rest = rest[:tmdb.start()]
+        if imdb:
+            pieces[1] = '$INFO[%s,  [B],[/B]]%s' % (imdb.group(1), rest[imdb.end():])
+            rest = rest[:imdb.start()]
+        pieces[0] = rest
+        for part, piece in zip(parts, pieces):
+            part.append('        <value%s>%s</value>\n' % (attribute, piece))
+        for key, mark in (('imdb', imdb), ('tmdb', tmdb)):
+            if mark:
+                terms = (['[%s]' % condition] if condition else []) + ['![%s]' % c for c in earlier] + \
+                    ['!String.IsEmpty(%s)' % mark.group(1)]
+                shown[key].append('[%s]' % ' + '.join(terms))
+        if condition:
+            earlier.append(condition)
+    replaced = ''.join('    <variable name="%s">\n%s    </variable>\n' % (name, ''.join(part)) for name, part in
+                       zip(('SiloDetailFacts', 'SiloDetailFactsImdb', 'SiloDetailFactsTmdb'), parts))
+    variables = variables.replace(block.group(0), replaced)
+    # Silo's facts separator: a dim dot in wide gaps (measured on its Apple TV app).
+    for name in ('SiloDetailFacts', 'SiloDetailFactsImdb', 'SiloDetailFactsTmdb', 'SiloDetailSeasons',
+                 'SiloDetailGenres', 'SiloDetailRating'):
+        found = re.search(r'    <variable name="%s">\n.*?    </variable>\n' % name, variables, re.S).group(0)
+        variables = variables.replace(found, found.replace(' · ', FACTS_DOT))
+    return (variables,
+            ' | '.join(shown['imdb']) or 'false', ' | '.join(shown['tmdb']) or 'false')
+
+
 def add_variables():
     path = os.path.join(ROOT, 'xml', 'Variables.xml')
     text = open(path, encoding='utf-8').read()
     start, end = '    <!-- Silo Skyline detail (tools/build_info.py) -->', '    <!-- end Silo Skyline detail -->\n'
     if start in text:
         text = text[:text.index(start) - 1] + text[text.index(end) + len(end):]
-    text = text.replace('</includes>', VARIABLES + '</includes>')
+    text = text.replace('</includes>', split_ratings(VARIABLES)[0] + '</includes>')
     open(path, 'w', encoding='utf-8').write(text)
 
 
 JUMP = 'Window(movieinformation).Property(silo.jump)'
+# A show's page with a season chosen other than its next episode's (or with
+# no next episode): Play plays that season's first episode.
+OTHER_SEASON = ('[Integer.IsGreater(Container(61).NumItems,0) + '
+                '!String.IsEqual(Container(61).ListItemAbsolute(0).Season,Container(62).ListItem.Season)]')
 NEXT = 'Container(62).ListItem'
 MAX_SEASONS, MAX_EPISODES = 40, 60
 
@@ -935,6 +1233,8 @@ def with_action_moves(xml):
 if __name__ == '__main__':
     with open(os.path.join(ROOT, 'xml', 'DialogVideoInfo.xml'), 'w', encoding='utf-8') as handle:
         handle.write(with_action_moves(build()))
+    with open(os.path.join(ROOT, 'xml', 'Custom_%d_SiloMore.xml' % MORE_WINDOW), 'w', encoding='utf-8') as handle:
+        handle.write(more_menu())
     add_variables()
     add_timers()
     print('Wrote xml/DialogVideoInfo.xml, its variables in xml/Variables.xml and its timers in xml/Timers.xml')

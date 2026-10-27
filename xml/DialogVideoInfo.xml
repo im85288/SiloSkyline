@@ -7,6 +7,7 @@
     <onload condition="String.IsEqual(Window(home).Property(silo.from_rail),1) + Integer.IsGreater(Container(50).NumItems,0)">SetFocus(50)</onload>
     <onload condition="String.IsEqual(Window(home).Property(silo.from_rail),1)">SetFocus(5000)</onload>
     <onload>ClearProperty(silo.from_rail,home)</onload>
+    <onload>SetProperty(silo.tint,$INFO[ListItem.Property(silo.tint)],movieinformation)</onload>
     <onload>SetProperty(silo.episode_id,$INFO[ListItem.DBID],movieinformation)</onload>
     <onload>SetProperty(silo.episode_number,$INFO[ListItem.Episode],movieinformation)</onload>
     <onload>SetProperty(silo.episode_season,$INFO[ListItem.Season],movieinformation)</onload>
@@ -23,8 +24,10 @@
         <!-- Silo's ambient wash in the title's colour (widget items carry it). -->
         <control type="image">
             <left>0</left><top>0</top><width>1920</width><height>1080</height>
-            <texture colordiffuse="$INFO[ListItem.Property(silo.tint)]">silo/tint_wash.png</texture>
-            <visible>!String.IsEmpty(ListItem.Property(silo.tint))</visible>
+            <!-- The page's own copy: with another dialog over it (More's menu), ListItem
+                 is that dialog's, and an empty colour would draw the wash white. -->
+            <texture colordiffuse="$INFO[Window(movieinformation).Property(silo.tint)]">silo/tint_wash.png</texture>
+            <visible>!String.IsEmpty(Window(movieinformation).Property(silo.tint))</visible>
         </control>
         <control type="image">
             <!-- 16:9 like the artwork, so Kodi draws it whole: cropped to fit,
@@ -58,7 +61,8 @@
                 <top>180</top>
                 <width>1200</width><height>40</height>
                 <orientation>horizontal</orientation>
-                <itemgap>14</itemgap>
+                <itemgap>0</itemgap>
+                <usecontrolcoords>true</usecontrolcoords>
                 <control type="button">
                     <width>auto</width><top>3</top><height>34</height>
                     <label>$VAR[SiloDetailMpaa]</label>
@@ -67,8 +71,14 @@
                     <aligny>center</aligny>
                     <enable>false</enable>
                     <disabledcolor>FFEDEDED</disabledcolor>
-                    <texturenofocus border="8">silo/badge_fill.png</texturenofocus>
-                    <texturefocus border="8">silo/badge_fill.png</texturefocus>
+                    <!-- Outlined, as on Silo's Apple TV app. -->
+                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
+                    <visible>[!String.IsEmpty(ListItem.Mpaa) | !String.IsEmpty(ListItem.Property(silo.mpaa))]</visible>
+                </control>
+                <control type="image">
+                    <width>14</width><height>40</height>
+                    <texture />
                     <visible>[!String.IsEmpty(ListItem.Mpaa) | !String.IsEmpty(ListItem.Property(silo.mpaa))]</visible>
                 </control>
                 <control type="label">
@@ -78,19 +88,61 @@
                     <textcolor>FFEDEDED</textcolor>
                     <label>$VAR[SiloDetailFacts]</label>
                 </control>
+                <!-- The rating sources' marks are images (IMDb in its colours, TMDB as
+                     Silo's Apple TV app shows it), so the line is in parts around them. -->
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>  [COLOR 80EDEDED]·[/COLOR]  </label>
+                    <visible>[[Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]] + !String.IsEmpty(Container(64).ListItem.Rating(imdb))] | [[Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]] + ![Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]] + !String.IsEmpty(Container(61).ListItem.Rating(imdb))] | [[String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.air_date))] + ![Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]] + ![Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb))] + !String.IsEmpty(ListItem.Property(silo.rating.imdb))] | [[String.IsEqual(ListItem.DBType,movie) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]] + ![Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]] + ![Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.air_date))] + !String.IsEmpty(ListItem.Property(silo.rating.imdb))] | [[String.IsEqual(ListItem.DBType,tvshow) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]] + ![Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]] + ![Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.air_date))] + ![String.IsEqual(ListItem.DBType,movie) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]] + !String.IsEmpty(ListItem.Property(silo.rating.imdb))]</visible>
+                </control>
+                <control type="image">
+                    <top>6</top><width>60</width><height>28</height>
+                    <texture>silo/imdb.png</texture>
+                    <visible>[[Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]] + !String.IsEmpty(Container(64).ListItem.Rating(imdb))] | [[Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]] + ![Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]] + !String.IsEmpty(Container(61).ListItem.Rating(imdb))] | [[String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.air_date))] + ![Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]] + ![Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb))] + !String.IsEmpty(ListItem.Property(silo.rating.imdb))] | [[String.IsEqual(ListItem.DBType,movie) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]] + ![Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]] + ![Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.air_date))] + !String.IsEmpty(ListItem.Property(silo.rating.imdb))] | [[String.IsEqual(ListItem.DBType,tvshow) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]] + ![Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]] + ![Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.air_date))] + ![String.IsEqual(ListItem.DBType,movie) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]] + !String.IsEmpty(ListItem.Property(silo.rating.imdb))]</visible>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>$VAR[SiloDetailFactsImdb]</label>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>  [COLOR 80EDEDED]·[/COLOR]  </label>
+                    <visible>[[Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]] + !String.IsEmpty(Container(64).ListItem.Rating(themoviedb))] | [[Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]] + ![Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]] + !String.IsEmpty(Container(61).ListItem.Rating(themoviedb))] | [[String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.air_date))] + ![Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]] + ![Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb))] + !String.IsEmpty(ListItem.Property(silo.rating.tmdb))] | [[String.IsEqual(ListItem.DBType,movie) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]] + ![Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]] + ![Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.air_date))] + !String.IsEmpty(ListItem.Property(silo.rating.tmdb))] | [[String.IsEqual(ListItem.DBType,tvshow) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]] + ![Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]] + ![Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.air_date))] + ![String.IsEqual(ListItem.DBType,movie) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]] + !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]</visible>
+                </control>
+                <control type="image">
+                    <top>5</top><width>165</width><height>30</height>
+                    <texture>silo/tmdb.png</texture>
+                    <visible>[[Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]] + !String.IsEmpty(Container(64).ListItem.Rating(themoviedb))] | [[Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]] + ![Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]] + !String.IsEmpty(Container(61).ListItem.Rating(themoviedb))] | [[String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.air_date))] + ![Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]] + ![Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb))] + !String.IsEmpty(ListItem.Property(silo.rating.tmdb))] | [[String.IsEqual(ListItem.DBType,movie) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]] + ![Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]] + ![Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.air_date))] + !String.IsEmpty(ListItem.Property(silo.rating.tmdb))] | [[String.IsEqual(ListItem.DBType,tvshow) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]] + ![Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]] + ![Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))] + ![!String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.air_date))] + ![String.IsEqual(ListItem.DBType,movie) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]] + !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]</visible>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>$VAR[SiloDetailFactsTmdb]</label>
+                </control>
             </control>
             <control type="textbox">
                 <top>236</top>
-                <width>900</width><height>106</height>
+                <width>1080</width><height>106</height>
                 <font>silo_plot</font>
-                <textcolor>BFEDEDED</textcolor>
+                <textcolor>FFEDEDED</textcolor>
                 <label>$VAR[SiloDetailPlot]</label>
             </control>
             <control type="label">
                 <top>362</top>
                 <width>1000</width><height>34</height>
                 <font>silo_detail</font>
-                <textcolor>BFEDEDED</textcolor>
+                <textcolor>B3EDEDED</textcolor>
                 <label>$VAR[SiloDetailCredit]</label>
             </control>
             <!-- Silo's Version / Audio / Subtitles line, else the quality badges. -->
@@ -99,9 +151,9 @@
                 <width>1300</width><height>40</height>
                 <aligny>center</aligny>
                 <font>silo_detail</font>
-                <textcolor>BFEDEDED</textcolor>
+                <textcolor>E6EDEDED</textcolor>
                 <label>$VAR[SiloDetailTech]</label>
-                <visible>[!String.IsEmpty(ListItem.Property(silo.version)) | !String.IsEmpty(ListItem.Property(silo.audio)) | Control.HasFocus(64)]</visible>
+                <visible>[!String.IsEmpty(ListItem.Property(silo.version)) | !String.IsEmpty(ListItem.Property(silo.audio)) | Control.HasFocus(64) | Control.HasFocus(65) | Control.HasFocus(61) | Control.HasFocus(60)]</visible>
             </control>
             <control type="grouplist">
                 <top>406</top>
@@ -116,8 +168,9 @@
                     <aligny>center</aligny>
                     <enable>false</enable>
                     <disabledcolor>FFEDEDED</disabledcolor>
-                    <texturenofocus border="8">silo/badge_fill.png</texturenofocus>
-                    <texturefocus border="8">silo/badge_fill.png</texturefocus>
+                    <!-- Outlined, as on Silo's Apple TV app. -->
+                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
                     <visible>!String.IsEmpty(ListItem.Property(silo.badge1))</visible>
                 </control>
                 <control type="button">
@@ -128,8 +181,9 @@
                     <aligny>center</aligny>
                     <enable>false</enable>
                     <disabledcolor>FFEDEDED</disabledcolor>
-                    <texturenofocus border="8">silo/badge_fill.png</texturenofocus>
-                    <texturefocus border="8">silo/badge_fill.png</texturefocus>
+                    <!-- Outlined, as on Silo's Apple TV app. -->
+                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
                     <visible>!String.IsEmpty(ListItem.Property(silo.badge2))</visible>
                 </control>
                 <control type="button">
@@ -140,8 +194,9 @@
                     <aligny>center</aligny>
                     <enable>false</enable>
                     <disabledcolor>FFEDEDED</disabledcolor>
-                    <texturenofocus border="8">silo/badge_fill.png</texturenofocus>
-                    <texturefocus border="8">silo/badge_fill.png</texturefocus>
+                    <!-- Outlined, as on Silo's Apple TV app. -->
+                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
                     <visible>!String.IsEmpty(ListItem.Property(silo.badge3))</visible>
                 </control>
                 <control type="button">
@@ -152,8 +207,9 @@
                     <aligny>center</aligny>
                     <enable>false</enable>
                     <disabledcolor>FFEDEDED</disabledcolor>
-                    <texturenofocus border="8">silo/badge_fill.png</texturenofocus>
-                    <texturefocus border="8">silo/badge_fill.png</texturefocus>
+                    <!-- Outlined, as on Silo's Apple TV app. -->
+                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
                     <visible>!!String.IsEmpty(ListItem.Property(silo.badge1)) + !String.IsEmpty(ListItem.VideoResolution)</visible>
                 </control>
                 <control type="button">
@@ -164,8 +220,9 @@
                     <aligny>center</aligny>
                     <enable>false</enable>
                     <disabledcolor>FFEDEDED</disabledcolor>
-                    <texturenofocus border="8">silo/badge_fill.png</texturenofocus>
-                    <texturefocus border="8">silo/badge_fill.png</texturefocus>
+                    <!-- Outlined, as on Silo's Apple TV app. -->
+                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
                     <visible>!!String.IsEmpty(ListItem.Property(silo.badge1)) + !String.IsEmpty(ListItem.HdrType)</visible>
                 </control>
                 <control type="button">
@@ -176,11 +233,12 @@
                     <aligny>center</aligny>
                     <enable>false</enable>
                     <disabledcolor>FFEDEDED</disabledcolor>
-                    <texturenofocus border="8">silo/badge_fill.png</texturenofocus>
-                    <texturefocus border="8">silo/badge_fill.png</texturefocus>
+                    <!-- Outlined, as on Silo's Apple TV app. -->
+                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
                     <visible>!!String.IsEmpty(ListItem.Property(silo.badge1)) + !String.IsEmpty(ListItem.AudioCodec)</visible>
                 </control>
-                <visible>![!String.IsEmpty(ListItem.Property(silo.version)) | !String.IsEmpty(ListItem.Property(silo.audio)) | Control.HasFocus(64)]</visible>
+                <visible>![!String.IsEmpty(ListItem.Property(silo.version)) | !String.IsEmpty(ListItem.Property(silo.audio)) | Control.HasFocus(64) | Control.HasFocus(65) | Control.HasFocus(61) | Control.HasFocus(60)]</visible>
             </control>
             <!-- Actions: Play (or Resume / Browse), then round buttons. -->
             <control type="grouplist" id="5000">
@@ -209,7 +267,7 @@
                     <onright condition="Control.IsVisible(1352) + !Control.IsVisible(301) + !Control.IsVisible(1008) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351)">SetFocus(352)</onright>
                     <onright condition="Control.IsVisible(1014) + !Control.IsVisible(301) + !Control.IsVisible(1008) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352)">SetFocus(14)</onright>
                     <onright condition="Control.IsVisible(1303) + !Control.IsVisible(301) + !Control.IsVisible(1008) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352) + !Control.IsVisible(1014)">SetFocus(303)</onright>
-                    <width min="220">auto</width><height>64</height>
+                    <width>340</width><height>64</height>
                     <label>$VAR[SiloDetailNextLabel]</label>
                     <font>silo_tab</font>
                     <textoffsetx>40</textoffsetx>
@@ -218,9 +276,11 @@
                     <focusedcolor>SkylineFocusText</focusedcolor>
                     <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
-                    <onclick condition="[Integer.IsGreater(Container(62).NumItems,0) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + Integer.IsGreater(Container(62).ListItem.PercentPlayed,0)">PlayMedia($ESCINFO[Container(62).ListItem.FileNameAndPath],resume)</onclick>
-                    <onclick condition="[Integer.IsGreater(Container(62).NumItems,0) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + !Integer.IsGreater(Container(62).ListItem.PercentPlayed,0)">PlayMedia($ESCINFO[Container(62).ListItem.FileNameAndPath],noresume)</onclick>
-                    <onclick condition="![Integer.IsGreater(Container(62).NumItems,0) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">ActivateWindow(Videos,videodb://tvshows/titles/$INFO[ListItem.DBID]/,return)</onclick>
+                    <!-- Another season chosen: its first episode, as Silo's Apple TV app does. -->
+                    <onclick condition="[Integer.IsGreater(Container(61).NumItems,0) + !String.IsEqual(Container(61).ListItemAbsolute(0).Season,Container(62).ListItem.Season)]">PlayMedia($ESCINFO[Container(61).ListItemAbsolute(0).FileNameAndPath],noresume)</onclick>
+                    <onclick condition="![Integer.IsGreater(Container(61).NumItems,0) + !String.IsEqual(Container(61).ListItemAbsolute(0).Season,Container(62).ListItem.Season)] + [Integer.IsGreater(Container(62).NumItems,0) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + Integer.IsGreater(Container(62).ListItem.PercentPlayed,0)">PlayMedia($ESCINFO[Container(62).ListItem.FileNameAndPath],resume)</onclick>
+                    <onclick condition="![Integer.IsGreater(Container(61).NumItems,0) + !String.IsEqual(Container(61).ListItemAbsolute(0).Season,Container(62).ListItem.Season)] + [Integer.IsGreater(Container(62).NumItems,0) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + !Integer.IsGreater(Container(62).ListItem.PercentPlayed,0)">PlayMedia($ESCINFO[Container(62).ListItem.FileNameAndPath],noresume)</onclick>
+                    <onclick condition="![Integer.IsGreater(Container(61).NumItems,0) + !String.IsEqual(Container(61).ListItemAbsolute(0).Season,Container(62).ListItem.Season)] + ![Integer.IsGreater(Container(62).NumItems,0) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">ActivateWindow(Videos,videodb://tvshows/titles/$INFO[ListItem.DBID]/,return)</onclick>
                     <onclick>Dialog.Close(movieinformation)</onclick>
                     <visible>[String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]</visible>
                 </control>
@@ -240,7 +300,7 @@
                     <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1008) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352) + !Control.IsVisible(1014)">SetFocus(303)</onright>
                     <onleft condition="Control.IsVisible(300)">SetFocus(300)</onleft>
                     <visible>!String.IsEmpty(ListItem.Property(silo.request.tmdb))</visible>
-                    <width min="220">auto</width><height>64</height>
+                    <width>340</width><height>64</height>
                     <label>$VAR[SiloRequestLabel]</label>
                     <font>silo_tab</font>
                     <textoffsetx>40</textoffsetx>
@@ -330,10 +390,25 @@
                     <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>64</width><height>64</height>
                         <label />
-                        <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                        <texturefocus />
                         <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
                     <onclick>PlayMedia($ESCINFO[ListItem.FileNameAndPath],noresume)</onclick>
                     <onclick>Dialog.Close(movieinformation)</onclick>
+                    </control>
+                    <control type="group">
+                        <visible>Control.HasFocus(304)</visible>
+                        <animation effect="zoom" start="40,100" end="100,100" center="0,32" time="180" tween="sine" easing="out">Visible</animation>
+                        <control type="image">
+                            <width>254</width><height>64</height>
+                            <texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
+                        </control>
+                        <control type="label">
+                            <left>62</left><width>186</width><height>64</height>
+                            <aligny>center</aligny>
+                            <font>silo_tab</font>
+                            <textcolor>SkylineFocusText</textcolor>
+                            <label>Start over</label>
+                        </control>
                     </control>
                     <control type="image">
                         <left>16</left><top>16</top>
@@ -351,6 +426,7 @@
                 <control type="group" id="1302">
                     <width>64</width><height>64</height>
                     <visible>String.IsEqual(ListItem.DBType,episode)</visible>
+                    <animation effect="slide" end="190,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(304)">Conditional</animation>
                     <control type="button" id="302">
                     <ondown condition="[String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">60</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
@@ -367,9 +443,24 @@
                     <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1304) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>64</width><height>64</height>
                         <label />
-                        <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                        <texturefocus />
                         <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
                     <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=previous&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    </control>
+                    <control type="group">
+                        <visible>Control.HasFocus(302)</visible>
+                        <animation effect="zoom" start="40,100" end="100,100" center="0,32" time="180" tween="sine" easing="out">Visible</animation>
+                        <control type="image">
+                            <width>222</width><height>64</height>
+                            <texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
+                        </control>
+                        <control type="label">
+                            <left>62</left><width>154</width><height>64</height>
+                            <aligny>center</aligny>
+                            <font>silo_tab</font>
+                            <textcolor>SkylineFocusText</textcolor>
+                            <label>Previous</label>
+                        </control>
                     </control>
                     <control type="image">
                         <left>16</left><top>16</top>
@@ -387,6 +478,8 @@
                 <control type="group" id="1011">
                     <width>64</width><height>64</height>
                     <visible>!String.IsEmpty(ListItem.Trailer)</visible>
+                    <animation effect="slide" end="190,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(304)">Conditional</animation>
+                    <animation effect="slide" end="158,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(302)">Conditional</animation>
                     <control type="button" id="11">
                     <ondown condition="[String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">60</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
@@ -403,8 +496,23 @@
                     <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>64</width><height>64</height>
                         <label />
-                        <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                        <texturefocus />
                         <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
+                    </control>
+                    <control type="group">
+                        <visible>Control.HasFocus(11)</visible>
+                        <animation effect="zoom" start="40,100" end="100,100" center="0,32" time="180" tween="sine" easing="out">Visible</animation>
+                        <control type="image">
+                            <width>206</width><height>64</height>
+                            <texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
+                        </control>
+                        <control type="label">
+                            <left>62</left><width>138</width><height>64</height>
+                            <aligny>center</aligny>
+                            <font>silo_tab</font>
+                            <textcolor>SkylineFocusText</textcolor>
+                            <label>Trailer</label>
+                        </control>
                     </control>
                     <control type="image">
                         <left>16</left><top>16</top>
@@ -422,6 +530,9 @@
                 <control type="group" id="1351">
                     <width>64</width><height>64</height>
                     <visible>String.IsEmpty(ListItem.Trailer) + !String.IsEmpty(ListItem.Property(silo.trailer))</visible>
+                    <animation effect="slide" end="190,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(304)">Conditional</animation>
+                    <animation effect="slide" end="158,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(302)">Conditional</animation>
+                    <animation effect="slide" end="142,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(11)">Conditional</animation>
                     <control type="button" id="351">
                     <ondown condition="[String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">60</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
@@ -438,7 +549,7 @@
                     <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>64</width><height>64</height>
                         <label />
-                        <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                        <texturefocus />
                         <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
                     <onclick>noop</onclick>
                     <onclick condition="System.HasAddon(plugin.video.youtube)">SetProperty(silokodi.trailer_art,$INFO[ListItem.Art(fanart)],home)</onclick>
@@ -447,6 +558,21 @@
                     <onclick condition="System.HasAddon(plugin.video.youtube)">PlayMedia(plugin://plugin.video.youtube/play/?video_id=$INFO[ListItem.Property(silo.trailer)])</onclick>
                     <onclick condition="System.HasAddon(plugin.video.youtube)">Dialog.Close(movieinformation)</onclick>
                     <onclick condition="!System.HasAddon(plugin.video.youtube)">InstallAddon(plugin.video.youtube)</onclick>
+                    </control>
+                    <control type="group">
+                        <visible>Control.HasFocus(351)</visible>
+                        <animation effect="zoom" start="40,100" end="100,100" center="0,32" time="180" tween="sine" easing="out">Visible</animation>
+                        <control type="image">
+                            <width>206</width><height>64</height>
+                            <texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
+                        </control>
+                        <control type="label">
+                            <left>62</left><width>138</width><height>64</height>
+                            <aligny>center</aligny>
+                            <font>silo_tab</font>
+                            <textcolor>SkylineFocusText</textcolor>
+                            <label>Trailer</label>
+                        </control>
                     </control>
                     <control type="image">
                         <left>16</left><top>16</top>
@@ -464,6 +590,10 @@
                 <control type="group" id="1352">
                     <width>64</width><height>64</height>
                     <visible>!String.IsEmpty(ListItem.Property(silo.watchlist))</visible>
+                    <animation effect="slide" end="190,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(304)">Conditional</animation>
+                    <animation effect="slide" end="158,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(302)">Conditional</animation>
+                    <animation effect="slide" end="142,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(11)">Conditional</animation>
+                    <animation effect="slide" end="142,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(351)">Conditional</animation>
                     <control type="button" id="352">
                     <ondown condition="[String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">60</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
@@ -480,11 +610,26 @@
                     <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>64</width><height>64</height>
                         <label />
-                        <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                        <texturefocus />
                         <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
                     <onclick>noop</onclick>
                     <onclick condition="$EXP[SiloOnWatchlist]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=watchlist&amp;id=$INFO[ListItem.Property(silo.content_id)]&amp;add=0)</onclick>
                     <onclick condition="!$EXP[SiloOnWatchlist]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=watchlist&amp;id=$INFO[ListItem.Property(silo.content_id)]&amp;add=1)</onclick>
+                    </control>
+                    <control type="group">
+                        <visible>Control.HasFocus(352)</visible>
+                        <animation effect="zoom" start="40,100" end="100,100" center="0,32" time="180" tween="sine" easing="out">Visible</animation>
+                        <control type="image">
+                            <width>238</width><height>64</height>
+                            <texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
+                        </control>
+                        <control type="label">
+                            <left>62</left><width>170</width><height>64</height>
+                            <aligny>center</aligny>
+                            <font>silo_tab</font>
+                            <textcolor>SkylineFocusText</textcolor>
+                            <label>Watchlist</label>
+                        </control>
                     </control>
                     <control type="image">
                         <left>16</left><top>16</top>
@@ -502,6 +647,11 @@
                 <control type="group" id="1014">
                     <width>64</width><height>64</height>
                     <visible>String.IsEqual(ListItem.DBType,movie) + Integer.IsGreater(ListItem.VideoVersionsCount,1)</visible>
+                    <animation effect="slide" end="190,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(304)">Conditional</animation>
+                    <animation effect="slide" end="158,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(302)">Conditional</animation>
+                    <animation effect="slide" end="142,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(11)">Conditional</animation>
+                    <animation effect="slide" end="142,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(351)">Conditional</animation>
+                    <animation effect="slide" end="174,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(352)">Conditional</animation>
                     <control type="button" id="14">
                     <ondown condition="[String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">60</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
@@ -518,8 +668,23 @@
                     <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>64</width><height>64</height>
                         <label />
-                        <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                        <texturefocus />
                         <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
+                    </control>
+                    <control type="group">
+                        <visible>Control.HasFocus(14)</visible>
+                        <animation effect="zoom" start="40,100" end="100,100" center="0,32" time="180" tween="sine" easing="out">Visible</animation>
+                        <control type="image">
+                            <width>222</width><height>64</height>
+                            <texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
+                        </control>
+                        <control type="label">
+                            <left>62</left><width>154</width><height>64</height>
+                            <aligny>center</aligny>
+                            <font>silo_tab</font>
+                            <textcolor>SkylineFocusText</textcolor>
+                            <label>Versions</label>
+                        </control>
                     </control>
                     <control type="image">
                         <left>16</left><top>16</top>
@@ -537,6 +702,12 @@
                 <control type="group" id="1303">
                     <width>64</width><height>64</height>
                     <visible>[String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow)] + String.IsEmpty(ListItem.Property(silo.request.tmdb))</visible>
+                    <animation effect="slide" end="190,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(304)">Conditional</animation>
+                    <animation effect="slide" end="158,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(302)">Conditional</animation>
+                    <animation effect="slide" end="142,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(11)">Conditional</animation>
+                    <animation effect="slide" end="142,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(351)">Conditional</animation>
+                    <animation effect="slide" end="174,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(352)">Conditional</animation>
+                    <animation effect="slide" end="158,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(14)">Conditional</animation>
                     <control type="button" id="303">
                     <ondown condition="[String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">60</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
@@ -553,21 +724,52 @@
                     <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1014) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>64</width><height>64</height>
                         <label />
-                        <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                        <texturefocus />
                         <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
-                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=more&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick>SetProperty(silo.more.type,$INFO[ListItem.DBType],home)</onclick>
+                    <onclick>SetProperty(silo.more.dbid,$INFO[ListItem.DBID],home)</onclick>
+                    <onclick>ClearProperty(silo.more.watched,home)</onclick>
+                    <onclick condition="[String.IsEqual(Window(movieinformation).Property(silo.marked),watched) | [String.IsEmpty(Window(movieinformation).Property(silo.marked)) + [Integer.IsGreater(ListItem.PlayCount,0) | [String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]]]">SetProperty(silo.more.watched,1,home)</onclick>
+                    <onclick>ClearProperty(silo.more.b304,home)</onclick>
+                    <onclick condition="Control.IsVisible(1304)">SetProperty(silo.more.b304,1,home)</onclick>
+                    <onclick>ClearProperty(silo.more.b302,home)</onclick>
+                    <onclick condition="Control.IsVisible(1302)">SetProperty(silo.more.b302,1,home)</onclick>
+                    <onclick>ClearProperty(silo.more.b11,home)</onclick>
+                    <onclick condition="Control.IsVisible(1011)">SetProperty(silo.more.b11,1,home)</onclick>
+                    <onclick>ClearProperty(silo.more.b351,home)</onclick>
+                    <onclick condition="Control.IsVisible(1351)">SetProperty(silo.more.b351,1,home)</onclick>
+                    <onclick>ClearProperty(silo.more.b352,home)</onclick>
+                    <onclick condition="Control.IsVisible(1352)">SetProperty(silo.more.b352,1,home)</onclick>
+                    <onclick>ClearProperty(silo.more.b14,home)</onclick>
+                    <onclick condition="Control.IsVisible(1014)">SetProperty(silo.more.b14,1,home)</onclick>
+                    <onclick>ActivateWindow(1194)</onclick>
+                    </control>
+                    <control type="group">
+                        <visible>[Control.HasFocus(303) | Window.IsActive(1194)]</visible>
+                        <animation effect="zoom" start="40,100" end="100,100" center="0,32" time="180" tween="sine" easing="out">Visible</animation>
+                        <control type="image">
+                            <width>158</width><height>64</height>
+                            <texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
+                        </control>
+                        <control type="label">
+                            <left>62</left><width>90</width><height>64</height>
+                            <aligny>center</aligny>
+                            <font>silo_tab</font>
+                            <textcolor>SkylineFocusText</textcolor>
+                            <label>More</label>
+                        </control>
                     </control>
                     <control type="image">
                         <left>16</left><top>16</top>
                         <width>32</width><height>32</height>
                         <texture colordiffuse="SkylineFocusText">icons/menu.png</texture>
-                        <visible>Control.HasFocus(303)</visible>
+                        <visible>[Control.HasFocus(303) | Window.IsActive(1194)]</visible>
                     </control>
                     <control type="image">
                         <left>16</left><top>16</top>
                         <width>32</width><height>32</height>
                         <texture colordiffuse="FFEDEDED">icons/menu.png</texture>
-                        <visible>!Control.HasFocus(303)</visible>
+                        <visible>![Control.HasFocus(303) | Window.IsActive(1194)]</visible>
                     </control>
                 </control>
             </control>
@@ -607,13 +809,13 @@
                     <itemlayout width="184" height="56">
                         <control type="image">
                             <width>168</width><height>56</height>
-                            <texture border="28" colordiffuse="59FFFFFF">silo/season_ring.png</texture>
+                            <texture border="28" colordiffuse="14FFFFFF">silo/pill.png</texture>
                         </control>
                         <control type="label">
                             <width>168</width><height>56</height>
                             <align>center</align><aligny>center</aligny>
                             <font>silo_meta</font>
-                            <textcolor>BFEDEDED</textcolor>
+                            <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloSeasonLabel]</label>
                         </control>
                     </itemlayout>
@@ -631,7 +833,7 @@
                         </control>
                         <control type="image">
                             <width>168</width><height>56</height>
-                            <texture border="28" colordiffuse="SkylineFocus">silo/season_ring.png</texture><visible>!Control.HasFocus(60)</visible>
+                            <texture border="28" colordiffuse="38FFFFFF">silo/pill.png</texture><visible>!Control.HasFocus(60)</visible>
                         </control>
                         <control type="label">
                             <width>168</width><height>56</height>
@@ -653,6 +855,7 @@
                     <onclick>Dialog.Close(movieinformation)</onclick>
                     <content target="videos">$INFO[Container(60).ListItem.FolderPath]</content>
                     <itemlayout width="400" height="290">
+                    <control type="group">
                         <control type="image">
                             <left>6</left><top>6</top>
                             <width>360</width><height>202</height>
@@ -667,21 +870,39 @@
                             <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
                             <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                         </control>
-                        <control type="image">
-                            <left>326</left><top>16</top>
-                            <width>30</width><height>30</height>
-                            <texture>OverlayWatched.png</texture>
+
+                        <control type="group">
+                            <left>316</left><top>16</top>
                             <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+                            <control type="image">
+                                <width>40</width><height>40</height>
+                                <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+                            </control>
+                            <control type="image">
+                                <left>9</left><top>9</top><width>22</width><height>22</height>
+                                <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                            </control>
                         </control>
+
                         <control type="label">
                             <left>6</left><top>222</top>
                             <width>360</width><height>34</height>
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
-                            <label>S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</label>
+                            <label>$VAR[SiloEpisodeCode]$INFO[ListItem.Title, · ,]</label>
                         </control>
+                        <control type="label">
+                            <left>6</left><top>256</top>
+                            <width>360</width><height>30</height>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[ListItem.Premiered]$INFO[ListItem.Duration(mins), · , min]</label>
+                        </control>
+                    </control>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
+                    <control type="group">
+                        <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus(61)">Conditional</animation>
                         <control type="image">
                             <left>6</left><top>6</top>
                             <width>360</width><height>202</height>
@@ -696,32 +917,63 @@
                             <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
                             <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                         </control>
-                        <control type="image">
-                            <left>326</left><top>16</top>
-                            <width>30</width><height>30</height>
-                            <texture>OverlayWatched.png</texture>
-                            <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
-                        </control>
-                        <control type="image">
-                            <left>0</left><top>0</top>
-                            <width>372</width><height>214</height>
-                            <texture colordiffuse="SkylineFocus">silo/card_landscape_focus.png</texture>
+
+                        <control type="group">
+                            <left>6</left><top>6</top>
                             <visible>Control.HasFocus(61)</visible>
+                            <control type="image">
+                                <width>360</width><height>202</height>
+                                <texture diffuse="silo/card_landscape_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
+                            </control>
+                            <control type="image">
+                                <width>360</width><height>202</height>
+                                <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
+                            </control>
                         </control>
                         <control type="image">
-                            <left>0</left><top>0</top>
-                            <width>372</width><height>214</height>
-                            <texture colordiffuse="B3FFFFFF">silo/card_landscape_focus.png</texture>
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>202</height>
+                            <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
                             <visible>!Control.HasFocus(61) + String.IsEqual(ListItem.DBID,Container(62).ListItem.DBID)</visible>
+                        </control>
+                        <control type="group">
+                            <left>316</left><top>16</top>
+                            <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+                            <control type="image">
+                                <width>40</width><height>40</height>
+                                <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+                            </control>
+                            <control type="image">
+                                <left>9</left><top>9</top><width>22</width><height>22</height>
+                                <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                            </control>
+                        </control>
+
+                        <control type="label">
+                            <left>6</left><top>222</top>
+                            <width>360</width><height>34</height>
+                            <font>silo_card_title</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$VAR[SiloEpisodeCode]$INFO[ListItem.Title, · ,]</label>
+                            <scroll>true</scroll><scrollspeed>50</scrollspeed><scrollsuffix>     ·     </scrollsuffix>
+                            <visible>Control.HasFocus(61)</visible>
                         </control>
                         <control type="label">
                             <left>6</left><top>222</top>
                             <width>360</width><height>34</height>
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
-                            <label>S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</label>
-                            <scroll>true</scroll><scrollspeed>50</scrollspeed><scrollsuffix>     ·     </scrollsuffix>
+                            <label>$VAR[SiloEpisodeCode]$INFO[ListItem.Title, · ,]</label>
+                            <visible>!Control.HasFocus(61)</visible>
                         </control>
+                        <control type="label">
+                            <left>6</left><top>256</top>
+                            <width>360</width><height>30</height>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[ListItem.Premiered]$INFO[ListItem.Duration(mins), · , min]</label>
+                        </control>
+                    </control>
                     </focusedlayout>
                 </control>
             </control>
@@ -767,13 +1019,13 @@
                     <itemlayout width="184" height="56">
                         <control type="image">
                             <width>168</width><height>56</height>
-                            <texture border="28" colordiffuse="59FFFFFF">silo/season_ring.png</texture>
+                            <texture border="28" colordiffuse="14FFFFFF">silo/pill.png</texture>
                         </control>
                         <control type="label">
                             <width>168</width><height>56</height>
                             <align>center</align><aligny>center</aligny>
                             <font>silo_meta</font>
-                            <textcolor>BFEDEDED</textcolor>
+                            <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloSeasonLabel]</label>
                         </control>
                     </itemlayout>
@@ -791,7 +1043,7 @@
                         </control>
                         <control type="image">
                             <width>168</width><height>56</height>
-                            <texture border="28" colordiffuse="SkylineFocus">silo/season_ring.png</texture><visible>!Control.HasFocus(65)</visible>
+                            <texture border="28" colordiffuse="38FFFFFF">silo/pill.png</texture><visible>!Control.HasFocus(65)</visible>
                         </control>
                         <control type="label">
                             <width>168</width><height>56</height>
@@ -826,6 +1078,7 @@
                     <!-- $INFO, not a $VAR: Kodi reads a $VAR here only when the page opens. -->
                     <content target="videos">$INFO[Container(65).ListItem.FolderPath]</content>
                     <itemlayout width="400" height="290">
+                    <control type="group">
                         <control type="image">
                             <left>6</left><top>6</top>
                             <width>360</width><height>202</height>
@@ -840,21 +1093,39 @@
                             <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
                             <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                         </control>
-                        <control type="image">
-                            <left>326</left><top>16</top>
-                            <width>30</width><height>30</height>
-                            <texture>OverlayWatched.png</texture>
+
+                        <control type="group">
+                            <left>316</left><top>16</top>
                             <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+                            <control type="image">
+                                <width>40</width><height>40</height>
+                                <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+                            </control>
+                            <control type="image">
+                                <left>9</left><top>9</top><width>22</width><height>22</height>
+                                <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                            </control>
                         </control>
+
                         <control type="label">
                             <left>6</left><top>222</top>
                             <width>360</width><height>34</height>
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
-                            <label>S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</label>
+                            <label>$VAR[SiloEpisodeCode]$INFO[ListItem.Title, · ,]</label>
                         </control>
+                        <control type="label">
+                            <left>6</left><top>256</top>
+                            <width>360</width><height>30</height>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[ListItem.Premiered]$INFO[ListItem.Duration(mins), · , min]</label>
+                        </control>
+                    </control>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
+                    <control type="group">
+                        <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus(64)">Conditional</animation>
                         <control type="image">
                             <left>6</left><top>6</top>
                             <width>360</width><height>202</height>
@@ -869,32 +1140,63 @@
                             <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
                             <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                         </control>
-                        <control type="image">
-                            <left>326</left><top>16</top>
-                            <width>30</width><height>30</height>
-                            <texture>OverlayWatched.png</texture>
-                            <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
-                        </control>
-                        <control type="image">
-                            <left>0</left><top>0</top>
-                            <width>372</width><height>214</height>
-                            <texture colordiffuse="SkylineFocus">silo/card_landscape_focus.png</texture>
+
+                        <control type="group">
+                            <left>6</left><top>6</top>
                             <visible>Control.HasFocus(64)</visible>
+                            <control type="image">
+                                <width>360</width><height>202</height>
+                                <texture diffuse="silo/card_landscape_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
+                            </control>
+                            <control type="image">
+                                <width>360</width><height>202</height>
+                                <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
+                            </control>
                         </control>
                         <control type="image">
-                            <left>0</left><top>0</top>
-                            <width>372</width><height>214</height>
-                            <texture colordiffuse="B3FFFFFF">silo/card_landscape_focus.png</texture>
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>202</height>
+                            <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
                             <visible>!Control.HasFocus(64) + String.IsEqual(ListItem.DBID,Window(movieinformation).Property(silo.episode_id))</visible>
+                        </control>
+                        <control type="group">
+                            <left>316</left><top>16</top>
+                            <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+                            <control type="image">
+                                <width>40</width><height>40</height>
+                                <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+                            </control>
+                            <control type="image">
+                                <left>9</left><top>9</top><width>22</width><height>22</height>
+                                <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                            </control>
+                        </control>
+
+                        <control type="label">
+                            <left>6</left><top>222</top>
+                            <width>360</width><height>34</height>
+                            <font>silo_card_title</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$VAR[SiloEpisodeCode]$INFO[ListItem.Title, · ,]</label>
+                            <scroll>true</scroll><scrollspeed>50</scrollspeed><scrollsuffix>     ·     </scrollsuffix>
+                            <visible>Control.HasFocus(64)</visible>
                         </control>
                         <control type="label">
                             <left>6</left><top>222</top>
                             <width>360</width><height>34</height>
                             <font>silo_card_title</font>
                             <textcolor>FFEDEDED</textcolor>
-                            <label>S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</label>
-                            <scroll>true</scroll><scrollspeed>50</scrollspeed><scrollsuffix>     ·     </scrollsuffix>
+                            <label>$VAR[SiloEpisodeCode]$INFO[ListItem.Title, · ,]</label>
+                            <visible>!Control.HasFocus(64)</visible>
                         </control>
+                        <control type="label">
+                            <left>6</left><top>256</top>
+                            <width>360</width><height>30</height>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[ListItem.Premiered]$INFO[ListItem.Duration(mins), · , min]</label>
+                        </control>
+                    </control>
                     </focusedlayout>
                 </control>
             </control>
@@ -955,12 +1257,7 @@
                              mask on the control instead of stretching it with the photo. -->
                         <aspectratio scalediffuse="false">scale</aspectratio>
                         <texture background="true" diffuse="silo/person_mask.png" fallback="silo/person_placeholder.png">$INFO[ListItem.Art(thumb)]</texture>
-                    </control>
-                    <control type="image">
-                        <left>14</left><top>0</top>
-                        <width>184</width><height>184</height>
-                        <texture colordiffuse="SkylineFocus">silo/person_ring.png</texture>
-                        <visible>Control.HasFocus(50)</visible>
+                    <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus(50)">Conditional</animation>
                     </control>
                     <control type="label">
                         <left>0</left><top>196</top>

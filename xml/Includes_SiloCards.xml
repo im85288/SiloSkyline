@@ -67,39 +67,45 @@
                             </control>
                         </control>
                         <control type="progress">
-                            <left>18</left><top>264</top>
-                            <width>152</width><height>6</height>
+                            <left>24</left><top>264</top>
+                            <width>140</width><height>6</height>
                             <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
                             <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
                             <info>ListItem.PercentPlayed</info>
                             <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                         </control>
                         <control type="progress">
-                            <left>18</left><top>264</top>
-                            <width>152</width><height>6</height>
+                            <left>24</left><top>264</top>
+                            <width>140</width><height>6</height>
                             <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
                             <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
                             <info>ListItem.Property(home.percent)</info>
                             <visible>!String.IsEmpty(ListItem.Property(home.percent))</visible>
                         </control>
-                        <control type="image">
-                            <right>16</right><top>16</top>
-                            <width>32</width><height>32</height>
-                            <texture colordiffuse="FFEDEDED">OverlayWatched.png</texture>
+                        <control type="group">
+                            <left>132</left><top>16</top>
                             <visible>Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))</visible>
+                            <control type="image">
+                                <width>40</width><height>40</height>
+                                <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+                            </control>
+                            <control type="image">
+                                <left>9</left><top>9</top><width>22</width><height>22</height>
+                                <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                            </control>
                         </control>
                         <control type="label">
                             <left>6</left><top>284</top>
                             <width>176</width><height>34</height>
                             <font>silo_card_title</font>
-                            <textcolor>C7EDEDED</textcolor>
+                            <textcolor>66EDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
                         </control>
                         <control type="label">
                             <left>6</left><top>318</top>
                             <width>176</width><height>32</height>
                             <font>silo_card_sub</font>
-                            <textcolor>BFEDEDED</textcolor>
+                            <textcolor>4AEDEDED</textcolor>
                             <label>$VAR[SiloCardYear]</label>
                         </control>
                     </control>
@@ -108,7 +114,7 @@
         <param name="id" />
         <definition>
                     <control type="group">
-                        <animation effect="zoom" start="100" end="104" time="160" tween="sine" center="auto" condition="Control.HasFocus($PARAM[id])">Conditional</animation>
+                        <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus($PARAM[id])">Conditional</animation>
                         <control type="image">
                             <left>6</left><top>6</top>
                             <width>176</width><height>264</height>
@@ -137,38 +143,50 @@
                             </control>
                         </control>
                         <control type="progress">
-                            <left>18</left><top>264</top>
-                            <width>152</width><height>6</height>
+                            <left>24</left><top>264</top>
+                            <width>140</width><height>6</height>
                             <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
                             <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
                             <info>ListItem.PercentPlayed</info>
                             <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                         </control>
                         <control type="progress">
-                            <left>18</left><top>264</top>
-                            <width>152</width><height>6</height>
+                            <left>24</left><top>264</top>
+                            <width>140</width><height>6</height>
                             <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
                             <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
                             <info>ListItem.Property(home.percent)</info>
                             <visible>!String.IsEmpty(ListItem.Property(home.percent))</visible>
                         </control>
-                        <control type="image">
-                            <right>16</right><top>16</top>
-                            <width>32</width><height>32</height>
-                            <texture colordiffuse="FFEDEDED">OverlayWatched.png</texture>
-                            <visible>Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))</visible>
-                        </control>
-                        <control type="image">
-                            <left>0</left><top>0</top>
-                            <width>188</width><height>276</height>
-                            <texture colordiffuse="SkylineFocus">silo/card_poster_focus.png</texture>
+                        <control type="group">
+                            <left>6</left><top>6</top>
                             <visible>Control.HasFocus($PARAM[id])</visible>
+                            <control type="image">
+                                <width>176</width><height>264</height>
+                                <texture diffuse="silo/card_poster_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
+                            </control>
+                            <control type="image">
+                                <width>176</width><height>264</height>
+                                <texture colordiffuse="33FFFFFF">silo/card_poster_rim.png</texture>
+                            </control>
+                        </control>
+                        <control type="group">
+                            <left>132</left><top>16</top>
+                            <visible>Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))</visible>
+                            <control type="image">
+                                <width>40</width><height>40</height>
+                                <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+                            </control>
+                            <control type="image">
+                                <left>9</left><top>9</top><width>22</width><height>22</height>
+                                <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                            </control>
                         </control>
                         <control type="label">
                             <left>6</left><top>284</top>
                             <width>176</width><height>34</height>
                             <font>silo_card_title</font>
-                            <textcolor>C7EDEDED</textcolor>
+                            <textcolor>66EDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
                             <visible>!Control.HasFocus($PARAM[id])</visible>
                         </control>
@@ -187,8 +205,17 @@
                             <left>6</left><top>318</top>
                             <width>176</width><height>32</height>
                             <font>silo_card_sub</font>
-                            <textcolor>BFEDEDED</textcolor>
+                            <textcolor>4AEDEDED</textcolor>
                             <label>$VAR[SiloCardYear]</label>
+                            <visible>!Control.HasFocus($PARAM[id])</visible>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>318</top>
+                            <width>176</width><height>32</height>
+                            <font>silo_card_sub</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$VAR[SiloCardYear]</label>
+                            <visible>Control.HasFocus($PARAM[id])</visible>
                         </control>
                     </control>
         </definition>
@@ -207,39 +234,45 @@
                             <texture diffuse="silo/card_landscape_mask.png">silo/card_scrim.png</texture>
                         </control>
                         <control type="progress">
-                            <left>20</left><top>202</top>
-                            <width>332</width><height>6</height>
+                            <left>26</left><top>202</top>
+                            <width>320</width><height>6</height>
                             <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
                             <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
                             <info>ListItem.PercentPlayed</info>
                             <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                         </control>
                         <control type="progress">
-                            <left>20</left><top>202</top>
-                            <width>332</width><height>6</height>
+                            <left>26</left><top>202</top>
+                            <width>320</width><height>6</height>
                             <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
                             <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
                             <info>ListItem.Property(home.percent)</info>
                             <visible>!String.IsEmpty(ListItem.Property(home.percent))</visible>
                         </control>
-                        <control type="image">
-                            <right>16</right><top>16</top>
-                            <width>32</width><height>32</height>
-                            <texture colordiffuse="FFEDEDED">OverlayWatched.png</texture>
+                        <control type="group">
+                            <left>316</left><top>16</top>
                             <visible>Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))</visible>
+                            <control type="image">
+                                <width>40</width><height>40</height>
+                                <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+                            </control>
+                            <control type="image">
+                                <left>9</left><top>9</top><width>22</width><height>22</height>
+                                <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                            </control>
                         </control>
                         <control type="label">
                             <left>6</left><top>222</top>
                             <width>360</width><height>34</height>
                             <font>silo_card_title</font>
-                            <textcolor>C7EDEDED</textcolor>
+                            <textcolor>66EDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
                         </control>
                         <control type="label">
                             <left>6</left><top>256</top>
                             <width>360</width><height>32</height>
                             <font>silo_card_sub</font>
-                            <textcolor>BFEDEDED</textcolor>
+                            <textcolor>4AEDEDED</textcolor>
                             <label>$VAR[SiloCardEpisode]</label>
                         </control>
                     </control>
@@ -248,7 +281,7 @@
         <param name="id" />
         <definition>
                     <control type="group">
-                        <animation effect="zoom" start="100" end="104" time="160" tween="sine" center="auto" condition="Control.HasFocus($PARAM[id])">Conditional</animation>
+                        <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus($PARAM[id])">Conditional</animation>
                         <control type="image">
                             <left>6</left><top>6</top>
                             <width>360</width><height>202</height>
@@ -261,38 +294,50 @@
                             <texture diffuse="silo/card_landscape_mask.png">silo/card_scrim.png</texture>
                         </control>
                         <control type="progress">
-                            <left>20</left><top>202</top>
-                            <width>332</width><height>6</height>
+                            <left>26</left><top>202</top>
+                            <width>320</width><height>6</height>
                             <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
                             <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
                             <info>ListItem.PercentPlayed</info>
                             <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                         </control>
                         <control type="progress">
-                            <left>20</left><top>202</top>
-                            <width>332</width><height>6</height>
+                            <left>26</left><top>202</top>
+                            <width>320</width><height>6</height>
                             <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
                             <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
                             <info>ListItem.Property(home.percent)</info>
                             <visible>!String.IsEmpty(ListItem.Property(home.percent))</visible>
                         </control>
-                        <control type="image">
-                            <right>16</right><top>16</top>
-                            <width>32</width><height>32</height>
-                            <texture colordiffuse="FFEDEDED">OverlayWatched.png</texture>
-                            <visible>Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))</visible>
-                        </control>
-                        <control type="image">
-                            <left>0</left><top>0</top>
-                            <width>372</width><height>214</height>
-                            <texture colordiffuse="SkylineFocus">silo/card_landscape_focus.png</texture>
+                        <control type="group">
+                            <left>6</left><top>6</top>
                             <visible>Control.HasFocus($PARAM[id])</visible>
+                            <control type="image">
+                                <width>360</width><height>202</height>
+                                <texture diffuse="silo/card_landscape_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
+                            </control>
+                            <control type="image">
+                                <width>360</width><height>202</height>
+                                <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
+                            </control>
+                        </control>
+                        <control type="group">
+                            <left>316</left><top>16</top>
+                            <visible>Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))</visible>
+                            <control type="image">
+                                <width>40</width><height>40</height>
+                                <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+                            </control>
+                            <control type="image">
+                                <left>9</left><top>9</top><width>22</width><height>22</height>
+                                <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                            </control>
                         </control>
                         <control type="label">
                             <left>6</left><top>222</top>
                             <width>360</width><height>34</height>
                             <font>silo_card_title</font>
-                            <textcolor>C7EDEDED</textcolor>
+                            <textcolor>66EDEDED</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
                             <visible>!Control.HasFocus($PARAM[id])</visible>
                         </control>
@@ -311,8 +356,17 @@
                             <left>6</left><top>256</top>
                             <width>360</width><height>32</height>
                             <font>silo_card_sub</font>
-                            <textcolor>BFEDEDED</textcolor>
+                            <textcolor>4AEDEDED</textcolor>
                             <label>$VAR[SiloCardEpisode]</label>
+                            <visible>!Control.HasFocus($PARAM[id])</visible>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>256</top>
+                            <width>360</width><height>32</height>
+                            <font>silo_card_sub</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$VAR[SiloCardEpisode]</label>
+                            <visible>Control.HasFocus($PARAM[id])</visible>
                         </control>
                     </control>
         </definition>

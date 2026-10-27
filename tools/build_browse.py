@@ -15,7 +15,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import wordmark, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM  # noqa: E402
+from build_home import wordmark, focus_sheen, focus_zoom, watched_disc, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM  # noqa: E402
 
 GRID = 'Container.Content(movies) | Container.Content(tvshows) | Container.Content(sets) | Container.Content(seasons)'
 EPISODES = 'Container.Content(episodes)'
@@ -35,17 +35,13 @@ LETTERS = ['#'] + [chr(c) for c in range(ord('A'), ord('Z') + 1)]
 JUMP_BAR = '[Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(Container.NumItems,20)'
 # Episode list: a 16:9 still, then the episode's details beside it.
 STILL_W, STILL_H = 360, 202
+WATCHED = ('Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0)'
+           ' + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]')
 EPISODE_ITEM_H = STILL_H + 12 + 32
 
 
 def poster(focused, view_id):
-    ring = '''
-                    <control type="image">
-                        <width>%(rw)d</width><height>%(rh)d</height>
-                        <texture colordiffuse="%(text)s">silo/card_poster_focus.png</texture>
-                        <visible>Control.HasFocus(%(id)d)</visible>
-                    </control>''' % {'rw': POSTER_W + 12, 'rh': POSTER_H + 12, 'text': TEXT, 'id': view_id} \
-        if focused else ''
+    zoom = focus_zoom('Control.HasFocus(%d)' % view_id) if focused else ''
     # Silo dims a card's title until the card has focus.
     title_color = TITLE_DIM
     focused_title = '''
@@ -62,6 +58,7 @@ def poster(focused, view_id):
         if focused else ''
     dim_visible = '\n                        <visible>!Control.HasFocus(%d)</visible>' % view_id if focused else ''
     return '''
+                <control type="group">%(zoom)s
                     <control type="image">
                         <left>6</left><top>6</top>
                         <width>%(w)d</width><height>%(h)d</height>
@@ -82,12 +79,7 @@ def poster(focused, view_id):
                         <info>ListItem.PercentPlayed</info>
                         <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                     </control>
-                    <control type="image">
-                        <left>%(tick)d</left><top>16</top>
-                        <width>32</width><height>32</height>
-                        <texture colordiffuse="%(text)s">OverlayWatched.png</texture>
-                        <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
-                    </control>%(ring)s
+%(sheen)s%(watched)s
                     <control type="label">
                         <left>6</left><top>%(t1)d</top>
                         <width>%(w)d</width><height>34</height>
@@ -99,11 +91,15 @@ def poster(focused, view_id):
                         <left>6</left><top>%(t2)d</top>
                         <width>%(w)d</width><height>32</height>
                         <font>silo_card_sub</font>
-                        <textcolor>%(dim)s</textcolor>
+                        <textcolor>%(sub_colour)s</textcolor>
                         <label>$VAR[SiloBrowseSub]</label>
-                    </control>''' % {'w': POSTER_W, 'h': POSTER_H, 'pw': POSTER_W - 24, 'text': TEXT, 'dim': TEXT_DIM,
-                                     'tick': POSTER_W - 32, 'ring': ring, 't1': POSTER_H + 20, 't2': POSTER_H + 54,
+                    </control>
+                </control>''' % {'w': POSTER_W, 'h': POSTER_H, 'pw': POSTER_W - 24, 'text': TEXT, 'dim': TEXT_DIM,
+                                     'watched': watched_disc(POSTER_W - 44, 16, WATCHED, 20), 'zoom': zoom,
+                                     'sheen': focus_sheen(POSTER_W, POSTER_H, 'silo/card_poster_mask.png', 'silo/card_poster_rim.png',
+                                                          'Control.HasFocus(%d)' % view_id, 20) if focused else '', 't1': POSTER_H + 20, 't2': POSTER_H + 54,
                                      'title_color': title_color, 'dim_visible': dim_visible,
+                                     'sub_colour': TEXT if focused else SUB_DIM,
                                      'focused_title': focused_title}
 
 
@@ -153,14 +149,7 @@ def fan_card(focused, view_id):
                         <visible>!String.IsEmpty(ListItem.Property(silo.fan%(n)d))</visible>
                     </control>''' % {'x': x, 'y': (FAN_H - MINI_H) // 2 + 6, 'w': MINI_W, 'h': MINI_H, 'n': number,
                                      'a': -angle}
-    ring = '''
-                    <control type="image">
-                        <width>%d</width><height>%d</height>
-                        <texture border="20" colordiffuse="%s">silo/card_landscape_focus.png</texture>
-                        <visible>%s</visible>
-                    </control>''' % (FAN_W + 12, FAN_H + 12, TEXT, lit) if focused else ''
-    zoom = ('\n                    <animation effect="zoom" start="100" end="104" center="auto" time="160" '
-            'tween="sine" easing="out" condition="%s">Conditional</animation>' % lit) if focused else ''
+    zoom = focus_zoom(lit, 20) if focused else ''
     return '''
                 <control type="group">%(zoom)s
                     <control type="image">
@@ -178,21 +167,16 @@ def fan_card(focused, view_id):
                         <font>silo_badge</font>
                         <textcolor>99EDEDED</textcolor>
                         <label>[UPPERCASE]$INFO[ListItem.Property(silo.count),, titles][/UPPERCASE]</label>
-                    </control>%(ring)s
+                    </control>
                 </control>''' % {'zoom': zoom, 'w': FAN_W, 'h': FAN_H, 'minis': minis, 'tx': 292, 'ty': 50,
-                                 'tw': FAN_W - 292 - 20, 'cy': FAN_H - 62, 'text': TEXT, 'ring': ring}
+                                 'tw': FAN_W - 292 - 20, 'cy': FAN_H - 62, 'text': TEXT}
 
 
 def episode(focused, view_id):
-    ring = '''
-                    <control type="image">
-                        <width>%(rw)d</width><height>%(rh)d</height>
-                        <texture colordiffuse="%(text)s">silo/card_landscape_focus.png</texture>
-                        <visible>Control.HasFocus(%(id)d)</visible>
-                    </control>''' % {'rw': STILL_W + 12, 'rh': STILL_H + 12, 'text': TEXT, 'id': view_id} \
-        if focused else ''
     title_color = TEXT if focused else TITLE_DIM
+    zoom = focus_zoom('Control.HasFocus(%d)' % view_id) if focused else ''
     return '''
+                <control type="group">%(zoom)s
                     <control type="image">
                         <left>6</left><top>6</top>
                         <width>%(w)d</width><height>%(h)d</height>
@@ -213,12 +197,8 @@ def episode(focused, view_id):
                         <info>ListItem.PercentPlayed</info>
                         <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                     </control>
-                    <control type="image">
-                        <left>%(tick)d</left><top>16</top>
-                        <width>32</width><height>32</height>
-                        <texture colordiffuse="%(text)s">OverlayWatched.png</texture>
-                        <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
-                    </control>%(ring)s
+%(sheen)s%(watched)s
+                </control>
                     <control type="label">
                         <left>%(x)d</left><top>14</top>
                         <width>1100</width><height>40</height>
@@ -240,7 +220,10 @@ def episode(focused, view_id):
                         <textcolor>%(dim)s</textcolor>
                         <label>$INFO[ListItem.Plot]</label>
                     </control>''' % {'w': STILL_W, 'h': STILL_H, 'pw': STILL_W - 28, 'text': TEXT, 'dim': TEXT_DIM,
-                                     'tick': STILL_W - 32, 'ring': ring, 'x': STILL_W + 52, 'title_color': title_color}
+                                     'watched': watched_disc(STILL_W - 44, 16, 'Integer.IsGreater(ListItem.PlayCount,0)', 24),
+                                     'zoom': zoom, 'x': STILL_W + 52,
+                                     'sheen': focus_sheen(STILL_W, STILL_H, 'silo/card_landscape_mask.png', 'silo/card_landscape_rim.png',
+                                                          'Control.HasFocus(%d)' % view_id, 20) if focused else '', 'title_color': title_color}
 
 
 def jump_bar():

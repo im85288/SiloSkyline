@@ -107,6 +107,21 @@ def badge_fill(name='badge_fill.png', size=32, radius=8, rim=1.5):
     write_png(name, size, size, alpha)
 
 
+def menu_panel(name='menu_panel.png', size=96, radius=24, rim=1.5):
+    """Silo's Apple TV menus: a near-black glass panel (#272A30 at 95%) with a
+    faint light rim, stretched with border="28"."""
+    def pixel(x, y):
+        outer = rounded_rect_coverage(x, y, size, size, radius)
+        inner = rounded_rect_coverage(x, y, size, size, radius, inset=rim)
+        edge = outer - inner
+        # The rim: white at 14% over the panel, mixed into one colour.
+        alpha = inner * 0.95 + edge * 0.97
+        mix = edge / alpha if alpha else 0
+        colour = tuple(int(base + (255 - base) * 0.14 * mix) for base in (0x27, 0x2A, 0x30))
+        return alpha, colour
+    write_png(name, size, size, pixel)
+
+
 def play_circle(name='play_circle.png', size=64):
     """Silo's Continue Watching mark: a white disc with a play triangle cut out."""
     def in_triangle(px, py):
@@ -186,14 +201,18 @@ if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
     hero_mask()
     tint_wash()
-    card_mask('card_poster_mask.png', 176, 264, 12)
-    card_mask('card_landscape_mask.png', 360, 202, 14)
+    card_mask('card_poster_mask.png', 176, 264, 18)
+    card_mask('card_landscape_mask.png', 360, 202, 20)
     # Rings sit 6 px outside the card on each side.
     focus_ring('card_poster_focus.png', 188, 276, 18, 4)
     focus_ring('card_landscape_focus.png', 372, 214, 20, 4)
+    # Silo's Apple TV focus: a thin rim just inside the card, at the card's size.
+    focus_ring('card_poster_rim.png', 176, 264, 18, 1)
+    focus_ring('card_landscape_rim.png', 360, 202, 20, 1)
     # Badges: a 2 px outline, stretched with border="8".
     focus_ring('badge_outline.png', 32, 32, 8, 2)
     badge_fill()
+    menu_panel()
     play_circle()
     # Silo's skip pill outline (Up Next's Skip intro), stretched with border="48".
     focus_ring('pill_ring.png', 96, 96, 48, 4)
