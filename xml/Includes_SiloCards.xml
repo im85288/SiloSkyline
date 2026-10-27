@@ -55,7 +55,7 @@
                             <control type="image">
                                 <left>6</left><top>6</top>
                                 <width>176</width><height>264</height>
-                                <texture diffuse="silo/card_poster_mask.png" colordiffuse="FF262A31">colors/white.png</texture>
+                                <texture diffuse="silo/card_poster_mask.png" colordiffuse="SkylineCardEmpty">colors/white.png</texture>
                             </control>
                             <control type="textbox">
                                 <left>22</left><top>22</top>
@@ -125,7 +125,7 @@
                             <control type="image">
                                 <left>6</left><top>6</top>
                                 <width>176</width><height>264</height>
-                                <texture diffuse="silo/card_poster_mask.png" colordiffuse="FF262A31">colors/white.png</texture>
+                                <texture diffuse="silo/card_poster_mask.png" colordiffuse="SkylineCardEmpty">colors/white.png</texture>
                             </control>
                             <control type="textbox">
                                 <left>22</left><top>22</top>
@@ -161,7 +161,7 @@
                         <control type="image">
                             <left>0</left><top>0</top>
                             <width>188</width><height>276</height>
-                            <texture colordiffuse="FFEDEDED">silo/card_poster_focus.png</texture>
+                            <texture colordiffuse="SkylineFocus">silo/card_poster_focus.png</texture>
                             <visible>Control.HasFocus($PARAM[id])</visible>
                         </control>
                         <control type="label">
@@ -285,7 +285,7 @@
                         <control type="image">
                             <left>0</left><top>0</top>
                             <width>372</width><height>214</height>
-                            <texture colordiffuse="FFEDEDED">silo/card_landscape_focus.png</texture>
+                            <texture colordiffuse="SkylineFocus">silo/card_landscape_focus.png</texture>
                             <visible>Control.HasFocus($PARAM[id])</visible>
                         </control>
                         <control type="label">

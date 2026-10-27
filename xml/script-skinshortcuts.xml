@@ -50,7 +50,7 @@
                         <animation effect="fade" start="100" end="45" time="0" condition="String.IsEqual(ListItem.Property(skinshortcuts-disabled),True)">Conditional</animation>
                     <control type="image">
                         <width>560</width><height>84</height>
-                        <texture border="30" colordiffuse="FFEDEDED">silo/pill.png</texture>
+                        <texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
                         <visible>Control.HasFocus(211)</visible>
                     </control>
                     <control type="image">
@@ -61,14 +61,14 @@
                     <control type="label">
                         <left>28</left><top>8</top><width>504</width><height>38</height>
                         <font>silo_meta</font>
-                        <textcolor>FF000000</textcolor>
+                        <textcolor>SkylineFocusText</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                         <visible>Control.HasFocus(211)</visible>
                     </control>
                     <control type="label">
                         <left>28</left><top>44</top><width>504</width><height>32</height>
                         <font>silo_detail</font>
-                        <textcolor>B3000000</textcolor>
+                        <textcolor>SkylineFocusTextDim</textcolor>
                         <label>$VAR[SiloShortcutDetail]</label>
                         <visible>Control.HasFocus(211)</visible>
                     </control>
@@ -112,8 +112,8 @@
                     <aligny>center</aligny>
                     <font>silo_meta</font>
                     <textcolor>FFEDEDED</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
-                    <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus border="30" colordiffuse="14FFFFFF">silo/pill.png</texturenofocus>
                     <label>Add an item</label>
                 </control>
@@ -123,8 +123,8 @@
                     <aligny>center</aligny>
                     <font>silo_meta</font>
                     <textcolor>FFEDEDED</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
-                    <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus border="30" colordiffuse="14FFFFFF">silo/pill.png</texturenofocus>
                     <label>Move up</label>
                     <visible>Integer.IsGreater(Container(211).NumItems,1)</visible>
@@ -135,8 +135,8 @@
                     <aligny>center</aligny>
                     <font>silo_meta</font>
                     <textcolor>FFEDEDED</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
-                    <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus border="30" colordiffuse="14FFFFFF">silo/pill.png</texturenofocus>
                     <label>Move down</label>
                     <visible>Integer.IsGreater(Container(211).NumItems,1)</visible>
@@ -147,8 +147,8 @@
                     <aligny>center</aligny>
                     <font>silo_meta</font>
                     <textcolor>FFEDEDED</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
-                    <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus border="30" colordiffuse="14FFFFFF">silo/pill.png</texturenofocus>
                     <label>Delete</label>
                     <visible>Integer.IsGreater(Container(211).NumItems,0)</visible>

@@ -8,7 +8,7 @@
     <onload condition="String.IsEmpty(Window(Home).Property(silo.home.count))">AlarmClock(silostartup,ClearProperty(silo.startup,home),00:20,silent)</onload>
     <!-- Skin Shortcuts writes the user's menu into script-skinshortcuts-includes.xml when it changed. -->
     <onload condition="System.HasAddon(script.skinshortcuts)">RunScript(script.skinshortcuts,type=buildxml&amp;mainmenuID=9100&amp;group=mainmenu)</onload>
-    <backgroundcolor>FF0D0F12</backgroundcolor>
+    <backgroundcolor>SkylineBackground</backgroundcolor>
     <controls>
         <!-- Silo's ambient wash: the focused title's colour, richest behind the art
              (top right) and carried dimmed to the bottom left. -->
@@ -4651,7 +4651,7 @@
                 <control type="button" id="9001">
                     <width>60</width><height>60</height>
                     <label />
-                    <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+                    <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus />
                     <onclick>ClearProperty(silo.search.mode,home)</onclick>
                     <onclick>ActivateWindow(1190)</onclick>
@@ -4706,7 +4706,7 @@
                 <control type="image">
                     <left>14</left><top>14</top>
                     <width>32</width><height>32</height>
-                    <texture colordiffuse="FF000000">icons/search.png</texture>
+                    <texture colordiffuse="SkylineFocusText">icons/search.png</texture>
                     <visible>Control.HasFocus(9001)</visible>
                 </control>
                 <control type="image">
@@ -4729,8 +4729,8 @@
                     <font>silo_tab</font>
                     <align>center</align><aligny>center</aligny>
                     <textcolor>B3EDEDED</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
-                    <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus />
                     <onclick>SetProperty(silo.page,home,home)</onclick>
                     <onclick>ClearProperty(silo.row,home)</onclick>
@@ -4803,8 +4803,8 @@
                     <font>silo_tab</font>
                     <align>center</align><aligny>center</aligny>
                     <textcolor>B3EDEDED</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
-                    <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus />
                     <onclick>SetProperty(silo.page,movies,home)</onclick>
                     <onclick>ClearProperty(silo.row,home)</onclick>
@@ -4883,8 +4883,8 @@
                     <font>silo_tab</font>
                     <align>center</align><aligny>center</aligny>
                     <textcolor>B3EDEDED</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
-                    <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus />
                     <onclick>SetProperty(silo.page,series,home)</onclick>
                     <onclick>ClearProperty(silo.row,home)</onclick>
@@ -4963,8 +4963,8 @@
                     <font>silo_tab</font>
                     <align>center</align><aligny>center</aligny>
                     <textcolor>B3EDEDED</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
-                    <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus />
                     <onclick>SetProperty(silo.page,requests,home)</onclick>
                     <onclick>ClearProperty(silo.row,home)</onclick>
@@ -5032,8 +5032,8 @@
                     <textoffsetx>24</textoffsetx>
                     <align>center</align><aligny>center</aligny>
                     <textcolor>B3EDEDED</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
-                    <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus border="30" colordiffuse="$VAR[SiloCustomTab9031]">silo/pill.png</texturenofocus>
                     <ondown condition="[!String.IsEqual(Container(9100).ListItemAbsolute(0).Property(hasSubmenu),True) | String.IsEqual(Window(Home).Property(silo.drop.closed),9240)] + [$EXP[SiloRow5001]]">SetFocus(5001)</ondown>
                     <ondown condition="[!String.IsEqual(Container(9100).ListItemAbsolute(0).Property(hasSubmenu),True) | String.IsEqual(Window(Home).Property(silo.drop.closed),9240)] + [$EXP[SiloRow5002] + !$EXP[SiloRow5001]]">SetFocus(5002)</ondown>
@@ -5114,8 +5114,8 @@
                     <textoffsetx>24</textoffsetx>
                     <align>center</align><aligny>center</aligny>
                     <textcolor>B3EDEDED</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
-                    <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus border="30" colordiffuse="$VAR[SiloCustomTab9032]">silo/pill.png</texturenofocus>
                     <ondown condition="[!String.IsEqual(Container(9100).ListItemAbsolute(1).Property(hasSubmenu),True) | String.IsEqual(Window(Home).Property(silo.drop.closed),9240)] + [$EXP[SiloRow5001]]">SetFocus(5001)</ondown>
                     <ondown condition="[!String.IsEqual(Container(9100).ListItemAbsolute(1).Property(hasSubmenu),True) | String.IsEqual(Window(Home).Property(silo.drop.closed),9240)] + [$EXP[SiloRow5002] + !$EXP[SiloRow5001]]">SetFocus(5002)</ondown>
@@ -5196,8 +5196,8 @@
                     <textoffsetx>24</textoffsetx>
                     <align>center</align><aligny>center</aligny>
                     <textcolor>B3EDEDED</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
-                    <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus border="30" colordiffuse="$VAR[SiloCustomTab9033]">silo/pill.png</texturenofocus>
                     <ondown condition="[!String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True) | String.IsEqual(Window(Home).Property(silo.drop.closed),9240)] + [$EXP[SiloRow5001]]">SetFocus(5001)</ondown>
                     <ondown condition="[!String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True) | String.IsEqual(Window(Home).Property(silo.drop.closed),9240)] + [$EXP[SiloRow5002] + !$EXP[SiloRow5001]]">SetFocus(5002)</ondown>
@@ -5278,8 +5278,8 @@
                     <textoffsetx>24</textoffsetx>
                     <align>center</align><aligny>center</aligny>
                     <textcolor>B3EDEDED</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
-                    <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus border="30" colordiffuse="$VAR[SiloCustomTab9034]">silo/pill.png</texturenofocus>
                     <ondown condition="[!String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True) | String.IsEqual(Window(Home).Property(silo.drop.closed),9240)] + [$EXP[SiloRow5001]]">SetFocus(5001)</ondown>
                     <ondown condition="[!String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True) | String.IsEqual(Window(Home).Property(silo.drop.closed),9240)] + [$EXP[SiloRow5002] + !$EXP[SiloRow5001]]">SetFocus(5002)</ondown>
@@ -5360,8 +5360,8 @@
                     <textoffsetx>24</textoffsetx>
                     <align>center</align><aligny>center</aligny>
                     <textcolor>B3EDEDED</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
-                    <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus border="30" colordiffuse="$VAR[SiloCustomTab9035]">silo/pill.png</texturenofocus>
                     <ondown condition="[!String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True) | String.IsEqual(Window(Home).Property(silo.drop.closed),9240)] + [$EXP[SiloRow5001]]">SetFocus(5001)</ondown>
                     <ondown condition="[!String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True) | String.IsEqual(Window(Home).Property(silo.drop.closed),9240)] + [$EXP[SiloRow5002] + !$EXP[SiloRow5001]]">SetFocus(5002)</ondown>
@@ -5439,7 +5439,7 @@
                 <control type="button" id="9009">
                     <width>60</width><height>60</height>
                     <label />
-                    <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+                    <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus />
                     <onclick>ActivateWindow(Settings)</onclick>
                     <onleft>ClearProperty(silo.drop.closed,home)</onleft>
@@ -5493,7 +5493,7 @@
                 <control type="image">
                     <left>14</left><top>14</top>
                     <width>32</width><height>32</height>
-                    <texture colordiffuse="FF000000">icons/settings.png</texture>
+                    <texture colordiffuse="SkylineFocusText">icons/settings.png</texture>
                     <visible>Control.HasFocus(9009)</visible>
                 </control>
                 <control type="image">
@@ -5508,7 +5508,7 @@
                 <control type="button" id="9010">
                     <width>60</width><height>60</height>
                     <label />
-                    <texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+                    <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus />
                     <onclick>ActivateWindow(ShutdownMenu)</onclick>
                     <onleft>ClearProperty(silo.drop.closed,home)</onleft>
@@ -5562,7 +5562,7 @@
                 <control type="image">
                     <left>14</left><top>14</top>
                     <width>32</width><height>32</height>
-                    <texture colordiffuse="FF000000">icons/power.png</texture>
+                    <texture colordiffuse="SkylineFocusText">icons/power.png</texture>
                     <visible>Control.HasFocus(9010)</visible>
                 </control>
                 <control type="image">
@@ -5659,7 +5659,7 @@
             </control>
             <control type="image">
                 <width>64</width><height>64</height>
-                <texture colordiffuse="FFEDEDED">silo/avatar_ring.png</texture>
+                <texture colordiffuse="SkylineFocus">silo/avatar_ring.png</texture>
                 <visible>Control.HasFocus(9011)</visible>
             </control>
         </control>
@@ -5684,7 +5684,7 @@
             <control type="group">
                 <control type="image">
                     <width>460</width><height>352</height>
-                    <texture border="24" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+                    <texture border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
                 </control>
                 <control type="image">
                     <left>28</left><top>260</top><width>404</width><height>2</height>
@@ -5727,19 +5727,19 @@
                 <focusedlayout width="428" height="64">
                     <control type="image">
                         <left>4</left><top>4</top><width>420</width><height>56</height>
-                        <texture border="28" colordiffuse="FFEDEDED">silo/pill.png</texture>
+                        <texture border="28" colordiffuse="SkylineFocus">silo/pill.png</texture>
                         <visible>Control.HasFocus(9203)</visible>
                     </control>
                     <control type="image">
                         <left>24</left><top>21</top><width>22</width><height>22</height>
-                        <texture colordiffuse="FF000000">$VAR[SiloDropIcon]</texture>
+                        <texture colordiffuse="SkylineFocusText">$VAR[SiloDropIcon]</texture>
                         <visible>Control.HasFocus(9203)</visible>
                     </control>
                     <control type="label">
                         <left>62</left><width>360</width><height>64</height>
                         <aligny>center</aligny>
                         <font>silo_meta</font>
-                        <textcolor>FF000000</textcolor>
+                        <textcolor>SkylineFocusText</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                         <visible>Control.HasFocus(9203)</visible>
                     </control>
@@ -5797,7 +5797,7 @@
             <control type="group">
                 <control type="image">
                     <width>460</width><height>352</height>
-                    <texture border="24" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+                    <texture border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
                 </control>
                 <control type="image">
                     <left>28</left><top>260</top><width>404</width><height>2</height>
@@ -5840,19 +5840,19 @@
                 <focusedlayout width="428" height="64">
                     <control type="image">
                         <left>4</left><top>4</top><width>420</width><height>56</height>
-                        <texture border="28" colordiffuse="FFEDEDED">silo/pill.png</texture>
+                        <texture border="28" colordiffuse="SkylineFocus">silo/pill.png</texture>
                         <visible>Control.HasFocus(9204)</visible>
                     </control>
                     <control type="image">
                         <left>24</left><top>21</top><width>22</width><height>22</height>
-                        <texture colordiffuse="FF000000">$VAR[SiloDropIcon]</texture>
+                        <texture colordiffuse="SkylineFocusText">$VAR[SiloDropIcon]</texture>
                         <visible>Control.HasFocus(9204)</visible>
                     </control>
                     <control type="label">
                         <left>62</left><width>360</width><height>64</height>
                         <aligny>center</aligny>
                         <font>silo_meta</font>
-                        <textcolor>FF000000</textcolor>
+                        <textcolor>SkylineFocusText</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                         <visible>Control.HasFocus(9204)</visible>
                     </control>
@@ -5910,7 +5910,7 @@
             <control type="group">
                 <control type="image">
                     <width>460</width><height>288</height>
-                    <texture border="24" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+                    <texture border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
                 </control>
                 <control type="image">
                     <left>28</left><top>196</top><width>404</width><height>2</height>
@@ -5953,19 +5953,19 @@
                 <focusedlayout width="428" height="64">
                     <control type="image">
                         <left>4</left><top>4</top><width>420</width><height>56</height>
-                        <texture border="28" colordiffuse="FFEDEDED">silo/pill.png</texture>
+                        <texture border="28" colordiffuse="SkylineFocus">silo/pill.png</texture>
                         <visible>Control.HasFocus(9205)</visible>
                     </control>
                     <control type="image">
                         <left>24</left><top>21</top><width>22</width><height>22</height>
-                        <texture colordiffuse="FF000000">$VAR[SiloDropIcon]</texture>
+                        <texture colordiffuse="SkylineFocusText">$VAR[SiloDropIcon]</texture>
                         <visible>Control.HasFocus(9205)</visible>
                     </control>
                     <control type="label">
                         <left>62</left><width>360</width><height>64</height>
                         <aligny>center</aligny>
                         <font>silo_meta</font>
-                        <textcolor>FF000000</textcolor>
+                        <textcolor>SkylineFocusText</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                         <visible>Control.HasFocus(9205)</visible>
                     </control>
@@ -6014,7 +6014,7 @@
                 <visible>Integer.IsEqual(Container(9240).NumItems,1)</visible>
                 <control type="image">
                     <width>460</width><height>224</height>
-                    <texture border="24" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+                    <texture border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
                 </control>
                 <control type="image">
                     <left>28</left><top>132</top><width>404</width><height>2</height>
@@ -6031,7 +6031,7 @@
                 <visible>Integer.IsEqual(Container(9240).NumItems,2)</visible>
                 <control type="image">
                     <width>460</width><height>288</height>
-                    <texture border="24" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+                    <texture border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
                 </control>
                 <control type="image">
                     <left>28</left><top>196</top><width>404</width><height>2</height>
@@ -6048,7 +6048,7 @@
                 <visible>Integer.IsEqual(Container(9240).NumItems,3)</visible>
                 <control type="image">
                     <width>460</width><height>352</height>
-                    <texture border="24" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+                    <texture border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
                 </control>
                 <control type="image">
                     <left>28</left><top>260</top><width>404</width><height>2</height>
@@ -6065,7 +6065,7 @@
                 <visible>Integer.IsEqual(Container(9240).NumItems,4)</visible>
                 <control type="image">
                     <width>460</width><height>416</height>
-                    <texture border="24" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+                    <texture border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
                 </control>
                 <control type="image">
                     <left>28</left><top>324</top><width>404</width><height>2</height>
@@ -6082,7 +6082,7 @@
                 <visible>Integer.IsEqual(Container(9240).NumItems,5)</visible>
                 <control type="image">
                     <width>460</width><height>480</height>
-                    <texture border="24" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+                    <texture border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
                 </control>
                 <control type="image">
                     <left>28</left><top>388</top><width>404</width><height>2</height>
@@ -6125,19 +6125,19 @@
                 <focusedlayout width="428" height="64">
                     <control type="image">
                         <left>4</left><top>4</top><width>420</width><height>56</height>
-                        <texture border="28" colordiffuse="FFEDEDED">silo/pill.png</texture>
+                        <texture border="28" colordiffuse="SkylineFocus">silo/pill.png</texture>
                         <visible>Control.HasFocus(9240)</visible>
                     </control>
                     <control type="image">
                         <left>24</left><top>21</top><width>22</width><height>22</height>
-                        <texture colordiffuse="FF000000">$VAR[SiloDropIcon]</texture>
+                        <texture colordiffuse="SkylineFocusText">$VAR[SiloDropIcon]</texture>
                         <visible>Control.HasFocus(9240)</visible>
                     </control>
                     <control type="label">
                         <left>62</left><width>360</width><height>64</height>
                         <aligny>center</aligny>
                         <font>silo_meta</font>
-                        <textcolor>FF000000</textcolor>
+                        <textcolor>SkylineFocusText</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                         <visible>Control.HasFocus(9240)</visible>
                     </control>
@@ -6171,7 +6171,7 @@
             <control type="group">
                 <control type="image">
                     <width>460</width><height>544</height>
-                    <texture border="24" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+                    <texture border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
                 </control>
                 <control type="image">
                     <left>28</left><top>452</top><width>404</width><height>2</height>
@@ -6214,19 +6214,19 @@
                 <focusedlayout width="428" height="64">
                     <control type="image">
                         <left>4</left><top>4</top><width>420</width><height>56</height>
-                        <texture border="28" colordiffuse="FFEDEDED">silo/pill.png</texture>
+                        <texture border="28" colordiffuse="SkylineFocus">silo/pill.png</texture>
                         <visible>Control.HasFocus(9211)</visible>
                     </control>
                     <control type="image">
                         <left>24</left><top>21</top><width>22</width><height>22</height>
-                        <texture colordiffuse="FF000000">$VAR[SiloDropIcon]</texture>
+                        <texture colordiffuse="SkylineFocusText">$VAR[SiloDropIcon]</texture>
                         <visible>Control.HasFocus(9211)</visible>
                     </control>
                     <control type="label">
                         <left>62</left><width>360</width><height>64</height>
                         <aligny>center</aligny>
                         <font>silo_meta</font>
-                        <textcolor>FF000000</textcolor>
+                        <textcolor>SkylineFocusText</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                         <visible>Control.HasFocus(9211)</visible>
                     </control>

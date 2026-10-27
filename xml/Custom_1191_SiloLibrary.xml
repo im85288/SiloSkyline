@@ -14,7 +14,7 @@
     <onload condition="String.IsEqual(Window(Home).Property(silo.browse.type),favorites) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">SetFocus(52)</onload>
     <onload condition="String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">SetFocus(53)</onload>
 
-    <backgroundcolor>FF0D0F12</backgroundcolor>
+    <backgroundcolor>SkylineBackground</backgroundcolor>
     <controls>
         <include>SiloPage</include>
         <!-- The focused title's artwork, faint behind the grid. -->
@@ -76,7 +76,7 @@
             <focusedlayout width="270" height="485">
                 <control type="image">
                     <width>258</width><height>381</height>
-                    <texture colordiffuse="FFEDEDED">silo/card_poster_focus.png</texture>
+                    <texture colordiffuse="SkylineFocus">silo/card_poster_focus.png</texture>
                     <visible>Control.HasFocus(50)</visible>
                 </control>
                 <control type="image">
@@ -123,8 +123,8 @@
             <textoffsetx>28</textoffsetx>
             <aligny>center</aligny>
             <textcolor>FFEDEDED</textcolor>
-            <focusedcolor>FF000000</focusedcolor>
-            <texturefocus border="28" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+            <focusedcolor>SkylineFocusText</focusedcolor>
+            <texturefocus border="28" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
             <texturenofocus border="28" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
             <visible>!!String.IsEmpty(Window(Home).Property(silo.browse.list))</visible>
             <onclick condition="String.IsEqual(Window(Home).Property(silo.browse.type),movies) + [String.IsEqual(Skin.String(silo.sort.movies),title) | String.IsEmpty(Skin.String(silo.sort.movies))]">SetFocus(71,0,absolute)</onclick>
@@ -152,7 +152,7 @@
         </control>
             <control type="image">
                 <left>114</left><top>183</top><width>26</width><height>26</height>
-                <texture colordiffuse="FF000000">silo/sort.png</texture>
+                <texture colordiffuse="SkylineFocusText">silo/sort.png</texture>
                 <visible>!!String.IsEmpty(Window(Home).Property(silo.browse.list)) + Control.HasFocus(70)</visible>
             </control>
             <control type="image">
@@ -166,12 +166,12 @@
             <animation effect="fade" start="0" end="100" time="140">Visible</animation>
             <control type="image">
                 <width>440</width><height>458</height>
-                <texture border="24" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+                <texture border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
                 <visible>String.IsEqual(Window(Home).Property(silo.browse.type),movies)</visible>
             </control>
             <control type="image">
                 <width>440</width><height>330</height>
-                <texture border="24" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+                <texture border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
                 <visible>String.IsEqual(Window(Home).Property(silo.browse.type),tvshows)</visible>
             </control>
             <control type="label">
@@ -217,19 +217,19 @@
                 <focusedlayout width="408" height="64">
                     <control type="image">
                         <left>4</left><top>4</top><width>400</width><height>56</height>
-                        <texture border="28" colordiffuse="FFEDEDED">silo/pill.png</texture>
+                        <texture border="28" colordiffuse="SkylineFocus">silo/pill.png</texture>
                         <visible>Control.HasFocus(71)</visible>
                     </control>
                     <control type="image">
                         <left>22</left><top>19</top><width>26</width><height>26</height>
-                        <texture colordiffuse="FF000000">silo/check.png</texture>
+                        <texture colordiffuse="SkylineFocusText">silo/check.png</texture>
                         <visible>[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + [String.IsEqual(ListItem.Property(sort),Skin.String(silo.sort.movies)) | [String.IsEqual(ListItem.Property(sort),title) + String.IsEmpty(Skin.String(silo.sort.movies))]]] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + [String.IsEqual(ListItem.Property(sort),Skin.String(silo.sort.tvshows)) | [String.IsEqual(ListItem.Property(sort),title) + String.IsEmpty(Skin.String(silo.sort.tvshows))]]]] + Control.HasFocus(71)</visible>
                     </control>
                     <control type="label">
                         <left>62</left><width>180</width><height>64</height>
                         <aligny>center</aligny>
                         <font>silo_meta</font>
-                        <textcolor>FF000000</textcolor>
+                        <textcolor>SkylineFocusText</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                         <visible>Control.HasFocus(71)</visible>
                     </control>
@@ -237,13 +237,13 @@
                         <right>56</right><width>140</width><height>64</height>
                         <align>right</align><aligny>center</aligny>
                         <font>silo_meta</font>
-                        <textcolor>8C000000</textcolor>
+                        <textcolor>SkylineFocusTextDim</textcolor>
                         <label>$VAR[SiloSortDirection]</label>
                         <visible>[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + [String.IsEqual(ListItem.Property(sort),Skin.String(silo.sort.movies)) | [String.IsEqual(ListItem.Property(sort),title) + String.IsEmpty(Skin.String(silo.sort.movies))]]] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + [String.IsEqual(ListItem.Property(sort),Skin.String(silo.sort.tvshows)) | [String.IsEqual(ListItem.Property(sort),title) + String.IsEmpty(Skin.String(silo.sort.tvshows))]]]] + Control.HasFocus(71)</visible>
                     </control>
                     <control type="image">
                         <right>22</right><top>21</top><width>22</width><height>22</height>
-                        <texture colordiffuse="FF000000">$VAR[SiloSortArrowIcon]</texture>
+                        <texture colordiffuse="SkylineFocusText">$VAR[SiloSortArrowIcon]</texture>
                         <visible>[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + [String.IsEqual(ListItem.Property(sort),Skin.String(silo.sort.movies)) | [String.IsEqual(ListItem.Property(sort),title) + String.IsEmpty(Skin.String(silo.sort.movies))]]] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + [String.IsEqual(ListItem.Property(sort),Skin.String(silo.sort.tvshows)) | [String.IsEqual(ListItem.Property(sort),title) + String.IsEmpty(Skin.String(silo.sort.tvshows))]]]] + Control.HasFocus(71)</visible>
                     </control>
                     <control type="image">
@@ -437,7 +437,7 @@
             <focusedlayout width="270" height="485">
                 <control type="image">
                     <width>258</width><height>381</height>
-                    <texture colordiffuse="FFEDEDED">silo/card_poster_focus.png</texture>
+                    <texture colordiffuse="SkylineFocus">silo/card_poster_focus.png</texture>
                     <visible>Control.HasFocus(51)</visible>
                 </control>
                 <control type="image">
@@ -531,7 +531,7 @@
             <focusedlayout width="270" height="485">
                 <control type="image">
                     <width>258</width><height>381</height>
-                    <texture colordiffuse="FFEDEDED">silo/card_poster_focus.png</texture>
+                    <texture colordiffuse="SkylineFocus">silo/card_poster_focus.png</texture>
                     <visible>Control.HasFocus(52)</visible>
                 </control>
                 <control type="image">
@@ -625,7 +625,7 @@
             <focusedlayout width="270" height="485">
                 <control type="image">
                     <width>258</width><height>381</height>
-                    <texture colordiffuse="FFEDEDED">silo/card_poster_focus.png</texture>
+                    <texture colordiffuse="SkylineFocus">silo/card_poster_focus.png</texture>
                     <visible>Control.HasFocus(53)</visible>
                 </control>
                 <control type="image">
@@ -730,13 +730,13 @@
             <focusedlayout width="96" height="72" condition="Control.HasFocus(60)">
                 <control type="image">
                     <left>12</left><top>6</top><width>72</width><height>60</height>
-                    <texture border="20" colordiffuse="FFEDEDED">silo/card_landscape_mask.png</texture>
+                    <texture border="20" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
                 </control>
                 <control type="label">
                     <width>96</width><height>72</height>
                     <align>center</align><aligny>center</aligny>
                     <font>silo_tab</font>
-                    <textcolor>FF000000</textcolor>
+                    <textcolor>SkylineFocusText</textcolor>
                     <label>$INFO[ListItem.Label]</label>
                 </control>
             </focusedlayout>

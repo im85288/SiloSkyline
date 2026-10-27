@@ -281,7 +281,7 @@
 					<right>6</right>
 					<top>6</top>
 					<bottom>6</bottom>
-					<texture border="28" colordiffuse="FFEDEDED">silo/pill.png</texture>
+					<texture border="28" colordiffuse="SkylineFocus">silo/pill.png</texture>
 					<animation effect="fade" start="100" end="15" time="0">UnFocus</animation>
 				</control>
 				<control type="group">
@@ -325,8 +325,8 @@
 						<font>$PARAM[font]</font>
 						<aligny>center</aligny>
 						<label>$INFO[ListItem.Label]</label>
-						<textcolor>FF000000</textcolor>
-						<selectedcolor>FF000000</selectedcolor>
+						<textcolor>SkylineFocusText</textcolor>
+						<selectedcolor>SkylineFocusText</selectedcolor>
 						<visible>Control.HasFocus($PARAM[list_id])</visible>
 						<scroll>true</scroll>
 					</control>
@@ -963,7 +963,7 @@
 				<right>0</right>
 				<bottom>0</bottom>
 				<!-- Silo Skyline: Silo's rounded dialog card, no coloured heading strip. -->
-				<texture border="14" colordiffuse="FF131417">silo/card_landscape_mask.png</texture>
+				<texture border="14" colordiffuse="SkylineDialog">silo/card_landscape_mask.png</texture>
 			</control>
 			<control type="label" id="$PARAM[header_id]">
 				<left>40</left>
@@ -1530,7 +1530,7 @@
 				<control type="image">
 					<left>10</left><top>10</top>
 					<width>380</width><height>240</height>
-					<texture border="14" colordiffuse="FFEDEDED">silo/card_landscape_mask.png</texture>
+					<texture border="14" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
 					<visible>Control.HasFocus(9000) | Control.HasFocus(9001)</visible>
 				</control>
 				<control type="image">
@@ -1538,7 +1538,7 @@
 					<top>48</top>
 					<width>210</width>
 					<height>120</height>
-					<texture colordiffuse="FF000000">$INFO[ListItem.Icon]</texture>
+					<texture colordiffuse="SkylineFocusText">$INFO[ListItem.Icon]</texture>
 					<aspectratio>keep</aspectratio>
 					<visible>Control.HasFocus(9000) | Control.HasFocus(9001)</visible>
 				</control>
@@ -1548,7 +1548,7 @@
 					<width>350</width>
 					<height>44</height>
 					<font>silo_meta</font>
-					<textcolor>FF000000</textcolor>
+					<textcolor>SkylineFocusText</textcolor>
 					<label>$INFO[ListItem.Label]</label>
 					<align>center</align>
 					<visible>Control.HasFocus(9000) | Control.HasFocus(9001)</visible>

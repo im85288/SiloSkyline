@@ -18,7 +18,7 @@
 					<width>755</width>
 					<height>435</height>
 					<label></label>
-					<texturenofocus border="24" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texturenofocus>
+					<texturenofocus border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texturenofocus>
 					<onup>50</onup>
 					<ondown>9000</ondown>
 					<onclick>SetProperty(TextViewer_Header,$LOCALIZE[31141] $INFO[ListItem.AddonVersion],home)</onclick>
@@ -117,7 +117,7 @@
 							<top>16</top>
 							<width>393</width>
 							<height>228</height>
-							<texture border="8" colordiffuse="FFEDEDED">buttons/thumbnail_focused.png</texture>
+							<texture border="8" colordiffuse="SkylineFocus">buttons/thumbnail_focused.png</texture>
 						</control>
 					</focusedlayout>
 				</control>
@@ -134,7 +134,7 @@
 						<top>400</top>
 						<width>450</width>
 						<height>435</height>
-						<texture border="24" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+						<texture border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
 					</control>
 					<control type="group">
 						<left>1340</left>
@@ -261,8 +261,8 @@
 						<radioposy>17</radioposy>
 						<radiowidth>100</radiowidth>
 						<font>silo_detail</font>
-						<focusedcolor>FF000000</focusedcolor>
-						<texturefocus border="24" colordiffuse="FFEDEDED">silo/card_landscape_mask.png</texturefocus>
+						<focusedcolor>SkylineFocusText</focusedcolor>
+						<texturefocus border="24" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texturefocus>
 						<texturenofocus border="24" colordiffuse="14FFFFFF">silo/card_landscape_mask.png</texturenofocus>
 						<visible>Control.IsEnabled(13)</visible>
 					</control>
@@ -325,7 +325,7 @@
 						<top>24</top>
 						<width>500</width>
 						<height>500</height>
-						<texture border="24" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+						<texture border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
 					</control>
 					<control type="textbox">
 						<left>25</left>

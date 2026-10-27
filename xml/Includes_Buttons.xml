@@ -3,9 +3,9 @@
 	<include name="OSDButton">
 		<!-- Silo Skyline: Silo's player buttons, a dark disc with a ring at rest and
 		     white with a dark icon when focused. -->
-		<textureradioonfocus colordiffuse="FF000000">$PARAM[texture]</textureradioonfocus>
+		<textureradioonfocus colordiffuse="SkylineFocusText">$PARAM[texture]</textureradioonfocus>
 		<textureradioonnofocus>$PARAM[texture]</textureradioonnofocus>
-		<textureradioofffocus colordiffuse="FF000000">$PARAM[texture]</textureradioofffocus>
+		<textureradioofffocus colordiffuse="SkylineFocusText">$PARAM[texture]</textureradioofffocus>
 		<textureradiooffnofocus>$PARAM[texture]</textureradiooffnofocus>
 		<textureradioondisabled colordiffuse="disabled">$PARAM[texture]</textureradioondisabled>
 		<textureradiooffdisabled colordiffuse="disabled">$PARAM[texture]</textureradiooffdisabled>
@@ -60,15 +60,15 @@
 			<!-- Silo Skyline (tools/build_frame.py): Silo's white pill on the focused row. -->
 			<font>silo_meta</font>
 			<textcolor>FFEDEDED</textcolor>
-			<focusedcolor>FF000000</focusedcolor>
+			<focusedcolor>SkylineFocusText</focusedcolor>
 			<disabledcolor>66EDEDED</disabledcolor>
-			<texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+			<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
 			<texturenofocus />
-			<textureradioonfocus colordiffuse="FF000000">buttons/radio-button-on.png</textureradioonfocus>
-			<textureradioofffocus colordiffuse="FF000000">buttons/radio-button-off.png</textureradioofffocus>
-			<textureupfocus colordiffuse="FF000000">buttons/spinctrl/arrow-light-up.png</textureupfocus>
-			<texturedownfocus colordiffuse="FF000000">buttons/spinctrl/arrow-light-down.png</texturedownfocus>
-			<textureslidernibfocus colordiffuse="FF000000">buttons/slider-nib.png</textureslidernibfocus>
+			<textureradioonfocus colordiffuse="SkylineFocusText">buttons/radio-button-on.png</textureradioonfocus>
+			<textureradioofffocus colordiffuse="SkylineFocusText">buttons/radio-button-off.png</textureradioofffocus>
+			<textureupfocus colordiffuse="SkylineFocusText">buttons/spinctrl/arrow-light-up.png</textureupfocus>
+			<texturedownfocus colordiffuse="SkylineFocusText">buttons/spinctrl/arrow-light-down.png</texturedownfocus>
+			<textureslidernibfocus colordiffuse="SkylineFocusText">buttons/slider-nib.png</textureslidernibfocus>
 		</definition>
 	</include>
 	<include name="DialogSettingButton">
@@ -101,11 +101,11 @@
 			<aligny>center</aligny>
 			<font>silo_meta</font>
 			<textcolor>FFEDEDED</textcolor>
-			<focusedcolor>FF000000</focusedcolor>
+			<focusedcolor>SkylineFocusText</focusedcolor>
 			<invalidcolor>invalid</invalidcolor>
 			<selectedcolor>selected</selectedcolor>
 			<texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
-			<texturenofocus colordiffuse="FF131417">colors/white.png</texturenofocus>
+			<texturenofocus colordiffuse="SkylineDialog">colors/white.png</texturenofocus>
 		</definition>
 	</include>
 	<include name="DefaultSettingLabel">
@@ -154,8 +154,8 @@
 				<align>center</align>
 				<!-- Silo Skyline: Silo's buttons, faint at rest, white with dark text on focus. -->
 				<textcolor>FFEDEDED</textcolor>
-				<focusedcolor>FF000000</focusedcolor>
-				<texturefocus border="46" colordiffuse="FFEDEDED">silo/dialog_button.png</texturefocus>
+				<focusedcolor>SkylineFocusText</focusedcolor>
+				<texturefocus border="46" colordiffuse="SkylineFocus">silo/dialog_button.png</texturefocus>
 				<texturenofocus border="46" colordiffuse="1FFFFFFF">silo/dialog_button.png</texturenofocus>
 				<visible>$PARAM[visible]</visible>
 				<enable>$PARAM[enable]</enable>
@@ -197,9 +197,9 @@
 		<height>120</height>
 		<textoffsety>27</textoffsety>
 		<!-- Silo Skyline: a white tile with dark text on focus, Inter. -->
-		<texturefocus border="46" colordiffuse="FFEDEDED">silo/dialog_button.png</texturefocus>
+		<texturefocus border="46" colordiffuse="SkylineFocus">silo/dialog_button.png</texturefocus>
 		<texturenofocus />
-		<focusedcolor>FF000000</focusedcolor>
+		<focusedcolor>SkylineFocusText</focusedcolor>
 		<textcolor>FFEDEDED</textcolor>
 		<align>center</align>
 		<aligny>top</aligny>
@@ -309,8 +309,8 @@
 				<height>142</height>
 				<align>center</align>
 				<aligny>top</aligny>
-				<texturefocus border="24" colordiffuse="FFEDEDED">silo/card_landscape_mask.png</texturefocus>
-				<focusedcolor>FF000000</focusedcolor>
+				<texturefocus border="24" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texturefocus>
+				<focusedcolor>SkylineFocusText</focusedcolor>
 				<texturenofocus border="24" colordiffuse="14FFFFFF">silo/card_landscape_mask.png</texturenofocus>
 				<textoffsetx>22</textoffsetx>
 				<textoffsety>78</textoffsety>
@@ -318,9 +318,9 @@
 				<radioposy>16</radioposy>
 				<radiowidth>48</radiowidth>
 				<font>silo_detail</font>
-				<textureradioonfocus colordiffuse="FF000000">$PARAM[icon]</textureradioonfocus>
+				<textureradioonfocus colordiffuse="SkylineFocusText">$PARAM[icon]</textureradioonfocus>
 				<textureradioonnofocus colordiffuse="D0FFFFFF">$PARAM[icon]</textureradioonnofocus>
-				<textureradioofffocus colordiffuse="FF000000">$PARAM[icon]</textureradioofffocus>
+				<textureradioofffocus colordiffuse="SkylineFocusText">$PARAM[icon]</textureradioofffocus>
 				<textureradiooffnofocus colordiffuse="D0FFFFFF">$PARAM[icon]</textureradiooffnofocus>
 				<textureradiooffdisabled colordiffuse="disabled">$PARAM[icon]</textureradiooffdisabled>
 				<textureradioondisabled colordiffuse="disabled">$PARAM[icon]</textureradioondisabled>
@@ -341,8 +341,8 @@
 				<height>142</height>
 				<align>center</align>
 				<aligny>top</aligny>
-				<texturefocus border="24" colordiffuse="FFEDEDED">silo/card_landscape_mask.png</texturefocus>
-				<focusedcolor>FF000000</focusedcolor>
+				<texturefocus border="24" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texturefocus>
+				<focusedcolor>SkylineFocusText</focusedcolor>
 				<texturenofocus border="24" colordiffuse="14FFFFFF">silo/card_landscape_mask.png</texturenofocus>
 				<textoffsetx>35</textoffsetx>
 				<textoffsety>78</textoffsety>
@@ -350,9 +350,9 @@
 				<radioposy>16</radioposy>
 				<radiowidth>48</radiowidth>
 				<font>silo_detail</font>
-				<textureradioonfocus colordiffuse="FF000000">$PARAM[icon_on]</textureradioonfocus>
+				<textureradioonfocus colordiffuse="SkylineFocusText">$PARAM[icon_on]</textureradioonfocus>
 				<textureradioonnofocus colordiffuse="D0FFFFFF">$PARAM[icon_on]</textureradioonnofocus>
-				<textureradioofffocus colordiffuse="FF000000">$PARAM[icon_off]</textureradioofffocus>
+				<textureradioofffocus colordiffuse="SkylineFocusText">$PARAM[icon_off]</textureradioofffocus>
 				<textureradiooffnofocus colordiffuse="D0FFFFFF">$PARAM[icon_off]</textureradiooffnofocus>
 				<textureradiooffdisabled colordiffuse="disabled">$PARAM[icon_off]</textureradiooffdisabled>
 				<textureradioondisabled colordiffuse="disabled">$PARAM[icon_on]</textureradioondisabled>
@@ -430,8 +430,8 @@
 		<aligny>center</aligny>
 		<font>silo_meta</font>
 		<textcolor>FFEDEDED</textcolor>
-		<focusedcolor>FF000000</focusedcolor>
-		<texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+		<focusedcolor>SkylineFocusText</focusedcolor>
+		<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
 		<texturenofocus />
 	</include>
 </includes>

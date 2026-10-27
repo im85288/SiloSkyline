@@ -30,14 +30,14 @@
 				<focusedlayout height="70" width="434">
 					<control type="image">
 						<width>434</width><height>70</height>
-						<texture border="30" colordiffuse="FFEDEDED">silo/pill.png</texture>
+						<texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
 						<animation effect="fade" start="100" end="40" time="100" condition="!Control.HasFocus(9000)">Conditional</animation>
 					</control>
 					<control type="label">
 						<left>32</left><width>370</width><height>70</height>
 						<aligny>center</aligny>
 						<font>silo_meta</font>
-						<textcolor>FF000000</textcolor>
+						<textcolor>SkylineFocusText</textcolor>
 						<label>$INFO[ListItem.Label]</label>
 					</control>
 				</focusedlayout>
@@ -113,7 +113,7 @@
 				<focusedlayout width="300" height="330">
 					<control type="image">
 						<width>288</width><height>318</height>
-						<texture border="20" colordiffuse="FFEDEDED">silo/card_landscape_mask.png</texture>
+						<texture border="20" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
 						<visible>Control.HasFocus(2)</visible>
 					</control>
 					<control type="image">
@@ -130,7 +130,7 @@
 						<left>16</left><top>206</top><width>256</width><height>48</height>
 						<align>center</align><aligny>center</aligny>
 						<font>silo_meta</font>
-						<textcolor>FF000000</textcolor>
+						<textcolor>SkylineFocusText</textcolor>
 						<label>$INFO[ListItem.Label]</label>
 						<visible>Control.HasFocus(2)</visible>
 					</control>
@@ -138,7 +138,7 @@
 						<left>16</left><top>250</top><width>256</width><height>36</height>
 						<align>center</align><aligny>center</aligny>
 						<font>silo_detail</font>
-						<textcolor>99000000</textcolor>
+						<textcolor>SkylineFocusTextDim</textcolor>
 						<label>$INFO[ListItem.Label2]</label>
 						<visible>Control.HasFocus(2)</visible>
 					</control>

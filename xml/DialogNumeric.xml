@@ -54,8 +54,8 @@
 					<font>silo_detail</font>
 					<align>center</align>
 					<aligny>center</aligny>
-					<texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
-					<focusedcolor>FF000000</focusedcolor>
+					<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+					<focusedcolor>SkylineFocusText</focusedcolor>
 					<texturenofocus colordiffuse="71FFFFFF" border="40">buttons/button-alt-nofo.png</texturenofocus>
 					<label>$LOCALIZE[20181]</label>
 					<onleft>13</onleft>
@@ -71,8 +71,8 @@
 					<font>silo_detail</font>
 					<align>center</align>
 					<aligny>center</aligny>
-					<texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
-					<focusedcolor>FF000000</focusedcolor>
+					<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+					<focusedcolor>SkylineFocusText</focusedcolor>
 					<texturenofocus colordiffuse="71FFFFFF" border="40">buttons/button-alt-nofo.png</texturenofocus>
 					<label>$LOCALIZE[20177]</label>
 					<angle>270</angle>
@@ -171,7 +171,7 @@
 						<width>125</width>
 						<height>125</height>
 						<texturefocus colordiffuse="FFEDEDED">silo/avatar_mask.png</texturefocus>
-						<focusedcolor>FF000000</focusedcolor>
+						<focusedcolor>SkylineFocusText</focusedcolor>
 						<texturenofocus />
 						<textureradioonfocus colordiffuse="FFFFFFFF">icons/keyboard/arrowleft.png</textureradioonfocus>
 						<textureradioonnofocus colordiffuse="FFFFFFFF">icons/keyboard/arrowleft.png</textureradioonnofocus>
@@ -195,7 +195,7 @@
 						<width>125</width>
 						<height>125</height>
 						<texturefocus colordiffuse="FFEDEDED">silo/avatar_mask.png</texturefocus>
-						<focusedcolor>FF000000</focusedcolor>
+						<focusedcolor>SkylineFocusText</focusedcolor>
 						<texturenofocus />
 						<textureradioonfocus colordiffuse="FFFFFFFF">icons/keyboard/arrowright.png</textureradioonfocus>
 						<textureradioonnofocus colordiffuse="FFFFFFFF">icons/keyboard/arrowright.png</textureradioonnofocus>

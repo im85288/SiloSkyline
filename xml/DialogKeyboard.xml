@@ -450,11 +450,11 @@
 						<height>120</height>
 						<onup>160</onup>
 						<ondown>100</ondown>
-						<texturefocus border="46" colordiffuse="FFEDEDED">silo/dialog_button.png</texturefocus>
+						<texturefocus border="46" colordiffuse="SkylineFocus">silo/dialog_button.png</texturefocus>
 						<texturenofocus />
-						<textureradioonfocus colordiffuse="FF000000">icons/keyboard/letters.png</textureradioonfocus>
+						<textureradioonfocus colordiffuse="SkylineFocusText">icons/keyboard/letters.png</textureradioonfocus>
 						<textureradioonnofocus colordiffuse="FFFFFFFF">icons/keyboard/letters.png</textureradioonnofocus>
-						<textureradioofffocus colordiffuse="FF000000">icons/keyboard/accents.png</textureradioofffocus>
+						<textureradioofffocus colordiffuse="SkylineFocusText">icons/keyboard/accents.png</textureradioofffocus>
 						<textureradiooffnofocus colordiffuse="FFFFFFFF">icons/keyboard/accents.png</textureradiooffnofocus>
 						<radioposx>32l</radioposx>
 						<radiowidth>56</radiowidth>
@@ -466,11 +466,11 @@
 						<height>120</height>
 						<onup>161</onup>
 						<ondown>101</ondown>
-						<texturefocus border="46" colordiffuse="FFEDEDED">silo/dialog_button.png</texturefocus>
+						<texturefocus border="46" colordiffuse="SkylineFocus">silo/dialog_button.png</texturefocus>
 						<texturenofocus />
-						<textureradioonfocus colordiffuse="FF000000">icons/keyboard/capslock.png</textureradioonfocus>
+						<textureradioonfocus colordiffuse="SkylineFocusText">icons/keyboard/capslock.png</textureradioonfocus>
 						<textureradioonnofocus colordiffuse="button_focus">icons/keyboard/capslock.png</textureradioonnofocus>
-						<textureradioofffocus colordiffuse="FF000000">icons/keyboard/capslock.png</textureradioofffocus>
+						<textureradioofffocus colordiffuse="SkylineFocusText">icons/keyboard/capslock.png</textureradioofffocus>
 						<textureradiooffnofocus colordiffuse="FFFFFFFF">icons/keyboard/capslock.png</textureradiooffnofocus>
 						<radioposx>40</radioposx>
 						<radioposy>42</radioposy>
@@ -483,11 +483,11 @@
 						<height>120</height>
 						<onup>162</onup>
 						<ondown>102</ondown>
-						<texturefocus border="46" colordiffuse="FFEDEDED">silo/dialog_button.png</texturefocus>
+						<texturefocus border="46" colordiffuse="SkylineFocus">silo/dialog_button.png</texturefocus>
 						<texturenofocus />
-						<textureradioonfocus colordiffuse="FF000000">icons/keyboard/shift.png</textureradioonfocus>
+						<textureradioonfocus colordiffuse="SkylineFocusText">icons/keyboard/shift.png</textureradioonfocus>
 						<textureradioonnofocus colordiffuse="button_focus">icons/keyboard/shift.png</textureradioonnofocus>
-						<textureradioofffocus colordiffuse="FF000000">icons/keyboard/shift.png</textureradioofffocus>
+						<textureradioofffocus colordiffuse="SkylineFocusText">icons/keyboard/shift.png</textureradioofffocus>
 						<textureradiooffnofocus colordiffuse="FFFFFFFF">icons/keyboard/shift.png</textureradiooffnofocus>
 						<radioposx>42</radioposx>
 						<radiowidth>36</radiowidth>
@@ -515,11 +515,11 @@
 						<height>120</height>
 						<ondown>107</ondown>
 						<onup>167</onup>
-						<texturefocus border="46" colordiffuse="FFEDEDED">silo/dialog_button.png</texturefocus>
+						<texturefocus border="46" colordiffuse="SkylineFocus">silo/dialog_button.png</texturefocus>
 						<texturenofocus />
-						<textureradioonfocus colordiffuse="FF000000">icons/keyboard/arrowleft.png</textureradioonfocus>
+						<textureradioonfocus colordiffuse="SkylineFocusText">icons/keyboard/arrowleft.png</textureradioonfocus>
 						<textureradioonnofocus colordiffuse="FFFFFFFF">icons/keyboard/arrowleft.png</textureradioonnofocus>
-						<textureradioofffocus colordiffuse="FF000000">icons/keyboard/arrowleft.png</textureradioofffocus>
+						<textureradioofffocus colordiffuse="SkylineFocusText">icons/keyboard/arrowleft.png</textureradioofffocus>
 						<textureradiooffnofocus colordiffuse="FFFFFFFF">icons/keyboard/arrowleft.png</textureradiooffnofocus>
 						<radioposx>38</radioposx>
 						<radiowidth>36</radiowidth>
@@ -531,11 +531,11 @@
 						<height>120</height>
 						<ondown>108</ondown>
 						<onup>168</onup>
-						<texturefocus border="46" colordiffuse="FFEDEDED">silo/dialog_button.png</texturefocus>
+						<texturefocus border="46" colordiffuse="SkylineFocus">silo/dialog_button.png</texturefocus>
 						<texturenofocus />
-						<textureradioonfocus colordiffuse="FF000000">icons/keyboard/arrowright.png</textureradioonfocus>
+						<textureradioonfocus colordiffuse="SkylineFocusText">icons/keyboard/arrowright.png</textureradioonfocus>
 						<textureradioonnofocus colordiffuse="FFFFFFFF">icons/keyboard/arrowright.png</textureradioonnofocus>
-						<textureradioofffocus colordiffuse="FF000000">icons/keyboard/arrowright.png</textureradioofffocus>
+						<textureradioofffocus colordiffuse="SkylineFocusText">icons/keyboard/arrowright.png</textureradioofffocus>
 						<textureradiooffnofocus colordiffuse="FFFFFFFF">icons/keyboard/arrowright.png</textureradiooffnofocus>
 						<radioposx>45</radioposx>
 						<radiowidth>36</radiowidth>
@@ -547,11 +547,11 @@
 						<height>120</height>
 						<onup>169</onup>
 						<ondown>109</ondown>
-						<texturefocus border="46" colordiffuse="FFEDEDED">silo/dialog_button.png</texturefocus>
+						<texturefocus border="46" colordiffuse="SkylineFocus">silo/dialog_button.png</texturefocus>
 						<texturenofocus />
-						<textureradioonfocus colordiffuse="FF000000">icons/keyboard/backspace.png</textureradioonfocus>
+						<textureradioonfocus colordiffuse="SkylineFocusText">icons/keyboard/backspace.png</textureradioonfocus>
 						<textureradioonnofocus colordiffuse="FFFFFFFF">icons/keyboard/backspace.png</textureradioonnofocus>
-						<textureradioofffocus colordiffuse="FF000000">icons/keyboard/backspace.png</textureradioofffocus>
+						<textureradioofffocus colordiffuse="SkylineFocusText">icons/keyboard/backspace.png</textureradioofffocus>
 						<textureradiooffnofocus colordiffuse="FFFFFFFF">icons/keyboard/backspace.png</textureradiooffnofocus>
 						<radioposx>31</radioposx>
 						<radiowidth>51</radiowidth>

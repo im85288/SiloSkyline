@@ -27,7 +27,7 @@
 							<left>0</left>
 							<right>0</right>
 							<bottom>0</bottom>
-							<texture border="30" colordiffuse="FFEDEDED">silo/pill.png</texture>
+							<texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
 						<animation effect="fade" start="100" end="40" time="100" condition="!Control.HasFocus(55)">Conditional</animation>
 						</control>
 						<control type="image">
@@ -35,7 +35,7 @@
 							<centertop>50%</centertop>
 							<width>32</width>
 							<height>32</height>
-							<texture colordiffuse="FF000000">$VAR[ListWatchedIconVar]</texture>
+							<texture colordiffuse="SkylineFocusText">$VAR[ListWatchedIconVar]</texture>
 						</control>
 						<control type="label">
 							<left>105</left>
@@ -45,7 +45,7 @@
 							<aligny>center</aligny>
 							<scroll>true</scroll>
 							<label>$VAR[ListLabelVar]</label>
-							<textcolor>FF000000</textcolor>
+							<textcolor>SkylineFocusText</textcolor>
 					</control>
 						<control type="label">
 							<left>105</left>
@@ -55,7 +55,7 @@
 							<align>right</align>
 							<aligny>center</aligny>
 							<label>$VAR[ListLabel2Var]</label>
-							<textcolor>FF000000</textcolor>
+							<textcolor>SkylineFocusText</textcolor>
 					</control>
 					</focusedlayout>
 					<itemlayout height="list_item_height" condition="Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(movies) | Container.Content(musicvideos) | Container.Content(videos) | Container.Content(games) | Window.IsActive(videoplaylist) | Window.IsActive(musicplaylist)">
@@ -91,7 +91,7 @@
 							<left>0</left>
 							<right>0</right>
 							<bottom>0</bottom>
-							<texture border="30" colordiffuse="FFEDEDED">silo/pill.png</texture>
+							<texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
 						<animation effect="fade" start="100" end="40" time="100" condition="!Control.HasFocus(55)">Conditional</animation>
 						</control>
 						<control type="image">
@@ -99,7 +99,7 @@
 							<centertop>50%</centertop>
 							<width>32</width>
 							<height>32</height>
-							<texture colordiffuse="FF000000">$VAR[ListWatchedIconVar]</texture>
+							<texture colordiffuse="SkylineFocusText">$VAR[ListWatchedIconVar]</texture>
 						</control>
 						<control type="label">
 							<left>105</left>
@@ -109,7 +109,7 @@
 							<aligny>center</aligny>
 							<scroll>true</scroll>
 							<label>$INFO[ListItem.Label]</label>
-							<textcolor>FF000000</textcolor>
+							<textcolor>SkylineFocusText</textcolor>
 					</control>
 						<control type="label">
 							<left>105</left>
@@ -119,7 +119,7 @@
 							<align>right</align>
 							<aligny>center</aligny>
 							<label>$VAR[ListLabel2Var]</label>
-							<textcolor>FF000000</textcolor>
+							<textcolor>SkylineFocusText</textcolor>
 					</control>
 					</focusedlayout>
 					<itemlayout height="list_item_height" condition="!Container.Content(songs) + !Container.Content(addons) + !Container.Content(playlists) + !Container.Content() + !Container.Content(tvshows) + !Container.Content(seasons) + !Container.Content(episodes) + !Container.Content(movies) + !Container.Content(musicvideos) + !Container.Content(videos) + !Container.Content(favourites)">
@@ -155,7 +155,7 @@
 							<left>0</left>
 							<right>0</right>
 							<bottom>0</bottom>
-							<texture border="30" colordiffuse="FFEDEDED">silo/pill.png</texture>
+							<texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
 						<animation effect="fade" start="100" end="40" time="100" condition="!Control.HasFocus(55)">Conditional</animation>
 						</control>
 						<control type="image">
@@ -164,7 +164,7 @@
 							<width>60</width>
 							<bottom>10</bottom>
 							<aspectratio>keep</aspectratio>
-							<texture colordiffuse="FF000000">$INFO[ListItem.Icon]</texture>
+							<texture colordiffuse="SkylineFocusText">$INFO[ListItem.Icon]</texture>
 						</control>
 						<control type="label">
 							<left>105</left>
@@ -174,7 +174,7 @@
 							<aligny>center</aligny>
 							<scroll>true</scroll>
 							<label>$INFO[ListItem.Label]</label>
-							<textcolor>FF000000</textcolor>
+							<textcolor>SkylineFocusText</textcolor>
 					</control>
 					</focusedlayout>
 					<itemlayout height="list_item_height" condition="Container.Content(playlists) | Container.Content(favourites) | Container.Content()">
@@ -207,7 +207,7 @@
 			<control type="image">
 				<left>0</left>
 				<right>0</right>
-				<texture border="30" colordiffuse="FFEDEDED">silo/pill.png</texture>
+				<texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
 						<animation effect="fade" start="100" end="40" time="100" condition="!Control.HasFocus(55)">Conditional</animation>
 				<visible>Control.hasFocus(55)</visible>
 			</control>
@@ -217,7 +217,7 @@
 				<aligny>center</aligny>
 				<scroll>true</scroll>
 				<label>$VAR[ListLabelVar]</label>
-				<textcolor>FF000000</textcolor>
+				<textcolor>SkylineFocusText</textcolor>
 					</control>
 			<control type="label">
 				<left>35</left>
@@ -225,7 +225,7 @@
 				<align>right</align>
 				<aligny>center</aligny>
 				<label>$VAR[ListLabel2Var]</label>
-				<textcolor>FF000000</textcolor>
+				<textcolor>SkylineFocusText</textcolor>
 					</control>
 		</focusedlayout>
 		<itemlayout height="list_item_height" condition="Container.Content(songs)">
@@ -252,7 +252,7 @@
 			<control type="image">
 				<left>0</left>
 				<right>0</right>
-				<texture border="30" colordiffuse="FFEDEDED">silo/pill.png</texture>
+				<texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
 						<animation effect="fade" start="100" end="40" time="100" condition="!Control.HasFocus(55)">Conditional</animation>
 				<visible>Control.hasFocus(55)</visible>
 			</control>
@@ -261,7 +261,7 @@
 				<top>25</top>
 				<width>32</width>
 				<height>32</height>
-				<texture colordiffuse="FF000000">$VAR[AddonsListIconVar]</texture>
+				<texture colordiffuse="SkylineFocusText">$VAR[AddonsListIconVar]</texture>
 			</control>
 			<control type="label">
 				<left>75</left>
@@ -269,7 +269,7 @@
 				<aligny>center</aligny>
 				<scroll>true</scroll>
 				<label>$INFO[ListItem.Label]</label>
-				<textcolor>FF000000</textcolor>
+				<textcolor>SkylineFocusText</textcolor>
 					</control>
 			<control type="label">
 				<left>75</left>
@@ -279,7 +279,7 @@
 				<font>font27</font>
 				<label>$VAR[AddonsLabel2Var]</label>
 				<scroll>true</scroll>
-				<textcolor>FF000000</textcolor>
+				<textcolor>SkylineFocusText</textcolor>
 					</control>
 			<control type="image">
 				<right>40</right>

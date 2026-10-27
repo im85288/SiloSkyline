@@ -28,11 +28,11 @@
 					<textoffsetx>28</textoffsetx>
 					<aligny>center</aligny>
 					<textcolor>FFEDEDED</textcolor>
-					<focusedcolor>FF000000</focusedcolor>
-					<texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+					<focusedcolor>SkylineFocusText</focusedcolor>
+					<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
 					<texturenofocus />
 					<altlabel>$LOCALIZE[31032]: $LOCALIZE[585]</altlabel>
-					<alttexturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</alttexturefocus>
+					<alttexturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</alttexturefocus>
 					<alttexturenofocus />
 				</control>
 				<control type="button" id="21">
@@ -42,8 +42,8 @@
 					<textoffsetx>28</textoffsetx>
 					<aligny>center</aligny>
 					<textcolor>FFEDEDED</textcolor>
-					<focusedcolor>FF000000</focusedcolor>
-					<texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+					<focusedcolor>SkylineFocusText</focusedcolor>
+					<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
 					<texturenofocus />
 				</control>
 				<control type="radiobutton" id="22">
@@ -53,13 +53,13 @@
 					<textoffsetx>28</textoffsetx>
 					<aligny>center</aligny>
 					<textcolor>FFEDEDED</textcolor>
-					<focusedcolor>FF000000</focusedcolor>
-					<texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+					<focusedcolor>SkylineFocusText</focusedcolor>
+					<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
 					<texturenofocus />
 					<radioposx>332</radioposx><radiowidth>56</radiowidth><radioheight>28</radioheight>
-					<textureradioonfocus colordiffuse="FF000000">silo/switch_on.png</textureradioonfocus>
+					<textureradioonfocus colordiffuse="SkylineFocusText">silo/switch_on.png</textureradioonfocus>
 					<textureradioonnofocus colordiffuse="FFEDEDED">silo/switch_on.png</textureradioonnofocus>
-					<textureradioofffocus colordiffuse="FF000000">silo/switch_off.png</textureradioofffocus>
+					<textureradioofffocus colordiffuse="SkylineFocusText">silo/switch_off.png</textureradioofffocus>
 					<textureradiooffnofocus colordiffuse="FFEDEDED">silo/switch_off.png</textureradiooffnofocus>
 				</control>
 				<control type="button" id="20">
@@ -69,8 +69,8 @@
 					<textoffsetx>28</textoffsetx>
 					<aligny>center</aligny>
 					<textcolor>FFEDEDED</textcolor>
-					<focusedcolor>FF000000</focusedcolor>
-					<texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+					<focusedcolor>SkylineFocusText</focusedcolor>
+					<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
 					<texturenofocus />
 				</control>
 				<control type="button" id="501">
@@ -80,8 +80,8 @@
 					<textoffsetx>28</textoffsetx>
 					<aligny>center</aligny>
 					<textcolor>FFEDEDED</textcolor>
-					<focusedcolor>FF000000</focusedcolor>
-					<texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+					<focusedcolor>SkylineFocusText</focusedcolor>
+					<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
 					<texturenofocus />
 					<onclick>ActivateWindow(systemsettings,logging)</onclick>
 				</control>
@@ -124,7 +124,7 @@
 			<focusedlayout height="116">
 						<control type="image">
 							<width>1224</width><height>108</height>
-							<texture border="24" colordiffuse="FFEDEDED">silo/card_landscape_mask.png</texture>
+							<texture border="24" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
 							<visible>Control.HasFocus(50)</visible>
 						</control>
 						<control type="image">
@@ -138,7 +138,7 @@
 							<left>92</left><top>14</top><width>792</width><height>40</height>
 							<aligny>center</aligny>
 							<font>silo_meta</font>
-							<textcolor>FF000000</textcolor>
+							<textcolor>SkylineFocusText</textcolor>
 							<label>$INFO[ListItem.Label]</label>
 						<visible>Control.HasFocus(50)</visible>
 						</control>
@@ -146,14 +146,14 @@
 							<right>28</right><top>14</top><width>300</width><height>40</height>
 							<align>right</align><aligny>center</aligny>
 							<font>silo_detail</font>
-							<textcolor>99000000</textcolor>
+							<textcolor>SkylineFocusTextDim</textcolor>
 							<label>$INFO[ListItem.Label2]</label>
 						<visible>Control.HasFocus(50)</visible>
 						</control>
 						<control type="textbox">
 							<left>92</left><top>56</top><width>1104</width><height>52</height>
 							<font>silo_detail</font>
-							<textcolor>99000000</textcolor>
+							<textcolor>SkylineFocusTextDim</textcolor>
 							<label>$INFO[ListItem.Property(Event.Description)]</label>
 						<visible>Control.HasFocus(50)</visible>
 						</control>

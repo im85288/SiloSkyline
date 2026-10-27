@@ -40,7 +40,7 @@
 				<top>0</top>
 				<width>520</width>
 				<height>780</height>
-				<texture border="14" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+				<texture border="14" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
 			</control>
 			<control type="grouplist" id="996">
 				<description>grouplist for context buttons</description>
@@ -68,8 +68,8 @@
 			<textoffsetx>28</textoffsetx>
 			<font>silo_meta</font>
 			<textcolor>FFEDEDED</textcolor>
-			<focusedcolor>FF000000</focusedcolor>
-			<texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+			<focusedcolor>SkylineFocusText</focusedcolor>
+			<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
 			<texturenofocus />
 		</control>
 	</controls>

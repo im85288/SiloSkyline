@@ -95,8 +95,8 @@
 			<aligny>center</aligny>
 			<font>silo_meta</font>
 			<textcolor>FFEDEDED</textcolor>
-			<focusedcolor>FF000000</focusedcolor>
-			<texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+			<focusedcolor>SkylineFocusText</focusedcolor>
+			<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
 			<texturenofocus />
 		</control>
 		<control type="radiobutton" id="20">
@@ -107,8 +107,8 @@
 			<textoffsetx>80</textoffsetx>
 			<font>silo_detail</font>
 			<textcolor>BFEDEDED</textcolor>
-			<focusedcolor>FF000000</focusedcolor>
-			<texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+			<focusedcolor>SkylineFocusText</focusedcolor>
+			<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
 			<texturenofocus />
 			<radioposx>32</radioposx>
 			<radioposy>0</radioposy>
@@ -118,9 +118,9 @@
 			<onright>5</onright>
 			<onup>3</onup>
 			<ondown>3</ondown>
-			<textureradioonfocus colordiffuse="FF000000">icons/settings.png</textureradioonfocus>
+			<textureradioonfocus colordiffuse="SkylineFocusText">icons/settings.png</textureradioonfocus>
 			<textureradioonnofocus colordiffuse="BFEDEDED">icons/settings.png</textureradioonnofocus>
-			<textureradioofffocus colordiffuse="FF000000">icons/settings.png</textureradioofffocus>
+			<textureradioofffocus colordiffuse="SkylineFocusText">icons/settings.png</textureradioofffocus>
 			<textureradiooffnofocus colordiffuse="BFEDEDED">icons/settings.png</textureradiooffnofocus>
 		</control>
 	</controls>

@@ -59,20 +59,20 @@
 			<focusedlayout height="64">
 					<control type="image">
 						<width>816</width><height>64</height>
-						<texture border="30" colordiffuse="FFEDEDED">silo/pill.png</texture>
+						<texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
 						<visible>Control.HasFocus(20)</visible>
 					</control>
 					<control type="image">
 						<left>16</left><top>16</top><width>32</width><height>32</height>
 						<aspectratio>keep</aspectratio>
-						<texture colordiffuse="FF000000">$INFO[ListItem.Icon]</texture>
+						<texture colordiffuse="SkylineFocusText">$INFO[ListItem.Icon]</texture>
 						<visible>Control.HasFocus(20)</visible>
 					</control>
 					<control type="label">
 						<left>64</left><width>532</width><height>64</height>
 						<aligny>center</aligny>
 						<font>silo_meta</font>
-						<textcolor>FF000000</textcolor>
+						<textcolor>SkylineFocusText</textcolor>
 						<label>$INFO[ListItem.Label]</label>
 						<visible>Control.HasFocus(20)</visible>
 					</control>
@@ -80,7 +80,7 @@
 						<left>600</left><width>200</width><height>64</height>
 						<align>right</align><aligny>center</aligny>
 						<font>silo_detail</font>
-						<textcolor>99000000</textcolor>
+						<textcolor>SkylineFocusTextDim</textcolor>
 						<label>$INFO[ListItem.Label2]</label>
 						<visible>Control.HasFocus(20)</visible>
 					</control>
@@ -165,20 +165,20 @@
 			<focusedlayout height="64">
 					<control type="image">
 						<width>816</width><height>64</height>
-						<texture border="30" colordiffuse="FFEDEDED">silo/pill.png</texture>
+						<texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
 						<visible>Control.HasFocus(21)</visible>
 					</control>
 					<control type="image">
 						<left>16</left><top>16</top><width>32</width><height>32</height>
 						<aspectratio>keep</aspectratio>
-						<texture colordiffuse="FF000000">$INFO[ListItem.Icon]</texture>
+						<texture colordiffuse="SkylineFocusText">$INFO[ListItem.Icon]</texture>
 						<visible>Control.HasFocus(21)</visible>
 					</control>
 					<control type="label">
 						<left>64</left><width>532</width><height>64</height>
 						<aligny>center</aligny>
 						<font>silo_meta</font>
-						<textcolor>FF000000</textcolor>
+						<textcolor>SkylineFocusText</textcolor>
 						<label>$INFO[ListItem.Label]</label>
 						<visible>Control.HasFocus(21)</visible>
 					</control>
@@ -186,7 +186,7 @@
 						<left>600</left><width>200</width><height>64</height>
 						<align>right</align><aligny>center</aligny>
 						<font>silo_detail</font>
-						<textcolor>99000000</textcolor>
+						<textcolor>SkylineFocusTextDim</textcolor>
 						<label>$INFO[ListItem.Label2]</label>
 						<visible>Control.HasFocus(21)</visible>
 					</control>

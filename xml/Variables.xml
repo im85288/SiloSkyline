@@ -4303,7 +4303,7 @@
         <value>A–Z</value>
     </variable>
     <variable name="SiloSortPillDirection">
-        <value condition="Control.HasFocus(70)">[COLOR 8C000000]$VAR[SiloSortDirection][/COLOR]</value>
+        <value condition="Control.HasFocus(70)">[COLOR SkylineFocusTextDim]$VAR[SiloSortDirection][/COLOR]</value>
         <value>[COLOR 99EDEDED]$VAR[SiloSortDirection][/COLOR]</value>
     </variable>
     <variable name="SiloSortArrowIcon">

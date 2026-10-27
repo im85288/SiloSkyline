@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<colors>
+	<!-- Zephyr: Arctic Zephyr's flat dark grey, with its blue accent for focus
+	     (white text on it). Overrides colors/defaults.xml. -->
+	<color name="SkylineBackground">FF1A1B1D</color>
+	<color name="SkylinePanel">F22A2B2E</color>
+	<color name="SkylineDialog">FF232427</color>
+	<color name="SkylineCard">FF2A2B2E</color>
+	<color name="SkylineCardEmpty">FF333438</color>
+	<color name="SkylineFocus">FF0385B5</color>
+	<color name="SkylineFocusText">FFFFFFFF</color>
+	<color name="SkylineFocusTextDim">B3FFFFFF</color>
+	<!-- The screens still Estuary's. -->
+	<color name="primary_background">FF2A2B2E</color>
+	<color name="dialog_tint">FF232427</color>
+	<color name="background">FF1A1B1D</color>
+	<color name="button_focus">FF0385B5</color>
+	<color name="button_alt_focus">800385B5</color>
+</colors>

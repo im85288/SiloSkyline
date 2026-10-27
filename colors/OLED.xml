@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<colors>
+	<!-- OLED: true black pages and near-black panels, Silo's white focus.
+	     Overrides colors/defaults.xml. -->
+	<color name="SkylineBackground">FF000000</color>
+	<color name="SkylinePanel">F20E0E0F</color>
+	<color name="SkylineDialog">FF0A0A0B</color>
+	<color name="SkylineCard">FF121213</color>
+	<color name="SkylineCardEmpty">FF1A1A1C</color>
+	<!-- The screens still Estuary's. -->
+	<color name="primary_background">FF0E0E0F</color>
+	<color name="dialog_tint">FF0A0A0B</color>
+	<color name="background">FF000000</color>
+</colors>

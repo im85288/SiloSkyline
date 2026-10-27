@@ -45,7 +45,7 @@
 			<focusedlayout width="384" height="340">
 					<control type="image">
 						<left>70</left><top>8</top><width>244</width><height>244</height>
-						<texture colordiffuse="FFEDEDED">silo/avatar_ring.png</texture>
+						<texture colordiffuse="SkylineFocus">silo/avatar_ring.png</texture>
 						<visible>Control.HasFocus(52)</visible>
 					</control>
 					<control type="image">
@@ -76,8 +76,8 @@
 			<font>silo_tab</font>
 			<align>center</align><aligny>center</aligny>
 			<textcolor>FFEDEDED</textcolor>
-			<focusedcolor>FF000000</focusedcolor>
-			<texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+			<focusedcolor>SkylineFocusText</focusedcolor>
+			<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
 			<texturenofocus border="30" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
 			<onclick>ActivateWindow(ShutdownMenu)</onclick>
 			<onup>52</onup><ondown>52</ondown>

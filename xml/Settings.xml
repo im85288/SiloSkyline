@@ -36,13 +36,13 @@
 			<focusedlayout width="300" height="216">
 				<control type="image">
 					<width>288</width><height>204</height>
-					<texture border="20" colordiffuse="FFEDEDED">silo/card_landscape_mask.png</texture>
+					<texture border="20" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
 					<visible>Control.HasFocus(9000)</visible>
 				</control>
 				<control type="image">
 					<left>96</left><top>42</top><width>96</width><height>96</height>
 					<aspectratio>keep</aspectratio>
-					<texture colordiffuse="FF000000">$INFO[ListItem.Icon]</texture>
+					<texture colordiffuse="SkylineFocusText">$INFO[ListItem.Icon]</texture>
 				
 					<visible>Control.HasFocus(9000)</visible>
 				</control>
@@ -50,7 +50,7 @@
 					<left>16</left><top>148</top><width>256</width><height>44</height>
 					<align>center</align><aligny>center</aligny>
 					<font>silo_meta</font>
-					<textcolor>FF000000</textcolor>
+					<textcolor>SkylineFocusText</textcolor>
 					<label>$INFO[ListItem.Label]</label>
 				
 					<visible>Control.HasFocus(9000)</visible>

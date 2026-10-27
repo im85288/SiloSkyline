@@ -104,16 +104,29 @@ def includes():
 			</control>
 		</definition>
 	</include>
+	<!-- The colour theme's name: Kodi calls the default SKINDEFAULT. -->
+	<variable name="SkylineColourName">
+		<value condition="String.IsEqual(Skin.CurrentColourTheme,SKINDEFAULT)">Silo</value>
+		<value>$INFO[Skin.CurrentColourTheme]</value>
+	</variable>
 	<!-- The event log's count, "1 event" or "12 events". -->
 	<variable name="SiloEventCount">
 		<value condition="Integer.IsEqual(Container(50).NumItems,1)">1 event</value>
 		<value>$INFO[Container(50).NumItems,, events]</value>
 	</variable>
-	<!-- Silo's page colour behind a screen. -->
+	<!-- Silo's page colour behind a screen, and with Skin settings' Artwork
+	     background (as Arctic Zephyr) the focused title's fanart, dimmed. -->
 	<include name="SiloPage">
 		<control type="image">
 			<left>0</left><top>0</top><width>1920</width><height>1080</height>
 			<texture colordiffuse="%(bg)s">colors/white.png</texture>
+		</control>
+		<control type="image">
+			<left>0</left><top>0</top><width>1920</width><height>1080</height>
+			<aspectratio>scale</aspectratio>
+			<fadetime>400</fadetime>
+			<texture background="true" colordiffuse="38FFFFFF">$INFO[Container.ListItem.Art(fanart)]</texture>
+			<visible>Skin.HasSetting(SkylineArtworkBackground)</visible>
 		</control>
 	</include>
 </includes>
@@ -520,6 +533,24 @@ def skin_settings(text):
         # Estuary's header and footer rules: the panel frames the settings now.
         text = re.sub(r'\t\t\t<control type="image">\s*<description>Dialog Header image</description>.*?</control>\n',
                       '', text, flags=re.S)
+    # Skyline's look, first in General: the colour theme (Kodi chooses it in
+    # Interface settings) and the artwork background.
+    look = '<!-- Skyline look (tools/build_frame.py) -->'
+    if look not in text:
+        text = text.replace('\t\t\t\t<control type="radiobutton" id="701">', '''\t\t\t\t%s
+\t\t\t\t<control type="button" id="790">
+\t\t\t\t\t<label>Colours</label>
+\t\t\t\t\t<label2>$VAR[SkylineColourName]</label2>
+\t\t\t\t\t<include>DefaultSettingButton</include>
+\t\t\t\t\t<onclick>ActivateWindow(InterfaceSettings)</onclick>
+\t\t\t\t</control>
+\t\t\t\t<control type="radiobutton" id="791">
+\t\t\t\t\t<label>Artwork background</label>
+\t\t\t\t\t<include>DefaultSettingButton</include>
+\t\t\t\t\t<selected>Skin.HasSetting(SkylineArtworkBackground)</selected>
+\t\t\t\t\t<onclick>Skin.ToggleSetting(SkylineArtworkBackground)</onclick>
+\t\t\t\t</control>
+\t\t\t\t<control type="radiobutton" id="701">''' % look, 1)
     # The settings: in the right pane.
     text = text.replace('<control type="group" id="10000">\n\t\t\t<left>470</left>',
                         '<control type="group" id="10000">\n\t\t\t<left>%d</left><width>%d</width>' % (right_x - 24, right_w + 24), 1)

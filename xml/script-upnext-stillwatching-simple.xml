@@ -12,7 +12,7 @@
             <animation effect="fade" start="100" end="0" time="240">WindowClose</animation>
             <control type="image">
                 <width>1920</width><height>1080</height>
-                <texture colordiffuse="FF0D0F12">colors/white.png</texture>
+                <texture colordiffuse="SkylineBackground">colors/white.png</texture>
             </control>
             <control type="image">
                 <width>1920</width><height>1080</height>
@@ -33,7 +33,7 @@
             <control type="image">
                 <left>160</left><top>190</top>
                 <width>616</width><height>346</height>
-                <texture diffuse="silo/card_landscape_mask.png" colordiffuse="FF1A1D27">colors/white.png</texture>
+                <texture diffuse="silo/card_landscape_mask.png" colordiffuse="SkylineCard">colors/white.png</texture>
             </control>
             <control type="image">
                 <left>160</left><top>190</top>
@@ -101,9 +101,9 @@
                     <label>$ADDON[service.upnext 30010]</label>
                     <font>silo_meta</font>
                     <textcolor>FFEDEDED</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
                     <align>center</align><aligny>center</aligny>
-                    <texturefocus border="46" colordiffuse="FFEDEDED">silo/dialog_button.png</texturefocus>
+                    <texturefocus border="46" colordiffuse="SkylineFocus">silo/dialog_button.png</texturefocus>
                     <texturenofocus border="46" colordiffuse="26FFFFFF">silo/dialog_button.png</texturenofocus>
                     <pulseonselect>false</pulseonselect>
                     <onright>3013</onright>
@@ -115,9 +115,9 @@
                     <label>$ADDON[service.upnext 30034]</label>
                     <font>silo_meta</font>
                     <textcolor>FFEDEDED</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
                     <align>center</align><aligny>center</aligny>
-                    <texturefocus border="46" colordiffuse="FFEDEDED">silo/dialog_button.png</texturefocus>
+                    <texturefocus border="46" colordiffuse="SkylineFocus">silo/dialog_button.png</texturefocus>
                     <texturenofocus border="46" colordiffuse="26FFFFFF">silo/dialog_button.png</texturenofocus>
                     <pulseonselect>false</pulseonselect>
                     <onleft>3012</onleft>
@@ -236,7 +236,7 @@
                         <control type="image">
                             <left>0</left><top>0</top>
                             <width>300</width><height>174</height>
-                            <texture colordiffuse="FFEDEDED">silo/card_landscape_focus.png</texture>
+                            <texture colordiffuse="SkylineFocus">silo/card_landscape_focus.png</texture>
                             <visible>Control.HasFocus(3100)</visible>
                         </control>
                         <control type="label">

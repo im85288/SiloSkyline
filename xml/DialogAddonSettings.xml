@@ -37,8 +37,8 @@
 				<font>silo_meta</font>
 				<texturenofocus />
 				<textcolor>FFEDEDED</textcolor>
-				<focusedcolor>FF000000</focusedcolor>
-				<texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+				<focusedcolor>SkylineFocusText</focusedcolor>
+				<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
 			</control>
 			<control type="grouplist" id="5">
 				<description>control area</description>

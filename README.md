@@ -32,6 +32,17 @@ menu** adds items of your own beside the avatar: any add-on, library node, playl
 and in your order. Give an item up to four widgets and it opens them as rows on its own page, like Home's;
 an item without widgets runs its action. The Silo tabs stay as they are.
 
+## Colours
+
+**Settings -> Interface -> Skin -> Colours** (or Skyline's skin settings) offers three colour themes:
+
+- **Silo** (the default): Silo's near-black pages and white focus.
+- **Zephyr**: a flatter dark grey with a blue focus, as Arctic Zephyr.
+- **OLED**: true black pages and near-black panels.
+
+**Artwork background** in the skin settings shows the selected title's fanart, dimmed, behind every
+screen, as Arctic Zephyr does.
+
 ## Install
 
 Install and sign in to SiloKodiConnect 0.9.3 or newer first, then build a zip and use Kodi's
@@ -57,6 +68,9 @@ The Silo screens are generated: edit the scripts in `tools/`, not the XML they w
 - `xml/script-skinshortcuts.xml` (the menu manager) and `shortcuts/` are hand-written; Skin Shortcuts
   writes `xml/script-skinshortcuts-includes.xml` on the device, over the placeholder here.
 - `tools/make_textures.py` draws the masks, focus rings, pills and badges in `media/silo/`.
+
+- `tools/build_colours.py` runs last: it turns the colours a theme changes (pages, panels, the focus and
+  what's drawn on it) into the names `colors/defaults.xml`, `Zephyr.xml` and `OLED.xml` define.
 
 Run `build_home.py` first, then the others, since they all write blocks into `xml/Variables.xml`. Kodi reads a
 `$VAR` in a list's content path only once, when the window opens, so content paths stay `$INFO`; check

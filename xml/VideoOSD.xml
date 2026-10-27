@@ -88,7 +88,7 @@
 							<top>15</top>
 							<width>44</width>
 							<height>44</height>
-							<texture colordiffuse="FF000000">silo/skip_back.png</texture>
+							<texture colordiffuse="SkylineFocusText">silo/skip_back.png</texture>
 							<visible>Control.HasFocus(609)</visible>
 						</control>
 						<control type="image">
@@ -120,7 +120,7 @@
 							<aligny>center</aligny>
 							<font>silo_badge</font>
 							<label>$NUMBER[10]</label>
-							<textcolor>FF000000</textcolor>
+							<textcolor>SkylineFocusText</textcolor>
 							<visible>Control.HasFocus(609)</visible>
 						</control>
 					</control>
@@ -177,7 +177,7 @@
 							<top>15</top>
 							<width>44</width>
 							<height>44</height>
-							<texture colordiffuse="FF000000">silo/skip_forward.png</texture>
+							<texture colordiffuse="SkylineFocusText">silo/skip_forward.png</texture>
 							<visible>Control.HasFocus(610)</visible>
 						</control>
 						<control type="image">
@@ -209,7 +209,7 @@
 							<aligny>center</aligny>
 							<font>silo_badge</font>
 							<label>$NUMBER[30]</label>
-							<textcolor>FF000000</textcolor>
+							<textcolor>SkylineFocusText</textcolor>
 							<visible>Control.HasFocus(610)</visible>
 						</control>
 					</control>

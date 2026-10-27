@@ -34,6 +34,19 @@
 				<onup>700</onup>
 				<ondown>700</ondown>
 				<visible>Container(9000).HasFocus(1)</visible>
+				<!-- Skyline look (tools/build_frame.py) -->
+				<control type="button" id="790">
+					<label>Colours</label>
+					<label2>$VAR[SkylineColourName]</label2>
+					<include>DefaultSettingButton</include>
+					<onclick>ActivateWindow(InterfaceSettings)</onclick>
+				</control>
+				<control type="radiobutton" id="791">
+					<label>Artwork background</label>
+					<include>DefaultSettingButton</include>
+					<selected>Skin.HasSetting(SkylineArtworkBackground)</selected>
+					<onclick>Skin.ToggleSetting(SkylineArtworkBackground)</onclick>
+				</control>
 				<control type="radiobutton" id="701">
 					<label>$LOCALIZE[31095]</label>
 					<include>DefaultSettingButton</include>
@@ -328,14 +341,14 @@
 				<focusedlayout height="70" width="434">
 					<control type="image">
 						<width>434</width><height>70</height>
-						<texture border="30" colordiffuse="FFEDEDED">silo/pill.png</texture>
+						<texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
 						<animation effect="fade" start="100" end="40" time="100" condition="!Control.HasFocus(9000)">Conditional</animation>
 					</control>
 					<control type="label">
 						<textoffsetx>32</textoffsetx>
 						<width>434</width><height>70</height>
 						<font>silo_meta</font>
-						<textcolor>FF000000</textcolor>
+						<textcolor>SkylineFocusText</textcolor>
 						<aligny>center</aligny>
 						<label>$INFO[ListItem.Label]</label>
 					</control>
