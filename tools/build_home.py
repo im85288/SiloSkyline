@@ -40,6 +40,13 @@ HOME_CARD_FIELDS = ('type', 'dbid', 'card.title', 'card.sub', 'card.wide_sub', '
                     'hero.detail', 'plot', 'mpaa', 'badge1', 'badge2', 'badge3', 'tint', 'percent', 'playcount',
                     'art.poster', 'art.landscape', 'art.fanart', 'art.clearlogo', 'request.type', 'request.tmdb',
                     'status.tint', 'status.seg1', 'status.seg2', 'status.seg3', 'status.seg4')
+# The fields a page's cards can have, written into Home.xml for every slot:
+# only Requests' cards carry a request or its status, and Requests' rows are
+# all posters (no wide caption or art). Each unused field cost every Home card.
+PAGE_FIELDS = {
+    'home': tuple(f for f in HOME_CARD_FIELDS if not f.startswith(('request.', 'status.'))),
+    'requests': tuple(f for f in HOME_CARD_FIELDS if f not in ('card.wide_sub', 'art.landscape')),
+}
 # Rows a page can show; Requests has Your requests and Silo's few discovery
 # rows, and every slot costs Home.xml size.
 # Silo's libraries have 6 rows each: fewer slots keep Home.xml quick to load.
@@ -154,11 +161,11 @@ def card_layout(card, focused, control_id=None):
             % (card['name'], control_id))
 
 
-def published_item(prefix):
-    """One card slot of a published row: its fields from the Home window."""
+def published_item(prefix, page):
+    """One card slot of a published row: its page's fields from the Home window."""
     return ('\n                        <item><label>$INFO[Window(Home).Property(%s.label)]</label>' % prefix +
             ''.join('<property name="home.%s">$INFO[Window(Home).Property(%s.%s)]</property>' % (field, prefix, field)
-                    for field in HOME_CARD_FIELDS) +
+                    for field in PAGE_FIELDS.get(page, HOME_CARD_FIELDS)) +
             '<visible>!String.IsEmpty(Window(Home).Property(%s.type))</visible></item>' % prefix)
 
 
@@ -385,7 +392,7 @@ def row(page, page_index, slot, landscape):
         # Written out, not an include with a parameter: Kodi expands those
         # slowly as the skin loads (thousands of them took 25 s on a SHIELD).
         content = '<content>%s\n                    </content>' % ''.join(
-            published_item('silo.%s.%d.%d' % (page, slot, card))
+            published_item('silo.%s.%d.%d' % (page, slot, card), page)
             for card in range(1, PAGE_CARDS.get(page, OTHER_CARDS) + 1))
     def layouts(card, condition=''):
         when = ' condition="%s"' % condition if condition else ''
