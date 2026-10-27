@@ -723,6 +723,27 @@ SECTION_ICONS = {'Recommended': 'silo/menu_recommended.png', 'Browse': 'silo/men
                  'Genres': 'silo/menu_default.png'}
 
 
+COLLECTION_KEYS = ('collections', 'collection')
+
+
+def browse_clear():
+    """Every Browse list path (Kodi loads a hidden grid's path too)."""
+    return ['ClearProperty(silo.browse.list.%s,home)' % key for key in PERSONAL_KEYS + COLLECTION_KEYS]
+
+
+def collections_actions(path):
+    return (['SetProperty(silo.browse.type,collections,home)', 'ClearProperty(silo.browse.letter,home)'] + browse_clear()
+            + ['SetProperty(silo.browse.list,%s,home)' % path, 'SetProperty(silo.browse.list.collections,%s,home)' % path,
+               'ActivateWindow(1191)'])
+
+
+def collection_actions(path, title):
+    """One collection in Browse: Back closes the window (it wasn't opened from the cards)."""
+    return (['SetProperty(silo.browse.type,collection,home)', 'ClearProperty(silo.browse.from,home)'] + browse_clear()
+            + ['SetProperty(silo.browse.title,%s,home)' % title, 'SetProperty(silo.browse.list,%s,home)' % path,
+               'SetProperty(silo.browse.list.collection,%s,home)' % path, 'ActivateWindow(1191)'])
+
+
 def section_actions(page, label, path):
     """What choosing one of a tab's sections does (its dropdown entry or pill)."""
     if label in ('Browse', 'Recently Added'):
@@ -734,8 +755,11 @@ def section_actions(page, label, path):
                   if label == 'Recently Added' else [])
         return newest + (['SetProperty(silo.browse.type,%s,home)' % kind, 'ClearProperty(silo.browse.letter,home)',
                           'ClearProperty(silo.browse.list,home)']
-                         + ['ClearProperty(silo.browse.list.%s,home)' % key for key in PERSONAL_KEYS]
+                         + browse_clear()
                          + ['SetProperty(silo.browse.path,videodb://%s/titles/,home)' % kind, 'ActivateWindow(1191)'])
+    if label == 'Collections':
+        # Silo's collections in Skyline's Browse window (OK opens details).
+        return collections_actions(path)
     if label == 'Search to request':
         return ['Skin.Reset(silo.search)', 'SetProperty(silo.search.mode,requests,home)', 'ActivateWindow(1190)']
     if path:
@@ -889,7 +913,7 @@ def collection_row(page, page_index):
                     <width>%(lw)d</width><height>%(item_h)d</height>
                     <orientation>horizontal</orientation>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
-                    <onclick>ActivateWindow(Videos,$INFO[ListItem.FolderPath],return)</onclick>
+%(clicks)s
                     <onfocus>SetProperty(silo.row,%(id)d,home)</onfocus>%(moves)s
                     <content target="videos">$INFO[%(path)s,,&amp;top=8]</content>
                     <itemlayout width="%(item_w)d" height="%(item_h)d">%(normal)s
@@ -900,7 +924,13 @@ def collection_row(page, page_index):
             </control>''' % {'group_h': BAND_H, 'id': cid, 'x': SAFE_X, 'text': TEXT, 'lx': SAFE_X - 6,
                              'lw': 1920 - SAFE_X + 6, 'cards_top': CARDS_TOP, 'moves': moves,
                              'path': prop('silo.%s.collections' % page), 'item_w': item_w, 'item_h': item_h,
-                             'normal': fan_row_card(False, cid), 'focused': fan_row_card(True, cid)}
+                             'normal': fan_row_card(False, cid), 'focused': fan_row_card(True, cid),
+                             'clicks': ''.join('\n                    <onclick condition="%s">%s</onclick>' % (c, a)
+                                               for c, actions in (('String.IsEqual(ListItem.Property(silo.see_all),true)',
+                                                                   collections_actions('$INFO[%s]' % prop('silo.%s.collections' % page))),
+                                                                  ('!String.IsEqual(ListItem.Property(silo.see_all),true)',
+                                                                   collection_actions('$INFO[ListItem.FolderPath]', '$INFO[ListItem.Label]')))
+                                               for a in actions)}
 
 
 FAN_CARD_W, FAN_CARD_H = 430, 234
@@ -998,7 +1028,8 @@ def avatar_menu():
         path = '%s?mode=widget&amp;section=%s' % (PLUGIN_URL, key)
         return (['SetProperty(silo.browse.type,%s,home)' % key, 'ClearProperty(silo.browse.letter,home)',
                  'SetProperty(silo.browse.list,%s,home)' % path, 'SetProperty(silo.browse.list.%s,%s,home)' % (key, path)]
-                + ['ClearProperty(silo.browse.list.%s,home)' % other for other in PERSONAL_KEYS if other != key]
+                + ['ClearProperty(silo.browse.list.%s,home)' % other for other in PERSONAL_KEYS + COLLECTION_KEYS
+                   if other != key]
                 + ['ActivateWindow(1191)'])
     entries = [
         ('Switch Profile', 'profile', [('Integer.IsGreater(System.ProfileCount,1)', 'System.LogOff'),

@@ -15,6 +15,8 @@
     <onload condition="String.IsEqual(Window(Home).Property(silo.browse.type),watchlist) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">SetFocus(51)</onload>
     <onload condition="String.IsEqual(Window(Home).Property(silo.browse.type),favorites) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">SetFocus(52)</onload>
     <onload condition="String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">SetFocus(53)</onload>
+    <onload condition="String.IsEqual(Window(Home).Property(silo.browse.type),collections) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">SetFocus(56)</onload>
+    <onload condition="String.IsEqual(Window(Home).Property(silo.browse.type),collection) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">SetFocus(55)</onload>
 
     <backgroundcolor>SkylineBackground</backgroundcolor>
     <controls>
@@ -673,6 +675,372 @@
             <label>Nothing here yet. Add titles from Silo and they appear here.</label>
             <visible>String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + !Container(53).IsUpdating + Integer.IsEqual(Container(53).NumItems,0)</visible>
         </control>
+        <control type="panel" id="55">
+            <left>82</left><top>252</top>
+            <width>1620</width><height>828</height>
+            <orientation>vertical</orientation>
+            <visible>String.IsEqual(Window(Home).Property(silo.browse.type),collection) + !String.IsEmpty(Window(Home).Property(silo.browse.list))</visible>
+            <onright>61</onright>
+            <onleft>noop</onleft>
+            <onup>noop</onup>
+            <scrolltime tween="cubic" easing="out">280</scrolltime>
+            <!-- Details, not Kodi's play or open (SiloKodiConnect's info page, else Kodi's). -->
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+            <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
+            <itemlayout width="270" height="485">
+                <control type="image">
+                    <left>6</left><top>6</top><width>246</width><height>369</height>
+                    <aspectratio>scale</aspectratio>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
+                </control>
+                <!-- The rating is in Silo's poster art itself (top left). -->
+                <!-- Watched: a white disc with a dark tick, top right. -->
+                <control type="group">
+                    <left>196</left><top>16</top>
+                    <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
+                    <control type="image">
+                        <width>44</width><height>44</height>
+                        <texture colordiffuse="F2FFFFFF">silo/avatar_mask.png</texture>
+                    </control>
+                    <control type="image">
+                        <left>10</left><top>10</top><width>24</width><height>24</height>
+                        <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                    </control>
+                </control>
+                <control type="label">
+                    <left>6</left><top>387</top><width>246</width><height>44</height>
+                    <font>silo_card_title</font>
+                    <textcolor>C7EDEDED</textcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                </control>
+                <control type="label">
+                    <left>6</left><top>427</top><width>246</width><height>34</height>
+                    <font>silo_detail</font>
+                    <textcolor>BFEDEDED</textcolor>
+                    <label>$INFO[ListItem.Year]</label>
+                </control>
+            </itemlayout>
+            <focusedlayout width="270" height="485">
+                <control type="image">
+                    <width>258</width><height>381</height>
+                    <texture colordiffuse="SkylineFocus">silo/card_poster_focus.png</texture>
+                    <visible>Control.HasFocus(55)</visible>
+                </control>
+                <control type="image">
+                    <left>6</left><top>6</top><width>246</width><height>369</height>
+                    <aspectratio>scale</aspectratio>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
+                </control>
+                <!-- The rating is in Silo's poster art itself (top left). -->
+                <!-- Watched: a white disc with a dark tick, top right. -->
+                <control type="group">
+                    <left>196</left><top>16</top>
+                    <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
+                    <control type="image">
+                        <width>44</width><height>44</height>
+                        <texture colordiffuse="F2FFFFFF">silo/avatar_mask.png</texture>
+                    </control>
+                    <control type="image">
+                        <left>10</left><top>10</top><width>24</width><height>24</height>
+                        <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                    </control>
+                </control>
+                <control type="label">
+                    <left>6</left><top>387</top><width>246</width><height>44</height>
+                    <font>silo_card_title</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                    <scroll>true</scroll>
+                </control>
+                <control type="label">
+                    <left>6</left><top>427</top><width>246</width><height>34</height>
+                    <font>silo_detail</font>
+                    <textcolor>BFEDEDED</textcolor>
+                    <label>$INFO[ListItem.Year]</label>
+                </control>
+            </focusedlayout>
+            <content target="videos" sortby="title" sortorder="ascending">$INFO[Window(Home).Property(silo.browse.list.collection)]</content>
+        </control>
+        <control type="list" id="61">
+            <visible>String.IsEqual(Window(Home).Property(silo.browse.type),collection) + !String.IsEmpty(Window(Home).Property(silo.browse.list))</visible>
+            <left>1736</left><top>252</top>
+            <width>96</width><height>828</height>
+            <orientation>vertical</orientation>
+            <onleft>55</onleft><onright>noop</onright>
+            <scrolltime tween="cubic" easing="out">200</scrolltime>
+            <itemlayout width="96" height="30" condition="!Control.HasFocus(61)">
+                <control type="image">
+                    <left>43</left><top>10</top><width>10</width><height>10</height>
+                    <texture colordiffuse="FFEDEDED">silo/avatar_mask.png</texture>
+                    <visible>String.IsEqual(ListItem.Label,Container(55).ListItem.SortLetter)</visible>
+                </control>
+                <control type="image">
+                    <left>43</left><top>10</top><width>10</width><height>10</height>
+                    <texture colordiffuse="59EDEDED">silo/avatar_mask.png</texture>
+                    <visible>!String.IsEqual(ListItem.Label,Container(55).ListItem.SortLetter)</visible>
+                </control>
+            </itemlayout>
+            <focusedlayout width="96" height="30" condition="!Control.HasFocus(61)">
+                <control type="image">
+                    <left>43</left><top>10</top><width>10</width><height>10</height>
+                    <texture colordiffuse="FFEDEDED">silo/avatar_mask.png</texture>
+                    <visible>String.IsEqual(ListItem.Label,Container(55).ListItem.SortLetter)</visible>
+                </control>
+                <control type="image">
+                    <left>43</left><top>10</top><width>10</width><height>10</height>
+                    <texture colordiffuse="59EDEDED">silo/avatar_mask.png</texture>
+                    <visible>!String.IsEqual(ListItem.Label,Container(55).ListItem.SortLetter)</visible>
+                </control>
+            </focusedlayout>
+            <itemlayout width="96" height="72" condition="Control.HasFocus(61)">
+                <control type="image">
+                    <left>12</left><top>6</top><width>72</width><height>60</height>
+                    <texture border="20" colordiffuse="33FFFFFF">silo/card_landscape_mask.png</texture>
+                    <visible>String.IsEqual(ListItem.Label,Container(55).ListItem.SortLetter)</visible>
+                </control>
+                <control type="label">
+                    <width>96</width><height>72</height>
+                    <align>center</align><aligny>center</aligny>
+                    <font>silo_tab</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                    <visible>String.IsEqual(ListItem.Label,Container(55).ListItem.SortLetter)</visible>
+                </control>
+                <control type="label">
+                    <width>96</width><height>72</height>
+                    <align>center</align><aligny>center</aligny>
+                    <font>silo_tab</font>
+                    <textcolor>BFEDEDED</textcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                    <visible>!String.IsEqual(ListItem.Label,Container(55).ListItem.SortLetter)</visible>
+                </control>
+            </itemlayout>
+            <focusedlayout width="96" height="72" condition="Control.HasFocus(61)">
+                <control type="image">
+                    <left>12</left><top>6</top><width>72</width><height>60</height>
+                    <texture border="20" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
+                </control>
+                <control type="label">
+                    <width>96</width><height>72</height>
+                    <align>center</align><aligny>center</aligny>
+                    <font>silo_tab</font>
+                    <textcolor>SkylineFocusText</textcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                </control>
+            </focusedlayout>
+            <content>
+                <item>
+                    <label>#</label>
+                    <onclick>NotifyAll(silokodi,jump.55.#)</onclick>
+                </item>
+                <item>
+                    <label>A</label>
+                    <onclick>NotifyAll(silokodi,jump.55.A)</onclick>
+                </item>
+                <item>
+                    <label>B</label>
+                    <onclick>NotifyAll(silokodi,jump.55.B)</onclick>
+                </item>
+                <item>
+                    <label>C</label>
+                    <onclick>NotifyAll(silokodi,jump.55.C)</onclick>
+                </item>
+                <item>
+                    <label>D</label>
+                    <onclick>NotifyAll(silokodi,jump.55.D)</onclick>
+                </item>
+                <item>
+                    <label>E</label>
+                    <onclick>NotifyAll(silokodi,jump.55.E)</onclick>
+                </item>
+                <item>
+                    <label>F</label>
+                    <onclick>NotifyAll(silokodi,jump.55.F)</onclick>
+                </item>
+                <item>
+                    <label>G</label>
+                    <onclick>NotifyAll(silokodi,jump.55.G)</onclick>
+                </item>
+                <item>
+                    <label>H</label>
+                    <onclick>NotifyAll(silokodi,jump.55.H)</onclick>
+                </item>
+                <item>
+                    <label>I</label>
+                    <onclick>NotifyAll(silokodi,jump.55.I)</onclick>
+                </item>
+                <item>
+                    <label>J</label>
+                    <onclick>NotifyAll(silokodi,jump.55.J)</onclick>
+                </item>
+                <item>
+                    <label>K</label>
+                    <onclick>NotifyAll(silokodi,jump.55.K)</onclick>
+                </item>
+                <item>
+                    <label>L</label>
+                    <onclick>NotifyAll(silokodi,jump.55.L)</onclick>
+                </item>
+                <item>
+                    <label>M</label>
+                    <onclick>NotifyAll(silokodi,jump.55.M)</onclick>
+                </item>
+                <item>
+                    <label>N</label>
+                    <onclick>NotifyAll(silokodi,jump.55.N)</onclick>
+                </item>
+                <item>
+                    <label>O</label>
+                    <onclick>NotifyAll(silokodi,jump.55.O)</onclick>
+                </item>
+                <item>
+                    <label>P</label>
+                    <onclick>NotifyAll(silokodi,jump.55.P)</onclick>
+                </item>
+                <item>
+                    <label>Q</label>
+                    <onclick>NotifyAll(silokodi,jump.55.Q)</onclick>
+                </item>
+                <item>
+                    <label>R</label>
+                    <onclick>NotifyAll(silokodi,jump.55.R)</onclick>
+                </item>
+                <item>
+                    <label>S</label>
+                    <onclick>NotifyAll(silokodi,jump.55.S)</onclick>
+                </item>
+                <item>
+                    <label>T</label>
+                    <onclick>NotifyAll(silokodi,jump.55.T)</onclick>
+                </item>
+                <item>
+                    <label>U</label>
+                    <onclick>NotifyAll(silokodi,jump.55.U)</onclick>
+                </item>
+                <item>
+                    <label>V</label>
+                    <onclick>NotifyAll(silokodi,jump.55.V)</onclick>
+                </item>
+                <item>
+                    <label>W</label>
+                    <onclick>NotifyAll(silokodi,jump.55.W)</onclick>
+                </item>
+                <item>
+                    <label>X</label>
+                    <onclick>NotifyAll(silokodi,jump.55.X)</onclick>
+                </item>
+                <item>
+                    <label>Y</label>
+                    <onclick>NotifyAll(silokodi,jump.55.Y)</onclick>
+                </item>
+                <item>
+                    <label>Z</label>
+                    <onclick>NotifyAll(silokodi,jump.55.Z)</onclick>
+                </item>
+            </content>
+        </control>
+        <control type="panel" id="56">
+            <left>82</left><top>252</top>
+            <width>1728</width><height>828</height>
+            <orientation>vertical</orientation>
+            <visible>String.IsEqual(Window(Home).Property(silo.browse.type),collections) + !String.IsEmpty(Window(Home).Property(silo.browse.list))</visible>
+            <scrolltime tween="cubic" easing="out">280</scrolltime>
+            <onclick>SetProperty(silo.browse.from,collections,home)</onclick>
+            <onclick>SetProperty(silo.browse.title,$INFO[ListItem.Label],home)</onclick>
+            <onclick>SetProperty(silo.browse.list.collection,$INFO[ListItem.FolderPath],home)</onclick>
+            <onclick>SetProperty(silo.browse.list,$INFO[ListItem.FolderPath],home)</onclick>
+            <onclick>SetProperty(silo.browse.type,collection,home)</onclick>
+            <onclick>ActivateWindow(1193)</onclick>
+            <itemlayout width="576" height="308">
+                <control type="group">
+                    <control type="image">
+                        <left>6</left><top>6</top><width>548</width><height>280</height>
+                        <texture border="24" colordiffuse="FF1E2024">silo/card_landscape_mask.png</texture>
+                    </control>
+                    <control type="image">
+                        <left>160</left><top>53</top><width>124</width><height>186</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan3)]</texture>
+                        <animation effect="rotate" end="-7" center="auto" time="0" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(silo.fan3))</visible>
+                    </control>
+                    <control type="image">
+                        <left>36</left><top>53</top><width>124</width><height>186</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan1)]</texture>
+                        <animation effect="rotate" end="8" center="auto" time="0" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(silo.fan1))</visible>
+                    </control>
+                    <control type="image">
+                        <left>98</left><top>53</top><width>124</width><height>186</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan2)]</texture>
+                        <animation effect="rotate" end="1" center="auto" time="0" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(silo.fan2))</visible>
+                    </control>
+                    <control type="textbox">
+                        <left>292</left><top>50</top><width>236</width><height>132</height>
+                        <font>silo_row</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="label">
+                        <left>292</left><top>218</top><width>236</width><height>32</height>
+                        <font>silo_badge</font>
+                        <textcolor>99EDEDED</textcolor>
+                        <label>[UPPERCASE]$INFO[ListItem.Property(silo.count),, titles][/UPPERCASE]</label>
+                    </control>
+                </control>
+            </itemlayout>
+            <focusedlayout width="576" height="308">
+                <control type="group">
+                    <animation effect="zoom" start="100" end="104" center="auto" time="160" tween="sine" easing="out" condition="Control.HasFocus(56)">Conditional</animation>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>548</width><height>280</height>
+                        <texture border="24" colordiffuse="FF1E2024">silo/card_landscape_mask.png</texture>
+                    </control>
+                    <control type="image">
+                        <left>160</left><top>53</top><width>124</width><height>186</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan3)]</texture>
+                        <animation effect="rotate" end="-7" center="auto" time="0" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(silo.fan3))</visible>
+                    </control>
+                    <control type="image">
+                        <left>36</left><top>53</top><width>124</width><height>186</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan1)]</texture>
+                        <animation effect="rotate" end="8" center="auto" time="0" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(silo.fan1))</visible>
+                    </control>
+                    <control type="image">
+                        <left>98</left><top>53</top><width>124</width><height>186</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan2)]</texture>
+                        <animation effect="rotate" end="1" center="auto" time="0" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(silo.fan2))</visible>
+                    </control>
+                    <control type="textbox">
+                        <left>292</left><top>50</top><width>236</width><height>132</height>
+                        <font>silo_row</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="label">
+                        <left>292</left><top>218</top><width>236</width><height>32</height>
+                        <font>silo_badge</font>
+                        <textcolor>99EDEDED</textcolor>
+                        <label>[UPPERCASE]$INFO[ListItem.Property(silo.count),, titles][/UPPERCASE]</label>
+                    </control>
+                    <control type="image">
+                        <width>560</width><height>292</height>
+                        <texture border="20" colordiffuse="SkylineFocus">silo/card_landscape_focus.png</texture>
+                        <visible>Control.HasFocus(56)</visible>
+                    </control>
+                </control>
+            </focusedlayout>
+            <content target="videos">$INFO[Window(Home).Property(silo.browse.list.collections)]</content>
+        </control>
         <!-- Silo's A-Z. -->
         <control type="list" id="60">
             <visible>!!String.IsEmpty(Window(Home).Property(silo.browse.list))</visible>
@@ -912,6 +1280,13 @@
                     <onclick condition="String.IsEqual(Window(Home).Property(silo.browse.type),tvshows)">SetProperty(silo.browse.path,videodb://tvshows/titles/?xsp=%7B%22type%22%3A%22tvshows%22%2C%22rules%22%3A%7B%22or%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22startswith%22%2C%22value%22%3A%5B%22Z%22%5D%7D%2C%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22startswith%22%2C%22value%22%3A%5B%22The%20Z%22%5D%7D%2C%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22startswith%22%2C%22value%22%3A%5B%22A%20Z%22%5D%7D%2C%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22startswith%22%2C%22value%22%3A%5B%22An%20Z%22%5D%7D%5D%7D%7D,home)</onclick>
                 </item>
             </content>
+        </control>
+        <!-- A list from SiloKodiConnect still loading. -->
+        <control type="image">
+            <left>928</left><top>508</top><width>64</width><height>64</height>
+            <texture colordiffuse="99EDEDED">silo/spinner_arc.png</texture>
+            <animation effect="rotate" start="0" end="-360" center="auto" time="900" loop="true" condition="true">Conditional</animation>
+            <visible>[String.IsEqual(Window(Home).Property(silo.browse.type),collections) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Container(56).IsUpdating] | [String.IsEqual(Window(Home).Property(silo.browse.type),collection) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Container(55).IsUpdating] | [String.IsEqual(Window(Home).Property(silo.browse.type),watchlist) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Container(51).IsUpdating] | [String.IsEqual(Window(Home).Property(silo.browse.type),favorites) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Container(52).IsUpdating] | [String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Container(53).IsUpdating]</visible>
         </control>
         <!-- A trailer from an info page: its cover (Includes_SiloFrame.xml). -->
         <include>SiloTrailerCover</include>

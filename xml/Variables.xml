@@ -4404,6 +4404,8 @@
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),watchlist) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">Watchlist</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),favorites) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">Favorites</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">History</value>
+        <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),collections)">Collections</value>
+        <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),collection)">$INFO[Window(Home).Property(silo.browse.title)]</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),tvshows)">Series</value>
         <value>Movies</value>
     </variable>
@@ -4414,6 +4416,8 @@
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),favorites) + !String.IsEmpty(Window(Home).Property(silo.browse.list))"></value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Integer.IsGreater(Container(53).NumItems,0)">$INFO[Container(53).NumItems,, titles]</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list))"></value>
+        <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),collections)">$INFO[Container(56).NumItems,, collections]</value>
+        <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),collection)">$INFO[Container(55).NumItems,, titles]</value>
         <value>$INFO[Container(50).NumItems,, titles]$INFO[Window(Home).Property(silo.browse.letter),  ·  ,]</value>
     </variable>
     <variable name="SiloBrowseSort">
@@ -4475,6 +4479,8 @@
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),watchlist) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">$INFO[Container(51).ListItem.Art(fanart)]</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),favorites) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">$INFO[Container(52).ListItem.Art(fanart)]</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">$INFO[Container(53).ListItem.Art(fanart)]</value>
+        <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),collections)">$INFO[Container(56).ListItem.Art(fanart)]</value>
+        <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),collection)">$INFO[Container(55).ListItem.Art(fanart)]</value>
         <value>$INFO[Container(50).ListItem.Art(fanart)]</value>
     </variable>
     <!-- end Silo Skyline library -->
