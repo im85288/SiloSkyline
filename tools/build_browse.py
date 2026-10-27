@@ -105,6 +105,58 @@ def poster(focused, view_id):
                                      'focused_title': focused_title}
 
 
+# Collections (SiloKodiConnect's, which carry silo.fan1-3): Silo's fan card,
+# three columns. Its first titles' posters fanned at the left (-8, -1 and
+# +7 degrees), its name and count at the right.
+FANS = 'Container.Content(sets) + String.IsEqual(Container.Property(silo.fans),true)'
+FAN_W, FAN_H, FAN_GAP = 548, 280, 28
+MINI_W, MINI_H = 124, 186
+
+
+def fan_card(focused, view_id):
+    lit = 'Control.HasFocus(%d)' % view_id
+    minis = ''
+    # Back to front: the right one, the left one, the middle one on top.
+    for number, x, angle in ((3, 160, 7), (1, 36, -8), (2, 98, -1)):
+        minis += '''
+                    <control type="image">
+                        <left>%(x)d</left><top>%(y)d</top><width>%(w)d</width><height>%(h)d</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan%(n)d)]</texture>
+                        <animation effect="rotate" end="%(a)d" center="auto" time="0" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(silo.fan%(n)d))</visible>
+                    </control>''' % {'x': x, 'y': (FAN_H - MINI_H) // 2 + 6, 'w': MINI_W, 'h': MINI_H, 'n': number,
+                                     'a': -angle}
+    ring = '''
+                    <control type="image">
+                        <width>%d</width><height>%d</height>
+                        <texture border="20" colordiffuse="%s">silo/card_landscape_focus.png</texture>
+                        <visible>%s</visible>
+                    </control>''' % (FAN_W + 12, FAN_H + 12, TEXT, lit) if focused else ''
+    zoom = ('\n                    <animation effect="zoom" start="100" end="104" center="auto" time="160" '
+            'tween="sine" easing="out" condition="%s">Conditional</animation>' % lit) if focused else ''
+    return '''
+                <control type="group">%(zoom)s
+                    <control type="image">
+                        <left>6</left><top>6</top><width>%(w)d</width><height>%(h)d</height>
+                        <texture border="24" colordiffuse="FF1E2024">silo/card_landscape_mask.png</texture>
+                    </control>%(minis)s
+                    <control type="textbox">
+                        <left>%(tx)d</left><top>%(ty)d</top><width>%(tw)d</width><height>132</height>
+                        <font>silo_row</font>
+                        <textcolor>%(text)s</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="label">
+                        <left>%(tx)d</left><top>%(cy)d</top><width>%(tw)d</width><height>32</height>
+                        <font>silo_badge</font>
+                        <textcolor>99EDEDED</textcolor>
+                        <label>[UPPERCASE]$INFO[ListItem.Property(silo.count),, titles][/UPPERCASE]</label>
+                    </control>%(ring)s
+                </control>''' % {'zoom': zoom, 'w': FAN_W, 'h': FAN_H, 'minis': minis, 'tx': 292, 'ty': 50,
+                                 'tw': FAN_W - 292 - 20, 'cy': FAN_H - 62, 'text': TEXT, 'ring': ring}
+
+
 def episode(focused, view_id):
     ring = '''
                     <control type="image">
@@ -318,7 +370,7 @@ def build():
 <window>
     <defaultcontrol always="true">50</defaultcontrol>
     <backgroundcolor>%(background)s</backgroundcolor>
-    <views>50,51,52</views>
+    <views>50,51,52,53</views>
     <controls>
         <control type="image">
             <left>0</left><top>0</top><width>1920</width><height>1080</height>
@@ -348,7 +400,7 @@ def build():
             <orientation>vertical</orientation>
             <scrolltime tween="cubic" easing="out">240</scrolltime>
             <viewtype label="List">list</viewtype>
-            <visible>!$EXP[SiloBrowseGrid] + !$EXP[SiloBrowseEpisodes]</visible>
+            <visible>!$EXP[SiloBrowseGrid] + !$EXP[SiloBrowseEpisodes] + !$EXP[SiloBrowseFans]</visible>
             <itemlayout width="1110" height="%(row_h)d">%(row)s
             </itemlayout>
             <focusedlayout width="1110" height="%(row_h)d">%(row_focused)s
@@ -370,6 +422,20 @@ def build():
             </focusedlayout>
         </control>
 %(jump_bar)s
+
+        <!-- Silo's collections: fan cards. -->
+        <control type="panel" id="53">
+            <left>%(gx)d</left><top>%(views_top)d</top>
+            <width>%(gw)d</width><height>%(views_h)d</height>
+            <orientation>vertical</orientation>
+            <scrolltime tween="cubic" easing="out">280</scrolltime>
+            <viewtype label="Collections">panel</viewtype>
+            <visible>$EXP[SiloBrowseFans]</visible>
+            <itemlayout width="%(fw)d" height="%(fh)d">%(fan)s
+            </itemlayout>
+            <focusedlayout width="%(fw)d" height="%(fh)d">%(fan_focused)s
+            </focusedlayout>
+        </control>
 
         <!-- Episodes: stills with their details. -->
         <control type="list" id="52">
@@ -395,15 +461,18 @@ def build():
        'row': pill_row(False, 50), 'row_h': ROW_H, 'row_focused': pill_row(True, 50),
        'poster': poster(False, 51), 'poster_focused': poster(True, 51),
        'episode': episode(False, 52), 'episode_focused': episode(True, 52),
-       'bar': JUMP_BAR, 'jump': JUMP_ID, 'jump_bar': jump_bar(SAFE_X - 6 + 7 * poster_item_w + 30)}
+       'bar': JUMP_BAR, 'jump': JUMP_ID, 'jump_bar': jump_bar(SAFE_X - 6 + 7 * poster_item_w + 30),
+       'fw': FAN_W + FAN_GAP, 'fh': FAN_H + FAN_GAP, 'fan': fan_card(False, 53), 'fan_focused': fan_card(True, 53)}
 
 
 VARIABLES = '''
     <!-- Silo Skyline browse (tools/build_browse.py) -->
-    <expression name="SiloBrowseGrid">%(grid)s</expression>
+    <expression name="SiloBrowseFans">%(fans)s</expression>
+    <expression name="SiloBrowseGrid">[%(grid)s] + !$EXP[SiloBrowseFans]</expression>
     <expression name="SiloBrowseEpisodes">%(episodes)s</expression>
     <variable name="SiloBrowseFacts">
         <value condition="Integer.IsGreater(Container.NumItems,0) + [$EXP[SiloBrowseGrid] | $EXP[SiloBrowseEpisodes]]">$INFO[Container.NumItems,, titles]</value>
+        <value condition="$EXP[SiloBrowseFans]">$INFO[Container.NumItems,, collections]</value>
         <value>$INFO[Window(Home).Property(silo.library.facts)]</value>
     </variable>
     <variable name="SiloBrowseTitle">
@@ -459,7 +528,7 @@ VARIABLES = '''
         <value>$INFO[Container.Art(fanart)]</value>
     </variable>
     <!-- end Silo Skyline browse -->
-''' % {'grid': GRID, 'episodes': EPISODES, 'jump': JUMP_ID}
+''' % {'grid': GRID, 'episodes': EPISODES, 'jump': JUMP_ID, 'fans': FANS}
 
 
 def add_variables():

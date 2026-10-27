@@ -14,12 +14,8 @@
     <!-- Back from its trailer: the cover under the page can go. -->
     <onload>ClearProperty(silokodi.trailer_playing,home)</onload>
     <onload>ClearProperty(silokodi.trailer_return,home)</onload>
-    <!-- Clear: the page draws its own background, so it can fade out while
-         its trailer plays (Kodi keeps it open over the video). -->
-    <backgroundcolor>00000000</backgroundcolor>
+    <backgroundcolor>SkylineBackground</backgroundcolor>
     <controls>
-        <control type="group">
-        <animation effect="fade" start="100" end="0" time="300" condition="Player.HasVideo + !String.IsEmpty(Window(Home).Property(silokodi.trailer_playing))">Conditional</animation>
         <control type="image">
             <left>0</left><top>0</top><width>1920</width><height>1080</height>
             <texture colordiffuse="SkylineBackground">colors/white.png</texture>
@@ -449,6 +445,7 @@
                     <onclick condition="System.HasAddon(plugin.video.youtube)">SetProperty(silokodi.trailer_return,$INFO[ListItem.DBType]|$INFO[ListItem.DBID],home)</onclick>
                     <onclick condition="System.HasAddon(plugin.video.youtube)">SetProperty(silokodi.trailer_playing,1,home)</onclick>
                     <onclick condition="System.HasAddon(plugin.video.youtube)">PlayMedia(plugin://plugin.video.youtube/play/?video_id=$INFO[ListItem.Property(silo.trailer)])</onclick>
+                    <onclick condition="System.HasAddon(plugin.video.youtube)">Dialog.Close(movieinformation)</onclick>
                     <onclick condition="!System.HasAddon(plugin.video.youtube)">InstallAddon(plugin.video.youtube)</onclick>
                     </control>
                     <control type="image">
@@ -1022,7 +1019,6 @@
                     </focusedlayout>
                 </control>
             </control>
-        </control>
         </control>
     </controls>
 </window>

@@ -96,12 +96,8 @@ def build():
     <!-- Back from its trailer: the cover under the page can go. -->
     <onload>ClearProperty(silokodi.trailer_playing,home)</onload>
     <onload>ClearProperty(silokodi.trailer_return,home)</onload>
-    <!-- Clear: the page draws its own background, so it can fade out while
-         its trailer plays (Kodi keeps it open over the video). -->
-    <backgroundcolor>00000000</backgroundcolor>
+    <backgroundcolor>%(background)s</backgroundcolor>
     <controls>
-        <control type="group">
-        <animation effect="fade" start="100" end="0" time="300" condition="Player.HasVideo + !String.IsEmpty(Window(Home).Property(silokodi.trailer_playing))">Conditional</animation>
         <control type="image">
             <left>0</left><top>0</top><width>1920</width><height>1080</height>
             <texture colordiffuse="%(background)s">colors/white.png</texture>
@@ -449,7 +445,6 @@ def build():
                 </control>
             </control>
         </control>
-        </control>
     </controls>
 </window>
 ''' % {'background': BACKGROUND, 'x': SAFE_X, 'top': TOP, 'text': TEXT, 'dim': TEXT_DIM, 'has_logo': has_logo,
@@ -476,12 +471,11 @@ def build():
            351, 'icons/infodialogs/trailer.png',
            'String.IsEmpty(ListItem.Trailer) + !String.IsEmpty(ListItem.Property(silo.trailer))',
            'noop</onclick>\n'
-           # The page fades out while its trailer plays (Kodi keeps it open
-           # over the video) and Kodi closes it when the trailer stops, so
-           # SiloKodiConnect reopens it (silokodi.trailer_return). Before the
-           # first frame and on the way back, the window under it shows a
-           # cover with the title's fanart (SiloTrailerCover, while
-           # silokodi.trailer_playing is set); the page clears it as it opens.
+           # The page closes for the trailer and SiloKodiConnect reopens it
+           # when the trailer stops, ends or never starts (silokodi.trailer_return).
+           # Meanwhile the window under it shows a cover with the title's
+           # fanart (SiloTrailerCover, while silokodi.trailer_playing is set);
+           # the page clears it as it opens.
            '                    <onclick condition="System.HasAddon(plugin.video.youtube)">'
            'SetProperty(silokodi.trailer_art,$INFO[ListItem.Art(fanart)],home)</onclick>\n'
            '                    <onclick condition="System.HasAddon(plugin.video.youtube)">'
@@ -490,6 +484,9 @@ def build():
            'SetProperty(silokodi.trailer_playing,1,home)</onclick>\n'
            '                    <onclick condition="System.HasAddon(plugin.video.youtube)">'
            'PlayMedia(plugin://plugin.video.youtube/play/?video_id=$INFO[ListItem.Property(silo.trailer)])</onclick>\n'
+           # Closed, so the player's own controls get the remote (left open,
+           # even unseen, the page takes OK).
+           '                    <onclick condition="System.HasAddon(plugin.video.youtube)">Dialog.Close(movieinformation)</onclick>\n'
            '                    <onclick condition="!System.HasAddon(plugin.video.youtube)">InstallAddon(plugin.video.youtube)'),
        # Silo's watchlist, for a film or series: a filled bookmark when on it.
        'watchlist': round_button(

@@ -4059,10 +4059,12 @@
     <!-- end Silo Skyline detail -->
 
     <!-- Silo Skyline browse (tools/build_browse.py) -->
-    <expression name="SiloBrowseGrid">Container.Content(movies) | Container.Content(tvshows) | Container.Content(sets) | Container.Content(seasons)</expression>
+    <expression name="SiloBrowseFans">Container.Content(sets) + String.IsEqual(Container.Property(silo.fans),true)</expression>
+    <expression name="SiloBrowseGrid">[Container.Content(movies) | Container.Content(tvshows) | Container.Content(sets) | Container.Content(seasons)] + !$EXP[SiloBrowseFans]</expression>
     <expression name="SiloBrowseEpisodes">Container.Content(episodes)</expression>
     <variable name="SiloBrowseFacts">
         <value condition="Integer.IsGreater(Container.NumItems,0) + [$EXP[SiloBrowseGrid] | $EXP[SiloBrowseEpisodes]]">$INFO[Container.NumItems,, titles]</value>
+        <value condition="$EXP[SiloBrowseFans]">$INFO[Container.NumItems,, collections]</value>
         <value>$INFO[Window(Home).Property(silo.library.facts)]</value>
     </variable>
     <variable name="SiloBrowseTitle">

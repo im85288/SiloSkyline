@@ -3,7 +3,7 @@
 <window>
     <defaultcontrol always="true">50</defaultcontrol>
     <backgroundcolor>SkylineBackground</backgroundcolor>
-    <views>50,51,52</views>
+    <views>50,51,52,53</views>
     <controls>
         <control type="image">
             <left>0</left><top>0</top><width>1920</width><height>1080</height>
@@ -33,7 +33,7 @@
             <orientation>vertical</orientation>
             <scrolltime tween="cubic" easing="out">240</scrolltime>
             <viewtype label="List">list</viewtype>
-            <visible>!$EXP[SiloBrowseGrid] + !$EXP[SiloBrowseEpisodes]</visible>
+            <visible>!$EXP[SiloBrowseGrid] + !$EXP[SiloBrowseEpisodes] + !$EXP[SiloBrowseFans]</visible>
             <itemlayout width="1110" height="104">
                     <control type="image">
                         <width>1110</width><height>92</height>
@@ -614,6 +614,104 @@
                     <onclick>NotifyAll(silokodi,jump.51.Z)</onclick>
                 </item>
             </content>
+        </control>
+
+        <!-- Silo's collections: fan cards. -->
+        <control type="panel" id="53">
+            <left>82</left><top>200</top>
+            <width>1756</width><height>880</height>
+            <orientation>vertical</orientation>
+            <scrolltime tween="cubic" easing="out">280</scrolltime>
+            <viewtype label="Collections">panel</viewtype>
+            <visible>$EXP[SiloBrowseFans]</visible>
+            <itemlayout width="576" height="308">
+                <control type="group">
+                    <control type="image">
+                        <left>6</left><top>6</top><width>548</width><height>280</height>
+                        <texture border="24" colordiffuse="FF1E2024">silo/card_landscape_mask.png</texture>
+                    </control>
+                    <control type="image">
+                        <left>160</left><top>53</top><width>124</width><height>186</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan3)]</texture>
+                        <animation effect="rotate" end="-7" center="auto" time="0" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(silo.fan3))</visible>
+                    </control>
+                    <control type="image">
+                        <left>36</left><top>53</top><width>124</width><height>186</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan1)]</texture>
+                        <animation effect="rotate" end="8" center="auto" time="0" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(silo.fan1))</visible>
+                    </control>
+                    <control type="image">
+                        <left>98</left><top>53</top><width>124</width><height>186</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan2)]</texture>
+                        <animation effect="rotate" end="1" center="auto" time="0" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(silo.fan2))</visible>
+                    </control>
+                    <control type="textbox">
+                        <left>292</left><top>50</top><width>236</width><height>132</height>
+                        <font>silo_row</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="label">
+                        <left>292</left><top>218</top><width>236</width><height>32</height>
+                        <font>silo_badge</font>
+                        <textcolor>99EDEDED</textcolor>
+                        <label>[UPPERCASE]$INFO[ListItem.Property(silo.count),, titles][/UPPERCASE]</label>
+                    </control>
+                </control>
+            </itemlayout>
+            <focusedlayout width="576" height="308">
+                <control type="group">
+                    <animation effect="zoom" start="100" end="104" center="auto" time="160" tween="sine" easing="out" condition="Control.HasFocus(53)">Conditional</animation>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>548</width><height>280</height>
+                        <texture border="24" colordiffuse="FF1E2024">silo/card_landscape_mask.png</texture>
+                    </control>
+                    <control type="image">
+                        <left>160</left><top>53</top><width>124</width><height>186</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan3)]</texture>
+                        <animation effect="rotate" end="-7" center="auto" time="0" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(silo.fan3))</visible>
+                    </control>
+                    <control type="image">
+                        <left>36</left><top>53</top><width>124</width><height>186</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan1)]</texture>
+                        <animation effect="rotate" end="8" center="auto" time="0" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(silo.fan1))</visible>
+                    </control>
+                    <control type="image">
+                        <left>98</left><top>53</top><width>124</width><height>186</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan2)]</texture>
+                        <animation effect="rotate" end="1" center="auto" time="0" condition="true">Conditional</animation>
+                        <visible>!String.IsEmpty(ListItem.Property(silo.fan2))</visible>
+                    </control>
+                    <control type="textbox">
+                        <left>292</left><top>50</top><width>236</width><height>132</height>
+                        <font>silo_row</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="label">
+                        <left>292</left><top>218</top><width>236</width><height>32</height>
+                        <font>silo_badge</font>
+                        <textcolor>99EDEDED</textcolor>
+                        <label>[UPPERCASE]$INFO[ListItem.Property(silo.count),, titles][/UPPERCASE]</label>
+                    </control>
+                    <control type="image">
+                        <width>560</width><height>292</height>
+                        <texture border="20" colordiffuse="SkylineFocus">silo/card_landscape_focus.png</texture>
+                        <visible>Control.HasFocus(53)</visible>
+                    </control>
+                </control>
+            </focusedlayout>
         </control>
 
         <!-- Episodes: stills with their details. -->
