@@ -4,7 +4,10 @@
     <onunload condition="String.IsEqual(Window(Home).Property(silo.browse.from),collections)">SetProperty(silo.browse.type,collections,home)</onunload>
     <onunload condition="String.IsEqual(Window(Home).Property(silo.browse.from),collections)">SetProperty(silo.browse.list,$INFO[Window(Home).Property(silo.browse.list.collections)],home)</onunload>
     <!-- Back from a trailer started from an info page (Kodi leaves it playing): stop it, which reopens the page. -->
-    <onload condition="Player.HasVideo + !String.IsEmpty(Window(Home).Property(silokodi.trailer_playing))">PlayerControl(Stop)</onload>
+    <!-- A video left playing behind the menus (Back from the player, or a trailer's
+         page): stopped, as in Silo's apps, since these pages cover the screen and
+         there's no way back to it. Kodi saves where it stopped; Live TV plays on. -->
+    <onload condition="Player.HasVideo + !VideoPlayer.Content(LiveTV)">PlayerControl(Stop)</onload>
     <defaultcontrol always="true">50</defaultcontrol>
     <onload condition="String.IsEqual(Window(Home).Property(silo.browse.type),movies)">SetProperty(silo.browse.sort,title,home)</onload>
     <onload condition="String.IsEqual(Window(Home).Property(silo.browse.type),movies) + !String.IsEmpty(Skin.String(silo.sort.movies))">SetProperty(silo.browse.sort,$INFO[Skin.String(silo.sort.movies)],home)</onload>
