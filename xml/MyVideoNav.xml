@@ -5,7 +5,7 @@
     <onload condition="Player.HasVideo + !String.IsEmpty(Window(Home).Property(silokodi.trailer_playing))">PlayerControl(Stop)</onload>
     <defaultcontrol always="true">50</defaultcontrol>
     <backgroundcolor>SkylineBackground</backgroundcolor>
-    <views>50,51,52,53</views>
+    <views>50,51,52,53,54</views>
     <controls>
         <control type="image">
             <left>0</left><top>0</top><width>1920</width><height>1080</height>
@@ -35,7 +35,7 @@
             <orientation>vertical</orientation>
             <scrolltime tween="cubic" easing="out">240</scrolltime>
             <viewtype label="List">list</viewtype>
-            <visible>!$EXP[SiloBrowseGrid] + !$EXP[SiloBrowseEpisodes] + !$EXP[SiloBrowseFans]</visible>
+            <visible>!$EXP[SiloBrowseGrid] + !$EXP[SiloBrowseEpisodes] + !$EXP[SiloBrowseFans] + !$EXP[SiloBrowseChips]</visible>
             <itemlayout width="1110" height="104">
                     <control type="image">
                         <width>1110</width><height>92</height>
@@ -616,6 +616,57 @@
                     <onclick>NotifyAll(silokodi,jump.51.Z)</onclick>
                 </item>
             </content>
+        </control>
+
+        <!-- Genres: Silo's chips. -->
+        <control type="panel" id="54">
+            <left>82</left><top>200</top>
+            <width>1756</width><height>880</height>
+            <orientation>vertical</orientation>
+            <scrolltime tween="cubic" easing="out">240</scrolltime>
+            <viewtype label="Genres">panel</viewtype>
+            <visible>$EXP[SiloBrowseChips]</visible>
+            <itemlayout width="276" height="80">
+                    <control type="image">
+                        <width>260</width><height>64</height>
+                        <texture border="32" colordiffuse="12FFFFFF">silo/pill.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>24</left><width>212</width><height>64</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+            </itemlayout>
+            <focusedlayout width="276" height="80">
+                    <control type="image">
+                        <width>260</width><height>64</height>
+                        <texture border="32" colordiffuse="SkylineFocus">silo/pill.png</texture>
+                        <visible>Control.HasFocus(54)</visible>
+                    </control>
+                    <control type="label">
+                        <left>24</left><width>212</width><height>64</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>SkylineFocusText</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>Control.HasFocus(54)</visible>
+                    </control>
+                    <control type="image">
+                        <width>260</width><height>64</height>
+                        <texture border="32" colordiffuse="12FFFFFF">silo/pill.png</texture>
+                        <visible>!Control.HasFocus(54)</visible>
+                    </control>
+                    <control type="label">
+                        <left>24</left><width>212</width><height>64</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>!Control.HasFocus(54)</visible>
+                    </control>
+            </focusedlayout>
         </control>
 
         <!-- Silo's collections: fan cards. -->

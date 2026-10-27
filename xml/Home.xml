@@ -40,6 +40,22 @@
             <left>88</left>
             <visible>!String.IsEmpty(Window(Home).Property(silo.row)) | [[String.IsEqual(Window(Home).Property(silo.page),home) | String.IsEmpty(Window(Home).Property(silo.page))] + [Integer.IsGreater(Window(Home).Property(silo.home.1.cards),0) | Integer.IsGreater(Window(Home).Property(silo.home.2.cards),0)]] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),movies) + Integer.IsGreater(Container(5101).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),movies) + Integer.IsGreater(Container(5151).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),movies) + Integer.IsGreater(Container(5102).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),movies) + Integer.IsGreater(Container(5152).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),series) + Integer.IsGreater(Container(5201).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),series) + Integer.IsGreater(Container(5251).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),series) + Integer.IsGreater(Container(5202).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),series) + Integer.IsGreater(Container(5252).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),requests) + Integer.IsGreater(Container(5301).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),requests) + Integer.IsGreater(Container(5302).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),custom) + Integer.IsGreater(Container(5401).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),custom) + Integer.IsGreater(Container(5451).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),custom) + Integer.IsGreater(Container(5402).NumItems,0)] | [String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),custom) + Integer.IsGreater(Container(5452).NumItems,0)]</visible>
             <animation effect="fade" start="0" end="100" time="240">Visible</animation>
+            <!-- Silo's eyebrow: a short dash, then the focused row's name in capitals. -->
+            <control type="group">
+                <top>146</top>
+                <visible>!String.IsEmpty(Window(Home).Property(silo.row)) + !String.IsEqual(Window(Home).Property(silo.page),movies) + !String.IsEqual(Window(Home).Property(silo.page),series)</visible>
+                <control type="image">
+                    <top>14</top><width>26</width><height>3</height>
+                    <texture colordiffuse="D9FFFFFF">colors/white.png</texture>
+                </control>
+                <control type="label">
+                    <left>40</left><width>1000</width><height>30</height>
+                    <aligny>center</aligny>
+                    <font>silo_badge</font>
+                    <textcolor>D9EDEDED</textcolor>
+                    <label>[UPPERCASE]$VAR[SiloEyebrow][/UPPERCASE]</label>
+                </control>
+            </control>
             <control type="image">
                 <top>190</top>
                 <width>880</width><height>170</height>
@@ -1300,7 +1316,8 @@
                     <ondown condition="$EXP[SiloRow5154] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104]">SetFocus(5154)</ondown>
                     <ondown condition="$EXP[SiloRow5105] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(5105)</ondown>
                     <ondown condition="$EXP[SiloRow5155] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105]">SetFocus(5155)</ondown>
-                    <onup>SetFocus(9003)</onup>
+                    <ondown condition="$EXP[SiloRow5149] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155]">SetFocus(5149)</ondown>
+                    <onup>SetFocus(4601)</onup>
                     <onback>SetProperty(silo.drop.closed,9203,home)</onback>
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.1.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.1.order)]" limit="$INFO[Window(Home).Property(silo.movies.1.limit)]">$INFO[Window(Home).Property(silo.movies.1.poster)]</content>
@@ -1361,7 +1378,8 @@
                     <ondown condition="$EXP[SiloRow5154] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104]">SetFocus(5154)</ondown>
                     <ondown condition="$EXP[SiloRow5105] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(5105)</ondown>
                     <ondown condition="$EXP[SiloRow5155] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105]">SetFocus(5155)</ondown>
-                    <onup>SetFocus(9003)</onup>
+                    <ondown condition="$EXP[SiloRow5149] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155]">SetFocus(5149)</ondown>
+                    <onup>SetFocus(4601)</onup>
                     <onback>SetProperty(silo.drop.closed,9203,home)</onback>
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.1.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.1.order)]" limit="$INFO[Window(Home).Property(silo.movies.1.limit)]">$INFO[Window(Home).Property(silo.movies.1.landscape)]</content>
@@ -1422,9 +1440,10 @@
                     <ondown condition="$EXP[SiloRow5155] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105]">SetFocus(5155)</ondown>
                     <ondown condition="$EXP[SiloRow5106] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155]">SetFocus(5106)</ondown>
                     <ondown condition="$EXP[SiloRow5156] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5106]">SetFocus(5156)</ondown>
+                    <ondown condition="$EXP[SiloRow5149] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156]">SetFocus(5149)</ondown>
                     <onup condition="$EXP[SiloRow5101]">SetFocus(5101)</onup>
                     <onup condition="$EXP[SiloRow5151] + !$EXP[SiloRow5101]">SetFocus(5151)</onup>
-                    <onup condition="!$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(9003)</onup>
+                    <onup condition="!$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(4601)</onup>
                     <onback>SetProperty(silo.drop.closed,9203,home)</onback>
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.2.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.2.order)]" limit="$INFO[Window(Home).Property(silo.movies.2.limit)]">$INFO[Window(Home).Property(silo.movies.2.poster)]</content>
@@ -1485,9 +1504,10 @@
                     <ondown condition="$EXP[SiloRow5155] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105]">SetFocus(5155)</ondown>
                     <ondown condition="$EXP[SiloRow5106] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155]">SetFocus(5106)</ondown>
                     <ondown condition="$EXP[SiloRow5156] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5106]">SetFocus(5156)</ondown>
+                    <ondown condition="$EXP[SiloRow5149] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156]">SetFocus(5149)</ondown>
                     <onup condition="$EXP[SiloRow5101]">SetFocus(5101)</onup>
                     <onup condition="$EXP[SiloRow5151] + !$EXP[SiloRow5101]">SetFocus(5151)</onup>
-                    <onup condition="!$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(9003)</onup>
+                    <onup condition="!$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(4601)</onup>
                     <onback>SetProperty(silo.drop.closed,9203,home)</onback>
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.2.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.2.order)]" limit="$INFO[Window(Home).Property(silo.movies.2.limit)]">$INFO[Window(Home).Property(silo.movies.2.landscape)]</content>
@@ -1548,11 +1568,12 @@
                     <ondown condition="$EXP[SiloRow5156] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5106]">SetFocus(5156)</ondown>
                     <ondown condition="$EXP[SiloRow5107] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156]">SetFocus(5107)</ondown>
                     <ondown condition="$EXP[SiloRow5157] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5107]">SetFocus(5157)</ondown>
+                    <ondown condition="$EXP[SiloRow5149] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157]">SetFocus(5149)</ondown>
                     <onup condition="$EXP[SiloRow5102]">SetFocus(5102)</onup>
                     <onup condition="$EXP[SiloRow5152] + !$EXP[SiloRow5102]">SetFocus(5152)</onup>
                     <onup condition="$EXP[SiloRow5101] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(5101)</onup>
                     <onup condition="$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101]">SetFocus(5151)</onup>
-                    <onup condition="!$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(9003)</onup>
+                    <onup condition="!$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(4601)</onup>
                     <onback>SetProperty(silo.drop.closed,9203,home)</onback>
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.3.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.3.order)]" limit="$INFO[Window(Home).Property(silo.movies.3.limit)]">$INFO[Window(Home).Property(silo.movies.3.poster)]</content>
@@ -1613,11 +1634,12 @@
                     <ondown condition="$EXP[SiloRow5156] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5106]">SetFocus(5156)</ondown>
                     <ondown condition="$EXP[SiloRow5107] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156]">SetFocus(5107)</ondown>
                     <ondown condition="$EXP[SiloRow5157] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5107]">SetFocus(5157)</ondown>
+                    <ondown condition="$EXP[SiloRow5149] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157]">SetFocus(5149)</ondown>
                     <onup condition="$EXP[SiloRow5102]">SetFocus(5102)</onup>
                     <onup condition="$EXP[SiloRow5152] + !$EXP[SiloRow5102]">SetFocus(5152)</onup>
                     <onup condition="$EXP[SiloRow5101] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(5101)</onup>
                     <onup condition="$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101]">SetFocus(5151)</onup>
-                    <onup condition="!$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(9003)</onup>
+                    <onup condition="!$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(4601)</onup>
                     <onback>SetProperty(silo.drop.closed,9203,home)</onback>
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.3.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.3.order)]" limit="$INFO[Window(Home).Property(silo.movies.3.limit)]">$INFO[Window(Home).Property(silo.movies.3.landscape)]</content>
@@ -1678,13 +1700,14 @@
                     <ondown condition="$EXP[SiloRow5157] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5107]">SetFocus(5157)</ondown>
                     <ondown condition="$EXP[SiloRow5108] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157]">SetFocus(5108)</ondown>
                     <ondown condition="$EXP[SiloRow5158] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5108]">SetFocus(5158)</ondown>
+                    <ondown condition="$EXP[SiloRow5149] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158]">SetFocus(5149)</ondown>
                     <onup condition="$EXP[SiloRow5103]">SetFocus(5103)</onup>
                     <onup condition="$EXP[SiloRow5153] + !$EXP[SiloRow5103]">SetFocus(5153)</onup>
                     <onup condition="$EXP[SiloRow5102] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(5102)</onup>
                     <onup condition="$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102]">SetFocus(5152)</onup>
                     <onup condition="$EXP[SiloRow5101] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(5101)</onup>
                     <onup condition="$EXP[SiloRow5151] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101]">SetFocus(5151)</onup>
-                    <onup condition="!$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(9003)</onup>
+                    <onup condition="!$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(4601)</onup>
                     <onback>SetProperty(silo.drop.closed,9203,home)</onback>
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.4.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.4.order)]" limit="$INFO[Window(Home).Property(silo.movies.4.limit)]">$INFO[Window(Home).Property(silo.movies.4.poster)]</content>
@@ -1745,13 +1768,14 @@
                     <ondown condition="$EXP[SiloRow5157] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5107]">SetFocus(5157)</ondown>
                     <ondown condition="$EXP[SiloRow5108] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157]">SetFocus(5108)</ondown>
                     <ondown condition="$EXP[SiloRow5158] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5108]">SetFocus(5158)</ondown>
+                    <ondown condition="$EXP[SiloRow5149] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158]">SetFocus(5149)</ondown>
                     <onup condition="$EXP[SiloRow5103]">SetFocus(5103)</onup>
                     <onup condition="$EXP[SiloRow5153] + !$EXP[SiloRow5103]">SetFocus(5153)</onup>
                     <onup condition="$EXP[SiloRow5102] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(5102)</onup>
                     <onup condition="$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102]">SetFocus(5152)</onup>
                     <onup condition="$EXP[SiloRow5101] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(5101)</onup>
                     <onup condition="$EXP[SiloRow5151] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101]">SetFocus(5151)</onup>
-                    <onup condition="!$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(9003)</onup>
+                    <onup condition="!$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(4601)</onup>
                     <onback>SetProperty(silo.drop.closed,9203,home)</onback>
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.4.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.4.order)]" limit="$INFO[Window(Home).Property(silo.movies.4.limit)]">$INFO[Window(Home).Property(silo.movies.4.landscape)]</content>
@@ -1810,13 +1834,14 @@
                     <ondown condition="$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5107]">SetFocus(5157)</ondown>
                     <ondown condition="$EXP[SiloRow5108] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157]">SetFocus(5108)</ondown>
                     <ondown condition="$EXP[SiloRow5158] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5108]">SetFocus(5158)</ondown>
+                    <ondown condition="$EXP[SiloRow5149] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158]">SetFocus(5149)</ondown>
                     <onup condition="$EXP[SiloRow5104]">SetFocus(5104)</onup>
                     <onup condition="$EXP[SiloRow5154] + !$EXP[SiloRow5104]">SetFocus(5154)</onup>
                     <onup condition="$EXP[SiloRow5103] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(5103)</onup>
                     <onup condition="$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103]">SetFocus(5153)</onup>
                     <onup condition="$EXP[SiloRow5102] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(5102)</onup>
                     <onup condition="$EXP[SiloRow5152] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102]">SetFocus(5152)</onup>
-                    <onup condition="!$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(9003)</onup>
+                    <onup condition="!$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(4601)</onup>
                     <onback>SetProperty(silo.drop.closed,9203,home)</onback>
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.5.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.5.order)]" limit="$INFO[Window(Home).Property(silo.movies.5.limit)]">$INFO[Window(Home).Property(silo.movies.5.poster)]</content>
@@ -1875,13 +1900,14 @@
                     <ondown condition="$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5107]">SetFocus(5157)</ondown>
                     <ondown condition="$EXP[SiloRow5108] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157]">SetFocus(5108)</ondown>
                     <ondown condition="$EXP[SiloRow5158] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5108]">SetFocus(5158)</ondown>
+                    <ondown condition="$EXP[SiloRow5149] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158]">SetFocus(5149)</ondown>
                     <onup condition="$EXP[SiloRow5104]">SetFocus(5104)</onup>
                     <onup condition="$EXP[SiloRow5154] + !$EXP[SiloRow5104]">SetFocus(5154)</onup>
                     <onup condition="$EXP[SiloRow5103] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(5103)</onup>
                     <onup condition="$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103]">SetFocus(5153)</onup>
                     <onup condition="$EXP[SiloRow5102] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(5102)</onup>
                     <onup condition="$EXP[SiloRow5152] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102]">SetFocus(5152)</onup>
-                    <onup condition="!$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(9003)</onup>
+                    <onup condition="!$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(4601)</onup>
                     <onback>SetProperty(silo.drop.closed,9203,home)</onback>
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.5.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.5.order)]" limit="$INFO[Window(Home).Property(silo.movies.5.limit)]">$INFO[Window(Home).Property(silo.movies.5.landscape)]</content>
@@ -1938,13 +1964,14 @@
                     <ondown condition="$EXP[SiloRow5157] + !$EXP[SiloRow5107]">SetFocus(5157)</ondown>
                     <ondown condition="$EXP[SiloRow5108] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157]">SetFocus(5108)</ondown>
                     <ondown condition="$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5108]">SetFocus(5158)</ondown>
+                    <ondown condition="$EXP[SiloRow5149] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158]">SetFocus(5149)</ondown>
                     <onup condition="$EXP[SiloRow5105]">SetFocus(5105)</onup>
                     <onup condition="$EXP[SiloRow5155] + !$EXP[SiloRow5105]">SetFocus(5155)</onup>
                     <onup condition="$EXP[SiloRow5104] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155]">SetFocus(5104)</onup>
                     <onup condition="$EXP[SiloRow5154] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104]">SetFocus(5154)</onup>
                     <onup condition="$EXP[SiloRow5103] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(5103)</onup>
                     <onup condition="$EXP[SiloRow5153] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103]">SetFocus(5153)</onup>
-                    <onup condition="!$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(9003)</onup>
+                    <onup condition="!$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(4601)</onup>
                     <onback>SetProperty(silo.drop.closed,9203,home)</onback>
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.6.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.6.order)]" limit="$INFO[Window(Home).Property(silo.movies.6.limit)]">$INFO[Window(Home).Property(silo.movies.6.poster)]</content>
@@ -2001,13 +2028,14 @@
                     <ondown condition="$EXP[SiloRow5157] + !$EXP[SiloRow5107]">SetFocus(5157)</ondown>
                     <ondown condition="$EXP[SiloRow5108] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157]">SetFocus(5108)</ondown>
                     <ondown condition="$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5108]">SetFocus(5158)</ondown>
+                    <ondown condition="$EXP[SiloRow5149] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158]">SetFocus(5149)</ondown>
                     <onup condition="$EXP[SiloRow5105]">SetFocus(5105)</onup>
                     <onup condition="$EXP[SiloRow5155] + !$EXP[SiloRow5105]">SetFocus(5155)</onup>
                     <onup condition="$EXP[SiloRow5104] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155]">SetFocus(5104)</onup>
                     <onup condition="$EXP[SiloRow5154] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104]">SetFocus(5154)</onup>
                     <onup condition="$EXP[SiloRow5103] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(5103)</onup>
                     <onup condition="$EXP[SiloRow5153] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103]">SetFocus(5153)</onup>
-                    <onup condition="!$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(9003)</onup>
+                    <onup condition="!$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(4601)</onup>
                     <onback>SetProperty(silo.drop.closed,9203,home)</onback>
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.6.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.6.order)]" limit="$INFO[Window(Home).Property(silo.movies.6.limit)]">$INFO[Window(Home).Property(silo.movies.6.landscape)]</content>
@@ -2062,13 +2090,14 @@
                     <onfocus>SetProperty(silo.row,5107,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5108]">SetFocus(5108)</ondown>
                     <ondown condition="$EXP[SiloRow5158] + !$EXP[SiloRow5108]">SetFocus(5158)</ondown>
+                    <ondown condition="$EXP[SiloRow5149] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158]">SetFocus(5149)</ondown>
                     <onup condition="$EXP[SiloRow5106]">SetFocus(5106)</onup>
                     <onup condition="$EXP[SiloRow5156] + !$EXP[SiloRow5106]">SetFocus(5156)</onup>
                     <onup condition="$EXP[SiloRow5105] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156]">SetFocus(5105)</onup>
                     <onup condition="$EXP[SiloRow5155] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105]">SetFocus(5155)</onup>
                     <onup condition="$EXP[SiloRow5104] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155]">SetFocus(5104)</onup>
                     <onup condition="$EXP[SiloRow5154] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104]">SetFocus(5154)</onup>
-                    <onup condition="!$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(9003)</onup>
+                    <onup condition="!$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(4601)</onup>
                     <onback>SetProperty(silo.drop.closed,9203,home)</onback>
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.7.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.7.order)]" limit="$INFO[Window(Home).Property(silo.movies.7.limit)]">$INFO[Window(Home).Property(silo.movies.7.poster)]</content>
@@ -2123,13 +2152,14 @@
                     <onfocus>SetProperty(silo.row,5157,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5108]">SetFocus(5108)</ondown>
                     <ondown condition="$EXP[SiloRow5158] + !$EXP[SiloRow5108]">SetFocus(5158)</ondown>
+                    <ondown condition="$EXP[SiloRow5149] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158]">SetFocus(5149)</ondown>
                     <onup condition="$EXP[SiloRow5106]">SetFocus(5106)</onup>
                     <onup condition="$EXP[SiloRow5156] + !$EXP[SiloRow5106]">SetFocus(5156)</onup>
                     <onup condition="$EXP[SiloRow5105] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156]">SetFocus(5105)</onup>
                     <onup condition="$EXP[SiloRow5155] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105]">SetFocus(5155)</onup>
                     <onup condition="$EXP[SiloRow5104] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155]">SetFocus(5104)</onup>
                     <onup condition="$EXP[SiloRow5154] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104]">SetFocus(5154)</onup>
-                    <onup condition="!$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(9003)</onup>
+                    <onup condition="!$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(4601)</onup>
                     <onback>SetProperty(silo.drop.closed,9203,home)</onback>
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.7.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.7.order)]" limit="$INFO[Window(Home).Property(silo.movies.7.limit)]">$INFO[Window(Home).Property(silo.movies.7.landscape)]</content>
@@ -2182,13 +2212,14 @@
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
                     <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5108,home)</onfocus>
+                    <ondown condition="$EXP[SiloRow5149]">SetFocus(5149)</ondown>
                     <onup condition="$EXP[SiloRow5107]">SetFocus(5107)</onup>
                     <onup condition="$EXP[SiloRow5157] + !$EXP[SiloRow5107]">SetFocus(5157)</onup>
                     <onup condition="$EXP[SiloRow5106] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157]">SetFocus(5106)</onup>
                     <onup condition="$EXP[SiloRow5156] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106]">SetFocus(5156)</onup>
                     <onup condition="$EXP[SiloRow5105] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156]">SetFocus(5105)</onup>
                     <onup condition="$EXP[SiloRow5155] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105]">SetFocus(5155)</onup>
-                    <onup condition="!$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155]">SetFocus(9003)</onup>
+                    <onup condition="!$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155]">SetFocus(4601)</onup>
                     <onback>SetProperty(silo.drop.closed,9203,home)</onback>
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.8.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.8.order)]" limit="$INFO[Window(Home).Property(silo.movies.8.limit)]">$INFO[Window(Home).Property(silo.movies.8.poster)]</content>
@@ -2241,13 +2272,14 @@
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
                     <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5158,home)</onfocus>
+                    <ondown condition="$EXP[SiloRow5149]">SetFocus(5149)</ondown>
                     <onup condition="$EXP[SiloRow5107]">SetFocus(5107)</onup>
                     <onup condition="$EXP[SiloRow5157] + !$EXP[SiloRow5107]">SetFocus(5157)</onup>
                     <onup condition="$EXP[SiloRow5106] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157]">SetFocus(5106)</onup>
                     <onup condition="$EXP[SiloRow5156] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106]">SetFocus(5156)</onup>
                     <onup condition="$EXP[SiloRow5105] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156]">SetFocus(5105)</onup>
                     <onup condition="$EXP[SiloRow5155] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105]">SetFocus(5155)</onup>
-                    <onup condition="!$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155]">SetFocus(9003)</onup>
+                    <onup condition="!$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155]">SetFocus(4601)</onup>
                     <onback>SetProperty(silo.drop.closed,9203,home)</onback>
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.8.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.8.order)]" limit="$INFO[Window(Home).Property(silo.movies.8.limit)]">$INFO[Window(Home).Property(silo.movies.8.landscape)]</content>
@@ -2308,7 +2340,8 @@
                     <ondown condition="$EXP[SiloRow5254] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204]">SetFocus(5254)</ondown>
                     <ondown condition="$EXP[SiloRow5205] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(5205)</ondown>
                     <ondown condition="$EXP[SiloRow5255] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205]">SetFocus(5255)</ondown>
-                    <onup>SetFocus(9004)</onup>
+                    <ondown condition="$EXP[SiloRow5249] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255]">SetFocus(5249)</ondown>
+                    <onup>SetFocus(4602)</onup>
                     <onback>SetProperty(silo.drop.closed,9204,home)</onback>
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.1.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.1.order)]" limit="$INFO[Window(Home).Property(silo.series.1.limit)]">$INFO[Window(Home).Property(silo.series.1.poster)]</content>
@@ -2369,7 +2402,8 @@
                     <ondown condition="$EXP[SiloRow5254] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204]">SetFocus(5254)</ondown>
                     <ondown condition="$EXP[SiloRow5205] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(5205)</ondown>
                     <ondown condition="$EXP[SiloRow5255] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205]">SetFocus(5255)</ondown>
-                    <onup>SetFocus(9004)</onup>
+                    <ondown condition="$EXP[SiloRow5249] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255]">SetFocus(5249)</ondown>
+                    <onup>SetFocus(4602)</onup>
                     <onback>SetProperty(silo.drop.closed,9204,home)</onback>
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.1.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.1.order)]" limit="$INFO[Window(Home).Property(silo.series.1.limit)]">$INFO[Window(Home).Property(silo.series.1.landscape)]</content>
@@ -2430,9 +2464,10 @@
                     <ondown condition="$EXP[SiloRow5255] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205]">SetFocus(5255)</ondown>
                     <ondown condition="$EXP[SiloRow5206] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255]">SetFocus(5206)</ondown>
                     <ondown condition="$EXP[SiloRow5256] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5206]">SetFocus(5256)</ondown>
+                    <ondown condition="$EXP[SiloRow5249] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256]">SetFocus(5249)</ondown>
                     <onup condition="$EXP[SiloRow5201]">SetFocus(5201)</onup>
                     <onup condition="$EXP[SiloRow5251] + !$EXP[SiloRow5201]">SetFocus(5251)</onup>
-                    <onup condition="!$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(9004)</onup>
+                    <onup condition="!$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(4602)</onup>
                     <onback>SetProperty(silo.drop.closed,9204,home)</onback>
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.2.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.2.order)]" limit="$INFO[Window(Home).Property(silo.series.2.limit)]">$INFO[Window(Home).Property(silo.series.2.poster)]</content>
@@ -2493,9 +2528,10 @@
                     <ondown condition="$EXP[SiloRow5255] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205]">SetFocus(5255)</ondown>
                     <ondown condition="$EXP[SiloRow5206] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255]">SetFocus(5206)</ondown>
                     <ondown condition="$EXP[SiloRow5256] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5206]">SetFocus(5256)</ondown>
+                    <ondown condition="$EXP[SiloRow5249] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256]">SetFocus(5249)</ondown>
                     <onup condition="$EXP[SiloRow5201]">SetFocus(5201)</onup>
                     <onup condition="$EXP[SiloRow5251] + !$EXP[SiloRow5201]">SetFocus(5251)</onup>
-                    <onup condition="!$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(9004)</onup>
+                    <onup condition="!$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(4602)</onup>
                     <onback>SetProperty(silo.drop.closed,9204,home)</onback>
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.2.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.2.order)]" limit="$INFO[Window(Home).Property(silo.series.2.limit)]">$INFO[Window(Home).Property(silo.series.2.landscape)]</content>
@@ -2556,11 +2592,12 @@
                     <ondown condition="$EXP[SiloRow5256] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5206]">SetFocus(5256)</ondown>
                     <ondown condition="$EXP[SiloRow5207] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256]">SetFocus(5207)</ondown>
                     <ondown condition="$EXP[SiloRow5257] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5207]">SetFocus(5257)</ondown>
+                    <ondown condition="$EXP[SiloRow5249] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257]">SetFocus(5249)</ondown>
                     <onup condition="$EXP[SiloRow5202]">SetFocus(5202)</onup>
                     <onup condition="$EXP[SiloRow5252] + !$EXP[SiloRow5202]">SetFocus(5252)</onup>
                     <onup condition="$EXP[SiloRow5201] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(5201)</onup>
                     <onup condition="$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201]">SetFocus(5251)</onup>
-                    <onup condition="!$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(9004)</onup>
+                    <onup condition="!$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(4602)</onup>
                     <onback>SetProperty(silo.drop.closed,9204,home)</onback>
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.3.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.3.order)]" limit="$INFO[Window(Home).Property(silo.series.3.limit)]">$INFO[Window(Home).Property(silo.series.3.poster)]</content>
@@ -2621,11 +2658,12 @@
                     <ondown condition="$EXP[SiloRow5256] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5206]">SetFocus(5256)</ondown>
                     <ondown condition="$EXP[SiloRow5207] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256]">SetFocus(5207)</ondown>
                     <ondown condition="$EXP[SiloRow5257] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5207]">SetFocus(5257)</ondown>
+                    <ondown condition="$EXP[SiloRow5249] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257]">SetFocus(5249)</ondown>
                     <onup condition="$EXP[SiloRow5202]">SetFocus(5202)</onup>
                     <onup condition="$EXP[SiloRow5252] + !$EXP[SiloRow5202]">SetFocus(5252)</onup>
                     <onup condition="$EXP[SiloRow5201] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(5201)</onup>
                     <onup condition="$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201]">SetFocus(5251)</onup>
-                    <onup condition="!$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(9004)</onup>
+                    <onup condition="!$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(4602)</onup>
                     <onback>SetProperty(silo.drop.closed,9204,home)</onback>
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.3.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.3.order)]" limit="$INFO[Window(Home).Property(silo.series.3.limit)]">$INFO[Window(Home).Property(silo.series.3.landscape)]</content>
@@ -2686,13 +2724,14 @@
                     <ondown condition="$EXP[SiloRow5257] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5207]">SetFocus(5257)</ondown>
                     <ondown condition="$EXP[SiloRow5208] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257]">SetFocus(5208)</ondown>
                     <ondown condition="$EXP[SiloRow5258] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5208]">SetFocus(5258)</ondown>
+                    <ondown condition="$EXP[SiloRow5249] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258]">SetFocus(5249)</ondown>
                     <onup condition="$EXP[SiloRow5203]">SetFocus(5203)</onup>
                     <onup condition="$EXP[SiloRow5253] + !$EXP[SiloRow5203]">SetFocus(5253)</onup>
                     <onup condition="$EXP[SiloRow5202] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(5202)</onup>
                     <onup condition="$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202]">SetFocus(5252)</onup>
                     <onup condition="$EXP[SiloRow5201] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(5201)</onup>
                     <onup condition="$EXP[SiloRow5251] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201]">SetFocus(5251)</onup>
-                    <onup condition="!$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(9004)</onup>
+                    <onup condition="!$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(4602)</onup>
                     <onback>SetProperty(silo.drop.closed,9204,home)</onback>
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.4.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.4.order)]" limit="$INFO[Window(Home).Property(silo.series.4.limit)]">$INFO[Window(Home).Property(silo.series.4.poster)]</content>
@@ -2753,13 +2792,14 @@
                     <ondown condition="$EXP[SiloRow5257] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5207]">SetFocus(5257)</ondown>
                     <ondown condition="$EXP[SiloRow5208] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257]">SetFocus(5208)</ondown>
                     <ondown condition="$EXP[SiloRow5258] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5208]">SetFocus(5258)</ondown>
+                    <ondown condition="$EXP[SiloRow5249] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258]">SetFocus(5249)</ondown>
                     <onup condition="$EXP[SiloRow5203]">SetFocus(5203)</onup>
                     <onup condition="$EXP[SiloRow5253] + !$EXP[SiloRow5203]">SetFocus(5253)</onup>
                     <onup condition="$EXP[SiloRow5202] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(5202)</onup>
                     <onup condition="$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202]">SetFocus(5252)</onup>
                     <onup condition="$EXP[SiloRow5201] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(5201)</onup>
                     <onup condition="$EXP[SiloRow5251] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201]">SetFocus(5251)</onup>
-                    <onup condition="!$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(9004)</onup>
+                    <onup condition="!$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(4602)</onup>
                     <onback>SetProperty(silo.drop.closed,9204,home)</onback>
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.4.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.4.order)]" limit="$INFO[Window(Home).Property(silo.series.4.limit)]">$INFO[Window(Home).Property(silo.series.4.landscape)]</content>
@@ -2818,13 +2858,14 @@
                     <ondown condition="$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5207]">SetFocus(5257)</ondown>
                     <ondown condition="$EXP[SiloRow5208] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257]">SetFocus(5208)</ondown>
                     <ondown condition="$EXP[SiloRow5258] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5208]">SetFocus(5258)</ondown>
+                    <ondown condition="$EXP[SiloRow5249] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258]">SetFocus(5249)</ondown>
                     <onup condition="$EXP[SiloRow5204]">SetFocus(5204)</onup>
                     <onup condition="$EXP[SiloRow5254] + !$EXP[SiloRow5204]">SetFocus(5254)</onup>
                     <onup condition="$EXP[SiloRow5203] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(5203)</onup>
                     <onup condition="$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203]">SetFocus(5253)</onup>
                     <onup condition="$EXP[SiloRow5202] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(5202)</onup>
                     <onup condition="$EXP[SiloRow5252] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202]">SetFocus(5252)</onup>
-                    <onup condition="!$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(9004)</onup>
+                    <onup condition="!$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(4602)</onup>
                     <onback>SetProperty(silo.drop.closed,9204,home)</onback>
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.5.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.5.order)]" limit="$INFO[Window(Home).Property(silo.series.5.limit)]">$INFO[Window(Home).Property(silo.series.5.poster)]</content>
@@ -2883,13 +2924,14 @@
                     <ondown condition="$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5207]">SetFocus(5257)</ondown>
                     <ondown condition="$EXP[SiloRow5208] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257]">SetFocus(5208)</ondown>
                     <ondown condition="$EXP[SiloRow5258] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5208]">SetFocus(5258)</ondown>
+                    <ondown condition="$EXP[SiloRow5249] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258]">SetFocus(5249)</ondown>
                     <onup condition="$EXP[SiloRow5204]">SetFocus(5204)</onup>
                     <onup condition="$EXP[SiloRow5254] + !$EXP[SiloRow5204]">SetFocus(5254)</onup>
                     <onup condition="$EXP[SiloRow5203] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(5203)</onup>
                     <onup condition="$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203]">SetFocus(5253)</onup>
                     <onup condition="$EXP[SiloRow5202] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(5202)</onup>
                     <onup condition="$EXP[SiloRow5252] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202]">SetFocus(5252)</onup>
-                    <onup condition="!$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(9004)</onup>
+                    <onup condition="!$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(4602)</onup>
                     <onback>SetProperty(silo.drop.closed,9204,home)</onback>
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.5.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.5.order)]" limit="$INFO[Window(Home).Property(silo.series.5.limit)]">$INFO[Window(Home).Property(silo.series.5.landscape)]</content>
@@ -2946,13 +2988,14 @@
                     <ondown condition="$EXP[SiloRow5257] + !$EXP[SiloRow5207]">SetFocus(5257)</ondown>
                     <ondown condition="$EXP[SiloRow5208] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257]">SetFocus(5208)</ondown>
                     <ondown condition="$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5208]">SetFocus(5258)</ondown>
+                    <ondown condition="$EXP[SiloRow5249] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258]">SetFocus(5249)</ondown>
                     <onup condition="$EXP[SiloRow5205]">SetFocus(5205)</onup>
                     <onup condition="$EXP[SiloRow5255] + !$EXP[SiloRow5205]">SetFocus(5255)</onup>
                     <onup condition="$EXP[SiloRow5204] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255]">SetFocus(5204)</onup>
                     <onup condition="$EXP[SiloRow5254] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204]">SetFocus(5254)</onup>
                     <onup condition="$EXP[SiloRow5203] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(5203)</onup>
                     <onup condition="$EXP[SiloRow5253] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203]">SetFocus(5253)</onup>
-                    <onup condition="!$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(9004)</onup>
+                    <onup condition="!$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(4602)</onup>
                     <onback>SetProperty(silo.drop.closed,9204,home)</onback>
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.6.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.6.order)]" limit="$INFO[Window(Home).Property(silo.series.6.limit)]">$INFO[Window(Home).Property(silo.series.6.poster)]</content>
@@ -3009,13 +3052,14 @@
                     <ondown condition="$EXP[SiloRow5257] + !$EXP[SiloRow5207]">SetFocus(5257)</ondown>
                     <ondown condition="$EXP[SiloRow5208] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257]">SetFocus(5208)</ondown>
                     <ondown condition="$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5208]">SetFocus(5258)</ondown>
+                    <ondown condition="$EXP[SiloRow5249] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258]">SetFocus(5249)</ondown>
                     <onup condition="$EXP[SiloRow5205]">SetFocus(5205)</onup>
                     <onup condition="$EXP[SiloRow5255] + !$EXP[SiloRow5205]">SetFocus(5255)</onup>
                     <onup condition="$EXP[SiloRow5204] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255]">SetFocus(5204)</onup>
                     <onup condition="$EXP[SiloRow5254] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204]">SetFocus(5254)</onup>
                     <onup condition="$EXP[SiloRow5203] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(5203)</onup>
                     <onup condition="$EXP[SiloRow5253] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203]">SetFocus(5253)</onup>
-                    <onup condition="!$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(9004)</onup>
+                    <onup condition="!$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(4602)</onup>
                     <onback>SetProperty(silo.drop.closed,9204,home)</onback>
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.6.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.6.order)]" limit="$INFO[Window(Home).Property(silo.series.6.limit)]">$INFO[Window(Home).Property(silo.series.6.landscape)]</content>
@@ -3070,13 +3114,14 @@
                     <onfocus>SetProperty(silo.row,5207,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5208]">SetFocus(5208)</ondown>
                     <ondown condition="$EXP[SiloRow5258] + !$EXP[SiloRow5208]">SetFocus(5258)</ondown>
+                    <ondown condition="$EXP[SiloRow5249] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258]">SetFocus(5249)</ondown>
                     <onup condition="$EXP[SiloRow5206]">SetFocus(5206)</onup>
                     <onup condition="$EXP[SiloRow5256] + !$EXP[SiloRow5206]">SetFocus(5256)</onup>
                     <onup condition="$EXP[SiloRow5205] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256]">SetFocus(5205)</onup>
                     <onup condition="$EXP[SiloRow5255] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205]">SetFocus(5255)</onup>
                     <onup condition="$EXP[SiloRow5204] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255]">SetFocus(5204)</onup>
                     <onup condition="$EXP[SiloRow5254] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204]">SetFocus(5254)</onup>
-                    <onup condition="!$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(9004)</onup>
+                    <onup condition="!$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(4602)</onup>
                     <onback>SetProperty(silo.drop.closed,9204,home)</onback>
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.7.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.7.order)]" limit="$INFO[Window(Home).Property(silo.series.7.limit)]">$INFO[Window(Home).Property(silo.series.7.poster)]</content>
@@ -3131,13 +3176,14 @@
                     <onfocus>SetProperty(silo.row,5257,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5208]">SetFocus(5208)</ondown>
                     <ondown condition="$EXP[SiloRow5258] + !$EXP[SiloRow5208]">SetFocus(5258)</ondown>
+                    <ondown condition="$EXP[SiloRow5249] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258]">SetFocus(5249)</ondown>
                     <onup condition="$EXP[SiloRow5206]">SetFocus(5206)</onup>
                     <onup condition="$EXP[SiloRow5256] + !$EXP[SiloRow5206]">SetFocus(5256)</onup>
                     <onup condition="$EXP[SiloRow5205] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256]">SetFocus(5205)</onup>
                     <onup condition="$EXP[SiloRow5255] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205]">SetFocus(5255)</onup>
                     <onup condition="$EXP[SiloRow5204] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255]">SetFocus(5204)</onup>
                     <onup condition="$EXP[SiloRow5254] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204]">SetFocus(5254)</onup>
-                    <onup condition="!$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(9004)</onup>
+                    <onup condition="!$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(4602)</onup>
                     <onback>SetProperty(silo.drop.closed,9204,home)</onback>
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.7.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.7.order)]" limit="$INFO[Window(Home).Property(silo.series.7.limit)]">$INFO[Window(Home).Property(silo.series.7.landscape)]</content>
@@ -3190,13 +3236,14 @@
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
                     <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5208,home)</onfocus>
+                    <ondown condition="$EXP[SiloRow5249]">SetFocus(5249)</ondown>
                     <onup condition="$EXP[SiloRow5207]">SetFocus(5207)</onup>
                     <onup condition="$EXP[SiloRow5257] + !$EXP[SiloRow5207]">SetFocus(5257)</onup>
                     <onup condition="$EXP[SiloRow5206] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257]">SetFocus(5206)</onup>
                     <onup condition="$EXP[SiloRow5256] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206]">SetFocus(5256)</onup>
                     <onup condition="$EXP[SiloRow5205] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256]">SetFocus(5205)</onup>
                     <onup condition="$EXP[SiloRow5255] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205]">SetFocus(5255)</onup>
-                    <onup condition="!$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255]">SetFocus(9004)</onup>
+                    <onup condition="!$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255]">SetFocus(4602)</onup>
                     <onback>SetProperty(silo.drop.closed,9204,home)</onback>
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.8.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.8.order)]" limit="$INFO[Window(Home).Property(silo.series.8.limit)]">$INFO[Window(Home).Property(silo.series.8.poster)]</content>
@@ -3249,13 +3296,14 @@
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
                     <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5258,home)</onfocus>
+                    <ondown condition="$EXP[SiloRow5249]">SetFocus(5249)</ondown>
                     <onup condition="$EXP[SiloRow5207]">SetFocus(5207)</onup>
                     <onup condition="$EXP[SiloRow5257] + !$EXP[SiloRow5207]">SetFocus(5257)</onup>
                     <onup condition="$EXP[SiloRow5206] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257]">SetFocus(5206)</onup>
                     <onup condition="$EXP[SiloRow5256] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206]">SetFocus(5256)</onup>
                     <onup condition="$EXP[SiloRow5205] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256]">SetFocus(5205)</onup>
                     <onup condition="$EXP[SiloRow5255] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205]">SetFocus(5255)</onup>
-                    <onup condition="!$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255]">SetFocus(9004)</onup>
+                    <onup condition="!$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255]">SetFocus(4602)</onup>
                     <onback>SetProperty(silo.drop.closed,9204,home)</onback>
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.8.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.8.order)]" limit="$INFO[Window(Home).Property(silo.series.8.limit)]">$INFO[Window(Home).Property(silo.series.8.landscape)]</content>
@@ -4575,6 +4623,306 @@
                     </focusedlayout>
                 </control>
             </control>
+            <control type="group">
+                <height>488</height>
+                <visible>$EXP[SiloRow5149]</visible>
+                <control type="label">
+                    <left>88</left><top>0</top>
+                    <width>1500</width><height>46</height>
+                    <font>silo_row</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>Collections</label>
+                </control>
+                <control type="list" id="5149">
+                    <visible>$EXP[SiloRow5149]</visible>
+                    <left>82</left><top>96</top>
+                    <width>1838</width><height>270</height>
+                    <orientation>horizontal</orientation>
+                    <scrolltime tween="cubic" easing="out">280</scrolltime>
+                    <onclick>ActivateWindow(Videos,$INFO[ListItem.FolderPath],return)</onclick>
+                    <onfocus>SetProperty(silo.row,5149,home)</onfocus>
+                    <onup condition="$EXP[SiloRow5108]">SetFocus(5108)</onup>
+                    <onup condition="$EXP[SiloRow5158] + !$EXP[SiloRow5108]">SetFocus(5158)</onup>
+                    <onup condition="$EXP[SiloRow5107] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158]">SetFocus(5107)</onup>
+                    <onup condition="$EXP[SiloRow5157] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107]">SetFocus(5157)</onup>
+                    <onup condition="$EXP[SiloRow5106] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157]">SetFocus(5106)</onup>
+                    <onup condition="$EXP[SiloRow5156] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106]">SetFocus(5156)</onup>
+                    <onup condition="$EXP[SiloRow5105] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156]">SetFocus(5105)</onup>
+                    <onup condition="$EXP[SiloRow5155] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105]">SetFocus(5155)</onup>
+                    <onup condition="$EXP[SiloRow5104] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155]">SetFocus(5104)</onup>
+                    <onup condition="$EXP[SiloRow5154] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104]">SetFocus(5154)</onup>
+                    <onup condition="$EXP[SiloRow5103] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(5103)</onup>
+                    <onup condition="$EXP[SiloRow5153] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103]">SetFocus(5153)</onup>
+                    <onup condition="$EXP[SiloRow5102] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(5102)</onup>
+                    <onup condition="$EXP[SiloRow5152] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102]">SetFocus(5152)</onup>
+                    <onup condition="$EXP[SiloRow5101] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(5101)</onup>
+                    <onup condition="$EXP[SiloRow5151] + !$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101]">SetFocus(5151)</onup>
+                    <onup condition="!$EXP[SiloRow5108] + !$EXP[SiloRow5158] + !$EXP[SiloRow5107] + !$EXP[SiloRow5157] + !$EXP[SiloRow5106] + !$EXP[SiloRow5156] + !$EXP[SiloRow5105] + !$EXP[SiloRow5155] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(4601)</onup>
+                    <onback>SetProperty(silo.drop.closed,9203,home)</onback>
+                    <onback>SetFocus(9003)</onback>
+                    <content target="videos">$INFO[Window(Home).Property(silo.movies.collections),,&amp;top=8]</content>
+                    <itemlayout width="470" height="270">
+                    <control type="group">
+                        <control type="image">
+                            <left>6</left><top>6</top><width>430</width><height>234</height>
+                            <texture border="24" colordiffuse="FF1E2024">silo/card_landscape_mask.png</texture>
+                        </control>
+                        <control type="group">
+                            <visible>!String.IsEqual(ListItem.Property(silo.see_all),true)</visible>
+                        <control type="image">
+                            <left>132</left><top>45</top><width>104</width><height>156</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan3)]</texture>
+                            <animation effect="rotate" end="-7" center="auto" time="0" condition="true">Conditional</animation>
+                            <visible>!String.IsEmpty(ListItem.Property(silo.fan3))</visible>
+                        </control>
+                        <control type="image">
+                            <left>28</left><top>45</top><width>104</width><height>156</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan1)]</texture>
+                            <animation effect="rotate" end="8" center="auto" time="0" condition="true">Conditional</animation>
+                            <visible>!String.IsEmpty(ListItem.Property(silo.fan1))</visible>
+                        </control>
+                        <control type="image">
+                            <left>80</left><top>45</top><width>104</width><height>156</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan2)]</texture>
+                            <animation effect="rotate" end="1" center="auto" time="0" condition="true">Conditional</animation>
+                            <visible>!String.IsEmpty(ListItem.Property(silo.fan2))</visible>
+                        </control>
+                            <control type="textbox">
+                                <left>230</left><top>40</top><width>184</width><height>110</height>
+                                <font>silo_card_title</font>
+                                <textcolor>FFEDEDED</textcolor>
+                                <label>$INFO[ListItem.Label]</label>
+                            </control>
+                            <control type="label">
+                                <left>230</left><top>180</top><width>184</width><height>30</height>
+                                <font>silo_badge</font>
+                                <textcolor>99EDEDED</textcolor>
+                                <label>[UPPERCASE]$INFO[ListItem.Property(silo.count),, titles][/UPPERCASE]</label>
+                            </control>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>6</top><width>430</width><height>234</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_row</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[ListItem.Label]  ›</label>
+                            <visible>String.IsEqual(ListItem.Property(silo.see_all),true)</visible>
+                        </control>
+                    </control>
+                    </itemlayout>
+                    <focusedlayout width="470" height="270">
+                    <control type="group">
+                    <animation effect="zoom" start="100" end="104" center="auto" time="160" tween="sine" easing="out" condition="Control.HasFocus(5149)">Conditional</animation>
+                        <control type="image">
+                            <left>6</left><top>6</top><width>430</width><height>234</height>
+                            <texture border="24" colordiffuse="FF1E2024">silo/card_landscape_mask.png</texture>
+                        </control>
+                        <control type="group">
+                            <visible>!String.IsEqual(ListItem.Property(silo.see_all),true)</visible>
+                        <control type="image">
+                            <left>132</left><top>45</top><width>104</width><height>156</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan3)]</texture>
+                            <animation effect="rotate" end="-7" center="auto" time="0" condition="true">Conditional</animation>
+                            <visible>!String.IsEmpty(ListItem.Property(silo.fan3))</visible>
+                        </control>
+                        <control type="image">
+                            <left>28</left><top>45</top><width>104</width><height>156</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan1)]</texture>
+                            <animation effect="rotate" end="8" center="auto" time="0" condition="true">Conditional</animation>
+                            <visible>!String.IsEmpty(ListItem.Property(silo.fan1))</visible>
+                        </control>
+                        <control type="image">
+                            <left>80</left><top>45</top><width>104</width><height>156</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan2)]</texture>
+                            <animation effect="rotate" end="1" center="auto" time="0" condition="true">Conditional</animation>
+                            <visible>!String.IsEmpty(ListItem.Property(silo.fan2))</visible>
+                        </control>
+                            <control type="textbox">
+                                <left>230</left><top>40</top><width>184</width><height>110</height>
+                                <font>silo_card_title</font>
+                                <textcolor>FFEDEDED</textcolor>
+                                <label>$INFO[ListItem.Label]</label>
+                            </control>
+                            <control type="label">
+                                <left>230</left><top>180</top><width>184</width><height>30</height>
+                                <font>silo_badge</font>
+                                <textcolor>99EDEDED</textcolor>
+                                <label>[UPPERCASE]$INFO[ListItem.Property(silo.count),, titles][/UPPERCASE]</label>
+                            </control>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>6</top><width>430</width><height>234</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_row</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[ListItem.Label]  ›</label>
+                            <visible>String.IsEqual(ListItem.Property(silo.see_all),true)</visible>
+                        </control>
+                    <control type="image">
+                        <width>442</width><height>246</height>
+                        <texture border="20" colordiffuse="SkylineFocus">silo/card_landscape_focus.png</texture>
+                        <visible>Control.HasFocus(5149)</visible>
+                    </control>
+                    </control>
+                    </focusedlayout>
+                </control>
+            </control>
+            <control type="group">
+                <height>488</height>
+                <visible>$EXP[SiloRow5249]</visible>
+                <control type="label">
+                    <left>88</left><top>0</top>
+                    <width>1500</width><height>46</height>
+                    <font>silo_row</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>Collections</label>
+                </control>
+                <control type="list" id="5249">
+                    <visible>$EXP[SiloRow5249]</visible>
+                    <left>82</left><top>96</top>
+                    <width>1838</width><height>270</height>
+                    <orientation>horizontal</orientation>
+                    <scrolltime tween="cubic" easing="out">280</scrolltime>
+                    <onclick>ActivateWindow(Videos,$INFO[ListItem.FolderPath],return)</onclick>
+                    <onfocus>SetProperty(silo.row,5249,home)</onfocus>
+                    <onup condition="$EXP[SiloRow5208]">SetFocus(5208)</onup>
+                    <onup condition="$EXP[SiloRow5258] + !$EXP[SiloRow5208]">SetFocus(5258)</onup>
+                    <onup condition="$EXP[SiloRow5207] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258]">SetFocus(5207)</onup>
+                    <onup condition="$EXP[SiloRow5257] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207]">SetFocus(5257)</onup>
+                    <onup condition="$EXP[SiloRow5206] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257]">SetFocus(5206)</onup>
+                    <onup condition="$EXP[SiloRow5256] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206]">SetFocus(5256)</onup>
+                    <onup condition="$EXP[SiloRow5205] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256]">SetFocus(5205)</onup>
+                    <onup condition="$EXP[SiloRow5255] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205]">SetFocus(5255)</onup>
+                    <onup condition="$EXP[SiloRow5204] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255]">SetFocus(5204)</onup>
+                    <onup condition="$EXP[SiloRow5254] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204]">SetFocus(5254)</onup>
+                    <onup condition="$EXP[SiloRow5203] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(5203)</onup>
+                    <onup condition="$EXP[SiloRow5253] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203]">SetFocus(5253)</onup>
+                    <onup condition="$EXP[SiloRow5202] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(5202)</onup>
+                    <onup condition="$EXP[SiloRow5252] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202]">SetFocus(5252)</onup>
+                    <onup condition="$EXP[SiloRow5201] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(5201)</onup>
+                    <onup condition="$EXP[SiloRow5251] + !$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201]">SetFocus(5251)</onup>
+                    <onup condition="!$EXP[SiloRow5208] + !$EXP[SiloRow5258] + !$EXP[SiloRow5207] + !$EXP[SiloRow5257] + !$EXP[SiloRow5206] + !$EXP[SiloRow5256] + !$EXP[SiloRow5205] + !$EXP[SiloRow5255] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(4602)</onup>
+                    <onback>SetProperty(silo.drop.closed,9204,home)</onback>
+                    <onback>SetFocus(9004)</onback>
+                    <content target="videos">$INFO[Window(Home).Property(silo.series.collections),,&amp;top=8]</content>
+                    <itemlayout width="470" height="270">
+                    <control type="group">
+                        <control type="image">
+                            <left>6</left><top>6</top><width>430</width><height>234</height>
+                            <texture border="24" colordiffuse="FF1E2024">silo/card_landscape_mask.png</texture>
+                        </control>
+                        <control type="group">
+                            <visible>!String.IsEqual(ListItem.Property(silo.see_all),true)</visible>
+                        <control type="image">
+                            <left>132</left><top>45</top><width>104</width><height>156</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan3)]</texture>
+                            <animation effect="rotate" end="-7" center="auto" time="0" condition="true">Conditional</animation>
+                            <visible>!String.IsEmpty(ListItem.Property(silo.fan3))</visible>
+                        </control>
+                        <control type="image">
+                            <left>28</left><top>45</top><width>104</width><height>156</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan1)]</texture>
+                            <animation effect="rotate" end="8" center="auto" time="0" condition="true">Conditional</animation>
+                            <visible>!String.IsEmpty(ListItem.Property(silo.fan1))</visible>
+                        </control>
+                        <control type="image">
+                            <left>80</left><top>45</top><width>104</width><height>156</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan2)]</texture>
+                            <animation effect="rotate" end="1" center="auto" time="0" condition="true">Conditional</animation>
+                            <visible>!String.IsEmpty(ListItem.Property(silo.fan2))</visible>
+                        </control>
+                            <control type="textbox">
+                                <left>230</left><top>40</top><width>184</width><height>110</height>
+                                <font>silo_card_title</font>
+                                <textcolor>FFEDEDED</textcolor>
+                                <label>$INFO[ListItem.Label]</label>
+                            </control>
+                            <control type="label">
+                                <left>230</left><top>180</top><width>184</width><height>30</height>
+                                <font>silo_badge</font>
+                                <textcolor>99EDEDED</textcolor>
+                                <label>[UPPERCASE]$INFO[ListItem.Property(silo.count),, titles][/UPPERCASE]</label>
+                            </control>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>6</top><width>430</width><height>234</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_row</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[ListItem.Label]  ›</label>
+                            <visible>String.IsEqual(ListItem.Property(silo.see_all),true)</visible>
+                        </control>
+                    </control>
+                    </itemlayout>
+                    <focusedlayout width="470" height="270">
+                    <control type="group">
+                    <animation effect="zoom" start="100" end="104" center="auto" time="160" tween="sine" easing="out" condition="Control.HasFocus(5249)">Conditional</animation>
+                        <control type="image">
+                            <left>6</left><top>6</top><width>430</width><height>234</height>
+                            <texture border="24" colordiffuse="FF1E2024">silo/card_landscape_mask.png</texture>
+                        </control>
+                        <control type="group">
+                            <visible>!String.IsEqual(ListItem.Property(silo.see_all),true)</visible>
+                        <control type="image">
+                            <left>132</left><top>45</top><width>104</width><height>156</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan3)]</texture>
+                            <animation effect="rotate" end="-7" center="auto" time="0" condition="true">Conditional</animation>
+                            <visible>!String.IsEmpty(ListItem.Property(silo.fan3))</visible>
+                        </control>
+                        <control type="image">
+                            <left>28</left><top>45</top><width>104</width><height>156</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan1)]</texture>
+                            <animation effect="rotate" end="8" center="auto" time="0" condition="true">Conditional</animation>
+                            <visible>!String.IsEmpty(ListItem.Property(silo.fan1))</visible>
+                        </control>
+                        <control type="image">
+                            <left>80</left><top>45</top><width>104</width><height>156</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan2)]</texture>
+                            <animation effect="rotate" end="1" center="auto" time="0" condition="true">Conditional</animation>
+                            <visible>!String.IsEmpty(ListItem.Property(silo.fan2))</visible>
+                        </control>
+                            <control type="textbox">
+                                <left>230</left><top>40</top><width>184</width><height>110</height>
+                                <font>silo_card_title</font>
+                                <textcolor>FFEDEDED</textcolor>
+                                <label>$INFO[ListItem.Label]</label>
+                            </control>
+                            <control type="label">
+                                <left>230</left><top>180</top><width>184</width><height>30</height>
+                                <font>silo_badge</font>
+                                <textcolor>99EDEDED</textcolor>
+                                <label>[UPPERCASE]$INFO[ListItem.Property(silo.count),, titles][/UPPERCASE]</label>
+                            </control>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>6</top><width>430</width><height>234</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_row</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[ListItem.Label]  ›</label>
+                            <visible>String.IsEqual(ListItem.Property(silo.see_all),true)</visible>
+                        </control>
+                    <control type="image">
+                        <width>442</width><height>246</height>
+                        <texture border="20" colordiffuse="SkylineFocus">silo/card_landscape_focus.png</texture>
+                        <visible>Control.HasFocus(5249)</visible>
+                    </control>
+                    </control>
+                    </focusedlayout>
+                </control>
+            </control>
         </control>
 
         <!-- Before SiloKodiConnect has published any rows. -->
@@ -4585,6 +4933,200 @@
             <textcolor>BFEDEDED</textcolor>
             <label>$VAR[SiloEmptyHome]</label>
             <visible>String.IsEmpty(Window(Home).Property(silo.home.count))</visible>
+        </control>
+
+        <!-- Movies' and Series' sections as pills under the bar. -->
+        <control type="grouplist" id="4601">
+            <left>88</left><top>140</top>
+            <width>1744</width><height>48</height>
+            <orientation>horizontal</orientation>
+            <itemgap>12</itemgap>
+            <visible>String.IsEqual(Window(Home).Property(silo.page),movies)</visible>
+            <animation effect="fade" start="100" end="70" time="200" condition="!ControlGroup(4601).HasFocus()">Conditional</animation>
+            <onup>SetFocus(9003)</onup>
+            <onback>SetFocus(9003)</onback>
+            <ondown condition="$EXP[SiloRow5101]">SetFocus(5101)</ondown>
+            <ondown condition="$EXP[SiloRow5151] + !$EXP[SiloRow5101]">SetFocus(5151)</ondown>
+            <ondown condition="$EXP[SiloRow5102] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(5102)</ondown>
+            <ondown condition="$EXP[SiloRow5152] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102]">SetFocus(5152)</ondown>
+            <ondown condition="$EXP[SiloRow5103] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(5103)</ondown>
+            <ondown condition="$EXP[SiloRow5153] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103]">SetFocus(5153)</ondown>
+            <ondown condition="$EXP[SiloRow5104] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(5104)</ondown>
+            <ondown condition="$EXP[SiloRow5154] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104]">SetFocus(5154)</ondown>
+            <ondown condition="$EXP[SiloRow5149] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(5149)</ondown>
+            <onleft>noop</onleft><onright>noop</onright>
+                <control type="button" id="46010">
+                    <width>auto</width><height>48</height>
+                    <label>Recommended</label>
+                    <font>silo_meta</font>
+                    <textoffsetx>22</textoffsetx>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>FFEDEDED</textcolor>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="24" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                    <texturenofocus border="24" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
+                    <onclick>noop</onclick>
+                </control>
+                <control type="button" id="46011">
+                    <width>auto</width><height>48</height>
+                    <label>Browse</label>
+                    <font>silo_meta</font>
+                    <textoffsetx>22</textoffsetx>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>B3EDEDED</textcolor>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="24" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                    <texturenofocus border="24" colordiffuse="12FFFFFF">silo/pill.png</texturenofocus>
+                    <onclick>SetProperty(silo.browse.type,movies,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.letter,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick>SetProperty(silo.browse.path,videodb://movies/titles/,home)</onclick>
+                    <onclick>ActivateWindow(1191)</onclick>
+                </control>
+                <control type="button" id="46012">
+                    <width>auto</width><height>48</height>
+                    <label>Recently Added</label>
+                    <font>silo_meta</font>
+                    <textoffsetx>22</textoffsetx>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>B3EDEDED</textcolor>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="24" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                    <texturenofocus border="24" colordiffuse="12FFFFFF">silo/pill.png</texturenofocus>
+                    <onclick>Skin.SetString(silo.sort.movies,dateadded)</onclick>
+                    <onclick>Skin.SetBool(silo.sort.movies.desc)</onclick>
+                    <onclick>SetProperty(silo.browse.type,movies,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.letter,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick>SetProperty(silo.browse.path,videodb://movies/titles/,home)</onclick>
+                    <onclick>ActivateWindow(1191)</onclick>
+                </control>
+                <control type="button" id="46013">
+                    <width>auto</width><height>48</height>
+                    <label>Genres</label>
+                    <font>silo_meta</font>
+                    <textoffsetx>22</textoffsetx>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>B3EDEDED</textcolor>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="24" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                    <texturenofocus border="24" colordiffuse="12FFFFFF">silo/pill.png</texturenofocus>
+                    <onclick>ActivateWindow(Videos,videodb://movies/genres/,return)</onclick>
+                </control>
+                <control type="button" id="46014">
+                    <width>auto</width><height>48</height>
+                    <label>Collections</label>
+                    <font>silo_meta</font>
+                    <textoffsetx>22</textoffsetx>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>B3EDEDED</textcolor>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="24" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                    <texturenofocus border="24" colordiffuse="12FFFFFF">silo/pill.png</texturenofocus>
+                    <onclick>ActivateWindow(Videos,$INFO[Window(Home).Property(silo.movies.collections)],return)</onclick>
+                </control>
+        </control>
+        <control type="grouplist" id="4602">
+            <left>88</left><top>140</top>
+            <width>1744</width><height>48</height>
+            <orientation>horizontal</orientation>
+            <itemgap>12</itemgap>
+            <visible>String.IsEqual(Window(Home).Property(silo.page),series)</visible>
+            <animation effect="fade" start="100" end="70" time="200" condition="!ControlGroup(4602).HasFocus()">Conditional</animation>
+            <onup>SetFocus(9004)</onup>
+            <onback>SetFocus(9004)</onback>
+            <ondown condition="$EXP[SiloRow5201]">SetFocus(5201)</ondown>
+            <ondown condition="$EXP[SiloRow5251] + !$EXP[SiloRow5201]">SetFocus(5251)</ondown>
+            <ondown condition="$EXP[SiloRow5202] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(5202)</ondown>
+            <ondown condition="$EXP[SiloRow5252] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202]">SetFocus(5252)</ondown>
+            <ondown condition="$EXP[SiloRow5203] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(5203)</ondown>
+            <ondown condition="$EXP[SiloRow5253] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203]">SetFocus(5253)</ondown>
+            <ondown condition="$EXP[SiloRow5204] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(5204)</ondown>
+            <ondown condition="$EXP[SiloRow5254] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204]">SetFocus(5254)</ondown>
+            <ondown condition="$EXP[SiloRow5249] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(5249)</ondown>
+            <onleft>noop</onleft><onright>noop</onright>
+                <control type="button" id="46020">
+                    <width>auto</width><height>48</height>
+                    <label>Recommended</label>
+                    <font>silo_meta</font>
+                    <textoffsetx>22</textoffsetx>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>FFEDEDED</textcolor>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="24" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                    <texturenofocus border="24" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
+                    <onclick>noop</onclick>
+                </control>
+                <control type="button" id="46021">
+                    <width>auto</width><height>48</height>
+                    <label>Browse</label>
+                    <font>silo_meta</font>
+                    <textoffsetx>22</textoffsetx>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>B3EDEDED</textcolor>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="24" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                    <texturenofocus border="24" colordiffuse="12FFFFFF">silo/pill.png</texturenofocus>
+                    <onclick>SetProperty(silo.browse.type,tvshows,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.letter,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick>SetProperty(silo.browse.path,videodb://tvshows/titles/,home)</onclick>
+                    <onclick>ActivateWindow(1191)</onclick>
+                </control>
+                <control type="button" id="46022">
+                    <width>auto</width><height>48</height>
+                    <label>Recently Added</label>
+                    <font>silo_meta</font>
+                    <textoffsetx>22</textoffsetx>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>B3EDEDED</textcolor>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="24" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                    <texturenofocus border="24" colordiffuse="12FFFFFF">silo/pill.png</texturenofocus>
+                    <onclick>Skin.SetString(silo.sort.tvshows,dateadded)</onclick>
+                    <onclick>Skin.SetBool(silo.sort.tvshows.desc)</onclick>
+                    <onclick>SetProperty(silo.browse.type,tvshows,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.letter,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick>SetProperty(silo.browse.path,videodb://tvshows/titles/,home)</onclick>
+                    <onclick>ActivateWindow(1191)</onclick>
+                </control>
+                <control type="button" id="46023">
+                    <width>auto</width><height>48</height>
+                    <label>Genres</label>
+                    <font>silo_meta</font>
+                    <textoffsetx>22</textoffsetx>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>B3EDEDED</textcolor>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="24" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                    <texturenofocus border="24" colordiffuse="12FFFFFF">silo/pill.png</texturenofocus>
+                    <onclick>ActivateWindow(Videos,videodb://tvshows/genres/,return)</onclick>
+                </control>
+                <control type="button" id="46024">
+                    <width>auto</width><height>48</height>
+                    <label>Collections</label>
+                    <font>silo_meta</font>
+                    <textoffsetx>22</textoffsetx>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>B3EDEDED</textcolor>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="24" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                    <texturenofocus border="24" colordiffuse="12FFFFFF">silo/pill.png</texturenofocus>
+                    <onclick>ActivateWindow(Videos,$INFO[Window(Home).Property(silo.series.collections)],return)</onclick>
+                </control>
         </control>
 
         <!-- The page darkens behind an open dropdown; the bar stays lit. -->

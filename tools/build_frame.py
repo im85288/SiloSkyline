@@ -104,6 +104,7 @@ def includes():
 			</control>
 		</definition>
 	</include>
+	<!-- Recommended add-ons' states (addon_states). -->%(addon_states)s
 	<!-- The colour theme's name: Kodi calls the default SKINDEFAULT. -->
 	<variable name="SkylineColourName">
 		<value condition="String.IsEqual(Skin.CurrentColourTheme,SKINDEFAULT)">Silo</value>
@@ -156,7 +157,7 @@ def includes():
 </includes>
 ''' % {'facts': FACTS, 'x': SAFE_X, 'tx': SAFE_X + 82, 'text': TEXT, 'dim': TEXT_DIM,
        'cx': 1920 - SAFE_X - 600, 'cy': 46, 'dy': 106, 'px': PANEL_X, 'py': PANEL_Y,
-       'pw': PANEL_W, 'ph': PANEL_H, 'card': CARD, 'bg': BACKGROUND}
+       'pw': PANEL_W, 'ph': PANEL_H, 'card': CARD, 'bg': BACKGROUND, 'addon_states': addon_states()}
 
 
 def top_bar():
@@ -567,6 +568,12 @@ def skin_settings(text):
 \t\t\t\t\t<label2>$VAR[SkylineColourName]</label2>
 \t\t\t\t\t<include>DefaultSettingButton</include>
 \t\t\t\t\t<onclick>ActivateWindow(InterfaceSettings)</onclick>
+\t\t\t\t</control>
+\t\t\t\t<control type="button" id="792">
+\t\t\t\t\t<label>Recommended add-ons</label>
+\t\t\t\t\t<label2>Up Next, YouTube and more</label2>
+\t\t\t\t\t<include>DefaultSettingButton</include>
+\t\t\t\t\t<onclick>ActivateWindow(1192)</onclick>
 \t\t\t\t</control>
 \t\t\t\t<control type="radiobutton" id="791">
 \t\t\t\t\t<label>Artwork background</label>
@@ -1352,7 +1359,121 @@ def event_log_window():
                   + button('button', 501, '$LOCALIZE[5]', onclick='ActivateWindow(systemsettings,logging)')}
 
 
+# The add-ons Skyline works with: (id, name, what it adds, where to get it when
+# it isn't in Kodi's repository, which InstallAddon can't reach).
+RECOMMENDED = [
+    ('plugin.video.silokodiconnect', 'SiloKodiConnect', 'Everything Silo: the rows, sync, requests and profiles',
+     'github.com/im85288/SiloKodiConnect/releases'),
+    ('service.upnext', 'Up Next', 'The next episode prompt, and Skip intro and Skip recap', ''),
+    ('plugin.video.youtube', 'YouTube', 'Trailers (sign in to it for smooth playback)', ''),
+    ('script.skinshortcuts', 'Skin Shortcuts', 'Your own items in the menu bar, with widgets',
+     'github.com/mikesilvo164/script.skinshortcuts'),
+    ('inputstream.adaptive', 'InputStream Adaptive', 'Streams Silo transcodes, and YouTube\'s', ''),
+]
+ADDONS_WINDOW = 1192
+
+
+def addons_window():
+    """Skin settings' Recommended add-ons: each with what it adds and its
+    state; OK installs it (Kodi's repository), enables it, or opens its
+    settings. One that isn't in Kodi's repository says where to get it."""
+    row_h = 112
+    width = PANEL_W - 80
+    items = ''
+    for number, (addon, name, about, source) in enumerate(RECOMMENDED):
+        missing = '!System.HasAddon(%s)' % addon
+        clicks = [('%s' % missing, 'InstallAddon(%s)' % addon) if not source else (missing, 'noop'),
+                  ('System.HasAddon(%s) + !System.AddonIsEnabled(%s)' % (addon, addon), 'EnableAddon(%s)' % addon),
+                  ('System.AddonIsEnabled(%s)' % addon, 'Addon.OpenSettings(%s)' % addon)]
+        items += '''
+				<item>
+					<label>%(name)s</label>
+					<label2>$VAR[SkylineAddonState%(n)d]</label2>
+					<icon>$INFO[System.AddonIcon(%(id)s)]</icon>
+					<property name="about">%(about)s</property>%(clicks)s
+				</item>''' % {'name': name, 'n': number, 'id': addon, 'about': about,
+                              'clicks': ''.join('\n\t\t\t\t\t<onclick condition="%s">%s</onclick>' % c for c in clicks)}
+    def row(colour, dim, visible):
+        v = '\n\t\t\t\t\t\t<visible>%s</visible>' % visible if visible else ''
+        return '''
+						<control type="image">
+							<left>24</left><top>%(iy)d</top><width>64</width><height>64</height>
+							<aspectratio>keep</aspectratio>
+							<texture fallback="DefaultAddon.png">$INFO[ListItem.Icon]</texture>
+						</control>
+						<control type="label">
+							<left>112</left><top>16</top><width>%(lw)d</width><height>40</height>
+							<aligny>center</aligny>
+							<font>silo_meta</font>
+							<textcolor>%(colour)s</textcolor>
+							<label>$INFO[ListItem.Label]</label>%(v)s
+						</control>
+						<control type="label">
+							<left>112</left><top>56</top><width>%(lw)d</width><height>36</height>
+							<aligny>center</aligny>
+							<font>silo_detail</font>
+							<textcolor>%(dim)s</textcolor>
+							<label>$INFO[ListItem.Property(about)]</label>%(v)s
+						</control>
+						<control type="label">
+							<right>32</right><top>0</top><width>520</width><height>%(h)d</height>
+							<align>right</align><aligny>center</aligny>
+							<font>silo_detail</font>
+							<textcolor>%(colour)s</textcolor>
+							<label>$INFO[ListItem.Label2]</label>%(v)s
+						</control>''' % {'iy': (row_h - 8 - 64) // 2, 'lw': width - 112 - 560, 'colour': colour, 'dim': dim,
+                                        'h': row_h - 8, 'v': v}
+    lit = 'Control.HasFocus(50)'
+    focused = '''
+						<control type="image">
+							<width>%d</width><height>%d</height>
+							<texture border="24" colordiffuse="%s">silo/card_landscape_mask.png</texture>
+							<visible>%s</visible>
+						</control>''' % (width, row_h - 8, TEXT, lit) + row('FF000000', '99000000', lit) + row(TEXT, TEXT_DIM, '!' + lit)
+    return '''<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated by tools/build_frame.py: edit that, not this. -->
+<window id="%(window)d">
+	<defaultcontrol always="true">50</defaultcontrol>
+	<controls>
+		<include>SiloPage</include>
+		<include content="SiloFrame">
+			<param name="title">Recommended add-ons</param>
+			<param name="sub">What Skyline works with. OK installs, turns on or opens an add-on's settings.</param>
+		</include>
+		<include content="SiloPanel" />
+		<control type="list" id="50">
+			<left>%(x)d</left><top>%(y)d</top><width>%(w)d</width><height>%(h)d</height>
+			<onup>50</onup><ondown>50</ondown><onleft>noop</onleft><onright>noop</onright>
+			<scrolltime tween="cubic" easing="out">240</scrolltime>
+			<itemlayout height="%(row)d">%(normal)s
+			</itemlayout>
+			<focusedlayout height="%(row)d">%(focused)s
+			</focusedlayout>
+			<content>%(items)s
+			</content>
+		</control>
+	</controls>
+</window>
+''' % {'window': ADDONS_WINDOW, 'x': PANEL_X + 40, 'y': PANEL_Y + 32, 'w': width, 'h': PANEL_H - 64,
+       'row': row_h, 'normal': row(TEXT, TEXT_DIM, ''), 'focused': focused, 'items': items}
+
+
+def addon_states():
+    """Each recommended add-on's state for its row (variables in Includes_SiloFrame.xml)."""
+    out = ''
+    for number, (addon, _, _, source) in enumerate(RECOMMENDED):
+        out += '''
+	<variable name="SkylineAddonState%d">
+		<value condition="System.AddonIsEnabled(%s)">Installed  ·  OK for settings</value>
+		<value condition="System.HasAddon(%s)">Turned off  ·  OK turns it on</value>
+		<value>%s</value>
+	</variable>''' % (number, addon, addon, 'Get it from %s' % source if source else 'Not installed  ·  OK installs')
+    return out
+
+
 def main():
+    with open(xml_path('Custom_%d_SiloAddons.xml' % ADDONS_WINDOW), 'w', encoding='utf-8') as handle:
+        handle.write(addons_window())
     with open(xml_path('EventLog.xml'), 'w', encoding='utf-8') as handle:
         handle.write(event_log_window())
     with open(xml_path('Includes_SiloFrame.xml'), 'w', encoding='utf-8') as handle:

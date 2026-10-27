@@ -369,13 +369,16 @@ def moves(page_index, slot):
     lists in groups inside a grouplist, so each row names its neighbours."""
     # Look a few rows ahead: enough to skip empty rows without bloating the XML.
     down = page_rows(page_index, range(slot + 1, min(rows_of(PAGES[page_index]), slot + LOOKAHEAD) + 1))
+    if PAGES[page_index] in PILL_PAGES:
+        down.append(collection_id(page_index))
     up = page_rows(page_index, range(slot - 1, max(0, slot - LOOKAHEAD), -1))
     out = first_visible('ondown', down) + first_visible('onup', up)
     # The top row goes up to the current page's tab (a button: focusing the
     # bar's grouplist itself leaves left and right with nowhere to go).
     above = ' + '.join('!' + shown(k) for k in up)
     target = '%d' % (9002 + page_index) if PAGES[page_index] in TABBED else '$INFO[%s]' % prop('silo.custom.button')
-    out += '\n                    <onup%s>SetFocus(%s)</onup>' % (' condition="%s"' % above if above else '', target)
+    up_to = '%d' % pills_id(page_index) if PAGES[page_index] in PILL_PAGES else target
+    out += '\n                    <onup%s>SetFocus(%s)</onup>' % (' condition="%s"' % above if above else '', up_to)
     # Back goes to the page's tab, as in Silo, with its dropdown closed (Down
     # comes back to the rows).
     page = PAGES[page_index]
@@ -709,6 +712,193 @@ SECTION_ICONS = {'Recommended': 'silo/menu_recommended.png', 'Browse': 'silo/men
                  'Genres': 'silo/menu_default.png'}
 
 
+def section_actions(page, label, path):
+    """What choosing one of a tab's sections does (its dropdown entry or pill)."""
+    if label in ('Browse', 'Recently Added'):
+        # Silo's Browse: Silo Skyline's own grid (tools/build_library.py);
+        # Recently Added is the same grid sorted newest first (Browse's
+        # Sort remembers it).
+        kind = 'movies' if page == 'movies' else 'tvshows'
+        newest = (['Skin.SetString(silo.sort.%s,dateadded)' % kind, 'Skin.SetBool(silo.sort.%s.desc)' % kind]
+                  if label == 'Recently Added' else [])
+        return newest + (['SetProperty(silo.browse.type,%s,home)' % kind, 'ClearProperty(silo.browse.letter,home)',
+                          'ClearProperty(silo.browse.list,home)']
+                         + ['ClearProperty(silo.browse.list.%s,home)' % key for key in PERSONAL_KEYS]
+                         + ['SetProperty(silo.browse.path,videodb://%s/titles/,home)' % kind, 'ActivateWindow(1191)'])
+    if label == 'Search to request':
+        return ['Skin.Reset(silo.search)', 'SetProperty(silo.search.mode,requests,home)', 'ActivateWindow(1190)']
+    if path:
+        return ['ActivateWindow(Videos,%s,return)' % path]
+    # Recommended: the page itself (its rows).
+    return ['SetProperty(silo.page,%s,home)' % page, 'ClearProperty(silo.row,home)', 'SetFocus(4000)']
+
+
+# As Silo's Apple TV app, Movies and Series pages: a row of their sections as
+# pills under the bar (Recommended, the page itself, selected), and a
+# Collections row of fan cards after Silo's rows, the biggest eight then See all.
+PILL_PAGES = ('movies', 'series')
+PILLS_TOP, PILL_H, PILL_GAP = 140, 48, 12
+COLLECTION_SLOT = 49  # the Collections row's list id slot (list_id)
+
+
+def pills_id(page_index):
+    return 4600 + page_index
+
+
+def collection_id(page_index):
+    return list_id(page_index, COLLECTION_SLOT, False)
+
+
+def page_pills():
+    out = ''
+    for index, page in enumerate(PAGES):
+        if page not in PILL_PAGES:
+            continue
+        gid = pills_id(index)
+        buttons = ''
+        for number, (label, path) in enumerate(SECTIONS[page]):
+            selected = number == 0  # Recommended: this page
+            clicks = ''.join('\n                    <onclick>%s</onclick>' % a
+                             for a in section_actions(page, label, path) if not a.startswith('SetFocus(4000)'))
+            if selected:
+                clicks = '\n                    <onclick>noop</onclick>'
+            buttons += '''
+                <control type="button" id="%(id)d">
+                    <width>auto</width><height>%(h)d</height>
+                    <label>%(label)s</label>
+                    <font>silo_meta</font>
+                    <textoffsetx>22</textoffsetx>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>%(colour)s</textcolor>
+                    <focusedcolor>FF000000</focusedcolor>
+                    <texturefocus border="24" colordiffuse="%(text)s">silo/pill.png</texturefocus>
+                    <texturenofocus border="24" colordiffuse="%(rest)s">silo/pill.png</texturenofocus>%(clicks)s
+                </control>''' % {'id': gid * 10 + number, 'h': PILL_H, 'label': label, 'text': TEXT, 'clicks': clicks,
+                                 'colour': TEXT if selected else TAB_DIM, 'rest': '33FFFFFF' if selected else '12FFFFFF'}
+        rows = page_rows(index, range(1, LOOKAHEAD + 1)) + [collection_id(index)]
+        out += '''
+        <control type="grouplist" id="%(gid)d">
+            <left>%(x)d</left><top>%(top)d</top>
+            <width>%(w)d</width><height>%(h)d</height>
+            <orientation>horizontal</orientation>
+            <itemgap>%(gap)d</itemgap>
+            <visible>%(visible)s</visible>
+            <animation effect="fade" start="100" end="70" time="200" condition="!ControlGroup(%(gid)d).HasFocus()">Conditional</animation>
+            <onup>SetFocus(%(tab)d)</onup>
+            <onback>SetFocus(%(tab)d)</onback>%(down)s
+            <onleft>noop</onleft><onright>noop</onright>%(buttons)s
+        </control>''' % {'gid': gid, 'x': SAFE_X, 'top': PILLS_TOP, 'w': 1920 - 2 * SAFE_X, 'h': PILL_H, 'gap': PILL_GAP,
+                         'visible': page_visible(page), 'tab': 9002 + index, 'buttons': buttons,
+                         'down': first_visible('ondown', rows, '            ')}
+    return out
+
+
+def collection_rule(page, page_index):
+    # Shown whenever the page's libraries have collections (SiloKodiConnect
+    # publishes the path only then): Kodi never loads a hidden list.
+    return '%s + !String.IsEmpty(%s)' % (page_visible(page), prop('silo.%s.collections' % page))
+
+
+def collection_row(page, page_index):
+    """The page's Collections row: Silo's fan cards, then See all."""
+    cid = collection_id(page_index)
+    slots = range(rows_of(page), 0, -1)
+    up = page_rows(page_index, slots)
+    above = ' + '.join('!' + shown(k) for k in up)
+    moves = first_visible('onup', up)
+    moves += '\n                    <onup condition="%s">SetFocus(%d)</onup>' % (above, pills_id(page_index))
+    moves += '\n                    <onback>SetProperty(silo.drop.closed,%d,home)</onback>' % (9002 + page_index + 200)
+    moves += '\n                    <onback>SetFocus(%d)</onback>' % (9002 + page_index)
+    item_w, item_h = FAN_CARD_W + 40, FAN_CARD_H + 12 + 24
+    return '''
+            <control type="group">
+                <height>%(group_h)d</height>
+                <visible>$EXP[SiloRow%(id)d]</visible>
+                <control type="label">
+                    <left>%(x)d</left><top>0</top>
+                    <width>1500</width><height>46</height>
+                    <font>silo_row</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label>Collections</label>
+                </control>
+                <control type="list" id="%(id)d">
+                    <visible>$EXP[SiloRow%(id)d]</visible>
+                    <left>%(lx)d</left><top>%(cards_top)d</top>
+                    <width>%(lw)d</width><height>%(item_h)d</height>
+                    <orientation>horizontal</orientation>
+                    <scrolltime tween="cubic" easing="out">280</scrolltime>
+                    <onclick>ActivateWindow(Videos,$INFO[ListItem.FolderPath],return)</onclick>
+                    <onfocus>SetProperty(silo.row,%(id)d,home)</onfocus>%(moves)s
+                    <content target="videos">$INFO[%(path)s,,&amp;top=8]</content>
+                    <itemlayout width="%(item_w)d" height="%(item_h)d">%(normal)s
+                    </itemlayout>
+                    <focusedlayout width="%(item_w)d" height="%(item_h)d">%(focused)s
+                    </focusedlayout>
+                </control>
+            </control>''' % {'group_h': BAND_H, 'id': cid, 'x': SAFE_X, 'text': TEXT, 'lx': SAFE_X - 6,
+                             'lw': 1920 - SAFE_X + 6, 'cards_top': CARDS_TOP, 'moves': moves,
+                             'path': prop('silo.%s.collections' % page), 'item_w': item_w, 'item_h': item_h,
+                             'normal': fan_row_card(False, cid), 'focused': fan_row_card(True, cid)}
+
+
+FAN_CARD_W, FAN_CARD_H = 430, 234
+
+
+def fan_row_card(focused, list_id_):
+    """A Collections row card: Silo's fan card (430x234), or See all."""
+    lit = 'Control.HasFocus(%d)' % list_id_
+    see_all = 'String.IsEqual(ListItem.Property(silo.see_all),true)'
+    minis = ''
+    for number, x, angle in ((3, 132, 7), (1, 28, -8), (2, 80, -1)):
+        minis += '''
+                        <control type="image">
+                            <left>%(x)d</left><top>%(y)d</top><width>104</width><height>156</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan%(n)d)]</texture>
+                            <animation effect="rotate" end="%(a)d" center="auto" time="0" condition="true">Conditional</animation>
+                            <visible>!String.IsEmpty(ListItem.Property(silo.fan%(n)d))</visible>
+                        </control>''' % {'x': x, 'y': (FAN_CARD_H - 156) // 2 + 6, 'n': number, 'a': -angle}
+    ring = '''
+                    <control type="image">
+                        <width>%d</width><height>%d</height>
+                        <texture border="20" colordiffuse="%s">silo/card_landscape_focus.png</texture>
+                        <visible>%s</visible>
+                    </control>''' % (FAN_CARD_W + 12, FAN_CARD_H + 12, TEXT, lit) if focused else ''
+    zoom = ('\n                    <animation effect="zoom" start="100" end="104" center="auto" time="160" '
+            'tween="sine" easing="out" condition="%s">Conditional</animation>' % lit) if focused else ''
+    return '''
+                    <control type="group">%(zoom)s
+                        <control type="image">
+                            <left>6</left><top>6</top><width>%(w)d</width><height>%(h)d</height>
+                            <texture border="24" colordiffuse="FF1E2024">silo/card_landscape_mask.png</texture>
+                        </control>
+                        <control type="group">
+                            <visible>!%(see_all)s</visible>%(minis)s
+                            <control type="textbox">
+                                <left>230</left><top>40</top><width>184</width><height>110</height>
+                                <font>silo_card_title</font>
+                                <textcolor>%(text)s</textcolor>
+                                <label>$INFO[ListItem.Label]</label>
+                            </control>
+                            <control type="label">
+                                <left>230</left><top>%(cy)d</top><width>184</width><height>30</height>
+                                <font>silo_badge</font>
+                                <textcolor>99EDEDED</textcolor>
+                                <label>[UPPERCASE]$INFO[ListItem.Property(silo.count),, titles][/UPPERCASE]</label>
+                            </control>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>6</top><width>%(w)d</width><height>%(h)d</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_row</font>
+                            <textcolor>%(text)s</textcolor>
+                            <label>$INFO[ListItem.Label]  ›</label>
+                            <visible>%(see_all)s</visible>
+                        </control>%(ring)s
+                    </control>''' % {'zoom': zoom, 'w': FAN_CARD_W, 'h': FAN_CARD_H, 'minis': minis, 'text': TEXT,
+                                     'cy': FAN_CARD_H - 54, 'see_all': see_all, 'ring': ring}
+
+
 def sections_menus():
     """The Movies and Series sections: Silo's dropdown under their tabs."""
     out = ''
@@ -719,23 +909,7 @@ def sections_menus():
         tab_id = 9002 + index
         items = ''
         for label, path in SECTIONS[page]:
-            if label in ('Browse', 'Recently Added'):
-                # Silo's Browse: Silo Skyline's own grid (tools/build_library.py);
-                # Recently Added is the same grid sorted newest first (Browse's
-                # Sort remembers it).
-                kind = 'movies' if page == 'movies' else 'tvshows'
-                newest = (['Skin.SetString(silo.sort.%s,dateadded)' % kind, 'Skin.SetBool(silo.sort.%s.desc)' % kind]
-                          if label == 'Recently Added' else [])
-                actions = newest + (['SetProperty(silo.browse.type,%s,home)' % kind, 'ClearProperty(silo.browse.letter,home)',
-                            'ClearProperty(silo.browse.list,home)']
-                           + ['ClearProperty(silo.browse.list.%s,home)' % key for key in PERSONAL_KEYS]
-                           + ['SetProperty(silo.browse.path,videodb://%s/titles/,home)' % kind, 'ActivateWindow(1191)'])
-            elif label == 'Search to request':
-                actions = ['Skin.Reset(silo.search)', 'SetProperty(silo.search.mode,requests,home)', 'ActivateWindow(1190)']
-            elif path:
-                actions = ['ActivateWindow(Videos,%s,return)' % path]
-            else:  # Recommended: the page itself (its rows).
-                actions = ['SetProperty(silo.page,%s,home)' % page, 'ClearProperty(silo.row,home)', 'SetFocus(4000)']
+            actions = section_actions(page, label, path)
             items += '''
                     <item>
                         <label>%s</label>
@@ -1076,7 +1250,8 @@ def build():
     rows = ''.join(row(page, index, slot, landscape)
                    for index, page in enumerate(PAGES)
                    for slot in range(1, rows_of(page) + 1)
-                   for landscape in styles(page))
+                   for landscape in styles(page)) + \
+        ''.join(collection_row(page, index) for index, page in enumerate(PAGES) if page in PILL_PAGES)
     tabs = icon_tab(9001, 'icons/search.png', 'ClearProperty(silo.search.mode,home)</onclick>\n'
                     '                    <onclick>ActivateWindow(1190)')
     tabs += ''.join(tab(9002 + index, page, index) for index, page in enumerate(TABBED))
@@ -1128,6 +1303,22 @@ def build():
             <left>%(x)d</left>
             <visible>!String.IsEmpty(%(row_prop)s) | [[String.IsEqual(Window(Home).Property(silo.page),home) | String.IsEmpty(Window(Home).Property(silo.page))] + [Integer.IsGreater(Window(Home).Property(silo.home.1.cards),0) | Integer.IsGreater(Window(Home).Property(silo.home.2.cards),0)]] | %(waiting)s</visible>
             <animation effect="fade" start="0" end="100" time="240">Visible</animation>
+            <!-- Silo's eyebrow: a short dash, then the focused row's name in capitals. -->
+            <control type="group">
+                <top>146</top>
+                <visible>!String.IsEmpty(Window(Home).Property(silo.row)) + %(no_pills)s</visible>
+                <control type="image">
+                    <top>14</top><width>26</width><height>3</height>
+                    <texture colordiffuse="D9FFFFFF">colors/white.png</texture>
+                </control>
+                <control type="label">
+                    <left>40</left><width>1000</width><height>30</height>
+                    <aligny>center</aligny>
+                    <font>silo_badge</font>
+                    <textcolor>D9EDEDED</textcolor>
+                    <label>[UPPERCASE]$VAR[SiloEyebrow][/UPPERCASE]</label>
+                </control>
+            </control>
             <control type="image">
                 <top>190</top>
                 <width>880</width><height>170</height>
@@ -1207,6 +1398,8 @@ def build():
             <visible>%(no_rows)s</visible>
         </control>
 
+        <!-- Movies' and Series' sections as pills under the bar. -->%(pills)s
+
         <!-- The page darkens behind an open dropdown; the bar stays lit. -->%(drop_dim)s
 
         <!-- Top menu bar. -->
@@ -1231,7 +1424,8 @@ def build():
        'row_overlap': ROW_PITCH - BAND_H,
        'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
        'bar_down': bar_down(), 'avatar': avatar(), 'custom': shortcuts_list,
-       'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections, 'drop_dim': dropdown_dim(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'wordmark': wordmark(SAFE_X, BAR_TOP, '\n            <animation effect="fade" start="100" end="70" time="200" condition="%s">Conditional</animation>' % BAR_DIM), 'waiting': ' | '.join('[%s]' % c for c, _ in waiting_rows()), 'background': BACKGROUND, 'splash_max': SPLASH_MAX,
+       'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections, 'drop_dim': dropdown_dim(), 'pills': page_pills(),
+       'no_pills': ' + '.join('!' + page_visible(p) for p in PILL_PAGES), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'wordmark': wordmark(SAFE_X, BAR_TOP, '\n            <animation effect="fade" start="100" end="70" time="200" condition="%s">Conditional</animation>' % BAR_DIM), 'waiting': ' | '.join('[%s]' % c for c, _ in waiting_rows()), 'background': BACKGROUND, 'splash_max': SPLASH_MAX,
        # The age rating as Silo draws it: the quality badges' size, centred on the info line.
        'splash': splash(), 'mpaa_badge': badge('$VAR[SiloMpaa]', 34, 'silo_badge').replace(
            '<width>auto</width><height>34</height>', '<top>3</top><width>auto</width><height>34</height>', 1),
@@ -1340,12 +1534,16 @@ EMPTY_HOME = '''    <variable name="SiloEmptyHome">
 def variables():
     rows = [list_id(index, slot, landscape) for index, page in enumerate(PAGES)
             for slot in range(1, rows_of(page) + 1) for landscape in styles(page)]
+    # The Collections rows: the hero shows the focused collection's name.
+    hero_rows = rows + [collection_id(index) for index, page in enumerate(PAGES) if page in PILL_PAGES]
     out = '\n    <!-- Silo Skyline (tools/build_home.py) -->' + CARDS + custom_tab_variables() + DROP_ICON
     for index, page in enumerate(PAGES):
         for slot in range(1, rows_of(page) + 1):
             for landscape in styles(page):
                 out += '    <expression name="SiloRow%d">%s</expression>\n' % (
                     list_id(index, slot, landscape), row_rules(page, index, slot, landscape))
+        if page in PILL_PAGES:
+            out += '    <expression name="SiloRow%d">%s</expression>\n' % (collection_id(index), collection_rule(page, index))
     # Kodi's conditions can't test a $VAR, so each badge's "has text" is an
     # expression over the remembered row, like the hero variables.
     for name, item_property in (('SiloMpaa', 'silo.mpaa'), ('SiloTint', 'silo.tint'),
@@ -1362,12 +1560,23 @@ def variables():
                   for row in (1, 2)]
         out += '    <expression name="Has%s">%s</expression>\n' % (name, ' | '.join(terms))
     out += EMPTY_HOME
+    # The hero's eyebrow: the name of the row that last had focus.
+    out += '    <variable name="SiloEyebrow">\n'
+    for index, page in enumerate(PAGES):
+        for slot in range(1, rows_of(page) + 1):
+            for landscape in styles(page):
+                out += '        <value condition="String.IsEqual(%s,%d)">$INFO[%s]</value>\n' % (
+                    prop('silo.row'), list_id(index, slot, landscape), prop('silo.%s.%d.title' % (page, slot)))
+        if page in PILL_PAGES:
+            out += '        <value condition="String.IsEqual(%s,%d)">Collections</value>\n' % (
+                prop('silo.row'), collection_id(index))
+    out += '    </variable>\n'
     for name, entries in HERO:
         # A Home card (SiloKodiConnect's published rows) carries its text ready.
         if name in HERO_STATIC:
             entries = [(HOME_CARD, '$INFO[LI.Property(%s)]' % HERO_STATIC[name])] + entries
         out += '    <variable name="%s">\n' % name
-        for row_id in rows:
+        for row_id in hero_rows:
             item = 'Container(%d).ListItem' % row_id
             mine = 'String.IsEqual(%s,%d)' % (prop('silo.row'), row_id)
             for condition, value in entries:

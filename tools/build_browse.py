@@ -109,8 +109,32 @@ def poster(focused, view_id):
 # three columns. Its first titles' posters fanned at the left (-8, -1 and
 # +7 degrees), its name and count at the right.
 FANS = 'Container.Content(sets) + String.IsEqual(Container.Property(silo.fans),true)'
+# Genres: Silo's chip cloud (capsules, six to a row).
+CHIPS = 'Container.Content(genres)'
+CHIP_W, CHIP_H, CHIP_GAP = 260, 64, 16
 FAN_W, FAN_H, FAN_GAP = 548, 280, 28
 MINI_W, MINI_H = 124, 186
+
+
+def chip(focused, view_id):
+    lit = 'Control.HasFocus(%d)' % view_id
+    def body(fill, colour, visible):
+        return '''
+                    <control type="image">
+                        <width>%(w)d</width><height>%(h)d</height>
+                        <texture border="32" colordiffuse="%(fill)s">silo/pill.png</texture>%(v)s
+                    </control>
+                    <control type="label">
+                        <left>24</left><width>%(lw)d</width><height>%(h)d</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>%(colour)s</textcolor>
+                        <label>$INFO[ListItem.Label]</label>%(v)s
+                    </control>''' % {'w': CHIP_W, 'h': CHIP_H, 'lw': CHIP_W - 48, 'fill': fill, 'colour': colour,
+                                     'v': '\n                        <visible>%s</visible>' % visible if visible else ''}
+    if not focused:
+        return body('12FFFFFF', TEXT, '')
+    return body(TEXT, 'FF000000', lit) + body('12FFFFFF', TEXT, '!' + lit)
 
 
 def fan_card(focused, view_id):
@@ -372,7 +396,7 @@ def build():
     <onload condition="Player.HasVideo + !String.IsEmpty(Window(Home).Property(silokodi.trailer_playing))">PlayerControl(Stop)</onload>
     <defaultcontrol always="true">50</defaultcontrol>
     <backgroundcolor>%(background)s</backgroundcolor>
-    <views>50,51,52,53</views>
+    <views>50,51,52,53,54</views>
     <controls>
         <control type="image">
             <left>0</left><top>0</top><width>1920</width><height>1080</height>
@@ -402,7 +426,7 @@ def build():
             <orientation>vertical</orientation>
             <scrolltime tween="cubic" easing="out">240</scrolltime>
             <viewtype label="List">list</viewtype>
-            <visible>!$EXP[SiloBrowseGrid] + !$EXP[SiloBrowseEpisodes] + !$EXP[SiloBrowseFans]</visible>
+            <visible>!$EXP[SiloBrowseGrid] + !$EXP[SiloBrowseEpisodes] + !$EXP[SiloBrowseFans] + !$EXP[SiloBrowseChips]</visible>
             <itemlayout width="1110" height="%(row_h)d">%(row)s
             </itemlayout>
             <focusedlayout width="1110" height="%(row_h)d">%(row_focused)s
@@ -424,6 +448,20 @@ def build():
             </focusedlayout>
         </control>
 %(jump_bar)s
+
+        <!-- Genres: Silo's chips. -->
+        <control type="panel" id="54">
+            <left>%(gx)d</left><top>%(views_top)d</top>
+            <width>%(gw)d</width><height>%(views_h)d</height>
+            <orientation>vertical</orientation>
+            <scrolltime tween="cubic" easing="out">240</scrolltime>
+            <viewtype label="Genres">panel</viewtype>
+            <visible>$EXP[SiloBrowseChips]</visible>
+            <itemlayout width="%(cw)d" height="%(ch)d">%(chip)s
+            </itemlayout>
+            <focusedlayout width="%(cw)d" height="%(ch)d">%(chip_focused)s
+            </focusedlayout>
+        </control>
 
         <!-- Silo's collections: fan cards. -->
         <control type="panel" id="53">
@@ -464,17 +502,20 @@ def build():
        'poster': poster(False, 51), 'poster_focused': poster(True, 51),
        'episode': episode(False, 52), 'episode_focused': episode(True, 52),
        'bar': JUMP_BAR, 'jump': JUMP_ID, 'jump_bar': jump_bar(SAFE_X - 6 + 7 * poster_item_w + 30),
+       'cw': CHIP_W + CHIP_GAP, 'ch': CHIP_H + CHIP_GAP, 'chip': chip(False, 54), 'chip_focused': chip(True, 54),
        'fw': FAN_W + FAN_GAP, 'fh': FAN_H + FAN_GAP, 'fan': fan_card(False, 53), 'fan_focused': fan_card(True, 53)}
 
 
 VARIABLES = '''
     <!-- Silo Skyline browse (tools/build_browse.py) -->
     <expression name="SiloBrowseFans">%(fans)s</expression>
+    <expression name="SiloBrowseChips">%(chips)s</expression>
     <expression name="SiloBrowseGrid">[%(grid)s] + !$EXP[SiloBrowseFans]</expression>
     <expression name="SiloBrowseEpisodes">%(episodes)s</expression>
     <variable name="SiloBrowseFacts">
         <value condition="Integer.IsGreater(Container.NumItems,0) + [$EXP[SiloBrowseGrid] | $EXP[SiloBrowseEpisodes]]">$INFO[Container.NumItems,, titles]</value>
         <value condition="$EXP[SiloBrowseFans]">$INFO[Container.NumItems,, collections]</value>
+        <value condition="$EXP[SiloBrowseChips]">$INFO[Container.NumItems,, genres]</value>
         <value>$INFO[Window(Home).Property(silo.library.facts)]</value>
     </variable>
     <variable name="SiloBrowseTitle">
@@ -530,7 +571,7 @@ VARIABLES = '''
         <value>$INFO[Container.Art(fanart)]</value>
     </variable>
     <!-- end Silo Skyline browse -->
-''' % {'grid': GRID, 'episodes': EPISODES, 'jump': JUMP_ID, 'fans': FANS}
+''' % {'grid': GRID, 'episodes': EPISODES, 'jump': JUMP_ID, 'fans': FANS, 'chips': CHIPS}
 
 
 def add_variables():

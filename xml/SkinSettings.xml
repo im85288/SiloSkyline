@@ -41,6 +41,12 @@
 					<include>DefaultSettingButton</include>
 					<onclick>ActivateWindow(InterfaceSettings)</onclick>
 				</control>
+				<control type="button" id="792">
+					<label>Recommended add-ons</label>
+					<label2>Up Next, YouTube and more</label2>
+					<include>DefaultSettingButton</include>
+					<onclick>ActivateWindow(1192)</onclick>
+				</control>
 				<control type="radiobutton" id="791">
 					<label>Artwork background</label>
 					<include>DefaultSettingButton</include>

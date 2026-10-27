@@ -65,6 +65,32 @@
 			</control>
 		</definition>
 	</include>
+	<!-- Recommended add-ons' states (addon_states). -->
+	<variable name="SkylineAddonState0">
+		<value condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">Installed  ·  OK for settings</value>
+		<value condition="System.HasAddon(plugin.video.silokodiconnect)">Turned off  ·  OK turns it on</value>
+		<value>Get it from github.com/im85288/SiloKodiConnect/releases</value>
+	</variable>
+	<variable name="SkylineAddonState1">
+		<value condition="System.AddonIsEnabled(service.upnext)">Installed  ·  OK for settings</value>
+		<value condition="System.HasAddon(service.upnext)">Turned off  ·  OK turns it on</value>
+		<value>Not installed  ·  OK installs</value>
+	</variable>
+	<variable name="SkylineAddonState2">
+		<value condition="System.AddonIsEnabled(plugin.video.youtube)">Installed  ·  OK for settings</value>
+		<value condition="System.HasAddon(plugin.video.youtube)">Turned off  ·  OK turns it on</value>
+		<value>Not installed  ·  OK installs</value>
+	</variable>
+	<variable name="SkylineAddonState3">
+		<value condition="System.AddonIsEnabled(script.skinshortcuts)">Installed  ·  OK for settings</value>
+		<value condition="System.HasAddon(script.skinshortcuts)">Turned off  ·  OK turns it on</value>
+		<value>Get it from github.com/mikesilvo164/script.skinshortcuts</value>
+	</variable>
+	<variable name="SkylineAddonState4">
+		<value condition="System.AddonIsEnabled(inputstream.adaptive)">Installed  ·  OK for settings</value>
+		<value condition="System.HasAddon(inputstream.adaptive)">Turned off  ·  OK turns it on</value>
+		<value>Not installed  ·  OK installs</value>
+	</variable>
 	<!-- The colour theme's name: Kodi calls the default SKINDEFAULT. -->
 	<variable name="SkylineColourName">
 		<value condition="String.IsEqual(Skin.CurrentColourTheme,SKINDEFAULT)">Silo</value>
