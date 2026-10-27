@@ -369,7 +369,7 @@ def moves(page_index, slot):
     lists in groups inside a grouplist, so each row names its neighbours."""
     # Look a few rows ahead: enough to skip empty rows without bloating the XML.
     down = page_rows(page_index, range(slot + 1, min(rows_of(PAGES[page_index]), slot + LOOKAHEAD) + 1))
-    if PAGES[page_index] in PILL_PAGES:
+    if PAGES[page_index] in COLLECTION_PAGES:
         down.append(collection_id(page_index))
     up = page_rows(page_index, range(slot - 1, max(0, slot - LOOKAHEAD), -1))
     out = first_visible('ondown', down) + first_visible('onup', up)
@@ -377,14 +377,18 @@ def moves(page_index, slot):
     # bar's grouplist itself leaves left and right with nowhere to go).
     above = ' + '.join('!' + shown(k) for k in up)
     target = '%d' % (9002 + page_index) if PAGES[page_index] in TABBED else '$INFO[%s]' % prop('silo.custom.button')
-    up_to = '%d' % pills_id(page_index) if PAGES[page_index] in PILL_PAGES else target
-    out += '\n                    <onup%s>SetFocus(%s)</onup>' % (' condition="%s"' % above if above else '', up_to)
-    # Back goes to the page's tab, as in Silo, with its dropdown closed (Down
-    # comes back to the rows).
-    page = PAGES[page_index]
-    menu = 9002 + page_index + 200 if page in SECTIONS else SUBMENU if page == 'custom' else None
-    if menu:
-        out += '\n                    <onback>SetProperty(silo.drop.closed,%d,home)</onback>' % menu
+    # Up from the top row: the page's pills (a custom item's when it has a
+    # submenu), else its tab. Kodi runs every onup whose condition holds.
+    if PAGES[page_index] in PILL_PAGES:
+        ups = [(above, '%d' % pills_id(page_index))]
+    elif PAGES[page_index] == 'custom':
+        ups = [(' + '.join(c for c in (above, CUSTOM_HAS_PILLS) if c), '%d' % CUSTOM_PILLS),
+               (' + '.join(c for c in (above, '!' + CUSTOM_HAS_PILLS) if c), target)]
+    else:
+        ups = [(above, target)]
+    for condition, to in ups:
+        out += '\n                    <onup%s>SetFocus(%s)</onup>' % (' condition="%s"' % condition if condition else '', to)
+    # Back goes to the page's tab, as in Silo.
     out += '\n                    <onback>SetFocus(%s)</onback>' % target
     return out
 
@@ -733,10 +737,14 @@ def section_actions(page, label, path):
     return ['SetProperty(silo.page,%s,home)' % page, 'ClearProperty(silo.row,home)', 'SetFocus(4000)']
 
 
-# As Silo's Apple TV app, Movies and Series pages: a row of their sections as
-# pills under the bar (Recommended, the page itself, selected), and a
-# Collections row of fan cards after Silo's rows, the biggest eight then See all.
-PILL_PAGES = ('movies', 'series')
+# As Silo's Apple TV app, a page's sections as pills under the bar (the first,
+# the page itself, selected) in place of a dropdown under its tab: Movies,
+# Series and Requests, and a custom item's submenu (CUSTOM_PILLS). Movies and
+# Series end with a Collections row of fan cards, the biggest eight then See all.
+PILL_PAGES = ('movies', 'series', 'requests')
+COLLECTION_PAGES = ('movies', 'series')
+CUSTOM_PILLS = 4699
+PILL_W = 300  # a custom item's submenu pill (a list's items are one width)
 PILLS_TOP, PILL_H, PILL_GAP = 140, 48, 12
 COLLECTION_SLOT = 49  # the Collections row's list id slot (list_id)
 
@@ -775,7 +783,7 @@ def page_pills():
                     <texturenofocus border="24" colordiffuse="%(rest)s">silo/pill.png</texturenofocus>%(clicks)s
                 </control>''' % {'id': gid * 10 + number, 'h': PILL_H, 'label': label, 'text': TEXT, 'clicks': clicks,
                                  'colour': TEXT if selected else TAB_DIM, 'rest': '33FFFFFF' if selected else '12FFFFFF'}
-        rows = page_rows(index, range(1, LOOKAHEAD + 1)) + [collection_id(index)]
+        rows = page_rows(index, range(1, LOOKAHEAD + 1)) + ([collection_id(index)] if page in COLLECTION_PAGES else [])
         out += '''
         <control type="grouplist" id="%(gid)d">
             <left>%(x)d</left><top>%(top)d</top>
@@ -791,6 +799,53 @@ def page_pills():
                          'visible': page_visible(page), 'tab': 9002 + index, 'buttons': buttons,
                          'down': first_visible('ondown', rows, '            ')}
     return out
+
+
+CUSTOM_HAS_PILLS = 'String.IsEqual(Container(%d).ListItem.Property(hasSubmenu),True)' % SHORTCUTS
+
+
+def custom_pills():
+    """A custom item's submenu as pills on its page (Skin Shortcuts' entries
+    for the item selected in the hidden menu list, which its tab selects)."""
+    index = PAGES.index('custom')
+    def pill(focused):
+        lit = 'Control.HasFocus(%d)' % CUSTOM_PILLS
+        def body(fill, colour, visible):
+            return '''
+                    <control type="image">
+                        <width>%(w)d</width><height>%(h)d</height>
+                        <texture border="24" colordiffuse="%(fill)s">silo/pill.png</texture>%(v)s
+                    </control>
+                    <control type="label">
+                        <left>20</left><width>%(lw)d</width><height>%(h)d</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>%(colour)s</textcolor>
+                        <label>$INFO[ListItem.Label]</label>%(v)s
+                    </control>''' % {'w': PILL_W, 'h': PILL_H, 'lw': PILL_W - 40, 'fill': fill, 'colour': colour,
+                                     'v': '\n                        <visible>%s</visible>' % visible if visible else ''}
+        if not focused:
+            return body('12FFFFFF', TAB_DIM, '')
+        return body(TEXT, 'FF000000', lit) + body('12FFFFFF', TAB_DIM, '!' + lit)
+    button = '$INFO[%s]' % prop('silo.custom.button')
+    return '''
+        <control type="list" id="%(id)d">
+            <left>%(x)d</left><top>%(top)d</top>
+            <width>%(w)d</width><height>%(h)d</height>
+            <orientation>horizontal</orientation>
+            <visible>%(visible)s + %(has)s</visible>
+            <animation effect="fade" start="100" end="70" time="200" condition="!Control.HasFocus(%(id)d)">Conditional</animation>
+            <onup>SetFocus(%(button)s)</onup>
+            <onback>SetFocus(%(button)s)</onback>%(down)s
+            <itemlayout width="%(iw)d" height="%(h)d">%(normal)s
+            </itemlayout>
+            <focusedlayout width="%(iw)d" height="%(h)d">%(focused)s
+            </focusedlayout>
+            <content><include>skinshortcuts-submenu</include></content>
+        </control>''' % {'id': CUSTOM_PILLS, 'x': SAFE_X, 'top': PILLS_TOP, 'w': 1920 - 2 * SAFE_X, 'h': PILL_H,
+                         'visible': page_visible('custom'), 'has': CUSTOM_HAS_PILLS, 'button': button,
+                         'down': first_visible('ondown', page_rows(index, range(1, LOOKAHEAD + 1)), '            '),
+                         'iw': PILL_W + PILL_GAP, 'normal': pill(False), 'focused': pill(True)}
 
 
 def collection_rule(page, page_index):
@@ -1037,9 +1092,7 @@ def tab(control_id, page, page_index):
                             'menu': control_id + 200 if page in SECTIONS else 0,
                             'label': TAB_LABELS[page],
                             'dim': TAB_DIM, 'text': TEXT, 'page': page,
-                            'moves': bar_moves(control_id, 'SetFocus(%d,0,absolute)' % (control_id + 200)
-                                               if page in SECTIONS else None,
-                                               control_id + 200 if page in SECTIONS else None),
+                            'moves': bar_moves(control_id),
                             'focus_rows': first_visible('onclick', page_rows(page_index, range(1, LOOKAHEAD + 1))),
                             'unless_open': '',
                             'open_sections': open_sections(page, control_id)}
@@ -1141,10 +1194,11 @@ def custom_items():
     for slot, control_id in enumerate(CUSTOM_IDS):
         label = shortcut(slot, 'Label')
         has_widgets = '!String.IsEmpty(%s)' % shortcut(slot, 'Property(widgetPath)')
-        # OK opens the submenu only for an item with nothing else to show;
-        # otherwise Up does (as the tabs' sections).
-        to_submenu = 'String.IsEqual(%s,True) + !%s' % (shortcut(slot, 'Property(hasSubmenu)'), has_widgets)
-        go = '%s + ![%s]' % (has_widgets, to_submenu)
+        # OK opens the item's page when it has widgets or a submenu (its
+        # pills); an item that is only a submenu focuses the pills.
+        has_submenu = 'String.IsEqual(%s,True)' % shortcut(slot, 'Property(hasSubmenu)')
+        to_submenu = '%s + !%s' % (has_submenu, has_widgets)
+        go = '[%s | %s]' % (has_widgets, has_submenu)
         actions = ''
         for n in range(1, WIDGETS + 1):
             suffix = '' if n == 1 else '.%d' % n
@@ -1171,31 +1225,23 @@ def custom_items():
                     <focusedcolor>FF000000</focusedcolor>
                     <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
                     <texturenofocus border="30" colordiffuse="%(nofocus)s">silo/pill.png</texturenofocus>%(moves)s
-                    <onclick condition="!%(has_widgets)s + ![%(to_submenu)s]">$INFO[%(path)s]</onclick>
+                    <onclick condition="!%(go)s">$INFO[%(path)s]</onclick>
                     <onclick condition="%(go)s">SetProperty(silo.page,custom,home)</onclick>
                     <onclick condition="%(go)s">ClearProperty(silo.row,home)</onclick>
                     <onclick condition="%(go)s">SetProperty(silo.custom.button,%(id)d,home)</onclick>%(actions)s
-                    <onclick condition="%(go)s">SetProperty(silo.custom.loading,1,home)</onclick>
-                    <onclick condition="%(to_submenu)s">SetProperty(silo.submenu.from,%(id)d,home)</onclick>
-                    <onclick condition="%(to_submenu)s">SetFocus(%(shortcuts)d,%(slot)d,absolute)</onclick>
-                    <onclick condition="%(to_submenu)s">SetFocus(%(submenu)d,0,absolute)</onclick>
-                    <ondown condition="%(has_submenu)s + !%(closed)s">SetProperty(silo.submenu.from,%(id)d,home)</ondown>
-                    <ondown condition="%(has_submenu)s + !%(closed)s">SetFocus(%(shortcuts)d,%(slot)d,absolute)</ondown>
-                    <ondown condition="%(has_submenu)s + !%(closed)s">SetFocus(%(submenu)d,0,absolute)</ondown>
-                    <!-- Leaving it opens its submenu again next time (Back closed it). -->
-                    <onunfocus>ClearProperty(silo.drop.closed,home)</onunfocus>%(close)s
-                </control>''' % {'label': label, 'close': close_on_back(SUBMENU, 'String.IsEqual(%s,True)' % shortcut(slot, 'Property(hasSubmenu)')), 'id': control_id, 'dim': TAB_DIM, 'text': TEXT, 'has_widgets': has_widgets,
+                    <onclick condition="%(has_widgets)s">SetProperty(silo.custom.loading,1,home)</onclick>
+                    <!-- Select the item in the hidden menu list, so the pills list its submenu. -->
+                    <onclick condition="%(go)s">SetFocus(%(shortcuts)d,%(slot)d,absolute)</onclick>
+                    <onclick condition="%(go)s + !%(to_submenu)s">SetFocus(%(id)d)</onclick>
+                    <onclick condition="%(to_submenu)s">SetFocus(%(pills)d,0,absolute)</onclick>
+                </control>''' % {'label': label, 'pills': CUSTOM_PILLS, 'id': control_id, 'dim': TAB_DIM, 'text': TEXT, 'has_widgets': has_widgets,
                              'path': shortcut(slot, 'Property(path)'), 'actions': actions,
                              'go': go, 'to_submenu': to_submenu, 'shortcuts': SHORTCUTS, 'slot': slot,
-                             'submenu': SUBMENU, 'has_submenu': 'String.IsEqual(%s,True)' % shortcut(slot, 'Property(hasSubmenu)'),
+                             'submenu': SUBMENU, 'has_submenu': has_submenu,
                              'nofocus': '$VAR[SiloCustomTab%d]' % control_id,
                              # Left and right come from the grouplist: Kodi points its direct
                              # children at their neighbours (passing hidden ones), over ours.
-                             # Down goes to the rows when it has no submenu, or Back closed it.
-                             'closed': 'String.IsEqual(%s,%d)' % (prop('silo.drop.closed'), SUBMENU),
-                             'moves': only_when(bar_down('                    '),
-                                                '[!String.IsEqual(%s,True) | String.IsEqual(%s,%d)]'
-                                                % (shortcut(slot, 'Property(hasSubmenu)'), prop('silo.drop.closed'), SUBMENU))}
+                             'moves': bar_down('                    ')}
     return '''
         <!-- Skin Shortcuts' main menu, built into script-skinshortcuts-includes.xml. -->
         <control type="list" id="%d">
@@ -1222,8 +1268,15 @@ def custom_tab_variables():
 def bar_down(indent='            '):
     """Down from the bar: the first row showing, on whichever page is shown
     (only one page's rows are ever visible)."""
-    return ''.join(first_visible('ondown', page_rows(index, range(1, LOOKAHEAD + 1)), indent)
-                   for index in range(len(PAGES)))
+    out = ''.join(first_visible('ondown', page_rows(index, range(1, LOOKAHEAD + 1)), indent)
+                  for index in range(len(PAGES)))
+    # A page with pills but no rows (a custom item that is only a submenu).
+    for index, page in enumerate(PAGES):
+        pills = pills_id(index) if page in PILL_PAGES else CUSTOM_PILLS if page == 'custom' else None
+        if pills:
+            none = ' + '.join('!' + shown(k) for k in page_rows(index, range(1, LOOKAHEAD + 1)))
+            out += '\n%s<ondown condition="%s + %s">SetFocus(%d)</ondown>' % (indent, page_visible(page), none, pills)
+    return out
 
 
 def badge(label, height, font):
@@ -1246,12 +1299,13 @@ def badge(label, height, font):
 
 def build():
     del DROPDOWNS[:]
-    sections = sections_menus() + custom_submenu() + avatar_menu()
+    # The tabs' sections are pills on their pages now; only the avatar has a card.
+    sections = avatar_menu()
     rows = ''.join(row(page, index, slot, landscape)
                    for index, page in enumerate(PAGES)
                    for slot in range(1, rows_of(page) + 1)
                    for landscape in styles(page)) + \
-        ''.join(collection_row(page, index) for index, page in enumerate(PAGES) if page in PILL_PAGES)
+        ''.join(collection_row(page, index) for index, page in enumerate(PAGES) if page in COLLECTION_PAGES)
     tabs = icon_tab(9001, 'icons/search.png', 'ClearProperty(silo.search.mode,home)</onclick>\n'
                     '                    <onclick>ActivateWindow(1190)')
     tabs += ''.join(tab(9002 + index, page, index) for index, page in enumerate(TABBED))
@@ -1424,8 +1478,8 @@ def build():
        'row_overlap': ROW_PITCH - BAND_H,
        'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
        'bar_down': bar_down(), 'avatar': avatar(), 'custom': shortcuts_list,
-       'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections, 'drop_dim': dropdown_dim(), 'pills': page_pills(),
-       'no_pills': ' + '.join('!' + page_visible(p) for p in PILL_PAGES), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'wordmark': wordmark(SAFE_X, BAR_TOP, '\n            <animation effect="fade" start="100" end="70" time="200" condition="%s">Conditional</animation>' % BAR_DIM), 'waiting': ' | '.join('[%s]' % c for c, _ in waiting_rows()), 'background': BACKGROUND, 'splash_max': SPLASH_MAX,
+       'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections, 'drop_dim': dropdown_dim(), 'pills': page_pills() + custom_pills(),
+       'no_pills': ' + '.join(['!' + page_visible(p) for p in PILL_PAGES] + ['![%s + %s]' % (page_visible('custom'), CUSTOM_HAS_PILLS)]), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'wordmark': wordmark(SAFE_X, BAR_TOP, '\n            <animation effect="fade" start="100" end="70" time="200" condition="%s">Conditional</animation>' % BAR_DIM), 'waiting': ' | '.join('[%s]' % c for c, _ in waiting_rows()), 'background': BACKGROUND, 'splash_max': SPLASH_MAX,
        # The age rating as Silo draws it: the quality badges' size, centred on the info line.
        'splash': splash(), 'mpaa_badge': badge('$VAR[SiloMpaa]', 34, 'silo_badge').replace(
            '<width>auto</width><height>34</height>', '<top>3</top><width>auto</width><height>34</height>', 1),
@@ -1535,14 +1589,14 @@ def variables():
     rows = [list_id(index, slot, landscape) for index, page in enumerate(PAGES)
             for slot in range(1, rows_of(page) + 1) for landscape in styles(page)]
     # The Collections rows: the hero shows the focused collection's name.
-    hero_rows = rows + [collection_id(index) for index, page in enumerate(PAGES) if page in PILL_PAGES]
+    hero_rows = rows + [collection_id(index) for index, page in enumerate(PAGES) if page in COLLECTION_PAGES]
     out = '\n    <!-- Silo Skyline (tools/build_home.py) -->' + CARDS + custom_tab_variables() + DROP_ICON
     for index, page in enumerate(PAGES):
         for slot in range(1, rows_of(page) + 1):
             for landscape in styles(page):
                 out += '    <expression name="SiloRow%d">%s</expression>\n' % (
                     list_id(index, slot, landscape), row_rules(page, index, slot, landscape))
-        if page in PILL_PAGES:
+        if page in COLLECTION_PAGES:
             out += '    <expression name="SiloRow%d">%s</expression>\n' % (collection_id(index), collection_rule(page, index))
     # Kodi's conditions can't test a $VAR, so each badge's "has text" is an
     # expression over the remembered row, like the hero variables.
@@ -1567,7 +1621,7 @@ def variables():
             for landscape in styles(page):
                 out += '        <value condition="String.IsEqual(%s,%d)">$INFO[%s]</value>\n' % (
                     prop('silo.row'), list_id(index, slot, landscape), prop('silo.%s.%d.title' % (page, slot)))
-        if page in PILL_PAGES:
+        if page in COLLECTION_PAGES:
             out += '        <value condition="String.IsEqual(%s,%d)">Collections</value>\n' % (
                 prop('silo.row'), collection_id(index))
     out += '    </variable>\n'
