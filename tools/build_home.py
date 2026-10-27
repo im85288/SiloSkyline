@@ -248,7 +248,7 @@ def card_body(card, focused, control_id='$PARAM[id]'):
                             <left>6</left><top>6</top>
                             <width>%(w)d</width><height>%(h)d</height>
                             <texture diffuse="%(mask)s">silo/card_scrim.png</texture>
-                        </control>
+                        </control>%(no_art)s
                         <control type="progress">
                             <left>%(px)d</left><top>%(pt)d</top>
                             <width>%(pw)d</width><height>6</height>
@@ -292,7 +292,33 @@ def card_body(card, focused, control_id='$PARAM[id]'):
                                     # (Kodi can't clip a progress bar to the card's mask).
                                     'px': 6 + card['radius'], 'pt': card['height'], 'pw': card['width'] - 2 * card['radius'],
                                     'text': TEXT, 'dim': TEXT_DIM, 'ring': ring, 'sub': card['sub'],
-                                    't1': card['height'] + 20, 't2': card['height'] + 54}
+                                    't1': card['height'] + 20, 't2': card['height'] + 54,
+                                    'no_art': no_art_card(card)}
+
+
+def no_art_card(card):
+    """A poster with no art at all: Silo's card colour with the title on it,
+    in place of the grey a missing picture leaves."""
+    if card['name'] != 'Poster':
+        return ''
+    return '''
+                        <control type="group">
+                            <visible>$EXP[SiloNoPosterArt]</visible>
+                            <control type="image">
+                                <left>6</left><top>6</top>
+                                <width>%(w)d</width><height>%(h)d</height>
+                                <texture diffuse="%(mask)s" colordiffuse="FF262A31">colors/white.png</texture>
+                            </control>
+                            <control type="textbox">
+                                <left>22</left><top>22</top>
+                                <width>%(tw)d</width><height>%(th)d</height>
+                                <align>center</align><aligny>center</aligny>
+                                <font>silo_card_title</font>
+                                <textcolor>%(dim)s</textcolor>
+                                <label>$VAR[SiloCardTitle]</label>
+                            </control>
+                        </control>''' % {'w': card['width'], 'h': card['height'], 'mask': card['mask'],
+                                         'tw': card['width'] - 32, 'th': card['height'] - 32, 'dim': TEXT_DIM}
 
 
 def shown(target):
@@ -1192,12 +1218,17 @@ CARDS = '''
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code)]</value>
         <value>$INFO[ListItem.Year]</value>
     </variable>
+    <!-- A title with no poster (often one Silo can request) shows its
+         backdrop, cropped; with no art at all, its name (SiloNoPosterArt). -->
     <variable name="SiloPosterArt">
-        <value condition="!String.IsEmpty(ListItem.Property(home.type))">$INFO[ListItem.Property(home.art.poster)]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(home.type)) + !String.IsEmpty(ListItem.Property(home.art.poster))">$INFO[ListItem.Property(home.art.poster)]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(home.type))">$INFO[ListItem.Property(home.art.fanart)]</value>
         <value condition="!String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
         <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
-        <value>$INFO[ListItem.Art(thumb)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+        <value>$INFO[ListItem.Art(fanart)]</value>
     </variable>
+    <expression name="SiloNoPosterArt">[!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.art.poster)) + String.IsEmpty(ListItem.Property(home.art.fanart))] | [String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Art(poster)) + String.IsEmpty(ListItem.Art(tvshow.poster)) + String.IsEmpty(ListItem.Art(thumb)) + String.IsEmpty(ListItem.Art(fanart))]</expression>
     <variable name="SiloLandscapeArt">
         <value condition="!String.IsEmpty(ListItem.Property(home.type))">$INFO[ListItem.Property(home.art.landscape)]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>

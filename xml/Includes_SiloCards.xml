@@ -50,6 +50,22 @@
                             <width>176</width><height>264</height>
                             <texture diffuse="silo/card_poster_mask.png">silo/card_scrim.png</texture>
                         </control>
+                        <control type="group">
+                            <visible>$EXP[SiloNoPosterArt]</visible>
+                            <control type="image">
+                                <left>6</left><top>6</top>
+                                <width>176</width><height>264</height>
+                                <texture diffuse="silo/card_poster_mask.png" colordiffuse="FF262A31">colors/white.png</texture>
+                            </control>
+                            <control type="textbox">
+                                <left>22</left><top>22</top>
+                                <width>144</width><height>232</height>
+                                <align>center</align><aligny>center</aligny>
+                                <font>silo_card_title</font>
+                                <textcolor>BFEDEDED</textcolor>
+                                <label>$VAR[SiloCardTitle]</label>
+                            </control>
+                        </control>
                         <control type="progress">
                             <left>18</left><top>264</top>
                             <width>152</width><height>6</height>
@@ -103,6 +119,22 @@
                             <left>6</left><top>6</top>
                             <width>176</width><height>264</height>
                             <texture diffuse="silo/card_poster_mask.png">silo/card_scrim.png</texture>
+                        </control>
+                        <control type="group">
+                            <visible>$EXP[SiloNoPosterArt]</visible>
+                            <control type="image">
+                                <left>6</left><top>6</top>
+                                <width>176</width><height>264</height>
+                                <texture diffuse="silo/card_poster_mask.png" colordiffuse="FF262A31">colors/white.png</texture>
+                            </control>
+                            <control type="textbox">
+                                <left>22</left><top>22</top>
+                                <width>144</width><height>232</height>
+                                <align>center</align><aligny>center</aligny>
+                                <font>silo_card_title</font>
+                                <textcolor>BFEDEDED</textcolor>
+                                <label>$VAR[SiloCardTitle]</label>
+                            </control>
                         </control>
                         <control type="progress">
                             <left>18</left><top>264</top>
