@@ -21,15 +21,17 @@ GRID = 'Container.Content(movies) | Container.Content(tvshows) | Container.Conte
 EPISODES = 'Container.Content(episodes)'
 VIEWS_TOP = 200
 
-# Poster grid: Silo's 2:3 cards, seven to a row.
-POSTER_W, POSTER_H, POSTER_GAP = 200, 300, 36
+# Poster grid: Silo's 2:3 cards, six to a row, the size of Browse's
+# (tools/build_library.py) so a collection or genre reads the same.
+POSTER_COLS = 6
+POSTER_GAP = 24
+POSTER_W = (1920 - 2 * SAFE_X - 96 - 24) // POSTER_COLS - POSTER_GAP
+POSTER_H = POSTER_W * 3 // 2
 POSTER_ITEM_H = POSTER_H + 12 + 76 + 24
 # A-Z bar right of the poster grid, for films and shows: a letter asks
 # SiloKodiConnect (NotifyAll) to jump the grid to the first title from it.
 JUMP_ID = 60
 LETTERS = ['#'] + [chr(c) for c in range(ord('A'), ord('Z') + 1)]
-JUMP_ITEM_H = 32
-JUMP_W = 68
 JUMP_BAR = '[Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(Container.NumItems,20)'
 # Episode list: a 16:9 still, then the episode's details beside it.
 STILL_W, STILL_H = 360, 202
@@ -241,57 +243,30 @@ def episode(focused, view_id):
                                      'tick': STILL_W - 32, 'ring': ring, 'x': STILL_W + 52, 'title_color': title_color}
 
 
-def jump_bar(left):
-    """The A-Z bar: the selected title's letter lit, the focused one a pill."""
+def jump_bar():
+    """The A-Z column (Browse's, tools/build_library.py): the selected title's
+    letter lit; a letter jumps the grid to it (SiloKodiConnect's jump.py)."""
+    from build_library import AZ_W, letter_layouts
     current = 'String.IsEqual(ListItem.Label,Container(51).ListItem.SortLetter)'
     items = ''.join('''
                 <item>
                     <label>%s</label>
                     <onclick>NotifyAll(silokodi,jump.51.%s)</onclick>
                 </item>''' % (letter, letter) for letter in LETTERS)
-    letter = '''
-                    <control type="label">
-                        <width>%(w)d</width><height>%(h)d</height>
-                        <align>center</align><aligny>center</aligny>
-                        <font>silo_detail</font>
-                        <textcolor>%(color)s</textcolor>
-                        <label>$INFO[ListItem.Label]</label>%(visible)s
-                    </control>'''
-    shown = '\n                        <visible>%s</visible>'
-    layout = (letter % {'w': JUMP_W, 'h': JUMP_ITEM_H, 'color': TEXT, 'visible': shown % current}
-              + letter % {'w': JUMP_W, 'h': JUMP_ITEM_H, 'color': '66EDEDED', 'visible': shown % ('!' + current)})
-    # Kodi draws the selected letter's focused layout whether or not the bar
-    # has focus: the pill only while it has.
-    has_focus = 'Control.HasFocus(%d)' % JUMP_ID
-    focused = '''
-                    <control type="image">
-                        <left>%(x)d</left><top>0</top>
-                        <width>%(h)d</width><height>%(h)d</height>
-                        <texture border="15" colordiffuse="%(text)s">silo/pill.png</texture>
-                        <visible>%(focus)s</visible>
-                    </control>''' % {'x': (JUMP_W - JUMP_ITEM_H) // 2, 'h': JUMP_ITEM_H, 'text': TEXT, 'focus': has_focus} \
-        + letter % {'w': JUMP_W, 'h': JUMP_ITEM_H, 'color': 'FF000000', 'visible': shown % has_focus} \
-        + letter % {'w': JUMP_W, 'h': JUMP_ITEM_H, 'color': TEXT,
-                    'visible': shown % ('!%s + %s' % (has_focus, current))} \
-        + letter % {'w': JUMP_W, 'h': JUMP_ITEM_H, 'color': '66EDEDED',
-                    'visible': shown % ('!%s + !%s' % (has_focus, current))}
     return '''
         <!-- A-Z: jump the poster grid to a letter (SiloKodiConnect's jump.py). -->
         <control type="list" id="%(id)d">
             <left>%(x)d</left><top>%(top)d</top>
             <width>%(w)d</width><height>%(h)d</height>
             <orientation>vertical</orientation>
-            <onleft>51</onleft>
-            <visible>$EXP[SiloBrowseGrid] + %(bar)s</visible>
-            <itemlayout width="%(w)d" height="%(ih)d">%(layout)s
-            </itemlayout>
-            <focusedlayout width="%(w)d" height="%(ih)d">%(focused)s
-            </focusedlayout>
+            <onleft>51</onleft><onright>noop</onright>
+            <scrolltime tween="cubic" easing="out">200</scrolltime>
+            <visible>$EXP[SiloBrowseGrid] + %(bar)s</visible>%(layouts)s
             <content>%(items)s
             </content>
-        </control>''' % {'id': JUMP_ID, 'x': left, 'top': VIEWS_TOP + 8, 'w': JUMP_W,
-                         'h': JUMP_ITEM_H * len(LETTERS), 'ih': JUMP_ITEM_H, 'bar': JUMP_BAR,
-                         'layout': layout, 'focused': focused, 'items': items}
+        </control>''' % {'id': JUMP_ID, 'x': 1920 - SAFE_X - AZ_W, 'top': VIEWS_TOP, 'w': AZ_W,
+                         'h': 1080 - VIEWS_TOP, 'bar': JUMP_BAR,
+                         'layouts': letter_layouts(JUMP_ID, current), 'items': items}
 
 
 ROW_W, ROW_H, CARD_H = 1110, 104, 92
@@ -501,7 +476,7 @@ def build():
        'row': pill_row(False, 50), 'row_h': ROW_H, 'row_focused': pill_row(True, 50),
        'poster': poster(False, 51), 'poster_focused': poster(True, 51),
        'episode': episode(False, 52), 'episode_focused': episode(True, 52),
-       'bar': JUMP_BAR, 'jump': JUMP_ID, 'jump_bar': jump_bar(SAFE_X - 6 + 7 * poster_item_w + 30),
+       'bar': JUMP_BAR, 'jump': JUMP_ID, 'jump_bar': jump_bar(),
        'cw': CHIP_W + CHIP_GAP, 'ch': CHIP_H + CHIP_GAP, 'chip': chip(False, 54), 'chip_focused': chip(True, 54),
        'fw': FAN_W + FAN_GAP, 'fh': FAN_H + FAN_GAP, 'fan': fan_card(False, 53), 'fan_focused': fan_card(True, 53)}
 

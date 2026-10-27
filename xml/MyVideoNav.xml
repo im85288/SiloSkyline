@@ -347,91 +347,91 @@
             <viewtype label="Posters">poster</viewtype>
             <onright condition="[Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(Container.NumItems,20)">60</onright>
             <visible>$EXP[SiloBrowseGrid]</visible>
-            <itemlayout width="236" height="412">
+            <itemlayout width="270" height="481">
                     <control type="image">
                         <left>6</left><top>6</top>
-                        <width>200</width><height>300</height>
+                        <width>246</width><height>369</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top>
-                        <width>200</width><height>300</height>
+                        <width>246</width><height>369</height>
                         <texture diffuse="silo/card_poster_mask.png">silo/card_scrim.png</texture>
                         <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                     </control>
                     <control type="progress">
-                        <left>18</left><top>300</top>
-                        <width>176</width><height>6</height>
+                        <left>18</left><top>369</top>
+                        <width>222</width><height>6</height>
                         <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
                         <info>ListItem.PercentPlayed</info>
                         <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                     </control>
                     <control type="image">
-                        <left>168</left><top>16</top>
+                        <left>214</left><top>16</top>
                         <width>32</width><height>32</height>
                         <texture colordiffuse="FFEDEDED">OverlayWatched.png</texture>
                         <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
                     </control>
                     <control type="label">
-                        <left>6</left><top>320</top>
-                        <width>200</width><height>34</height>
+                        <left>6</left><top>389</top>
+                        <width>246</width><height>34</height>
                         <font>silo_card_title</font>
                         <textcolor>C7EDEDED</textcolor>
                         <label>$VAR[SiloBrowseLabel]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>354</top>
-                        <width>200</width><height>32</height>
+                        <left>6</left><top>423</top>
+                        <width>246</width><height>32</height>
                         <font>silo_card_sub</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$VAR[SiloBrowseSub]</label>
                     </control>
             </itemlayout>
-            <focusedlayout width="236" height="412">
+            <focusedlayout width="270" height="481">
                     <control type="image">
                         <left>6</left><top>6</top>
-                        <width>200</width><height>300</height>
+                        <width>246</width><height>369</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top>
-                        <width>200</width><height>300</height>
+                        <width>246</width><height>369</height>
                         <texture diffuse="silo/card_poster_mask.png">silo/card_scrim.png</texture>
                         <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                     </control>
                     <control type="progress">
-                        <left>18</left><top>300</top>
-                        <width>176</width><height>6</height>
+                        <left>18</left><top>369</top>
+                        <width>222</width><height>6</height>
                         <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
                         <info>ListItem.PercentPlayed</info>
                         <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                     </control>
                     <control type="image">
-                        <left>168</left><top>16</top>
+                        <left>214</left><top>16</top>
                         <width>32</width><height>32</height>
                         <texture colordiffuse="FFEDEDED">OverlayWatched.png</texture>
                         <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
                     </control>
                     <control type="image">
-                        <width>212</width><height>312</height>
+                        <width>258</width><height>381</height>
                         <texture colordiffuse="SkylineFocus">silo/card_poster_focus.png</texture>
                         <visible>Control.HasFocus(51)</visible>
                     </control>
                     <control type="label">
-                        <left>6</left><top>320</top>
-                        <width>200</width><height>34</height>
+                        <left>6</left><top>389</top>
+                        <width>246</width><height>34</height>
                         <font>silo_card_title</font>
                         <textcolor>C7EDEDED</textcolor>
                         <label>$VAR[SiloBrowseLabel]</label>
                         <visible>!Control.HasFocus(51)</visible>
                     </control>
                     <control type="label">
-                        <left>6</left><top>320</top>
-                        <width>200</width><height>34</height>
+                        <left>6</left><top>389</top>
+                        <width>246</width><height>34</height>
                         <font>silo_card_title</font>
                         <textcolor>FFEDEDED</textcolor>
                         <label>$VAR[SiloBrowseLabel]</label>
@@ -440,8 +440,8 @@
                         <visible>Control.HasFocus(51)</visible>
                     </control>
                     <control type="label">
-                        <left>6</left><top>354</top>
-                        <width>200</width><height>32</height>
+                        <left>6</left><top>423</top>
+                        <width>246</width><height>32</height>
                         <font>silo_card_sub</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$VAR[SiloBrowseSub]</label>
@@ -451,60 +451,71 @@
 
         <!-- A-Z: jump the poster grid to a letter (SiloKodiConnect's jump.py). -->
         <control type="list" id="60">
-            <left>1764</left><top>208</top>
-            <width>68</width><height>864</height>
+            <left>1736</left><top>200</top>
+            <width>96</width><height>880</height>
             <orientation>vertical</orientation>
-            <onleft>51</onleft>
+            <onleft>51</onleft><onright>noop</onright>
+            <scrolltime tween="cubic" easing="out">200</scrolltime>
             <visible>$EXP[SiloBrowseGrid] + [Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(Container.NumItems,20)</visible>
-            <itemlayout width="68" height="32">
-                    <control type="label">
-                        <width>68</width><height>32</height>
-                        <align>center</align><aligny>center</aligny>
-                        <font>silo_detail</font>
-                        <textcolor>FFEDEDED</textcolor>
-                        <label>$INFO[ListItem.Label]</label>
-                        <visible>String.IsEqual(ListItem.Label,Container(51).ListItem.SortLetter)</visible>
-                    </control>
-                    <control type="label">
-                        <width>68</width><height>32</height>
-                        <align>center</align><aligny>center</aligny>
-                        <font>silo_detail</font>
-                        <textcolor>66EDEDED</textcolor>
-                        <label>$INFO[ListItem.Label]</label>
-                        <visible>!String.IsEqual(ListItem.Label,Container(51).ListItem.SortLetter)</visible>
-                    </control>
+            <itemlayout width="96" height="30" condition="!Control.HasFocus(60)">
+                <control type="image">
+                    <left>43</left><top>10</top><width>10</width><height>10</height>
+                    <texture colordiffuse="FFEDEDED">silo/avatar_mask.png</texture>
+                    <visible>String.IsEqual(ListItem.Label,Container(51).ListItem.SortLetter)</visible>
+                </control>
+                <control type="image">
+                    <left>43</left><top>10</top><width>10</width><height>10</height>
+                    <texture colordiffuse="59EDEDED">silo/avatar_mask.png</texture>
+                    <visible>!String.IsEqual(ListItem.Label,Container(51).ListItem.SortLetter)</visible>
+                </control>
             </itemlayout>
-            <focusedlayout width="68" height="32">
-                    <control type="image">
-                        <left>18</left><top>0</top>
-                        <width>32</width><height>32</height>
-                        <texture border="15" colordiffuse="SkylineFocus">silo/pill.png</texture>
-                        <visible>Control.HasFocus(60)</visible>
-                    </control>
-                    <control type="label">
-                        <width>68</width><height>32</height>
-                        <align>center</align><aligny>center</aligny>
-                        <font>silo_detail</font>
-                        <textcolor>SkylineFocusText</textcolor>
-                        <label>$INFO[ListItem.Label]</label>
-                        <visible>Control.HasFocus(60)</visible>
-                    </control>
-                    <control type="label">
-                        <width>68</width><height>32</height>
-                        <align>center</align><aligny>center</aligny>
-                        <font>silo_detail</font>
-                        <textcolor>FFEDEDED</textcolor>
-                        <label>$INFO[ListItem.Label]</label>
-                        <visible>!Control.HasFocus(60) + String.IsEqual(ListItem.Label,Container(51).ListItem.SortLetter)</visible>
-                    </control>
-                    <control type="label">
-                        <width>68</width><height>32</height>
-                        <align>center</align><aligny>center</aligny>
-                        <font>silo_detail</font>
-                        <textcolor>66EDEDED</textcolor>
-                        <label>$INFO[ListItem.Label]</label>
-                        <visible>!Control.HasFocus(60) + !String.IsEqual(ListItem.Label,Container(51).ListItem.SortLetter)</visible>
-                    </control>
+            <focusedlayout width="96" height="30" condition="!Control.HasFocus(60)">
+                <control type="image">
+                    <left>43</left><top>10</top><width>10</width><height>10</height>
+                    <texture colordiffuse="FFEDEDED">silo/avatar_mask.png</texture>
+                    <visible>String.IsEqual(ListItem.Label,Container(51).ListItem.SortLetter)</visible>
+                </control>
+                <control type="image">
+                    <left>43</left><top>10</top><width>10</width><height>10</height>
+                    <texture colordiffuse="59EDEDED">silo/avatar_mask.png</texture>
+                    <visible>!String.IsEqual(ListItem.Label,Container(51).ListItem.SortLetter)</visible>
+                </control>
+            </focusedlayout>
+            <itemlayout width="96" height="72" condition="Control.HasFocus(60)">
+                <control type="image">
+                    <left>12</left><top>6</top><width>72</width><height>60</height>
+                    <texture border="20" colordiffuse="33FFFFFF">silo/card_landscape_mask.png</texture>
+                    <visible>String.IsEqual(ListItem.Label,Container(51).ListItem.SortLetter)</visible>
+                </control>
+                <control type="label">
+                    <width>96</width><height>72</height>
+                    <align>center</align><aligny>center</aligny>
+                    <font>silo_tab</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                    <visible>String.IsEqual(ListItem.Label,Container(51).ListItem.SortLetter)</visible>
+                </control>
+                <control type="label">
+                    <width>96</width><height>72</height>
+                    <align>center</align><aligny>center</aligny>
+                    <font>silo_tab</font>
+                    <textcolor>BFEDEDED</textcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                    <visible>!String.IsEqual(ListItem.Label,Container(51).ListItem.SortLetter)</visible>
+                </control>
+            </itemlayout>
+            <focusedlayout width="96" height="72" condition="Control.HasFocus(60)">
+                <control type="image">
+                    <left>12</left><top>6</top><width>72</width><height>60</height>
+                    <texture border="20" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
+                </control>
+                <control type="label">
+                    <width>96</width><height>72</height>
+                    <align>center</align><aligny>center</aligny>
+                    <font>silo_tab</font>
+                    <textcolor>SkylineFocusText</textcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                </control>
             </focusedlayout>
             <content>
                 <item>

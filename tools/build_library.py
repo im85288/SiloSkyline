@@ -122,13 +122,16 @@ def card(focused, control_id=GRID_ID):
                                  'yy': POSTER_H + 58, 'w': POSTER_W, 'dim': TEXT_DIM}
 
 
-def letter_layouts():
-    """The A-Z column: dots at rest, letters while it has focus (Kodi picks
-    the item layout by condition); the chosen letter is lit either way."""
-    lit = 'Control.HasFocus(%d)' % AZ_ID
-    # A condition compares with another info label as it is (a $INFO in one is an error).
-    chosen = '[String.IsEqual(ListItem.Label,%s) | [String.IsEqual(ListItem.Label,All) + String.IsEmpty(%s)]]' % (
-        LETTER, LETTER)
+def letter_layouts(list_id=AZ_ID, chosen=None):
+    """Silo's A-Z column, shared by every screen that has one: dots at rest,
+    letters while it has focus (Kodi picks the item layout by condition);
+    the chosen letter is lit either way. chosen: the condition for an item
+    being the current letter (Browse's: the letter it filters to)."""
+    lit = 'Control.HasFocus(%d)' % list_id
+    if chosen is None:
+        # A condition compares with another info label as it is (a $INFO in one is an error).
+        chosen = '[String.IsEqual(ListItem.Label,%s) | [String.IsEqual(ListItem.Label,All) + String.IsEmpty(%s)]]' % (
+            LETTER, LETTER)
     dot = '''
                 <control type="image">
                     <left>%(x)d</left><top>%(y)d</top><width>10</width><height>10</height>

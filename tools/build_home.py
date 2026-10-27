@@ -393,6 +393,16 @@ def moves(page_index, slot):
     return out
 
 
+ROW_CLICKS = '''
+                    <!-- A title Silo can request opens with Silo's full details. -->
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
+                    <!-- A published card opens its info page through SiloKodiConnect:
+                         a title Silo can request, its request page. -->
+                    <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>'''
+
+
 def row(page, page_index, slot, landscape):
     card = LANDSCAPE if landscape else POSTER
     key = 'silo.%s.%d' % (page, slot)
@@ -475,20 +485,17 @@ def row(page, page_index, slot, landscape):
                     <orientation>horizontal</orientation>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
-                    <!-- A title Silo can request opens with Silo's full details. -->
-                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
-                    <!-- A published card opens its info page through SiloKodiConnect:
-                         a title Silo can request, its request page. -->
-                    <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+%(clicks)s
                     <onfocus>SetProperty(silo.row,%(id)d,home)</onfocus>%(moves)s
                     %(content)s%(layouts)s
                 </control>
             </control>''' % {
         'group_h': BAND_H, 'rules': rules, 'x': SAFE_X, 'text': TEXT, 'title': prop(key + '.title'), 'type': prop(key + '.type'), 'icon_x': SAFE_X + 42,
         'cards_top': CARDS_TOP, 'id': list_id(page_index, slot, landscape), 'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'item_h': item_h,
-        'moves': moves(page_index, slot), 'path': path, 'content': content, 'layouts': item_layouts}
+        'moves': moves(page_index, slot), 'path': path, 'content': content, 'layouts': item_layouts,
+        # A custom item's widgets are any Kodi list: OK does what Kodi does
+        # (plays an item, opens a folder). Silo's rows open details.
+        'clicks': '' if page == 'custom' else ROW_CLICKS}
 
 
 # Silo dims the whole bar to 70% while focus is down in the rows.
