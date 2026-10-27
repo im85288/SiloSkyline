@@ -12,8 +12,9 @@ Layout (Silo TV's 960-unit grid doubled to 1920x1080):
   SiloKodiConnect publishes as Home window properties (silo.*).
 """
 import os
+import re
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT =os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Pages with a tab in the bar, then 'custom': the rows of a custom menu item
 # (Skin Shortcuts) the user opened.
 TABBED = ('home', 'movies', 'series', 'requests')
@@ -333,6 +334,13 @@ def moves(page_index, slot):
     above = ' + '.join('!' + shown(k) for k in up)
     target = '%d' % (9002 + page_index) if PAGES[page_index] in TABBED else '$INFO[%s]' % prop('silo.custom.button')
     out += '\n                    <onup%s>SetFocus(%s)</onup>' % (' condition="%s"' % above if above else '', target)
+    # Back goes to the page's tab, as in Silo, with its dropdown closed (Down
+    # comes back to the rows).
+    page = PAGES[page_index]
+    menu = 9002 + page_index + 200 if page in SECTIONS else SUBMENU if page == 'custom' else None
+    if menu:
+        out += '\n                    <onback>SetProperty(silo.drop.closed,%d,home)</onback>' % menu
+    out += '\n                    <onback>SetFocus(%s)</onback>' % target
     return out
 
 
@@ -438,12 +446,18 @@ def bar_moves(control_id, down=None, menu=None):
     button's own Down (a tab's sub-menu), in place of the rows."""
     # Leaving a button opens its dropdown again next time (Back closed it).
     clear = 'ClearProperty(silo.drop.closed,home)'
-    out = ''.join('\n                    <%s>%s</%s>' % (a, clear, a) for a in ('onleft', 'onright', 'ondown'))
+    out = ''.join('\n                    <%s>%s</%s>' % (a, clear, a) for a in ('onleft', 'onright'))
     if menu:
         # Back on the button closes its open dropdown, as in Silo; when it is
-        # closed, Back does what it always did.
+        # closed, Back does what it always did, and Down goes to the rows.
         out += close_on_back(menu)
-    out += ('\n                    <ondown>%s</ondown>' % down) if down else bar_down('                    ')
+        closed = 'String.IsEqual(%s,%d)' % (prop('silo.drop.closed'), menu)
+        out += only_when(bar_down('                    '), closed)
+        out += '\n                    <ondown condition="!%s">%s</ondown>' % (closed, down)
+    else:
+        out += ('\n                    <ondown>%s</ondown>' % down) if down else bar_down('                    ')
+    # Last, so the conditions before it still see a dropdown Back closed.
+    out += '\n                    <ondown>%s</ondown>' % clear
     index = BAR_ORDER.index(control_id)
     for action, neighbours in (('onright', BAR_ORDER[index + 1:]), ('onleft', BAR_ORDER[:index][::-1])):
         skipped = []
@@ -452,6 +466,14 @@ def bar_moves(control_id, down=None, menu=None):
             out += '\n                    <%s condition="%s">SetFocus(%d)</%s>' % (action, condition, target, action)
             skipped.append(target)
     return out
+
+
+def only_when(actions, condition):
+    """Actions (<ondown> and the like) that also need condition."""
+    return re.sub(r'<(on\w+)( condition="([^"]*)")?>',
+                  lambda m: '<%s condition="%s%s">' % (m.group(1), condition,
+                                                       ' + [%s]' % m.group(3) if m.group(3) else ''),
+                  actions)
 
 
 def close_on_back(menu, condition=None):
@@ -850,9 +872,9 @@ def custom_items():
                     <onclick condition="%(to_submenu)s">SetProperty(silo.submenu.from,%(id)d,home)</onclick>
                     <onclick condition="%(to_submenu)s">SetFocus(%(shortcuts)d,%(slot)d,absolute)</onclick>
                     <onclick condition="%(to_submenu)s">SetFocus(%(submenu)d,0,absolute)</onclick>
-                    <ondown condition="%(has_submenu)s">SetProperty(silo.submenu.from,%(id)d,home)</ondown>
-                    <ondown condition="%(has_submenu)s">SetFocus(%(shortcuts)d,%(slot)d,absolute)</ondown>
-                    <ondown condition="%(has_submenu)s">SetFocus(%(submenu)d,0,absolute)</ondown>
+                    <ondown condition="%(has_submenu)s + !%(closed)s">SetProperty(silo.submenu.from,%(id)d,home)</ondown>
+                    <ondown condition="%(has_submenu)s + !%(closed)s">SetFocus(%(shortcuts)d,%(slot)d,absolute)</ondown>
+                    <ondown condition="%(has_submenu)s + !%(closed)s">SetFocus(%(submenu)d,0,absolute)</ondown>
                     <!-- Leaving it opens its submenu again next time (Back closed it). -->
                     <onunfocus>ClearProperty(silo.drop.closed,home)</onunfocus>%(close)s
                 </control>''' % {'label': label, 'close': close_on_back(SUBMENU, 'String.IsEqual(%s,True)' % shortcut(slot, 'Property(hasSubmenu)')), 'id': control_id, 'dim': TAB_DIM, 'text': TEXT, 'has_widgets': has_widgets,
@@ -862,7 +884,11 @@ def custom_items():
                              'nofocus': '$VAR[SiloCustomTab%d]' % control_id,
                              # Left and right come from the grouplist: Kodi points its direct
                              # children at their neighbours (passing hidden ones), over ours.
-                             'moves': bar_down('                    ').replace('<ondown condition="', '<ondown condition="!%s + ' % 'String.IsEqual(%s,True)' % shortcut(slot, 'Property(hasSubmenu)'))}
+                             # Down goes to the rows when it has no submenu, or Back closed it.
+                             'closed': 'String.IsEqual(%s,%d)' % (prop('silo.drop.closed'), SUBMENU),
+                             'moves': only_when(bar_down('                    '),
+                                                '[!String.IsEqual(%s,True) | String.IsEqual(%s,%d)]'
+                                                % (shortcut(slot, 'Property(hasSubmenu)'), prop('silo.drop.closed'), SUBMENU))}
     return '''
         <!-- Skin Shortcuts' main menu, built into script-skinshortcuts-includes.xml. -->
         <control type="list" id="%d">

@@ -65,6 +65,11 @@
 			</control>
 		</definition>
 	</include>
+	<!-- The event log's count, "1 event" or "12 events". -->
+	<variable name="SiloEventCount">
+		<value condition="Integer.IsEqual(Container(50).NumItems,1)">1 event</value>
+		<value>$INFO[Container(50).NumItems,, events]</value>
+	</variable>
 	<!-- Silo's page colour behind a screen. -->
 	<include name="SiloPage">
 		<control type="image">

@@ -130,6 +130,24 @@ def pill(size=60):
     write_png('pill.png', size, size, lambda x, y: rounded_rect_coverage(x, y, size, size, size / 2.0))
 
 
+def switches(width=112, height=56):
+    """An on/off switch drawn at twice its size on screen (56x28): on is a
+    filled track with a cut-out knob on the right, off an outlined track with
+    a knob on the left."""
+    knob = height / 2.0 - 7
+    def on(x, y):
+        track = rounded_rect_coverage(x, y, width, height, height / 2.0)
+        hole = rounded_rect_coverage(x - (width - height / 2.0 - knob), y - (height / 2.0 - knob), 2 * knob, 2 * knob, knob)
+        return max(0.0, track - hole)
+    def off(x, y):
+        ring = rounded_rect_coverage(x, y, width, height, height / 2.0) \
+            - rounded_rect_coverage(x, y, width, height, height / 2.0, inset=4)
+        dot = rounded_rect_coverage(x - (height / 2.0 - knob), y - (height / 2.0 - knob), 2 * knob, 2 * knob, knob)
+        return max(ring, dot)
+    write_png('switch_on.png', width, height, on)
+    write_png('switch_off.png', width, height, off)
+
+
 def scrim(height=256):
     """Vertical black scrim, opaque at the bottom, for text over artwork."""
     write_png('scrim_bottom.png', 4, height, lambda x, y: smoothstep(y / float(height)) * 0.9, rgb=(0, 0, 0))
@@ -182,6 +200,7 @@ if __name__ == '__main__':
     # Silo's season pills: a 2 px outline at the pills' own size, border="28".
     focus_ring('season_ring.png', 56, 56, 28, 2)
     pill()
+    switches()
     scrim()
     # Cast photos: round, with a ring 6 px outside the photo.
     # Cast photos: a round mask, and a ring 6 px outside the photo.
