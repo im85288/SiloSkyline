@@ -571,11 +571,12 @@ def bar_positions():
 DROP_W, DROP_ROW = 460, 64  # Silo's dropdown under a tab
 
 
-def dropdown(x, list_id, back, heading, content, shown, rows, fit=False, hint='OK opens · Back closes'):
-    """Silo's dropdown under a tab: a heading, the entries (icon and label,
-    the focused one a white pill) and a hint. It shows while the tab or the
-    dropdown has focus (Kodi can't focus a hidden control, so it's there
-    whenever its tab is); Up from the first entry and Back return to the tab."""
+def dropdown(x, list_id, back, heading, content, shown, rows, fit=False):
+    """Silo's dropdown under a tab: a heading and the entries (icon and label,
+    the focused one a white pill), with no hint, as Silo's Apple TV app. It
+    shows while the tab or the dropdown has focus (Kodi can't focus a hidden
+    control, so it's there whenever its tab is); Up from the first entry and
+    Back return to the tab, Down past the last closes it and goes to the rows."""
     def entry(focused):
         lit = 'Control.HasFocus(%d)' % list_id
         def body(colour, visible):
@@ -600,7 +601,7 @@ def dropdown(x, list_id, back, heading, content, shown, rows, fit=False, hint='O
                         <left>4</left><top>4</top><width>%d</width><height>%d</height>
                         <texture border="28" colordiffuse="%s">silo/pill.png</texture>%s
                     </control>''' % (DROP_W - 40, DROP_ROW - 8, TEXT, on) + body('FF000000', on) + body(TEXT, off))
-    height = 64 + rows * DROP_ROW + 96
+    height = 58 + rows * DROP_ROW + 16
     def frame(n, visible):
         return '''
             <control type="group">%(v)s
@@ -608,19 +609,8 @@ def dropdown(x, list_id, back, heading, content, shown, rows, fit=False, hint='O
                     <width>%(w)d</width><height>%(h)d</height>
                     <texture border="24" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
                 </control>
-                <control type="image">
-                    <left>28</left><top>%(sy)d</top><width>%(sw)d</width><height>2</height>
-                    <texture colordiffuse="1AFFFFFF">colors/white.png</texture>
-                </control>
-                <control type="textbox">
-                    <left>28</left><top>%(hy)d</top><width>%(sw)d</width><height>64</height>
-                    <font>silo_detail</font>
-                    <textcolor>80EDEDED</textcolor>
-                    <label>%(hint)s</label>
-                </control>
-            </control>''' % {'hint': hint, 'v': '\n                <visible>%s</visible>' % visible if visible else '', 'w': DROP_W,
-                             'h': 64 + n * DROP_ROW + 96, 'sy': 58 + n * DROP_ROW + 10, 'sw': DROP_W - 56,
-                             'hy': 58 + n * DROP_ROW + 22}
+            </control>''' % {'v': '\n                <visible>%s</visible>' % visible if visible else '', 'w': DROP_W,
+                             'h': 58 + n * DROP_ROW + 16}
     # A submenu's length varies (fit): one frame per length, the right one shown.
     frames = ''.join(frame(n, 'Integer.IsEqual(Container(%d).NumItems,%d)' % (list_id, n)) for n in range(1, rows + 1)) \
         if fit else frame(rows, '')
@@ -647,7 +637,9 @@ def dropdown(x, list_id, back, heading, content, shown, rows, fit=False, hint='O
                 <onup>%(back)s</onup>
                 <onback>SetProperty(silo.drop.closed,%(id)d,home)</onback>
                 <onback>%(back)s</onback>
-                <onleft>noop</onleft><onright>noop</onright><ondown>noop</ondown>
+                <onleft>noop</onleft><onright>noop</onright>
+                <!-- Down past the last entry: closed, and on to the page's rows. -->
+                <ondown>SetProperty(silo.drop.closed,%(id)d,home)</ondown>%(to_rows)s
                 <itemlayout width="%(liw)d" height="%(row)d">%(normal)s
                 </itemlayout>
                 <focusedlayout width="%(liw)d" height="%(row)d">%(focused)s
@@ -658,7 +650,7 @@ def dropdown(x, list_id, back, heading, content, shown, rows, fit=False, hint='O
         </control>''' % {'x': x, 'top': BAR_TOP + 76, 'shown': shown, 'w': DROP_W, 'h': height, 'lw': DROP_W - 56,
                          'closed': prop('silo.drop.closed'), 'heading': heading, 'id': list_id, 'liw': DROP_W - 32, 'lh': rows * DROP_ROW, 'back': back,
                          'row': DROP_ROW, 'normal': entry(False), 'focused': entry(True), 'content': content, 'frames': frames,
-                         'sy': 58 + rows * DROP_ROW + 10, 'sw': DROP_W - 56, 'hy': 58 + rows * DROP_ROW + 22}
+                         'to_rows': bar_down('                ')}
 
 
 def custom_submenu():
@@ -758,8 +750,7 @@ def avatar_menu():
                         <icon>silo/menu_%s.png</icon>%s
                     </item>''' % (label, icon, clicks)
     return dropdown(1920 - SAFE_X - DROP_W, AVATAR_MENU, 'SetFocus(9011)', '$INFO[%s]' % prop('silo.profile_name'),
-                    items, 'Control.HasFocus(9011) | Control.HasFocus(%d)' % AVATAR_MENU, len(entries),
-                    hint='Back closes')
+                    items, 'Control.HasFocus(9011) | Control.HasFocus(%d)' % AVATAR_MENU, len(entries))
 
 
 def tab(control_id, page, page_index):
