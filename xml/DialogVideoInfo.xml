@@ -9,6 +9,10 @@
     <onload>ClearProperty(silo.from_rail,home)</onload>
     <onload>SetProperty(silo.tint,$INFO[ListItem.Property(silo.tint)],movieinformation)</onload>
     <onload>SetProperty(silo.content_id,$INFO[ListItem.Property(silo.content_id)],movieinformation)</onload>
+    <!-- For Trailers & More, where ListItem is the video: the page's own title and art. -->
+    <onload>SetProperty(silo.page_type,$INFO[ListItem.DBType],movieinformation)</onload>
+    <onload>SetProperty(silo.page_dbid,$INFO[ListItem.DBID],movieinformation)</onload>
+    <onload>SetProperty(silo.page_fanart,$INFO[ListItem.Art(fanart)],movieinformation)</onload>
     <onload>SetProperty(silo.episode_id,$INFO[ListItem.DBID],movieinformation)</onload>
     <onload>SetProperty(silo.episode_number,$INFO[ListItem.Episode],movieinformation)</onload>
     <onload>SetProperty(silo.episode_season,$INFO[ListItem.Season],movieinformation)</onload>
@@ -851,6 +855,7 @@
                     <orientation>horizontal</orientation>
                     <onup>60</onup>
                     <ondown condition="Integer.IsGreater(Container(70).NumItems,0)">70</ondown>
+                    <ondown condition="!Integer.IsGreater(Container(70).NumItems,0) + Integer.IsGreater(Container(71).NumItems,0)">71</ondown>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <onclick>PlayMedia($ESCINFO[ListItem.FileNameAndPath])</onclick>
                     <onclick>Dialog.Close(movieinformation)</onclick>
@@ -1072,7 +1077,8 @@
                     <onup condition="[Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</onup>
                     <onup condition="![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">5000</onup>
                     <ondown condition="Integer.IsGreater(Container(70).NumItems,0)">70</ondown>
-                    <ondown condition="!Integer.IsGreater(Container(70).NumItems,0)">63</ondown>
+                    <ondown condition="!Integer.IsGreater(Container(70).NumItems,0) + Integer.IsGreater(Container(71).NumItems,0)">71</ondown>
+                    <ondown condition="!Integer.IsGreater(Container(70).NumItems,0) + !Integer.IsGreater(Container(71).NumItems,0)">63</ondown>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <onclick>PlayMedia($ESCINFO[ListItem.FileNameAndPath])</onclick>
                     <onclick>Dialog.Close(movieinformation)</onclick>
@@ -1227,7 +1233,8 @@
                     <!-- A cast member's page (SiloKodiConnect: Silo's person, their titles here). -->
                     <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=person&amp;id=$INFO[Window(movieinformation).Property(silo.content_id)]&amp;name=$INFO[ListItem.Label])</onclick>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
-                    <ondown condition="Integer.IsGreater(Container(63).NumItems,0)">63</ondown>
+                    <ondown condition="Integer.IsGreater(Container(71).NumItems,0)">71</ondown>
+                    <ondown condition="!Integer.IsGreater(Container(71).NumItems,0) + Integer.IsGreater(Container(63).NumItems,0)">63</ondown>
                     <itemlayout width="220" height="280">
                     <control type="image">
                         <left>20</left><top>6</top>
@@ -1283,6 +1290,103 @@
                     </focusedlayout>
                 </control>
             </control>
+            <!-- Trailers & More: the title's YouTube videos from Silo (SiloKodiConnect),
+                 as Silo's Apple TV app; one plays as the Trailer button's does. -->
+            <control type="group">
+                <height>404</height>
+                <visible>Integer.IsGreater(Container(71).NumItems,0) | Container(71).IsUpdating</visible>
+                <control type="label">
+                    <left>88</left>
+                    <width>1000</width><height>46</height>
+                    <font>silo_row</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>Trailers &amp; More</label>
+                </control>
+                <control type="list" id="71">
+                    <content target="videos">plugin://plugin.video.silokodiconnect/?mode=videos&amp;id=$INFO[Window(movieinformation).Property(silo.content_id)]</content>
+                    <left>82</left><top>56</top>
+                    <width>1838</width><height>348</height>
+                    <orientation>horizontal</orientation>
+                    <scrolltime tween="cubic" easing="out">280</scrolltime>
+                    <onup condition="Integer.IsGreater(Container(70).NumItems,0)">70</onup>
+                    <onup condition="!Integer.IsGreater(Container(70).NumItems,0) + [String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">61</onup>
+                    <onup condition="!Integer.IsGreater(Container(70).NumItems,0) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">5000</onup>
+                    <ondown condition="Integer.IsGreater(Container(63).NumItems,0)">63</ondown>
+                    <onclick condition="System.HasAddon(plugin.video.youtube)">SetProperty(silokodi.trailer_art,$INFO[Window(movieinformation).Property(silo.page_fanart)],home)</onclick>
+                    <onclick condition="System.HasAddon(plugin.video.youtube)">SetProperty(silokodi.trailer_return,$INFO[Window(movieinformation).Property(silo.page_type)]|$INFO[Window(movieinformation).Property(silo.page_dbid)],home)</onclick>
+                    <onclick condition="System.HasAddon(plugin.video.youtube)">SetProperty(silokodi.trailer_playing,1,home)</onclick>
+                    <onclick condition="System.HasAddon(plugin.video.youtube)">PlayMedia(plugin://plugin.video.youtube/play/?video_id=$INFO[ListItem.Property(silo.video.key)])</onclick>
+                    <onclick condition="System.HasAddon(plugin.video.youtube)">Dialog.Close(movieinformation)</onclick>
+                    <onclick condition="!System.HasAddon(plugin.video.youtube)">InstallAddon(plugin.video.youtube)</onclick>
+                    <itemlayout width="488" height="348">
+                    <control type="group">
+                        <control type="image">
+                            <left>6</left><top>6</top><width>448</width><height>252</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(thumb)]</texture>
+                        </control>
+                        <control type="image">
+                            <left>202</left><top>104</top><width>56</width><height>56</height>
+                            <texture colordiffuse="E6FFFFFF">silo/play_circle.png</texture>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>272</top><width>448</width><height>34</height>
+                            <align>center</align>
+                            <font>silo_card_title</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>306</top><width>448</width><height>30</height>
+                            <align>center</align>
+                            <font>silo_card_sub</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[ListItem.Label2]</label>
+                        </control>
+                    </control>
+                    </itemlayout>
+                    <focusedlayout width="488" height="348">
+                    <control type="group">
+                        <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus(71)">Conditional</animation>
+                        <control type="image">
+                            <left>6</left><top>6</top><width>448</width><height>252</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(thumb)]</texture>
+                        </control>
+                        <control type="image">
+                            <left>202</left><top>104</top><width>56</width><height>56</height>
+                            <texture colordiffuse="E6FFFFFF">silo/play_circle.png</texture>
+                        </control>
+                        <control type="group">
+                            <left>6</left><top>6</top>
+                            <visible>Control.HasFocus(71)</visible>
+                            <control type="image">
+                                <width>448</width><height>252</height>
+                                <texture diffuse="silo/card_landscape_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
+                            </control>
+                            <control type="image">
+                                <width>448</width><height>252</height>
+                                <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
+                            </control>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>272</top><width>448</width><height>34</height>
+                            <align>center</align>
+                            <font>silo_card_title</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>306</top><width>448</width><height>30</height>
+                            <align>center</align>
+                            <font>silo_card_sub</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[ListItem.Label2]</label>
+                        </control>
+                    </control>
+                    </focusedlayout>
+                </control>
+            </control>
             <!-- More Like This: same-genre titles from the library, best rated
                  first (SiloKodiConnect's silo.similar). -->
             <control type="group">
@@ -1301,9 +1405,10 @@
                     <width>1838</width><height>352</height>
                     <orientation>horizontal</orientation>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
-                    <onup condition="Integer.IsGreater(Container(70).NumItems,0)">70</onup>
-                    <onup condition="!Integer.IsGreater(Container(70).NumItems,0) + [String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">61</onup>
-                    <onup condition="!Integer.IsGreater(Container(70).NumItems,0) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">5000</onup>
+                    <onup condition="Integer.IsGreater(Container(71).NumItems,0)">71</onup>
+                    <onup condition="!Integer.IsGreater(Container(71).NumItems,0) + Integer.IsGreater(Container(70).NumItems,0)">70</onup>
+                    <onup condition="!Integer.IsGreater(Container(71).NumItems,0) + !Integer.IsGreater(Container(70).NumItems,0) + [String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">61</onup>
+                    <onup condition="!Integer.IsGreater(Container(71).NumItems,0) + !Integer.IsGreater(Container(70).NumItems,0) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">5000</onup>
                     <!-- Kodi can't open an info page from inside one: close this one and
                          have SiloKodiConnect open the chosen title's. That page opens with
                          the column below still scrolled to this rail; silo.from_rail has

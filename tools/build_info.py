@@ -220,6 +220,10 @@ def build():
     <onload>ClearProperty(silo.from_rail,home)</onload>
     <onload>SetProperty(silo.tint,$INFO[ListItem.Property(silo.tint)],movieinformation)</onload>
     <onload>SetProperty(silo.content_id,$INFO[ListItem.Property(silo.content_id)],movieinformation)</onload>
+    <!-- For Trailers & More, where ListItem is the video: the page's own title and art. -->
+    <onload>SetProperty(silo.page_type,$INFO[ListItem.DBType],movieinformation)</onload>
+    <onload>SetProperty(silo.page_dbid,$INFO[ListItem.DBID],movieinformation)</onload>
+    <onload>SetProperty(silo.page_fanart,$INFO[ListItem.Art(fanart)],movieinformation)</onload>
     <onload>SetProperty(silo.episode_id,$INFO[ListItem.DBID],movieinformation)</onload>
     <onload>SetProperty(silo.episode_number,$INFO[ListItem.Episode],movieinformation)</onload>
     <onload>SetProperty(silo.episode_season,$INFO[ListItem.Season],movieinformation)</onload>
@@ -498,6 +502,7 @@ def build():
                     <orientation>horizontal</orientation>
                     <onup>60</onup>
                     <ondown condition="Integer.IsGreater(Container(70).NumItems,0)">70</ondown>
+                    <ondown condition="!Integer.IsGreater(Container(70).NumItems,0) + %(has_videos)s">71</ondown>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <onclick>PlayMedia($ESCINFO[ListItem.FileNameAndPath])</onclick>
                     <onclick>Dialog.Close(movieinformation)</onclick>
@@ -550,7 +555,8 @@ def build():
                     <onup condition="%(episode_pills)s">65</onup>
                     <onup condition="!%(episode_pills)s">5000</onup>
                     <ondown condition="Integer.IsGreater(Container(70).NumItems,0)">70</ondown>
-                    <ondown condition="!Integer.IsGreater(Container(70).NumItems,0)">63</ondown>
+                    <ondown condition="!Integer.IsGreater(Container(70).NumItems,0) + %(has_videos)s">71</ondown>
+                    <ondown condition="!Integer.IsGreater(Container(70).NumItems,0) + !%(has_videos)s">63</ondown>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <onclick>PlayMedia($ESCINFO[ListItem.FileNameAndPath])</onclick>
                     <onclick>Dialog.Close(movieinformation)</onclick>
@@ -588,10 +594,39 @@ def build():
                     <!-- A cast member's page (SiloKodiConnect: Silo's person, their titles here). -->
                     <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=person&amp;id=$INFO[Window(movieinformation).Property(silo.content_id)]&amp;name=$INFO[ListItem.Label])</onclick>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
-                    <ondown condition="%(has_similar)s">63</ondown>
+                    <ondown condition="%(has_videos)s">71</ondown>
+                    <ondown condition="!%(has_videos)s + %(has_similar)s">63</ondown>
                     <itemlayout width="220" height="280">%(person)s
                     </itemlayout>
                     <focusedlayout width="220" height="280">%(person_focused)s
+                    </focusedlayout>
+                </control>
+            </control>
+            <!-- Trailers & More: the title's YouTube videos from Silo (SiloKodiConnect),
+                 as Silo's Apple TV app; one plays as the Trailer button's does. -->
+            <control type="group">
+                <height>%(videos_h)d</height>
+                <visible>%(has_videos)s | Container(71).IsUpdating</visible>
+                <control type="label">
+                    <left>%(x)d</left>
+                    <width>1000</width><height>46</height>
+                    <font>silo_row</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label>Trailers &amp; More</label>
+                </control>
+                <control type="list" id="71">
+                    <content target="videos">plugin://plugin.video.silokodiconnect/?mode=videos&amp;id=$INFO[Window(movieinformation).Property(silo.content_id)]</content>
+                    <left>%(lx)d</left><top>56</top>
+                    <width>%(lw)d</width><height>%(video_item_h)d</height>
+                    <orientation>horizontal</orientation>
+                    <scrolltime tween="cubic" easing="out">280</scrolltime>
+                    <onup condition="Integer.IsGreater(Container(70).NumItems,0)">70</onup>
+                    <onup condition="!Integer.IsGreater(Container(70).NumItems,0) + %(show)s">61</onup>
+                    <onup condition="!Integer.IsGreater(Container(70).NumItems,0) + !%(show)s">5000</onup>
+                    <ondown condition="%(has_similar)s">63</ondown>%(video_play)s
+                    <itemlayout width="%(video_item_w)d" height="%(video_item_h)d">%(video_card)s
+                    </itemlayout>
+                    <focusedlayout width="%(video_item_w)d" height="%(video_item_h)d">%(video_card_focused)s
                     </focusedlayout>
                 </control>
             </control>
@@ -613,9 +648,10 @@ def build():
                     <width>%(lw)d</width><height>%(similar_item_h)d</height>
                     <orientation>horizontal</orientation>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
-                    <onup condition="Integer.IsGreater(Container(70).NumItems,0)">70</onup>
-                    <onup condition="!Integer.IsGreater(Container(70).NumItems,0) + %(show)s">61</onup>
-                    <onup condition="!Integer.IsGreater(Container(70).NumItems,0) + !%(show)s">5000</onup>
+                    <onup condition="%(has_videos)s">71</onup>
+                    <onup condition="!%(has_videos)s + Integer.IsGreater(Container(70).NumItems,0)">70</onup>
+                    <onup condition="!%(has_videos)s + !Integer.IsGreater(Container(70).NumItems,0) + %(show)s">61</onup>
+                    <onup condition="!%(has_videos)s + !Integer.IsGreater(Container(70).NumItems,0) + !%(show)s">5000</onup>
                     <!-- Kodi can't open an info page from inside one: close this one and
                          have SiloKodiConnect open the chosen title's. That page opens with
                          the column below still scrolled to this rail; silo.from_rail has
@@ -688,6 +724,9 @@ def build():
                                 'String.IsEqual(ListItem.DBType,movie) + Integer.IsGreater(ListItem.VideoVersionsCount,1)'),
        'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'person': person(False), 'person_focused': person(True),
        'has_similar': 'Integer.IsGreater(Container(63).NumItems,0)', 'similar_h': SECTION_H,
+       'has_videos': HAS_VIDEOS, 'videos_h': SECTION_H, 'video_play': video_play(),
+       'video_item_w': VIDEO_W + 40, 'video_item_h': VIDEO_H + 12 + 84,
+       'video_card': video_card(False), 'video_card_focused': video_card(True),
        'similar_item_w': POSTER['width'] + POSTER['gap'], 'similar_item_h': POSTER['height'] + 12 + 76,
        'similar_card': card_layout(POSTER, False), 'similar_card_focused': card_layout(POSTER, True, 63),
        'has_season': 'Integer.IsGreater(Container(64).NumItems,0)', 'episode_pills': EPISODE_PILLS,
@@ -835,6 +874,60 @@ def episode_card(focused, list_id=61, current='String.IsEqual(ListItem.DBID,Cont
                                          'titles': ''.join(episode_title(scroll, visible) for scroll, visible in
                                                            (((True, lit), (False, '!' + lit)) if focused else ((False, ''),)))}
 
+
+
+HAS_VIDEOS = 'Integer.IsGreater(Container(71).NumItems,0)'
+VIDEO_W, VIDEO_H = 448, 252     # Silo's Apple TV trailer cards, 16:9
+PAGE = 'Window(movieinformation).Property(silo.page_%s)'
+
+
+def video_card(focused):
+    """A Trailers & More card: YouTube's thumbnail with a play icon, its name
+    and "YouTube" under it, centred; focus as the other cards."""
+    lit = 'Control.HasFocus(71)'
+    return '''
+                    <control type="group">%(zoom)s
+                        <control type="image">
+                            <left>6</left><top>6</top><width>%(w)d</width><height>%(h)d</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(thumb)]</texture>
+                        </control>
+                        <control type="image">
+                            <left>%(px)d</left><top>%(py)d</top><width>56</width><height>56</height>
+                            <texture colordiffuse="E6FFFFFF">silo/play_circle.png</texture>
+                        </control>%(sheen)s
+                        <control type="label">
+                            <left>6</left><top>%(t1)d</top><width>%(w)d</width><height>34</height>
+                            <align>center</align>
+                            <font>silo_card_title</font>
+                            <textcolor>%(title)s</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>%(t2)d</top><width>%(w)d</width><height>30</height>
+                            <align>center</align>
+                            <font>silo_card_sub</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[ListItem.Label2]</label>
+                        </control>
+                    </control>''' % {'zoom': focus_zoom(lit) if focused else '', 'w': VIDEO_W, 'h': VIDEO_H,
+                                      'px': 6 + VIDEO_W // 2 - 28, 'py': 6 + VIDEO_H // 2 - 28,
+                                      'sheen': focus_sheen(VIDEO_W, VIDEO_H, 'silo/card_landscape_mask.png',
+                                                           'silo/card_landscape_rim.png', lit) if focused else '',
+                                      't1': VIDEO_H + 20, 't2': VIDEO_H + 54, 'title': TEXT}
+
+
+def video_play():
+    """A video's onclick: the Trailer button's way (tools: silo_trailer), with
+    the page's own title and art, as ListItem is the video here."""
+    youtube = 'System.HasAddon(plugin.video.youtube)'
+    steps = [('SetProperty(silokodi.trailer_art,$INFO[%s],home)' % (PAGE % 'fanart')),
+             ('SetProperty(silokodi.trailer_return,$INFO[%s]|$INFO[%s],home)' % (PAGE % 'type', PAGE % 'dbid')),
+             'SetProperty(silokodi.trailer_playing,1,home)',
+             'PlayMedia(plugin://plugin.video.youtube/play/?video_id=$INFO[ListItem.Property(silo.video.key)])',
+             'Dialog.Close(movieinformation)']
+    out = ''.join('\n                    <onclick condition="%s">%s</onclick>' % (youtube, step) for step in steps)
+    return out + '\n                    <onclick condition="!%s">InstallAddon(plugin.video.youtube)</onclick>' % youtube
 
 
 def person(focused):
