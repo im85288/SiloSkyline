@@ -96,7 +96,7 @@
 			<font>silo_meta</font>
 			<textcolor>FFEDEDED</textcolor>
 			<focusedcolor>SkylineFocusText</focusedcolor>
-			<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+			<texturefocus border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texturefocus>
 			<texturenofocus />
 		</control>
 		<control type="radiobutton" id="20">
@@ -108,7 +108,7 @@
 			<font>silo_detail</font>
 			<textcolor>BFEDEDED</textcolor>
 			<focusedcolor>SkylineFocusText</focusedcolor>
-			<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+			<texturefocus border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texturefocus>
 			<texturenofocus />
 			<radioposx>32</radioposx>
 			<radioposy>0</radioposy>

@@ -77,8 +77,8 @@
 			<align>center</align><aligny>center</aligny>
 			<textcolor>FFEDEDED</textcolor>
 			<focusedcolor>SkylineFocusText</focusedcolor>
-			<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
-			<texturenofocus border="30" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
+			<texturefocus border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texturefocus>
+			<texturenofocus border="30" colordiffuse="26FFFFFF">silo/card_landscape_mask.png</texturenofocus>
 			<onclick>ActivateWindow(ShutdownMenu)</onclick>
 			<onup>52</onup><ondown>52</ondown>
 			<onleft>52</onleft><onright>52</onright>

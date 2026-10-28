@@ -347,7 +347,7 @@
 				<focusedlayout height="70" width="434">
 					<control type="image">
 						<width>434</width><height>70</height>
-						<texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
+						<texture border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
 						<animation effect="fade" start="100" end="40" time="100" condition="!Control.HasFocus(9000)">Conditional</animation>
 					</control>
 					<control type="label">

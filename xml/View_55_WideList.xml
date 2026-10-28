@@ -27,7 +27,7 @@
 							<left>0</left>
 							<right>0</right>
 							<bottom>0</bottom>
-							<texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
+							<texture border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
 						<animation effect="fade" start="100" end="40" time="100" condition="!Control.HasFocus(55)">Conditional</animation>
 						</control>
 						<control type="image">
@@ -91,7 +91,7 @@
 							<left>0</left>
 							<right>0</right>
 							<bottom>0</bottom>
-							<texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
+							<texture border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
 						<animation effect="fade" start="100" end="40" time="100" condition="!Control.HasFocus(55)">Conditional</animation>
 						</control>
 						<control type="image">
@@ -155,7 +155,7 @@
 							<left>0</left>
 							<right>0</right>
 							<bottom>0</bottom>
-							<texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
+							<texture border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
 						<animation effect="fade" start="100" end="40" time="100" condition="!Control.HasFocus(55)">Conditional</animation>
 						</control>
 						<control type="image">
@@ -207,7 +207,7 @@
 			<control type="image">
 				<left>0</left>
 				<right>0</right>
-				<texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
+				<texture border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
 						<animation effect="fade" start="100" end="40" time="100" condition="!Control.HasFocus(55)">Conditional</animation>
 				<visible>Control.hasFocus(55)</visible>
 			</control>
@@ -252,7 +252,7 @@
 			<control type="image">
 				<left>0</left>
 				<right>0</right>
-				<texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
+				<texture border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
 						<animation effect="fade" start="100" end="40" time="100" condition="!Control.HasFocus(55)">Conditional</animation>
 				<visible>Control.hasFocus(55)</visible>
 			</control>

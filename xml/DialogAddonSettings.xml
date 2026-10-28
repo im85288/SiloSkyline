@@ -38,7 +38,7 @@
 				<texturenofocus />
 				<textcolor>FFEDEDED</textcolor>
 				<focusedcolor>SkylineFocusText</focusedcolor>
-				<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+				<texturefocus border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texturefocus>
 			</control>
 			<control type="grouplist" id="5">
 				<description>control area</description>

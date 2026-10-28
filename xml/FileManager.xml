@@ -59,7 +59,7 @@
 			<focusedlayout height="64">
 					<control type="image">
 						<width>816</width><height>64</height>
-						<texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
+						<texture border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
 						<visible>Control.HasFocus(20)</visible>
 					</control>
 					<control type="image">
@@ -165,7 +165,7 @@
 			<focusedlayout height="64">
 					<control type="image">
 						<width>816</width><height>64</height>
-						<texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
+						<texture border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
 						<visible>Control.HasFocus(21)</visible>
 					</control>
 					<control type="image">

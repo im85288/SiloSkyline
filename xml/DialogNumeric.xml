@@ -54,7 +54,7 @@
 					<font>silo_detail</font>
 					<align>center</align>
 					<aligny>center</aligny>
-					<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+					<texturefocus border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texturefocus>
 					<focusedcolor>SkylineFocusText</focusedcolor>
 					<texturenofocus colordiffuse="71FFFFFF" border="40">buttons/button-alt-nofo.png</texturenofocus>
 					<label>$LOCALIZE[20181]</label>
@@ -71,7 +71,7 @@
 					<font>silo_detail</font>
 					<align>center</align>
 					<aligny>center</aligny>
-					<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+					<texturefocus border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texturefocus>
 					<focusedcolor>SkylineFocusText</focusedcolor>
 					<texturenofocus colordiffuse="71FFFFFF" border="40">buttons/button-alt-nofo.png</texturenofocus>
 					<label>$LOCALIZE[20177]</label>

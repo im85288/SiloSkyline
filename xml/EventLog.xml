@@ -29,10 +29,10 @@
 					<aligny>center</aligny>
 					<textcolor>FFEDEDED</textcolor>
 					<focusedcolor>SkylineFocusText</focusedcolor>
-					<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+					<texturefocus border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texturefocus>
 					<texturenofocus />
 					<altlabel>$LOCALIZE[31032]: $LOCALIZE[585]</altlabel>
-					<alttexturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</alttexturefocus>
+					<alttexturefocus border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</alttexturefocus>
 					<alttexturenofocus />
 				</control>
 				<control type="button" id="21">
@@ -43,7 +43,7 @@
 					<aligny>center</aligny>
 					<textcolor>FFEDEDED</textcolor>
 					<focusedcolor>SkylineFocusText</focusedcolor>
-					<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+					<texturefocus border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texturefocus>
 					<texturenofocus />
 				</control>
 				<control type="radiobutton" id="22">
@@ -54,7 +54,7 @@
 					<aligny>center</aligny>
 					<textcolor>FFEDEDED</textcolor>
 					<focusedcolor>SkylineFocusText</focusedcolor>
-					<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+					<texturefocus border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texturefocus>
 					<texturenofocus />
 					<radioposx>332</radioposx><radiowidth>56</radiowidth><radioheight>28</radioheight>
 					<textureradioonfocus colordiffuse="SkylineFocusText">silo/switch_on.png</textureradioonfocus>
@@ -70,7 +70,7 @@
 					<aligny>center</aligny>
 					<textcolor>FFEDEDED</textcolor>
 					<focusedcolor>SkylineFocusText</focusedcolor>
-					<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+					<texturefocus border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texturefocus>
 					<texturenofocus />
 				</control>
 				<control type="button" id="501">
@@ -81,7 +81,7 @@
 					<aligny>center</aligny>
 					<textcolor>FFEDEDED</textcolor>
 					<focusedcolor>SkylineFocusText</focusedcolor>
-					<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+					<texturefocus border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texturefocus>
 					<texturenofocus />
 					<onclick>ActivateWindow(systemsettings,logging)</onclick>
 				</control>

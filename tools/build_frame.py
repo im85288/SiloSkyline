@@ -29,7 +29,8 @@ FACTS = 'Window(Home).Property(silo.library.facts)'
 # The panel every screen's content sits in, between the header and the clock.
 PANEL_X, PANEL_Y, PANEL_W, PANEL_H = SAFE_X, 196, 1920 - 2 * SAFE_X, 1080 - 196 - 64
 LEFT_W = 452  # a two-pane panel's left pane (categories)
-FOCUS_ROW = 'silo/pill.png'
+# The focused row's shape: Silo's Apple TV menus' white rounded bar.
+FOCUS_ROW = 'silo/card_landscape_mask.png'
 
 
 def xml_path(name):
@@ -506,12 +507,12 @@ def setting_button():
 			<aligny>center</aligny>
 			<invalidcolor>invalid</invalidcolor>
 			<selectedcolor>selected</selectedcolor>
-			<!-- Silo Skyline (tools/build_frame.py): Silo's white pill on the focused row. -->
+			<!-- Silo Skyline (tools/build_frame.py): a white rounded bar on the focused row, as Silo's Apple TV menus. -->
 			<font>silo_meta</font>
 			<textcolor>%(text)s</textcolor>
 			<focusedcolor>FF000000</focusedcolor>
 			<disabledcolor>66EDEDED</disabledcolor>
-			<texturefocus border="30" colordiffuse="%(text)s">%(pill)s</texturefocus>
+			<texturefocus border="20" colordiffuse="%(text)s">silo/card_landscape_mask.png</texturefocus>
 			<texturenofocus />
 			<textureradioonfocus colordiffuse="FF000000">buttons/radio-button-on.png</textureradioonfocus>
 			<textureradioofffocus colordiffuse="FF000000">buttons/radio-button-off.png</textureradioofffocus>

@@ -57,12 +57,12 @@
 			<aligny>center</aligny>
 			<invalidcolor>invalid</invalidcolor>
 			<selectedcolor>selected</selectedcolor>
-			<!-- Silo Skyline (tools/build_frame.py): Silo's white pill on the focused row. -->
+			<!-- Silo Skyline (tools/build_frame.py): a white rounded bar on the focused row, as Silo's Apple TV menus. -->
 			<font>silo_meta</font>
 			<textcolor>FFEDEDED</textcolor>
 			<focusedcolor>SkylineFocusText</focusedcolor>
 			<disabledcolor>66EDEDED</disabledcolor>
-			<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+			<texturefocus border="20" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texturefocus>
 			<texturenofocus />
 			<textureradioonfocus colordiffuse="SkylineFocusText">buttons/radio-button-on.png</textureradioonfocus>
 			<textureradioofffocus colordiffuse="SkylineFocusText">buttons/radio-button-off.png</textureradioofffocus>

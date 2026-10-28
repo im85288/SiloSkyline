@@ -143,7 +143,7 @@
 						<right>0</right>
 						<top>0</top>
 						<bottom>0</bottom>
-						<texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
+						<texture border="30" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
 						<animation effect="fade" start="100" end="40" time="100" condition="!Control.HasFocus($PARAM[list_id])">Conditional</animation>
 					</control>
 					<control type="label">
