@@ -1,0 +1,4 @@
+# Left out of release zips (git archive, GitHub releases): developer tools only;
+# Kodi uses the generated files they write.
+tools/ export-ignore
+.gitattributes export-ignore
