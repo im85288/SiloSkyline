@@ -135,6 +135,8 @@ def build():
                 <orientation>horizontal</orientation>
                 <itemgap>12</itemgap>%(chips)s
             </control>
+            <!-- SiloKodiConnect trims a long biography to fit, ending it with "…" as
+                 Silo's app does (Kodi's textbox would just cut it off). -->
             <control type="textbox">
                 <left>%(tx)d</left><top>290</top><width>920</width><height>210</height>
                 <font>silo_bio</font>

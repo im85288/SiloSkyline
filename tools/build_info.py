@@ -257,9 +257,9 @@ def build():
 
         <control type="group">
             <left>%(x)d</left><top>%(top)d</top>
-            <!-- More Like This is the last row and fills the screen to its edge: the
+            <!-- More Like This and Trailers &amp; More fill the screen to its edge: the
                  page slides up so a focused poster's title and year stay on screen. -->
-            <animation effect="slide" end="0,-%(lift)d" time="300" tween="cubic" easing="out" condition="Control.HasFocus(63)">Conditional</animation>
+            <animation effect="slide" end="0,-%(lift)d" time="300" tween="cubic" easing="out" condition="Control.HasFocus(63) | Control.HasFocus(71)">Conditional</animation>
             <!-- Logo, or the title in text. -->
             <control type="image">
                 <width>820</width><height>160</height>
@@ -478,9 +478,9 @@ def build():
              the column scrolls to whichever has focus. -->
         <control type="grouplist" id="7000">
             <top>%(lower_top)d</top>
-            <!-- More Like This is the last row and fills the screen to its edge: the
+            <!-- More Like This and Trailers &amp; More fill the screen to its edge: the
                  page slides up so a focused poster's title and year stay on screen. -->
-            <animation effect="slide" end="0,-%(lift)d" time="300" tween="cubic" easing="out" condition="Control.HasFocus(63)">Conditional</animation>
+            <animation effect="slide" end="0,-%(lift)d" time="300" tween="cubic" easing="out" condition="Control.HasFocus(63) | Control.HasFocus(71)">Conditional</animation>
             <width>1920</width><height>%(lower_h)d</height>
             <orientation>vertical</orientation>
             <itemgap>0</itemgap>

@@ -13,6 +13,9 @@
                 <property name="home.card.wide_sub">$INFO[Window(Home).Property($PARAM[p].card.wide_sub)]</property>
                 <property name="home.hero.title">$INFO[Window(Home).Property($PARAM[p].hero.title)]</property>
                 <property name="home.hero.meta">$INFO[Window(Home).Property($PARAM[p].hero.meta)]</property>
+                <property name="home.hero.facts">$INFO[Window(Home).Property($PARAM[p].hero.facts)]</property>
+                <property name="home.rating.imdb">$INFO[Window(Home).Property($PARAM[p].rating.imdb)]</property>
+                <property name="home.rating.tmdb">$INFO[Window(Home).Property($PARAM[p].rating.tmdb)]</property>
                 <property name="home.hero.detail">$INFO[Window(Home).Property($PARAM[p].hero.detail)]</property>
                 <property name="home.plot">$INFO[Window(Home).Property($PARAM[p].plot)]</property>
                 <property name="home.mpaa">$INFO[Window(Home).Property($PARAM[p].mpaa)]</property>

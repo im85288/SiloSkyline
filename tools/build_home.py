@@ -38,6 +38,7 @@ POSTER_ONLY = ('requests',)  # Silo's request rows are all posters
 PAGE_CARDS = {'home': HOME_CARDS}
 OTHER_CARDS = 12
 HOME_CARD_FIELDS = ('type', 'dbid', 'card.title', 'card.sub', 'card.wide_sub', 'hero.title', 'hero.meta',
+                    'hero.facts', 'rating.imdb', 'rating.tmdb',
                     'hero.detail', 'plot', 'mpaa', 'badge1', 'badge2', 'badge3', 'tint', 'percent', 'playcount',
                     'art.poster', 'art.landscape', 'art.fanart', 'art.clearlogo', 'request.type', 'request.tmdb',
                     'status.tint', 'status.seg1', 'status.seg2', 'status.seg3', 'status.seg4')
@@ -1488,7 +1489,50 @@ def build():
                     <aligny>center</aligny>
                     <font>silo_meta</font>
                     <textcolor>%(meta)s</textcolor>
-                    <label>$VAR[SiloMetaLine]</label>
+                    <label>$VAR[SiloHeroFacts]</label>
+                </control>
+                <!-- The ratings' marks, as the info page: images, so the line is in parts. -->
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(meta)s</textcolor>
+                    <label>[COLOR 80EDEDED]·[/COLOR]</label>
+                    <visible>$EXP[HasSiloHeroImdb]</visible>
+                </control>
+                <control type="image">
+                    <top>6</top><width>60</width><height>28</height>
+                    <texture>silo/imdb.png</texture>
+                    <visible>$EXP[HasSiloHeroImdb]</visible>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(meta)s</textcolor>
+                    <label>  [B]$VAR[SiloHeroImdb][/B]</label>
+                    <visible>$EXP[HasSiloHeroImdb]</visible>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(meta)s</textcolor>
+                    <label>[COLOR 80EDEDED]·[/COLOR]</label>
+                    <visible>$EXP[HasSiloHeroTmdb]</visible>
+                </control>
+                <control type="image">
+                    <top>5</top><width>165</width><height>30</height>
+                    <texture>silo/tmdb.png</texture>
+                    <visible>$EXP[HasSiloHeroTmdb]</visible>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(meta)s</textcolor>
+                    <label>  [B]$VAR[SiloHeroTmdb][/B]</label>
+                    <visible>$EXP[HasSiloHeroTmdb]</visible>
                 </control>
             </control>
             <control type="textbox">
@@ -1585,7 +1629,7 @@ def build():
 # (condition, value) template; LI stands for that row's ListItem.
 # A Home card: an item SiloKodiConnect published as properties (rows.py).
 HOME_CARD = '!String.IsEmpty(LI.Property(home.type))'
-HERO_STATIC = {'SiloHeroArt': 'home.art.fanart', 'SiloLogoArt': 'home.art.clearlogo', 'SiloTitle': 'home.hero.title', 'SiloMetaLine': 'home.hero.meta', 'SiloPlot': 'home.plot', 'SiloDetail': 'home.hero.detail', 'SiloMpaa': 'home.mpaa', 'SiloHeroTint': 'home.tint', 'SiloBadge1': 'home.badge1', 'SiloBadge2': 'home.badge2', 'SiloBadge3': 'home.badge3'}
+HERO_STATIC = {'SiloHeroArt': 'home.art.fanart', 'SiloLogoArt': 'home.art.clearlogo', 'SiloTitle': 'home.hero.title', 'SiloMetaLine': 'home.hero.meta', 'SiloHeroFacts': 'home.hero.facts', 'SiloHeroImdb': 'home.rating.imdb', 'SiloHeroTmdb': 'home.rating.tmdb', 'SiloPlot': 'home.plot', 'SiloDetail': 'home.hero.detail', 'SiloMpaa': 'home.mpaa', 'SiloHeroTint': 'home.tint', 'SiloBadge1': 'home.badge1', 'SiloBadge2': 'home.badge2', 'SiloBadge3': 'home.badge3'}
 
 HERO = [
     ('SiloHeroArt', [('!String.IsEmpty(LI.Art(fanart))', '$INFO[LI.Art(fanart)]'),
@@ -1601,6 +1645,16 @@ HERO = [
     ('SiloMetaLine', [('String.IsEqual(LI.DBType,episode)', '$INFO[LI.Property(silo.code)]$INFO[LI.Title, · ,]'),
                       (None, '$INFO[LI.Year]$INFO[LI.Property(silo.genre), · ,]'
                        '$INFO[LI.Property(silo.rating), · ,]')]),
+    # The info line in parts, with the ratings' marks between them (IMDb's badge,
+    # TMDB's wordmark, as the info page): an episode's has no ratings.
+    ('SiloHeroFacts', [('String.IsEqual(LI.DBType,episode)', '$INFO[LI.Property(silo.code)]$INFO[LI.Title, · ,]'),
+                       (None, '$INFO[LI.Year]$INFO[LI.Property(silo.genre), · ,]')]),
+    ('SiloHeroImdb', [('String.IsEqual(LI.DBType,episode)', ''),
+                      ('!String.IsEmpty(LI.Property(silo.rating.imdb))', '$INFO[LI.Property(silo.rating.imdb)]'),
+                      (None, '$INFO[LI.Rating(imdb)]')]),
+    ('SiloHeroTmdb', [('String.IsEqual(LI.DBType,episode)', ''),
+                      ('!String.IsEmpty(LI.Property(silo.rating.tmdb))', '$INFO[LI.Property(silo.rating.tmdb)]'),
+                      (None, '$INFO[LI.Rating(themoviedb)]')]),
     ('SiloPlot', [(None, '$INFO[LI.Plot]')]),
     # "Aired Sep 25, 2026 · Tom Hardy, Helen Mirren, Pierce Brosnan"
     # A Requests card: its state (Requested, Downloading, Available...).
@@ -1698,6 +1752,21 @@ def variables():
         terms += ['[%s + [!String.IsEmpty(Container(%d).ListItem.Property(%s)) | '
                   '!String.IsEmpty(Container(%d).ListItem.Property(%s))]]'
                   % (waiting, row_id, item_property, row_id, home_property) for waiting, row_id in waiting_rows()]
+        terms += ['[%s + !String.IsEmpty(%s)]' % (home_waiting(row), prop('silo.home.%d.1.%s' % (row, home_property[5:])))
+                  for row in (1, 2)]
+        out += '    <expression name="Has%s">%s</expression>\n' % (name, ' | '.join(terms))
+    # The ratings' marks: Silo's score (a library item, or a Home card's), else
+    # Kodi's own rating for an item it lists itself; never an episode's.
+    for name, item_property, home_property, kodi_rating in (
+            ('SiloHeroImdb', 'silo.rating.imdb', 'home.rating.imdb', 'imdb'),
+            ('SiloHeroTmdb', 'silo.rating.tmdb', 'home.rating.tmdb', 'themoviedb')):
+        def has(item):
+            return ('[!String.IsEqual(%(i)s.DBType,episode) + [!String.IsEmpty(%(i)s.Property(%(p)s)) | '
+                    '!String.IsEmpty(%(i)s.Property(%(h)s)) | !String.IsEmpty(%(i)s.Rating(%(k)s))]]'
+                    % {'i': item, 'p': item_property, 'h': home_property, 'k': kodi_rating})
+        terms = ['[String.IsEqual(%s,%d) + %s]' % (prop('silo.row'), row_id, has('Container(%d).ListItem' % row_id))
+                 for row_id in rows]
+        terms += ['[%s + %s]' % (waiting, has('Container(%d).ListItem' % row_id)) for waiting, row_id in waiting_rows()]
         terms += ['[%s + !String.IsEmpty(%s)]' % (home_waiting(row), prop('silo.home.%d.1.%s' % (row, home_property[5:])))
                   for row in (1, 2)]
         out += '    <expression name="Has%s">%s</expression>\n' % (name, ' | '.join(terms))
