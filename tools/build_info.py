@@ -257,6 +257,9 @@ def build():
 
         <control type="group">
             <left>%(x)d</left><top>%(top)d</top>
+            <!-- More Like This is the last row and fills the screen to its edge: the
+                 page slides up so a focused poster's title and year stay on screen. -->
+            <animation effect="slide" end="0,-%(lift)d" time="300" tween="cubic" easing="out" condition="Control.HasFocus(63)">Conditional</animation>
             <!-- Logo, or the title in text. -->
             <control type="image">
                 <width>820</width><height>160</height>
@@ -475,6 +478,9 @@ def build():
              the column scrolls to whichever has focus. -->
         <control type="grouplist" id="7000">
             <top>%(lower_top)d</top>
+            <!-- More Like This is the last row and fills the screen to its edge: the
+                 page slides up so a focused poster's title and year stay on screen. -->
+            <animation effect="slide" end="0,-%(lift)d" time="300" tween="cubic" easing="out" condition="Control.HasFocus(63)">Conditional</animation>
             <width>1920</width><height>%(lower_h)d</height>
             <orientation>vertical</orientation>
             <itemgap>0</itemgap>
@@ -724,7 +730,7 @@ def build():
                                 'String.IsEqual(ListItem.DBType,movie) + Integer.IsGreater(ListItem.VideoVersionsCount,1)'),
        'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'person': person(False), 'person_focused': person(True),
        'has_similar': 'Integer.IsGreater(Container(63).NumItems,0)', 'similar_h': SECTION_H,
-       'has_videos': HAS_VIDEOS, 'videos_h': SECTION_H, 'video_play': video_play(),
+       'lift': 64, 'has_videos': HAS_VIDEOS, 'videos_h': SECTION_H, 'video_play': video_play(),
        'video_item_w': VIDEO_W + 40, 'video_item_h': VIDEO_H + 12 + 84,
        'video_card': video_card(False), 'video_card_focused': video_card(True),
        'similar_item_w': POSTER['width'] + POSTER['gap'], 'similar_item_h': POSTER['height'] + 12 + 76,
