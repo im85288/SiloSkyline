@@ -142,6 +142,7 @@ FONTS = [  # name, file, size
     ('silo_meta', 'Inter-Medium.ttf', 28),
     ('silo_plot', 'Inter-Regular.ttf', 28),
     ('silo_detail', 'Inter-Medium.ttf', 24),
+    ('silo_bio', 'Inter-Regular.ttf', 25),  # a person's biography, as Silo's Apple TV app
     ('silo_badge', 'Inter-SemiBold.ttf', 20),
     ('silo_card_title', 'Inter-SemiBold.ttf', 26),
     ('silo_card_sub', 'Inter-Medium.ttf', 24),

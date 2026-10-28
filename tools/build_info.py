@@ -215,10 +215,11 @@ def build():
     <defaultcontrol always="true">308</defaultcontrol>
     <onload condition="%(show)s">SetFocus(300)</onload>
     <onload condition="%(request)s">SetFocus(301)</onload>
-    <onload condition="String.IsEqual(Window(home).Property(silo.from_rail),1) + Integer.IsGreater(Container(50).NumItems,0)">SetFocus(50)</onload>
+    <onload condition="String.IsEqual(Window(home).Property(silo.from_rail),1) + Integer.IsGreater(Container(70).NumItems,0)">SetFocus(70)</onload>
     <onload condition="String.IsEqual(Window(home).Property(silo.from_rail),1)">SetFocus(5000)</onload>
     <onload>ClearProperty(silo.from_rail,home)</onload>
     <onload>SetProperty(silo.tint,$INFO[ListItem.Property(silo.tint)],movieinformation)</onload>
+    <onload>SetProperty(silo.content_id,$INFO[ListItem.Property(silo.content_id)],movieinformation)</onload>
     <onload>SetProperty(silo.episode_id,$INFO[ListItem.DBID],movieinformation)</onload>
     <onload>SetProperty(silo.episode_number,$INFO[ListItem.Episode],movieinformation)</onload>
     <onload>SetProperty(silo.episode_season,$INFO[ListItem.Season],movieinformation)</onload>
@@ -369,7 +370,7 @@ def build():
                 <ondown condition="%(show)s">60</ondown>
                 <ondown condition="%(episode)s + %(episode_pills)s">65</ondown>
                 <ondown condition="%(episode)s + !%(episode_pills)s + %(has_season)s">64</ondown>
-                <ondown condition="!%(show)s + ![%(episode)s + %(has_season)s]">50</ondown>
+                <ondown condition="!%(show)s + ![%(episode)s + %(has_season)s]">70</ondown>
                 <!-- A show: Play or Resume its next episode, as in Silo (Kodi's button 8
                      would Browse); Browse once every episode is watched. Kodi reserves
                      ids 5-15 in this window (12 chooses art), so this is 300. -->
@@ -496,7 +497,7 @@ def build():
                     <width>%(lw)d</width><height>%(episode_h)d</height>
                     <orientation>horizontal</orientation>
                     <onup>60</onup>
-                    <ondown condition="Integer.IsGreater(Container(50).NumItems,0)">50</ondown>
+                    <ondown condition="Integer.IsGreater(Container(70).NumItems,0)">70</ondown>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <onclick>PlayMedia($ESCINFO[ListItem.FileNameAndPath])</onclick>
                     <onclick>Dialog.Close(movieinformation)</onclick>
@@ -548,8 +549,8 @@ def build():
                     <orientation>horizontal</orientation>
                     <onup condition="%(episode_pills)s">65</onup>
                     <onup condition="!%(episode_pills)s">5000</onup>
-                    <ondown condition="Integer.IsGreater(Container(50).NumItems,0)">50</ondown>
-                    <ondown condition="!Integer.IsGreater(Container(50).NumItems,0)">63</ondown>
+                    <ondown condition="Integer.IsGreater(Container(70).NumItems,0)">70</ondown>
+                    <ondown condition="!Integer.IsGreater(Container(70).NumItems,0)">63</ondown>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <onclick>PlayMedia($ESCINFO[ListItem.FileNameAndPath])</onclick>
                     <onclick>Dialog.Close(movieinformation)</onclick>
@@ -566,7 +567,7 @@ def build():
                 <height>%(cast_h)d</height>
                 <!-- From the title's own cast, not list 50's items: Kodi doesn't
                      refresh a list inside a hidden group. -->
-                <visible>Integer.IsGreater(Container(50).NumItems,0) | !String.IsEmpty(ListItem.Cast)</visible>
+                <visible>Integer.IsGreater(Container(70).NumItems,0) | !String.IsEmpty(ListItem.Cast)</visible>
                 <control type="label">
                     <left>%(x)d</left>
                     <width>1000</width><height>46</height>
@@ -574,14 +575,18 @@ def build():
                     <textcolor>%(text)s</textcolor>
                     <label>Cast &amp; Crew</label>
                 </control>
-                <control type="list" id="50">
+                <control type="list" id="70">
+                    <!-- Not Kodi's cast list (control 50), which searches the library for a
+                         chosen name: SiloKodiConnect's, so a name opens the person page. -->
+                    <content target="videos">plugin://plugin.video.silokodiconnect/?mode=cast&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID]</content>
                     <left>%(lx)d</left><top>60</top>
                     <width>%(lw)d</width><height>280</height>
                     <orientation>horizontal</orientation>
                     <onup condition="%(show)s">61</onup>
                     <onup condition="%(episode)s + %(has_season)s">64</onup>
                     <onup condition="!%(show)s + ![%(episode)s + %(has_season)s]">5000</onup>
-                    <onclick>noop</onclick>
+                    <!-- A cast member's page (SiloKodiConnect: Silo's person, their titles here). -->
+                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=person&amp;id=$INFO[Window(movieinformation).Property(silo.content_id)]&amp;name=$INFO[ListItem.Label])</onclick>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <ondown condition="%(has_similar)s">63</ondown>
                     <itemlayout width="220" height="280">%(person)s
@@ -608,9 +613,9 @@ def build():
                     <width>%(lw)d</width><height>%(similar_item_h)d</height>
                     <orientation>horizontal</orientation>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
-                    <onup condition="Integer.IsGreater(Container(50).NumItems,0)">50</onup>
-                    <onup condition="!Integer.IsGreater(Container(50).NumItems,0) + %(show)s">61</onup>
-                    <onup condition="!Integer.IsGreater(Container(50).NumItems,0) + !%(show)s">5000</onup>
+                    <onup condition="Integer.IsGreater(Container(70).NumItems,0)">70</onup>
+                    <onup condition="!Integer.IsGreater(Container(70).NumItems,0) + %(show)s">61</onup>
+                    <onup condition="!Integer.IsGreater(Container(70).NumItems,0) + !%(show)s">5000</onup>
                     <!-- Kodi can't open an info page from inside one: close this one and
                          have SiloKodiConnect open the chosen title's. That page opens with
                          the column below still scrolled to this rail; silo.from_rail has
@@ -834,7 +839,7 @@ def episode_card(focused, list_id=61, current='String.IsEqual(ListItem.DBID,Cont
 
 def person(focused):
     # Silo's Apple TV app grows the photo on focus; no ring.
-    zoom = focus_zoom('Control.HasFocus(50)', 20) if focused else ''
+    zoom = focus_zoom('Control.HasFocus(70)', 20) if focused else ''
     return '''
                     <control type="image">
                         <left>20</left><top>6</top>

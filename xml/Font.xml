@@ -170,6 +170,11 @@
 			<size>24</size>
 		</font>
 		<font>
+			<name>silo_bio</name>
+			<filename>Inter-Regular.ttf</filename>
+			<size>25</size>
+		</font>
+		<font>
 			<name>silo_badge</name>
 			<filename>Inter-SemiBold.ttf</filename>
 			<size>20</size>
@@ -386,6 +391,11 @@
 			<name>silo_detail</name>
 			<filename>Inter-Medium.ttf</filename>
 			<size>24</size>
+		</font>
+		<font>
+			<name>silo_bio</name>
+			<filename>Inter-Regular.ttf</filename>
+			<size>25</size>
 		</font>
 		<font>
 			<name>silo_badge</name>
