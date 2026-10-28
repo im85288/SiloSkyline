@@ -61,7 +61,7 @@
                 </control>
             </control>
             <control type="textbox">
-                <top>196</top><width>1050</width><height>140</height>
+                <top>196</top><width>1050</width><height>70</height>
                 <font>silo_plot</font>
                 <textcolor>B3EDEDED</textcolor>
                 <selectedcolor>B3EDEDED</selectedcolor>
@@ -73,17 +73,17 @@
         <!-- At the right: what's playing (TiviMate's preview), else the
              programme's or channel's picture. -->
         <control type="group">
-            <left>1224</left><top>52</top>
+            <left>1336</left><top>52</top>
             <control type="image">
-                <width>608</width><height>342</height>
+                <width>496</width><height>279</height>
                 <texture border="20" colordiffuse="SkylineFocusText">silo/card_landscape_mask.png</texture>
             </control>
             <control type="videowindow">
-                <width>608</width><height>342</height>
+                <width>496</width><height>279</height>
                 <visible>Player.HasVideo</visible>
             </control>
             <control type="image">
-                <width>608</width><height>342</height>
+                <width>496</width><height>279</height>
                 <aspectratio>keep</aspectratio>
                 <texture background="true" diffuse="silo/card_landscape_mask.png">$INFO[ListItem.Icon]</texture>
                 <visible>!Player.HasVideo</visible>
@@ -100,7 +100,7 @@
 
         <!-- Channel groups (Kodi fills list 11): Silo's pills. -->
         <control type="list" id="11">
-            <left>88</left><top>416</top><width>1744</width><height>52</height>
+            <left>88</left><top>336</top><width>1744</width><height>52</height>
             <orientation>horizontal</orientation>
             <ondown>51</ondown>
             <scrolltime tween="cubic" easing="out">200</scrolltime>
@@ -158,11 +158,11 @@
 
         <!-- The timeline: channels down the left, programmes across. -->
         <control type="epggrid" id="51">
-            <left>0</left><top>492</top><width>1920</width><height>588</height>
+            <left>0</left><top>412</top><width>1920</width><height>668</height>
             <!-- Kodi's "vertical": channels down, time across (TiviMate's timeline). -->
             <orientation>vertical</orientation>
             <viewtype label="19298">list</viewtype>
-            <timeblocks>24</timeblocks>
+            <timeblocks>23</timeblocks>
             <rulerunit>6</rulerunit>
             <onup>11</onup>
             <scrolltime tween="cubic" easing="out">240</scrolltime>
@@ -178,75 +178,75 @@
                     <label>$INFO[ListItem.Label]</label>
                 </control>
             </rulerlayout>
-            <channellayout height="76" width="440">
+            <channellayout height="56" width="520">
                     <control type="image">
-                        <left>82</left><top>8</top><width>354</width><height>64</height>
-                        <texture border="20" colordiffuse="0DFFFFFF">silo/card_landscape_mask.png</texture>
+                        <left>82</left><top>5</top><width>434</width><height>46</height>
+                        <texture border="16" colordiffuse="0DFFFFFF">silo/card_landscape_mask.png</texture>
                     </control>
                     <control type="image">
-                        <left>94</left><top>14</top><width>96</width><height>56</height>
+                        <left>92</left><top>9</top><width>68</width><height>38</height>
                         <aspectratio>keep</aspectratio>
                         <texture fallback="DefaultTVShows.png">$INFO[ListItem.Icon]</texture>
                     </control>
                     <control type="label">
-                        <left>204</left><top>10</top><width>228</width><height>32</height>
-                        <font>silo_detail</font>
-                        <textcolor>99EDEDED</textcolor>
-                        <selectedcolor>99EDEDED</selectedcolor>
-                        <label>$INFO[ListItem.ChannelNumberLabel]</label>
-                    </control>
-                    <control type="label">
-                        <left>204</left><top>40</top><width>228</width><height>34</height>
+                        <left>172</left><top>5</top><width>308</width><height>46</height>
+                        <aligny>center</aligny>
                         <font>silo_detail</font>
                         <textcolor>C7EDEDED</textcolor>
                         <selectedcolor>C7EDEDED</selectedcolor>
-                        <label>$INFO[ListItem.Label]</label>
+                        <label>$INFO[ListItem.ChannelNumberLabel,[COLOR 99EDEDED],[/COLOR]  ]$INFO[ListItem.Label]</label>
+                    </control>
+                    <!-- Catch-up: past programmes can be played (TiviMate's clock). -->
+                    <control type="image">
+                        <left>484</left><top>17</top><width>22</width><height>22</height>
+                        <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
+                        <visible>ListItem.HasArchive</visible>
                     </control>
             </channellayout>
-            <focusedchannellayout height="76" width="440">
+            <focusedchannellayout height="56" width="520">
                     <control type="image">
-                        <left>82</left><top>8</top><width>354</width><height>64</height>
-                        <texture border="20" colordiffuse="1FFFFFFF">silo/card_landscape_mask.png</texture>
+                        <left>82</left><top>5</top><width>434</width><height>46</height>
+                        <texture border="16" colordiffuse="1FFFFFFF">silo/card_landscape_mask.png</texture>
                     </control>
                     <control type="image">
-                        <left>94</left><top>14</top><width>96</width><height>56</height>
+                        <left>92</left><top>9</top><width>68</width><height>38</height>
                         <aspectratio>keep</aspectratio>
                         <texture fallback="DefaultTVShows.png">$INFO[ListItem.Icon]</texture>
                     </control>
                     <control type="label">
-                        <left>204</left><top>10</top><width>228</width><height>32</height>
-                        <font>silo_detail</font>
-                        <textcolor>99EDEDED</textcolor>
-                        <selectedcolor>99EDEDED</selectedcolor>
-                        <label>$INFO[ListItem.ChannelNumberLabel]</label>
-                    </control>
-                    <control type="label">
-                        <left>204</left><top>40</top><width>228</width><height>34</height>
+                        <left>172</left><top>5</top><width>308</width><height>46</height>
+                        <aligny>center</aligny>
                         <font>silo_detail</font>
                         <textcolor>FFEDEDED</textcolor>
                         <selectedcolor>FFEDEDED</selectedcolor>
-                        <label>$INFO[ListItem.Label]</label>
+                        <label>$INFO[ListItem.ChannelNumberLabel,[COLOR 99EDEDED],[/COLOR]  ]$INFO[ListItem.Label]</label>
+                    </control>
+                    <!-- Catch-up: past programmes can be played (TiviMate's clock). -->
+                    <control type="image">
+                        <left>484</left><top>17</top><width>22</width><height>22</height>
+                        <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
+                        <visible>ListItem.HasArchive</visible>
                     </control>
             </focusedchannellayout>
-            <itemlayout height="76" width="60">
+            <itemlayout height="56" width="60">
                     <control type="image" id="2">
-                        <left>3</left><top>6</top><width>54</width><height>64</height>
+                        <left>3</left><top>5</top><width>54</width><height>46</height>
                         <texture border="16" colordiffuse="17FFFFFF">silo/card_landscape_mask.png</texture>
                     </control>
                     <control type="label" id="1">
-                        <left>18</left><top>6</top><width>30</width><height>64</height>
+                        <left>18</left><top>5</top><width>30</width><height>46</height>
                         <aligny>center</aligny>
                         <font>silo_detail</font>
                         <label>$VAR[SiloGuideTitleRest]</label>
                     </control>
             </itemlayout>
-            <focusedlayout height="76" width="60">
+            <focusedlayout height="56" width="60">
                     <control type="image" id="2">
-                        <left>3</left><top>6</top><width>54</width><height>64</height>
+                        <left>3</left><top>5</top><width>54</width><height>46</height>
                         <texture border="16" colordiffuse="$VAR[SiloGuideCell]">silo/card_landscape_mask.png</texture>
                     </control>
                     <control type="label" id="1">
-                        <left>18</left><top>6</top><width>30</width><height>64</height>
+                        <left>18</left><top>5</top><width>30</width><height>46</height>
                         <aligny>center</aligny>
                         <font>silo_detail</font>
                         <label>$VAR[SiloGuideTitle]</label>

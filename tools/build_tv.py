@@ -19,46 +19,48 @@ from build_home import BACKGROUND, ROOT, SAFE_X, TEXT  # noqa: E402
 
 GROUPS_ID, GRID_ID = 11, 51
 DIM = '99EDEDED'
-TOP_H = 410                 # the programme's details and the preview
+TOP_H = 330                 # the programme's details and the preview
 PILLS_Y = TOP_H + 6
 GRID_Y = PILLS_Y + 76
-CHANNEL_W = 440
-ROW_H = 76
+CHANNEL_W = 520
+ROW_H = 56                  # TiviMate's slim rows: 11 channels on screen
 RULER_H = 46
-PREVIEW_W, PREVIEW_H = 608, 342
+PREVIEW_W, PREVIEW_H = 496, 279
 BLOCK_W = 60                # a 5-minute block
 
 
 def channel(focused):
-    """A channel down the left: logo, number and name; the focused row's
+    """A channel down the left on one line, as TiviMate's: logo, number and
+    name, and its history icon when it has catch-up; the focused row's
     channel lit while the grid has focus."""
     colour = TEXT if focused else 'C7EDEDED'
     return '''
                     <control type="image">
-                        <left>%(x)d</left><top>8</top><width>%(w)d</width><height>%(h)d</height>
-                        <texture border="20" colordiffuse="%(fill)s">silo/card_landscape_mask.png</texture>
+                        <left>%(x)d</left><top>5</top><width>%(w)d</width><height>%(h)d</height>
+                        <texture border="16" colordiffuse="%(fill)s">silo/card_landscape_mask.png</texture>
                     </control>
                     <control type="image">
-                        <left>%(lx)d</left><top>14</top><width>96</width><height>56</height>
+                        <left>%(lx)d</left><top>9</top><width>68</width><height>38</height>
                         <aspectratio>keep</aspectratio>
                         <texture fallback="DefaultTVShows.png">$INFO[ListItem.Icon]</texture>
                     </control>
                     <control type="label">
-                        <left>%(tx)d</left><top>10</top><width>%(tw)d</width><height>32</height>
-                        <font>silo_detail</font>
-                        <textcolor>%(dim)s</textcolor>
-                        <selectedcolor>%(dim)s</selectedcolor>
-                        <label>$INFO[ListItem.ChannelNumberLabel]</label>
-                    </control>
-                    <control type="label">
-                        <left>%(tx)d</left><top>40</top><width>%(tw)d</width><height>34</height>
+                        <left>%(tx)d</left><top>5</top><width>%(tw)d</width><height>%(h)d</height>
+                        <aligny>center</aligny>
                         <font>silo_detail</font>
                         <textcolor>%(colour)s</textcolor>
                         <selectedcolor>%(colour)s</selectedcolor>
-                        <label>$INFO[ListItem.Label]</label>
-                    </control>''' % {'x': SAFE_X - 6, 'w': CHANNEL_W - SAFE_X + 2, 'h': ROW_H - 12,
-                                     'fill': '1FFFFFFF' if focused else '0DFFFFFF', 'lx': SAFE_X + 6,
-                                     'tx': SAFE_X + 116, 'tw': CHANNEL_W - SAFE_X - 124, 'dim': DIM, 'colour': colour}
+                        <label>$INFO[ListItem.ChannelNumberLabel,[COLOR %(dim)s],[/COLOR]  ]$INFO[ListItem.Label]</label>
+                    </control>
+                    <!-- Catch-up: past programmes can be played (TiviMate's clock). -->
+                    <control type="image">
+                        <left>%(ax)d</left><top>17</top><width>22</width><height>22</height>
+                        <texture colordiffuse="%(dim)s">silo/menu_history.png</texture>
+                        <visible>ListItem.HasArchive</visible>
+                    </control>''' % {'x': SAFE_X - 6, 'w': CHANNEL_W - SAFE_X + 2, 'h': ROW_H - 10,
+                                     'fill': '1FFFFFFF' if focused else '0DFFFFFF', 'lx': SAFE_X + 4,
+                                     'tx': SAFE_X + 84, 'tw': CHANNEL_W - SAFE_X - 124, 'dim': DIM, 'colour': colour,
+                                     'ax': CHANNEL_W - 36}
 
 
 def programme(focused):
@@ -68,15 +70,15 @@ def programme(focused):
     length, so the block's colour and the title's come from variables."""
     return '''
                     <control type="image" id="2">
-                        <left>3</left><top>6</top><width>%(w)d</width><height>%(h)d</height>
+                        <left>3</left><top>5</top><width>%(w)d</width><height>%(h)d</height>
                         <texture border="16" colordiffuse="%(fill)s">silo/card_landscape_mask.png</texture>
                     </control>
                     <control type="label" id="1">
-                        <left>18</left><top>6</top><width>%(lw)d</width><height>%(h)d</height>
+                        <left>18</left><top>5</top><width>%(lw)d</width><height>%(h)d</height>
                         <aligny>center</aligny>
                         <font>silo_detail</font>
                         <label>%(label)s</label>
-                    </control>''' % {'w': BLOCK_W - 6, 'lw': BLOCK_W - 30, 'h': ROW_H - 12,
+                    </control>''' % {'w': BLOCK_W - 6, 'lw': BLOCK_W - 30, 'h': ROW_H - 10,
                                       'fill': '$VAR[SiloGuideCell]' if focused else '17FFFFFF',
                                       'label': '$VAR[SiloGuideTitle]' if focused else '$VAR[SiloGuideTitleRest]'}
 
@@ -233,7 +235,7 @@ def build():
                 </control>
             </control>
             <control type="textbox">
-                <top>196</top><width>1050</width><height>140</height>
+                <top>196</top><width>1050</width><height>70</height>
                 <font>silo_plot</font>
                 <textcolor>B3EDEDED</textcolor>
                 <selectedcolor>B3EDEDED</selectedcolor>
