@@ -8,8 +8,84 @@
 	<zorder>0</zorder>
 	<controls>
 		<include>PVRChannelNumberInput</include>
+		<!-- Silo Skyline: Live TV's banner (a channel change, Info), as TiviMate's in
+		     Silo's look: the channel, what's on with how far through it, and next.
+		     Estuary's stays for its own OSD. -->
+		<control type="group">
+			<visible>VideoPlayer.Content(LiveTV) + [Player.ShowInfo | Window.IsActive(fullscreeninfo) | Player.ChannelPreviewActive] + !Window.IsActive(videoosd) + !Window.IsActive(pvrosdchannels) + !Window.IsActive(1196)</visible>
+			<animation effect="slide" start="0,120" end="0,0" time="220" tween="cubic" easing="out">Visible</animation>
+			<animation effect="fade" start="100" end="0" time="160">Hidden</animation>
+			<!-- Twice, so the text reads over bright pictures. -->
+			<control type="image">
+				<left>0</left><top>560</top><width>1920</width><height>520</height>
+				<texture>silo/scrim_bottom.png</texture>
+			</control>
+			<control type="image">
+				<left>0</left><top>700</top><width>1920</width><height>380</height>
+				<texture>silo/scrim_bottom.png</texture>
+			</control>
+			<control type="label">
+				<right>88</right><top>40</top><width>400</width><height>56</height>
+				<align>right</align>
+				<font>silo_row</font>
+				<textcolor>FFEDEDED</textcolor>
+				<label>$INFO[System.Time]</label>
+			</control>
+			<control type="image">
+				<left>88</left><top>812</top><width>224</width><height>136</height>
+				<texture border="20" colordiffuse="E61E2024">silo/card_landscape_mask.png</texture>
+			</control>
+			<control type="image">
+				<left>110</left><top>828</top><width>180</width><height>104</height>
+				<aspectratio>keep</aspectratio>
+				<texture>$INFO[Player.Icon]</texture>
+			</control>
+			<control type="group">
+				<left>348</left><top>800</top>
+				<control type="label">
+					<width>1300</width><height>36</height>
+					<font>silo_meta</font>
+					<textcolor>99EDEDED</textcolor>
+					<label>$INFO[VideoPlayer.ChannelNumberLabel,,  ·  ]$INFO[VideoPlayer.ChannelName]</label>
+				</control>
+				<control type="label">
+					<top>38</top><width>1300</width><height>60</height>
+					<font>silo_osd_title</font>
+					<textcolor>FFEDEDED</textcolor>
+					<label fallback="19055">$INFO[VideoPlayer.Title]</label>
+				</control>
+				<control type="grouplist">
+					<top>104</top><width>1300</width><height>36</height>
+					<orientation>horizontal</orientation>
+					<itemgap>20</itemgap>
+					<control type="label">
+						<width>auto</width><height>36</height>
+						<aligny>center</aligny>
+						<font>silo_meta</font>
+						<textcolor>FFEDEDED</textcolor>
+						<label>$INFO[VideoPlayer.StartTime]$INFO[VideoPlayer.EndTime, – ,]</label>
+					</control>
+					<control type="progress">
+						<top>15</top><width>360</width><height>6</height>
+						<texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
+						<midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+						<info>PVR.EpgEventProgress</info>
+						<visible>!String.IsEmpty(VideoPlayer.EndTime)</visible>
+					</control>
+					<control type="label">
+						<width>auto</width><height>36</height>
+						<aligny>center</aligny>
+						<font>silo_meta</font>
+						<textcolor>99EDEDED</textcolor>
+						<label>$INFO[VideoPlayer.NextStartTime,[COLOR FFEDEDED]Next[/COLOR]  ,  ]$INFO[VideoPlayer.NextTitle]</label>
+					</control>
+				</control>
+			</control>
+		</control>
 		<control type="group">
 			<visible>!$EXP[SiloVideoPlayer]</visible>
+			<!-- Silo Skyline: not over Live TV, which has the banner above, but for Estuary's own OSD. -->
+			<visible>!VideoPlayer.Content(LiveTV) | Window.IsActive(videoosd)</visible>
 			<animation effect="slide" start="0,200" end="0,0" time="300" tween="cubic" easing="out">VisibleChange</animation>
 			<visible>Player.ShowInfo | Window.IsActive(fullscreeninfo) | Player.ShowTime | Window.IsActive(videoosd) | Window.IsActive(musicosd) | Window.IsActive(playerprocessinfo) | Window.IsActive(pvrosdchannels) | Window.IsActive(pvrchannelguide) | ![!String.IsEmpty(Player.SeekNumeric) | Player.Seeking | Player.HasPerformedSeek(3) | Player.Forwarding | Player.Rewinding | Player.Paused] | !String.IsEmpty(PVR.ChannelNumberInput)</visible>
 			<visible>!Player.HasGame</visible>
@@ -292,6 +368,8 @@
 		<control type="group">
 			<visible>!Window.IsVisible(playerprocessinfo)</visible>
 			<visible>[Player.ShowInfo | Window.IsActive(fullscreeninfo)] + VideoPlayer.Content(LiveTV)</visible>
+			<!-- Silo Skyline: Skyline's banner shows instead, but under Estuary's own OSD. -->
+			<visible>Window.IsActive(videoosd)</visible>
 			<visible>Player.ShowInfo | Window.IsActive(fullscreeninfo) | !Player.Seeking | !Player.HasPerformedSeek(3) | !Player.Forwarding | !Player.Rewinding | !Player.Paused</visible>
 			<animation effect="fade" start="0" end="100" time="300" delay="250">Visible</animation>
 			<animation effect="fade" start="100" end="0" time="100">Hidden</animation>

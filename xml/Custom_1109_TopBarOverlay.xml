@@ -4,6 +4,8 @@
 	<visible>Window.IsActive(fullscreenvideo) | Window.IsActive(visualisation)</visible>
 	<visible>Window.IsActive(seekbar) | Window.IsActive(pvrosdchannels) | Window.IsActive(pvrchannelguide)</visible>
 	<visible>!$EXP[SiloVideoPlayer]</visible>
+	<!-- Silo Skyline: Live TV's banner has its own clock; Estuary's bar stays for its own OSD. -->
+	<visible>!VideoPlayer.Content(LiveTV) | Window.IsActive(videoosd)</visible>
 	<depth>DepthOSD</depth>
 	<include>Animation_TopSlide</include>
 	<zorder>0</zorder>

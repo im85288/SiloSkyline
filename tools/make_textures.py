@@ -122,6 +122,12 @@ def menu_panel(name='menu_panel.png', size=96, radius=24, rim=1.5):
     write_png(name, size, size, pixel)
 
 
+def epg_now(name='epg_now.png', width=16, height=16, line=3):
+    """The guide's "now" marker: Kodi stretches it from the grid's start to
+    the current time; only its right edge shows, a white line (border="0,0,4,0")."""
+    write_png(name, width, height, lambda x, y: 1.0 if x > width - line else 0.0)
+
+
 def play_circle(name='play_circle.png', size=64):
     """Silo's Continue Watching mark: a white disc with a play triangle cut out."""
     def in_triangle(px, py):
@@ -166,6 +172,8 @@ def switches(width=112, height=56):
 def scrim(height=256):
     """Vertical black scrim, opaque at the bottom, for text over artwork."""
     write_png('scrim_bottom.png', 4, height, lambda x, y: smoothstep(y / float(height)) * 0.9, rgb=(0, 0, 0))
+    # The Live TV quick guide's edge: solid at the left fading to clear (white, so colordiffuse colours it).
+    write_png('scrim_side.png', height, 4, lambda x, y: 1 - smoothstep(x / float(height)))
 
 
 
@@ -213,6 +221,7 @@ if __name__ == '__main__':
     focus_ring('badge_outline.png', 32, 32, 8, 2)
     badge_fill()
     menu_panel()
+    epg_now()
     play_circle()
     # Silo's skip pill outline (Up Next's Skip intro), stretched with border="48".
     focus_ring('pill_ring.png', 96, 96, 48, 4)

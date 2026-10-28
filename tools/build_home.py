@@ -25,6 +25,7 @@ MAX_ROWS = 12
 CUSTOM_SLOTS = 5
 WIDGETS = 6
 CUSTOM_IDS = list(range(9031, 9031 + CUSTOM_SLOTS))
+TV_TAB = 9006  # Live TV's guide, when Kodi has TV channels
 SHORTCUTS = 9100  # hidden list holding Skin Shortcuts' main menu
 SUBMENU = 9240    # the dropdown of a custom item's submenu
 HOME_CARDS = 25   # cards in a published row (SiloKodiConnect rows.CARDS)
@@ -546,7 +547,7 @@ def row(page, page_index, slot, landscape):
 
 # Silo dims the whole bar to 70% while focus is down in the rows.
 BAR_DIM = '!ControlGroup(9000).HasFocus() + !Control.HasFocus(9011)'
-BAR_ORDER = [9001, 9002, 9003, 9004, 9005] + CUSTOM_IDS + [9009, 9010, 9011]  # Search, tabs, custom items, Settings, Power, profile
+BAR_ORDER = [9001, 9002, 9003, 9004, 9005, TV_TAB] + CUSTOM_IDS + [9009, 9010, 9011]  # Search, tabs, TV, custom items, Settings, Power, profile
 
 
 def bar_moves(control_id, down=None, menu=None):
@@ -622,8 +623,9 @@ def open_sections(page, control_id):
 
 def bar_positions():
     """Each bar button's left edge: the bar is a centred grouplist."""
-    widths = [60] + [tab_width(page) for page in TABBED] + [60, 60]
-    ids = [9001] + [9002 + index for index in range(len(TABBED))] + [9009, 9010]
+    # TV's width too (it shows when Kodi has TV channels), so the bar keeps room for it.
+    widths = [60] + [tab_width(page) for page in TABBED] + [60 + 17 * 2, 60, 60]
+    ids = [9001] + [9002 + index for index in range(len(TABBED))] + [TV_TAB, 9009, 9010]
     total = sum(widths) + BAR_GAP * (len(widths) - 1)
     x, out = (1920 - total) // 2, {}
     for control_id, width in zip(ids, widths):
@@ -1175,6 +1177,26 @@ def tab(control_id, page, page_index):
                             'open_sections': open_sections(page, control_id)}
 
 
+def tv_tab():
+    """TV, after Requests when Live TV has channels: TiviMate's guide in
+    Silo's look (tools/build_tv.py). A button of the bar's own, as the custom
+    items: Kodi moves left and right past it when it's hidden."""
+    return '''
+                <control type="button" id="%(id)d">
+                    <visible>PVR.HasTVChannels</visible>
+                    <width>auto</width><height>60</height>
+                    <label>$LOCALIZE[19020]</label>
+                    <font>silo_tab</font>
+                    <textoffsetx>24</textoffsetx>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>%(dim)s</textcolor>
+                    <focusedcolor>FF000000</focusedcolor>
+                    <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
+                    <texturenofocus />%(moves)s
+                    <onclick>ActivateWindow(TVGuide)</onclick>
+                </control>''' % {'id': TV_TAB, 'dim': TAB_DIM, 'text': TEXT, 'moves': bar_down('                    ')}
+
+
 def icon_tab(control_id, icon, action):
     return '''
             <control type="group" id="%(group)d">
@@ -1386,6 +1408,7 @@ def build():
     tabs = icon_tab(9001, 'icons/search.png', 'ClearProperty(silo.search.mode,home)</onclick>\n'
                     '                    <onclick>ActivateWindow(1190)')
     tabs += ''.join(tab(9002 + index, page, index) for index, page in enumerate(TABBED))
+    tabs += tv_tab()
     shortcuts_list, custom_tabs = custom_items()
     tabs += custom_tabs
     tabs += icon_tab(9009, 'icons/settings.png', 'ActivateWindow(Settings)')
