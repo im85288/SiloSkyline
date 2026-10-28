@@ -188,13 +188,24 @@
                         <aspectratio>keep</aspectratio>
                         <texture fallback="DefaultTVShows.png">$INFO[ListItem.Icon]</texture>
                     </control>
+
                     <control type="label">
-                        <left>172</left><top>5</top><width>308</width><height>46</height>
+                        <left>172</left><top>5</top><width>272</width><height>46</height>
+                        <aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFF2D46B</textcolor>
+                        <selectedcolor>FFF2D46B</selectedcolor>
+                        <label>$INFO[ListItem.ChannelNumberLabel,[COLOR 99EDEDED],[/COLOR]  ]$INFO[ListItem.Label]</label>
+                        <visible>ListItem.IsPlaying</visible>
+                    </control>
+                    <control type="label">
+                        <left>172</left><top>5</top><width>272</width><height>46</height>
                         <aligny>center</aligny>
                         <font>silo_detail</font>
                         <textcolor>C7EDEDED</textcolor>
                         <selectedcolor>C7EDEDED</selectedcolor>
                         <label>$INFO[ListItem.ChannelNumberLabel,[COLOR 99EDEDED],[/COLOR]  ]$INFO[ListItem.Label]</label>
+                        <visible>!ListItem.IsPlaying</visible>
                     </control>
                     <!-- Catch-up: past programmes can be played (TiviMate's clock). -->
                     <control type="image">
@@ -202,6 +213,16 @@
                         <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
                         <visible>ListItem.HasArchive</visible>
                     </control>
+                        <control type="label">
+                            <left>450</left><top>16</top><width>24</width><height>24</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <!-- Kodi marks the playing channel selected: the same colour then. -->
+                            <selectedcolor>FFF2D46B</selectedcolor>
+                            <label>▶</label>
+                            <visible>ListItem.IsPlaying + true</visible>
+                        </control>
             </channellayout>
             <focusedchannellayout height="56" width="520">
                     <control type="image">
@@ -213,13 +234,24 @@
                         <aspectratio>keep</aspectratio>
                         <texture fallback="DefaultTVShows.png">$INFO[ListItem.Icon]</texture>
                     </control>
+
                     <control type="label">
-                        <left>172</left><top>5</top><width>308</width><height>46</height>
+                        <left>172</left><top>5</top><width>272</width><height>46</height>
+                        <aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFF2D46B</textcolor>
+                        <selectedcolor>FFF2D46B</selectedcolor>
+                        <label>$INFO[ListItem.ChannelNumberLabel,[COLOR 99EDEDED],[/COLOR]  ]$INFO[ListItem.Label]</label>
+                        <visible>ListItem.IsPlaying</visible>
+                    </control>
+                    <control type="label">
+                        <left>172</left><top>5</top><width>272</width><height>46</height>
                         <aligny>center</aligny>
                         <font>silo_detail</font>
                         <textcolor>FFEDEDED</textcolor>
                         <selectedcolor>FFEDEDED</selectedcolor>
                         <label>$INFO[ListItem.ChannelNumberLabel,[COLOR 99EDEDED],[/COLOR]  ]$INFO[ListItem.Label]</label>
+                        <visible>!ListItem.IsPlaying</visible>
                     </control>
                     <!-- Catch-up: past programmes can be played (TiviMate's clock). -->
                     <control type="image">
@@ -227,6 +259,16 @@
                         <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
                         <visible>ListItem.HasArchive</visible>
                     </control>
+                        <control type="label">
+                            <left>450</left><top>16</top><width>24</width><height>24</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <!-- Kodi marks the playing channel selected: the same colour then. -->
+                            <selectedcolor>FFF2D46B</selectedcolor>
+                            <label>▶</label>
+                            <visible>ListItem.IsPlaying + true</visible>
+                        </control>
             </focusedchannellayout>
             <itemlayout height="56" width="60">
                     <control type="image" id="2">

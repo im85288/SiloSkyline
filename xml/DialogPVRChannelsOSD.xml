@@ -6,61 +6,92 @@
         <control type="group">
             <animation effect="slide" start="-1220,0" end="0,0" time="220" tween="cubic" easing="out">WindowOpen</animation>
             <animation effect="slide" start="0,0" end="-1220,0" time="160" tween="cubic" easing="in">WindowClose</animation>
-            <!-- The list's panel; the schedule's darker veil fades into the video. -->
-            <control type="image">
-                <left>0</left><top>0</top><width>640</width><height>1080</height>
-                <texture colordiffuse="F20D0F12">colors/white.png</texture>
-            </control>
-            <control type="image">
-                <left>640</left><top>0</top><width>580</width><height>1080</height>
-                <texture colordiffuse="CC0D0F12">colors/white.png</texture>
-            </control>
-            <control type="image">
-                <left>1220</left><top>0</top><width>200</width><height>1080</height>
-                <texture colordiffuse="CC0D0F12">silo/scrim_side.png</texture>
-            </control>
-            <control type="label" id="2">
-                <left>48</left><top>40</top><width>552</width><height>56</height>
-                <font>silo_meta</font>
-                <textcolor>FFEDEDED</textcolor>
-                <label>$INFO[VideoPlayer.ChannelGroup]</label>
-            </control>
-            <control type="fixedlist" id="11">
-                <left>0</left><top>110</top><width>640</width><height>954</height>
-                <focusposition>3</focusposition>
-                <movement>3</movement>
-                <orientation>vertical</orientation>
-                <scrolltime tween="cubic" easing="out">200</scrolltime>
-                <itemlayout width="640" height="106">
+            <!-- The channels and their short schedule: slid away while the whole schedule is open. -->
+            <control type="group">
+                <animation effect="slide" end="-1220,0" time="220" tween="cubic" easing="out" condition="[Control.HasFocus(14) | Control.HasFocus(13) | String.IsEqual(Window(Home).Property(silo.sched.want),1)]">Conditional</animation>
+                <animation effect="fade" end="0" time="220" condition="[Control.HasFocus(14) | Control.HasFocus(13) | String.IsEqual(Window(Home).Property(silo.sched.want),1)]">Conditional</animation>
+                <!-- The list's panel; the schedule's darker veil fades into the video. -->
+                <control type="image">
+                    <left>0</left><top>0</top><width>640</width><height>1080</height>
+                    <texture colordiffuse="F2272A30">colors/white.png</texture>
+                </control>
+                <control type="image">
+                    <left>640</left><top>0</top><width>580</width><height>1080</height>
+                    <texture colordiffuse="CC272A30">colors/white.png</texture>
+                </control>
+                <control type="image">
+                    <left>1220</left><top>0</top><width>200</width><height>1080</height>
+                    <texture colordiffuse="CC272A30">silo/scrim_side.png</texture>
+                </control>
+                <control type="label" id="2">
+                    <left>48</left><top>40</top><width>552</width><height>56</height>
+                    <font>silo_meta</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>$INFO[VideoPlayer.ChannelGroup]</label>
+                </control>
+                <control type="fixedlist" id="11">
+                    <left>0</left><top>110</top><width>640</width><height>954</height>
+                    <!-- Right: into this channel's whole schedule, catch-up included (TiviMate's). -->
+                    <onright>SetProperty(silo.sched.number,$INFO[Container(11).ListItem.ChannelNumberLabel],home)</onright>
+                    <onright>SetProperty(silo.sched.name,$INFO[Container(11).ListItem.ChannelName],home)</onright>
+                    <!-- Loaded already (the channel rested on): straight to what's on now. Else, as
+                         Kodi can't focus an empty list, a timer does once it has loaded. -->
+                    <onright condition="[String.IsEqual(Window(Home).Property(silokodi.schedule_for),Container(11).ListItem.ChannelNumberLabel) + Integer.IsGreater(Container(14).NumItems,0) + !Container(14).IsUpdating]">SetFocus(14,$INFO[Window(Home).Property(silokodi.schedule_now)],absolute)</onright>
+                    <onright condition="![String.IsEqual(Window(Home).Property(silokodi.schedule_for),Container(11).ListItem.ChannelNumberLabel) + Integer.IsGreater(Container(14).NumItems,0) + !Container(14).IsUpdating]">SetProperty(silo.sched.want,1,home)</onright>
+                    <focusposition>3</focusposition>
+                    <movement>3</movement>
+                    <orientation>vertical</orientation>
+                    <scrolltime tween="cubic" easing="out">200</scrolltime>
+                    <itemlayout width="640" height="106">
                     <control type="group">
                         <control type="image">
                             <left>48</left><top>16</top><width>104</width><height>72</height>
                             <aspectratio>keep</aspectratio>
                             <texture fallback="DefaultTVShows.png">$INFO[ListItem.Icon]</texture>
                         </control>
+
                         <control type="label">
-                            <left>168</left><top>12</top><width>442</width><height>34</height>
+                            <left>168</left><top>12</top><width>402</width><height>34</height>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <selectedcolor>FFF2D46B</selectedcolor>
+                            <label>$INFO[ListItem.ChannelNumberLabel,,  ·  ]$INFO[ListItem.ChannelName]</label>
+                            <visible>ListItem.IsPlaying</visible>
+                        </control>
+                        <control type="label">
+                            <left>168</left><top>12</top><width>402</width><height>34</height>
                             <font>silo_detail</font>
                             <textcolor>99EDEDED</textcolor>
                             <selectedcolor>99EDEDED</selectedcolor>
                             <label>$INFO[ListItem.ChannelNumberLabel,,  ·  ]$INFO[ListItem.ChannelName]</label>
+                            <visible>!ListItem.IsPlaying</visible>
                         </control>
                         <control type="label">
-                            <left>168</left><top>44</top><width>442</width><height>36</height>
+                            <left>168</left><top>44</top><width>402</width><height>36</height>
                             <font>silo_meta</font>
                             <textcolor>D9EDEDED</textcolor>
                             <selectedcolor>D9EDEDED</selectedcolor>
                             <label>$VAR[SiloQuickNow]</label>
                         </control>
                         <control type="progress">
-                            <left>168</left><top>88</top><width>442</width><height>5</height>
+                            <left>168</left><top>88</top><width>402</width><height>5</height>
                             <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
                             <midtexture colordiffuse="D9EDEDED">colors/white.png</midtexture>
                             <info>ListItem.Progress</info>
                         </control>
                     </control>
-                </itemlayout>
-                <focusedlayout width="640" height="106">
+                        <control type="label">
+                            <left>574</left><top>18</top><width>28</width><height>28</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <!-- Kodi marks the playing channel selected: the same colour then. -->
+                            <selectedcolor>FFF2D46B</selectedcolor>
+                            <label>▶</label>
+                            <visible>ListItem.IsPlaying + true</visible>
+                        </control>
+                    </itemlayout>
+                    <focusedlayout width="640" height="106">
                     <control type="image">
                         <left>30</left><top>4</top><width>592</width><height>98</height>
                         <texture border="20" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
@@ -73,22 +104,32 @@
                             <aspectratio>keep</aspectratio>
                             <texture fallback="DefaultTVShows.png">$INFO[ListItem.Icon]</texture>
                         </control>
+
                         <control type="label">
-                            <left>168</left><top>12</top><width>442</width><height>34</height>
+                            <left>168</left><top>12</top><width>402</width><height>34</height>
                             <font>silo_detail</font>
                             <textcolor>SkylineFocusTextDim</textcolor>
                             <selectedcolor>B3000000</selectedcolor>
                             <label>$INFO[ListItem.ChannelNumberLabel,,  ·  ]$INFO[ListItem.ChannelName]</label>
+                            <visible>ListItem.IsPlaying</visible>
                         </control>
                         <control type="label">
-                            <left>168</left><top>44</top><width>442</width><height>36</height>
+                            <left>168</left><top>12</top><width>402</width><height>34</height>
+                            <font>silo_detail</font>
+                            <textcolor>SkylineFocusTextDim</textcolor>
+                            <selectedcolor>B3000000</selectedcolor>
+                            <label>$INFO[ListItem.ChannelNumberLabel,,  ·  ]$INFO[ListItem.ChannelName]</label>
+                            <visible>!ListItem.IsPlaying</visible>
+                        </control>
+                        <control type="label">
+                            <left>168</left><top>44</top><width>402</width><height>36</height>
                             <font>silo_meta</font>
                             <textcolor>SkylineFocusText</textcolor>
                             <selectedcolor>SkylineFocusText</selectedcolor>
                             <label>$VAR[SiloQuickNow]</label>
                         </control>
                         <control type="progress">
-                            <left>168</left><top>88</top><width>442</width><height>5</height>
+                            <left>168</left><top>88</top><width>402</width><height>5</height>
                             <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
                             <midtexture colordiffuse="SkylineFocusText">colors/white.png</midtexture>
                             <info>ListItem.Progress</info>
@@ -101,106 +142,489 @@
                             <aspectratio>keep</aspectratio>
                             <texture fallback="DefaultTVShows.png">$INFO[ListItem.Icon]</texture>
                         </control>
+
                         <control type="label">
-                            <left>168</left><top>12</top><width>442</width><height>34</height>
+                            <left>168</left><top>12</top><width>402</width><height>34</height>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <selectedcolor>FFF2D46B</selectedcolor>
+                            <label>$INFO[ListItem.ChannelNumberLabel,,  ·  ]$INFO[ListItem.ChannelName]</label>
+                            <visible>ListItem.IsPlaying</visible>
+                        </control>
+                        <control type="label">
+                            <left>168</left><top>12</top><width>402</width><height>34</height>
                             <font>silo_detail</font>
                             <textcolor>99EDEDED</textcolor>
                             <selectedcolor>99EDEDED</selectedcolor>
                             <label>$INFO[ListItem.ChannelNumberLabel,,  ·  ]$INFO[ListItem.ChannelName]</label>
+                            <visible>!ListItem.IsPlaying</visible>
                         </control>
                         <control type="label">
-                            <left>168</left><top>44</top><width>442</width><height>36</height>
+                            <left>168</left><top>44</top><width>402</width><height>36</height>
                             <font>silo_meta</font>
                             <textcolor>D9EDEDED</textcolor>
                             <selectedcolor>D9EDEDED</selectedcolor>
                             <label>$VAR[SiloQuickNow]</label>
                         </control>
                         <control type="progress">
-                            <left>168</left><top>88</top><width>442</width><height>5</height>
+                            <left>168</left><top>88</top><width>402</width><height>5</height>
                             <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
                             <midtexture colordiffuse="D9EDEDED">colors/white.png</midtexture>
                             <info>ListItem.Progress</info>
                         </control>
                     </control>
-                </focusedlayout>
+                        <control type="label">
+                            <left>574</left><top>18</top><width>28</width><height>28</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FF101010</textcolor>
+                            <!-- Kodi marks the playing channel selected: the same colour then. -->
+                            <selectedcolor>FF101010</selectedcolor>
+                            <label>▶</label>
+                            <visible>ListItem.IsPlaying + Control.HasFocus(11)</visible>
+                        </control>
+                        <control type="label">
+                            <left>574</left><top>18</top><width>28</width><height>28</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <!-- Kodi marks the playing channel selected: the same colour then. -->
+                            <selectedcolor>FFF2D46B</selectedcolor>
+                            <label>▶</label>
+                            <visible>ListItem.IsPlaying + !Control.HasFocus(11)</visible>
+                        </control>
+                    </focusedlayout>
+                </control>
+                <!-- The focused channel's schedule, from just before what's on now. -->
+                <control type="group">
+                    <left>670</left><top>40</top>
+                    <control type="image">
+                        <width>104</width><height>56</height>
+                        <aspectratio align="left">keep</aspectratio>
+                        <texture>$INFO[Container(11).ListItem.Icon]</texture>
+                    </control>
+                    <control type="label">
+                        <left>120</left><width>400</width><height>56</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[Container(11).ListItem.ChannelNumberLabel,,  ·  ]$INFO[Container(11).ListItem.ChannelName]</label>
+                    </control>
+                    <control type="list" id="12">
+                        <top>90</top><width>520</width><height>870</height>
+                        <orientation>vertical</orientation>
+                        <content target="videos">plugin://plugin.video.silokodiconnect/?mode=schedule&amp;number=$INFO[Container(11).ListItem.ChannelNumberLabel]&amp;name=$INFO[Container(11).ListItem.ChannelName]</content>
+                        <itemlayout width="520" height="58">
+                    <control type="group">
+                        <visible>String.IsEqual(ListItem.Property(silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                            <visible>String.IsEqual(ListItem.Property(silo.today),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                            <visible>!String.IsEqual(ListItem.Property(silo.today),1)</visible>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>!String.IsEqual(ListItem.Property(silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>110</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[ListItem.Label2]</label>
+                        </control>
+
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                            <visible>String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                            <visible>!String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                        </control>
+                        <control type="image">
+                            <left>476</left><top>17</top><width>24</width><height>24</height>
+                            <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
+                            <visible>String.IsEqual(ListItem.Property(silo.archive),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>428</left><width>76</width><height>58</height>
+                            <aligny>center</aligny><align>right</align>
+                            <font>silo_badge</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>▶ LIVE</label>
+                            <visible>String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                        </control>
+                    </control>
+                        </itemlayout>
+                        <focusedlayout width="520" height="58">
+                    <control type="group">
+                        <visible>String.IsEqual(ListItem.Property(silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                            <visible>String.IsEqual(ListItem.Property(silo.today),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                            <visible>!String.IsEqual(ListItem.Property(silo.today),1)</visible>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>!String.IsEqual(ListItem.Property(silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>110</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[ListItem.Label2]</label>
+                        </control>
+
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                            <visible>String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                            <visible>!String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                        </control>
+                        <control type="image">
+                            <left>476</left><top>17</top><width>24</width><height>24</height>
+                            <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
+                            <visible>String.IsEqual(ListItem.Property(silo.archive),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>428</left><width>76</width><height>58</height>
+                            <aligny>center</aligny><align>right</align>
+                            <font>silo_badge</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>▶ LIVE</label>
+                            <visible>String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                        </control>
+                    </control>
+                        </focusedlayout>
+                    </control>
+                </control>
             </control>
-            <!-- The focused channel's schedule, from what's on now. -->
+            <!-- The whole schedule, as TiviMate's: in from the right as the channels go. Never
+                 hidden (Kodi can't focus a hidden list), only faded out until Right. -->
             <control type="group">
-                <left>670</left><top>40</top>
+                <animation effect="fade" start="100" end="0" time="0" condition="![Control.HasFocus(14) | Control.HasFocus(13) | String.IsEqual(Window(Home).Property(silo.sched.want),1)]">Conditional</animation>
+                <animation effect="slide" start="640,0" end="0,0" time="220" tween="cubic" easing="out" condition="[Control.HasFocus(14) | Control.HasFocus(13) | String.IsEqual(Window(Home).Property(silo.sched.want),1)]">Conditional</animation>
                 <control type="image">
-                    <width>104</width><height>56</height>
+                    <left>0</left><top>0</top><width>1138</width><height>1080</height>
+                    <texture colordiffuse="F2272A30">colors/white.png</texture>
+                </control>
+                <control type="image">
+                    <left>1138</left><top>0</top><width>200</width><height>1080</height>
+                    <texture colordiffuse="CC272A30">silo/scrim_side.png</texture>
+                </control>
+                <control type="image">
+                    <left>48</left><top>26</top><width>120</width><height>72</height>
                     <aspectratio align="left">keep</aspectratio>
                     <texture>$INFO[Container(11).ListItem.Icon]</texture>
                 </control>
                 <control type="label">
-                    <left>120</left><width>400</width><height>56</height>
-                    <aligny>center</aligny>
+                    <left>188</left><top>22</top><width>712</width><height>44</height>
                     <font>silo_meta</font>
                     <textcolor>FFEDEDED</textcolor>
-                    <label>$INFO[Container(11).ListItem.ChannelNumberLabel,,  ·  ]$INFO[Container(11).ListItem.ChannelName]</label>
+                    <label>$INFO[Container(11).ListItem.ChannelNumberLabel,,  ]$INFO[Container(11).ListItem.ChannelName]</label>
                 </control>
-                <control type="list" id="12">
-                    <top>90</top><width>520</width><height>870</height>
+                <control type="label">
+                    <left>188</left><top>64</top><width>712</width><height>36</height>
+                    <font>silo_detail</font>
+                    <textcolor>99EDEDED</textcolor>
+                    <label>$INFO[VideoPlayer.ChannelGroup]</label>
+                </control>
+                <control type="fixedlist" id="14">
+                    <left>24</left><top>124</top><width>900</width><height>962</height>
                     <orientation>vertical</orientation>
-                    <content target="videos">plugin://plugin.video.silokodiconnect/?mode=schedule&amp;number=$INFO[Container(11).ListItem.ChannelNumberLabel]&amp;name=$INFO[Container(11).ListItem.ChannelName]</content>
-                    <itemlayout width="520" height="58">
-                    <control type="label">
-                        <left>0</left><width>120</width><height>58</height>
-                        <aligny>center</aligny>
-                        <font>silo_detail</font>
-                        <textcolor>99EDEDED</textcolor>
-                        <label>$INFO[ListItem.Label2]</label>
-                        <visible>!String.IsEqual(ListItem.Property(silo.header),1)</visible>
-                    </control>
-                    <control type="label">
-                        <left>130</left><width>380</width><height>58</height>
-                        <aligny>center</aligny>
-                        <font>silo_detail</font>
-                        <textcolor>$VAR[SiloQuickScheduleColour]</textcolor>
-                        <label>$INFO[ListItem.Label]</label>
-                        <visible>!String.IsEqual(ListItem.Property(silo.header),1)</visible>
-                    </control>
-                    <control type="label">
-                        <left>0</left><width>520</width><height>58</height>
-                        <aligny>bottom</aligny>
-                        <font>silo_badge</font>
-                        <textcolor>FFEDEDED</textcolor>
-                        <label>[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</label>
+                    <focusposition>5</focusposition>
+                    <movement>5</movement>
+                    <scrolltime tween="cubic" easing="out">160</scrolltime>
+                    <onleft>11</onleft>
+                    <!-- Into the days at this programme's (TiviMate's); neither list wraps round. -->
+                    <onright>SetFocus(13,$INFO[Container(14).ListItem.Property(silo.day)],absolute)</onright>
+                    <onup>noop</onup>
+                    <ondown>noop</ondown>
+                    <content target="videos">$VAR[SiloSchedulePath]</content>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.when)) + !String.IsEqual(ListItem.Property(silo.when),future)">Dialog.Close(pvrosdchannels)</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.when)) + !String.IsEqual(ListItem.Property(silo.when),future)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=play_broadcast&amp;id=$INFO[ListItem.Property(silo.broadcastid)]&amp;channel=$INFO[ListItem.Property(silo.channelid)]&amp;when=$INFO[ListItem.Property(silo.when)])</onclick>
+                    <itemlayout width="900" height="74">
+                    <control type="group">
                         <visible>String.IsEqual(ListItem.Property(silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>900</width><height>74</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                            <visible>String.IsEqual(ListItem.Property(silo.today),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>14</left><width>900</width><height>74</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                            <visible>!String.IsEqual(ListItem.Property(silo.today),1)</visible>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>!String.IsEqual(ListItem.Property(silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>110</width><height>74</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[ListItem.Label2]</label>
+                        </control>
+
+                        <control type="label">
+                            <left>130</left><width>670</width><height>74</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                            <visible>String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>130</left><width>670</width><height>74</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                            <visible>!String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                        </control>
+                        <control type="image">
+                            <left>856</left><top>25</top><width>24</width><height>24</height>
+                            <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
+                            <visible>String.IsEqual(ListItem.Property(silo.archive),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>808</left><width>76</width><height>74</height>
+                            <aligny>center</aligny><align>right</align>
+                            <font>silo_badge</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>▶ LIVE</label>
+                            <visible>String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                        </control>
                     </control>
                     </itemlayout>
-                    <focusedlayout width="520" height="58">
-                    <control type="label">
-                        <left>0</left><width>120</width><height>58</height>
-                        <aligny>center</aligny>
-                        <font>silo_detail</font>
-                        <textcolor>99EDEDED</textcolor>
-                        <label>$INFO[ListItem.Label2]</label>
-                        <visible>!String.IsEqual(ListItem.Property(silo.header),1)</visible>
+                    <focusedlayout width="900" height="74">
+                    <control type="image">
+                        <top>3</top><width>900</width><height>68</height>
+                        <texture border="20" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
+                        <visible>!String.IsEqual(ListItem.Property(silo.header),1) + Control.HasFocus(14)</visible>
                     </control>
-                    <control type="label">
-                        <left>130</left><width>380</width><height>58</height>
-                        <aligny>center</aligny>
-                        <font>silo_detail</font>
-                        <textcolor>$VAR[SiloQuickScheduleColour]</textcolor>
-                        <label>$INFO[ListItem.Label]</label>
-                        <visible>!String.IsEqual(ListItem.Property(silo.header),1)</visible>
-                    </control>
-                    <control type="label">
-                        <left>0</left><width>520</width><height>58</height>
-                        <aligny>bottom</aligny>
-                        <font>silo_badge</font>
-                        <textcolor>FFEDEDED</textcolor>
-                        <label>[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</label>
+                    <control type="group">
                         <visible>String.IsEqual(ListItem.Property(silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>900</width><height>74</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                            <visible>String.IsEqual(ListItem.Property(silo.today),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>14</left><width>900</width><height>74</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                            <visible>!String.IsEqual(ListItem.Property(silo.today),1)</visible>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>!String.IsEqual(ListItem.Property(silo.header),1) + Control.HasFocus(14)</visible>
+                        <control type="label">
+                            <left>14</left><width>110</width><height>74</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>SkylineFocusTextDim</textcolor>
+                            <label>$INFO[ListItem.Label2]</label>
+                        </control>
+
+                        <control type="label">
+                            <left>130</left><width>670</width><height>74</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>SkylineFocusText</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                            <visible>String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>130</left><width>670</width><height>74</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>SkylineFocusText</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                            <visible>!String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                        </control>
+                        <control type="image">
+                            <left>856</left><top>25</top><width>24</width><height>24</height>
+                            <texture colordiffuse="SkylineFocusText">silo/menu_history.png</texture>
+                            <visible>String.IsEqual(ListItem.Property(silo.archive),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>808</left><width>76</width><height>74</height>
+                            <aligny>center</aligny><align>right</align>
+                            <font>silo_badge</font>
+                            <textcolor>SkylineFocusText</textcolor>
+                            <label>▶ LIVE</label>
+                            <visible>String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>!String.IsEqual(ListItem.Property(silo.header),1) + !Control.HasFocus(14)</visible>
+                        <control type="label">
+                            <left>14</left><width>110</width><height>74</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[ListItem.Label2]</label>
+                        </control>
+
+                        <control type="label">
+                            <left>130</left><width>670</width><height>74</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                            <visible>String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>130</left><width>670</width><height>74</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                            <visible>!String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                        </control>
+                        <control type="image">
+                            <left>856</left><top>25</top><width>24</width><height>24</height>
+                            <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
+                            <visible>String.IsEqual(ListItem.Property(silo.archive),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>808</left><width>76</width><height>74</height>
+                            <aligny>center</aligny><align>right</align>
+                            <font>silo_badge</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>▶ LIVE</label>
+                            <visible>String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                        </control>
+                    </control>
+                    </focusedlayout>
+                </control>
+                <!-- The days, TiviMate's column: moving to one takes the schedule there
+                     (a timer: Kodi's lists run nothing as they move); Left goes into it. -->
+                <control type="list" id="13">
+                    <left>944</left><top>124</top><width>170</width><height>930</height>
+                    <orientation>vertical</orientation>
+                    <onleft>14</onleft>
+                    <onup>noop</onup>
+                    <ondown>noop</ondown>
+                    <content target="videos">$VAR[SiloScheduleDaysPath]</content>
+                    <itemlayout width="170" height="62">
+                    <control type="image">
+                        <top>3</top><width>170</width><height>56</height>
+                        <texture border="20" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texture>
+                        <visible>String.IsEqual(ListItem.Property(silo.day),Container(14).ListItem.Property(silo.day))</visible>
+                    </control>
+                    <control type="label">
+                        <width>170</width><height>62</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFF2D46B</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>String.IsEqual(ListItem.Property(silo.today),1)</visible>
+                    </control>
+                    <control type="label">
+                        <width>170</width><height>62</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>C7EDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>!String.IsEqual(ListItem.Property(silo.today),1)</visible>
+                    </control>
+                    </itemlayout>
+                    <focusedlayout width="170" height="62">
+                    <control type="image">
+                        <top>3</top><width>170</width><height>56</height>
+                        <texture border="20" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texture>
+                        <visible>String.IsEqual(ListItem.Property(silo.day),Container(14).ListItem.Property(silo.day)) + !Control.HasFocus(13)</visible>
+                    </control>
+                    <control type="image">
+                        <top>3</top><width>170</width><height>56</height>
+                        <texture border="20" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
+                        <visible>Control.HasFocus(13)</visible>
+                    </control>
+                    <control type="label">
+                        <width>170</width><height>62</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>SkylineFocusText</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>Control.HasFocus(13)</visible>
+                    </control>
+                    <control type="label">
+                        <width>170</width><height>62</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFF2D46B</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>String.IsEqual(ListItem.Property(silo.today),1) + !Control.HasFocus(13)</visible>
+                    </control>
+                    <control type="label">
+                        <width>170</width><height>62</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>C7EDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>!String.IsEqual(ListItem.Property(silo.today),1) + !Control.HasFocus(13)</visible>
                     </control>
                     </focusedlayout>
                 </control>
             </control>
         </control>
-        <!-- The focused channel's programme, as TiviMate's card. -->
         <control type="group">
             <left>1232</left><top>48</top>
+            <visible>![Control.HasFocus(14) | Control.HasFocus(13)]</visible>
             <animation effect="fade" start="0" end="100" time="200">WindowOpen</animation>
             <animation effect="fade" start="100" end="0" time="120">WindowClose</animation>
             <control type="image">
@@ -236,6 +660,45 @@
                 <font>silo_detail</font>
                 <textcolor>B3EDEDED</textcolor>
                 <label>$INFO[Container(11).ListItem.Plot]</label>
+            </control>
+        </control>
+        <control type="group">
+            <left>1232</left><top>48</top>
+            <visible>[Control.HasFocus(14) | Control.HasFocus(13)] + String.IsEmpty(Container(14).ListItem.Property(silo.header))</visible>
+            <animation effect="fade" start="0" end="100" time="200">WindowOpen</animation>
+            <animation effect="fade" start="100" end="0" time="120">WindowClose</animation>
+            <control type="image">
+                <width>600</width><height>260</height>
+                <texture border="28">silo/menu_panel.png</texture>
+            </control>
+            <control type="textbox">
+                <left>30</left><top>22</top><width>540</width><height>96</height>
+                <font>silo_meta</font>
+                <textcolor>FFEDEDED</textcolor>
+                <label fallback="19055">$INFO[Container(14).ListItem.Label]</label>
+            </control>
+            <control type="grouplist">
+                <left>30</left><top>126</top><width>540</width><height>34</height>
+                <orientation>horizontal</orientation>
+                <itemgap>18</itemgap>
+                <control type="label">
+                    <width>auto</width><height>34</height>
+                    <aligny>center</aligny>
+                    <font>silo_detail</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>$INFO[Container(14).ListItem.Property(silo.timeline)]</label>
+                </control>
+                <control type="image">
+                    <top>5</top><width>24</width><height>24</height>
+                    <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
+                    <visible>String.IsEqual(Container(14).ListItem.Property(silo.archive),1)</visible>
+                </control>
+            </control>
+            <control type="textbox">
+                <left>30</left><top>170</top><width>540</width><height>66</height>
+                <font>silo_detail</font>
+                <textcolor>B3EDEDED</textcolor>
+                <label>$INFO[Container(14).ListItem.Property(silo.plot)]</label>
             </control>
         </control>
         <include>PVRChannelNumberInput</include>

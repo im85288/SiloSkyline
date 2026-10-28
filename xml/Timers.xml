@@ -335,4 +335,35 @@
         <onstop condition="[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + !Control.HasFocus(53)">SetFocus(53)</onstop>
     </timer>
     <!-- end Silo Skyline library -->
+    <!-- Silo Skyline TV (tools/build_tv.py) -->
+    <timer>
+        <name>silo_recent_autoclose</name>
+        <start reset="true">Window.IsActive(1196)</start>
+        <reset>Window.IsActive(1196) + !System.IdleTime(1)</reset>
+        <stop>!Window.IsActive(1196) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_recent_autoclose),3)</stop>
+        <onstop condition="Window.IsActive(1196)">Dialog.Close(1196)</onstop>
+    </timer>
+    <timer>
+        <name>silo_schedule_now</name>
+        <start reset="true">Window.IsActive(pvrosdchannels) + String.IsEqual(Window(Home).Property(silo.sched.want),1) + String.IsEqual(Window(Home).Property(silokodi.schedule_for),Window(Home).Property(silo.sched.number)) + Integer.IsGreater(Container(14).NumItems,0) + !Container(14).IsUpdating</start>
+        <stop>true</stop>
+        <onstop>ClearProperty(silo.sched.want,home)</onstop>
+        <onstop>SetFocus(14,$INFO[Window(Home).Property(silokodi.schedule_now)],absolute)</onstop>
+    </timer>
+    <!-- Right on a channel with no schedule: back to the channels after 5 s. -->
+    <timer>
+        <name>silo_schedule_giveup</name>
+        <start reset="true">String.IsEqual(Window(Home).Property(silo.sched.want),1)</start>
+        <stop>!String.IsEqual(Window(Home).Property(silo.sched.want),1) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_schedule_giveup),5)</stop>
+        <onstop>ClearProperty(silo.sched.want,home)</onstop>
+    </timer>
+    <!-- The day column: the schedule follows the focused day to its first programme, focus staying on the day. -->
+    <timer>
+        <name>silo_schedule_day</name>
+        <start reset="true">Control.HasFocus(13) + !String.IsEqual(Container(13).ListItem.Property(silo.day),Container(14).ListItem.Property(silo.day))</start>
+        <stop>true</stop>
+        <onstop>SetFocus(14,$INFO[Container(13).ListItem.Property(silo.first)],absolute)</onstop>
+        <onstop>SetFocus(13)</onstop>
+    </timer>
+    <!-- end Silo Skyline TV -->
 </timers>

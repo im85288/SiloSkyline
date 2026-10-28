@@ -3,17 +3,10 @@
 <window id="1196" type="dialog">
     <defaultcontrol always="true">5600</defaultcontrol>
     <controls>
+        <!-- The top's shade and corners fade in place (sliding, the shade crossed the picture). -->
         <control type="group">
-            <animation effect="slide" start="0,320" end="0,0" time="220" tween="cubic" easing="out">WindowOpen</animation>
-            <animation effect="slide" start="0,0" end="0,320" time="160" tween="cubic" easing="in">WindowClose</animation>
-            <control type="image">
-                <left>0</left><top>300</top><width>1920</width><height>780</height>
-                <texture colordiffuse="F20D0F12">silo/scrim_bottom.png</texture>
-            </control>
-            <control type="image">
-                <left>0</left><top>520</top><width>1920</width><height>560</height>
-                <texture colordiffuse="F20D0F12">silo/scrim_bottom.png</texture>
-            </control>
+            <animation effect="fade" start="0" end="100" time="220">WindowOpen</animation>
+            <animation effect="fade" start="100" end="0" time="160">WindowClose</animation>
             <control type="image">
                 <left>0</left><top>0</top><width>1920</width><height>200</height>
                 <texture flipy="true">silo/scrim_bottom.png</texture>
@@ -30,6 +23,18 @@
                 <font>silo_meta</font>
                 <textcolor>FFEDEDED</textcolor>
                 <label>$INFO[System.Date(ddd d mmm)]$INFO[System.Time,  ·  ,]</label>
+            </control>
+        </control>
+        <control type="group">
+            <animation effect="slide" start="0,320" end="0,0" time="220" tween="cubic" easing="out">WindowOpen</animation>
+            <animation effect="slide" start="0,0" end="0,320" time="160" tween="cubic" easing="in">WindowClose</animation>
+            <control type="image">
+                <left>0</left><top>300</top><width>1920</width><height>780</height>
+                <texture colordiffuse="F20D0F12">silo/scrim_bottom.png</texture>
+            </control>
+            <control type="image">
+                <left>0</left><top>520</top><width>1920</width><height>560</height>
+                <texture colordiffuse="F20D0F12">silo/scrim_bottom.png</texture>
             </control>
             <control type="group">
                 <left>88</left><top>468</top>
@@ -71,6 +76,58 @@
                         <label>$INFO[PVR.EpgEventRemainingTime(mins),, min left]</label>
                         <visible>!String.IsEmpty(VideoPlayer.EndTime)</visible>
                     </control>
+                <control type="button">
+                    <width>auto</width><height>34</height>
+                    <label>$INFO[VideoPlayer.VideoResolution]$VAR[SiloLiveResolutionSuffix]</label>
+                    <font>silo_badge</font>
+                    <textoffsetx>12</textoffsetx>
+                    <aligny>center</aligny>
+                    <enable>false</enable>
+                    <disabledcolor>FFEDEDED</disabledcolor>
+                    <!-- Outlined, as on Silo's Apple TV app. -->
+                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
+                    <visible>!String.IsEmpty(VideoPlayer.VideoResolution)</visible>
+                </control>
+                <control type="button">
+                    <width>auto</width><height>34</height>
+                    <label>$VAR[SiloLiveFps] FPS</label>
+                    <font>silo_badge</font>
+                    <textoffsetx>12</textoffsetx>
+                    <aligny>center</aligny>
+                    <enable>false</enable>
+                    <disabledcolor>FFEDEDED</disabledcolor>
+                    <!-- Outlined, as on Silo's Apple TV app. -->
+                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
+                    <visible>String.StartsWith(Player.Process(videofps),59.9) | String.StartsWith(Player.Process(videofps),60) | String.StartsWith(Player.Process(videofps),50) | String.StartsWith(Player.Process(videofps),48) | String.StartsWith(Player.Process(videofps),29.9) | String.StartsWith(Player.Process(videofps),30) | String.StartsWith(Player.Process(videofps),25) | String.StartsWith(Player.Process(videofps),23.9) | String.StartsWith(Player.Process(videofps),24)</visible>
+                </control>
+                <control type="button">
+                    <width>auto</width><height>34</height>
+                    <label>$VAR[SiloLiveHdr]</label>
+                    <font>silo_badge</font>
+                    <textoffsetx>12</textoffsetx>
+                    <aligny>center</aligny>
+                    <enable>false</enable>
+                    <disabledcolor>FFEDEDED</disabledcolor>
+                    <!-- Outlined, as on Silo's Apple TV app. -->
+                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
+                    <visible>!String.IsEmpty(VideoPlayer.HdrType)</visible>
+                </control>
+                <control type="button">
+                    <width>auto</width><height>34</height>
+                    <label>$VAR[SiloLiveAudio]</label>
+                    <font>silo_badge</font>
+                    <textoffsetx>12</textoffsetx>
+                    <aligny>center</aligny>
+                    <enable>false</enable>
+                    <disabledcolor>FFEDEDED</disabledcolor>
+                    <!-- Outlined, as on Silo's Apple TV app. -->
+                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
+                    <visible>!String.IsEmpty(VideoPlayer.AudioChannels)</visible>
+                </control>
                 </control>
                 <control type="textbox">
                     <top>150</top><width>1300</width><height>66</height>
