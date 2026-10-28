@@ -4517,8 +4517,22 @@
         <value>17FFFFFF</value>
     </variable>
     <variable name="SiloGuideTitle">
+        <value condition="Control.HasFocus(51) + String.IsEmpty(ListItem.Label)">[COLOR B3000000]No information[/COLOR]</value>
         <value condition="Control.HasFocus(51)">[COLOR FF000000]$INFO[ListItem.Label][/COLOR]</value>
+        <value condition="String.IsEmpty(ListItem.Label)">[COLOR 80EDEDED]No information[/COLOR]</value>
         <value>[COLOR D9EDEDED]$INFO[ListItem.Label][/COLOR]</value>
+    </variable>
+    <variable name="SiloGuideTitleRest">
+        <value condition="String.IsEmpty(ListItem.Label)">[COLOR 80EDEDED]No information[/COLOR]</value>
+        <value>[COLOR D9EDEDED]$INFO[ListItem.Label][/COLOR]</value>
+    </variable>
+    <variable name="SiloQuickNow">
+        <value condition="String.IsEmpty(ListItem.Title)">No information</value>
+        <value>$INFO[ListItem.Title]</value>
+    </variable>
+    <variable name="SiloQuickScheduleColour">
+        <value condition="String.IsEqual(ListItem.Property(silo.now),1)">FFEDEDED</value>
+        <value>C7EDEDED</value>
     </variable>
     <!-- end Silo Skyline TV guide -->
 </includes>

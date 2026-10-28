@@ -7,19 +7,135 @@
             <animation effect="slide" start="0,320" end="0,0" time="220" tween="cubic" easing="out">WindowOpen</animation>
             <animation effect="slide" start="0,0" end="0,320" time="160" tween="cubic" easing="in">WindowClose</animation>
             <control type="image">
-                <left>0</left><top>620</top><width>1920</width><height>460</height>
+                <left>0</left><top>300</top><width>1920</width><height>780</height>
                 <texture colordiffuse="F20D0F12">silo/scrim_bottom.png</texture>
             </control>
+            <control type="image">
+                <left>0</left><top>520</top><width>1920</width><height>560</height>
+                <texture colordiffuse="F20D0F12">silo/scrim_bottom.png</texture>
+            </control>
+            <control type="image">
+                <left>0</left><top>0</top><width>1920</width><height>200</height>
+                <texture flipy="true">silo/scrim_bottom.png</texture>
+            </control>
             <control type="label">
-                <left>88</left><top>694</top><width>1000</width><height>50</height>
-                <font>silo_row</font>
+                <left>88</left><top>40</top><width>900</width><height>56</height>
+                <font>silo_meta</font>
                 <textcolor>FFEDEDED</textcolor>
-                <selectedcolor>FFEDEDED</selectedcolor>
-                <label>Recent channels</label>
+                <label>$INFO[VideoPlayer.ChannelGroup]</label>
+            </control>
+            <control type="label">
+                <right>88</right><top>40</top><width>600</width><height>56</height>
+                <align>right</align>
+                <font>silo_meta</font>
+                <textcolor>FFEDEDED</textcolor>
+                <label>$INFO[System.Date(ddd d mmm)]$INFO[System.Time,  ·  ,]</label>
+            </control>
+            <control type="group">
+                <left>88</left><top>468</top>
+                <control type="label">
+                    <width>1400</width><height>36</height>
+                    <font>silo_meta</font>
+                    <textcolor>99EDEDED</textcolor>
+                    <label>$INFO[VideoPlayer.ChannelNumberLabel,,  ·  ]$INFO[VideoPlayer.ChannelName]</label>
+                </control>
+                <control type="label">
+                    <top>38</top><width>1400</width><height>60</height>
+                    <font>silo_osd_title</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label fallback="19055">$INFO[VideoPlayer.Title]</label>
+                </control>
+                <control type="grouplist">
+                    <top>104</top><width>1400</width><height>36</height>
+                    <orientation>horizontal</orientation>
+                    <itemgap>20</itemgap>
+                    <control type="label">
+                        <width>auto</width><height>36</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[VideoPlayer.StartTime]$INFO[VideoPlayer.EndTime, – ,]</label>
+                    </control>
+                    <control type="progress">
+                        <top>15</top><width>240</width><height>6</height>
+                        <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
+                        <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+                        <info>PVR.EpgEventProgress</info>
+                        <visible>!String.IsEmpty(VideoPlayer.EndTime)</visible>
+                    </control>
+                    <control type="label">
+                        <width>auto</width><height>36</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>99EDEDED</textcolor>
+                        <label>$INFO[PVR.EpgEventRemainingTime(mins),, min left]</label>
+                        <visible>!String.IsEmpty(VideoPlayer.EndTime)</visible>
+                    </control>
+                </control>
+                <control type="textbox">
+                    <top>150</top><width>1300</width><height>66</height>
+                    <font>silo_detail</font>
+                    <textcolor>B3EDEDED</textcolor>
+                    <label>$INFO[VideoPlayer.Plot]</label>
+                </control>
+                <control type="label">
+                    <top>222</top><width>1400</width><height>36</height>
+                    <font>silo_meta</font>
+                    <textcolor>99EDEDED</textcolor>
+                    <label>$INFO[VideoPlayer.NextStartTime,[COLOR FFEDEDED]Next[/COLOR]  ,  ]$INFO[VideoPlayer.NextTitle]</label>
+                </control>
+            </control>
+            <control type="group">
+                <left>82</left><top>758</top>
+                <control type="button" id="5599">
+                    <width>340</width><height>264</height>
+                    <texturefocus /><texturenofocus />
+                    <onright>5600</onright>
+                    <onclick>Dialog.Close(1196)</onclick>
+                    <onclick>ActivateWindow(TVGuide)</onclick>
+                </control>
+                <control type="group">
+                <control type="image">
+                    <left>6</left><top>6</top><width>300</width><height>168</height>
+                    <texture border="20" colordiffuse="FF1E2024">silo/card_landscape_mask.png</texture>
+                </control>
+                <control type="image">
+                    <left>128</left><top>38</top><width>56</width><height>56</height>
+                    <texture colordiffuse="FFEDEDED">icons/menu.png</texture>
+                </control>
+                <control type="label">
+                    <left>6</left><top>110</top><width>300</width><height>40</height>
+                    <align>center</align>
+                    <font>silo_meta</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>TV guide</label>
+                </control>
+                    <visible>!Control.HasFocus(5599)</visible>
+                </control>
+                <control type="group">
+                <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus(5599)">Conditional</animation>
+                <control type="image">
+                    <left>6</left><top>6</top><width>300</width><height>168</height>
+                    <texture border="20" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
+                </control>
+                <control type="image">
+                    <left>128</left><top>38</top><width>56</width><height>56</height>
+                    <texture colordiffuse="SkylineFocusText">icons/menu.png</texture>
+                </control>
+                <control type="label">
+                    <left>6</left><top>110</top><width>300</width><height>40</height>
+                    <align>center</align>
+                    <font>silo_meta</font>
+                    <textcolor>SkylineFocusText</textcolor>
+                    <label>TV guide</label>
+                </control>
+                    <visible>Control.HasFocus(5599)</visible>
+                </control>
             </control>
             <control type="list" id="5600">
-                <left>82</left><top>758</top><width>1832</width><height>264</height>
+                <left>422</left><top>758</top><width>1492</width><height>264</height>
                 <orientation>horizontal</orientation>
+                <onleft>5599</onleft>
                 <scrolltime tween="cubic" easing="out">200</scrolltime>
                 <content target="videos">pvr://channels/tv/*?view=lastplayed</content>
                 <onclick>Dialog.Close(1196)</onclick>

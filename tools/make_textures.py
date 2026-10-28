@@ -122,10 +122,18 @@ def menu_panel(name='menu_panel.png', size=96, radius=24, rim=1.5):
     write_png(name, size, size, pixel)
 
 
-def epg_now(name='epg_now.png', width=16, height=16, line=3):
+def epg_now(name='epg_now.png', width=28, height=28, dot=12, line=3):
     """The guide's "now" marker: Kodi stretches it from the grid's start to
-    the current time; only its right edge shows, a white line (border="0,0,4,0")."""
-    write_png(name, width, height, lambda x, y: 1.0 if x > width - line else 0.0)
+    the current time; only its right edge shows, a white line with a dot at
+    its top, as TiviMate's (border="0,16,18,0": the dot and the line's
+    column keep their size, with clear margin so filtering doesn't smear them)."""
+    cx, cy = width - dot / 2.0, dot / 2.0
+
+    def alpha(x, y):
+        in_dot = (x - cx) ** 2 + (y - cy) ** 2 <= (dot / 2.0) ** 2
+        in_line = abs(x - cx) <= line / 2.0
+        return 1.0 if in_dot or in_line else 0.0
+    write_png(name, width, height, alpha)
 
 
 def play_circle(name='play_circle.png', size=64):

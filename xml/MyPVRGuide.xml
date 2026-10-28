@@ -166,8 +166,8 @@
             <rulerunit>6</rulerunit>
             <onup>11</onup>
             <scrolltime tween="cubic" easing="out">240</scrolltime>
-            <!-- Now: a white line at the current time. -->
-            <progresstexture border="0,0,4,0" colordiffuse="E6FFFFFF">silo/epg_now.png</progresstexture>
+            <!-- Now: a white line at the current time, with TiviMate's dot at its top. -->
+            <progresstexture border="0,16,18,0" colordiffuse="F2FFFFFF">silo/epg_now.png</progresstexture>
             <rulerlayout height="46" width="1400">
                 <control type="label">
                     <left>14</left><width>360</width><height>46</height>
@@ -237,7 +237,7 @@
                         <left>18</left><top>6</top><width>30</width><height>64</height>
                         <aligny>center</aligny>
                         <font>silo_detail</font>
-                        <label>[COLOR D9EDEDED]$INFO[ListItem.Label][/COLOR]</label>
+                        <label>$VAR[SiloGuideTitleRest]</label>
                     </control>
             </itemlayout>
             <focusedlayout height="76" width="60">
