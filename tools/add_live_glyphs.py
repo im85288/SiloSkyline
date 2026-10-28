@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Give the skin's Inter fonts the superscript letters IPTV guides use for
-"Live" (ᴸᶦᵛᵉ): Inter has ᵛ and ᵉ but not ᴸ and ᶦ, which Kodi drew as boxes.
+"Live" (ᴸᶦᵛᵉ) and "New" (ᴺᵉʷ): Inter lacks ᴸ, ᶦ and ᴺ, which Kodi drew as boxes.
 They're copied from Noto Sans (same units per em), outlines decomposed.
 
     python3 tools/add_live_glyphs.py   (needs fontTools; run once per Inter update)
@@ -13,7 +13,7 @@ from fontTools.ttLib import TTFont
 
 FONTS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'fonts')
 SOURCE = 'NotoSans-Regular.ttf'
-CHARS = 'ᴸᶦ'
+CHARS = 'ᴸᶦᴺ'  # Live (ᴸᶦᵛᵉ) and New (ᴺᵉʷ); Inter has ᵛ, ᵉ and ʷ
 
 
 def add(target, source):

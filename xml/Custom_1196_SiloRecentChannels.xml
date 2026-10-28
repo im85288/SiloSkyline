@@ -137,9 +137,11 @@
                 <orientation>horizontal</orientation>
                 <onleft>5599</onleft>
                 <scrolltime tween="cubic" easing="out">200</scrolltime>
-                <content target="videos">pvr://channels/tv/*?view=lastplayed</content>
+                <!-- SiloKodiConnect's recent channels: newest first, not the playing one, none
+                     the viewer removed (the long-press menu); silokodi.recent_changed reloads it. -->
+                <content target="videos">plugin://plugin.video.silokodiconnect/?mode=recent_channels&amp;v=$INFO[Window(Home).Property(silokodi.recent_changed)]</content>
                 <onclick>Dialog.Close(1196)</onclick>
-                <onclick>PlayMedia($ESCINFO[ListItem.FileNameAndPath])</onclick>
+                <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=play_channel&amp;id=$INFO[ListItem.Property(silo.channelid)])</onclick>
                 <itemlayout width="340" height="264">
                 <control type="group">
                     <control type="image">
@@ -155,21 +157,21 @@
                         <left>24</left><top>156</top><width>264</width><height>5</height>
                         <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
-                        <info>ListItem.Progress</info>
+                        <info>ListItem.Property(silo.progress)</info>
                     </control>
                     <control type="label">
                         <left>6</left><top>188</top><width>300</width><height>34</height>
                         <font>silo_card_title</font>
                         <textcolor>80EDEDED</textcolor>
                         <selectedcolor>80EDEDED</selectedcolor>
-                        <label>$INFO[ListItem.ChannelName]</label>
+                        <label>$INFO[ListItem.Property(silo.channel)]</label>
                     </control>
                     <control type="label">
                         <left>6</left><top>222</top><width>300</width><height>30</height>
                         <font>silo_card_sub</font>
                         <textcolor>61EDEDED</textcolor>
                         <selectedcolor>61EDEDED</selectedcolor>
-                        <label>$INFO[ListItem.Title]</label>
+                        <label>$INFO[ListItem.Property(silo.now)]</label>
                     </control>
                 </control>
                 </itemlayout>
@@ -189,7 +191,7 @@
                         <left>24</left><top>156</top><width>264</width><height>5</height>
                         <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
-                        <info>ListItem.Progress</info>
+                        <info>ListItem.Property(silo.progress)</info>
                     </control>
                 <control type="group">
                     <left>6</left><top>6</top>
@@ -208,14 +210,14 @@
                         <font>silo_card_title</font>
                         <textcolor>FFEDEDED</textcolor>
                         <selectedcolor>FFEDEDED</selectedcolor>
-                        <label>$INFO[ListItem.ChannelName]</label>
+                        <label>$INFO[ListItem.Property(silo.channel)]</label>
                     </control>
                     <control type="label">
                         <left>6</left><top>222</top><width>300</width><height>30</height>
                         <font>silo_card_sub</font>
                         <textcolor>99EDEDED</textcolor>
                         <selectedcolor>99EDEDED</selectedcolor>
-                        <label>$INFO[ListItem.Title]</label>
+                        <label>$INFO[ListItem.Property(silo.now)]</label>
                     </control>
                 </control>
                 </focusedlayout>

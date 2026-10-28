@@ -834,21 +834,21 @@ def recent_card(focused):
                         <left>24</left><top>%(py)d</top><width>%(pw)d</width><height>5</height>
                         <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
                         <midtexture colordiffuse="%(text)s">colors/white.png</midtexture>
-                        <info>ListItem.Progress</info>
+                        <info>ListItem.Property(silo.progress)</info>
                     </control>%(sheen)s
                     <control type="label">
                         <left>6</left><top>%(t1)d</top><width>%(w)d</width><height>34</height>
                         <font>silo_card_title</font>
                         <textcolor>%(title)s</textcolor>
                         <selectedcolor>%(title)s</selectedcolor>
-                        <label>$INFO[ListItem.ChannelName]</label>
+                        <label>$INFO[ListItem.Property(silo.channel)]</label>
                     </control>
                     <control type="label">
                         <left>6</left><top>%(t2)d</top><width>%(w)d</width><height>30</height>
                         <font>silo_card_sub</font>
                         <textcolor>%(sub)s</textcolor>
                         <selectedcolor>%(sub)s</selectedcolor>
-                        <label>$INFO[ListItem.Title]</label>
+                        <label>$INFO[ListItem.Property(silo.now)]</label>
                     </control>
                 </control>''' % {'zoom': focus_zoom(lit, 16) if focused else '', 'w': CARD_W, 'h': CARD_H,
                                   'lw': CARD_W - 60, 'lh': CARD_H - 60, 'py': CARD_H - 12, 'pw': CARD_W - 36,
@@ -925,9 +925,11 @@ def build_recent():
                 <orientation>horizontal</orientation>
                 <onleft>%(guide)d</onleft>
                 <scrolltime tween="cubic" easing="out">200</scrolltime>
-                <content target="videos">pvr://channels/tv/*?view=lastplayed</content>
+                <!-- SiloKodiConnect's recent channels: newest first, not the playing one, none
+                     the viewer removed (the long-press menu); silokodi.recent_changed reloads it. -->
+                <content target="videos">plugin://plugin.video.silokodiconnect/?mode=recent_channels&amp;v=$INFO[Window(Home).Property(silokodi.recent_changed)]</content>
                 <onclick>Dialog.Close(%(window)d)</onclick>
-                <onclick>PlayMedia($ESCINFO[ListItem.FileNameAndPath])</onclick>
+                <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=play_channel&amp;id=$INFO[ListItem.Property(silo.channelid)])</onclick>
                 <itemlayout width="%(iw)d" height="%(ih)d">%(card)s
                 </itemlayout>
                 <focusedlayout width="%(iw)d" height="%(ih)d">%(card_focused)s
