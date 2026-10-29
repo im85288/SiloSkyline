@@ -53,14 +53,6 @@
 					<selected>Skin.HasSetting(SkylineArtworkBackground)</selected>
 					<onclick>Skin.ToggleSetting(SkylineArtworkBackground)</onclick>
 				</control>
-				<!-- Continue Watching and Next Up as Silo's Apple TV app shows them: the season
-				     backdrop, else the series', not the episode still (SiloKodiConnect publishes it). -->
-				<control type="radiobutton" id="793">
-					<label>Series art in Continue Watching</label>
-					<include>DefaultSettingButton</include>
-					<selected>Skin.HasSetting(SiloEpisodeSeriesArt)</selected>
-					<onclick>Skin.ToggleSetting(SiloEpisodeSeriesArt)</onclick>
-				</control>
 				<control type="radiobutton" id="701">
 					<label>$LOCALIZE[31095]</label>
 					<include>DefaultSettingButton</include>
