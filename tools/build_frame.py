@@ -582,6 +582,14 @@ def skin_settings(text):
 \t\t\t\t\t<selected>Skin.HasSetting(SkylineArtworkBackground)</selected>
 \t\t\t\t\t<onclick>Skin.ToggleSetting(SkylineArtworkBackground)</onclick>
 \t\t\t\t</control>
+\t\t\t\t<!-- Continue Watching and Next Up as Silo's Apple TV app shows them: the season
+\t\t\t\t     backdrop, else the series', not the episode still (SiloKodiConnect publishes it). -->
+\t\t\t\t<control type="radiobutton" id="793">
+\t\t\t\t\t<label>Series art in Continue Watching</label>
+\t\t\t\t\t<include>DefaultSettingButton</include>
+\t\t\t\t\t<selected>Skin.HasSetting(SiloEpisodeSeriesArt)</selected>
+\t\t\t\t\t<onclick>Skin.ToggleSetting(SiloEpisodeSeriesArt)</onclick>
+\t\t\t\t</control>
 \t\t\t\t<control type="radiobutton" id="701">''' % look, 1)
     # The settings: in the right pane.
     text = text.replace('<control type="group" id="10000">\n\t\t\t<left>470</left>',
