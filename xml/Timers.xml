@@ -296,6 +296,15 @@
         <onstop condition="Window.IsActive(movieinformation)">SetFocus(308)</onstop>
     </timer>
     <!-- end Silo Skyline detail -->
+    <!-- Silo Up Next (tools/build_upnext.py) -->
+    <timer>
+        <name>silo_deck_play</name>
+        <start reset="true">!String.IsEmpty(Window(Home).Property(silo.deck_play)) + String.IsEmpty(Window(Home).Property(service.upnext.dialog))</start>
+        <stop>true</stop>
+        <onstop>PlayMedia($ESCINFO[Window(Home).Property(silo.deck_play)],$INFO[Window(Home).Property(silo.deck_resume)])</onstop>
+        <onstop>ClearProperty(silo.deck_play,home)</onstop>
+    </timer>
+    <!-- end Silo Up Next -->
     <!-- Silo Skyline library (tools/build_library.py) -->
     <timer>
         <name>silo_sort_top</name>

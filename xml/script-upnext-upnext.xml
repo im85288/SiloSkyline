@@ -163,8 +163,14 @@
                 <onup>SetFocus(3012)</onup>
                 <visible>Integer.IsGreater(Container(3100).NumItems,0) | Container(3100).IsUpdating</visible>
                 <onfocus condition="!String.IsEqual(Window.Property(silo.deck),1)">SetFocus(3012)</onfocus>
-                <onclick condition="Integer.IsGreater(ListItem.PercentPlayed,0)">PlayMedia($ESCINFO[ListItem.FileNameAndPath],resume)</onclick>
-                <onclick condition="!Integer.IsGreater(ListItem.PercentPlayed,0)">PlayMedia($ESCINFO[ListItem.FileNameAndPath],noresume)</onclick>
+                <!-- Not PlayMedia here: started under Up Next's open dialog, Kodi's two busy
+                     spinners met and Kodi quit ("two concurrent busydialogs"). Note the title,
+                     close the dialog as Back does (Up Next keeps the video playing), and a
+                     timer plays it once Up Next has let go (Timers.xml). -->
+                <onclick>SetProperty(silo.deck_play,$ESCINFO[ListItem.FileNameAndPath],home)</onclick>
+                <onclick condition="Integer.IsGreater(ListItem.PercentPlayed,0)">SetProperty(silo.deck_resume,resume,home)</onclick>
+                <onclick condition="!Integer.IsGreater(ListItem.PercentPlayed,0)">SetProperty(silo.deck_resume,noresume,home)</onclick>
+                <onclick>Action(Back)</onclick>
                 <content target="videos">plugin://plugin.video.silokodiconnect/?mode=widget&amp;section=continue_watching&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]&amp;exclude_show=$INFO[Window.Property(tvshowtitle)]</content>
                 <itemlayout width="328" height="250">
                     <control type="group">

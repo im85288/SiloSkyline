@@ -186,8 +186,14 @@ def popup(still_watching):
                 <onup>SetFocus(3012)</onup>
                 <visible>Integer.IsGreater(Container(%(deck)d).NumItems,0) | Container(%(deck)d).IsUpdating</visible>
                 <onfocus condition="!String.IsEqual(Window.Property(silo.deck),1)">SetFocus(3012)</onfocus>
-                <onclick condition="Integer.IsGreater(ListItem.PercentPlayed,0)">PlayMedia($ESCINFO[ListItem.FileNameAndPath],resume)</onclick>
-                <onclick condition="!Integer.IsGreater(ListItem.PercentPlayed,0)">PlayMedia($ESCINFO[ListItem.FileNameAndPath],noresume)</onclick>
+                <!-- Not PlayMedia here: started under Up Next's open dialog, Kodi's two busy
+                     spinners met and Kodi quit ("two concurrent busydialogs"). Note the title,
+                     close the dialog as Back does (Up Next keeps the video playing), and a
+                     timer plays it once Up Next has let go (Timers.xml). -->
+                <onclick>SetProperty(silo.deck_play,$ESCINFO[ListItem.FileNameAndPath],home)</onclick>
+                <onclick condition="Integer.IsGreater(ListItem.PercentPlayed,0)">SetProperty(silo.deck_resume,resume,home)</onclick>
+                <onclick condition="!Integer.IsGreater(ListItem.PercentPlayed,0)">SetProperty(silo.deck_resume,noresume,home)</onclick>
+                <onclick>Action(Back)</onclick>
                 <content target="videos">%(deck_path)s</content>
                 <itemlayout width="%(deck_item_w)d" height="%(deck_h)d">%(deck_card)s
                 </itemlayout>
@@ -279,6 +285,29 @@ VARIABLES = '''    <variable name="SiloUpNextBackdrop">
 START, END = '    <!-- Silo Up Next variables (tools/build_upnext.py) -->\n', '    <!-- end Silo Up Next variables -->\n'
 
 
+TIMER_START, TIMER_END = '    <!-- Silo Up Next (tools/build_upnext.py) -->\n', '    <!-- end Silo Up Next -->\n'
+# A Continue Watching title chosen in an Up Next dialog: played once the
+# dialog has closed (Up Next clears service.upnext.dialog then).
+TIMERS = '''    <timer>
+        <name>silo_deck_play</name>
+        <start reset="true">!String.IsEmpty(Window(Home).Property(silo.deck_play)) + String.IsEmpty(Window(Home).Property(service.upnext.dialog))</start>
+        <stop>true</stop>
+        <onstop>PlayMedia($ESCINFO[Window(Home).Property(silo.deck_play)],$INFO[Window(Home).Property(silo.deck_resume)])</onstop>
+        <onstop>ClearProperty(silo.deck_play,home)</onstop>
+    </timer>
+'''
+
+
+def add_timers():
+    path = os.path.join(ROOT, 'xml', 'Timers.xml')
+    text = open(path, encoding='utf-8').read()
+    if TIMER_START in text:
+        text = text[:text.index(TIMER_START)] + text[text.index(TIMER_END) + len(TIMER_END):]
+    text = text.replace('</timers>', TIMER_START + TIMERS + TIMER_END + '</timers>')
+    with open(path, 'w', encoding='utf-8') as handle:
+        handle.write(text)
+
+
 def add_variables():
     path = os.path.join(ROOT, 'xml', 'Variables.xml')
     text = open(path, encoding='utf-8').read()
@@ -299,4 +328,5 @@ if __name__ == '__main__':
     with open(os.path.join(ROOT, 'xml', 'script-upnext-skip.xml'), 'w', encoding='utf-8') as handle:
         handle.write(SKIP)
     add_variables()
-    print('Wrote xml/script-upnext-*.xml and their variables in xml/Variables.xml')
+    add_timers()
+    print('Wrote xml/script-upnext-*.xml, their variables in xml/Variables.xml and timer in xml/Timers.xml')
