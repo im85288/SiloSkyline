@@ -29,11 +29,11 @@
             <animation effect="slide" start="0,320" end="0,0" time="220" tween="cubic" easing="out">WindowOpen</animation>
             <animation effect="slide" start="0,0" end="0,320" time="160" tween="cubic" easing="in">WindowClose</animation>
             <control type="image">
-                <left>0</left><top>300</top><width>1920</width><height>780</height>
+                <left>0</left><top>160</top><width>1920</width><height>920</height>
                 <texture colordiffuse="F20D0F12">silo/scrim_bottom.png</texture>
             </control>
             <control type="image">
-                <left>0</left><top>520</top><width>1920</width><height>560</height>
+                <left>0</left><top>380</top><width>1920</width><height>700</height>
                 <texture colordiffuse="F20D0F12">silo/scrim_bottom.png</texture>
             </control>
             <control type="group">
@@ -41,13 +41,13 @@
                 <control type="label">
                     <width>1400</width><height>36</height>
                     <font>silo_meta</font>
-                    <textcolor>99EDEDED</textcolor>
+                    <textcolor>E0EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
                     <label>$INFO[VideoPlayer.ChannelNumberLabel,,  ·  ]$INFO[VideoPlayer.ChannelName]</label>
                 </control>
                 <control type="label">
                     <top>38</top><width>1400</width><height>60</height>
                     <font>silo_osd_title</font>
-                    <textcolor>FFEDEDED</textcolor>
+                    <textcolor>FFEDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
                     <label fallback="19055">$INFO[VideoPlayer.Title]</label>
                 </control>
                 <control type="grouplist">
@@ -58,7 +58,7 @@
                         <width>auto</width><height>36</height>
                         <aligny>center</aligny>
                         <font>silo_meta</font>
-                        <textcolor>FFEDEDED</textcolor>
+                        <textcolor>FFEDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
                         <label>$INFO[VideoPlayer.StartTime]$INFO[VideoPlayer.EndTime, – ,]</label>
                     </control>
                     <control type="progress">
@@ -72,7 +72,7 @@
                         <width>auto</width><height>36</height>
                         <aligny>center</aligny>
                         <font>silo_meta</font>
-                        <textcolor>99EDEDED</textcolor>
+                        <textcolor>E0EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
                         <label>$INFO[PVR.EpgEventRemainingTime(mins),, min left]</label>
                         <visible>!String.IsEmpty(VideoPlayer.EndTime)</visible>
                     </control>
@@ -132,67 +132,19 @@
                 <control type="textbox">
                     <top>150</top><width>1300</width><height>66</height>
                     <font>silo_detail</font>
-                    <textcolor>B3EDEDED</textcolor>
+                    <textcolor>E0EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
                     <label>$INFO[VideoPlayer.Plot]</label>
                 </control>
                 <control type="label">
                     <top>222</top><width>1400</width><height>36</height>
                     <font>silo_meta</font>
-                    <textcolor>99EDEDED</textcolor>
+                    <textcolor>E0EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
                     <label>$INFO[VideoPlayer.NextStartTime,[COLOR FFEDEDED]Next[/COLOR]  ,  ]$INFO[VideoPlayer.NextTitle]</label>
                 </control>
             </control>
-            <control type="group">
-                <left>82</left><top>758</top>
-                <control type="button" id="5599">
-                    <width>340</width><height>264</height>
-                    <texturefocus /><texturenofocus />
-                    <onright>5600</onright>
-                    <onclick>Dialog.Close(1196)</onclick>
-                    <onclick>ActivateWindow(TVGuide)</onclick>
-                </control>
-                <control type="group">
-                <control type="image">
-                    <left>6</left><top>6</top><width>300</width><height>168</height>
-                    <texture border="20" colordiffuse="FF1E2024">silo/card_landscape_mask.png</texture>
-                </control>
-                <control type="image">
-                    <left>128</left><top>38</top><width>56</width><height>56</height>
-                    <texture colordiffuse="FFEDEDED">icons/menu.png</texture>
-                </control>
-                <control type="label">
-                    <left>6</left><top>110</top><width>300</width><height>40</height>
-                    <align>center</align>
-                    <font>silo_meta</font>
-                    <textcolor>FFEDEDED</textcolor>
-                    <label>TV guide</label>
-                </control>
-                    <visible>!Control.HasFocus(5599)</visible>
-                </control>
-                <control type="group">
-                <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus(5599)">Conditional</animation>
-                <control type="image">
-                    <left>6</left><top>6</top><width>300</width><height>168</height>
-                    <texture border="20" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
-                </control>
-                <control type="image">
-                    <left>128</left><top>38</top><width>56</width><height>56</height>
-                    <texture colordiffuse="SkylineFocusText">icons/menu.png</texture>
-                </control>
-                <control type="label">
-                    <left>6</left><top>110</top><width>300</width><height>40</height>
-                    <align>center</align>
-                    <font>silo_meta</font>
-                    <textcolor>SkylineFocusText</textcolor>
-                    <label>TV guide</label>
-                </control>
-                    <visible>Control.HasFocus(5599)</visible>
-                </control>
-            </control>
             <control type="list" id="5600">
-                <left>422</left><top>758</top><width>1492</width><height>264</height>
+                <left>82</left><top>758</top><width>1832</width><height>264</height>
                 <orientation>horizontal</orientation>
-                <onleft>5599</onleft>
                 <scrolltime tween="cubic" easing="out">200</scrolltime>
                 <!-- SiloKodiConnect's recent channels: newest first, not the playing one, none
                      the viewer removed (the long-press menu); silokodi.recent_changed reloads it. -->
@@ -219,15 +171,15 @@
                     <control type="label">
                         <left>6</left><top>188</top><width>300</width><height>34</height>
                         <font>silo_card_title</font>
-                        <textcolor>80EDEDED</textcolor>
-                        <selectedcolor>80EDEDED</selectedcolor>
+                        <textcolor>D9EDEDED</textcolor>
+                        <selectedcolor>D9EDEDED</selectedcolor>
                         <label>$INFO[ListItem.Property(silo.channel)]</label>
                     </control>
                     <control type="label">
                         <left>6</left><top>222</top><width>300</width><height>30</height>
                         <font>silo_card_sub</font>
-                        <textcolor>61EDEDED</textcolor>
-                        <selectedcolor>61EDEDED</selectedcolor>
+                        <textcolor>A6EDEDED</textcolor>
+                        <selectedcolor>A6EDEDED</selectedcolor>
                         <label>$INFO[ListItem.Property(silo.now)]</label>
                     </control>
                 </control>
@@ -272,8 +224,8 @@
                     <control type="label">
                         <left>6</left><top>222</top><width>300</width><height>30</height>
                         <font>silo_card_sub</font>
-                        <textcolor>99EDEDED</textcolor>
-                        <selectedcolor>99EDEDED</selectedcolor>
+                        <textcolor>D9EDEDED</textcolor>
+                        <selectedcolor>D9EDEDED</selectedcolor>
                         <label>$INFO[ListItem.Property(silo.now)]</label>
                     </control>
                 </control>

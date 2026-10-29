@@ -54,13 +54,13 @@
                 <control type="label">
                     <width>1400</width><height>36</height>
                     <font>silo_meta</font>
-                    <textcolor>99EDEDED</textcolor>
+                    <textcolor>E0EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
                     <label>$INFO[VideoPlayer.ChannelNumberLabel,,  ·  ]$INFO[VideoPlayer.ChannelName]</label>
                 </control>
                 <control type="label">
                     <top>38</top><width>1400</width><height>60</height>
                     <font>silo_osd_title</font>
-                    <textcolor>FFEDEDED</textcolor>
+                    <textcolor>FFEDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
                     <label fallback="19055">$INFO[VideoPlayer.Title]</label>
                 </control>
                 <control type="grouplist">
@@ -71,7 +71,7 @@
                         <width>auto</width><height>36</height>
                         <aligny>center</aligny>
                         <font>silo_meta</font>
-                        <textcolor>FFEDEDED</textcolor>
+                        <textcolor>FFEDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
                         <label>$INFO[VideoPlayer.StartTime]$INFO[VideoPlayer.EndTime, – ,]</label>
                     </control>
                     <control type="progress">
@@ -85,7 +85,7 @@
                         <width>auto</width><height>36</height>
                         <aligny>center</aligny>
                         <font>silo_meta</font>
-                        <textcolor>99EDEDED</textcolor>
+                        <textcolor>E0EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
                         <label>$INFO[PVR.EpgEventRemainingTime(mins),, min left]</label>
                         <visible>!String.IsEmpty(VideoPlayer.EndTime)</visible>
                     </control>
@@ -145,13 +145,13 @@
                 <control type="textbox">
                     <top>150</top><width>1300</width><height>66</height>
                     <font>silo_detail</font>
-                    <textcolor>B3EDEDED</textcolor>
+                    <textcolor>E0EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
                     <label>$INFO[VideoPlayer.Plot]</label>
                 </control>
                 <control type="label">
                     <top>222</top><width>1400</width><height>36</height>
                     <font>silo_meta</font>
-                    <textcolor>99EDEDED</textcolor>
+                    <textcolor>E0EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
                     <label>$INFO[VideoPlayer.NextStartTime,[COLOR FFEDEDED]Next[/COLOR]  ,  ]$INFO[VideoPlayer.NextTitle]</label>
                 </control>
             </control>

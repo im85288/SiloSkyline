@@ -22,8 +22,9 @@ DIM = '99EDEDED'
 TOP_H = 330                 # the programme's details and the preview
 PILLS_Y = TOP_H + 6
 GRID_Y = PILLS_Y + 76
-CHANNEL_W = 520
-ROW_H = 56                  # TiviMate's slim rows: 11 channels on screen
+CHANNEL_W = 620
+ROW_H = 78                  # TiviMate's rows: 8 channels on screen, easy to read from the sofa
+LOGO_W, LOGO_H = 92, 52
 RULER_H = 46
 PREVIEW_W, PREVIEW_H = 496, 279
 BLOCK_W = 60                # a 5-minute block
@@ -32,11 +33,15 @@ ACCENT = 'FFF2D46B'
 PLAYING = 'ListItem.IsPlaying'
 
 
-def two_tone(control, colour, accent, condition):
+def two_tone(control, colour, accent, condition, also=''):
     """A label twice: in the accent where condition holds, else in colour.
     Kodi works a $VAR colour out once for a whole list, not per row, while
-    a visible condition is per row. control has {colour} and {visible}."""
-    return (control.replace('{colour}', accent).replace('{visible}', '<visible>%s</visible>' % condition) +
+    a visible condition is per row. control has {colour} and {visible}, and
+    {also} for a part in its own colour (a channel number) that takes the
+    accent too."""
+    control = control.replace('{also}', also)
+    lit = control.replace('[COLOR %s]' % also, '[COLOR %s]' % accent) if also else control
+    return (lit.replace('{colour}', accent).replace('{visible}', '<visible>%s</visible>' % condition) +
             control.replace('{colour}', colour).replace('{visible}', '<visible>!%s</visible>' % condition))
 
 
@@ -66,31 +71,33 @@ def channel(focused):
                         <texture border="16" colordiffuse="%(fill)s">silo/card_landscape_mask.png</texture>
                     </control>
                     <control type="image">
-                        <left>%(lx)d</left><top>9</top><width>68</width><height>38</height>
+                        <left>%(lx)d</left><top>%(ly)d</top><width>%(lw)d</width><height>%(lh)d</height>
                         <aspectratio>keep</aspectratio>
                         <texture fallback="DefaultTVShows.png">$INFO[ListItem.Icon]</texture>
                     </control>
 %(name)s
                     <!-- Catch-up: past programmes can be played (TiviMate's clock). -->
                     <control type="image">
-                        <left>%(ax)d</left><top>17</top><width>22</width><height>22</height>
+                        <left>%(ax)d</left><top>%(iy)d</top><width>26</width><height>26</height>
                         <texture colordiffuse="%(dim)s">silo/menu_history.png</texture>
                         <visible>ListItem.HasArchive</visible>
                     </control>%(playing)s''' % {'x': SAFE_X - 6, 'w': CHANNEL_W - SAFE_X + 2, 'h': ROW_H - 10,
-                                     'playing': playing_mark(CHANNEL_W - 70, 16),
+                                     'playing': playing_mark(CHANNEL_W - 74, (ROW_H - 28) // 2, 28),
+                                     'ly': (ROW_H - LOGO_H) // 2, 'lw': LOGO_W, 'lh': LOGO_H, 'iy': (ROW_H - 26) // 2,
                                      'name': two_tone('''
                     <control type="label">
                         <left>%d</left><top>5</top><width>%d</width><height>%d</height>
                         <aligny>center</aligny>
-                        <font>silo_detail</font>
+                        <font>silo_meta</font>
                         <textcolor>{colour}</textcolor>
                         <selectedcolor>{colour}</selectedcolor>
-                        <label>$INFO[ListItem.ChannelNumberLabel,[COLOR %s],[/COLOR]  ]$INFO[ListItem.Label]</label>
+                        <label>$INFO[ListItem.ChannelNumberLabel,[COLOR {also}],[/COLOR]  ]$INFO[ListItem.Label]</label>
                         {visible}
-                    </control>''' % (SAFE_X + 84, CHANNEL_W - SAFE_X - 160, ROW_H - 10, DIM), colour, ACCENT, PLAYING),
+                    </control>''' % (SAFE_X + LOGO_W + 18, CHANNEL_W - SAFE_X - LOGO_W - 100, ROW_H - 10),
+                                                      colour, ACCENT, PLAYING, DIM),
                                      'fill': '1FFFFFFF' if focused else '0DFFFFFF', 'lx': SAFE_X + 4,
                                      'tx': SAFE_X + 84, 'tw': CHANNEL_W - SAFE_X - 160, 'dim': DIM, 'colour': colour,
-                                     'ax': CHANNEL_W - 36}
+                                     'ax': CHANNEL_W - 40}
 
 
 def programme(focused):
@@ -106,7 +113,7 @@ def programme(focused):
                     <control type="label" id="1">
                         <left>18</left><top>5</top><width>%(lw)d</width><height>%(h)d</height>
                         <aligny>center</aligny>
-                        <font>silo_detail</font>
+                        <font>silo_meta</font>
                         <label>%(label)s</label>
                     </control>''' % {'w': BLOCK_W - 6, 'lw': BLOCK_W - 30, 'h': ROW_H - 10,
                                       'fill': '$VAR[SiloGuideCell]' if focused else '17FFFFFF',
@@ -214,70 +221,10 @@ def build():
             <texture colordiffuse="%(background)s">colors/white.png</texture>
         </control>
 
-        <!-- The focused programme, as TiviMate's guide shows it. -->
-        <control type="group">
-            <left>%(x)d</left><top>52</top>
-            <control type="grouplist">
-                <width>1000</width><height>56</height>
-                <orientation>horizontal</orientation>
-                <itemgap>16</itemgap>
-                <control type="image">
-                    <width>96</width><height>56</height>
-                    <aspectratio align="left">keep</aspectratio>
-                    <texture>$INFO[ListItem.ChannelLogo]</texture>
-                    <visible>!String.IsEmpty(ListItem.ChannelLogo)</visible>
-                </control>
-                <control type="label">
-                    <width>auto</width><height>56</height>
-                    <aligny>center</aligny>
-                    <font>silo_meta</font>
-                    <textcolor>%(dim)s</textcolor>
-                    <selectedcolor>%(dim)s</selectedcolor>
-                    <label>$INFO[ListItem.ChannelNumberLabel,,  ·  ]$INFO[ListItem.ChannelName]</label>
-                </control>
-            </control>
-            <control type="label">
-                <top>72</top><width>1050</width><height>64</height>
-                <font>silo_osd_title</font>
-                <textcolor>%(text)s</textcolor>
-                <selectedcolor>%(text)s</selectedcolor>
-                <label>$INFO[ListItem.Label]</label>
-            </control>
-            <control type="grouplist">
-                <top>146</top><width>1050</width><height>36</height>
-                <orientation>horizontal</orientation>
-                <itemgap>18</itemgap>
-                <control type="label">
-                    <width>auto</width><height>36</height>
-                    <aligny>center</aligny>
-                    <font>silo_meta</font>
-                    <textcolor>%(text)s</textcolor>
-                    <selectedcolor>%(text)s</selectedcolor>
-                    <label>$INFO[ListItem.StartTime]$INFO[ListItem.EndTime, – ,]$INFO[ListItem.Genre,  ·  ,]</label>
-                </control>
-                <!-- On now: how far through, as Silo's progress bars. -->
-                <control type="progress">
-                    <top>15</top><width>180</width><height>6</height>
-                    <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
-                    <midtexture colordiffuse="%(text)s">colors/white.png</midtexture>
-                    <info>ListItem.Progress</info>
-                    <visible>Integer.IsGreater(ListItem.Progress,0) + Integer.IsLess(ListItem.Progress,100)</visible>
-                </control>
-            </control>
-            <control type="textbox">
-                <top>196</top><width>1050</width><height>70</height>
-                <font>silo_plot</font>
-                <textcolor>B3EDEDED</textcolor>
-                <selectedcolor>B3EDEDED</selectedcolor>
-                <label>$INFO[ListItem.Plot]</label>
-                <autoscroll>false</autoscroll>
-            </control>
-        </control>
-
-        <!-- At the right: what's playing (TiviMate's preview), else the
+        <!-- At the left: what's playing (TiviMate's preview), else the
              programme's or channel's picture. -->
         <control type="group">
-            <left>%(px)d</left><top>52</top>
+            <left>%(x)d</left><top>%(py)d</top>
             <control type="image">
                 <width>%(pw)d</width><height>%(ph)d</height>
                 <texture border="20" colordiffuse="FF000000">silo/card_landscape_mask.png</texture>
@@ -293,13 +240,47 @@ def build():
                 <visible>!Player.HasVideo</visible>
             </control>
         </control>
-        <control type="label">
-            <right>%(x)d</right><top>8</top><width>300</width><height>40</height>
-            <align>right</align>
-            <font>silo_meta</font>
-            <textcolor>%(dim)s</textcolor>
-            <selectedcolor>%(dim)s</selectedcolor>
-            <label>$INFO[System.Time]</label>
+
+        <!-- Beside it, the focused programme as TiviMate's guide shows it: the
+             title on up to two lines, its times, how far through, and its plot. -->
+        <control type="group">
+            <left>%(dx)d</left><top>%(py)d</top>
+            <control type="textbox">
+                <width>%(dw)d</width><height>112</height>
+                <font>silo_osd_title</font>
+                <textcolor>%(text)s</textcolor>
+                <label>$INFO[ListItem.Label]</label>
+                <autoscroll>false</autoscroll>
+            </control>
+            <control type="grouplist">
+                <top>132</top><width>%(dw)d</width><height>36</height>
+                <orientation>horizontal</orientation>
+                <itemgap>18</itemgap>
+                <control type="label">
+                    <width>auto</width><height>36</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(text)s</textcolor>
+                    <selectedcolor>%(text)s</selectedcolor>
+                    <label>$INFO[ListItem.StartTime]$INFO[ListItem.EndTime, – ,]</label>
+                </control>
+                <!-- On now: how far through, as Silo's progress bars (Kodi gives guide
+                     programmes no time left: EpgEventRemainingTime is for channels). -->
+                <control type="progress">
+                    <top>15</top><width>180</width><height>6</height>
+                    <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
+                    <midtexture colordiffuse="%(text)s">colors/white.png</midtexture>
+                    <info>ListItem.Progress</info>
+                    <visible>%(on_now)s</visible>
+                </control>
+            </control>
+            <control type="textbox">
+                <top>180</top><width>%(dw)d</width><height>%(plot_h)d</height>
+                <font>silo_plot</font>
+                <textcolor>%(soft)s</textcolor>
+                <label>$INFO[ListItem.Plot]</label>
+                <autoscroll>false</autoscroll>
+            </control>
         </control>
 
         <!-- Channel groups (Kodi fills list 11): Silo's pills. -->
@@ -324,8 +305,11 @@ def build():
             <rulerunit>6</rulerunit>
             <onup>%(groups)d</onup>
             <scrolltime tween="cubic" easing="out">240</scrolltime>
-            <!-- Now: a white line at the current time, with TiviMate's dot at its top. -->
+            <!-- Now: a white line at the current time with TiviMate's dot at its top, what has aired shaded. -->
             <progresstexture border="0,16,18,0" colordiffuse="F2FFFFFF">silo/epg_now.png</progresstexture>
+            <!-- The ruler's first cell is the date, above the channels: there, in line
+                 with their logos, today and the time in TiviMate's yellow; the
+                 others are the times (the only cells with a colon). -->
             <rulerlayout height="%(ruler_h)d" width="1400">
                 <control type="label">
                     <left>14</left><width>%(half_hour)d</width><height>%(ruler_h)d</height>
@@ -334,6 +318,16 @@ def build():
                     <textcolor>%(dim)s</textcolor>
                     <selectedcolor>%(dim)s</selectedcolor>
                     <label>$INFO[ListItem.Label]</label>
+                    <visible>String.Contains(ListItem.Label,:)</visible>
+                </control>
+                <control type="label">
+                    <left>%(date_x)d</left><width>%(date_w)d</width><height>%(ruler_h)d</height>
+                    <aligny>center</aligny>
+                    <font>silo_detail</font>
+                    <textcolor>%(accent)s</textcolor>
+                    <selectedcolor>%(accent)s</selectedcolor>
+                    <label>$INFO[System.Date(ddd d mmm)]$INFO[System.Time,  ·  ,]</label>
+                    <visible>!String.Contains(ListItem.Label,:)</visible>
                 </control>
             </rulerlayout>
             <channellayout height="%(row_h)d" width="%(cw)d">%(channel)s
@@ -352,9 +346,12 @@ def build():
     </controls>
 </window>
 ''' % {'grid': GRID_ID, 'groups': GROUPS_ID, 'background': BACKGROUND, 'x': SAFE_X, 'text': TEXT, 'dim': DIM,
-       'px': 1920 - SAFE_X - PREVIEW_W, 'pw': PREVIEW_W, 'ph': PREVIEW_H, 'pills_y': PILLS_Y,
+       'pw': PREVIEW_W, 'ph': PREVIEW_H, 'pills_y': PILLS_Y, 'py': (PILLS_Y - PREVIEW_H) // 2,
+       'dx': SAFE_X + PREVIEW_W + 48, 'dw': 1920 - 2 * SAFE_X - PREVIEW_W - 48, 'plot_h': PILLS_Y - 194,
+       'soft': 'D9EDEDED', 'accent': ACCENT, 'on_now': 'Integer.IsGreater(ListItem.Progress,0) + Integer.IsLess(ListItem.Progress,100)',
        'gw': 1920 - 2 * SAFE_X, 'pill': group_pill(False), 'pill_focused': group_pill(True),
        'grid_y': GRID_Y, 'grid_h': grid_h, 'ruler_h': RULER_H, 'row_h': ROW_H, 'cw': CHANNEL_W,
+       'date_x': SAFE_X + 4, 'date_w': CHANNEL_W - SAFE_X - 4,
        'channel': channel(False), 'channel_focused': channel(True),
        'item': programme(False), 'item_focused': programme(True),
        # 5 minutes a block, half an hour 360 px (TiviMate's scale); as many as fit.
@@ -493,20 +490,21 @@ def infobar(top, left=348):
     """What's playing, as TiviMate's infobar: the channel, the programme with a
     LIVE-style tag as the guide sends it, its times, progress and minutes
     left, its description, and what's next. VideoPlayer's labels: the banner
-    and the recent channels row show the same."""
+    and the recent channels row show the same. Over the picture: bright text
+    with a soft shadow, as TiviMate's reads from the sofa."""
     return '''
             <control type="group">
                 <left>%(left)d</left><top>%(top)d</top>
                 <control type="label">
                     <width>1400</width><height>36</height>
                     <font>silo_meta</font>
-                    <textcolor>%(dim)s</textcolor>
+                    <textcolor>%(soft)s</textcolor><shadowcolor>%(shadow)s</shadowcolor>
                     <label>$INFO[VideoPlayer.ChannelNumberLabel,,  ·  ]$INFO[VideoPlayer.ChannelName]</label>
                 </control>
                 <control type="label">
                     <top>38</top><width>1400</width><height>60</height>
                     <font>silo_osd_title</font>
-                    <textcolor>%(text)s</textcolor>
+                    <textcolor>%(text)s</textcolor><shadowcolor>%(shadow)s</shadowcolor>
                     <label fallback="19055">$INFO[VideoPlayer.Title]</label>
                 </control>
                 <control type="grouplist">
@@ -517,7 +515,7 @@ def infobar(top, left=348):
                         <width>auto</width><height>36</height>
                         <aligny>center</aligny>
                         <font>silo_meta</font>
-                        <textcolor>%(text)s</textcolor>
+                        <textcolor>%(text)s</textcolor><shadowcolor>%(shadow)s</shadowcolor>
                         <label>$INFO[VideoPlayer.StartTime]$INFO[VideoPlayer.EndTime, – ,]</label>
                     </control>
                     <control type="progress">
@@ -531,7 +529,7 @@ def infobar(top, left=348):
                         <width>auto</width><height>36</height>
                         <aligny>center</aligny>
                         <font>silo_meta</font>
-                        <textcolor>%(dim)s</textcolor>
+                        <textcolor>%(soft)s</textcolor><shadowcolor>%(shadow)s</shadowcolor>
                         <label>$INFO[PVR.EpgEventRemainingTime(mins),, min left]</label>
                         <visible>!String.IsEmpty(VideoPlayer.EndTime)</visible>
                     </control>%(badges)s
@@ -539,16 +537,17 @@ def infobar(top, left=348):
                 <control type="textbox">
                     <top>150</top><width>1300</width><height>66</height>
                     <font>silo_detail</font>
-                    <textcolor>B3EDEDED</textcolor>
+                    <textcolor>%(soft)s</textcolor><shadowcolor>%(shadow)s</shadowcolor>
                     <label>$INFO[VideoPlayer.Plot]</label>
                 </control>
                 <control type="label">
                     <top>222</top><width>1400</width><height>36</height>
                     <font>silo_meta</font>
-                    <textcolor>%(dim)s</textcolor>
+                    <textcolor>%(soft)s</textcolor><shadowcolor>%(shadow)s</shadowcolor>
                     <label>$INFO[VideoPlayer.NextStartTime,[COLOR %(text)s]Next[/COLOR]  ,  ]$INFO[VideoPlayer.NextTitle]</label>
                 </control>
-            </control>''' % {'left': left, 'top': top, 'text': TEXT, 'dim': DIM, 'badges': stream_badges()}
+            </control>''' % {'left': left, 'top': top, 'text': TEXT, 'soft': 'E0EDEDED', 'shadow': 'CC000000',
+                                    'badges': stream_badges()}
 
 
 FPS = (('59.9', '60'), ('60', '60'), ('50', '50'), ('48', '48'), ('29.9', '30'), ('30', '30'), ('25', '25'),
@@ -650,12 +649,12 @@ def banner():
 
 
 TIMER_START, TIMER_END = '    <!-- Silo Skyline TV (tools/build_tv.py) -->\n', '    <!-- end Silo Skyline TV -->\n'
-# The OK screen closes after 3 s without a key, as TiviMate's (Estuary's OSD timer, simpler).
+# The OK screen closes after 5 s without a key (TiviMate: 3 s, too quick from the sofa).
 TIMERS = '''    <timer>
         <name>silo_recent_autoclose</name>
         <start reset="true">Window.IsActive(%(window)d)</start>
         <reset>Window.IsActive(%(window)d) + !System.IdleTime(1)</reset>
-        <stop>!Window.IsActive(%(window)d) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_recent_autoclose),3)</stop>
+        <stop>!Window.IsActive(%(window)d) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_recent_autoclose),5)</stop>
         <onstop condition="Window.IsActive(%(window)d)">Dialog.Close(%(window)d)</onstop>
     </timer>
     <timer>
@@ -709,7 +708,6 @@ CARD_PANEL_W = 600
 PANEL = '272A30'             # the panels' grey: the programme card's (silo/menu_panel.png), as TiviMate's match
 RECENT_ID = 1196
 RECENT_LIST = 5600
-GUIDE_CARD = 5599
 ROW_Y = 1080 - 70 - 168 - 84   # the row's top
 CARD_W, CARD_H = 300, 168
 
@@ -1186,35 +1184,14 @@ def recent_card(focused):
                                   'sheen': focus_sheen(CARD_W, CARD_H, 'silo/card_landscape_mask.png',
                                                        'silo/card_landscape_rim.png', lit, 16) if focused else '',
                                   't1': CARD_H + 20, 't2': CARD_H + 54, 'text': TEXT,
-                                  'title': TEXT if focused else '80EDEDED', 'sub': DIM if focused else '61EDEDED'}
-
-
-def guide_card(focused):
-    """The row's first card, as TiviMate's: TV guide, opening the full guide."""
-    lit = 'Control.HasFocus(%d)' % GUIDE_CARD
-    return '''
-                <control type="image">
-                    <left>6</left><top>6</top><width>%(w)d</width><height>%(h)d</height>
-                    <texture border="20" colordiffuse="%(fill)s">silo/card_landscape_mask.png</texture>
-                </control>
-                <control type="image">
-                    <left>%(ix)d</left><top>38</top><width>56</width><height>56</height>
-                    <texture colordiffuse="%(ink)s">icons/menu.png</texture>
-                </control>
-                <control type="label">
-                    <left>6</left><top>110</top><width>%(w)d</width><height>40</height>
-                    <align>center</align>
-                    <font>silo_meta</font>
-                    <textcolor>%(ink)s</textcolor>
-                    <label>TV guide</label>
-                </control>''' % {'w': CARD_W, 'h': CARD_H, 'ix': 6 + CARD_W // 2 - 28,
-                                  'fill': TEXT if focused else 'FF1E2024', 'ink': 'FF000000' if focused else TEXT}
+                                  'title': TEXT if focused else 'D9EDEDED', 'sub': 'D9EDEDED' if focused else 'A6EDEDED'}
 
 
 def build_recent():
     """While Live TV plays (OK in our keymap), as TiviMate's: what's playing
-    (the infobar), then a row along the bottom: TV guide, then the recently
-    watched channels. OK switches to one; Back closes it."""
+    (the infobar), then the recently watched channels in a row along the
+    bottom. OK switches to one; Back closes it. The shade reaches up behind
+    the infobar, so its text reads over a bright picture."""
     return '''<?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated by tools/build_tv.py: edit that, not this. -->
 <window id="%(window)d" type="dialog">
@@ -1233,33 +1210,16 @@ def build_recent():
             <animation effect="slide" start="0,320" end="0,0" time="220" tween="cubic" easing="out">WindowOpen</animation>
             <animation effect="slide" start="0,0" end="0,320" time="160" tween="cubic" easing="in">WindowClose</animation>
             <control type="image">
-                <left>0</left><top>300</top><width>1920</width><height>780</height>
+                <left>0</left><top>160</top><width>1920</width><height>920</height>
                 <texture colordiffuse="F2%(bg)s">silo/scrim_bottom.png</texture>
             </control>
             <control type="image">
-                <left>0</left><top>520</top><width>1920</width><height>560</height>
+                <left>0</left><top>380</top><width>1920</width><height>700</height>
                 <texture colordiffuse="F2%(bg)s">silo/scrim_bottom.png</texture>
             </control>%(info)s
-            <control type="group">
-                <left>%(lx)d</left><top>%(ly)d</top>
-                <control type="button" id="%(guide)d">
-                    <width>%(iw)d</width><height>%(ih)d</height>
-                    <texturefocus /><texturenofocus />
-                    <onright>%(list)d</onright>
-                    <onclick>Dialog.Close(%(window)d)</onclick>
-                    <onclick>ActivateWindow(TVGuide)</onclick>
-                </control>
-                <control type="group">%(guide_card)s
-                    <visible>!Control.HasFocus(%(guide)d)</visible>
-                </control>
-                <control type="group">%(zoom)s%(guide_card_focused)s
-                    <visible>Control.HasFocus(%(guide)d)</visible>
-                </control>
-            </control>
             <control type="list" id="%(list)d">
-                <left>%(rx)d</left><top>%(ly)d</top><width>%(lw)d</width><height>%(ih)d</height>
+                <left>%(lx)d</left><top>%(ly)d</top><width>%(lw)d</width><height>%(ih)d</height>
                 <orientation>horizontal</orientation>
-                <onleft>%(guide)d</onleft>
                 <scrolltime tween="cubic" easing="out">200</scrolltime>
                 <!-- SiloKodiConnect's recent channels: newest first, not the playing one, none
                      the viewer removed (the long-press menu); silokodi.recent_changed reloads it. -->
@@ -1274,12 +1234,9 @@ def build_recent():
         </control>
     </controls>
 </window>
-''' % {'window': RECENT_ID, 'list': RECENT_LIST, 'guide': GUIDE_CARD, 'bg': BACKGROUND[2:], 'text': TEXT,
+''' % {'window': RECENT_ID, 'list': RECENT_LIST, 'bg': BACKGROUND[2:], 'text': TEXT,
        'corners': corners(), 'info': infobar(ROW_Y - 290, SAFE_X),
-       'lx': SAFE_X - 6, 'rx': SAFE_X - 6 + CARD_W + 40, 'ly': ROW_Y,
-       'lw': 1920 - SAFE_X - CARD_W - 40, 'iw': CARD_W + 40, 'ih': CARD_H + 12 + 84,
-       'guide_card': guide_card(False), 'guide_card_focused': guide_card(True),
-       'zoom': __import__('build_home').focus_zoom('Control.HasFocus(%d)' % GUIDE_CARD, 16),
+       'lx': SAFE_X - 6, 'ly': ROW_Y, 'lw': 1920 - SAFE_X, 'iw': CARD_W + 40, 'ih': CARD_H + 12 + 84,
        'card': recent_card(False), 'card_focused': recent_card(True)}
 
 
