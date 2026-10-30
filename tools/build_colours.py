@@ -9,6 +9,8 @@ Interface -> Skin -> Colours):
 
 - SkylineBackground, SkylinePanel, SkylineDialog, SkylineCard,
   SkylineCardEmpty: the page, panels and dropdowns, dialogs and cards;
+- SkylineLivePanel, SkylineLiveCard, SkylineLiveVeil, SkylineLiveBar: Live
+  TV's quick guide, OK screen tiles, schedule veil and title bars;
 - SkylineFocus: the focus pill, focus cards and rings (Silo's white);
 - SkylineFocusText, SkylineFocusTextDim: text and icons drawn on it (black).
 
@@ -28,11 +30,18 @@ THEMED = {
     'FF131417': 'SkylineDialog',
     'FF1A1D27': 'SkylineCard',
     'FF262A31': 'SkylineCardEmpty',
+    # Live TV's panels (TiviMate's grey in Silo's theme): the quick guide's and
+    # the schedule's, the OK screen's tiles, the schedule's veil, the title bars.
+    'F2272A30': 'SkylineLivePanel',
+    'E6272A30': 'SkylineLiveCard',
+    'CC272A30': 'SkylineLiveVeil',
+    'FF33373E': 'SkylineLiveBar',
 }
 # Textures that show focus (or Silo's white primary button), in Silo's white.
 FOCUS_TEXTURES = ('silo/pill.png', 'silo/dialog_button.png', 'silo/card_landscape_mask.png',
                   'silo/card_landscape_focus.png', 'silo/card_poster_focus.png', 'silo/season_ring.png',
-                  'silo/avatar_ring.png', 'silo/person_ring.png', 'buttons/thumbnail_focused.png')
+                  'silo/avatar_ring.png', 'silo/person_ring.png', 'buttons/thumbnail_focused.png',
+                  'silo/round_button.png')
 KEEP_BLACK = ('OverlayWatched.png',)  # the watched tick on its white disc
 
 

@@ -7,6 +7,11 @@
 	<color name="SkylineDialog">FF0A0A0B</color>
 	<color name="SkylineCard">FF121213</color>
 	<color name="SkylineCardEmpty">FF1A1A1C</color>
+	<!-- Live TV's panels (tools/build_colours.py). -->
+	<color name="SkylineLivePanel">F20E0E0F</color>
+	<color name="SkylineLiveCard">E6121213</color>
+	<color name="SkylineLiveVeil">CC0E0E0F</color>
+	<color name="SkylineLiveBar">FF1E1E20</color>
 	<!-- The screens still Estuary's. -->
 	<color name="primary_background">FF0E0E0F</color>
 	<color name="dialog_tint">FF0A0A0B</color>

@@ -360,6 +360,20 @@
         <onstop>ClearProperty(silo.sched.want,home)</onstop>
         <onstop>SetFocus(14,$INFO[Window(Home).Property(silokodi.schedule_now)],absolute)</onstop>
     </timer>
+    <!-- The day column follows the schedule's day a step at a time (Kodi's lists can't be
+         set to an item without focus), as TiviMate's keeps it in the middle. -->
+    <timer>
+        <name>silo_days_down</name>
+        <start reset="true">Control.HasFocus(14) + Integer.IsLess(Container(13).ListItem.Property(silo.day),Container(14).ListItem.Property(silo.day))</start>
+        <stop>true</stop>
+        <onstop>Control.Move(13,1)</onstop>
+    </timer>
+    <timer>
+        <name>silo_days_up</name>
+        <start reset="true">Control.HasFocus(14) + Integer.IsGreater(Container(13).ListItem.Property(silo.day),Container(14).ListItem.Property(silo.day))</start>
+        <stop>true</stop>
+        <onstop>Control.Move(13,-1)</onstop>
+    </timer>
     <!-- Right on a channel with no schedule: back to the channels after 5 s. -->
     <timer>
         <name>silo_schedule_giveup</name>

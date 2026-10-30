@@ -256,6 +256,8 @@ if __name__ == '__main__':
     focus_ring('person_ring.png', 184, 184, 92, 4)
     # The profile avatar in the menu bar, and its focus ring 4 px outside it.
     card_mask('avatar_mask.png', 56, 56, 28)
+    # The Live TV playback bar's round buttons: a themed focus shape of their own.
+    card_mask('round_button.png', 84, 84, 42)
     card_scrim()
     # Silo's player buttons at rest: a 38% black disc with a 24% white ring.
     def osd_button(x, y, size=76, ring=2.0):

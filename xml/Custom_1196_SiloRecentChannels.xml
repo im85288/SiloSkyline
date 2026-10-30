@@ -308,7 +308,7 @@
                 <control type="group">
                     <control type="image">
                         <width>234</width><height>180</height>
-                        <texture border="20" colordiffuse="E6272A30">silo/card_landscape_mask.png</texture>
+                        <texture border="20" colordiffuse="SkylineLiveCard">silo/card_landscape_mask.png</texture>
                     </control>
                     <control type="image">
                         <left>22</left><top>18</top><width>190</width><height>92</height>
@@ -330,7 +330,7 @@
                 <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus(5600)">Conditional</animation>
                     <control type="image">
                         <width>234</width><height>180</height>
-                        <texture border="20" colordiffuse="E6272A30">silo/card_landscape_mask.png</texture>
+                        <texture border="20" colordiffuse="SkylineLiveCard">silo/card_landscape_mask.png</texture>
                     </control>
                     <control type="image">
                         <left>22</left><top>18</top><width>190</width><height>92</height>
@@ -370,7 +370,7 @@
                 <control type="group">
                     <control type="image">
                         <width>234</width><height>180</height>
-                        <texture border="20" colordiffuse="E6272A30">silo/card_landscape_mask.png</texture>
+                        <texture border="20" colordiffuse="SkylineLiveCard">silo/card_landscape_mask.png</texture>
                     </control>
                     <control type="image">
                         <left>22</left><top>18</top><width>190</width><height>92</height>
@@ -391,7 +391,7 @@
                 <control type="group">
                     <control type="image">
                         <width>234</width><height>180</height>
-                        <texture border="20" colordiffuse="E6272A30">silo/card_landscape_mask.png</texture>
+                        <texture border="20" colordiffuse="SkylineLiveCard">silo/card_landscape_mask.png</texture>
                     </control>
                     <control type="image">
                         <left>22</left><top>18</top><width>190</width><height>92</height>
@@ -433,7 +433,7 @@
                         <width>84</width><height>84</height>
                         <control type="button" id="5611">
                             <width>84</width><height>84</height>
-                            <texturefocus colordiffuse="FFEDEDED">silo/avatar_mask.png</texturefocus>
+                            <texturefocus colordiffuse="SkylineFocus">silo/round_button.png</texturefocus>
                             <texturenofocus />
                             <onleft>noop</onleft>
                             <onright>5612</onright>
@@ -443,7 +443,7 @@
                         </control>
                         <control type="image">
                             <left>22</left><top>22</top><width>40</width><height>40</height>
-                            <texture colordiffuse="FF101010">osd/fullscreen/buttons/previous.png</texture>
+                            <texture colordiffuse="SkylineFocusText">osd/fullscreen/buttons/previous.png</texture>
                             <visible>Control.HasFocus(5611)</visible>
                         </control>
                         <control type="image">
@@ -456,7 +456,7 @@
                         <width>84</width><height>84</height>
                         <control type="button" id="5612">
                             <width>84</width><height>84</height>
-                            <texturefocus colordiffuse="FFEDEDED">silo/avatar_mask.png</texturefocus>
+                            <texturefocus colordiffuse="SkylineFocus">silo/round_button.png</texturefocus>
                             <texturenofocus />
                             <onleft>5611</onleft>
                             <onright>5613</onright>
@@ -466,7 +466,7 @@
                         </control>
                         <control type="image">
                             <left>22</left><top>22</top><width>40</width><height>40</height>
-                            <texture colordiffuse="FF101010">osd/fullscreen/buttons/rewind.png</texture>
+                            <texture colordiffuse="SkylineFocusText">osd/fullscreen/buttons/rewind.png</texture>
                             <visible>Control.HasFocus(5612)</visible>
                         </control>
                         <control type="image">
@@ -479,7 +479,7 @@
                         <width>84</width><height>84</height>
                         <control type="button" id="5613">
                             <width>84</width><height>84</height>
-                            <texturefocus colordiffuse="FFEDEDED">silo/avatar_mask.png</texturefocus>
+                            <texturefocus colordiffuse="SkylineFocus">silo/round_button.png</texturefocus>
                             <texturenofocus />
                             <onleft>5612</onleft>
                             <onright>5614</onright>
@@ -489,7 +489,7 @@
                         </control>
                         <control type="image">
                             <left>22</left><top>22</top><width>40</width><height>40</height>
-                            <texture colordiffuse="FF101010">osd/fullscreen/buttons/pause.png</texture>
+                            <texture colordiffuse="SkylineFocusText">osd/fullscreen/buttons/pause.png</texture>
                             <visible>Control.HasFocus(5613) + !Player.Paused</visible>
                         </control>
                         <control type="image">
@@ -499,7 +499,7 @@
                         </control>
                         <control type="image">
                             <left>22</left><top>22</top><width>40</width><height>40</height>
-                            <texture colordiffuse="FF101010">osd/fullscreen/buttons/play.png</texture>
+                            <texture colordiffuse="SkylineFocusText">osd/fullscreen/buttons/play.png</texture>
                             <visible>Control.HasFocus(5613) + Player.Paused</visible>
                         </control>
                         <control type="image">
@@ -512,7 +512,7 @@
                         <width>84</width><height>84</height>
                         <control type="button" id="5614">
                             <width>84</width><height>84</height>
-                            <texturefocus colordiffuse="FFEDEDED">silo/avatar_mask.png</texturefocus>
+                            <texturefocus colordiffuse="SkylineFocus">silo/round_button.png</texturefocus>
                             <texturenofocus />
                             <onleft>5613</onleft>
                             <onright>5615</onright>
@@ -522,7 +522,7 @@
                         </control>
                         <control type="image">
                             <left>22</left><top>22</top><width>40</width><height>40</height>
-                            <texture colordiffuse="FF101010">osd/fullscreen/buttons/forward.png</texture>
+                            <texture colordiffuse="SkylineFocusText">osd/fullscreen/buttons/forward.png</texture>
                             <visible>Control.HasFocus(5614)</visible>
                         </control>
                         <control type="image">
@@ -535,7 +535,7 @@
                         <width>84</width><height>84</height>
                         <control type="button" id="5615">
                             <width>84</width><height>84</height>
-                            <texturefocus colordiffuse="FFEDEDED">silo/avatar_mask.png</texturefocus>
+                            <texturefocus colordiffuse="SkylineFocus">silo/round_button.png</texturefocus>
                             <texturenofocus />
                             <onleft>5614</onleft>
                             <onright>5617</onright>
@@ -545,7 +545,7 @@
                         </control>
                         <control type="image">
                             <left>22</left><top>22</top><width>40</width><height>40</height>
-                            <texture colordiffuse="FF101010">osd/fullscreen/buttons/next.png</texture>
+                            <texture colordiffuse="SkylineFocusText">osd/fullscreen/buttons/next.png</texture>
                             <visible>Control.HasFocus(5615)</visible>
                         </control>
                         <control type="image">
@@ -560,7 +560,7 @@
                         <width>84</width><height>84</height>
                         <control type="button" id="5617">
                             <width>84</width><height>84</height>
-                            <texturefocus colordiffuse="FFEDEDED">silo/avatar_mask.png</texturefocus>
+                            <texturefocus colordiffuse="SkylineFocus">silo/round_button.png</texturefocus>
                             <texturenofocus />
                             <onleft>5615</onleft>
                             <onright>5618</onright>
@@ -570,7 +570,7 @@
                         </control>
                         <control type="image">
                             <left>22</left><top>22</top><width>40</width><height>40</height>
-                            <texture colordiffuse="FF101010">silo/skip_back.png</texture>
+                            <texture colordiffuse="SkylineFocusText">silo/skip_back.png</texture>
                             <visible>Control.HasFocus(5617)</visible>
                         </control>
                         <control type="image">
@@ -592,7 +592,7 @@
                         <width>84</width><height>84</height>
                         <control type="button" id="5618">
                             <width>84</width><height>84</height>
-                            <texturefocus colordiffuse="FFEDEDED">silo/avatar_mask.png</texturefocus>
+                            <texturefocus colordiffuse="SkylineFocus">silo/round_button.png</texturefocus>
                             <texturenofocus />
                             <onleft>5617</onleft>
                             <onright>noop</onright>
@@ -602,14 +602,14 @@
                         </control>
                         <control type="image">
                             <left>13</left><top>27</top><width>58</width><height>30</height>
-                            <texture border="8" colordiffuse="FF101010">silo/badge_outline.png</texture>
+                            <texture border="8" colordiffuse="SkylineFocusText">silo/badge_outline.png</texture>
                             <visible>Control.HasFocus(5618)</visible>
                         </control>
                         <control type="label">
                             <left>13</left><top>27</top><width>58</width><height>30</height>
                             <align>center</align><aligny>center</aligny>
                             <font>silo_badge</font>
-                            <textcolor>FF101010</textcolor>
+                            <textcolor>SkylineFocusText</textcolor>
                             <label>LIVE</label>
                             <visible>Control.HasFocus(5618)</visible>
                         </control>

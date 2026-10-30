@@ -126,14 +126,15 @@ def variables():
     the grid has focus, as the others otherwise."""
     lit = 'Control.HasFocus(%d)' % GRID_ID
     return ('    <!-- Silo Skyline TV guide (tools/build_tv.py) -->\n'
+            # The theme's names: tools/build_colours.py doesn't reach a variable's values.
             '    <variable name="SiloGuideCell">\n'
-            '        <value condition="%(lit)s">%(text)s</value>\n'
+            '        <value condition="%(lit)s">SkylineFocus</value>\n'
             '        <value>17FFFFFF</value>\n'
             '    </variable>\n'
             # A channel with no guide data: "No information", as TiviMate.
             '    <variable name="SiloGuideTitle">\n'
-            '        <value condition="%(lit)s + String.IsEmpty(ListItem.Label)">[COLOR B3000000]No information[/COLOR]</value>\n'
-            '        <value condition="%(lit)s">[COLOR FF000000]$INFO[ListItem.Label][/COLOR]</value>\n'
+            '        <value condition="%(lit)s + String.IsEmpty(ListItem.Label)">[COLOR SkylineFocusTextDim]No information[/COLOR]</value>\n'
+            '        <value condition="%(lit)s">[COLOR SkylineFocusText]$INFO[ListItem.Label][/COLOR]</value>\n'
             '        <value condition="String.IsEmpty(ListItem.Label)">[COLOR 80EDEDED]No information[/COLOR]</value>\n'
             '        <value>[COLOR D9EDEDED]$INFO[ListItem.Label][/COLOR]</value>\n'
             '    </variable>\n'
@@ -711,6 +712,20 @@ TIMERS = '''    <timer>
         <onstop>ClearProperty(silo.sched.want,home)</onstop>
         <onstop>SetFocus(%(sched)d,$INFO[Window(Home).Property(silokodi.schedule_now)],absolute)</onstop>
     </timer>
+    <!-- The day column follows the schedule's day a step at a time (Kodi's lists can't be
+         set to an item without focus), as TiviMate's keeps it in the middle. -->
+    <timer>
+        <name>silo_days_down</name>
+        <start reset="true">Control.HasFocus(%(sched)d) + Integer.IsLess(Container(%(days)d).ListItem.Property(silo.day),Container(%(sched)d).ListItem.Property(silo.day))</start>
+        <stop>true</stop>
+        <onstop>Control.Move(%(days)d,1)</onstop>
+    </timer>
+    <timer>
+        <name>silo_days_up</name>
+        <start reset="true">Control.HasFocus(%(sched)d) + Integer.IsGreater(Container(%(days)d).ListItem.Property(silo.day),Container(%(sched)d).ListItem.Property(silo.day))</start>
+        <stop>true</stop>
+        <onstop>Control.Move(%(days)d,-1)</onstop>
+    </timer>
     <!-- Right on a channel with no schedule: back to the channels after 5 s. -->
     <timer>
         <name>silo_schedule_giveup</name>
@@ -812,7 +827,7 @@ def quick_row(focused):
                         <visible>%s</visible>
                     </control>''' % (SAFE_X - 58, QUICK_W - SAFE_X + 40, QUICK_ROW - 8, TEXT, lit)
     return (bar + row('FF000000', 'B3000000', lit) + row('D9EDEDED', DIM, '!' + lit) +
-            playing_mark(QUICK_W - 66, 18, 28, 'FF101010', lit) + playing_mark(QUICK_W - 66, 18, 28, ACCENT, '!' + lit))
+            playing_mark(QUICK_W - 66, 18, 28, 'FF000000', lit) + playing_mark(QUICK_W - 66, 18, 28, ACCENT, '!' + lit))
 
 
 SCHEDULE_ID, DAYS_ID = 14, 13
@@ -826,7 +841,10 @@ TODAY_ROW = 'String.IsEqual(ListItem.Property(silo.today),1)'
 # slides away, the schedule fills the left with the days beside it.
 FULL_X, FULL_W, FULL_ROW = 24, 900, 74
 FULL_TOP, FULL_ROWS = 124, 13
-DAYS_X, DAYS_W, DAY_ROW = FULL_X + FULL_W + 20, 170, 62
+# TiviMate's day column: a darker strip under the header, tall two-line days,
+# the schedule's day kept in the middle.
+DAYS_X, DAYS_W, DAY_ROW = FULL_X + FULL_W + 20, 170, 136
+DAYS_TOP, DAYS_ROWS = 112, 7
 FULL_PANEL = DAYS_X + DAYS_W + 24
 
 
@@ -906,23 +924,24 @@ def day_row(focused):
     shown = 'String.IsEqual(ListItem.Property(silo.day),Container(%d).ListItem.Property(silo.day))' % SCHEDULE_ID
     soft = '''
                     <control type="image">
-                        <top>3</top><width>%(w)d</width><height>%(h)d</height>
+                        <top>12</top><width>%(w)d</width><height>%(h)d</height>
                         <texture border="20" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texture>
                         <visible>%(shown)s%(not_lit)s</visible>
-                    </control>''' % {'w': DAYS_W, 'h': DAY_ROW - 6, 'shown': shown, 'not_lit': ' + !' + lit if focused else ''}
+                    </control>''' % {'w': DAYS_W, 'h': DAY_ROW - 24, 'shown': shown, 'not_lit': ' + !' + lit if focused else ''}
     pill = '''
                     <control type="image">
-                        <top>3</top><width>%(w)d</width><height>%(h)d</height>
+                        <top>12</top><width>%(w)d</width><height>%(h)d</height>
                         <texture border="20" colordiffuse="%(text)s">silo/card_landscape_mask.png</texture>
                         <visible>%(lit)s</visible>
-                    </control>''' % {'w': DAYS_W, 'h': DAY_ROW - 6, 'text': TEXT, 'lit': lit} if focused else ''
+                    </control>''' % {'w': DAYS_W, 'h': DAY_ROW - 24, 'text': TEXT, 'lit': lit} if focused else ''
 
     def label(colour, visible):
         control = '''
                     <control type="label">
                         <width>%(w)d</width><height>%(h)d</height>
                         <align>center</align><aligny>center</aligny>
-                        <font>silo_detail</font>
+                        <wrapmultiline>true</wrapmultiline>
+                        <font>silo_meta</font>
                         <textcolor>{colour}</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                         {visible}
@@ -1171,9 +1190,17 @@ def build_quick_guide():
                 </control>
                 <!-- The days, TiviMate's column: moving to one takes the schedule there
                      (a timer: Kodi's lists run nothing as they move); Left goes into it. -->
-                <control type="list" id="%(days_id)d">
-                    <left>%(dx)d</left><top>%(ft)d</top><width>%(dw)d</width><height>%(dh)d</height>
+                <control type="image">
+                    <left>%(strip_x)d</left><top>%(days_top)d</top><width>%(strip_w)d</width><height>%(strip_h)d</height>
+                    <!-- A light darkening of the panel, not a fill: TiviMate's barely stands out. -->
+                    <texture colordiffuse="1F000000">colors/white.png</texture>
+                </control>
+                <control type="fixedlist" id="%(days_id)d">
+                    <left>%(dx)d</left><top>%(days_top)d</top><width>%(dw)d</width><height>%(dh)d</height>
                     <orientation>vertical</orientation>
+                    <focusposition>%(days_middle)d</focusposition>
+                    <movement>%(days_middle)d</movement>
+                    <scrolltime tween="cubic" easing="out">200</scrolltime>
                     <onleft>%(sched_id)d</onleft>
                     <onup>noop</onup>
                     <ondown>noop</ondown>
@@ -1199,7 +1226,9 @@ def build_quick_guide():
        'fx': FULL_X, 'ft': FULL_TOP, 'fw': FULL_W, 'fh': FULL_ROW * FULL_ROWS, 'frow': FULL_ROW,
        'full': schedule_row(False, FULL_W, FULL_ROW, SCHEDULE_ID),
        'full_focused': schedule_row(True, FULL_W, FULL_ROW, SCHEDULE_ID),
-       'dx': DAYS_X, 'dw': DAYS_W, 'dh': DAY_ROW * 15, 'drow': DAY_ROW,
+       'dx': DAYS_X, 'dw': DAYS_W, 'dh': DAY_ROW * DAYS_ROWS, 'drow': DAY_ROW, 'days_top': DAYS_TOP,
+       'days_middle': DAYS_ROWS // 2, 'strip_x': DAYS_X - 12, 'strip_w': FULL_PANEL - DAYS_X + 12,
+       'strip_h': 1080 - DAYS_TOP,
        'day': day_row(False), 'day_focused': day_row(True),
        'card': programme_card(focused, now_timeline, '![%s]' % IN_SCHED),
        'sched_card': programme_card(sched, sched_timeline,
@@ -1267,7 +1296,7 @@ def round_button(control_id, icons, action, left, right, caption='', x=None, liv
                             <visible>%(visible)s</visible>
                         </control>''' % {'icon': icon, 'colour': colour,
                                         'visible': ' + '.join(part for part in (when, shown) if part)}
-                     for icon, shown in icons for colour, when in (('FF101010', lit), (TEXT, '!' + lit)))
+                     for icon, shown in icons for colour, when in (('FF000000', lit), (TEXT, '!' + lit)))
     if live:
         images = ''.join('''
                         <control type="image">
@@ -1283,7 +1312,7 @@ def round_button(control_id, icons, action, left, right, caption='', x=None, liv
                             <label>LIVE</label>
                             <visible>%(when)s</visible>
                         </control>''' % {'colour': colour, 'when': when}
-                         for colour, when in (('FF101010', lit), (TEXT, '!' + lit)))
+                         for colour, when in (('FF000000', lit), (TEXT, '!' + lit)))
     if caption:
         images += '''
                         <control type="label">
@@ -1300,7 +1329,7 @@ def round_button(control_id, icons, action, left, right, caption='', x=None, liv
                         <width>%(b)d</width><height>%(b)d</height>
                         <control type="button" id="%(id)d">
                             <width>%(b)d</width><height>%(b)d</height>
-                            <texturefocus colordiffuse="%(text)s">silo/avatar_mask.png</texturefocus>
+                            <texturefocus colordiffuse="%(text)s">silo/round_button.png</texturefocus>
                             <texturenofocus />
                             <onleft>%(left)s</onleft>
                             <onright>%(right)s</onright>

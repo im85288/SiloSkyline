@@ -5407,12 +5407,12 @@
     <!-- end Silo Skyline person -->
     <!-- Silo Skyline TV guide (tools/build_tv.py) -->
     <variable name="SiloGuideCell">
-        <value condition="Control.HasFocus(51)">FFEDEDED</value>
+        <value condition="Control.HasFocus(51)">SkylineFocus</value>
         <value>17FFFFFF</value>
     </variable>
     <variable name="SiloGuideTitle">
-        <value condition="Control.HasFocus(51) + String.IsEmpty(ListItem.Label)">[COLOR B3000000]No information[/COLOR]</value>
-        <value condition="Control.HasFocus(51)">[COLOR FF000000]$INFO[ListItem.Label][/COLOR]</value>
+        <value condition="Control.HasFocus(51) + String.IsEmpty(ListItem.Label)">[COLOR SkylineFocusTextDim]No information[/COLOR]</value>
+        <value condition="Control.HasFocus(51)">[COLOR SkylineFocusText]$INFO[ListItem.Label][/COLOR]</value>
         <value condition="String.IsEmpty(ListItem.Label)">[COLOR 80EDEDED]No information[/COLOR]</value>
         <value>[COLOR D9EDEDED]$INFO[ListItem.Label][/COLOR]</value>
     </variable>
