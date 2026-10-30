@@ -12,6 +12,7 @@ focused one a white bar, a white line at the current time. Kodi fills the
 groups (control 11) and the grid; the bar's TV tab opens it (Live TV only).
 """
 import os
+import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -974,6 +975,26 @@ def programme_card(item, timeline, visible):
                          'plot': '$INFO[%s.Plot]' % item if item.startswith('Container(11)') else '$INFO[%s.Property(silo.plot)]' % item}
 
 
+QUICK_ROWS = 15               # SiloKodiConnect's quick.ROWS
+
+
+def quick_rows():
+    """The short schedule's rows: schedule_row's layout, read from the
+    properties SiloKodiConnect's service publishes for the focused channel."""
+    prop = 'Window(Home).Property(silokodi.quick.%d.%s)'
+    rows = []
+    for n in range(1, QUICK_ROWS + 1):
+        row = schedule_row()
+        row = row.replace('ListItem.Label2', prop % (n, 'label2')).replace('ListItem.Label', prop % (n, 'label'))
+        row = re.sub(r'ListItem\.Property\(([a-z.]+)\)', lambda m: prop % (n, m.group(1)), row)
+        rows.append('''
+                        <control type="group">
+                            <top>%d</top><height>%d</height>
+                            <visible>!String.IsEmpty(%s)</visible>%s
+                        </control>''' % ((n - 1) * SCHEDULE_ROW, SCHEDULE_ROW, prop % (n, 'label'), row))
+    return ''.join(rows)
+
+
 def build_quick_guide():
     """Kodi's channel list while Live TV plays (DialogPVRChannelsOSD; Left in
     our keymap), as TiviMate's: the channels down the left, the focused
@@ -1085,14 +1106,12 @@ def build_quick_guide():
                         <textcolor>%(text)s</textcolor>
                         <label>$INFO[%(f)s.ChannelNumberLabel,,  ·  ]$INFO[%(f)s.ChannelName]</label>
                     </control>
-                    <control type="list" id="12">
-                        <top>90</top><width>%(sw2)d</width><height>%(sh)d</height>
-                        <orientation>vertical</orientation>
-                        <content target="videos">plugin://plugin.video.silokodiconnect/?mode=schedule&amp;number=$INFO[%(f)s.ChannelNumberLabel]&amp;name=$INFO[%(f)s.ChannelName]</content>
-                        <itemlayout width="%(sw2)d" height="%(srow)d">%(short)s
-                        </itemlayout>
-                        <focusedlayout width="%(sw2)d" height="%(srow)d">%(short)s
-                        </focusedlayout>
+                    <!-- SiloKodiConnect's service publishes the focused channel's rows (its
+                         quick.py; a plugin per channel took most of a second to start). Plain
+                         rows, not a list: Kodi refreshed a static list's items once a second. -->
+                    <control type="group">
+                        <top>90</top>
+                        <visible>String.IsEqual(Window(Home).Property(silokodi.quick.for),%(f)s.ChannelNumberLabel)</visible>%(quick_rows)s
                     </control>
                 </control>
             </control>
@@ -1173,7 +1192,7 @@ def build_quick_guide():
        'bg': PANEL, 'x': SAFE_X - 40, 'lw': QUICK_W - SAFE_X, 'text': TEXT, 'dim': DIM,
        'lh': QUICK_ROW * 9, 'row': QUICK_ROW, 'item': quick_row(False), 'item_focused': quick_row(True),
        'f': focused, 'stw': SCHEDULE_W - 120, 'sw2': SCHEDULE_W, 'sh': SCHEDULE_ROW * 15, 'srow': SCHEDULE_ROW,
-       'short': schedule_row(), 'sched_id': SCHEDULE_ID, 'days_id': DAYS_ID, 'in_sched': IN_SCHED, 'view': SCHED_VIEW, 'band': 112, 'band_colour': 'FF33373E',
+       'short': schedule_row(), 'sched_id': SCHEDULE_ID, 'quick_rows': quick_rows(), 'days_id': DAYS_ID, 'in_sched': IN_SCHED, 'view': SCHED_VIEW, 'band': 112, 'band_colour': 'FF33373E',
        'loaded': '[String.IsEqual(Window(Home).Property(silokodi.schedule_for),Container(11).ListItem.ChannelNumberLabel) + '
                  'Integer.IsGreater(Container(%d).NumItems,0) + !Container(%d).IsUpdating]' % (SCHEDULE_ID, SCHEDULE_ID),
        'panel': FULL_PANEL, 'hx': SAFE_X + 100, 'hw': FULL_W - SAFE_X - 100,

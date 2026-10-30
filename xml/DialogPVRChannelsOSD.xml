@@ -221,38 +221,42 @@
                         <textcolor>FFEDEDED</textcolor>
                         <label>$INFO[Container(11).ListItem.ChannelNumberLabel,,  ·  ]$INFO[Container(11).ListItem.ChannelName]</label>
                     </control>
-                    <control type="list" id="12">
-                        <top>90</top><width>520</width><height>870</height>
-                        <orientation>vertical</orientation>
-                        <content target="videos">plugin://plugin.video.silokodiconnect/?mode=schedule&amp;number=$INFO[Container(11).ListItem.ChannelNumberLabel]&amp;name=$INFO[Container(11).ListItem.ChannelName]</content>
-                        <itemlayout width="520" height="58">
+                    <!-- SiloKodiConnect's service publishes the focused channel's rows (its
+                         quick.py; a plugin per channel took most of a second to start). Plain
+                         rows, not a list: Kodi refreshed a static list's items once a second. -->
                     <control type="group">
-                        <visible>String.IsEqual(ListItem.Property(silo.header),1)</visible>
+                        <top>90</top>
+                        <visible>String.IsEqual(Window(Home).Property(silokodi.quick.for),Container(11).ListItem.ChannelNumberLabel)</visible>
+                        <control type="group">
+                            <top>0</top><height>58</height>
+                            <visible>!String.IsEmpty(Window(Home).Property(silokodi.quick.1.label))</visible>
+                    <control type="group">
+                        <visible>String.IsEqual(Window(Home).Property(silokodi.quick.1.silo.header),1)</visible>
                         <control type="label">
                             <left>14</left><width>520</width><height>58</height>
                             <aligny>center</aligny>
                             <font>silo_detail</font>
                             <textcolor>FFF2D46B</textcolor>
-                            <label>$INFO[ListItem.Label]</label>
-                            <visible>String.IsEqual(ListItem.Property(silo.today),1)</visible>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.1.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.1.silo.today),1)</visible>
                         </control>
                         <control type="label">
                             <left>14</left><width>520</width><height>58</height>
                             <aligny>center</aligny>
                             <font>silo_detail</font>
                             <textcolor>FFEDEDED</textcolor>
-                            <label>$INFO[ListItem.Label]</label>
-                            <visible>!String.IsEqual(ListItem.Property(silo.today),1)</visible>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.1.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.1.silo.today),1)</visible>
                         </control>
                     </control>
                     <control type="group">
-                        <visible>!String.IsEqual(ListItem.Property(silo.header),1)</visible>
+                        <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.1.silo.header),1)</visible>
                         <control type="label">
                             <left>14</left><width>110</width><height>58</height>
                             <aligny>center</aligny>
                             <font>silo_detail</font>
                             <textcolor>99EDEDED</textcolor>
-                            <label>$INFO[ListItem.Label2]</label>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.1.label2)]</label>
                         </control>
 
                         <control type="label">
@@ -260,21 +264,21 @@
                             <aligny>center</aligny>
                             <font>silo_detail</font>
                             <textcolor>FFF2D46B</textcolor>
-                            <label>$INFO[ListItem.Label]</label>
-                            <visible>String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.1.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.1.silo.now),1)</visible>
                         </control>
                         <control type="label">
                             <left>130</left><width>290</width><height>58</height>
                             <aligny>center</aligny>
                             <font>silo_detail</font>
                             <textcolor>C7EDEDED</textcolor>
-                            <label>$INFO[ListItem.Label]</label>
-                            <visible>!String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.1.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.1.silo.now),1)</visible>
                         </control>
                         <control type="image">
                             <left>476</left><top>17</top><width>24</width><height>24</height>
                             <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
-                            <visible>String.IsEqual(ListItem.Property(silo.archive),1)</visible>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.1.silo.archive),1)</visible>
                         </control>
                         <control type="label">
                             <left>428</left><width>76</width><height>58</height>
@@ -282,38 +286,40 @@
                             <font>silo_badge</font>
                             <textcolor>FFF2D46B</textcolor>
                             <label>▶ LIVE</label>
-                            <visible>String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.1.silo.now),1)</visible>
                         </control>
                     </control>
-                        </itemlayout>
-                        <focusedlayout width="520" height="58">
+                        </control>
+                        <control type="group">
+                            <top>58</top><height>58</height>
+                            <visible>!String.IsEmpty(Window(Home).Property(silokodi.quick.2.label))</visible>
                     <control type="group">
-                        <visible>String.IsEqual(ListItem.Property(silo.header),1)</visible>
+                        <visible>String.IsEqual(Window(Home).Property(silokodi.quick.2.silo.header),1)</visible>
                         <control type="label">
                             <left>14</left><width>520</width><height>58</height>
                             <aligny>center</aligny>
                             <font>silo_detail</font>
                             <textcolor>FFF2D46B</textcolor>
-                            <label>$INFO[ListItem.Label]</label>
-                            <visible>String.IsEqual(ListItem.Property(silo.today),1)</visible>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.2.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.2.silo.today),1)</visible>
                         </control>
                         <control type="label">
                             <left>14</left><width>520</width><height>58</height>
                             <aligny>center</aligny>
                             <font>silo_detail</font>
                             <textcolor>FFEDEDED</textcolor>
-                            <label>$INFO[ListItem.Label]</label>
-                            <visible>!String.IsEqual(ListItem.Property(silo.today),1)</visible>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.2.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.2.silo.today),1)</visible>
                         </control>
                     </control>
                     <control type="group">
-                        <visible>!String.IsEqual(ListItem.Property(silo.header),1)</visible>
+                        <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.2.silo.header),1)</visible>
                         <control type="label">
                             <left>14</left><width>110</width><height>58</height>
                             <aligny>center</aligny>
                             <font>silo_detail</font>
                             <textcolor>99EDEDED</textcolor>
-                            <label>$INFO[ListItem.Label2]</label>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.2.label2)]</label>
                         </control>
 
                         <control type="label">
@@ -321,21 +327,21 @@
                             <aligny>center</aligny>
                             <font>silo_detail</font>
                             <textcolor>FFF2D46B</textcolor>
-                            <label>$INFO[ListItem.Label]</label>
-                            <visible>String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.2.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.2.silo.now),1)</visible>
                         </control>
                         <control type="label">
                             <left>130</left><width>290</width><height>58</height>
                             <aligny>center</aligny>
                             <font>silo_detail</font>
                             <textcolor>C7EDEDED</textcolor>
-                            <label>$INFO[ListItem.Label]</label>
-                            <visible>!String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.2.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.2.silo.now),1)</visible>
                         </control>
                         <control type="image">
                             <left>476</left><top>17</top><width>24</width><height>24</height>
                             <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
-                            <visible>String.IsEqual(ListItem.Property(silo.archive),1)</visible>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.2.silo.archive),1)</visible>
                         </control>
                         <control type="label">
                             <left>428</left><width>76</width><height>58</height>
@@ -343,10 +349,829 @@
                             <font>silo_badge</font>
                             <textcolor>FFF2D46B</textcolor>
                             <label>▶ LIVE</label>
-                            <visible>String.IsEqual(ListItem.Property(silo.now),1)</visible>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.2.silo.now),1)</visible>
                         </control>
                     </control>
-                        </focusedlayout>
+                        </control>
+                        <control type="group">
+                            <top>116</top><height>58</height>
+                            <visible>!String.IsEmpty(Window(Home).Property(silokodi.quick.3.label))</visible>
+                    <control type="group">
+                        <visible>String.IsEqual(Window(Home).Property(silokodi.quick.3.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.3.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.3.silo.today),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.3.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.3.silo.today),1)</visible>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.3.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>110</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.3.label2)]</label>
+                        </control>
+
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.3.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.3.silo.now),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.3.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.3.silo.now),1)</visible>
+                        </control>
+                        <control type="image">
+                            <left>476</left><top>17</top><width>24</width><height>24</height>
+                            <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.3.silo.archive),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>428</left><width>76</width><height>58</height>
+                            <aligny>center</aligny><align>right</align>
+                            <font>silo_badge</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>▶ LIVE</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.3.silo.now),1)</visible>
+                        </control>
+                    </control>
+                        </control>
+                        <control type="group">
+                            <top>174</top><height>58</height>
+                            <visible>!String.IsEmpty(Window(Home).Property(silokodi.quick.4.label))</visible>
+                    <control type="group">
+                        <visible>String.IsEqual(Window(Home).Property(silokodi.quick.4.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.4.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.4.silo.today),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.4.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.4.silo.today),1)</visible>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.4.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>110</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.4.label2)]</label>
+                        </control>
+
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.4.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.4.silo.now),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.4.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.4.silo.now),1)</visible>
+                        </control>
+                        <control type="image">
+                            <left>476</left><top>17</top><width>24</width><height>24</height>
+                            <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.4.silo.archive),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>428</left><width>76</width><height>58</height>
+                            <aligny>center</aligny><align>right</align>
+                            <font>silo_badge</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>▶ LIVE</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.4.silo.now),1)</visible>
+                        </control>
+                    </control>
+                        </control>
+                        <control type="group">
+                            <top>232</top><height>58</height>
+                            <visible>!String.IsEmpty(Window(Home).Property(silokodi.quick.5.label))</visible>
+                    <control type="group">
+                        <visible>String.IsEqual(Window(Home).Property(silokodi.quick.5.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.5.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.5.silo.today),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.5.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.5.silo.today),1)</visible>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.5.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>110</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.5.label2)]</label>
+                        </control>
+
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.5.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.5.silo.now),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.5.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.5.silo.now),1)</visible>
+                        </control>
+                        <control type="image">
+                            <left>476</left><top>17</top><width>24</width><height>24</height>
+                            <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.5.silo.archive),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>428</left><width>76</width><height>58</height>
+                            <aligny>center</aligny><align>right</align>
+                            <font>silo_badge</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>▶ LIVE</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.5.silo.now),1)</visible>
+                        </control>
+                    </control>
+                        </control>
+                        <control type="group">
+                            <top>290</top><height>58</height>
+                            <visible>!String.IsEmpty(Window(Home).Property(silokodi.quick.6.label))</visible>
+                    <control type="group">
+                        <visible>String.IsEqual(Window(Home).Property(silokodi.quick.6.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.6.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.6.silo.today),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.6.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.6.silo.today),1)</visible>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.6.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>110</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.6.label2)]</label>
+                        </control>
+
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.6.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.6.silo.now),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.6.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.6.silo.now),1)</visible>
+                        </control>
+                        <control type="image">
+                            <left>476</left><top>17</top><width>24</width><height>24</height>
+                            <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.6.silo.archive),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>428</left><width>76</width><height>58</height>
+                            <aligny>center</aligny><align>right</align>
+                            <font>silo_badge</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>▶ LIVE</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.6.silo.now),1)</visible>
+                        </control>
+                    </control>
+                        </control>
+                        <control type="group">
+                            <top>348</top><height>58</height>
+                            <visible>!String.IsEmpty(Window(Home).Property(silokodi.quick.7.label))</visible>
+                    <control type="group">
+                        <visible>String.IsEqual(Window(Home).Property(silokodi.quick.7.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.7.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.7.silo.today),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.7.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.7.silo.today),1)</visible>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.7.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>110</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.7.label2)]</label>
+                        </control>
+
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.7.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.7.silo.now),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.7.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.7.silo.now),1)</visible>
+                        </control>
+                        <control type="image">
+                            <left>476</left><top>17</top><width>24</width><height>24</height>
+                            <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.7.silo.archive),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>428</left><width>76</width><height>58</height>
+                            <aligny>center</aligny><align>right</align>
+                            <font>silo_badge</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>▶ LIVE</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.7.silo.now),1)</visible>
+                        </control>
+                    </control>
+                        </control>
+                        <control type="group">
+                            <top>406</top><height>58</height>
+                            <visible>!String.IsEmpty(Window(Home).Property(silokodi.quick.8.label))</visible>
+                    <control type="group">
+                        <visible>String.IsEqual(Window(Home).Property(silokodi.quick.8.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.8.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.8.silo.today),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.8.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.8.silo.today),1)</visible>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.8.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>110</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.8.label2)]</label>
+                        </control>
+
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.8.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.8.silo.now),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.8.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.8.silo.now),1)</visible>
+                        </control>
+                        <control type="image">
+                            <left>476</left><top>17</top><width>24</width><height>24</height>
+                            <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.8.silo.archive),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>428</left><width>76</width><height>58</height>
+                            <aligny>center</aligny><align>right</align>
+                            <font>silo_badge</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>▶ LIVE</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.8.silo.now),1)</visible>
+                        </control>
+                    </control>
+                        </control>
+                        <control type="group">
+                            <top>464</top><height>58</height>
+                            <visible>!String.IsEmpty(Window(Home).Property(silokodi.quick.9.label))</visible>
+                    <control type="group">
+                        <visible>String.IsEqual(Window(Home).Property(silokodi.quick.9.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.9.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.9.silo.today),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.9.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.9.silo.today),1)</visible>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.9.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>110</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.9.label2)]</label>
+                        </control>
+
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.9.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.9.silo.now),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.9.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.9.silo.now),1)</visible>
+                        </control>
+                        <control type="image">
+                            <left>476</left><top>17</top><width>24</width><height>24</height>
+                            <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.9.silo.archive),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>428</left><width>76</width><height>58</height>
+                            <aligny>center</aligny><align>right</align>
+                            <font>silo_badge</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>▶ LIVE</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.9.silo.now),1)</visible>
+                        </control>
+                    </control>
+                        </control>
+                        <control type="group">
+                            <top>522</top><height>58</height>
+                            <visible>!String.IsEmpty(Window(Home).Property(silokodi.quick.10.label))</visible>
+                    <control type="group">
+                        <visible>String.IsEqual(Window(Home).Property(silokodi.quick.10.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.10.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.10.silo.today),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.10.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.10.silo.today),1)</visible>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.10.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>110</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.10.label2)]</label>
+                        </control>
+
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.10.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.10.silo.now),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.10.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.10.silo.now),1)</visible>
+                        </control>
+                        <control type="image">
+                            <left>476</left><top>17</top><width>24</width><height>24</height>
+                            <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.10.silo.archive),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>428</left><width>76</width><height>58</height>
+                            <aligny>center</aligny><align>right</align>
+                            <font>silo_badge</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>▶ LIVE</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.10.silo.now),1)</visible>
+                        </control>
+                    </control>
+                        </control>
+                        <control type="group">
+                            <top>580</top><height>58</height>
+                            <visible>!String.IsEmpty(Window(Home).Property(silokodi.quick.11.label))</visible>
+                    <control type="group">
+                        <visible>String.IsEqual(Window(Home).Property(silokodi.quick.11.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.11.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.11.silo.today),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.11.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.11.silo.today),1)</visible>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.11.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>110</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.11.label2)]</label>
+                        </control>
+
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.11.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.11.silo.now),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.11.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.11.silo.now),1)</visible>
+                        </control>
+                        <control type="image">
+                            <left>476</left><top>17</top><width>24</width><height>24</height>
+                            <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.11.silo.archive),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>428</left><width>76</width><height>58</height>
+                            <aligny>center</aligny><align>right</align>
+                            <font>silo_badge</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>▶ LIVE</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.11.silo.now),1)</visible>
+                        </control>
+                    </control>
+                        </control>
+                        <control type="group">
+                            <top>638</top><height>58</height>
+                            <visible>!String.IsEmpty(Window(Home).Property(silokodi.quick.12.label))</visible>
+                    <control type="group">
+                        <visible>String.IsEqual(Window(Home).Property(silokodi.quick.12.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.12.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.12.silo.today),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.12.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.12.silo.today),1)</visible>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.12.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>110</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.12.label2)]</label>
+                        </control>
+
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.12.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.12.silo.now),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.12.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.12.silo.now),1)</visible>
+                        </control>
+                        <control type="image">
+                            <left>476</left><top>17</top><width>24</width><height>24</height>
+                            <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.12.silo.archive),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>428</left><width>76</width><height>58</height>
+                            <aligny>center</aligny><align>right</align>
+                            <font>silo_badge</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>▶ LIVE</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.12.silo.now),1)</visible>
+                        </control>
+                    </control>
+                        </control>
+                        <control type="group">
+                            <top>696</top><height>58</height>
+                            <visible>!String.IsEmpty(Window(Home).Property(silokodi.quick.13.label))</visible>
+                    <control type="group">
+                        <visible>String.IsEqual(Window(Home).Property(silokodi.quick.13.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.13.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.13.silo.today),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.13.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.13.silo.today),1)</visible>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.13.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>110</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.13.label2)]</label>
+                        </control>
+
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.13.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.13.silo.now),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.13.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.13.silo.now),1)</visible>
+                        </control>
+                        <control type="image">
+                            <left>476</left><top>17</top><width>24</width><height>24</height>
+                            <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.13.silo.archive),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>428</left><width>76</width><height>58</height>
+                            <aligny>center</aligny><align>right</align>
+                            <font>silo_badge</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>▶ LIVE</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.13.silo.now),1)</visible>
+                        </control>
+                    </control>
+                        </control>
+                        <control type="group">
+                            <top>754</top><height>58</height>
+                            <visible>!String.IsEmpty(Window(Home).Property(silokodi.quick.14.label))</visible>
+                    <control type="group">
+                        <visible>String.IsEqual(Window(Home).Property(silokodi.quick.14.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.14.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.14.silo.today),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.14.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.14.silo.today),1)</visible>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.14.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>110</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.14.label2)]</label>
+                        </control>
+
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.14.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.14.silo.now),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.14.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.14.silo.now),1)</visible>
+                        </control>
+                        <control type="image">
+                            <left>476</left><top>17</top><width>24</width><height>24</height>
+                            <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.14.silo.archive),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>428</left><width>76</width><height>58</height>
+                            <aligny>center</aligny><align>right</align>
+                            <font>silo_badge</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>▶ LIVE</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.14.silo.now),1)</visible>
+                        </control>
+                    </control>
+                        </control>
+                        <control type="group">
+                            <top>812</top><height>58</height>
+                            <visible>!String.IsEmpty(Window(Home).Property(silokodi.quick.15.label))</visible>
+                    <control type="group">
+                        <visible>String.IsEqual(Window(Home).Property(silokodi.quick.15.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.15.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.15.silo.today),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>14</left><width>520</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.15.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.15.silo.today),1)</visible>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.15.silo.header),1)</visible>
+                        <control type="label">
+                            <left>14</left><width>110</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>99EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.15.label2)]</label>
+                        </control>
+
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.15.label)]</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.15.silo.now),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>130</left><width>290</width><height>58</height>
+                            <aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>C7EDEDED</textcolor>
+                            <label>$INFO[Window(Home).Property(silokodi.quick.15.label)]</label>
+                            <visible>!String.IsEqual(Window(Home).Property(silokodi.quick.15.silo.now),1)</visible>
+                        </control>
+                        <control type="image">
+                            <left>476</left><top>17</top><width>24</width><height>24</height>
+                            <texture colordiffuse="99EDEDED">silo/menu_history.png</texture>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.15.silo.archive),1)</visible>
+                        </control>
+                        <control type="label">
+                            <left>428</left><width>76</width><height>58</height>
+                            <aligny>center</aligny><align>right</align>
+                            <font>silo_badge</font>
+                            <textcolor>FFF2D46B</textcolor>
+                            <label>▶ LIVE</label>
+                            <visible>String.IsEqual(Window(Home).Property(silokodi.quick.15.silo.now),1)</visible>
+                        </control>
+                    </control>
+                        </control>
                     </control>
                 </control>
             </control>
