@@ -5434,9 +5434,11 @@
         <value condition="String.IsEmpty(ListItem.Title)">No information</value>
         <value>$INFO[ListItem.Title]</value>
     </variable>
-    <variable name="SiloLiveResolutionSuffix">
-        <value condition="String.IsEqual(VideoPlayer.VideoResolution,4K) | String.IsEqual(VideoPlayer.VideoResolution,8K)"></value>
-        <value>P</value>
+    <variable name="SiloLiveResolution">
+        <value condition="String.IsEqual(VideoPlayer.VideoResolution,1080)">FHD</value>
+        <value condition="String.IsEqual(VideoPlayer.VideoResolution,720)">HD</value>
+        <value condition="String.IsEqual(VideoPlayer.VideoResolution,576) | String.IsEqual(VideoPlayer.VideoResolution,540) | String.IsEqual(VideoPlayer.VideoResolution,480)">SD</value>
+        <value>$INFO[VideoPlayer.VideoResolution]</value>
     </variable>
     <variable name="SiloLiveFps">
         <value condition="String.StartsWith(Player.Process(videofps),59.9)">60</value>
@@ -5458,7 +5460,7 @@
     </variable>
     <variable name="SiloLiveAudio">
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,1)">MONO</value>
-        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,2)">2.0</value>
+        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,2)">STEREO</value>
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,6)">5.1</value>
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,8)">7.1</value>
         <value>$INFO[VideoPlayer.AudioChannels,, CH]</value>

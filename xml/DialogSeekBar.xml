@@ -40,119 +40,135 @@
                 <textcolor>FFEDEDED</textcolor>
                 <label>$INFO[System.Date(ddd d mmm)]$INFO[System.Time,  ·  ,]</label>
             </control>
-            <control type="image">
-                <left>88</left><top>788</top><width>224</width><height>136</height>
-                <texture border="20" colordiffuse="E61E2024">silo/card_landscape_mask.png</texture>
-            </control>
-            <control type="image">
-                <left>110</left><top>804</top><width>180</width><height>104</height>
-                <aspectratio>keep</aspectratio>
-                <texture>$INFO[Player.Icon]</texture>
-            </control>
             <control type="group">
-                <left>348</left><top>776</top>
-                <control type="label">
-                    <width>1400</width><height>36</height>
-                    <font>silo_meta</font>
-                    <textcolor>E0EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
-                    <label>$INFO[VideoPlayer.ChannelNumberLabel,,  ·  ]$INFO[VideoPlayer.ChannelName]</label>
+                <top>844</top>
+                <control type="image">
+                    <left>80</left><top>14</top><width>246</width><height>106</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture>$INFO[Player.Icon]</texture>
                 </control>
                 <control type="label">
-                    <top>38</top><width>1400</width><height>60</height>
+                    <left>358</left><width>1474</width><height>60</height>
                     <font>silo_osd_title</font>
                     <textcolor>FFEDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
                     <label fallback="19055">$INFO[VideoPlayer.Title]</label>
                 </control>
                 <control type="grouplist">
-                    <top>104</top><width>1400</width><height>36</height>
+                    <left>358</left><top>66</top><width>1474</width><height>40</height>
                     <orientation>horizontal</orientation>
-                    <itemgap>20</itemgap>
+                    <itemgap>22</itemgap>
                     <control type="label">
-                        <width>auto</width><height>36</height>
+                        <width>auto</width><height>40</height>
                         <aligny>center</aligny>
                         <font>silo_meta</font>
-                        <textcolor>FFEDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
-                        <label>$INFO[VideoPlayer.StartTime]$INFO[VideoPlayer.EndTime, – ,]</label>
+                        <textcolor>D9EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
+                        <label>$INFO[VideoPlayer.StartTime]$INFO[VideoPlayer.EndTime, — ,]</label>
                     </control>
                     <control type="progress">
-                        <top>15</top><width>240</width><height>6</height>
-                        <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
+                        <top>17</top><width>90</width><height>6</height>
+                        <texturebg colordiffuse="40FFFFFF">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
                         <info>PVR.EpgEventProgress</info>
                         <visible>!String.IsEmpty(VideoPlayer.EndTime)</visible>
                     </control>
                     <control type="label">
-                        <width>auto</width><height>36</height>
+                        <width>auto</width><height>40</height>
                         <aligny>center</aligny>
                         <font>silo_meta</font>
-                        <textcolor>E0EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
-                        <label>$INFO[PVR.EpgEventRemainingTime(mins),, min left]</label>
+                        <textcolor>D9EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
+                        <label>$INFO[PVR.EpgEventRemainingTime(mins),, min]</label>
                         <visible>!String.IsEmpty(VideoPlayer.EndTime)</visible>
                     </control>
-                <control type="button">
-                    <width>auto</width><height>34</height>
-                    <label>$INFO[VideoPlayer.VideoResolution]$VAR[SiloLiveResolutionSuffix]</label>
-                    <font>silo_badge</font>
-                    <textoffsetx>12</textoffsetx>
+                    <control type="label">
+                        <width>auto</width><height>40</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FFEDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
+                        <label>$INFO[VideoPlayer.ChannelNumberLabel,,  ]$INFO[VideoPlayer.ChannelName]</label>
+                    </control>
+                    <control type="button">
+                        <top>5</top><width>auto</width><height>30</height>
+                        <label>$VAR[SiloLiveResolution]</label>
+                        <font>silo_badge</font>
+                        <textoffsetx>9</textoffsetx>
+                        <aligny>center</aligny>
+                        <enable>false</enable>
+                        <disabledcolor>FF141414</disabledcolor>
+                        <texturenofocus border="8" colordiffuse="FFA3A3A3">silo/badge_solid.png</texturenofocus>
+                        <texturefocus border="8" colordiffuse="FFA3A3A3">silo/badge_solid.png</texturefocus>
+                        <visible>!String.IsEmpty(VideoPlayer.VideoResolution)</visible>
+                    </control>
+                    <control type="button">
+                        <top>5</top><width>auto</width><height>30</height>
+                        <label>$VAR[SiloLiveFps] FPS</label>
+                        <font>silo_badge</font>
+                        <textoffsetx>9</textoffsetx>
+                        <aligny>center</aligny>
+                        <enable>false</enable>
+                        <disabledcolor>FF141414</disabledcolor>
+                        <texturenofocus border="8" colordiffuse="FFA3A3A3">silo/badge_solid.png</texturenofocus>
+                        <texturefocus border="8" colordiffuse="FFA3A3A3">silo/badge_solid.png</texturefocus>
+                        <visible>String.StartsWith(Player.Process(videofps),59.9) | String.StartsWith(Player.Process(videofps),60) | String.StartsWith(Player.Process(videofps),50) | String.StartsWith(Player.Process(videofps),48) | String.StartsWith(Player.Process(videofps),29.9) | String.StartsWith(Player.Process(videofps),30) | String.StartsWith(Player.Process(videofps),25) | String.StartsWith(Player.Process(videofps),23.9) | String.StartsWith(Player.Process(videofps),24)</visible>
+                    </control>
+                    <control type="button">
+                        <top>5</top><width>auto</width><height>30</height>
+                        <label>$VAR[SiloLiveHdr]</label>
+                        <font>silo_badge</font>
+                        <textoffsetx>9</textoffsetx>
+                        <aligny>center</aligny>
+                        <enable>false</enable>
+                        <disabledcolor>FF141414</disabledcolor>
+                        <texturenofocus border="8" colordiffuse="FFA3A3A3">silo/badge_solid.png</texturenofocus>
+                        <texturefocus border="8" colordiffuse="FFA3A3A3">silo/badge_solid.png</texturefocus>
+                        <visible>!String.IsEmpty(VideoPlayer.HdrType)</visible>
+                    </control>
+                    <control type="button">
+                        <top>5</top><width>auto</width><height>30</height>
+                        <label>$VAR[SiloLiveAudio]</label>
+                        <font>silo_badge</font>
+                        <textoffsetx>9</textoffsetx>
+                        <aligny>center</aligny>
+                        <enable>false</enable>
+                        <disabledcolor>FF141414</disabledcolor>
+                        <texturenofocus border="8" colordiffuse="FFA3A3A3">silo/badge_solid.png</texturenofocus>
+                        <texturefocus border="8" colordiffuse="FFA3A3A3">silo/badge_solid.png</texturefocus>
+                        <visible>!String.IsEmpty(VideoPlayer.AudioChannels)</visible>
+                    </control>
+                </control>
+
+                <control type="label">
+                    <left>358</left><top>110</top><width>1474</width><height>40</height>
                     <aligny>center</aligny>
-                    <enable>false</enable>
-                    <disabledcolor>FFEDEDED</disabledcolor>
-                    <!-- Outlined, as on Silo's Apple TV app. -->
-                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
-                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
-                    <visible>!String.IsEmpty(VideoPlayer.VideoResolution)</visible>
-                </control>
-                <control type="button">
-                    <width>auto</width><height>34</height>
-                    <label>$VAR[SiloLiveFps] FPS</label>
-                    <font>silo_badge</font>
-                    <textoffsetx>12</textoffsetx>
-                    <aligny>center</aligny>
-                    <enable>false</enable>
-                    <disabledcolor>FFEDEDED</disabledcolor>
-                    <!-- Outlined, as on Silo's Apple TV app. -->
-                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
-                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
-                    <visible>String.StartsWith(Player.Process(videofps),59.9) | String.StartsWith(Player.Process(videofps),60) | String.StartsWith(Player.Process(videofps),50) | String.StartsWith(Player.Process(videofps),48) | String.StartsWith(Player.Process(videofps),29.9) | String.StartsWith(Player.Process(videofps),30) | String.StartsWith(Player.Process(videofps),25) | String.StartsWith(Player.Process(videofps),23.9) | String.StartsWith(Player.Process(videofps),24)</visible>
-                </control>
-                <control type="button">
-                    <width>auto</width><height>34</height>
-                    <label>$VAR[SiloLiveHdr]</label>
-                    <font>silo_badge</font>
-                    <textoffsetx>12</textoffsetx>
-                    <aligny>center</aligny>
-                    <enable>false</enable>
-                    <disabledcolor>FFEDEDED</disabledcolor>
-                    <!-- Outlined, as on Silo's Apple TV app. -->
-                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
-                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
-                    <visible>!String.IsEmpty(VideoPlayer.HdrType)</visible>
-                </control>
-                <control type="button">
-                    <width>auto</width><height>34</height>
-                    <label>$VAR[SiloLiveAudio]</label>
-                    <font>silo_badge</font>
-                    <textoffsetx>12</textoffsetx>
-                    <aligny>center</aligny>
-                    <enable>false</enable>
-                    <disabledcolor>FFEDEDED</disabledcolor>
-                    <!-- Outlined, as on Silo's Apple TV app. -->
-                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
-                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
-                    <visible>!String.IsEmpty(VideoPlayer.AudioChannels)</visible>
-                </control>
-                </control>
-                <control type="textbox">
-                    <top>150</top><width>1300</width><height>66</height>
                     <font>silo_detail</font>
-                    <textcolor>E0EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
+                    <textcolor>D9EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
                     <label>$INFO[VideoPlayer.Plot]</label>
                 </control>
-                <control type="label">
-                    <top>222</top><width>1400</width><height>36</height>
-                    <font>silo_meta</font>
-                    <textcolor>E0EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
-                    <label>$INFO[VideoPlayer.NextStartTime,[COLOR FFEDEDED]Next[/COLOR]  ,  ]$INFO[VideoPlayer.NextTitle]</label>
+                <control type="grouplist">
+                    <left>358</left><top>154</top><width>1474</width><height>40</height>
+                    <orientation>horizontal</orientation>
+                    <itemgap>22</itemgap>
+                    <control type="label">
+                        <width>auto</width><height>40</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>D9EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
+                        <label>$INFO[VideoPlayer.NextStartTime]$INFO[VideoPlayer.NextEndTime, — ,]</label>
+                    </control>
+                    <control type="label">
+                        <width>auto</width><height>40</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>D9EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
+                        <label>$INFO[VideoPlayer.NextTitle]</label>
+                    </control>
+                </control>
+                <!-- TiviMate's full-width bar: yellow as far as the programme has got. -->
+                <control type="progress">
+                    <left>80</left><top>166</top><width>1760</width><height>4</height>
+                    <texturebg colordiffuse="66FFFFFF">colors/white.png</texturebg>
+                    <midtexture colordiffuse="FFF2D46B">colors/white.png</midtexture>
+                    <info>PVR.EpgEventProgress</info>
+                    <visible>!String.IsEmpty(VideoPlayer.EndTime) + false</visible>
                 </control>
             </control>
 		</control>

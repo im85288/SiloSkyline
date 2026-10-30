@@ -348,7 +348,8 @@
     <timer>
         <name>silo_recent_autoclose</name>
         <start reset="true">Window.IsActive(1196)</start>
-        <reset>Window.IsActive(1196) + !System.IdleTime(1)</reset>
+        <!-- Not while the playback bar is open (paused, the viewer may be a while). -->
+        <reset>Window.IsActive(1196) + [!System.IdleTime(1) | ControlGroup(5610).HasFocus()]</reset>
         <stop>!Window.IsActive(1196) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_recent_autoclose),5)</stop>
         <onstop condition="Window.IsActive(1196)">Dialog.Close(1196)</onstop>
     </timer>

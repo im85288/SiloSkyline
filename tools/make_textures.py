@@ -107,6 +107,12 @@ def badge_fill(name='badge_fill.png', size=32, radius=8, rim=1.5):
     write_png(name, size, size, alpha)
 
 
+def badge_solid(name='badge_solid.png', size=32, radius=6):
+    """TiviMate's stream badges (4K, 50 FPS, 5.1): a filled rounded tag,
+    coloured by colordiffuse, stretched with border="8"."""
+    write_png(name, size, size, lambda x, y: rounded_rect_coverage(x, y, size, size, radius))
+
+
 def menu_panel(name='menu_panel.png', size=96, radius=24, rim=1.5):
     """Silo's Apple TV menus: a near-black glass panel (#272A30 at 95%) with a
     faint light rim, stretched with border="28"."""
@@ -233,6 +239,7 @@ if __name__ == '__main__':
     # Badges: a 2 px outline, stretched with border="8".
     focus_ring('badge_outline.png', 32, 32, 8, 2)
     badge_fill()
+    badge_solid()
     menu_panel()
     epg_now()
     play_circle()
