@@ -32,11 +32,6 @@ HOME_CARDS = 20   # cards in a published row (SiloKodiConnect rows.CARDS): each 
 # Pages whose rows are SiloKodiConnect's published cards (Movies' and
 # Series' rows are native Kodi lists where they can be, plugin rows otherwise).
 PUBLISHED_PAGES = ('home', 'requests')
-# Home's first rows only are published cards (at hand the moment Home opens);
-# the rest load from SiloKodiConnect's rows as Movies' do, filling while the
-# first are looked at. Each published card costs Home about 9 ms to load.
-HOME_PUBLISHED_ROWS = 4
-HOME_ROWS = 18  # Silo's Home rows (its admin's choice)
 POSTER_ONLY = ('requests',)  # Silo's request rows are all posters
 # Cards per published row: every slot is parsed as the skin loads (on a SHIELD,
 # 2,200 slots took 25 s; Home's 600, 1 s), so other pages show fewer.
@@ -58,12 +53,7 @@ PAGE_FIELDS = {
 # Rows a page can show; Requests has Silo's Discover rows (six title rows,
 # then Studios, Networks and Genres), and every slot costs Home.xml size.
 # Silo's libraries have 6 rows each: fewer slots keep Home.xml quick to load.
-PAGE_ROWS = {'home': HOME_ROWS, 'movies': 8, 'series': 8, 'requests': 12, 'custom': WIDGETS}
-
-
-def published(page, slot):
-    """Whether a page's row slot holds published cards, not a path to load."""
-    return page in PUBLISHED_PAGES and not (page == 'home' and slot > HOME_PUBLISHED_ROWS)
+PAGE_ROWS = {'movies': 8, 'series': 8, 'requests': 12, 'custom': WIDGETS}
 
 
 def rows_of(page):
@@ -489,10 +479,8 @@ def shown(target):
 def row_rules(page, page_index, slot, landscape):
     key = 'silo.%s.%d' % (page, slot)
     lid = list_id(page_index, slot, landscape)
-    # The list for the row's style (a published page's one list draws either).
-    style = '' if page in PUBLISHED_PAGES else ' + ' + (
-        ('String.IsEqual(%s,landscape)' if landscape else '!String.IsEqual(%s,landscape)') % prop(key + '.style'))
-    if published(page, slot):
+    style = ('String.IsEqual(%s,landscape)' if landscape else '!String.IsEqual(%s,landscape)') % prop(key + '.style')
+    if page in PUBLISHED_PAGES:
         # Published cards: the row shows when SiloKodiConnect has cards for
         # it. Not the list's item count: Kodi doesn't evaluate a hidden list's
         # items, so the row would wait for the page's loading flag. Its one
@@ -507,7 +495,7 @@ def row_rules(page, page_index, slot, landscape):
     # Empty rows hide, as in Silo; Kodi still loads a list hidden this way.
     # silo.<page>.loading (SiloKodiConnect) keeps rows shown while they load:
     # Kodi never loads a hidden list whose path changed.
-    return ('%s + !String.IsEmpty(%s)%s + [Integer.IsGreater(Container(%d).NumItems,0) | Container(%d).IsUpdating'
+    return ('%s + !String.IsEmpty(%s) + %s + [Integer.IsGreater(Container(%d).NumItems,0) | Container(%d).IsUpdating'
             ' | String.IsEqual(%s,1)]' % (page_visible(page), prop(key + '.path'), style, lid, lid,
                                          prop('silo.%s.loading' % page)))
 
@@ -587,10 +575,6 @@ def row(page, page_index, slot, landscape):
     # from trying the row too early: a list whose load failed never retries.
     # Kodi reads a $VAR in a content path only once, so this must stay $INFO.
     path = '$INFO[%s]' % prop(key + ('.landscape' if landscape else '.poster'))
-    if page in PUBLISHED_PAGES:
-        # A Home row past the published ones: its one list loads whichever
-        # path its style has (the other is empty).
-        path = '$INFO[%s]$INFO[%s]' % (prop(key + '.poster'), prop(key + '.landscape'))
     if page == 'custom':
         # A Skin Shortcuts widget: any Kodi path, used as it is.
         path = '$INFO[%s]' % prop(key + '.path')
@@ -610,7 +594,7 @@ def row(page, page_index, slot, landscape):
             prop(key + '.sort'), prop(key + '.order'), prop(key + '.limit'), path)
     if page in POSTER_ONLY and landscape:
         content = '<content></content>'  # never shown: no slots to parse
-    elif published(page, slot):
+    elif page in PUBLISHED_PAGES:
         # Written out, not an include with a parameter: Kodi expands those
         # slowly as the skin loads (thousands of them took 25 s on a SHIELD).
         content = '<content>%s\n                    </content>' % ''.join(
