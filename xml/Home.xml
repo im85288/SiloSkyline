@@ -301,13 +301,13 @@
                         <item><label>$INFO[Window(Home).Property(silo.home.1.20.label)]</label><property name="home.type">$INFO[Window(Home).Property(silo.home.1.20.type)]</property><property name="home.dbid">$INFO[Window(Home).Property(silo.home.1.20.dbid)]</property><property name="home.card.title">$INFO[Window(Home).Property(silo.home.1.20.card.title)]</property><property name="home.card.sub">$INFO[Window(Home).Property(silo.home.1.20.card.sub)]</property><property name="home.card.wide_sub">$INFO[Window(Home).Property(silo.home.1.20.card.wide_sub)]</property><property name="home.hero.title">$INFO[Window(Home).Property(silo.home.1.20.hero.title)]</property><property name="home.hero.meta">$INFO[Window(Home).Property(silo.home.1.20.hero.meta)]</property><property name="home.hero.facts">$INFO[Window(Home).Property(silo.home.1.20.hero.facts)]</property><property name="home.rating.imdb">$INFO[Window(Home).Property(silo.home.1.20.rating.imdb)]</property><property name="home.rating.tmdb">$INFO[Window(Home).Property(silo.home.1.20.rating.tmdb)]</property><property name="home.hero.detail">$INFO[Window(Home).Property(silo.home.1.20.hero.detail)]</property><property name="home.plot">$INFO[Window(Home).Property(silo.home.1.20.plot)]</property><property name="home.mpaa">$INFO[Window(Home).Property(silo.home.1.20.mpaa)]</property><property name="home.badge1">$INFO[Window(Home).Property(silo.home.1.20.badge1)]</property><property name="home.badge2">$INFO[Window(Home).Property(silo.home.1.20.badge2)]</property><property name="home.badge3">$INFO[Window(Home).Property(silo.home.1.20.badge3)]</property><property name="home.tint">$INFO[Window(Home).Property(silo.home.1.20.tint)]</property><property name="home.percent">$INFO[Window(Home).Property(silo.home.1.20.percent)]</property><property name="home.playcount">$INFO[Window(Home).Property(silo.home.1.20.playcount)]</property><property name="home.art.poster">$INFO[Window(Home).Property(silo.home.1.20.art.poster)]</property><property name="home.art.landscape">$INFO[Window(Home).Property(silo.home.1.20.art.landscape)]</property><property name="home.art.fanart">$INFO[Window(Home).Property(silo.home.1.20.art.fanart)]</property><property name="home.art.clearlogo">$INFO[Window(Home).Property(silo.home.1.20.art.clearlogo)]</property><visible>!String.IsEmpty(Window(Home).Property(silo.home.1.20.type))</visible></item>
                     </content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.1.style),landscape)">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5001) | String.IsEqual(Window(Home).Property(silo.row),5002)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.1.style),landscape)">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5001" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.1.style),landscape)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5001) | String.IsEqual(Window(Home).Property(silo.row),5002)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.1.style),landscape)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5001" /></include>
@@ -394,13 +394,13 @@
                         <item><label>$INFO[Window(Home).Property(silo.home.2.20.label)]</label><property name="home.type">$INFO[Window(Home).Property(silo.home.2.20.type)]</property><property name="home.dbid">$INFO[Window(Home).Property(silo.home.2.20.dbid)]</property><property name="home.card.title">$INFO[Window(Home).Property(silo.home.2.20.card.title)]</property><property name="home.card.sub">$INFO[Window(Home).Property(silo.home.2.20.card.sub)]</property><property name="home.card.wide_sub">$INFO[Window(Home).Property(silo.home.2.20.card.wide_sub)]</property><property name="home.hero.title">$INFO[Window(Home).Property(silo.home.2.20.hero.title)]</property><property name="home.hero.meta">$INFO[Window(Home).Property(silo.home.2.20.hero.meta)]</property><property name="home.hero.facts">$INFO[Window(Home).Property(silo.home.2.20.hero.facts)]</property><property name="home.rating.imdb">$INFO[Window(Home).Property(silo.home.2.20.rating.imdb)]</property><property name="home.rating.tmdb">$INFO[Window(Home).Property(silo.home.2.20.rating.tmdb)]</property><property name="home.hero.detail">$INFO[Window(Home).Property(silo.home.2.20.hero.detail)]</property><property name="home.plot">$INFO[Window(Home).Property(silo.home.2.20.plot)]</property><property name="home.mpaa">$INFO[Window(Home).Property(silo.home.2.20.mpaa)]</property><property name="home.badge1">$INFO[Window(Home).Property(silo.home.2.20.badge1)]</property><property name="home.badge2">$INFO[Window(Home).Property(silo.home.2.20.badge2)]</property><property name="home.badge3">$INFO[Window(Home).Property(silo.home.2.20.badge3)]</property><property name="home.tint">$INFO[Window(Home).Property(silo.home.2.20.tint)]</property><property name="home.percent">$INFO[Window(Home).Property(silo.home.2.20.percent)]</property><property name="home.playcount">$INFO[Window(Home).Property(silo.home.2.20.playcount)]</property><property name="home.art.poster">$INFO[Window(Home).Property(silo.home.2.20.art.poster)]</property><property name="home.art.landscape">$INFO[Window(Home).Property(silo.home.2.20.art.landscape)]</property><property name="home.art.fanart">$INFO[Window(Home).Property(silo.home.2.20.art.fanart)]</property><property name="home.art.clearlogo">$INFO[Window(Home).Property(silo.home.2.20.art.clearlogo)]</property><visible>!String.IsEmpty(Window(Home).Property(silo.home.2.20.type))</visible></item>
                     </content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.2.style),landscape)">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5001) | String.IsEqual(Window(Home).Property(silo.row),5002) | String.IsEqual(Window(Home).Property(silo.row),5003)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.2.style),landscape)">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5002" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.2.style),landscape)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5001) | String.IsEqual(Window(Home).Property(silo.row),5002) | String.IsEqual(Window(Home).Property(silo.row),5003)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.2.style),landscape)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5002" /></include>
@@ -488,13 +488,13 @@
                         <item><label>$INFO[Window(Home).Property(silo.home.3.20.label)]</label><property name="home.type">$INFO[Window(Home).Property(silo.home.3.20.type)]</property><property name="home.dbid">$INFO[Window(Home).Property(silo.home.3.20.dbid)]</property><property name="home.card.title">$INFO[Window(Home).Property(silo.home.3.20.card.title)]</property><property name="home.card.sub">$INFO[Window(Home).Property(silo.home.3.20.card.sub)]</property><property name="home.card.wide_sub">$INFO[Window(Home).Property(silo.home.3.20.card.wide_sub)]</property><property name="home.hero.title">$INFO[Window(Home).Property(silo.home.3.20.hero.title)]</property><property name="home.hero.meta">$INFO[Window(Home).Property(silo.home.3.20.hero.meta)]</property><property name="home.hero.facts">$INFO[Window(Home).Property(silo.home.3.20.hero.facts)]</property><property name="home.rating.imdb">$INFO[Window(Home).Property(silo.home.3.20.rating.imdb)]</property><property name="home.rating.tmdb">$INFO[Window(Home).Property(silo.home.3.20.rating.tmdb)]</property><property name="home.hero.detail">$INFO[Window(Home).Property(silo.home.3.20.hero.detail)]</property><property name="home.plot">$INFO[Window(Home).Property(silo.home.3.20.plot)]</property><property name="home.mpaa">$INFO[Window(Home).Property(silo.home.3.20.mpaa)]</property><property name="home.badge1">$INFO[Window(Home).Property(silo.home.3.20.badge1)]</property><property name="home.badge2">$INFO[Window(Home).Property(silo.home.3.20.badge2)]</property><property name="home.badge3">$INFO[Window(Home).Property(silo.home.3.20.badge3)]</property><property name="home.tint">$INFO[Window(Home).Property(silo.home.3.20.tint)]</property><property name="home.percent">$INFO[Window(Home).Property(silo.home.3.20.percent)]</property><property name="home.playcount">$INFO[Window(Home).Property(silo.home.3.20.playcount)]</property><property name="home.art.poster">$INFO[Window(Home).Property(silo.home.3.20.art.poster)]</property><property name="home.art.landscape">$INFO[Window(Home).Property(silo.home.3.20.art.landscape)]</property><property name="home.art.fanart">$INFO[Window(Home).Property(silo.home.3.20.art.fanart)]</property><property name="home.art.clearlogo">$INFO[Window(Home).Property(silo.home.3.20.art.clearlogo)]</property><visible>!String.IsEmpty(Window(Home).Property(silo.home.3.20.type))</visible></item>
                     </content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.3.style),landscape)">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5001) | String.IsEqual(Window(Home).Property(silo.row),5002) | String.IsEqual(Window(Home).Property(silo.row),5003) | String.IsEqual(Window(Home).Property(silo.row),5004)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.3.style),landscape)">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5003" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.3.style),landscape)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5001) | String.IsEqual(Window(Home).Property(silo.row),5002) | String.IsEqual(Window(Home).Property(silo.row),5003) | String.IsEqual(Window(Home).Property(silo.row),5004)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.3.style),landscape)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5003" /></include>
@@ -583,13 +583,13 @@
                         <item><label>$INFO[Window(Home).Property(silo.home.4.20.label)]</label><property name="home.type">$INFO[Window(Home).Property(silo.home.4.20.type)]</property><property name="home.dbid">$INFO[Window(Home).Property(silo.home.4.20.dbid)]</property><property name="home.card.title">$INFO[Window(Home).Property(silo.home.4.20.card.title)]</property><property name="home.card.sub">$INFO[Window(Home).Property(silo.home.4.20.card.sub)]</property><property name="home.card.wide_sub">$INFO[Window(Home).Property(silo.home.4.20.card.wide_sub)]</property><property name="home.hero.title">$INFO[Window(Home).Property(silo.home.4.20.hero.title)]</property><property name="home.hero.meta">$INFO[Window(Home).Property(silo.home.4.20.hero.meta)]</property><property name="home.hero.facts">$INFO[Window(Home).Property(silo.home.4.20.hero.facts)]</property><property name="home.rating.imdb">$INFO[Window(Home).Property(silo.home.4.20.rating.imdb)]</property><property name="home.rating.tmdb">$INFO[Window(Home).Property(silo.home.4.20.rating.tmdb)]</property><property name="home.hero.detail">$INFO[Window(Home).Property(silo.home.4.20.hero.detail)]</property><property name="home.plot">$INFO[Window(Home).Property(silo.home.4.20.plot)]</property><property name="home.mpaa">$INFO[Window(Home).Property(silo.home.4.20.mpaa)]</property><property name="home.badge1">$INFO[Window(Home).Property(silo.home.4.20.badge1)]</property><property name="home.badge2">$INFO[Window(Home).Property(silo.home.4.20.badge2)]</property><property name="home.badge3">$INFO[Window(Home).Property(silo.home.4.20.badge3)]</property><property name="home.tint">$INFO[Window(Home).Property(silo.home.4.20.tint)]</property><property name="home.percent">$INFO[Window(Home).Property(silo.home.4.20.percent)]</property><property name="home.playcount">$INFO[Window(Home).Property(silo.home.4.20.playcount)]</property><property name="home.art.poster">$INFO[Window(Home).Property(silo.home.4.20.art.poster)]</property><property name="home.art.landscape">$INFO[Window(Home).Property(silo.home.4.20.art.landscape)]</property><property name="home.art.fanart">$INFO[Window(Home).Property(silo.home.4.20.art.fanart)]</property><property name="home.art.clearlogo">$INFO[Window(Home).Property(silo.home.4.20.art.clearlogo)]</property><visible>!String.IsEmpty(Window(Home).Property(silo.home.4.20.type))</visible></item>
                     </content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.4.style),landscape)">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5002) | String.IsEqual(Window(Home).Property(silo.row),5003) | String.IsEqual(Window(Home).Property(silo.row),5004) | String.IsEqual(Window(Home).Property(silo.row),5005)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.4.style),landscape)">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5004" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.4.style),landscape)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5002) | String.IsEqual(Window(Home).Property(silo.row),5003) | String.IsEqual(Window(Home).Property(silo.row),5004) | String.IsEqual(Window(Home).Property(silo.row),5005)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.4.style),landscape)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5004" /></include>
@@ -657,13 +657,13 @@
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.5.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.5.order)]" limit="$INFO[Window(Home).Property(silo.home.5.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.5.poster)]$INFO[Window(Home).Property(silo.home.5.landscape)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.5.style),landscape)">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5003) | String.IsEqual(Window(Home).Property(silo.row),5004) | String.IsEqual(Window(Home).Property(silo.row),5005) | String.IsEqual(Window(Home).Property(silo.row),5006)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.5.style),landscape)">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5005" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.5.style),landscape)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5003) | String.IsEqual(Window(Home).Property(silo.row),5004) | String.IsEqual(Window(Home).Property(silo.row),5005) | String.IsEqual(Window(Home).Property(silo.row),5006)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.5.style),landscape)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5005" /></include>
@@ -731,13 +731,13 @@
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.6.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.6.order)]" limit="$INFO[Window(Home).Property(silo.home.6.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.6.poster)]$INFO[Window(Home).Property(silo.home.6.landscape)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.6.style),landscape)">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5004) | String.IsEqual(Window(Home).Property(silo.row),5005) | String.IsEqual(Window(Home).Property(silo.row),5006) | String.IsEqual(Window(Home).Property(silo.row),5007)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.6.style),landscape)">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5006" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.6.style),landscape)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5004) | String.IsEqual(Window(Home).Property(silo.row),5005) | String.IsEqual(Window(Home).Property(silo.row),5006) | String.IsEqual(Window(Home).Property(silo.row),5007)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.6.style),landscape)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5006" /></include>
@@ -805,13 +805,13 @@
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.7.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.7.order)]" limit="$INFO[Window(Home).Property(silo.home.7.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.7.poster)]$INFO[Window(Home).Property(silo.home.7.landscape)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.7.style),landscape)">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5005) | String.IsEqual(Window(Home).Property(silo.row),5006) | String.IsEqual(Window(Home).Property(silo.row),5007) | String.IsEqual(Window(Home).Property(silo.row),5008)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.7.style),landscape)">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5007" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.7.style),landscape)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5005) | String.IsEqual(Window(Home).Property(silo.row),5006) | String.IsEqual(Window(Home).Property(silo.row),5007) | String.IsEqual(Window(Home).Property(silo.row),5008)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.7.style),landscape)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5007" /></include>
@@ -879,13 +879,13 @@
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.8.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.8.order)]" limit="$INFO[Window(Home).Property(silo.home.8.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.8.poster)]$INFO[Window(Home).Property(silo.home.8.landscape)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.8.style),landscape)">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5006) | String.IsEqual(Window(Home).Property(silo.row),5007) | String.IsEqual(Window(Home).Property(silo.row),5008) | String.IsEqual(Window(Home).Property(silo.row),5009)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.8.style),landscape)">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5008" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.8.style),landscape)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5006) | String.IsEqual(Window(Home).Property(silo.row),5007) | String.IsEqual(Window(Home).Property(silo.row),5008) | String.IsEqual(Window(Home).Property(silo.row),5009)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.8.style),landscape)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5008" /></include>
@@ -953,13 +953,13 @@
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.9.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.9.order)]" limit="$INFO[Window(Home).Property(silo.home.9.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.9.poster)]$INFO[Window(Home).Property(silo.home.9.landscape)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.9.style),landscape)">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5007) | String.IsEqual(Window(Home).Property(silo.row),5008) | String.IsEqual(Window(Home).Property(silo.row),5009) | String.IsEqual(Window(Home).Property(silo.row),5010)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.9.style),landscape)">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5009" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.9.style),landscape)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5007) | String.IsEqual(Window(Home).Property(silo.row),5008) | String.IsEqual(Window(Home).Property(silo.row),5009) | String.IsEqual(Window(Home).Property(silo.row),5010)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.9.style),landscape)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5009" /></include>
@@ -1027,13 +1027,13 @@
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.10.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.10.order)]" limit="$INFO[Window(Home).Property(silo.home.10.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.10.poster)]$INFO[Window(Home).Property(silo.home.10.landscape)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.10.style),landscape)">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5008) | String.IsEqual(Window(Home).Property(silo.row),5009) | String.IsEqual(Window(Home).Property(silo.row),5010) | String.IsEqual(Window(Home).Property(silo.row),5011)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.10.style),landscape)">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5010" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.10.style),landscape)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5008) | String.IsEqual(Window(Home).Property(silo.row),5009) | String.IsEqual(Window(Home).Property(silo.row),5010) | String.IsEqual(Window(Home).Property(silo.row),5011)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.10.style),landscape)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5010" /></include>
@@ -1101,13 +1101,13 @@
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.11.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.11.order)]" limit="$INFO[Window(Home).Property(silo.home.11.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.11.poster)]$INFO[Window(Home).Property(silo.home.11.landscape)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.11.style),landscape)">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5009) | String.IsEqual(Window(Home).Property(silo.row),5010) | String.IsEqual(Window(Home).Property(silo.row),5011) | String.IsEqual(Window(Home).Property(silo.row),5012)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.11.style),landscape)">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5011" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.11.style),landscape)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5009) | String.IsEqual(Window(Home).Property(silo.row),5010) | String.IsEqual(Window(Home).Property(silo.row),5011) | String.IsEqual(Window(Home).Property(silo.row),5012)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.11.style),landscape)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5011" /></include>
@@ -1175,13 +1175,13 @@
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.12.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.12.order)]" limit="$INFO[Window(Home).Property(silo.home.12.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.12.poster)]$INFO[Window(Home).Property(silo.home.12.landscape)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.12.style),landscape)">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5010) | String.IsEqual(Window(Home).Property(silo.row),5011) | String.IsEqual(Window(Home).Property(silo.row),5012) | String.IsEqual(Window(Home).Property(silo.row),5013)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.12.style),landscape)">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5012" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.12.style),landscape)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5010) | String.IsEqual(Window(Home).Property(silo.row),5011) | String.IsEqual(Window(Home).Property(silo.row),5012) | String.IsEqual(Window(Home).Property(silo.row),5013)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.12.style),landscape)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5012" /></include>
@@ -1249,13 +1249,13 @@
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.13.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.13.order)]" limit="$INFO[Window(Home).Property(silo.home.13.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.13.poster)]$INFO[Window(Home).Property(silo.home.13.landscape)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.13.style),landscape)">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5011) | String.IsEqual(Window(Home).Property(silo.row),5012) | String.IsEqual(Window(Home).Property(silo.row),5013) | String.IsEqual(Window(Home).Property(silo.row),5014)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.13.style),landscape)">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5013" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.13.style),landscape)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5011) | String.IsEqual(Window(Home).Property(silo.row),5012) | String.IsEqual(Window(Home).Property(silo.row),5013) | String.IsEqual(Window(Home).Property(silo.row),5014)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.13.style),landscape)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5013" /></include>
@@ -1323,13 +1323,13 @@
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.14.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.14.order)]" limit="$INFO[Window(Home).Property(silo.home.14.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.14.poster)]$INFO[Window(Home).Property(silo.home.14.landscape)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.14.style),landscape)">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5012) | String.IsEqual(Window(Home).Property(silo.row),5013) | String.IsEqual(Window(Home).Property(silo.row),5014) | String.IsEqual(Window(Home).Property(silo.row),5015)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.14.style),landscape)">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5014" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.14.style),landscape)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5012) | String.IsEqual(Window(Home).Property(silo.row),5013) | String.IsEqual(Window(Home).Property(silo.row),5014) | String.IsEqual(Window(Home).Property(silo.row),5015)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.14.style),landscape)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5014" /></include>
@@ -1396,13 +1396,13 @@
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.15.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.15.order)]" limit="$INFO[Window(Home).Property(silo.home.15.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.15.poster)]$INFO[Window(Home).Property(silo.home.15.landscape)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.15.style),landscape)">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5013) | String.IsEqual(Window(Home).Property(silo.row),5014) | String.IsEqual(Window(Home).Property(silo.row),5015) | String.IsEqual(Window(Home).Property(silo.row),5016)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.15.style),landscape)">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5015" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.15.style),landscape)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5013) | String.IsEqual(Window(Home).Property(silo.row),5014) | String.IsEqual(Window(Home).Property(silo.row),5015) | String.IsEqual(Window(Home).Property(silo.row),5016)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.15.style),landscape)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5015" /></include>
@@ -1468,13 +1468,13 @@
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.16.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.16.order)]" limit="$INFO[Window(Home).Property(silo.home.16.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.16.poster)]$INFO[Window(Home).Property(silo.home.16.landscape)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.16.style),landscape)">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5014) | String.IsEqual(Window(Home).Property(silo.row),5015) | String.IsEqual(Window(Home).Property(silo.row),5016) | String.IsEqual(Window(Home).Property(silo.row),5017)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.16.style),landscape)">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5016" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.16.style),landscape)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5014) | String.IsEqual(Window(Home).Property(silo.row),5015) | String.IsEqual(Window(Home).Property(silo.row),5016) | String.IsEqual(Window(Home).Property(silo.row),5017)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.16.style),landscape)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5016" /></include>
@@ -1539,13 +1539,13 @@
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.17.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.17.order)]" limit="$INFO[Window(Home).Property(silo.home.17.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.17.poster)]$INFO[Window(Home).Property(silo.home.17.landscape)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.17.style),landscape)">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5015) | String.IsEqual(Window(Home).Property(silo.row),5016) | String.IsEqual(Window(Home).Property(silo.row),5017) | String.IsEqual(Window(Home).Property(silo.row),5018)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.17.style),landscape)">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5017" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.17.style),landscape)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5015) | String.IsEqual(Window(Home).Property(silo.row),5016) | String.IsEqual(Window(Home).Property(silo.row),5017) | String.IsEqual(Window(Home).Property(silo.row),5018)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.17.style),landscape)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5017" /></include>
@@ -1609,13 +1609,13 @@
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.18.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.18.order)]" limit="$INFO[Window(Home).Property(silo.home.18.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.18.poster)]$INFO[Window(Home).Property(silo.home.18.landscape)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.18.style),landscape)">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5016) | String.IsEqual(Window(Home).Property(silo.row),5017) | String.IsEqual(Window(Home).Property(silo.row),5018)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.18.style),landscape)">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5018" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.18.style),landscape)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5016) | String.IsEqual(Window(Home).Property(silo.row),5017) | String.IsEqual(Window(Home).Property(silo.row),5018)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.home.18.style),landscape)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5018" /></include>
@@ -1685,7 +1685,7 @@
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.1.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.1.order)]" limit="$INFO[Window(Home).Property(silo.movies.1.limit)]" browse="never">$INFO[Window(Home).Property(silo.movies.1.poster)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5101) | String.IsEqual(Window(Home).Property(silo.row),5151) | String.IsEqual(Window(Home).Property(silo.row),5102) | String.IsEqual(Window(Home).Property(silo.row),5152)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5101" /></include>
@@ -1755,7 +1755,7 @@
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.1.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.1.order)]" limit="$INFO[Window(Home).Property(silo.movies.1.limit)]" browse="never">$INFO[Window(Home).Property(silo.movies.1.landscape)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5101) | String.IsEqual(Window(Home).Property(silo.row),5151) | String.IsEqual(Window(Home).Property(silo.row),5102) | String.IsEqual(Window(Home).Property(silo.row),5152)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5151" /></include>
@@ -1827,7 +1827,7 @@
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.2.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.2.order)]" limit="$INFO[Window(Home).Property(silo.movies.2.limit)]" browse="never">$INFO[Window(Home).Property(silo.movies.2.poster)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5101) | String.IsEqual(Window(Home).Property(silo.row),5151) | String.IsEqual(Window(Home).Property(silo.row),5102) | String.IsEqual(Window(Home).Property(silo.row),5152) | String.IsEqual(Window(Home).Property(silo.row),5103) | String.IsEqual(Window(Home).Property(silo.row),5153)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5102" /></include>
@@ -1899,7 +1899,7 @@
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.2.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.2.order)]" limit="$INFO[Window(Home).Property(silo.movies.2.limit)]" browse="never">$INFO[Window(Home).Property(silo.movies.2.landscape)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5101) | String.IsEqual(Window(Home).Property(silo.row),5151) | String.IsEqual(Window(Home).Property(silo.row),5102) | String.IsEqual(Window(Home).Property(silo.row),5152) | String.IsEqual(Window(Home).Property(silo.row),5103) | String.IsEqual(Window(Home).Property(silo.row),5153)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5152" /></include>
@@ -1973,7 +1973,7 @@
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.3.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.3.order)]" limit="$INFO[Window(Home).Property(silo.movies.3.limit)]" browse="never">$INFO[Window(Home).Property(silo.movies.3.poster)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5101) | String.IsEqual(Window(Home).Property(silo.row),5151) | String.IsEqual(Window(Home).Property(silo.row),5102) | String.IsEqual(Window(Home).Property(silo.row),5152) | String.IsEqual(Window(Home).Property(silo.row),5103) | String.IsEqual(Window(Home).Property(silo.row),5153) | String.IsEqual(Window(Home).Property(silo.row),5104) | String.IsEqual(Window(Home).Property(silo.row),5154)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5103" /></include>
@@ -2047,7 +2047,7 @@
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.3.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.3.order)]" limit="$INFO[Window(Home).Property(silo.movies.3.limit)]" browse="never">$INFO[Window(Home).Property(silo.movies.3.landscape)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5101) | String.IsEqual(Window(Home).Property(silo.row),5151) | String.IsEqual(Window(Home).Property(silo.row),5102) | String.IsEqual(Window(Home).Property(silo.row),5152) | String.IsEqual(Window(Home).Property(silo.row),5103) | String.IsEqual(Window(Home).Property(silo.row),5153) | String.IsEqual(Window(Home).Property(silo.row),5104) | String.IsEqual(Window(Home).Property(silo.row),5154)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5153" /></include>
@@ -2123,7 +2123,7 @@
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.4.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.4.order)]" limit="$INFO[Window(Home).Property(silo.movies.4.limit)]" browse="never">$INFO[Window(Home).Property(silo.movies.4.poster)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5102) | String.IsEqual(Window(Home).Property(silo.row),5152) | String.IsEqual(Window(Home).Property(silo.row),5103) | String.IsEqual(Window(Home).Property(silo.row),5153) | String.IsEqual(Window(Home).Property(silo.row),5104) | String.IsEqual(Window(Home).Property(silo.row),5154) | String.IsEqual(Window(Home).Property(silo.row),5105) | String.IsEqual(Window(Home).Property(silo.row),5155)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5104" /></include>
@@ -2199,7 +2199,7 @@
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.4.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.4.order)]" limit="$INFO[Window(Home).Property(silo.movies.4.limit)]" browse="never">$INFO[Window(Home).Property(silo.movies.4.landscape)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5102) | String.IsEqual(Window(Home).Property(silo.row),5152) | String.IsEqual(Window(Home).Property(silo.row),5103) | String.IsEqual(Window(Home).Property(silo.row),5153) | String.IsEqual(Window(Home).Property(silo.row),5104) | String.IsEqual(Window(Home).Property(silo.row),5154) | String.IsEqual(Window(Home).Property(silo.row),5105) | String.IsEqual(Window(Home).Property(silo.row),5155)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5154" /></include>
@@ -2273,7 +2273,7 @@
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.5.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.5.order)]" limit="$INFO[Window(Home).Property(silo.movies.5.limit)]" browse="never">$INFO[Window(Home).Property(silo.movies.5.poster)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5103) | String.IsEqual(Window(Home).Property(silo.row),5153) | String.IsEqual(Window(Home).Property(silo.row),5104) | String.IsEqual(Window(Home).Property(silo.row),5154) | String.IsEqual(Window(Home).Property(silo.row),5105) | String.IsEqual(Window(Home).Property(silo.row),5155) | String.IsEqual(Window(Home).Property(silo.row),5106) | String.IsEqual(Window(Home).Property(silo.row),5156)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5105" /></include>
@@ -2347,7 +2347,7 @@
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.5.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.5.order)]" limit="$INFO[Window(Home).Property(silo.movies.5.limit)]" browse="never">$INFO[Window(Home).Property(silo.movies.5.landscape)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5103) | String.IsEqual(Window(Home).Property(silo.row),5153) | String.IsEqual(Window(Home).Property(silo.row),5104) | String.IsEqual(Window(Home).Property(silo.row),5154) | String.IsEqual(Window(Home).Property(silo.row),5105) | String.IsEqual(Window(Home).Property(silo.row),5155) | String.IsEqual(Window(Home).Property(silo.row),5106) | String.IsEqual(Window(Home).Property(silo.row),5156)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5155" /></include>
@@ -2419,7 +2419,7 @@
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.6.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.6.order)]" limit="$INFO[Window(Home).Property(silo.movies.6.limit)]" browse="never">$INFO[Window(Home).Property(silo.movies.6.poster)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5104) | String.IsEqual(Window(Home).Property(silo.row),5154) | String.IsEqual(Window(Home).Property(silo.row),5105) | String.IsEqual(Window(Home).Property(silo.row),5155) | String.IsEqual(Window(Home).Property(silo.row),5106) | String.IsEqual(Window(Home).Property(silo.row),5156) | String.IsEqual(Window(Home).Property(silo.row),5107) | String.IsEqual(Window(Home).Property(silo.row),5157)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5106" /></include>
@@ -2491,7 +2491,7 @@
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.6.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.6.order)]" limit="$INFO[Window(Home).Property(silo.movies.6.limit)]" browse="never">$INFO[Window(Home).Property(silo.movies.6.landscape)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5104) | String.IsEqual(Window(Home).Property(silo.row),5154) | String.IsEqual(Window(Home).Property(silo.row),5105) | String.IsEqual(Window(Home).Property(silo.row),5155) | String.IsEqual(Window(Home).Property(silo.row),5106) | String.IsEqual(Window(Home).Property(silo.row),5156) | String.IsEqual(Window(Home).Property(silo.row),5107) | String.IsEqual(Window(Home).Property(silo.row),5157)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5156" /></include>
@@ -2561,7 +2561,7 @@
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.7.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.7.order)]" limit="$INFO[Window(Home).Property(silo.movies.7.limit)]" browse="never">$INFO[Window(Home).Property(silo.movies.7.poster)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5105) | String.IsEqual(Window(Home).Property(silo.row),5155) | String.IsEqual(Window(Home).Property(silo.row),5106) | String.IsEqual(Window(Home).Property(silo.row),5156) | String.IsEqual(Window(Home).Property(silo.row),5107) | String.IsEqual(Window(Home).Property(silo.row),5157) | String.IsEqual(Window(Home).Property(silo.row),5108) | String.IsEqual(Window(Home).Property(silo.row),5158)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5107" /></include>
@@ -2631,7 +2631,7 @@
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.7.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.7.order)]" limit="$INFO[Window(Home).Property(silo.movies.7.limit)]" browse="never">$INFO[Window(Home).Property(silo.movies.7.landscape)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5105) | String.IsEqual(Window(Home).Property(silo.row),5155) | String.IsEqual(Window(Home).Property(silo.row),5106) | String.IsEqual(Window(Home).Property(silo.row),5156) | String.IsEqual(Window(Home).Property(silo.row),5107) | String.IsEqual(Window(Home).Property(silo.row),5157) | String.IsEqual(Window(Home).Property(silo.row),5108) | String.IsEqual(Window(Home).Property(silo.row),5158)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5157" /></include>
@@ -2699,7 +2699,7 @@
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.8.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.8.order)]" limit="$INFO[Window(Home).Property(silo.movies.8.limit)]" browse="never">$INFO[Window(Home).Property(silo.movies.8.poster)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5106) | String.IsEqual(Window(Home).Property(silo.row),5156) | String.IsEqual(Window(Home).Property(silo.row),5107) | String.IsEqual(Window(Home).Property(silo.row),5157) | String.IsEqual(Window(Home).Property(silo.row),5108) | String.IsEqual(Window(Home).Property(silo.row),5158)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5108" /></include>
@@ -2767,7 +2767,7 @@
                     <onback>SetFocus(9003)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.movies.8.sort)]" sortorder="$INFO[Window(Home).Property(silo.movies.8.order)]" limit="$INFO[Window(Home).Property(silo.movies.8.limit)]" browse="never">$INFO[Window(Home).Property(silo.movies.8.landscape)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5106) | String.IsEqual(Window(Home).Property(silo.row),5156) | String.IsEqual(Window(Home).Property(silo.row),5107) | String.IsEqual(Window(Home).Property(silo.row),5157) | String.IsEqual(Window(Home).Property(silo.row),5108) | String.IsEqual(Window(Home).Property(silo.row),5158)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5158" /></include>
@@ -2837,7 +2837,7 @@
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.1.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.1.order)]" limit="$INFO[Window(Home).Property(silo.series.1.limit)]" browse="never">$INFO[Window(Home).Property(silo.series.1.poster)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5201) | String.IsEqual(Window(Home).Property(silo.row),5251) | String.IsEqual(Window(Home).Property(silo.row),5202) | String.IsEqual(Window(Home).Property(silo.row),5252)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5201" /></include>
@@ -2907,7 +2907,7 @@
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.1.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.1.order)]" limit="$INFO[Window(Home).Property(silo.series.1.limit)]" browse="never">$INFO[Window(Home).Property(silo.series.1.landscape)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5201) | String.IsEqual(Window(Home).Property(silo.row),5251) | String.IsEqual(Window(Home).Property(silo.row),5202) | String.IsEqual(Window(Home).Property(silo.row),5252)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5251" /></include>
@@ -2979,7 +2979,7 @@
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.2.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.2.order)]" limit="$INFO[Window(Home).Property(silo.series.2.limit)]" browse="never">$INFO[Window(Home).Property(silo.series.2.poster)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5201) | String.IsEqual(Window(Home).Property(silo.row),5251) | String.IsEqual(Window(Home).Property(silo.row),5202) | String.IsEqual(Window(Home).Property(silo.row),5252) | String.IsEqual(Window(Home).Property(silo.row),5203) | String.IsEqual(Window(Home).Property(silo.row),5253)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5202" /></include>
@@ -3051,7 +3051,7 @@
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.2.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.2.order)]" limit="$INFO[Window(Home).Property(silo.series.2.limit)]" browse="never">$INFO[Window(Home).Property(silo.series.2.landscape)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5201) | String.IsEqual(Window(Home).Property(silo.row),5251) | String.IsEqual(Window(Home).Property(silo.row),5202) | String.IsEqual(Window(Home).Property(silo.row),5252) | String.IsEqual(Window(Home).Property(silo.row),5203) | String.IsEqual(Window(Home).Property(silo.row),5253)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5252" /></include>
@@ -3125,7 +3125,7 @@
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.3.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.3.order)]" limit="$INFO[Window(Home).Property(silo.series.3.limit)]" browse="never">$INFO[Window(Home).Property(silo.series.3.poster)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5201) | String.IsEqual(Window(Home).Property(silo.row),5251) | String.IsEqual(Window(Home).Property(silo.row),5202) | String.IsEqual(Window(Home).Property(silo.row),5252) | String.IsEqual(Window(Home).Property(silo.row),5203) | String.IsEqual(Window(Home).Property(silo.row),5253) | String.IsEqual(Window(Home).Property(silo.row),5204) | String.IsEqual(Window(Home).Property(silo.row),5254)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5203" /></include>
@@ -3199,7 +3199,7 @@
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.3.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.3.order)]" limit="$INFO[Window(Home).Property(silo.series.3.limit)]" browse="never">$INFO[Window(Home).Property(silo.series.3.landscape)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5201) | String.IsEqual(Window(Home).Property(silo.row),5251) | String.IsEqual(Window(Home).Property(silo.row),5202) | String.IsEqual(Window(Home).Property(silo.row),5252) | String.IsEqual(Window(Home).Property(silo.row),5203) | String.IsEqual(Window(Home).Property(silo.row),5253) | String.IsEqual(Window(Home).Property(silo.row),5204) | String.IsEqual(Window(Home).Property(silo.row),5254)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5253" /></include>
@@ -3275,7 +3275,7 @@
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.4.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.4.order)]" limit="$INFO[Window(Home).Property(silo.series.4.limit)]" browse="never">$INFO[Window(Home).Property(silo.series.4.poster)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5202) | String.IsEqual(Window(Home).Property(silo.row),5252) | String.IsEqual(Window(Home).Property(silo.row),5203) | String.IsEqual(Window(Home).Property(silo.row),5253) | String.IsEqual(Window(Home).Property(silo.row),5204) | String.IsEqual(Window(Home).Property(silo.row),5254) | String.IsEqual(Window(Home).Property(silo.row),5205) | String.IsEqual(Window(Home).Property(silo.row),5255)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5204" /></include>
@@ -3351,7 +3351,7 @@
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.4.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.4.order)]" limit="$INFO[Window(Home).Property(silo.series.4.limit)]" browse="never">$INFO[Window(Home).Property(silo.series.4.landscape)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5202) | String.IsEqual(Window(Home).Property(silo.row),5252) | String.IsEqual(Window(Home).Property(silo.row),5203) | String.IsEqual(Window(Home).Property(silo.row),5253) | String.IsEqual(Window(Home).Property(silo.row),5204) | String.IsEqual(Window(Home).Property(silo.row),5254) | String.IsEqual(Window(Home).Property(silo.row),5205) | String.IsEqual(Window(Home).Property(silo.row),5255)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5254" /></include>
@@ -3425,7 +3425,7 @@
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.5.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.5.order)]" limit="$INFO[Window(Home).Property(silo.series.5.limit)]" browse="never">$INFO[Window(Home).Property(silo.series.5.poster)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5203) | String.IsEqual(Window(Home).Property(silo.row),5253) | String.IsEqual(Window(Home).Property(silo.row),5204) | String.IsEqual(Window(Home).Property(silo.row),5254) | String.IsEqual(Window(Home).Property(silo.row),5205) | String.IsEqual(Window(Home).Property(silo.row),5255) | String.IsEqual(Window(Home).Property(silo.row),5206) | String.IsEqual(Window(Home).Property(silo.row),5256)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5205" /></include>
@@ -3499,7 +3499,7 @@
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.5.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.5.order)]" limit="$INFO[Window(Home).Property(silo.series.5.limit)]" browse="never">$INFO[Window(Home).Property(silo.series.5.landscape)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5203) | String.IsEqual(Window(Home).Property(silo.row),5253) | String.IsEqual(Window(Home).Property(silo.row),5204) | String.IsEqual(Window(Home).Property(silo.row),5254) | String.IsEqual(Window(Home).Property(silo.row),5205) | String.IsEqual(Window(Home).Property(silo.row),5255) | String.IsEqual(Window(Home).Property(silo.row),5206) | String.IsEqual(Window(Home).Property(silo.row),5256)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5255" /></include>
@@ -3571,7 +3571,7 @@
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.6.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.6.order)]" limit="$INFO[Window(Home).Property(silo.series.6.limit)]" browse="never">$INFO[Window(Home).Property(silo.series.6.poster)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5204) | String.IsEqual(Window(Home).Property(silo.row),5254) | String.IsEqual(Window(Home).Property(silo.row),5205) | String.IsEqual(Window(Home).Property(silo.row),5255) | String.IsEqual(Window(Home).Property(silo.row),5206) | String.IsEqual(Window(Home).Property(silo.row),5256) | String.IsEqual(Window(Home).Property(silo.row),5207) | String.IsEqual(Window(Home).Property(silo.row),5257)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5206" /></include>
@@ -3643,7 +3643,7 @@
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.6.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.6.order)]" limit="$INFO[Window(Home).Property(silo.series.6.limit)]" browse="never">$INFO[Window(Home).Property(silo.series.6.landscape)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5204) | String.IsEqual(Window(Home).Property(silo.row),5254) | String.IsEqual(Window(Home).Property(silo.row),5205) | String.IsEqual(Window(Home).Property(silo.row),5255) | String.IsEqual(Window(Home).Property(silo.row),5206) | String.IsEqual(Window(Home).Property(silo.row),5256) | String.IsEqual(Window(Home).Property(silo.row),5207) | String.IsEqual(Window(Home).Property(silo.row),5257)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5256" /></include>
@@ -3713,7 +3713,7 @@
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.7.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.7.order)]" limit="$INFO[Window(Home).Property(silo.series.7.limit)]" browse="never">$INFO[Window(Home).Property(silo.series.7.poster)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5205) | String.IsEqual(Window(Home).Property(silo.row),5255) | String.IsEqual(Window(Home).Property(silo.row),5206) | String.IsEqual(Window(Home).Property(silo.row),5256) | String.IsEqual(Window(Home).Property(silo.row),5207) | String.IsEqual(Window(Home).Property(silo.row),5257) | String.IsEqual(Window(Home).Property(silo.row),5208) | String.IsEqual(Window(Home).Property(silo.row),5258)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5207" /></include>
@@ -3783,7 +3783,7 @@
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.7.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.7.order)]" limit="$INFO[Window(Home).Property(silo.series.7.limit)]" browse="never">$INFO[Window(Home).Property(silo.series.7.landscape)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5205) | String.IsEqual(Window(Home).Property(silo.row),5255) | String.IsEqual(Window(Home).Property(silo.row),5206) | String.IsEqual(Window(Home).Property(silo.row),5256) | String.IsEqual(Window(Home).Property(silo.row),5207) | String.IsEqual(Window(Home).Property(silo.row),5257) | String.IsEqual(Window(Home).Property(silo.row),5208) | String.IsEqual(Window(Home).Property(silo.row),5258)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5257" /></include>
@@ -3851,7 +3851,7 @@
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.8.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.8.order)]" limit="$INFO[Window(Home).Property(silo.series.8.limit)]" browse="never">$INFO[Window(Home).Property(silo.series.8.poster)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5206) | String.IsEqual(Window(Home).Property(silo.row),5256) | String.IsEqual(Window(Home).Property(silo.row),5207) | String.IsEqual(Window(Home).Property(silo.row),5257) | String.IsEqual(Window(Home).Property(silo.row),5208) | String.IsEqual(Window(Home).Property(silo.row),5258)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5208" /></include>
@@ -3919,7 +3919,7 @@
                     <onback>SetFocus(9004)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.series.8.sort)]" sortorder="$INFO[Window(Home).Property(silo.series.8.order)]" limit="$INFO[Window(Home).Property(silo.series.8.limit)]" browse="never">$INFO[Window(Home).Property(silo.series.8.landscape)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5206) | String.IsEqual(Window(Home).Property(silo.row),5256) | String.IsEqual(Window(Home).Property(silo.row),5207) | String.IsEqual(Window(Home).Property(silo.row),5257) | String.IsEqual(Window(Home).Property(silo.row),5208) | String.IsEqual(Window(Home).Property(silo.row),5258)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5258" /></include>
@@ -3997,13 +3997,13 @@
                         <item><label>$INFO[Window(Home).Property(silo.requests.1.12.label)]</label><property name="home.type">$INFO[Window(Home).Property(silo.requests.1.12.type)]</property><property name="home.dbid">$INFO[Window(Home).Property(silo.requests.1.12.dbid)]</property><property name="home.card.title">$INFO[Window(Home).Property(silo.requests.1.12.card.title)]</property><property name="home.card.sub">$INFO[Window(Home).Property(silo.requests.1.12.card.sub)]</property><property name="home.hero.title">$INFO[Window(Home).Property(silo.requests.1.12.hero.title)]</property><property name="home.hero.meta">$INFO[Window(Home).Property(silo.requests.1.12.hero.meta)]</property><property name="home.hero.facts">$INFO[Window(Home).Property(silo.requests.1.12.hero.facts)]</property><property name="home.rating.imdb">$INFO[Window(Home).Property(silo.requests.1.12.rating.imdb)]</property><property name="home.rating.tmdb">$INFO[Window(Home).Property(silo.requests.1.12.rating.tmdb)]</property><property name="home.hero.detail">$INFO[Window(Home).Property(silo.requests.1.12.hero.detail)]</property><property name="home.plot">$INFO[Window(Home).Property(silo.requests.1.12.plot)]</property><property name="home.mpaa">$INFO[Window(Home).Property(silo.requests.1.12.mpaa)]</property><property name="home.badge1">$INFO[Window(Home).Property(silo.requests.1.12.badge1)]</property><property name="home.badge2">$INFO[Window(Home).Property(silo.requests.1.12.badge2)]</property><property name="home.badge3">$INFO[Window(Home).Property(silo.requests.1.12.badge3)]</property><property name="home.tint">$INFO[Window(Home).Property(silo.requests.1.12.tint)]</property><property name="home.percent">$INFO[Window(Home).Property(silo.requests.1.12.percent)]</property><property name="home.playcount">$INFO[Window(Home).Property(silo.requests.1.12.playcount)]</property><property name="home.art.poster">$INFO[Window(Home).Property(silo.requests.1.12.art.poster)]</property><property name="home.art.fanart">$INFO[Window(Home).Property(silo.requests.1.12.art.fanart)]</property><property name="home.art.clearlogo">$INFO[Window(Home).Property(silo.requests.1.12.art.clearlogo)]</property><property name="home.request.type">$INFO[Window(Home).Property(silo.requests.1.12.request.type)]</property><property name="home.request.tmdb">$INFO[Window(Home).Property(silo.requests.1.12.request.tmdb)]</property><property name="home.status.tint">$INFO[Window(Home).Property(silo.requests.1.12.status.tint)]</property><property name="home.status.seg1">$INFO[Window(Home).Property(silo.requests.1.12.status.seg1)]</property><property name="home.status.seg2">$INFO[Window(Home).Property(silo.requests.1.12.status.seg2)]</property><property name="home.status.seg3">$INFO[Window(Home).Property(silo.requests.1.12.status.seg3)]</property><property name="home.status.seg4">$INFO[Window(Home).Property(silo.requests.1.12.status.seg4)]</property><property name="home.request.library">$INFO[Window(Home).Property(silo.requests.1.12.request.library)]</property><property name="home.request.state">$INFO[Window(Home).Property(silo.requests.1.12.request.state)]</property><property name="home.request.more">$INFO[Window(Home).Property(silo.requests.1.12.request.more)]</property><property name="home.request.logo">$INFO[Window(Home).Property(silo.requests.1.12.request.logo)]</property><property name="home.request.from">$INFO[Window(Home).Property(silo.requests.1.12.request.from)]</property><property name="home.request.to">$INFO[Window(Home).Property(silo.requests.1.12.request.to)]</property><visible>!String.IsEmpty(Window(Home).Property(silo.requests.1.12.type))</visible></item>
                     </content>
                     <itemlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.1.style),brand)">
-                    <include>SiloCardBrand</include>
+                    <include content="SiloCardBrand"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5301) | String.IsEqual(Window(Home).Property(silo.row),5302)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.1.style),brand)">
                     <include content="SiloCardFocusedBrand"><param name="id" value="5301" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.1.style),brand)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5301) | String.IsEqual(Window(Home).Property(silo.row),5302)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.1.style),brand)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5301" /></include>
@@ -4082,13 +4082,13 @@
                         <item><label>$INFO[Window(Home).Property(silo.requests.2.12.label)]</label><property name="home.type">$INFO[Window(Home).Property(silo.requests.2.12.type)]</property><property name="home.dbid">$INFO[Window(Home).Property(silo.requests.2.12.dbid)]</property><property name="home.card.title">$INFO[Window(Home).Property(silo.requests.2.12.card.title)]</property><property name="home.card.sub">$INFO[Window(Home).Property(silo.requests.2.12.card.sub)]</property><property name="home.hero.title">$INFO[Window(Home).Property(silo.requests.2.12.hero.title)]</property><property name="home.hero.meta">$INFO[Window(Home).Property(silo.requests.2.12.hero.meta)]</property><property name="home.hero.facts">$INFO[Window(Home).Property(silo.requests.2.12.hero.facts)]</property><property name="home.rating.imdb">$INFO[Window(Home).Property(silo.requests.2.12.rating.imdb)]</property><property name="home.rating.tmdb">$INFO[Window(Home).Property(silo.requests.2.12.rating.tmdb)]</property><property name="home.hero.detail">$INFO[Window(Home).Property(silo.requests.2.12.hero.detail)]</property><property name="home.plot">$INFO[Window(Home).Property(silo.requests.2.12.plot)]</property><property name="home.mpaa">$INFO[Window(Home).Property(silo.requests.2.12.mpaa)]</property><property name="home.badge1">$INFO[Window(Home).Property(silo.requests.2.12.badge1)]</property><property name="home.badge2">$INFO[Window(Home).Property(silo.requests.2.12.badge2)]</property><property name="home.badge3">$INFO[Window(Home).Property(silo.requests.2.12.badge3)]</property><property name="home.tint">$INFO[Window(Home).Property(silo.requests.2.12.tint)]</property><property name="home.percent">$INFO[Window(Home).Property(silo.requests.2.12.percent)]</property><property name="home.playcount">$INFO[Window(Home).Property(silo.requests.2.12.playcount)]</property><property name="home.art.poster">$INFO[Window(Home).Property(silo.requests.2.12.art.poster)]</property><property name="home.art.fanart">$INFO[Window(Home).Property(silo.requests.2.12.art.fanart)]</property><property name="home.art.clearlogo">$INFO[Window(Home).Property(silo.requests.2.12.art.clearlogo)]</property><property name="home.request.type">$INFO[Window(Home).Property(silo.requests.2.12.request.type)]</property><property name="home.request.tmdb">$INFO[Window(Home).Property(silo.requests.2.12.request.tmdb)]</property><property name="home.status.tint">$INFO[Window(Home).Property(silo.requests.2.12.status.tint)]</property><property name="home.status.seg1">$INFO[Window(Home).Property(silo.requests.2.12.status.seg1)]</property><property name="home.status.seg2">$INFO[Window(Home).Property(silo.requests.2.12.status.seg2)]</property><property name="home.status.seg3">$INFO[Window(Home).Property(silo.requests.2.12.status.seg3)]</property><property name="home.status.seg4">$INFO[Window(Home).Property(silo.requests.2.12.status.seg4)]</property><property name="home.request.library">$INFO[Window(Home).Property(silo.requests.2.12.request.library)]</property><property name="home.request.state">$INFO[Window(Home).Property(silo.requests.2.12.request.state)]</property><property name="home.request.more">$INFO[Window(Home).Property(silo.requests.2.12.request.more)]</property><property name="home.request.logo">$INFO[Window(Home).Property(silo.requests.2.12.request.logo)]</property><property name="home.request.from">$INFO[Window(Home).Property(silo.requests.2.12.request.from)]</property><property name="home.request.to">$INFO[Window(Home).Property(silo.requests.2.12.request.to)]</property><visible>!String.IsEmpty(Window(Home).Property(silo.requests.2.12.type))</visible></item>
                     </content>
                     <itemlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.2.style),brand)">
-                    <include>SiloCardBrand</include>
+                    <include content="SiloCardBrand"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5301) | String.IsEqual(Window(Home).Property(silo.row),5302) | String.IsEqual(Window(Home).Property(silo.row),5303)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.2.style),brand)">
                     <include content="SiloCardFocusedBrand"><param name="id" value="5302" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.2.style),brand)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5301) | String.IsEqual(Window(Home).Property(silo.row),5302) | String.IsEqual(Window(Home).Property(silo.row),5303)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.2.style),brand)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5302" /></include>
@@ -4168,13 +4168,13 @@
                         <item><label>$INFO[Window(Home).Property(silo.requests.3.12.label)]</label><property name="home.type">$INFO[Window(Home).Property(silo.requests.3.12.type)]</property><property name="home.dbid">$INFO[Window(Home).Property(silo.requests.3.12.dbid)]</property><property name="home.card.title">$INFO[Window(Home).Property(silo.requests.3.12.card.title)]</property><property name="home.card.sub">$INFO[Window(Home).Property(silo.requests.3.12.card.sub)]</property><property name="home.hero.title">$INFO[Window(Home).Property(silo.requests.3.12.hero.title)]</property><property name="home.hero.meta">$INFO[Window(Home).Property(silo.requests.3.12.hero.meta)]</property><property name="home.hero.facts">$INFO[Window(Home).Property(silo.requests.3.12.hero.facts)]</property><property name="home.rating.imdb">$INFO[Window(Home).Property(silo.requests.3.12.rating.imdb)]</property><property name="home.rating.tmdb">$INFO[Window(Home).Property(silo.requests.3.12.rating.tmdb)]</property><property name="home.hero.detail">$INFO[Window(Home).Property(silo.requests.3.12.hero.detail)]</property><property name="home.plot">$INFO[Window(Home).Property(silo.requests.3.12.plot)]</property><property name="home.mpaa">$INFO[Window(Home).Property(silo.requests.3.12.mpaa)]</property><property name="home.badge1">$INFO[Window(Home).Property(silo.requests.3.12.badge1)]</property><property name="home.badge2">$INFO[Window(Home).Property(silo.requests.3.12.badge2)]</property><property name="home.badge3">$INFO[Window(Home).Property(silo.requests.3.12.badge3)]</property><property name="home.tint">$INFO[Window(Home).Property(silo.requests.3.12.tint)]</property><property name="home.percent">$INFO[Window(Home).Property(silo.requests.3.12.percent)]</property><property name="home.playcount">$INFO[Window(Home).Property(silo.requests.3.12.playcount)]</property><property name="home.art.poster">$INFO[Window(Home).Property(silo.requests.3.12.art.poster)]</property><property name="home.art.fanart">$INFO[Window(Home).Property(silo.requests.3.12.art.fanart)]</property><property name="home.art.clearlogo">$INFO[Window(Home).Property(silo.requests.3.12.art.clearlogo)]</property><property name="home.request.type">$INFO[Window(Home).Property(silo.requests.3.12.request.type)]</property><property name="home.request.tmdb">$INFO[Window(Home).Property(silo.requests.3.12.request.tmdb)]</property><property name="home.status.tint">$INFO[Window(Home).Property(silo.requests.3.12.status.tint)]</property><property name="home.status.seg1">$INFO[Window(Home).Property(silo.requests.3.12.status.seg1)]</property><property name="home.status.seg2">$INFO[Window(Home).Property(silo.requests.3.12.status.seg2)]</property><property name="home.status.seg3">$INFO[Window(Home).Property(silo.requests.3.12.status.seg3)]</property><property name="home.status.seg4">$INFO[Window(Home).Property(silo.requests.3.12.status.seg4)]</property><property name="home.request.library">$INFO[Window(Home).Property(silo.requests.3.12.request.library)]</property><property name="home.request.state">$INFO[Window(Home).Property(silo.requests.3.12.request.state)]</property><property name="home.request.more">$INFO[Window(Home).Property(silo.requests.3.12.request.more)]</property><property name="home.request.logo">$INFO[Window(Home).Property(silo.requests.3.12.request.logo)]</property><property name="home.request.from">$INFO[Window(Home).Property(silo.requests.3.12.request.from)]</property><property name="home.request.to">$INFO[Window(Home).Property(silo.requests.3.12.request.to)]</property><visible>!String.IsEmpty(Window(Home).Property(silo.requests.3.12.type))</visible></item>
                     </content>
                     <itemlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.3.style),brand)">
-                    <include>SiloCardBrand</include>
+                    <include content="SiloCardBrand"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5301) | String.IsEqual(Window(Home).Property(silo.row),5302) | String.IsEqual(Window(Home).Property(silo.row),5303) | String.IsEqual(Window(Home).Property(silo.row),5304)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.3.style),brand)">
                     <include content="SiloCardFocusedBrand"><param name="id" value="5303" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.3.style),brand)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5301) | String.IsEqual(Window(Home).Property(silo.row),5302) | String.IsEqual(Window(Home).Property(silo.row),5303) | String.IsEqual(Window(Home).Property(silo.row),5304)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.3.style),brand)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5303" /></include>
@@ -4255,13 +4255,13 @@
                         <item><label>$INFO[Window(Home).Property(silo.requests.4.12.label)]</label><property name="home.type">$INFO[Window(Home).Property(silo.requests.4.12.type)]</property><property name="home.dbid">$INFO[Window(Home).Property(silo.requests.4.12.dbid)]</property><property name="home.card.title">$INFO[Window(Home).Property(silo.requests.4.12.card.title)]</property><property name="home.card.sub">$INFO[Window(Home).Property(silo.requests.4.12.card.sub)]</property><property name="home.hero.title">$INFO[Window(Home).Property(silo.requests.4.12.hero.title)]</property><property name="home.hero.meta">$INFO[Window(Home).Property(silo.requests.4.12.hero.meta)]</property><property name="home.hero.facts">$INFO[Window(Home).Property(silo.requests.4.12.hero.facts)]</property><property name="home.rating.imdb">$INFO[Window(Home).Property(silo.requests.4.12.rating.imdb)]</property><property name="home.rating.tmdb">$INFO[Window(Home).Property(silo.requests.4.12.rating.tmdb)]</property><property name="home.hero.detail">$INFO[Window(Home).Property(silo.requests.4.12.hero.detail)]</property><property name="home.plot">$INFO[Window(Home).Property(silo.requests.4.12.plot)]</property><property name="home.mpaa">$INFO[Window(Home).Property(silo.requests.4.12.mpaa)]</property><property name="home.badge1">$INFO[Window(Home).Property(silo.requests.4.12.badge1)]</property><property name="home.badge2">$INFO[Window(Home).Property(silo.requests.4.12.badge2)]</property><property name="home.badge3">$INFO[Window(Home).Property(silo.requests.4.12.badge3)]</property><property name="home.tint">$INFO[Window(Home).Property(silo.requests.4.12.tint)]</property><property name="home.percent">$INFO[Window(Home).Property(silo.requests.4.12.percent)]</property><property name="home.playcount">$INFO[Window(Home).Property(silo.requests.4.12.playcount)]</property><property name="home.art.poster">$INFO[Window(Home).Property(silo.requests.4.12.art.poster)]</property><property name="home.art.fanart">$INFO[Window(Home).Property(silo.requests.4.12.art.fanart)]</property><property name="home.art.clearlogo">$INFO[Window(Home).Property(silo.requests.4.12.art.clearlogo)]</property><property name="home.request.type">$INFO[Window(Home).Property(silo.requests.4.12.request.type)]</property><property name="home.request.tmdb">$INFO[Window(Home).Property(silo.requests.4.12.request.tmdb)]</property><property name="home.status.tint">$INFO[Window(Home).Property(silo.requests.4.12.status.tint)]</property><property name="home.status.seg1">$INFO[Window(Home).Property(silo.requests.4.12.status.seg1)]</property><property name="home.status.seg2">$INFO[Window(Home).Property(silo.requests.4.12.status.seg2)]</property><property name="home.status.seg3">$INFO[Window(Home).Property(silo.requests.4.12.status.seg3)]</property><property name="home.status.seg4">$INFO[Window(Home).Property(silo.requests.4.12.status.seg4)]</property><property name="home.request.library">$INFO[Window(Home).Property(silo.requests.4.12.request.library)]</property><property name="home.request.state">$INFO[Window(Home).Property(silo.requests.4.12.request.state)]</property><property name="home.request.more">$INFO[Window(Home).Property(silo.requests.4.12.request.more)]</property><property name="home.request.logo">$INFO[Window(Home).Property(silo.requests.4.12.request.logo)]</property><property name="home.request.from">$INFO[Window(Home).Property(silo.requests.4.12.request.from)]</property><property name="home.request.to">$INFO[Window(Home).Property(silo.requests.4.12.request.to)]</property><visible>!String.IsEmpty(Window(Home).Property(silo.requests.4.12.type))</visible></item>
                     </content>
                     <itemlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.4.style),brand)">
-                    <include>SiloCardBrand</include>
+                    <include content="SiloCardBrand"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5302) | String.IsEqual(Window(Home).Property(silo.row),5303) | String.IsEqual(Window(Home).Property(silo.row),5304) | String.IsEqual(Window(Home).Property(silo.row),5305)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.4.style),brand)">
                     <include content="SiloCardFocusedBrand"><param name="id" value="5304" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.4.style),brand)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5302) | String.IsEqual(Window(Home).Property(silo.row),5303) | String.IsEqual(Window(Home).Property(silo.row),5304) | String.IsEqual(Window(Home).Property(silo.row),5305)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.4.style),brand)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5304" /></include>
@@ -4342,13 +4342,13 @@
                         <item><label>$INFO[Window(Home).Property(silo.requests.5.12.label)]</label><property name="home.type">$INFO[Window(Home).Property(silo.requests.5.12.type)]</property><property name="home.dbid">$INFO[Window(Home).Property(silo.requests.5.12.dbid)]</property><property name="home.card.title">$INFO[Window(Home).Property(silo.requests.5.12.card.title)]</property><property name="home.card.sub">$INFO[Window(Home).Property(silo.requests.5.12.card.sub)]</property><property name="home.hero.title">$INFO[Window(Home).Property(silo.requests.5.12.hero.title)]</property><property name="home.hero.meta">$INFO[Window(Home).Property(silo.requests.5.12.hero.meta)]</property><property name="home.hero.facts">$INFO[Window(Home).Property(silo.requests.5.12.hero.facts)]</property><property name="home.rating.imdb">$INFO[Window(Home).Property(silo.requests.5.12.rating.imdb)]</property><property name="home.rating.tmdb">$INFO[Window(Home).Property(silo.requests.5.12.rating.tmdb)]</property><property name="home.hero.detail">$INFO[Window(Home).Property(silo.requests.5.12.hero.detail)]</property><property name="home.plot">$INFO[Window(Home).Property(silo.requests.5.12.plot)]</property><property name="home.mpaa">$INFO[Window(Home).Property(silo.requests.5.12.mpaa)]</property><property name="home.badge1">$INFO[Window(Home).Property(silo.requests.5.12.badge1)]</property><property name="home.badge2">$INFO[Window(Home).Property(silo.requests.5.12.badge2)]</property><property name="home.badge3">$INFO[Window(Home).Property(silo.requests.5.12.badge3)]</property><property name="home.tint">$INFO[Window(Home).Property(silo.requests.5.12.tint)]</property><property name="home.percent">$INFO[Window(Home).Property(silo.requests.5.12.percent)]</property><property name="home.playcount">$INFO[Window(Home).Property(silo.requests.5.12.playcount)]</property><property name="home.art.poster">$INFO[Window(Home).Property(silo.requests.5.12.art.poster)]</property><property name="home.art.fanart">$INFO[Window(Home).Property(silo.requests.5.12.art.fanart)]</property><property name="home.art.clearlogo">$INFO[Window(Home).Property(silo.requests.5.12.art.clearlogo)]</property><property name="home.request.type">$INFO[Window(Home).Property(silo.requests.5.12.request.type)]</property><property name="home.request.tmdb">$INFO[Window(Home).Property(silo.requests.5.12.request.tmdb)]</property><property name="home.status.tint">$INFO[Window(Home).Property(silo.requests.5.12.status.tint)]</property><property name="home.status.seg1">$INFO[Window(Home).Property(silo.requests.5.12.status.seg1)]</property><property name="home.status.seg2">$INFO[Window(Home).Property(silo.requests.5.12.status.seg2)]</property><property name="home.status.seg3">$INFO[Window(Home).Property(silo.requests.5.12.status.seg3)]</property><property name="home.status.seg4">$INFO[Window(Home).Property(silo.requests.5.12.status.seg4)]</property><property name="home.request.library">$INFO[Window(Home).Property(silo.requests.5.12.request.library)]</property><property name="home.request.state">$INFO[Window(Home).Property(silo.requests.5.12.request.state)]</property><property name="home.request.more">$INFO[Window(Home).Property(silo.requests.5.12.request.more)]</property><property name="home.request.logo">$INFO[Window(Home).Property(silo.requests.5.12.request.logo)]</property><property name="home.request.from">$INFO[Window(Home).Property(silo.requests.5.12.request.from)]</property><property name="home.request.to">$INFO[Window(Home).Property(silo.requests.5.12.request.to)]</property><visible>!String.IsEmpty(Window(Home).Property(silo.requests.5.12.type))</visible></item>
                     </content>
                     <itemlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.5.style),brand)">
-                    <include>SiloCardBrand</include>
+                    <include content="SiloCardBrand"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5303) | String.IsEqual(Window(Home).Property(silo.row),5304) | String.IsEqual(Window(Home).Property(silo.row),5305) | String.IsEqual(Window(Home).Property(silo.row),5306)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.5.style),brand)">
                     <include content="SiloCardFocusedBrand"><param name="id" value="5305" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.5.style),brand)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5303) | String.IsEqual(Window(Home).Property(silo.row),5304) | String.IsEqual(Window(Home).Property(silo.row),5305) | String.IsEqual(Window(Home).Property(silo.row),5306)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.5.style),brand)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5305" /></include>
@@ -4429,13 +4429,13 @@
                         <item><label>$INFO[Window(Home).Property(silo.requests.6.12.label)]</label><property name="home.type">$INFO[Window(Home).Property(silo.requests.6.12.type)]</property><property name="home.dbid">$INFO[Window(Home).Property(silo.requests.6.12.dbid)]</property><property name="home.card.title">$INFO[Window(Home).Property(silo.requests.6.12.card.title)]</property><property name="home.card.sub">$INFO[Window(Home).Property(silo.requests.6.12.card.sub)]</property><property name="home.hero.title">$INFO[Window(Home).Property(silo.requests.6.12.hero.title)]</property><property name="home.hero.meta">$INFO[Window(Home).Property(silo.requests.6.12.hero.meta)]</property><property name="home.hero.facts">$INFO[Window(Home).Property(silo.requests.6.12.hero.facts)]</property><property name="home.rating.imdb">$INFO[Window(Home).Property(silo.requests.6.12.rating.imdb)]</property><property name="home.rating.tmdb">$INFO[Window(Home).Property(silo.requests.6.12.rating.tmdb)]</property><property name="home.hero.detail">$INFO[Window(Home).Property(silo.requests.6.12.hero.detail)]</property><property name="home.plot">$INFO[Window(Home).Property(silo.requests.6.12.plot)]</property><property name="home.mpaa">$INFO[Window(Home).Property(silo.requests.6.12.mpaa)]</property><property name="home.badge1">$INFO[Window(Home).Property(silo.requests.6.12.badge1)]</property><property name="home.badge2">$INFO[Window(Home).Property(silo.requests.6.12.badge2)]</property><property name="home.badge3">$INFO[Window(Home).Property(silo.requests.6.12.badge3)]</property><property name="home.tint">$INFO[Window(Home).Property(silo.requests.6.12.tint)]</property><property name="home.percent">$INFO[Window(Home).Property(silo.requests.6.12.percent)]</property><property name="home.playcount">$INFO[Window(Home).Property(silo.requests.6.12.playcount)]</property><property name="home.art.poster">$INFO[Window(Home).Property(silo.requests.6.12.art.poster)]</property><property name="home.art.fanart">$INFO[Window(Home).Property(silo.requests.6.12.art.fanart)]</property><property name="home.art.clearlogo">$INFO[Window(Home).Property(silo.requests.6.12.art.clearlogo)]</property><property name="home.request.type">$INFO[Window(Home).Property(silo.requests.6.12.request.type)]</property><property name="home.request.tmdb">$INFO[Window(Home).Property(silo.requests.6.12.request.tmdb)]</property><property name="home.status.tint">$INFO[Window(Home).Property(silo.requests.6.12.status.tint)]</property><property name="home.status.seg1">$INFO[Window(Home).Property(silo.requests.6.12.status.seg1)]</property><property name="home.status.seg2">$INFO[Window(Home).Property(silo.requests.6.12.status.seg2)]</property><property name="home.status.seg3">$INFO[Window(Home).Property(silo.requests.6.12.status.seg3)]</property><property name="home.status.seg4">$INFO[Window(Home).Property(silo.requests.6.12.status.seg4)]</property><property name="home.request.library">$INFO[Window(Home).Property(silo.requests.6.12.request.library)]</property><property name="home.request.state">$INFO[Window(Home).Property(silo.requests.6.12.request.state)]</property><property name="home.request.more">$INFO[Window(Home).Property(silo.requests.6.12.request.more)]</property><property name="home.request.logo">$INFO[Window(Home).Property(silo.requests.6.12.request.logo)]</property><property name="home.request.from">$INFO[Window(Home).Property(silo.requests.6.12.request.from)]</property><property name="home.request.to">$INFO[Window(Home).Property(silo.requests.6.12.request.to)]</property><visible>!String.IsEmpty(Window(Home).Property(silo.requests.6.12.type))</visible></item>
                     </content>
                     <itemlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.6.style),brand)">
-                    <include>SiloCardBrand</include>
+                    <include content="SiloCardBrand"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5304) | String.IsEqual(Window(Home).Property(silo.row),5305) | String.IsEqual(Window(Home).Property(silo.row),5306) | String.IsEqual(Window(Home).Property(silo.row),5307)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.6.style),brand)">
                     <include content="SiloCardFocusedBrand"><param name="id" value="5306" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.6.style),brand)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5304) | String.IsEqual(Window(Home).Property(silo.row),5305) | String.IsEqual(Window(Home).Property(silo.row),5306) | String.IsEqual(Window(Home).Property(silo.row),5307)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.6.style),brand)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5306" /></include>
@@ -4516,13 +4516,13 @@
                         <item><label>$INFO[Window(Home).Property(silo.requests.7.12.label)]</label><property name="home.type">$INFO[Window(Home).Property(silo.requests.7.12.type)]</property><property name="home.dbid">$INFO[Window(Home).Property(silo.requests.7.12.dbid)]</property><property name="home.card.title">$INFO[Window(Home).Property(silo.requests.7.12.card.title)]</property><property name="home.card.sub">$INFO[Window(Home).Property(silo.requests.7.12.card.sub)]</property><property name="home.hero.title">$INFO[Window(Home).Property(silo.requests.7.12.hero.title)]</property><property name="home.hero.meta">$INFO[Window(Home).Property(silo.requests.7.12.hero.meta)]</property><property name="home.hero.facts">$INFO[Window(Home).Property(silo.requests.7.12.hero.facts)]</property><property name="home.rating.imdb">$INFO[Window(Home).Property(silo.requests.7.12.rating.imdb)]</property><property name="home.rating.tmdb">$INFO[Window(Home).Property(silo.requests.7.12.rating.tmdb)]</property><property name="home.hero.detail">$INFO[Window(Home).Property(silo.requests.7.12.hero.detail)]</property><property name="home.plot">$INFO[Window(Home).Property(silo.requests.7.12.plot)]</property><property name="home.mpaa">$INFO[Window(Home).Property(silo.requests.7.12.mpaa)]</property><property name="home.badge1">$INFO[Window(Home).Property(silo.requests.7.12.badge1)]</property><property name="home.badge2">$INFO[Window(Home).Property(silo.requests.7.12.badge2)]</property><property name="home.badge3">$INFO[Window(Home).Property(silo.requests.7.12.badge3)]</property><property name="home.tint">$INFO[Window(Home).Property(silo.requests.7.12.tint)]</property><property name="home.percent">$INFO[Window(Home).Property(silo.requests.7.12.percent)]</property><property name="home.playcount">$INFO[Window(Home).Property(silo.requests.7.12.playcount)]</property><property name="home.art.poster">$INFO[Window(Home).Property(silo.requests.7.12.art.poster)]</property><property name="home.art.fanart">$INFO[Window(Home).Property(silo.requests.7.12.art.fanart)]</property><property name="home.art.clearlogo">$INFO[Window(Home).Property(silo.requests.7.12.art.clearlogo)]</property><property name="home.request.type">$INFO[Window(Home).Property(silo.requests.7.12.request.type)]</property><property name="home.request.tmdb">$INFO[Window(Home).Property(silo.requests.7.12.request.tmdb)]</property><property name="home.status.tint">$INFO[Window(Home).Property(silo.requests.7.12.status.tint)]</property><property name="home.status.seg1">$INFO[Window(Home).Property(silo.requests.7.12.status.seg1)]</property><property name="home.status.seg2">$INFO[Window(Home).Property(silo.requests.7.12.status.seg2)]</property><property name="home.status.seg3">$INFO[Window(Home).Property(silo.requests.7.12.status.seg3)]</property><property name="home.status.seg4">$INFO[Window(Home).Property(silo.requests.7.12.status.seg4)]</property><property name="home.request.library">$INFO[Window(Home).Property(silo.requests.7.12.request.library)]</property><property name="home.request.state">$INFO[Window(Home).Property(silo.requests.7.12.request.state)]</property><property name="home.request.more">$INFO[Window(Home).Property(silo.requests.7.12.request.more)]</property><property name="home.request.logo">$INFO[Window(Home).Property(silo.requests.7.12.request.logo)]</property><property name="home.request.from">$INFO[Window(Home).Property(silo.requests.7.12.request.from)]</property><property name="home.request.to">$INFO[Window(Home).Property(silo.requests.7.12.request.to)]</property><visible>!String.IsEmpty(Window(Home).Property(silo.requests.7.12.type))</visible></item>
                     </content>
                     <itemlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.7.style),brand)">
-                    <include>SiloCardBrand</include>
+                    <include content="SiloCardBrand"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5305) | String.IsEqual(Window(Home).Property(silo.row),5306) | String.IsEqual(Window(Home).Property(silo.row),5307) | String.IsEqual(Window(Home).Property(silo.row),5308)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.7.style),brand)">
                     <include content="SiloCardFocusedBrand"><param name="id" value="5307" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.7.style),brand)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5305) | String.IsEqual(Window(Home).Property(silo.row),5306) | String.IsEqual(Window(Home).Property(silo.row),5307) | String.IsEqual(Window(Home).Property(silo.row),5308)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.7.style),brand)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5307" /></include>
@@ -4603,13 +4603,13 @@
                         <item><label>$INFO[Window(Home).Property(silo.requests.8.12.label)]</label><property name="home.type">$INFO[Window(Home).Property(silo.requests.8.12.type)]</property><property name="home.dbid">$INFO[Window(Home).Property(silo.requests.8.12.dbid)]</property><property name="home.card.title">$INFO[Window(Home).Property(silo.requests.8.12.card.title)]</property><property name="home.card.sub">$INFO[Window(Home).Property(silo.requests.8.12.card.sub)]</property><property name="home.hero.title">$INFO[Window(Home).Property(silo.requests.8.12.hero.title)]</property><property name="home.hero.meta">$INFO[Window(Home).Property(silo.requests.8.12.hero.meta)]</property><property name="home.hero.facts">$INFO[Window(Home).Property(silo.requests.8.12.hero.facts)]</property><property name="home.rating.imdb">$INFO[Window(Home).Property(silo.requests.8.12.rating.imdb)]</property><property name="home.rating.tmdb">$INFO[Window(Home).Property(silo.requests.8.12.rating.tmdb)]</property><property name="home.hero.detail">$INFO[Window(Home).Property(silo.requests.8.12.hero.detail)]</property><property name="home.plot">$INFO[Window(Home).Property(silo.requests.8.12.plot)]</property><property name="home.mpaa">$INFO[Window(Home).Property(silo.requests.8.12.mpaa)]</property><property name="home.badge1">$INFO[Window(Home).Property(silo.requests.8.12.badge1)]</property><property name="home.badge2">$INFO[Window(Home).Property(silo.requests.8.12.badge2)]</property><property name="home.badge3">$INFO[Window(Home).Property(silo.requests.8.12.badge3)]</property><property name="home.tint">$INFO[Window(Home).Property(silo.requests.8.12.tint)]</property><property name="home.percent">$INFO[Window(Home).Property(silo.requests.8.12.percent)]</property><property name="home.playcount">$INFO[Window(Home).Property(silo.requests.8.12.playcount)]</property><property name="home.art.poster">$INFO[Window(Home).Property(silo.requests.8.12.art.poster)]</property><property name="home.art.fanart">$INFO[Window(Home).Property(silo.requests.8.12.art.fanart)]</property><property name="home.art.clearlogo">$INFO[Window(Home).Property(silo.requests.8.12.art.clearlogo)]</property><property name="home.request.type">$INFO[Window(Home).Property(silo.requests.8.12.request.type)]</property><property name="home.request.tmdb">$INFO[Window(Home).Property(silo.requests.8.12.request.tmdb)]</property><property name="home.status.tint">$INFO[Window(Home).Property(silo.requests.8.12.status.tint)]</property><property name="home.status.seg1">$INFO[Window(Home).Property(silo.requests.8.12.status.seg1)]</property><property name="home.status.seg2">$INFO[Window(Home).Property(silo.requests.8.12.status.seg2)]</property><property name="home.status.seg3">$INFO[Window(Home).Property(silo.requests.8.12.status.seg3)]</property><property name="home.status.seg4">$INFO[Window(Home).Property(silo.requests.8.12.status.seg4)]</property><property name="home.request.library">$INFO[Window(Home).Property(silo.requests.8.12.request.library)]</property><property name="home.request.state">$INFO[Window(Home).Property(silo.requests.8.12.request.state)]</property><property name="home.request.more">$INFO[Window(Home).Property(silo.requests.8.12.request.more)]</property><property name="home.request.logo">$INFO[Window(Home).Property(silo.requests.8.12.request.logo)]</property><property name="home.request.from">$INFO[Window(Home).Property(silo.requests.8.12.request.from)]</property><property name="home.request.to">$INFO[Window(Home).Property(silo.requests.8.12.request.to)]</property><visible>!String.IsEmpty(Window(Home).Property(silo.requests.8.12.type))</visible></item>
                     </content>
                     <itemlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.8.style),brand)">
-                    <include>SiloCardBrand</include>
+                    <include content="SiloCardBrand"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5306) | String.IsEqual(Window(Home).Property(silo.row),5307) | String.IsEqual(Window(Home).Property(silo.row),5308) | String.IsEqual(Window(Home).Property(silo.row),5309)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.8.style),brand)">
                     <include content="SiloCardFocusedBrand"><param name="id" value="5308" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.8.style),brand)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5306) | String.IsEqual(Window(Home).Property(silo.row),5307) | String.IsEqual(Window(Home).Property(silo.row),5308) | String.IsEqual(Window(Home).Property(silo.row),5309)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.8.style),brand)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5308" /></include>
@@ -4689,13 +4689,13 @@
                         <item><label>$INFO[Window(Home).Property(silo.requests.9.12.label)]</label><property name="home.type">$INFO[Window(Home).Property(silo.requests.9.12.type)]</property><property name="home.dbid">$INFO[Window(Home).Property(silo.requests.9.12.dbid)]</property><property name="home.card.title">$INFO[Window(Home).Property(silo.requests.9.12.card.title)]</property><property name="home.card.sub">$INFO[Window(Home).Property(silo.requests.9.12.card.sub)]</property><property name="home.hero.title">$INFO[Window(Home).Property(silo.requests.9.12.hero.title)]</property><property name="home.hero.meta">$INFO[Window(Home).Property(silo.requests.9.12.hero.meta)]</property><property name="home.hero.facts">$INFO[Window(Home).Property(silo.requests.9.12.hero.facts)]</property><property name="home.rating.imdb">$INFO[Window(Home).Property(silo.requests.9.12.rating.imdb)]</property><property name="home.rating.tmdb">$INFO[Window(Home).Property(silo.requests.9.12.rating.tmdb)]</property><property name="home.hero.detail">$INFO[Window(Home).Property(silo.requests.9.12.hero.detail)]</property><property name="home.plot">$INFO[Window(Home).Property(silo.requests.9.12.plot)]</property><property name="home.mpaa">$INFO[Window(Home).Property(silo.requests.9.12.mpaa)]</property><property name="home.badge1">$INFO[Window(Home).Property(silo.requests.9.12.badge1)]</property><property name="home.badge2">$INFO[Window(Home).Property(silo.requests.9.12.badge2)]</property><property name="home.badge3">$INFO[Window(Home).Property(silo.requests.9.12.badge3)]</property><property name="home.tint">$INFO[Window(Home).Property(silo.requests.9.12.tint)]</property><property name="home.percent">$INFO[Window(Home).Property(silo.requests.9.12.percent)]</property><property name="home.playcount">$INFO[Window(Home).Property(silo.requests.9.12.playcount)]</property><property name="home.art.poster">$INFO[Window(Home).Property(silo.requests.9.12.art.poster)]</property><property name="home.art.fanart">$INFO[Window(Home).Property(silo.requests.9.12.art.fanart)]</property><property name="home.art.clearlogo">$INFO[Window(Home).Property(silo.requests.9.12.art.clearlogo)]</property><property name="home.request.type">$INFO[Window(Home).Property(silo.requests.9.12.request.type)]</property><property name="home.request.tmdb">$INFO[Window(Home).Property(silo.requests.9.12.request.tmdb)]</property><property name="home.status.tint">$INFO[Window(Home).Property(silo.requests.9.12.status.tint)]</property><property name="home.status.seg1">$INFO[Window(Home).Property(silo.requests.9.12.status.seg1)]</property><property name="home.status.seg2">$INFO[Window(Home).Property(silo.requests.9.12.status.seg2)]</property><property name="home.status.seg3">$INFO[Window(Home).Property(silo.requests.9.12.status.seg3)]</property><property name="home.status.seg4">$INFO[Window(Home).Property(silo.requests.9.12.status.seg4)]</property><property name="home.request.library">$INFO[Window(Home).Property(silo.requests.9.12.request.library)]</property><property name="home.request.state">$INFO[Window(Home).Property(silo.requests.9.12.request.state)]</property><property name="home.request.more">$INFO[Window(Home).Property(silo.requests.9.12.request.more)]</property><property name="home.request.logo">$INFO[Window(Home).Property(silo.requests.9.12.request.logo)]</property><property name="home.request.from">$INFO[Window(Home).Property(silo.requests.9.12.request.from)]</property><property name="home.request.to">$INFO[Window(Home).Property(silo.requests.9.12.request.to)]</property><visible>!String.IsEmpty(Window(Home).Property(silo.requests.9.12.type))</visible></item>
                     </content>
                     <itemlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.9.style),brand)">
-                    <include>SiloCardBrand</include>
+                    <include content="SiloCardBrand"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5307) | String.IsEqual(Window(Home).Property(silo.row),5308) | String.IsEqual(Window(Home).Property(silo.row),5309) | String.IsEqual(Window(Home).Property(silo.row),5310)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.9.style),brand)">
                     <include content="SiloCardFocusedBrand"><param name="id" value="5309" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.9.style),brand)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5307) | String.IsEqual(Window(Home).Property(silo.row),5308) | String.IsEqual(Window(Home).Property(silo.row),5309) | String.IsEqual(Window(Home).Property(silo.row),5310)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.9.style),brand)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5309" /></include>
@@ -4774,13 +4774,13 @@
                         <item><label>$INFO[Window(Home).Property(silo.requests.10.12.label)]</label><property name="home.type">$INFO[Window(Home).Property(silo.requests.10.12.type)]</property><property name="home.dbid">$INFO[Window(Home).Property(silo.requests.10.12.dbid)]</property><property name="home.card.title">$INFO[Window(Home).Property(silo.requests.10.12.card.title)]</property><property name="home.card.sub">$INFO[Window(Home).Property(silo.requests.10.12.card.sub)]</property><property name="home.hero.title">$INFO[Window(Home).Property(silo.requests.10.12.hero.title)]</property><property name="home.hero.meta">$INFO[Window(Home).Property(silo.requests.10.12.hero.meta)]</property><property name="home.hero.facts">$INFO[Window(Home).Property(silo.requests.10.12.hero.facts)]</property><property name="home.rating.imdb">$INFO[Window(Home).Property(silo.requests.10.12.rating.imdb)]</property><property name="home.rating.tmdb">$INFO[Window(Home).Property(silo.requests.10.12.rating.tmdb)]</property><property name="home.hero.detail">$INFO[Window(Home).Property(silo.requests.10.12.hero.detail)]</property><property name="home.plot">$INFO[Window(Home).Property(silo.requests.10.12.plot)]</property><property name="home.mpaa">$INFO[Window(Home).Property(silo.requests.10.12.mpaa)]</property><property name="home.badge1">$INFO[Window(Home).Property(silo.requests.10.12.badge1)]</property><property name="home.badge2">$INFO[Window(Home).Property(silo.requests.10.12.badge2)]</property><property name="home.badge3">$INFO[Window(Home).Property(silo.requests.10.12.badge3)]</property><property name="home.tint">$INFO[Window(Home).Property(silo.requests.10.12.tint)]</property><property name="home.percent">$INFO[Window(Home).Property(silo.requests.10.12.percent)]</property><property name="home.playcount">$INFO[Window(Home).Property(silo.requests.10.12.playcount)]</property><property name="home.art.poster">$INFO[Window(Home).Property(silo.requests.10.12.art.poster)]</property><property name="home.art.fanart">$INFO[Window(Home).Property(silo.requests.10.12.art.fanart)]</property><property name="home.art.clearlogo">$INFO[Window(Home).Property(silo.requests.10.12.art.clearlogo)]</property><property name="home.request.type">$INFO[Window(Home).Property(silo.requests.10.12.request.type)]</property><property name="home.request.tmdb">$INFO[Window(Home).Property(silo.requests.10.12.request.tmdb)]</property><property name="home.status.tint">$INFO[Window(Home).Property(silo.requests.10.12.status.tint)]</property><property name="home.status.seg1">$INFO[Window(Home).Property(silo.requests.10.12.status.seg1)]</property><property name="home.status.seg2">$INFO[Window(Home).Property(silo.requests.10.12.status.seg2)]</property><property name="home.status.seg3">$INFO[Window(Home).Property(silo.requests.10.12.status.seg3)]</property><property name="home.status.seg4">$INFO[Window(Home).Property(silo.requests.10.12.status.seg4)]</property><property name="home.request.library">$INFO[Window(Home).Property(silo.requests.10.12.request.library)]</property><property name="home.request.state">$INFO[Window(Home).Property(silo.requests.10.12.request.state)]</property><property name="home.request.more">$INFO[Window(Home).Property(silo.requests.10.12.request.more)]</property><property name="home.request.logo">$INFO[Window(Home).Property(silo.requests.10.12.request.logo)]</property><property name="home.request.from">$INFO[Window(Home).Property(silo.requests.10.12.request.from)]</property><property name="home.request.to">$INFO[Window(Home).Property(silo.requests.10.12.request.to)]</property><visible>!String.IsEmpty(Window(Home).Property(silo.requests.10.12.type))</visible></item>
                     </content>
                     <itemlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.10.style),brand)">
-                    <include>SiloCardBrand</include>
+                    <include content="SiloCardBrand"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5308) | String.IsEqual(Window(Home).Property(silo.row),5309) | String.IsEqual(Window(Home).Property(silo.row),5310) | String.IsEqual(Window(Home).Property(silo.row),5311)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.10.style),brand)">
                     <include content="SiloCardFocusedBrand"><param name="id" value="5310" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.10.style),brand)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5308) | String.IsEqual(Window(Home).Property(silo.row),5309) | String.IsEqual(Window(Home).Property(silo.row),5310) | String.IsEqual(Window(Home).Property(silo.row),5311)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.10.style),brand)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5310" /></include>
@@ -4858,13 +4858,13 @@
                         <item><label>$INFO[Window(Home).Property(silo.requests.11.12.label)]</label><property name="home.type">$INFO[Window(Home).Property(silo.requests.11.12.type)]</property><property name="home.dbid">$INFO[Window(Home).Property(silo.requests.11.12.dbid)]</property><property name="home.card.title">$INFO[Window(Home).Property(silo.requests.11.12.card.title)]</property><property name="home.card.sub">$INFO[Window(Home).Property(silo.requests.11.12.card.sub)]</property><property name="home.hero.title">$INFO[Window(Home).Property(silo.requests.11.12.hero.title)]</property><property name="home.hero.meta">$INFO[Window(Home).Property(silo.requests.11.12.hero.meta)]</property><property name="home.hero.facts">$INFO[Window(Home).Property(silo.requests.11.12.hero.facts)]</property><property name="home.rating.imdb">$INFO[Window(Home).Property(silo.requests.11.12.rating.imdb)]</property><property name="home.rating.tmdb">$INFO[Window(Home).Property(silo.requests.11.12.rating.tmdb)]</property><property name="home.hero.detail">$INFO[Window(Home).Property(silo.requests.11.12.hero.detail)]</property><property name="home.plot">$INFO[Window(Home).Property(silo.requests.11.12.plot)]</property><property name="home.mpaa">$INFO[Window(Home).Property(silo.requests.11.12.mpaa)]</property><property name="home.badge1">$INFO[Window(Home).Property(silo.requests.11.12.badge1)]</property><property name="home.badge2">$INFO[Window(Home).Property(silo.requests.11.12.badge2)]</property><property name="home.badge3">$INFO[Window(Home).Property(silo.requests.11.12.badge3)]</property><property name="home.tint">$INFO[Window(Home).Property(silo.requests.11.12.tint)]</property><property name="home.percent">$INFO[Window(Home).Property(silo.requests.11.12.percent)]</property><property name="home.playcount">$INFO[Window(Home).Property(silo.requests.11.12.playcount)]</property><property name="home.art.poster">$INFO[Window(Home).Property(silo.requests.11.12.art.poster)]</property><property name="home.art.fanart">$INFO[Window(Home).Property(silo.requests.11.12.art.fanart)]</property><property name="home.art.clearlogo">$INFO[Window(Home).Property(silo.requests.11.12.art.clearlogo)]</property><property name="home.request.type">$INFO[Window(Home).Property(silo.requests.11.12.request.type)]</property><property name="home.request.tmdb">$INFO[Window(Home).Property(silo.requests.11.12.request.tmdb)]</property><property name="home.status.tint">$INFO[Window(Home).Property(silo.requests.11.12.status.tint)]</property><property name="home.status.seg1">$INFO[Window(Home).Property(silo.requests.11.12.status.seg1)]</property><property name="home.status.seg2">$INFO[Window(Home).Property(silo.requests.11.12.status.seg2)]</property><property name="home.status.seg3">$INFO[Window(Home).Property(silo.requests.11.12.status.seg3)]</property><property name="home.status.seg4">$INFO[Window(Home).Property(silo.requests.11.12.status.seg4)]</property><property name="home.request.library">$INFO[Window(Home).Property(silo.requests.11.12.request.library)]</property><property name="home.request.state">$INFO[Window(Home).Property(silo.requests.11.12.request.state)]</property><property name="home.request.more">$INFO[Window(Home).Property(silo.requests.11.12.request.more)]</property><property name="home.request.logo">$INFO[Window(Home).Property(silo.requests.11.12.request.logo)]</property><property name="home.request.from">$INFO[Window(Home).Property(silo.requests.11.12.request.from)]</property><property name="home.request.to">$INFO[Window(Home).Property(silo.requests.11.12.request.to)]</property><visible>!String.IsEmpty(Window(Home).Property(silo.requests.11.12.type))</visible></item>
                     </content>
                     <itemlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.11.style),brand)">
-                    <include>SiloCardBrand</include>
+                    <include content="SiloCardBrand"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5309) | String.IsEqual(Window(Home).Property(silo.row),5310) | String.IsEqual(Window(Home).Property(silo.row),5311) | String.IsEqual(Window(Home).Property(silo.row),5312)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.11.style),brand)">
                     <include content="SiloCardFocusedBrand"><param name="id" value="5311" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.11.style),brand)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5309) | String.IsEqual(Window(Home).Property(silo.row),5310) | String.IsEqual(Window(Home).Property(silo.row),5311) | String.IsEqual(Window(Home).Property(silo.row),5312)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.11.style),brand)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5311" /></include>
@@ -4941,13 +4941,13 @@
                         <item><label>$INFO[Window(Home).Property(silo.requests.12.12.label)]</label><property name="home.type">$INFO[Window(Home).Property(silo.requests.12.12.type)]</property><property name="home.dbid">$INFO[Window(Home).Property(silo.requests.12.12.dbid)]</property><property name="home.card.title">$INFO[Window(Home).Property(silo.requests.12.12.card.title)]</property><property name="home.card.sub">$INFO[Window(Home).Property(silo.requests.12.12.card.sub)]</property><property name="home.hero.title">$INFO[Window(Home).Property(silo.requests.12.12.hero.title)]</property><property name="home.hero.meta">$INFO[Window(Home).Property(silo.requests.12.12.hero.meta)]</property><property name="home.hero.facts">$INFO[Window(Home).Property(silo.requests.12.12.hero.facts)]</property><property name="home.rating.imdb">$INFO[Window(Home).Property(silo.requests.12.12.rating.imdb)]</property><property name="home.rating.tmdb">$INFO[Window(Home).Property(silo.requests.12.12.rating.tmdb)]</property><property name="home.hero.detail">$INFO[Window(Home).Property(silo.requests.12.12.hero.detail)]</property><property name="home.plot">$INFO[Window(Home).Property(silo.requests.12.12.plot)]</property><property name="home.mpaa">$INFO[Window(Home).Property(silo.requests.12.12.mpaa)]</property><property name="home.badge1">$INFO[Window(Home).Property(silo.requests.12.12.badge1)]</property><property name="home.badge2">$INFO[Window(Home).Property(silo.requests.12.12.badge2)]</property><property name="home.badge3">$INFO[Window(Home).Property(silo.requests.12.12.badge3)]</property><property name="home.tint">$INFO[Window(Home).Property(silo.requests.12.12.tint)]</property><property name="home.percent">$INFO[Window(Home).Property(silo.requests.12.12.percent)]</property><property name="home.playcount">$INFO[Window(Home).Property(silo.requests.12.12.playcount)]</property><property name="home.art.poster">$INFO[Window(Home).Property(silo.requests.12.12.art.poster)]</property><property name="home.art.fanart">$INFO[Window(Home).Property(silo.requests.12.12.art.fanart)]</property><property name="home.art.clearlogo">$INFO[Window(Home).Property(silo.requests.12.12.art.clearlogo)]</property><property name="home.request.type">$INFO[Window(Home).Property(silo.requests.12.12.request.type)]</property><property name="home.request.tmdb">$INFO[Window(Home).Property(silo.requests.12.12.request.tmdb)]</property><property name="home.status.tint">$INFO[Window(Home).Property(silo.requests.12.12.status.tint)]</property><property name="home.status.seg1">$INFO[Window(Home).Property(silo.requests.12.12.status.seg1)]</property><property name="home.status.seg2">$INFO[Window(Home).Property(silo.requests.12.12.status.seg2)]</property><property name="home.status.seg3">$INFO[Window(Home).Property(silo.requests.12.12.status.seg3)]</property><property name="home.status.seg4">$INFO[Window(Home).Property(silo.requests.12.12.status.seg4)]</property><property name="home.request.library">$INFO[Window(Home).Property(silo.requests.12.12.request.library)]</property><property name="home.request.state">$INFO[Window(Home).Property(silo.requests.12.12.request.state)]</property><property name="home.request.more">$INFO[Window(Home).Property(silo.requests.12.12.request.more)]</property><property name="home.request.logo">$INFO[Window(Home).Property(silo.requests.12.12.request.logo)]</property><property name="home.request.from">$INFO[Window(Home).Property(silo.requests.12.12.request.from)]</property><property name="home.request.to">$INFO[Window(Home).Property(silo.requests.12.12.request.to)]</property><visible>!String.IsEmpty(Window(Home).Property(silo.requests.12.12.type))</visible></item>
                     </content>
                     <itemlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.12.style),brand)">
-                    <include>SiloCardBrand</include>
+                    <include content="SiloCardBrand"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5310) | String.IsEqual(Window(Home).Property(silo.row),5311) | String.IsEqual(Window(Home).Property(silo.row),5312)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="268" condition="String.IsEqual(Window(Home).Property(silo.requests.12.style),brand)">
                     <include content="SiloCardFocusedBrand"><param name="id" value="5312" /></include>
                     </focusedlayout>
                     <itemlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.12.style),brand)">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5310) | String.IsEqual(Window(Home).Property(silo.row),5311) | String.IsEqual(Window(Home).Property(silo.row),5312)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352" condition="!String.IsEqual(Window(Home).Property(silo.requests.12.style),brand)">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5312" /></include>
@@ -5002,7 +5002,7 @@
                     <onback>SetFocus($INFO[Window(Home).Property(silo.custom.button)])</onback>
                     <content target="videos">$INFO[Window(Home).Property(silo.custom.1.path)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5401) | String.IsEqual(Window(Home).Property(silo.row),5451) | String.IsEqual(Window(Home).Property(silo.row),5402) | String.IsEqual(Window(Home).Property(silo.row),5452)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5401" /></include>
@@ -5057,7 +5057,7 @@
                     <onback>SetFocus($INFO[Window(Home).Property(silo.custom.button)])</onback>
                     <content target="videos">$INFO[Window(Home).Property(silo.custom.1.path)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5401) | String.IsEqual(Window(Home).Property(silo.row),5451) | String.IsEqual(Window(Home).Property(silo.row),5402) | String.IsEqual(Window(Home).Property(silo.row),5452)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5451" /></include>
@@ -5114,7 +5114,7 @@
                     <onback>SetFocus($INFO[Window(Home).Property(silo.custom.button)])</onback>
                     <content target="videos">$INFO[Window(Home).Property(silo.custom.2.path)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5401) | String.IsEqual(Window(Home).Property(silo.row),5451) | String.IsEqual(Window(Home).Property(silo.row),5402) | String.IsEqual(Window(Home).Property(silo.row),5452) | String.IsEqual(Window(Home).Property(silo.row),5403) | String.IsEqual(Window(Home).Property(silo.row),5453)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5402" /></include>
@@ -5171,7 +5171,7 @@
                     <onback>SetFocus($INFO[Window(Home).Property(silo.custom.button)])</onback>
                     <content target="videos">$INFO[Window(Home).Property(silo.custom.2.path)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5401) | String.IsEqual(Window(Home).Property(silo.row),5451) | String.IsEqual(Window(Home).Property(silo.row),5402) | String.IsEqual(Window(Home).Property(silo.row),5452) | String.IsEqual(Window(Home).Property(silo.row),5403) | String.IsEqual(Window(Home).Property(silo.row),5453)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5452" /></include>
@@ -5228,7 +5228,7 @@
                     <onback>SetFocus($INFO[Window(Home).Property(silo.custom.button)])</onback>
                     <content target="videos">$INFO[Window(Home).Property(silo.custom.3.path)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5401) | String.IsEqual(Window(Home).Property(silo.row),5451) | String.IsEqual(Window(Home).Property(silo.row),5402) | String.IsEqual(Window(Home).Property(silo.row),5452) | String.IsEqual(Window(Home).Property(silo.row),5403) | String.IsEqual(Window(Home).Property(silo.row),5453) | String.IsEqual(Window(Home).Property(silo.row),5404) | String.IsEqual(Window(Home).Property(silo.row),5454)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5403" /></include>
@@ -5285,7 +5285,7 @@
                     <onback>SetFocus($INFO[Window(Home).Property(silo.custom.button)])</onback>
                     <content target="videos">$INFO[Window(Home).Property(silo.custom.3.path)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEmpty(Window(Home).Property(silo.row)) | String.IsEqual(Window(Home).Property(silo.row),5401) | String.IsEqual(Window(Home).Property(silo.row),5451) | String.IsEqual(Window(Home).Property(silo.row),5402) | String.IsEqual(Window(Home).Property(silo.row),5452) | String.IsEqual(Window(Home).Property(silo.row),5403) | String.IsEqual(Window(Home).Property(silo.row),5453) | String.IsEqual(Window(Home).Property(silo.row),5404) | String.IsEqual(Window(Home).Property(silo.row),5454)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5453" /></include>
@@ -5342,7 +5342,7 @@
                     <onback>SetFocus($INFO[Window(Home).Property(silo.custom.button)])</onback>
                     <content target="videos">$INFO[Window(Home).Property(silo.custom.4.path)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5402) | String.IsEqual(Window(Home).Property(silo.row),5452) | String.IsEqual(Window(Home).Property(silo.row),5403) | String.IsEqual(Window(Home).Property(silo.row),5453) | String.IsEqual(Window(Home).Property(silo.row),5404) | String.IsEqual(Window(Home).Property(silo.row),5454) | String.IsEqual(Window(Home).Property(silo.row),5405) | String.IsEqual(Window(Home).Property(silo.row),5455)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5404" /></include>
@@ -5399,7 +5399,7 @@
                     <onback>SetFocus($INFO[Window(Home).Property(silo.custom.button)])</onback>
                     <content target="videos">$INFO[Window(Home).Property(silo.custom.4.path)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5402) | String.IsEqual(Window(Home).Property(silo.row),5452) | String.IsEqual(Window(Home).Property(silo.row),5403) | String.IsEqual(Window(Home).Property(silo.row),5453) | String.IsEqual(Window(Home).Property(silo.row),5404) | String.IsEqual(Window(Home).Property(silo.row),5454) | String.IsEqual(Window(Home).Property(silo.row),5405) | String.IsEqual(Window(Home).Property(silo.row),5455)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5454" /></include>
@@ -5454,7 +5454,7 @@
                     <onback>SetFocus($INFO[Window(Home).Property(silo.custom.button)])</onback>
                     <content target="videos">$INFO[Window(Home).Property(silo.custom.5.path)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5403) | String.IsEqual(Window(Home).Property(silo.row),5453) | String.IsEqual(Window(Home).Property(silo.row),5404) | String.IsEqual(Window(Home).Property(silo.row),5454) | String.IsEqual(Window(Home).Property(silo.row),5405) | String.IsEqual(Window(Home).Property(silo.row),5455) | String.IsEqual(Window(Home).Property(silo.row),5406) | String.IsEqual(Window(Home).Property(silo.row),5456)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5405" /></include>
@@ -5509,7 +5509,7 @@
                     <onback>SetFocus($INFO[Window(Home).Property(silo.custom.button)])</onback>
                     <content target="videos">$INFO[Window(Home).Property(silo.custom.5.path)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5403) | String.IsEqual(Window(Home).Property(silo.row),5453) | String.IsEqual(Window(Home).Property(silo.row),5404) | String.IsEqual(Window(Home).Property(silo.row),5454) | String.IsEqual(Window(Home).Property(silo.row),5405) | String.IsEqual(Window(Home).Property(silo.row),5455) | String.IsEqual(Window(Home).Property(silo.row),5406) | String.IsEqual(Window(Home).Property(silo.row),5456)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5455" /></include>
@@ -5562,7 +5562,7 @@
                     <onback>SetFocus($INFO[Window(Home).Property(silo.custom.button)])</onback>
                     <content target="videos">$INFO[Window(Home).Property(silo.custom.6.path)]</content>
                     <itemlayout width="216" height="352">
-                    <include>SiloCardPoster</include>
+                    <include content="SiloCardPoster"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5404) | String.IsEqual(Window(Home).Property(silo.row),5454) | String.IsEqual(Window(Home).Property(silo.row),5405) | String.IsEqual(Window(Home).Property(silo.row),5455) | String.IsEqual(Window(Home).Property(silo.row),5406) | String.IsEqual(Window(Home).Property(silo.row),5456)]" /></include>
                     </itemlayout>
                     <focusedlayout width="216" height="352">
                     <include content="SiloCardFocusedPoster"><param name="id" value="5406" /></include>
@@ -5615,7 +5615,7 @@
                     <onback>SetFocus($INFO[Window(Home).Property(silo.custom.button)])</onback>
                     <content target="videos">$INFO[Window(Home).Property(silo.custom.6.path)]</content>
                     <itemlayout width="400" height="290">
-                    <include>SiloCardLandscape</include>
+                    <include content="SiloCardLandscape"><param name="near" value="[String.IsEqual(Window(Home).Property(silo.row),5404) | String.IsEqual(Window(Home).Property(silo.row),5454) | String.IsEqual(Window(Home).Property(silo.row),5405) | String.IsEqual(Window(Home).Property(silo.row),5455) | String.IsEqual(Window(Home).Property(silo.row),5406) | String.IsEqual(Window(Home).Property(silo.row),5456)]" /></include>
                     </itemlayout>
                     <focusedlayout width="400" height="290">
                     <include content="SiloCardFocusedLandscape"><param name="id" value="5456" /></include>

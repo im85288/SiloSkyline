@@ -47,12 +47,15 @@
         </definition>
     </include>
     <include name="SiloCardPoster">
+        <param name="near" default="true" />
+        <definition>
                     <control type="group">
                         <control type="image">
                             <left>6</left><top>6</top>
                             <width>176</width><height>264</height>
                             <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloPosterArt]</texture>
                             <aspectratio>scale</aspectratio>
+                            <visible>$PARAM[near]</visible>
                         </control>
                         <control type="image">
                             <left>6</left><top>6</top>
@@ -148,9 +151,11 @@
                             <label>$VAR[SiloCardYear]</label>
                         </control>
                     </control>
+        </definition>
     </include>
     <include name="SiloCardFocusedPoster">
         <param name="id" />
+        <param name="near" default="true" />
         <definition>
                     <control type="group">
                         <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus($PARAM[id])">Conditional</animation>
@@ -159,6 +164,7 @@
                             <width>176</width><height>264</height>
                             <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloPosterArt]</texture>
                             <aspectratio>scale</aspectratio>
+                            <visible>$PARAM[near]</visible>
                         </control>
                         <control type="image">
                             <left>6</left><top>6</top>
@@ -290,12 +296,15 @@
         </definition>
     </include>
     <include name="SiloCardLandscape">
+        <param name="near" default="true" />
+        <definition>
                     <control type="group">
                         <control type="image">
                             <left>6</left><top>6</top>
                             <width>360</width><height>202</height>
                             <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloLandscapeArt]</texture>
                             <aspectratio>scale</aspectratio>
+                            <visible>$PARAM[near]</visible>
                         </control>
                         <control type="image">
                             <left>6</left><top>6</top>
@@ -345,9 +354,11 @@
                             <label>$VAR[SiloCardEpisode]</label>
                         </control>
                     </control>
+        </definition>
     </include>
     <include name="SiloCardFocusedLandscape">
         <param name="id" />
+        <param name="near" default="true" />
         <definition>
                     <control type="group">
                         <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus($PARAM[id])">Conditional</animation>
@@ -356,6 +367,7 @@
                             <width>360</width><height>202</height>
                             <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloLandscapeArt]</texture>
                             <aspectratio>scale</aspectratio>
+                            <visible>$PARAM[near]</visible>
                         </control>
                         <control type="image">
                             <left>6</left><top>6</top>
@@ -441,12 +453,15 @@
         </definition>
     </include>
     <include name="SiloCardGridPoster">
+        <param name="near" default="true" />
+        <definition>
                     <control type="group">
                         <control type="image">
                             <left>6</left><top>6</top>
                             <width>256</width><height>384</height>
                             <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloPosterArt]</texture>
                             <aspectratio>scale</aspectratio>
+                            <visible>$PARAM[near]</visible>
                         </control>
                         <control type="image">
                             <left>6</left><top>6</top>
@@ -542,9 +557,11 @@
                             <label>$VAR[SiloCardYear]</label>
                         </control>
                     </control>
+        </definition>
     </include>
     <include name="SiloCardFocusedGridPoster">
         <param name="id" />
+        <param name="near" default="true" />
         <definition>
                     <control type="group">
                         <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus($PARAM[id])">Conditional</animation>
@@ -553,6 +570,7 @@
                             <width>256</width><height>384</height>
                             <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloPosterArt]</texture>
                             <aspectratio>scale</aspectratio>
+                            <visible>$PARAM[near]</visible>
                         </control>
                         <control type="image">
                             <left>6</left><top>6</top>

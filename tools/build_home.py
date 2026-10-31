@@ -218,10 +218,14 @@ def waiting_rows():
     return out
 
 
-def card_layout(card, focused, control_id=None):
+def card_layout(card, focused, control_id=None, near=None):
     """A row's card: the shared include from Includes_SiloCards.xml (a
-    focused card is told its list's id), which keeps Home.xml small."""
+    focused card is told its list's id), which keeps Home.xml small. near:
+    when the card's artwork shows (rows_near), else always."""
     if not focused:
+        if near:
+            return ('\n                    <include content="SiloCard%s"><param name="near" value="%s" /></include>'
+                    % (card['name'], near))
         return '\n                    <include>SiloCard%s</include>' % card['name']
     return ('\n                    <include content="SiloCardFocused%s"><param name="id" value="%d" /></include>'
             % (card['name'], control_id))
@@ -250,13 +254,18 @@ def write_card_includes():
     </include>''' % ''.join('\n                <property name="home.%s">$INFO[Window(Home).Property($PARAM[p].%s)]</property>'
                             % (field, field) for field in HOME_CARD_FIELDS)
     includes = home_card + ''.join('''
-    <include name="SiloCard%(name)s">%(normal)s
+    <include name="SiloCard%(name)s">
+        <param name="near" default="true" />
+        <definition>%(normal)s
+        </definition>
     </include>
     <include name="SiloCardFocused%(name)s">
         <param name="id" />
+        <param name="near" default="true" />
         <definition>%(focused)s
         </definition>
-    </include>''' % {'name': card['name'], 'normal': card_body(card, False), 'focused': card_body(card, True)}
+    </include>''' % {'name': card['name'], 'normal': card_body(card, False, near='$PARAM[near]'),
+                     'focused': card_body(card, True, near='$PARAM[near]')}
                        for card in (POSTER, LANDSCAPE, GRID_POSTER)) + '''
     <include name="SiloCardBrand">%s
     </include>
@@ -277,7 +286,7 @@ def write_card_includes():
             handle.write(text)
 
 
-def card_body(card, focused, control_id='$PARAM[id]'):
+def card_body(card, focused, control_id='$PARAM[id]', near=None):
     # Kodi draws every row's selected item with this layout, focused or
     # not: only the row that has focus lifts its card.
     zoom = focus_zoom('Control.HasFocus(%s)' % control_id) if focused else ''
@@ -313,7 +322,7 @@ def card_body(card, focused, control_id='$PARAM[id]'):
                             <left>6</left><top>6</top>
                             <width>%(w)d</width><height>%(h)d</height>
                             <texture background="true" diffuse="%(mask)s" fallback="colors/grey.png">%(art)s</texture>
-                            <aspectratio>scale</aspectratio>
+                            <aspectratio>scale</aspectratio>%(near)s
                         </control>
                         <control type="image">
                             <left>6</left><top>6</top>
@@ -352,6 +361,8 @@ def card_body(card, focused, control_id='$PARAM[id]'):
                         </control>%(sub_focused)s
                     </control>''' % {'zoom': zoom, 'w': card['width'], 'h': card['height'], 'mask': card['mask'],
                                     'art': card['art'], 'title_color': TITLE_DIM, 'title_visible': title_visible,
+                                    # When the artwork shows (the includes' near, rows_near).
+                                    'near': '\n                            <visible>%s</visible>' % near if near else '',
                                     'title_focused': title_focused, 'sub_focused': sub_focused,
                                     # On the card's bottom edge, short of the rounded corners
                                     # (Kodi can't clip a progress bar to the card's mask).
@@ -576,6 +587,19 @@ ROW_CLICKS = '''
                'String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)'}
 
 
+def rows_near(page_index, slot):
+    """When a row's cards show their artwork: its row within one above or two
+    below the focused one (the first rows before any has focus). Kodi keeps
+    a laid-out card's picture, and every row is laid out (off screen too):
+    Home's 18 rows held 165 MB more than this on a SHIELD, which a 4K film
+    starting then needed. A row's titles still load, so moves stay quick."""
+    ids = page_rows(page_index, [k for k in range(slot - 2, slot + 2) if 1 <= k <= rows_of(PAGES[page_index])])
+    terms = ['String.IsEqual(%s,%d)' % (prop('silo.row'), i) for i in ids]
+    if slot <= 3:
+        terms.insert(0, 'String.IsEmpty(%s)' % prop('silo.row'))
+    return '[%s]' % ' | '.join(terms)
+
+
 def row(page, page_index, slot, landscape):
     card = LANDSCAPE if landscape else POSTER
     key = 'silo.%s.%d' % (page, slot)
@@ -621,7 +645,8 @@ def row(page, page_index, slot, landscape):
         size = 'width="%d" height="%d"%s' % (card['width'] + card['gap'], card['height'] + 12 + CAPTION_H, when)
         return ('\n                    <itemlayout %s>%s\n                    </itemlayout>'
                 '\n                    <focusedlayout %s>%s\n                    </focusedlayout>'
-                % (size, card_layout(card, False), size, card_layout(card, True, list_id(page_index, slot, landscape))))
+                % (size, card_layout(card, False, near=rows_near(page_index, slot)), size,
+                   card_layout(card, True, list_id(page_index, slot, landscape))))
     if page == 'requests':
         # Poster rows, and Silo's Studios, Networks and Genres rows of tiles.
         brand = 'String.IsEqual(%s,brand)' % prop(key + '.style')
