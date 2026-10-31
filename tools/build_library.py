@@ -16,6 +16,7 @@ silo.browse.type watchlist, favorites or history and silo.browse.list the
 add-on's row: their own grids keep Silo's order (newest first), with no A-Z.
 """
 import json
+import re
 import os
 import sys
 from urllib.parse import quote
@@ -63,6 +64,47 @@ SORTS = [('Title', 'title', False, ('movies', 'tvshows'), ('A–Z', 'Z–A')),
 KINDS = ('movies', 'tvshows')
 SORT_W, SORT_ROW, SORT_HEAD = 440, 64, 58
 
+# Browse's views, per kind in Skin.String(silo.view.<kind>): Silo's grid (none
+# chosen), a hero over two rows of posters (Plex's and Apple TV's), or a list
+# beside the focused title's details (Infuse's). Each view has its own path,
+# set only while it shows (silo.browse.vpath.<view>): Kodi loads a hidden
+# container's path too, and each would hold the whole library.
+HERO_ID, LIST_VIEW_ID = 57, 58
+VIEW_ID, VIEW_LIST_ID = 72, 73
+VIEWS = [('Grid', 'grid', GRID_ID), ('Hero', 'hero', HERO_ID), ('List', 'list', LIST_VIEW_ID)]
+VPATH = 'Window(Home).Property(silo.browse.vpath.%s)'
+HERO_COLS = 8
+HERO_ITEM_W = (1920 - 2 * SAFE_X - AZ_W - 24) // HERO_COLS
+HERO_POSTER_W = HERO_ITEM_W - 24
+HERO_POSTER_H = HERO_POSTER_W * 3 // 2
+HERO_ITEM_H = HERO_POSTER_H + 20
+HERO_GRID_TOP = 1080 - 2 * HERO_ITEM_H - 8
+LIST_ROW = 66
+
+
+def view_is(view, kind=None):
+    """Whether Browse shows view (for kind, else for the open kind)."""
+    def one(k):
+        chosen = 'Skin.String(silo.view.%s)' % k
+        this = 'String.IsEmpty(%s)' % chosen if view == 'grid' else 'String.IsEqual(%s,%s)' % (chosen, view)
+        return this if kind else '[String.IsEqual(%s,%s) + %s]' % (TYPE, k, this)
+    return one(kind) if kind else '[%s]' % ' | '.join(one(k) for k in KINDS)
+
+
+def show_view(path=None):
+    """[(condition, action)]: the open kind's view gets Browse's path (path,
+    else Window(Home).Property(silo.browse.path)), the others none."""
+    out = []
+    for _, view, _ in VIEWS:
+        out.append((view_is(view), 'SetProperty(silo.browse.vpath.%s,%s,home)' % (view, path or '$INFO[%s]' % PATH)))
+        out.append(('!' + view_is(view), 'ClearProperty(silo.browse.vpath.%s,home)' % view))
+    return out
+
+
+def focus_view(action='SetFocus(%d)'):
+    """[(condition, action)] focusing the open view's control."""
+    return [(view_is(view), action % control) for _, view, control in VIEWS]
+
 
 def letter_path(kind, letter):
     """The library folder with only the titles from a letter."""
@@ -77,7 +119,11 @@ def letter_path(kind, letter):
     return 'videodb://%s/titles/?xsp=%s' % (kind, quote(json.dumps(query, separators=(',', ':')), safe=''))
 
 
-def card(focused, control_id=GRID_ID):
+def card(focused, control_id=GRID_ID, size=None):
+    """A grid's poster card; size (width, height) for the hero grid's, which
+    has no captions (the hero names the title)."""
+    if size:
+        return hero_card(focused, control_id, *size)
     lit = 'Control.HasFocus(%d)' % control_id
     zoom = focus_zoom(lit, 20) if focused else ''
     title = '''
@@ -110,6 +156,23 @@ def card(focused, control_id=GRID_ID):
                                                          '[Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + '
                                                          'Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]', 16),
                                  'yy': POSTER_H + 58, 'w': POSTER_W, 'dim': TEXT if focused else SUB_DIM}
+
+
+def hero_card(focused, control_id, width, height):
+    lit = 'Control.HasFocus(%d)' % control_id
+    return '''
+                <control type="group">%(zoom)s
+                <control type="image">
+                    <left>6</left><top>6</top><width>%(w)d</width><height>%(h)d</height>
+                    <aspectratio>scale</aspectratio>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
+                </control>%(sheen)s%(watched)s
+                </control>''' % {'w': width, 'h': height, 'zoom': focus_zoom(lit, 20) if focused else '',
+                                 'sheen': focus_sheen(width, height, 'silo/card_poster_mask.png', 'silo/card_poster_rim.png',
+                                                      lit, 16) if focused else '',
+                                 'watched': watched_disc(width - 44, 16, 'Integer.IsGreater(ListItem.PlayCount,0) | '
+                                                         '[Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + '
+                                                         'Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]', 16)}
 
 
 def letter_layouts(list_id=AZ_ID, chosen=None):
@@ -168,6 +231,10 @@ def letter_items():
         for kind in ('movies', 'tvshows'):
             clicks.append('<onclick condition="String.IsEqual(%s,%s)">SetProperty(silo.browse.path,%s,home)'
                           % (TYPE, kind, letter_path(kind, letter)))
+            # The open view loads the letter's titles (the others stay empty).
+            for _, view, _ in VIEWS:
+                clicks.append('<onclick condition="String.IsEqual(%s,%s) + %s">SetProperty(silo.browse.vpath.%s,%s,home)'
+                              % (TYPE, kind, view_is(view, kind), view, letter_path(kind, letter)))
         items += '''
                 <item>
                     <label>%s</label>%s
@@ -177,15 +244,16 @@ def letter_items():
     return items
 
 
-def panel(control_id, content, right, visible, up='noop'):
-    """The poster grid: content is its <content> element."""
+def panel(control_id, content, right, visible, up='noop', hero=False, left='<onleft>noop</onleft>'):
+    """The poster grid (hero: the hero view's smaller one under the hero):
+    content is its <content> element."""
     return '''        <control type="panel" id="%(id)d">
             <left>%(gx)d</left><top>%(gy)d</top>
             <width>%(gw)d</width><height>%(gh)d</height>
             <orientation>vertical</orientation>
             <visible>%(visible)s</visible>
             <onright>%(right)s</onright>
-            <onleft>noop</onleft>
+            %(left)s
             <onup>%(up)s</onup>
             <scrolltime tween="cubic" easing="out">280</scrolltime>
             <!-- Details, not Kodi's play or open (SiloKodiConnect's info page, else Kodi's). -->
@@ -197,9 +265,12 @@ def panel(control_id, content, right, visible, up='noop'):
             </focusedlayout>
             %(content)s
         </control>
-''' % {'id': control_id, 'gx': GRID_X, 'gy': GRID_TOP, 'gw': COLS * ITEM_W, 'gh': 1080 - GRID_TOP,
-       'visible': visible, 'right': right, 'iw': ITEM_W, 'ih': ITEM_H, 'card': card(False),
-       'card_focused': card(True, control_id), 'content': content, 'up': up}
+''' % dict({'id': control_id, 'gx': GRID_X, 'gy': GRID_TOP, 'gw': COLS * ITEM_W, 'gh': 1080 - GRID_TOP,
+            'visible': visible, 'right': right, 'iw': ITEM_W, 'ih': ITEM_H, 'card': card(False),
+            'card_focused': card(True, control_id), 'content': content, 'up': up, 'left': left},
+           **({'gy': HERO_GRID_TOP, 'gw': HERO_COLS * HERO_ITEM_W, 'gh': 1080 - HERO_GRID_TOP, 'iw': HERO_ITEM_W,
+               'ih': HERO_ITEM_H, 'card': card(False, control_id, (HERO_POSTER_W, HERO_POSTER_H)),
+               'card_focused': card(True, control_id, (HERO_POSTER_W, HERO_POSTER_H))} if hero else {}))
 
 
 def sort_current(kind, value):
@@ -229,7 +300,7 @@ def sort_controls():
                        (other, 'Skin.SetString(silo.sort.%s,%s)' % (kind, value))]
         # Back to the grid's top, and again once the re-sorted list is in
         # (the silo_sort_top timer): Kodi reselects the title that was selected.
-        clicks.append((None, 'SetFocus(%d,0,absolute)' % GRID_ID))
+        clicks += focus_view('SetFocus(%d,0,absolute)')
         clicks.append((None, 'SetProperty(silo.browse.resort,1,home)'))
         items += '''
                 <item>
@@ -331,8 +402,9 @@ def sort_controls():
             <texturenofocus border="28" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
             <visible>!%(personal)s</visible>
 %(open_list)s
-            <onleft>noop</onleft><onright>noop</onright><onup>noop</onup>
+            <onleft>noop</onleft><onright>%(view)d</onright><onup>noop</onup>
         </control>%(pill_icons)s
+        <!-- DROPDOWN -->
         <control type="group">
             <left>%(x)d</left><top>%(ly)d</top>
             <visible>Control.HasFocus(%(pill)d) | Control.HasFocus(%(list)d)</visible>
@@ -357,12 +429,305 @@ def sort_controls():
                 </content>
             </control>
         </control>
+        <!-- END DROPDOWN -->
 ''' % {'pill': SORT_ID, 'list': SORT_LIST_ID, 'x': SAFE_X, 'top': SORT_TOP, 'text': TEXT,
        'personal': IS_PERSONAL, 'ly': SORT_TOP + 68, 'frames': frames, 'head': SORT_HEAD,
        'lw': SORT_W - 32, 'lh': len(SORTS) * SORT_ROW, 'row': SORT_ROW, 'normal': row(False), 'focused': row(True),
-       'items': items, 'open_list': open_list,
+       'items': items, 'open_list': open_list, 'view': VIEW_ID,
        'pill_icons': pill_icon('FF000000', '!%s + Control.HasFocus(%d)' % (IS_PERSONAL, SORT_ID))
                      + pill_icon(TEXT, '!%s + !Control.HasFocus(%d)' % (IS_PERSONAL, SORT_ID))}
+
+
+def marks(item, indent):
+    """IMDb's and TMDB's marks with their scores (as the hero's), for item."""
+    out = ''
+    for rating, mark, width, height, top in (('imdb', 'silo/imdb.png', 60, 28, 6), ('themoviedb', 'silo/tmdb.png', 165, 30, 5)):
+        # TMDB's from SiloKodiConnect's extras: Kodi's lists load only the default rating.
+        score = ('%s.Art(silotmdb)' % item) if rating == 'themoviedb' else '%s.Rating(%s)' % (item, rating)
+        out += """
+%(i)s<control type="image">
+%(i)s    <top>%(top)d</top><width>%(w)d</width><height>%(h)d</height>
+%(i)s    <texture>%(mark)s</texture>
+%(i)s    <visible>!String.IsEmpty(%(score)s)</visible>
+%(i)s</control>
+%(i)s<control type="label">
+%(i)s    <width>auto</width><height>40</height>
+%(i)s    <aligny>center</aligny>
+%(i)s    <font>silo_meta</font>
+%(i)s    <textcolor>%(dim)s</textcolor>
+%(i)s    <label> [B]$INFO[%(score)s][/B]   </label>
+%(i)s    <visible>!String.IsEmpty(%(score)s)</visible>
+%(i)s</control>""" % {'i': indent, 'top': top, 'w': width, 'h': height, 'mark': mark, 'score': score, 'dim': TEXT_DIM}
+    return out
+
+
+def title_art(item, left, top, width, height):
+    """The title's clearlogo, or its name in Silo's title font without one."""
+    return """
+        <control type="image">
+            <left>%(x)d</left><top>%(y)d</top><width>%(w)d</width><height>%(h)d</height>
+            <aspectratio align="left" aligny="bottom">keep</aspectratio>
+            <texture background="true">$INFO[%(item)s.Art(clearlogo)]</texture>
+        </control>
+        <control type="label">
+            <left>%(x)d</left><top>%(y)d</top><width>%(w)d</width><height>%(h)d</height>
+            <aligny>bottom</aligny>
+            <font>silo_osd_title</font>
+            <textcolor>%(text)s</textcolor>
+            <label>$INFO[%(item)s.Label]</label>
+            <visible>String.IsEmpty(%(item)s.Art(clearlogo))</visible>
+        </control>""" % {'x': left, 'y': top, 'w': width, 'h': height, 'item': item, 'text': TEXT}
+
+
+# A title's facts as the hero's: year, runtime (a film), genre (SiloKodiConnect's
+# first, kept in the library as silogenre), and its age rating.
+def facts(item):
+    return ('$INFO[%(i)s.Mpaa,,  ·  ]$INFO[%(i)s.Year]$INFO[%(i)s.Duration(mins),  ·  , min]'
+            '$INFO[%(i)s.Art(silogenre),  ·  ,]' % {'i': item})
+
+
+def view_controls():
+    """The View pill (right of Sort, at the right edge), its list, and the
+    hero and list views with their details."""
+    hero, lst = 'Container(%d).ListItem' % HERO_ID, 'Container(%d).ListItem' % LIST_VIEW_ID
+    pick = ''
+    for label, view, control in VIEWS:
+        clicks = [(c, a) for c, a in [(None, 'ClearProperty(silo.browse.vpath.%s,home)' % v) for _, v, _ in VIEWS if v != view]]
+        clicks.append((None, 'SetProperty(silo.browse.vpath.%s,$INFO[%s],home)' % (view, PATH)))
+        for kind in KINDS:
+            this = 'String.IsEqual(%s,%s)' % (TYPE, kind)
+            clicks.append((this, 'Skin.Reset(silo.view.%s)' % kind if view == 'grid' else 'Skin.SetString(silo.view.%s,%s)' % (kind, view)))
+        # Focus once its titles are in (silo_browse_view_focus).
+        clicks.append((None, 'SetProperty(silo.browse.focusview,1,home)'))
+        pick += """
+                <item>
+                    <label>%s</label>
+                    <property name="view">%s</property>%s
+                </item>""" % (label, view, ''.join('\n                    <onclick%s>%s</onclick>' % (
+                    ' condition="%s"' % c if c else '', a) for c, a in clicks))
+    chosen = '[%s]' % ' | '.join('[String.IsEqual(ListItem.Property(view),%s) + %s]' % (v, view_is(v)) for _, v, _ in VIEWS)
+    lit = 'Control.HasFocus(%d)' % VIEW_LIST_ID
+    def row(focused):
+        def parts(colour, visible):
+            v = ' + '.join(x for x in (visible,) if x)
+            return """
+                    <control type="image">
+                        <left>22</left><top>%(iy)d</top><width>26</width><height>26</height>
+                        <texture colordiffuse="%(c)s">silo/check.png</texture>
+                        <visible>%(chosen)s%(v2)s</visible>
+                    </control>
+                    <control type="label">
+                        <left>62</left><width>200</width><height>%(row)d</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>%(c)s</textcolor>
+                        <label>$INFO[ListItem.Label]</label>%(v1)s
+                    </control>""" % {'iy': (SORT_ROW - 26) // 2, 'c': colour, 'chosen': chosen, 'row': SORT_ROW,
+                                     'v2': ' + ' + v if v else '', 'v1': '\n                        <visible>%s</visible>' % v if v else ''}
+        if not focused:
+            return parts(TEXT, '')
+        return """
+                    <control type="image">
+                        <left>4</left><top>4</top><width>%(w)d</width><height>%(h)d</height>
+                        <texture border="28" colordiffuse="%(text)s">silo/pill.png</texture>
+                        <visible>%(lit)s</visible>
+                    </control>""" % {'w': VIEW_W - 40, 'h': SORT_ROW - 8, 'text': TEXT, 'lit': lit} \
+            + parts('FF000000', lit) + parts(TEXT, '!' + lit)
+    # OK or Down on the pill opens the list on the current view.
+    open_list = ''.join('            <%s condition="%s">SetFocus(%d,%d,absolute)</%s>\n' % (a, view_is(v), VIEW_LIST_ID, n, a)
+                        for n, (_, v, _) in enumerate(VIEWS) for a in ('onclick', 'ondown'))
+    return """        <!-- Browse's views: a View pill on Sort's line, at the right, and its
+             list below it (shown while either has focus, as Sort's). -->
+        <control type="button" id="%(pill)d">
+            <right>%(px)d</right><top>%(top)d</top>
+            <width>%(pw)d</width><height>56</height>
+            <label>View · $VAR[SiloBrowseViewLabel]</label>
+            <font>silo_meta</font>
+            <align>center</align><aligny>center</aligny>
+            <textcolor>%(text)s</textcolor>
+            <focusedcolor>FF000000</focusedcolor>
+            <texturefocus border="28" colordiffuse="%(text)s">silo/pill.png</texturefocus>
+            <texturenofocus border="28" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
+            <visible>!%(personal)s</visible>
+%(open_list)s            <onleft>%(sort)d</onleft><onright>noop</onright><onup>noop</onup>
+        </control>
+        <!-- DROPDOWN -->
+        <control type="group">
+            <right>%(px)d</right><top>%(ly)d</top><width>%(vw)d</width>
+            <visible>Control.HasFocus(%(pill)d) | Control.HasFocus(%(list)d)</visible>
+            <animation effect="fade" start="0" end="100" time="140">Visible</animation>
+            <control type="image">
+                <width>%(vw)d</width><height>%(fh)d</height>
+                <texture border="24" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+            </control>
+            <control type="label">
+                <left>28</left><top>16</top><width>%(lw)d</width><height>40</height>
+                <aligny>center</aligny>
+                <font>silo_badge</font>
+                <textcolor>99EDEDED</textcolor>
+                <label>VIEW</label>
+            </control>
+            <control type="list" id="%(list)d">
+                <left>16</left><top>%(head)d</top><width>%(lw)d</width><height>%(lh)d</height>
+                <orientation>vertical</orientation>
+                <onup>%(pill)d</onup><onback>%(pill)d</onback>
+                <onleft>noop</onleft><onright>noop</onright><ondown>noop</ondown>
+                <itemlayout width="%(lw)d" height="%(row)d">%(normal)s
+                </itemlayout>
+                <focusedlayout width="%(lw)d" height="%(row)d">%(focused)s
+                </focusedlayout>
+                <content>%(items)s
+                </content>
+            </control>
+        </control>
+        <!-- END DROPDOWN -->
+        <!-- HERO BACKDROP -->
+        <control type="group">
+            <visible>!%(personal)s + %(is_hero)s</visible>
+            <control type="image">
+                <left>576</left><top>0</top><width>1344</width><height>756</height>
+                <aspectratio>scale</aspectratio>
+                <fadetime>240</fadetime>
+                <texture background="true" colordiffuse="80FFFFFF" diffuse="silo/hero_mask.png">$INFO[%(hero)s.Art(fanart)]</texture>
+            </control>
+            <!-- The header, Sort and View stay readable over a bright picture. -->
+            <control type="image">
+                <left>0</left><top>0</top><width>1920</width><height>320</height>
+                <texture flipy="true" colordiffuse="CCFFFFFF">silo/scrim_bottom.png</texture>
+            </control>
+        </control>
+        <!-- END HERO BACKDROP -->
+        <!-- The hero view: the focused title over two rows of posters. -->
+        <control type="group">
+            <visible>!%(personal)s + %(is_hero)s</visible>%(hero_title)s
+            <control type="grouplist">
+                <left>%(sx)d</left><top>%(fy)d</top><width>1100</width><height>40</height>
+                <orientation>horizontal</orientation>
+                <usecontrolcoords>true</usecontrolcoords>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(dim)s</textcolor>
+                    <label>%(hero_facts)s   </label>
+                </control>%(hero_marks)s
+            </control>
+            <control type="textbox">
+                <left>%(sx)d</left><top>%(py)d</top><width>960</width><height>62</height>
+                <font>silo_detail</font>
+                <textcolor>%(text)s</textcolor>
+                <label>$INFO[%(hero)s.Plot]</label>
+            </control>
+        </control>
+        <!-- The list view's details: the focused title's poster and facts. -->
+        <control type="group">
+            <visible>!%(personal)s + %(is_list)s</visible>
+            <control type="image">
+                <left>576</left><top>0</top><width>1344</width><height>756</height>
+                <aspectratio>stretch</aspectratio>
+                <fadetime>240</fadetime>
+                <texture background="true" colordiffuse="%(backdrop)s" diffuse="silo/hero_mask.png">$INFO[%(lst)s.Art(fanart)]</texture>
+            </control>
+            <control type="image">
+                <left>%(dx)d</left><top>%(dy)d</top><width>300</width><height>450</height>
+                <aspectratio>scale</aspectratio>
+                <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[%(lst)s.Art(poster)]</texture>
+            </control>%(list_title)s
+            <control type="label">
+                <left>%(ix)d</left><top>%(iy)d</top><width>%(iw)d</width><height>40</height>
+                <font>silo_meta</font>
+                <textcolor>%(dim)s</textcolor>
+                <label>%(list_facts)s</label>
+            </control>
+            <control type="label">
+                <left>%(ix)d</left><top>%(by)d</top><width>%(iw)d</width><height>40</height>
+                <font>silo_meta</font>
+                <textcolor>%(dim)s</textcolor>
+                <label>$INFO[%(lst)s.Art(silobadge1)]$INFO[%(lst)s.Art(silobadge2),  ·  ,]$INFO[%(lst)s.Art(silobadge3),  ·  ,]</label>
+            </control>
+            <control type="grouplist">
+                <left>%(ix)d</left><top>%(ry)d</top><width>%(iw)d</width><height>40</height>
+                <orientation>horizontal</orientation>
+                <usecontrolcoords>true</usecontrolcoords>%(list_marks)s
+            </control>
+            <control type="textbox">
+                <left>%(ix)d</left><top>%(cy)d</top><width>%(iw)d</width><height>90</height>
+                <font>silo_detail</font>
+                <textcolor>%(dim)s</textcolor>
+                <label>$INFO[%(lst)s.Art(silocast)]</label>
+            </control>
+            <control type="textbox">
+                <left>%(dx)d</left><top>%(ply)d</top><width>%(plw)d</width><height>260</height>
+                <font>silo_detail</font>
+                <textcolor>%(text)s</textcolor>
+                <label>$INFO[%(lst)s.Plot]</label>
+            </control>
+        </control>
+        <control type="list" id="%(lv)d">
+            <left>%(lx)d</left><top>%(gy)d</top><width>%(lvw)d</width><height>%(gh)d</height>
+            <orientation>vertical</orientation>
+            <visible>!%(personal)s + %(is_list)s</visible>
+            <onup>%(sort)d</onup><onright>%(az)d</onright><onleft>noop</onleft>
+            <scrolltime tween="cubic" easing="out">200</scrolltime>
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+            <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
+            <itemlayout width="%(lvw)d" height="%(lrow)d">%(lrow_normal)s
+            </itemlayout>
+            <focusedlayout width="%(lvw)d" height="%(lrow)d">%(lrow_focused)s
+            </focusedlayout>
+            <content target="videos" sortby="$INFO[%(sort_by)s]" sortorder="$INFO[%(sort_order)s]">$INFO[%(vpath_list)s]</content>
+        </control>
+""" % {'list': VIEW_LIST_ID, 'pill': VIEW_ID, 'px': SAFE_X + AZ_W + 24, 'pw': 260, 'top': SORT_TOP,
+       'ly': SORT_TOP + 68, 'open_list': open_list, 'fh': SORT_HEAD + 16 + SORT_ROW * len(VIEWS), 'head': SORT_HEAD,
+       'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'personal': IS_PERSONAL, 'sort': SORT_ID, 'vw': VIEW_W,
+       'lw': VIEW_W - 32,
+       'lh': SORT_ROW * len(VIEWS), 'row': SORT_ROW, 'normal': row(False), 'focused': row(True), 'items': pick,
+       'is_hero': view_is('hero'), 'is_list': view_is('list'), 'hero': hero, 'lst': lst, 'backdrop': GRID_BACKDROP,
+       'hero_title': title_art(hero, SAFE_X, 236, 760, 130).replace('\n        ', '\n            '),
+       'sx': SAFE_X, 'fy': 378, 'py': 424, 'hero_facts': facts(hero), 'hero_marks': marks(hero, '                '),
+       'dx': SAFE_X + 812, 'dy': GRID_TOP, 'ix': SAFE_X + 812 + 330, 'iw': 1920 - SAFE_X - AZ_W - 24 - (SAFE_X + 812 + 330),
+       'list_title': title_art(lst, SAFE_X + 812 + 330, GRID_TOP, 1920 - SAFE_X - AZ_W - 24 - (SAFE_X + 812 + 330), 140).replace('\n        ', '\n            '),
+       'iy': GRID_TOP + 156, 'by': GRID_TOP + 204, 'ry': GRID_TOP + 252, 'cy': GRID_TOP + 306,
+       'list_facts': facts(lst), 'list_marks': marks(lst, '                '),
+       'ply': GRID_TOP + 480, 'plw': 1920 - SAFE_X - AZ_W - 24 - (SAFE_X + 812),
+       'lv': LIST_VIEW_ID, 'lx': SAFE_X - 6, 'gy': GRID_TOP, 'lvw': 780, 'gh': 1080 - GRID_TOP - 24, 'az': AZ_ID,
+       'lrow': LIST_ROW, 'lrow_normal': list_row(False), 'lrow_focused': list_row(True),
+       'sort_by': SORT_BY, 'sort_order': SORT_ORDER, 'vpath_list': VPATH % 'list'}
+
+
+VIEW_W = 300  # the View list's card
+
+
+def list_row(focused):
+    """A row of the list view: the title, its year on the right, and Silo's
+    watched tick; the focused row black on the white pill while it has focus."""
+    lit = 'Control.HasFocus(%d)' % LIST_VIEW_ID
+    def parts(colour, dim, visible):
+        v = '\n                    <visible>%s</visible>' % visible if visible else ''
+        return """
+                <control type="label">
+                    <left>28</left><width>600</width><height>%(row)d</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(c)s</textcolor>
+                    <label>$INFO[ListItem.Label]</label>%(v)s
+                </control>
+                <control type="label">
+                    <right>28</right><width>140</width><height>%(row)d</height>
+                    <align>right</align><aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(d)s</textcolor>
+                    <label>$INFO[ListItem.Year]</label>%(v)s
+                </control>""" % {'row': LIST_ROW, 'c': colour, 'd': dim, 'v': v}
+    if not focused:
+        return parts(TITLE_DIM, SUB_DIM, '')
+    return """
+                <control type="image">
+                    <left>4</left><top>4</top><width>772</width><height>%(h)d</height>
+                    <texture border="28" colordiffuse="%(text)s">silo/pill.png</texture>
+                    <visible>%(lit)s</visible>
+                </control>""" % {'h': LIST_ROW - 8, 'text': TEXT, 'lit': lit} \
+        + parts('FF000000', '8C000000', lit) + parts(TEXT, TEXT_DIM, '!' + lit)
 
 
 def is_list(key):
@@ -442,8 +807,20 @@ def collection_controls():
        'collection_window': COLLECTION_WINDOW}
 
 
+def arrange(text):
+    """The window with the hero's backdrop behind the header and the Sort and
+    View lists above everything (Kodi draws controls in order)."""
+    backdrops = re.findall(r'        <!-- HERO BACKDROP -->\n(.*?)        <!-- END HERO BACKDROP -->\n', text, re.S)
+    dropdowns = re.findall(r'        <!-- DROPDOWN -->\n(.*?)        <!-- END DROPDOWN -->\n', text, re.S)
+    text = re.sub(r'        <!-- (HERO BACKDROP|DROPDOWN) -->\n.*?        <!-- END \1 -->\n', '', text, flags=re.S)
+    frame = '        <include content="SiloFrame">'
+    text = text.replace(frame, ''.join(backdrops) + frame, 1)
+    spinner = '        <!-- A list from SiloKodiConnect still loading. -->'
+    return text.replace(spinner, ''.join(dropdowns) + spinner, 1)
+
+
 def build():
-    return '''<?xml version="1.0" encoding="UTF-8"?>
+    return arrange('''<?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated by tools/build_library.py: edit that, not this. -->
 <window id="%(window)d">
     <!-- Back from a trailer started from an info page (Kodi leaves it playing): stop it, which reopens the page. -->
@@ -474,7 +851,7 @@ def build():
             <left>%(ax)d</left><top>%(gy)d</top>
             <width>%(aw)d</width><height>%(gh)d</height>
             <orientation>vertical</orientation>
-            <onleft>%(grid)d</onleft>
+%(az_left)s
             <onright>noop</onright>
             <scrolltime tween="cubic" easing="out">200</scrolltime>%(layouts)s
             <content>%(items)s
@@ -508,10 +885,19 @@ def build():
                  + ''.join('    <onload condition="%s">SetFocus(%d)</onload>\n' % (is_list(key), list_id)
                          for key, (_, list_id) in PERSONAL.items())
                  + '    <onload condition="%s">SetFocus(%d)</onload>\n' % (is_list('collections'), FANS_ID)
-                 + '    <onload condition="%s">SetFocus(%d)</onload>\n' % (is_list('collection'), COLLECTION_ID),
+                 + '    <onload condition="%s">SetFocus(%d)</onload>\n' % (is_list('collection'), COLLECTION_ID)
+                 # The open view loads Browse's path (the others none), and the
+                 # hero or list view takes focus once its titles are in.
+                 + ''.join('    <onload condition="%s">%s</onload>\n' % (c, a) for c, a in show_view())
+                 + '    <onload condition="!%s + [%s | %s]">SetProperty(silo.browse.focusview,1,home)</onload>\n'
+                 % (IS_PERSONAL, view_is('hero'), view_is('list')),
        'panels': panel(GRID_ID, '<content target="videos" sortby="$INFO[%s]" sortorder="$INFO[%s]">'
-                       '$INFO[%s]</content>' % (SORT_BY, SORT_ORDER, PATH), str(AZ_ID), '!' + IS_PERSONAL, str(SORT_ID))
-                 + sort_controls()
+                       '$INFO[%s]</content>' % (SORT_BY, SORT_ORDER, VPATH % 'grid'), str(AZ_ID),
+                       '!%s + %s' % (IS_PERSONAL, view_is('grid')), str(SORT_ID))
+                 + panel(HERO_ID, '<content target="videos" sortby="$INFO[%s]" sortorder="$INFO[%s]">'
+                         '$INFO[%s]</content>' % (SORT_BY, SORT_ORDER, VPATH % 'hero'), str(AZ_ID),
+                         '!%s + %s' % (IS_PERSONAL, view_is('hero')), str(SORT_ID), hero=True)
+                 + sort_controls() + view_controls()
                  # Each grid has its own path (only the open list's is set: Kodi
                  # loads a grid's path even while it is hidden).
                  + ''.join(panel(list_id, '<content target="videos">$INFO[Window(Home).Property(silo.browse.list.%s)]'
@@ -519,7 +905,9 @@ def build():
                            + empty_note(key, list_id) for key, (_, list_id) in PERSONAL.items())
                  + collection_controls(),
        'ax': 1920 - SAFE_X - AZ_W,
-       'aw': AZ_W, 'layouts': letter_layouts(), 'items': letter_items()}
+       'aw': AZ_W, 'layouts': letter_layouts(), 'items': letter_items(),
+       'az_left': ''.join('            <onleft condition="%s">%d</onleft>\n' % (c, ctrl) for c, ctrl in
+                          [(view_is(v), ctrl) for _, v, ctrl in VIEWS]).rstrip('\n')})
 
 
 VARIABLES = '''
@@ -533,7 +921,7 @@ VARIABLES = '''
     <variable name="SiloLibrarySub">
 %(subs)s        <value condition="String.IsEqual(%(type)s,collections)">$INFO[Container(56).NumItems,, collections]</value>
         <value condition="String.IsEqual(%(type)s,collection)">$INFO[Container(55).NumItems,, titles]</value>
-        <value>$INFO[Container(%(grid)d).NumItems,, titles]$INFO[%(letter)s,  ·  ,]</value>
+%(view_subs)s        <value>$INFO[Container(%(grid)d).NumItems,, titles]$INFO[%(letter)s,  ·  ,]</value>
     </variable>
     <variable name="SiloBrowseSort">
 %(sort_values)s        <value>title</value>
@@ -557,10 +945,19 @@ VARIABLES = '''
     <variable name="SiloLibraryFanart">
 %(fanarts)s        <value condition="String.IsEqual(%(type)s,collections)">$INFO[Container(56).ListItem.Art(fanart)]</value>
         <value condition="String.IsEqual(%(type)s,collection)">$INFO[Container(55).ListItem.Art(fanart)]</value>
-        <value>$INFO[Container(%(grid)d).ListItem.Art(fanart)]</value>
+%(view_fanarts)s        <value>$INFO[Container(%(grid)d).ListItem.Art(fanart)]</value>
+    </variable>
+    <variable name="SiloBrowseViewLabel">
+%(view_labels)s        <value>Grid</value>
     </variable>
     <!-- end Silo Skyline library -->
 ''' % {'type': TYPE, 'grid': GRID_ID, 'letter': LETTER,
+       'view_subs': ''.join('        <value condition="%s">$INFO[Container(%d).NumItems,, titles]$INFO[%s,  ·  ,]</value>\n'
+                            % (view_is(v), ctrl, LETTER) for _, v, ctrl in VIEWS[1:]),
+       # The hero and list views draw the backdrop themselves.
+       'view_labels': ''.join('        <value condition="%s">%s</value>\n' % (view_is(v), label)
+                              for label, v, _ in VIEWS[1:]),
+       'view_fanarts': ''.join('        <value condition="%s"></value>\n' % view_is(v) for _, v, _ in VIEWS[1:]),
        'personal': ''.join('        <value condition="%s">%s</value>\n' % (is_list(key), title)
                            for key, (title, _) in PERSONAL.items()),
        'subs': ''.join('        <value condition="%s + Integer.IsGreater(Container(%d).NumItems,0)">'
@@ -602,11 +999,22 @@ TIMER_START, TIMER_END = '    <!-- Silo Skyline library (tools/build_library.py)
 TIMERS = '''    <timer>
         <name>silo_sort_top</name>
         <start reset="true">String.IsEqual(Window(Home).Property(silo.browse.resort),1)</start>
-        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_sort_top),1) + !Container(%(grid)d).IsUpdating | !Window.IsActive(%(window)d)</stop>
-        <onstop condition="Window.IsActive(%(window)d)">SetFocus(%(grid)d,0,absolute)</onstop>
-        <onstop>ClearProperty(silo.browse.resort,home)</onstop>
+        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_sort_top),1) + !Container(%(grid)d).IsUpdating + !Container(%(hero)d).IsUpdating + !Container(%(list)d).IsUpdating | !Window.IsActive(%(window)d)</stop>
+%(tops)s        <onstop>ClearProperty(silo.browse.resort,home)</onstop>
     </timer>
-''' % {'grid': GRID_ID, 'window': WINDOW_ID}
+    <timer>
+        <name>silo_browse_view_focus</name>
+        <description>Browse's view takes focus once its titles are in, after opening or choosing it (Kodi can't focus an empty list)</description>
+        <start reset="true">Window.IsActive(%(window)d) + String.IsEqual(Window(Home).Property(silo.browse.focusview),1) + [[%(is_grid)s + Integer.IsGreater(Container(%(grid)d).NumItems,0)] | [%(is_hero)s + Integer.IsGreater(Container(%(hero)d).NumItems,0)] | [%(is_list)s + Integer.IsGreater(Container(%(list)d).NumItems,0)]]</start>
+        <stop>true</stop>
+%(focus)s        <onstop>ClearProperty(silo.browse.focusview,home)</onstop>
+    </timer>
+''' % {'grid': GRID_ID, 'hero': HERO_ID, 'list': LIST_VIEW_ID, 'window': WINDOW_ID,
+       'is_grid': view_is('grid'), 'is_hero': view_is('hero'), 'is_list': view_is('list'),
+       'tops': ''.join('        <onstop condition="Window.IsActive(%d) + %s">%s</onstop>\n' % (WINDOW_ID, c, a)
+                       for c, a in focus_view('SetFocus(%d,0,absolute)')),
+       'focus': ''.join('        <onstop condition="Window.IsActive(%d) + %s">%s</onstop>\n' % (WINDOW_ID, c, a)
+                        for c, a in focus_view())}
 # A list from SiloKodiConnect can still be loading as the window opens, and
 # Kodi can't focus an empty list (its onload SetFocus fails and focus is
 # lost): focus each one once it has items, unless something of it has focus.

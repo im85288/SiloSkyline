@@ -1831,6 +1831,8 @@ HERO = [
                       (None, '$INFO[LI.Rating(imdb)]')]),
     ('SiloHeroTmdb', [('String.IsEqual(LI.DBType,episode)', ''),
                       ('!String.IsEmpty(LI.Property(silo.rating.tmdb))', '$INFO[LI.Property(silo.rating.tmdb)]'),
+                      # Kodi's own lists: SiloKodiConnect's extra (they load only the default rating).
+                      ('!String.IsEmpty(LI.Art(silotmdb))', '$INFO[LI.Art(silotmdb)]'),
                       (None, '$INFO[LI.Rating(themoviedb)]')]),
     ('SiloPlot', [(None, '$INFO[LI.Plot]')]),
     # "Aired Sep 25, 2026 · Tom Hardy, Helen Mirren, Pierce Brosnan"
@@ -1963,8 +1965,9 @@ def variables():
             ('SiloHeroTmdb', 'silo.rating.tmdb', 'home.rating.tmdb', 'themoviedb')):
         def has(item):
             return ('[!String.IsEqual(%(i)s.DBType,episode) + [!String.IsEmpty(%(i)s.Property(%(p)s)) | '
-                    '!String.IsEmpty(%(i)s.Property(%(h)s)) | !String.IsEmpty(%(i)s.Rating(%(k)s))]]'
-                    % {'i': item, 'p': item_property, 'h': home_property, 'k': kodi_rating})
+                    '!String.IsEmpty(%(i)s.Property(%(h)s)) | !String.IsEmpty(%(i)s.Rating(%(k)s))%(x)s]]'
+                    % {'i': item, 'p': item_property, 'h': home_property, 'k': kodi_rating,
+                       'x': ' | !String.IsEmpty(%s.Art(silotmdb))' % item if kodi_rating == 'themoviedb' else ''})
         terms = ['[String.IsEqual(%s,%d) + %s]' % (prop('silo.row'), row_id, has('Container(%d).ListItem' % row_id))
                  for row_id in rows]
         terms += ['[%s + %s]' % (waiting, has('Container(%d).ListItem' % row_id)) for waiting, row_id in waiting_rows()]

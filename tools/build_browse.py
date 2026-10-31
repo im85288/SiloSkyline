@@ -7,9 +7,13 @@ gets a header (the folder's name and how many items it holds) and one view
 per kind of content, each shown only for its content so Kodi always lands on
 the right one: a poster grid for films, shows, sets and seasons (51), episode
 stills with their details (52), and a list of pills for everything else, such
-as an add-on's menu or a folder (50). Estuary's side menu of sorting and view
-options is gone, as Silo has none. Films and shows get an A-Z bar (60) right
-of the grid, which SiloKodiConnect answers by jumping to the letter.
+as an add-on's menu or a folder (50). Films and shows have two more views,
+Kodi's own as any skin's (so an add-on's films get them too): a hero over two
+rows of posters (55, Plex's and Apple TV's) and a list beside the focused
+title's details (56, Infuse's). Left from a view opens a side panel with
+Kodi's View, Sort by and Order buttons (2, 3, 4), as Estuary's; Kodi keeps
+the chosen view per folder. Films and shows get an A-Z bar (60) right of the
+view, which SiloKodiConnect answers by jumping to the letter.
 """
 import os
 import sys
@@ -18,6 +22,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_home import wordmark, focus_sheen, focus_zoom, watched_disc, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM, GRID_BACKDROP  # noqa: E402
 
 GRID = 'Container.Content(movies) | Container.Content(tvshows) | Container.Content(sets) | Container.Content(seasons)'
+HERO_VIEW, DETAIL_VIEW = 55, 56
+TITLE_VIEWS = (51, HERO_VIEW, DETAIL_VIEW)  # the views films and shows can use
+MENU_ID, MENU_W = 9000, 560
 EPISODES = 'Container.Content(episodes)'
 VIEWS_TOP = 200
 
@@ -226,30 +233,329 @@ def episode(focused, view_id):
                                                           'Control.HasFocus(%d)' % view_id, 20) if focused else '', 'title_color': title_color}
 
 
+def to_view(tag, indent):
+    """<tag>s that focus whichever title view is showing."""
+    return ''.join('%s<%s condition="Control.IsVisible(%d)">%d</%s>\n' % (indent, tag, view, view, tag) for view in TITLE_VIEWS)
+
+
 def jump_bar():
     """The A-Z column (Browse's, tools/build_library.py): the selected title's
     letter lit; a letter jumps the grid to it (SiloKodiConnect's jump.py)."""
     from build_library import AZ_W, letter_layouts
-    current = 'String.IsEqual(ListItem.Label,Container(51).ListItem.SortLetter)'
+    current = '[%s]' % ' | '.join('[Control.IsVisible(%d) + String.IsEqual(ListItem.Label,Container(%d).ListItem.SortLetter)]'
+                                  % (view, view) for view in TITLE_VIEWS)
     items = ''.join('''
                 <item>
-                    <label>%s</label>
-                    <onclick>NotifyAll(silokodi,jump.51.%s)</onclick>
-                </item>''' % (letter, letter) for letter in LETTERS)
+                    <label>%s</label>%s
+                </item>''' % (letter, ''.join('''
+                    <onclick condition="Control.IsVisible(%d)">NotifyAll(silokodi,jump.%d.%s)</onclick>'''
+                                              % (view, view, letter) for view in TITLE_VIEWS)) for letter in LETTERS)
     return '''
         <!-- A-Z: jump the poster grid to a letter (SiloKodiConnect's jump.py). -->
         <control type="list" id="%(id)d">
             <left>%(x)d</left><top>%(top)d</top>
             <width>%(w)d</width><height>%(h)d</height>
             <orientation>vertical</orientation>
-            <onleft>51</onleft><onright>noop</onright>
+%(back)s            <onright>noop</onright>
             <scrolltime tween="cubic" easing="out">200</scrolltime>
             <visible>$EXP[SiloBrowseGrid] + %(bar)s</visible>%(layouts)s
             <content>%(items)s
             </content>
         </control>''' % {'id': JUMP_ID, 'x': 1920 - SAFE_X - AZ_W, 'top': VIEWS_TOP, 'w': AZ_W,
                          'h': 1080 - VIEWS_TOP, 'bar': JUMP_BAR,
-                         'layouts': letter_layouts(JUMP_ID, current), 'items': items}
+                         'layouts': letter_layouts(JUMP_ID, current), 'items': items,
+                         'back': to_view('onleft', '            ')}
+
+
+# The hero view: eight smaller posters to a row, two rows under the hero.
+HERO_ITEM_W = (1920 - 2 * SAFE_X - 96 - 24) // 8
+HERO_POSTER_W = HERO_ITEM_W - 24
+HERO_POSTER_H = HERO_POSTER_W * 3 // 2
+HERO_ITEM_H = HERO_POSTER_H + 24
+HERO_TOP = 1080 - 2 * HERO_ITEM_H
+# The list view: rows on the left, the details on the right.
+# Their view types aren't "list" or "poster": Kodi opens a folder it has no
+# view for in the first view of its default type, which is to stay the grid.
+DETAIL_ROW, DETAIL_LIST_W = 66, 780
+DETAIL_X = SAFE_X + DETAIL_LIST_W + 20
+DETAIL_INFO_X = DETAIL_X + 330
+DETAIL_INFO_W = 1920 - SAFE_X - 96 - 24 - DETAIL_INFO_X
+DETAIL_W = 1920 - SAFE_X - 96 - 24 - DETAIL_X
+# A library film's or show's OK: its details page (SiloKodiConnect's), as
+# Browse's; anything else does what Kodi does.
+INFO_CLICK = ('\n            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + '
+              '[Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(ListItem.DBID,0)">'
+              'RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]'
+              '&amp;dbid=$INFO[ListItem.DBID])</onclick>')
+
+
+def hero_poster(focused, view_id):
+    """The hero view's poster: no captions (the hero names the title)."""
+    lit = 'Control.HasFocus(%d)' % view_id
+    return '''
+                <control type="group">%(zoom)s
+                <control type="image">
+                    <left>6</left><top>6</top><width>%(w)d</width><height>%(h)d</height>
+                    <aspectratio>scale</aspectratio>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
+                </control>%(sheen)s%(watched)s
+                </control>''' % {'w': HERO_POSTER_W, 'h': HERO_POSTER_H, 'zoom': focus_zoom(lit, 20) if focused else '',
+                                 'sheen': focus_sheen(HERO_POSTER_W, HERO_POSTER_H, 'silo/card_poster_mask.png',
+                                                      'silo/card_poster_rim.png', lit, 16) if focused else '',
+                                 'watched': watched_disc(HERO_POSTER_W - 44, 16, WATCHED, 16)}
+
+
+def detail_row(focused):
+    """A row of the list view: the title and its year; the focused row black
+    on the white pill while the list has focus."""
+    lit = 'Control.HasFocus(%d)' % DETAIL_VIEW
+
+    def parts(colour, dim, visible):
+        v = '\n                    <visible>%s</visible>' % visible if visible else ''
+        return '''
+                <control type="label">
+                    <left>28</left><width>%(lw)d</width><height>%(row)d</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(c)s</textcolor>
+                    <label>$VAR[SiloBrowseLabel]</label>%(v)s
+                </control>
+                <control type="label">
+                    <right>28</right><width>140</width><height>%(row)d</height>
+                    <align>right</align><aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(d)s</textcolor>
+                    <label>$INFO[ListItem.Year]</label>%(v)s
+                </control>''' % {'row': DETAIL_ROW, 'lw': DETAIL_LIST_W - 200, 'c': colour, 'd': dim, 'v': v}
+    if not focused:
+        return parts(TITLE_DIM, SUB_DIM, '')
+    return '''
+                <control type="image">
+                    <left>4</left><top>4</top><width>%(w)d</width><height>%(h)d</height>
+                    <texture border="28" colordiffuse="%(text)s">silo/pill.png</texture>
+                    <visible>%(lit)s</visible>
+                </control>''' % {'w': DETAIL_LIST_W - 8, 'h': DETAIL_ROW - 8, 'text': TEXT, 'lit': lit} \
+        + parts('FF000000', '8C000000', lit) + parts(TEXT, TEXT_DIM, '!' + lit)
+
+
+def rating_marks(indent):
+    """IMDb's and TMDB's marks with their scores, as the hero's."""
+    out = ''
+    for rating, mark, width, height, top in (('imdb', 'silo/imdb.png', 60, 28, 6),
+                                             ('themoviedb', 'silo/tmdb.png', 165, 30, 5)):
+        # TMDB's from SiloKodiConnect's extras (Kodi's lists load only the default
+        # rating), else Kodi's own (an add-on's titles).
+        score = 'ListItem.Rating(%s)' % rating
+        if rating == 'themoviedb':
+            score = 'ListItem.Art(silotmdb)'
+        out += '''
+%(i)s<control type="image">
+%(i)s    <top>%(top)d</top><width>%(w)d</width><height>%(h)d</height>
+%(i)s    <texture>%(mark)s</texture>
+%(i)s    <visible>!String.IsEmpty(%(score)s)</visible>
+%(i)s</control>
+%(i)s<control type="label">
+%(i)s    <width>auto</width><height>40</height>
+%(i)s    <aligny>center</aligny>
+%(i)s    <font>silo_meta</font>
+%(i)s    <textcolor>%(dim)s</textcolor>
+%(i)s    <label> [B]$INFO[%(score)s][/B]   </label>
+%(i)s    <visible>!String.IsEmpty(%(score)s)</visible>
+%(i)s</control>''' % {'i': indent, 'top': top, 'w': width, 'h': height, 'mark': mark, 'score': score, 'dim': TEXT_DIM}
+    return out
+
+
+def mpaa_badge(indent):
+    return '''
+%(i)s<control type="button">
+%(i)s    <width>auto</width><height>36</height>
+%(i)s    <label>$INFO[ListItem.Mpaa]</label>
+%(i)s    <font>silo_badge</font>
+%(i)s    <textoffsetx>12</textoffsetx>
+%(i)s    <aligny>center</aligny>
+%(i)s    <enable>false</enable>
+%(i)s    <disabledcolor>%(text)s</disabledcolor>
+%(i)s    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+%(i)s    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
+%(i)s    <visible>!String.IsEmpty(ListItem.Mpaa)</visible>
+%(i)s</control>''' % {'i': indent, 'text': TEXT}
+
+
+def title_art(left, top, width, height):
+    """The focused title's clearlogo, or its name without one."""
+    return '''
+            <control type="image">
+                <left>%(x)d</left><top>%(y)d</top><width>%(w)d</width><height>%(h)d</height>
+                <aspectratio align="left" aligny="bottom">keep</aspectratio>
+                <texture background="true">$INFO[ListItem.Art(clearlogo)]</texture>
+            </control>
+            <control type="label">
+                <left>%(x)d</left><top>%(y)d</top><width>%(w)d</width><height>%(h)d</height>
+                <aligny>bottom</aligny>
+                <font>silo_osd_title</font>
+                <textcolor>%(text)s</textcolor>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEmpty(ListItem.Art(clearlogo))</visible>
+            </control>''' % {'x': left, 'y': top, 'w': width, 'h': height, 'text': TEXT}
+
+
+def facts_line(left, top, width, indent='                ', marks=True):
+    """Age badge, then year · runtime · genre, then the rating marks (marks)."""
+    return '''
+            <control type="grouplist">
+                <left>%(x)d</left><top>%(y)d</top><width>%(w)d</width><height>40</height>
+                <orientation>horizontal</orientation>
+                <itemgap>14</itemgap>
+                <usecontrolcoords>true</usecontrolcoords>%(mpaa)s
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(dim)s</textcolor>
+                    <label>$INFO[ListItem.Year]$INFO[ListItem.Duration(mins),  ·  , min]$VAR[SiloViewGenre]</label>
+                </control>%(marks)s
+            </control>''' % {'x': left, 'y': top, 'w': width, 'dim': TEXT_DIM, 'mpaa': mpaa_badge(indent),
+                             'marks': rating_marks(indent) if marks else ''}
+
+
+def title_views():
+    """The hero and list views, and what each draws of the focused title."""
+    return '''
+        <!-- Films and shows, as a hero: the focused title over two rows of posters. -->
+        <control type="group">
+            <visible>Control.IsVisible(%(hero)d)</visible>
+            <control type="image">
+                <left>576</left><top>0</top><width>1344</width><height>756</height>
+                <aspectratio>stretch</aspectratio>
+                <fadetime>240</fadetime>
+                <texture background="true" colordiffuse="99FFFFFF" diffuse="silo/hero_mask.png">$VAR[SiloViewArt]</texture>
+            </control>%(hero_title)s%(hero_facts)s
+            <control type="textbox">
+                <left>%(x)d</left><top>%(plot_y)d</top><width>980</width><height>66</height>
+                <font>silo_detail</font>
+                <textcolor>%(text)s</textcolor>
+                <label>$INFO[ListItem.Plot]</label>
+            </control>
+        </control>
+        <control type="panel" id="%(hero)d">
+            <left>%(gx)d</left><top>%(hero_top)d</top>
+            <width>%(hw)d</width><height>%(hh)d</height>
+            <orientation>vertical</orientation>
+            <scrolltime tween="cubic" easing="out">280</scrolltime>
+            <viewtype label="Hero">bigwide</viewtype>
+            <visible>$EXP[SiloBrowseTitles]</visible>
+            <onleft>%(menu)d</onleft>
+            <onright condition="%(bar)s">%(jump)d</onright>%(click)s
+            <itemlayout width="%(hiw)d" height="%(hih)d">%(hero_card)s
+            </itemlayout>
+            <focusedlayout width="%(hiw)d" height="%(hih)d">%(hero_card_focused)s
+            </focusedlayout>
+        </control>
+
+        <!-- Films and shows, as a list beside the focused title's details. -->
+        <control type="group">
+            <visible>Control.IsVisible(%(detail)d)</visible>
+            <control type="image">
+                <left>%(dx)d</left><top>%(top)d</top><width>300</width><height>450</height>
+                <aspectratio>scale</aspectratio>
+                <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
+            </control>%(detail_title)s%(detail_facts)s
+            <!-- The ratings on their own line: the column is too narrow for them beside the facts. -->
+            <control type="grouplist">
+                <left>%(ix)d</left><top>%(marks_y)d</top><width>%(iw)d</width><height>40</height>
+                <orientation>horizontal</orientation>
+                <usecontrolcoords>true</usecontrolcoords>%(detail_marks)s
+            </control>
+            <control type="label">
+                <left>%(ix)d</left><top>%(badges_y)d</top><width>%(iw)d</width><height>40</height>
+                <font>silo_meta</font>
+                <textcolor>%(dim)s</textcolor>
+                <label>$INFO[ListItem.Art(silobadge1)]$INFO[ListItem.Art(silobadge2),  ·  ,]$INFO[ListItem.Art(silobadge3),  ·  ,]</label>
+            </control>
+            <control type="textbox">
+                <left>%(ix)d</left><top>%(cast_y)d</top><width>%(iw)d</width><height>90</height>
+                <font>silo_detail</font>
+                <textcolor>%(dim)s</textcolor>
+                <label>$INFO[ListItem.Art(silocast)]</label>
+            </control>
+            <control type="textbox">
+                <left>%(dx)d</left><top>%(dplot_y)d</top><width>%(dw)d</width><height>%(dplot_h)d</height>
+                <font>silo_detail</font>
+                <textcolor>%(text)s</textcolor>
+                <label>$INFO[ListItem.Plot]</label>
+            </control>
+        </control>
+        <control type="list" id="%(detail)d">
+            <left>%(gx)d</left><top>%(top)d</top>
+            <width>%(lw)d</width><height>%(lh)d</height>
+            <orientation>vertical</orientation>
+            <scrolltime tween="cubic" easing="out">200</scrolltime>
+            <viewtype label="List">biginfo</viewtype>
+            <visible>$EXP[SiloBrowseTitles]</visible>
+            <onleft>%(menu)d</onleft>
+            <onright condition="%(bar)s">%(jump)d</onright>%(click)s
+            <itemlayout width="%(lw)d" height="%(row)d">%(row_normal)s
+            </itemlayout>
+            <focusedlayout width="%(lw)d" height="%(row)d">%(row_focused)s
+            </focusedlayout>
+        </control>
+''' % {'hero': HERO_VIEW, 'detail': DETAIL_VIEW, 'menu': MENU_ID, 'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM,
+       'hero_title': title_art(SAFE_X, 206, 820, 130), 'hero_facts': facts_line(SAFE_X, 344, 1200),
+       'plot_y': 394, 'gx': SAFE_X - 6, 'hero_top': HERO_TOP, 'hw': 8 * HERO_ITEM_W + 12, 'hh': 1080 - HERO_TOP,
+       'hiw': HERO_ITEM_W, 'hih': HERO_ITEM_H, 'hero_card': hero_poster(False, HERO_VIEW),
+       'hero_card_focused': hero_poster(True, HERO_VIEW), 'bar': JUMP_BAR, 'jump': JUMP_ID, 'click': INFO_CLICK,
+       'dx': DETAIL_X, 'top': VIEWS_TOP, 'ix': DETAIL_INFO_X, 'iw': DETAIL_INFO_W, 'dw': DETAIL_W,
+       'detail_title': title_art(DETAIL_INFO_X, VIEWS_TOP, DETAIL_INFO_W, 120),
+       'detail_facts': facts_line(DETAIL_INFO_X, VIEWS_TOP + 136, DETAIL_INFO_W, marks=False),
+       'detail_marks': rating_marks('                '), 'marks_y': VIEWS_TOP + 184,
+       'badges_y': VIEWS_TOP + 234, 'cast_y': VIEWS_TOP + 282, 'dplot_y': VIEWS_TOP + 480,
+       'dplot_h': 1080 - VIEWS_TOP - 520, 'lw': DETAIL_LIST_W, 'lh': 1080 - VIEWS_TOP - 24, 'row': DETAIL_ROW,
+       'row_normal': detail_row(False), 'row_focused': detail_row(True)}
+
+
+def side_menu():
+    """Estuary's side panel in Silo's look: Kodi's own View, Sort by and Order
+    buttons (Kodi labels them "View: ..." and "Sort by: ..." and does what they
+    say). It waits off screen and slides in while it has focus."""
+    back = to_view('onright', '                ') + to_view('onback', '                ')
+    return '''
+        <!-- View and sort, from the left (Left from a view's first column). -->
+        <control type="group">
+            <left>-%(w)d</left>
+            <animation effect="slide" start="0,0" end="%(w)d,0" time="220" tween="cubic" easing="out" condition="ControlGroup(%(menu)d).HasFocus">Conditional</animation>
+            <control type="image">
+                <left>0</left><top>0</top><width>%(w)d</width><height>1080</height>
+                <texture colordiffuse="F21C1F24">colors/white.png</texture>
+            </control>
+            <control type="label">
+                <left>%(x)d</left><top>%(ty)d</top><width>%(bw)d</width><height>40</height>
+                <aligny>center</aligny>
+                <font>silo_badge</font>
+                <textcolor>99EDEDED</textcolor>
+                <label>VIEW AND SORT</label>
+            </control>
+            <control type="grouplist" id="%(menu)d">
+                <left>%(bx)d</left><top>%(top)d</top><width>%(bw)d</width><height>400</height>
+                <orientation>vertical</orientation>
+                <itemgap>8</itemgap>
+                <onleft>noop</onleft><onup>noop</onup><ondown>noop</ondown>
+%(back)s                <control type="button" id="2">
+                    <width>%(bw)d</width>
+                    <include>DefaultSettingButton</include>
+                </control>
+                <control type="button" id="3">
+                    <width>%(bw)d</width>
+                    <include>DefaultSettingButton</include>
+                </control>
+                <control type="radiobutton" id="4">
+                    <width>%(bw)d</width>
+                    <label>Descending</label>
+                    <include>DefaultSettingButton</include>
+                </control>
+            </control>
+        </control>
+''' % {'w': MENU_W, 'menu': MENU_ID, 'x': SAFE_X, 'bx': SAFE_X - 24, 'bw': MENU_W - SAFE_X - 40,
+       'ty': VIEWS_TOP - 56, 'top': VIEWS_TOP, 'back': back}
 
 
 ROW_W, ROW_H, CARD_H = 1110, 104, 92
@@ -358,7 +664,7 @@ def build():
     <onload condition="Player.HasVideo">PlayerControl(Stop)</onload>
     <defaultcontrol always="true">50</defaultcontrol>
     <backgroundcolor>%(background)s</backgroundcolor>
-    <views>50,51,52,53,54</views>
+    <views>50,51,52,53,54,%(hero_view)d,%(detail_view)d</views>
     <controls>
         <control type="image">
             <left>0</left><top>0</top><width>1920</width><height>1080</height>
@@ -402,7 +708,8 @@ def build():
             <orientation>vertical</orientation>
             <scrolltime tween="cubic" easing="out">280</scrolltime>
             <viewtype label="Posters">poster</viewtype>
-            <onright condition="%(bar)s">%(jump)d</onright>
+            <onleft condition="$EXP[SiloBrowseTitles]">%(menu)d</onleft>
+            <onright condition="%(bar)s">%(jump)d</onright>%(click)s
             <visible>$EXP[SiloBrowseGrid]</visible>
             <itemlayout width="%(pw)d" height="%(ph)d">%(poster)s
             </itemlayout>
@@ -410,7 +717,7 @@ def build():
             </focusedlayout>
         </control>
 %(jump_bar)s
-
+%(title_views)s
         <!-- Genres: Silo's chips. -->
         <control type="panel" id="54">
             <left>%(gx)d</left><top>%(views_top)d</top>
@@ -452,6 +759,7 @@ def build():
             <focusedlayout width="%(ew)d" height="%(eh)d">%(episode_focused)s
             </focusedlayout>
         </control>
+%(side_menu)s
         <!-- A trailer from an info page: its cover (Includes_SiloFrame.xml). -->
         <include>SiloTrailerCover</include>
     </controls>
@@ -465,7 +773,9 @@ def build():
        'episode': episode(False, 52), 'episode_focused': episode(True, 52),
        'bar': JUMP_BAR, 'jump': JUMP_ID, 'jump_bar': jump_bar(),
        'cw': CHIP_W + CHIP_GAP, 'ch': CHIP_H + CHIP_GAP, 'chip': chip(False, 54), 'chip_focused': chip(True, 54),
-       'fw': FAN_W + FAN_GAP, 'fh': FAN_H + FAN_GAP, 'fan': fan_card(False, 53), 'fan_focused': fan_card(True, 53)}
+       'fw': FAN_W + FAN_GAP, 'fh': FAN_H + FAN_GAP, 'fan': fan_card(False, 53), 'fan_focused': fan_card(True, 53),
+       'hero_view': HERO_VIEW, 'detail_view': DETAIL_VIEW, 'menu': MENU_ID, 'click': INFO_CLICK,
+       'title_views': title_views(), 'side_menu': side_menu()}
 
 
 VARIABLES = '''
@@ -474,6 +784,17 @@ VARIABLES = '''
     <expression name="SiloBrowseChips">%(chips)s</expression>
     <expression name="SiloBrowseGrid">[%(grid)s] + !$EXP[SiloBrowseFans]</expression>
     <expression name="SiloBrowseEpisodes">%(episodes)s</expression>
+    <!-- Films and shows: the views they have beside the poster grid (hero, list). -->
+    <expression name="SiloBrowseTitles">[Container.Content(movies) | Container.Content(tvshows)] + !$EXP[SiloBrowseFans]</expression>
+    <!-- The genre in a view's facts: SiloKodiConnect's first (kept in the library), else Kodi's. -->
+    <variable name="SiloViewGenre">
+        <value condition="!String.IsEmpty(ListItem.Art(silogenre))">$INFO[ListItem.Art(silogenre),  ·  ,]</value>
+        <value>$INFO[ListItem.Genre,  ·  ,]</value>
+    </variable>
+    <variable name="SiloViewArt">
+        <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+        <value>$INFO[ListItem.Art(tvshow.fanart)]</value>
+    </variable>
     <variable name="SiloBrowseFacts">
         <value condition="Integer.IsGreater(Container.NumItems,0) + [$EXP[SiloBrowseGrid] | $EXP[SiloBrowseEpisodes]]">$INFO[Container.NumItems,, titles]</value>
         <value condition="$EXP[SiloBrowseFans]">$INFO[Container.NumItems,, collections]</value>
@@ -527,13 +848,18 @@ VARIABLES = '''
         <value>$INFO[ListItem.Plot]</value>
     </variable>
     <variable name="SiloBrowseArt">
-        <value condition="Control.HasFocus(%(jump)d)">$INFO[Container(51).ListItem.Art(fanart)]</value>
+        <!-- The hero view draws its own, stronger. -->
+        <value condition="Control.IsVisible(%(hero_view)d)"></value>
+%(jump_arts)s
         <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
         <value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
         <value>$INFO[Container.Art(fanart)]</value>
     </variable>
     <!-- end Silo Skyline browse -->
-''' % {'grid': GRID, 'episodes': EPISODES, 'jump': JUMP_ID, 'fans': FANS, 'chips': CHIPS}
+''' % {'grid': GRID, 'episodes': EPISODES, 'jump': JUMP_ID, 'fans': FANS, 'chips': CHIPS, 'hero_view': HERO_VIEW,
+       'jump_arts': ''.join('        <value condition="Control.HasFocus(%d) + Control.IsVisible(%d)">'
+                            '$INFO[Container(%d).ListItem.Art(fanart)]</value>\n' % (JUMP_ID, view, view)
+                            for view in TITLE_VIEWS)}
 
 
 def add_variables():
