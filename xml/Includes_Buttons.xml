@@ -3,9 +3,9 @@
 	<include name="OSDButton">
 		<!-- Silo Skyline: Silo's player buttons, a dark disc with a ring at rest and
 		     white with a dark icon when focused. -->
-		<textureradioonfocus colordiffuse="FF000000">$PARAM[texture]</textureradioonfocus>
+		<textureradioonfocus colordiffuse="SkylineFocusText">$PARAM[texture]</textureradioonfocus>
 		<textureradioonnofocus>$PARAM[texture]</textureradioonnofocus>
-		<textureradioofffocus colordiffuse="FF000000">$PARAM[texture]</textureradioofffocus>
+		<textureradioofffocus colordiffuse="SkylineFocusText">$PARAM[texture]</textureradioofffocus>
 		<textureradiooffnofocus>$PARAM[texture]</textureradiooffnofocus>
 		<textureradioondisabled colordiffuse="disabled">$PARAM[texture]</textureradioondisabled>
 		<textureradiooffdisabled colordiffuse="disabled">$PARAM[texture]</textureradiooffdisabled>
@@ -32,8 +32,8 @@
 				<textoffsetx>16</textoffsetx>
 				<aligny>center</aligny>
 				<font>font12</font>
-				<texturefocus colordiffuse="button_focus">lists/focus.png</texturefocus>
-				<alttexturefocus colordiffuse="button_focus">lists/focus.png</alttexturefocus>
+				<texturefocus border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texturefocus>
+				<alttexturefocus border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</alttexturefocus>
 				<texturenofocus />
 				<alttexturenofocus />
 				<onclick>noop</onclick>
@@ -49,7 +49,7 @@
 	</include>
 	<include name="DefaultSettingButton">
 		<param name="height">70</param>
-		<param name="textoffsetx">40</param>
+		<param name="textoffsetx">24</param>
 		<definition>
 			<textoffsetx>$PARAM[textoffsetx]</textoffsetx>
 			<top>0</top>
@@ -57,12 +57,18 @@
 			<aligny>center</aligny>
 			<invalidcolor>invalid</invalidcolor>
 			<selectedcolor>selected</selectedcolor>
-			<!-- Silo Skyline: Inter, and a soft rounded highlight that keeps the
-			     row's white toggles and arrows readable. -->
+			<!-- Silo Skyline (tools/build_frame.py): a white rounded bar on the focused row, as Silo's Apple TV menus. -->
 			<font>silo_meta</font>
 			<textcolor>FFEDEDED</textcolor>
-			<texturefocus border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texturefocus>
+			<focusedcolor>SkylineFocusText</focusedcolor>
+			<disabledcolor>66EDEDED</disabledcolor>
+			<texturefocus border="20" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texturefocus>
 			<texturenofocus />
+			<textureradioonfocus colordiffuse="SkylineFocusText">buttons/radio-button-on.png</textureradioonfocus>
+			<textureradioofffocus colordiffuse="SkylineFocusText">buttons/radio-button-off.png</textureradioofffocus>
+			<textureupfocus colordiffuse="SkylineFocusText">buttons/spinctrl/arrow-light-up.png</textureupfocus>
+			<texturedownfocus colordiffuse="SkylineFocusText">buttons/spinctrl/arrow-light-down.png</texturedownfocus>
+			<textureslidernibfocus colordiffuse="SkylineFocusText">buttons/slider-nib.png</textureslidernibfocus>
 		</definition>
 	</include>
 	<include name="DialogSettingButton">
@@ -79,8 +85,27 @@
 			     row's white toggles and arrows readable. -->
 			<font>silo_meta</font>
 			<textcolor>FFEDEDED</textcolor>
-			<texturefocus border="46" colordiffuse="2EFFFFFF">silo/dialog_button.png</texturefocus>
+			<texturefocus border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texturefocus>
 			<texturenofocus />
+		</definition>
+	</include>
+	<include name="OSDSettingButton">
+		<!-- Silo Skyline: the player's settings list (Custom_1101), as Silo's
+		     sheets: solid rows continuing the dialog card, the focused row a
+		     white pill with dark text. -->
+		<param name="height">70</param>
+		<definition>
+			<textoffsetx>40</textoffsetx>
+			<top>0</top>
+			<height>$PARAM[height]</height>
+			<aligny>center</aligny>
+			<font>silo_meta</font>
+			<textcolor>FFEDEDED</textcolor>
+			<focusedcolor>SkylineFocusText</focusedcolor>
+			<invalidcolor>invalid</invalidcolor>
+			<selectedcolor>selected</selectedcolor>
+			<texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
+			<texturenofocus colordiffuse="SkylineDialog">colors/white.png</texturenofocus>
 		</definition>
 	</include>
 	<include name="DefaultSettingLabel">
@@ -129,8 +154,8 @@
 				<align>center</align>
 				<!-- Silo Skyline: Silo's buttons, faint at rest, white with dark text on focus. -->
 				<textcolor>FFEDEDED</textcolor>
-				<focusedcolor>FF000000</focusedcolor>
-				<texturefocus border="46" colordiffuse="FFEDEDED">silo/dialog_button.png</texturefocus>
+				<focusedcolor>SkylineFocusText</focusedcolor>
+				<texturefocus border="46" colordiffuse="SkylineFocus">silo/dialog_button.png</texturefocus>
 				<texturenofocus border="46" colordiffuse="1FFFFFFF">silo/dialog_button.png</texturenofocus>
 				<visible>$PARAM[visible]</visible>
 				<enable>$PARAM[enable]</enable>
@@ -172,9 +197,9 @@
 		<height>120</height>
 		<textoffsety>27</textoffsety>
 		<!-- Silo Skyline: a white tile with dark text on focus, Inter. -->
-		<texturefocus border="46" colordiffuse="FFEDEDED">silo/dialog_button.png</texturefocus>
+		<texturefocus border="46" colordiffuse="SkylineFocus">silo/dialog_button.png</texturefocus>
 		<texturenofocus />
-		<focusedcolor>FF000000</focusedcolor>
+		<focusedcolor>SkylineFocusText</focusedcolor>
 		<textcolor>FFEDEDED</textcolor>
 		<align>center</align>
 		<aligny>top</aligny>
@@ -188,7 +213,7 @@
 				<height>110</height>
 				<align>left</align>
 				<aligny>top</aligny>
-				<texturefocus colordiffuse="button_focus">lists/focus.png</texturefocus>
+				<texturefocus border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texturefocus>
 				<texturenofocus />
 				<textoffsetx>40</textoffsetx>
 				<textoffsety>35</textoffsety>
@@ -274,7 +299,7 @@
 		</definition>
 	</include>
 	<include name="InfoDialogButton">
-		<param name="width">264</param>
+		<param name="width">230</param>
 		<param name="onclick_1_condition">true</param>
 		<param name="onclick_2_condition">true</param>
 		<param name="onclick_3_condition">true</param>
@@ -284,17 +309,18 @@
 				<height>142</height>
 				<align>center</align>
 				<aligny>top</aligny>
-				<texturefocus border="21" colordiffuse="button_focus">buttons/button-fo.png</texturefocus>
-				<texturenofocus border="21">buttons/button-nofo.png</texturenofocus>
+				<texturefocus border="24" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texturefocus>
+				<focusedcolor>SkylineFocusText</focusedcolor>
+				<texturenofocus border="24" colordiffuse="14FFFFFF">silo/card_landscape_mask.png</texturenofocus>
 				<textoffsetx>22</textoffsetx>
 				<textoffsety>78</textoffsety>
-				<radioposx>108</radioposx>
+				<radioposx>91</radioposx>
 				<radioposy>16</radioposy>
 				<radiowidth>48</radiowidth>
-				<font>font12</font>
-				<textureradioonfocus colordiffuse="D0FFFFFF">$PARAM[icon]</textureradioonfocus>
+				<font>silo_detail</font>
+				<textureradioonfocus colordiffuse="SkylineFocusText">$PARAM[icon]</textureradioonfocus>
 				<textureradioonnofocus colordiffuse="D0FFFFFF">$PARAM[icon]</textureradioonnofocus>
-				<textureradioofffocus colordiffuse="D0FFFFFF">$PARAM[icon]</textureradioofffocus>
+				<textureradioofffocus colordiffuse="SkylineFocusText">$PARAM[icon]</textureradioofffocus>
 				<textureradiooffnofocus colordiffuse="D0FFFFFF">$PARAM[icon]</textureradiooffnofocus>
 				<textureradiooffdisabled colordiffuse="disabled">$PARAM[icon]</textureradiooffdisabled>
 				<textureradioondisabled colordiffuse="disabled">$PARAM[icon]</textureradioondisabled>
@@ -308,24 +334,25 @@
 		</definition>
 	</include>
 	<include name="InfoDialogToggleButton">
-		<param name="width">262</param>
+		<param name="width">230</param>
 		<definition>
 			<control type="radiobutton" id="$PARAM[id]">
 				<width>$PARAM[width]</width>
 				<height>142</height>
 				<align>center</align>
 				<aligny>top</aligny>
-				<texturefocus border="21" colordiffuse="button_focus">buttons/button-fo.png</texturefocus>
-				<texturenofocus border="21">buttons/button-nofo.png</texturenofocus>
+				<texturefocus border="24" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texturefocus>
+				<focusedcolor>SkylineFocusText</focusedcolor>
+				<texturenofocus border="24" colordiffuse="14FFFFFF">silo/card_landscape_mask.png</texturenofocus>
 				<textoffsetx>35</textoffsetx>
 				<textoffsety>78</textoffsety>
-				<radioposx>108</radioposx>
+				<radioposx>91</radioposx>
 				<radioposy>16</radioposy>
 				<radiowidth>48</radiowidth>
-				<font>font12</font>
-				<textureradioonfocus colordiffuse="D0FFFFFF">$PARAM[icon_on]</textureradioonfocus>
+				<font>silo_detail</font>
+				<textureradioonfocus colordiffuse="SkylineFocusText">$PARAM[icon_on]</textureradioonfocus>
 				<textureradioonnofocus colordiffuse="D0FFFFFF">$PARAM[icon_on]</textureradioonnofocus>
-				<textureradioofffocus colordiffuse="D0FFFFFF">$PARAM[icon_off]</textureradioofffocus>
+				<textureradioofffocus colordiffuse="SkylineFocusText">$PARAM[icon_off]</textureradioofffocus>
 				<textureradiooffnofocus colordiffuse="D0FFFFFF">$PARAM[icon_off]</textureradiooffnofocus>
 				<textureradiooffdisabled colordiffuse="disabled">$PARAM[icon_off]</textureradiooffdisabled>
 				<textureradioondisabled colordiffuse="disabled">$PARAM[icon_on]</textureradioondisabled>
@@ -380,7 +407,7 @@
 				<top>0</top>
 				<width>600</width>
 				<height>70</height>
-				<texture colordiffuse="button_focus">lists/focus.png</texture>
+				<texture border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texture>
 			</control>
 			<control type="label">
 				<left>0</left>
@@ -393,5 +420,18 @@
 				<label>$INFO[ListItem.Label]</label>
 			</control>
 		</focusedlayout>
+	</include>
+	<!-- Silo Skyline: a row in the menu manager (script-skinshortcuts.xml). -->
+	<include name="SiloShortcutButton">
+		<!-- As the settings rows (tools/build_frame.py): plain, the focused one a white pill. -->
+		<width>1060</width>
+		<height>70</height>
+		<textoffsetx>32</textoffsetx>
+		<aligny>center</aligny>
+		<font>silo_meta</font>
+		<textcolor>FFEDEDED</textcolor>
+		<focusedcolor>SkylineFocusText</focusedcolor>
+		<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+		<texturenofocus />
 	</include>
 </includes>

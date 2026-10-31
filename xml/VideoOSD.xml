@@ -54,7 +54,8 @@
 						</include>
 						<onclick>PlayerControl(Previous)</onclick>
 						<visible>Player.HasSceneMarkers | Player.ChapterCount | Integer.IsGreater(Playlist.Length(video),1) | [Player.SeekEnabled + VideoPlayer.Content(livetv)]</visible>
-					</control>
+						<visible>!$EXP[SiloVideoPlayer]</visible>
+						</control>
 					<control type="radiobutton" id="601">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/rewind.png"/>
@@ -62,6 +63,66 @@
 						<onclick condition="Player.Paused">PlayerControl(Play)</onclick>
 						<onclick condition="!Player.Paused">PlayerControl(Rewind)</onclick>
 						<visible>Player.SeekEnabled + !VideoPlayer.Content(livetv)</visible>
+						<visible>!$EXP[SiloVideoPlayer]</visible>
+						</control>
+					<control type="group" id="690">
+						<!-- Silo's skip back 10 s (Silo's player only). -->
+						<width>76</width>
+						<height>76</height>
+						<visible>$EXP[SiloVideoPlayer] + Player.SeekEnabled</visible>
+						<control type="button" id="609">
+							<width>74</width>
+							<height>74</height>
+							<label></label>
+							<font></font>
+							<texturefocus colordiffuse="FFEDEDED">silo/avatar_mask.png</texturefocus>
+							<texturenofocus>silo/osd_button_rest.png</texturenofocus>
+							<onleft>202</onleft>
+							<onright>602</onright>
+							<onup>87</onup>
+							<ondown>noop</ondown>
+							<onclick>Seek(-10)</onclick>
+						</control>
+						<control type="image">
+							<left>15</left>
+							<top>15</top>
+							<width>44</width>
+							<height>44</height>
+							<texture colordiffuse="SkylineFocusText">silo/skip_back.png</texture>
+							<visible>Control.HasFocus(609)</visible>
+						</control>
+						<control type="image">
+							<left>15</left>
+							<top>15</top>
+							<width>44</width>
+							<height>44</height>
+							<texture>silo/skip_back.png</texture>
+							<visible>!Control.HasFocus(609)</visible>
+						</control>
+						<control type="label">
+							<left>0</left>
+							<top>19</top>
+							<width>74</width>
+							<height>40</height>
+							<align>center</align>
+							<aligny>center</aligny>
+							<font>silo_badge</font>
+							<label>$NUMBER[10]</label>
+							<textcolor>FFEDEDED</textcolor>
+							<visible>!Control.HasFocus(609)</visible>
+						</control>
+						<control type="label">
+							<left>0</left>
+							<top>19</top>
+							<width>74</width>
+							<height>40</height>
+							<align>center</align>
+							<aligny>center</aligny>
+							<font>silo_badge</font>
+							<label>$NUMBER[10]</label>
+							<textcolor>SkylineFocusText</textcolor>
+							<visible>Control.HasFocus(609)</visible>
+						</control>
 					</control>
 					<control type="group" id="698">
 						<width>76</width>
@@ -76,8 +137,10 @@
 							<font></font>
 							<texturefocus colordiffuse="FFEDEDED">silo/avatar_mask.png</texturefocus>
 							<texturenofocus>silo/osd_button_rest.png</texturenofocus>
-							<onleft>601</onleft>
-							<onright>603</onright>
+							<onleft condition="!$EXP[SiloVideoPlayer]">601</onleft>
+							<onleft condition="$EXP[SiloVideoPlayer]">609</onleft>
+							<onright condition="!$EXP[SiloVideoPlayer]">603</onright>
+							<onright condition="$EXP[SiloVideoPlayer]">610</onright>
 							<onup>87</onup>
 							<ondown>noop</ondown>
 							<onclick>PlayerControl(Play)</onclick>
@@ -91,12 +154,72 @@
 							<texture colordiffuse="$VAR[SiloOSDIconColor602]">$VAR[PlayerControlsPlayImageVar]</texture>
 						</control>
 					</control>
+					<control type="group" id="691">
+						<!-- Silo's skip forward 30 s (Silo's player only). -->
+						<width>76</width>
+						<height>76</height>
+						<visible>$EXP[SiloVideoPlayer] + Player.SeekEnabled</visible>
+						<control type="button" id="610">
+							<width>74</width>
+							<height>74</height>
+							<label></label>
+							<font></font>
+							<texturefocus colordiffuse="FFEDEDED">silo/avatar_mask.png</texturefocus>
+							<texturenofocus>silo/osd_button_rest.png</texturenofocus>
+							<onleft>602</onleft>
+							<onright>202</onright>
+							<onup>87</onup>
+							<ondown>noop</ondown>
+							<onclick>Seek(30)</onclick>
+						</control>
+						<control type="image">
+							<left>15</left>
+							<top>15</top>
+							<width>44</width>
+							<height>44</height>
+							<texture colordiffuse="SkylineFocusText">silo/skip_forward.png</texture>
+							<visible>Control.HasFocus(610)</visible>
+						</control>
+						<control type="image">
+							<left>15</left>
+							<top>15</top>
+							<width>44</width>
+							<height>44</height>
+							<texture>silo/skip_forward.png</texture>
+							<visible>!Control.HasFocus(610)</visible>
+						</control>
+						<control type="label">
+							<left>0</left>
+							<top>19</top>
+							<width>74</width>
+							<height>40</height>
+							<align>center</align>
+							<aligny>center</aligny>
+							<font>silo_badge</font>
+							<label>$NUMBER[30]</label>
+							<textcolor>FFEDEDED</textcolor>
+							<visible>!Control.HasFocus(610)</visible>
+						</control>
+						<control type="label">
+							<left>0</left>
+							<top>19</top>
+							<width>74</width>
+							<height>40</height>
+							<align>center</align>
+							<aligny>center</aligny>
+							<font>silo_badge</font>
+							<label>$NUMBER[30]</label>
+							<textcolor>SkylineFocusText</textcolor>
+							<visible>Control.HasFocus(610)</visible>
+						</control>
+					</control>
 					<control type="radiobutton" id="603">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/stop.png"/>
 						</include>
 						<onclick>PlayerControl(Stop)</onclick>
-					</control>
+						<visible>!$EXP[SiloVideoPlayer]</visible>
+						</control>
 					<control type="radiobutton" id="606">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/forward.png"/>
@@ -104,14 +227,16 @@
 						<onclick condition="Player.Paused">PlayerControl(Play)</onclick>
 						<onclick condition="!Player.Paused">PlayerControl(Forward)</onclick>
 						<visible>Player.SeekEnabled + !VideoPlayer.Content(livetv)</visible>
-					</control>
+						<visible>!$EXP[SiloVideoPlayer]</visible>
+						</control>
 					<control type="radiobutton" id="607">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/next.png"/>
 						</include>
 						<onclick>PlayerControl(Next)</onclick>
 						<visible>Player.HasSceneMarkers | Player.ChapterCount | Integer.IsGreater(Playlist.Length(video),1) | PVR.IsTimeShift</visible>
-					</control>
+						<visible>!$EXP[SiloVideoPlayer]</visible>
+						</control>
 					<control type="radiobutton" id="608">
 						<textureradioonfocus colordiffuse="white">osd/fullscreen/buttons/record-white.png</textureradioonfocus>
 						<textureradioonnofocus>osd/fullscreen/buttons/record-white.png</textureradioonnofocus>
@@ -147,8 +272,10 @@
 					<ondown condition="Control.HasFocus(70043)">11104</ondown>
 					<ondown condition="Control.HasFocus(704)">12104</ondown>
 					<ondown condition="Control.HasFocus(255)">13103</ondown>
-					<onleft>608</onleft>
-					<onright>600</onright>
+					<onleft condition="!$EXP[SiloVideoPlayer]">608</onleft>
+					<onleft condition="$EXP[SiloVideoPlayer]">610</onleft>
+					<onright condition="!$EXP[SiloVideoPlayer]">600</onright>
+					<onright condition="$EXP[SiloVideoPlayer]">609</onright>
 					<control type="radiobutton" id="804">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/home.png"/>
@@ -185,14 +312,16 @@
 							<param name="texture" value="osd/fullscreen/buttons/information.png"/>
 						</include>
 						<onclick>Info</onclick>
-					</control>
+						<visible>!$EXP[SiloVideoPlayer]</visible>
+						</control>
 					<control type="radiobutton" id="70044">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/bookmarks.png"/>
 						</include>
 						<onclick>ActivateWindow(videobookmarks)</onclick>
 						<visible>!VideoPlayer.Content(livetv)</visible>
-					</control>
+						<visible>!$EXP[SiloVideoPlayer]</visible>
+						</control>
 					<control type="radiobutton" id="70045">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/teletext.png"/>
@@ -200,6 +329,13 @@
 						<onclick>Dialog.Close(VideoOSD)</onclick>
 						<onclick>ActivateWindow(Teletext)</onclick>
 						<visible>VideoPlayer.HasTeletext</visible>
+					</control>
+					<control type="radiobutton" id="70050">
+						<include content="OSDButton">
+							<param name="texture" value="osd/fullscreen/buttons/next.png"/>
+						</include>
+						<onclick>PlayerControl(Next)</onclick>
+						<visible>$EXP[SiloVideoPlayer] + Integer.IsGreater(Playlist.Length(video),1)</visible>
 					</control>
 					<control type="radiobutton" id="70046">
 						<include content="OSDButton">
@@ -219,11 +355,21 @@
 					</control>
 					<control type="radiobutton" id="70048">
 						<include content="OSDButton">
-							<param name="texture" value="osd/fullscreen/buttons/settings.png"/>
+							<param name="texture" value="silo/options.png"/>
 						</include>
-						<onclick>SetProperty(settingslist_content,osd,home)</onclick>
-						<onclick>SetProperty(settingslist_header,$LOCALIZE[5],home)</onclick>
-						<onclick>ActivateWindow(1101)</onclick>
+						<onclick condition="!$EXP[SiloVideoPlayer]">SetProperty(settingslist_content,osd,home)</onclick>
+						<onclick condition="!$EXP[SiloVideoPlayer]">SetProperty(settingslist_header,$LOCALIZE[5],home)</onclick>
+						<onclick condition="!$EXP[SiloVideoPlayer]">ActivateWindow(1101)</onclick>
+						<!-- Silo's Options sheet (tools/build_options.py). -->
+						<onclick condition="$EXP[SiloVideoPlayer]">ActivateWindow(1180)</onclick>
+					</control>
+					<control type="radiobutton" id="70049">
+						<!-- Silo's close: stop and leave the player. -->
+						<include content="OSDButton">
+							<param name="texture" value="silo/close.png"/>
+						</include>
+						<onclick>PlayerControl(Stop)</onclick>
+						<visible>$EXP[SiloVideoPlayer]</visible>
 					</control>
 				</control>
 			</control>
@@ -259,8 +405,8 @@
 					<width>100%</width>
 					<height>26</height>
 					<texturesliderbar colordiffuse="00FFFFFF">silo/avatar_mask.png</texturesliderbar>
-					<textureslidernib>silo/avatar_mask.png</textureslidernib>
-					<textureslidernibfocus>silo/avatar_mask.png</textureslidernibfocus>
+					<textureslidernib colordiffuse="$VAR[SiloOsdNib]">silo/avatar_mask.png</textureslidernib>
+					<textureslidernibfocus colordiffuse="$VAR[SiloOsdNib]">silo/avatar_mask.png</textureslidernibfocus>
 					<info>Player.Progress</info>
 					<onup>200</onup>
 					<ondown>200</ondown>
@@ -273,8 +419,8 @@
 					<width>100%</width>
 					<height>26</height>
 					<texturesliderbar colordiffuse="00FFFFFF">silo/avatar_mask.png</texturesliderbar>
-					<textureslidernib>silo/avatar_mask.png</textureslidernib>
-					<textureslidernibfocus>silo/avatar_mask.png</textureslidernibfocus>
+					<textureslidernib colordiffuse="$VAR[SiloOsdNib]">silo/avatar_mask.png</textureslidernib>
+					<textureslidernibfocus colordiffuse="$VAR[SiloOsdNib]">silo/avatar_mask.png</textureslidernibfocus>
 					<info>Player.Progress</info>
 					<onup>200</onup>
 					<ondown>200</ondown>
@@ -287,8 +433,8 @@
 					<width>100%</width>
 					<height>26</height>
 					<texturesliderbar colordiffuse="00FFFFFF">silo/avatar_mask.png</texturesliderbar>
-					<textureslidernib>silo/avatar_mask.png</textureslidernib>
-					<textureslidernibfocus>silo/avatar_mask.png</textureslidernibfocus>
+					<textureslidernib colordiffuse="$VAR[SiloOsdNib]">silo/avatar_mask.png</textureslidernib>
+					<textureslidernibfocus colordiffuse="$VAR[SiloOsdNib]">silo/avatar_mask.png</textureslidernibfocus>
 					<info>PVR.TimeshiftProgressPlayPos</info>
 					<onup>200</onup>
 					<ondown>200</ondown>
@@ -301,8 +447,8 @@
 					<width>100%</width>
 					<height>26</height>
 					<texturesliderbar colordiffuse="00FFFFFF">silo/avatar_mask.png</texturesliderbar>
-					<textureslidernib>silo/avatar_mask.png</textureslidernib>
-					<textureslidernibfocus>silo/avatar_mask.png</textureslidernibfocus>
+					<textureslidernib colordiffuse="$VAR[SiloOsdNib]">silo/avatar_mask.png</textureslidernib>
+					<textureslidernibfocus colordiffuse="$VAR[SiloOsdNib]">silo/avatar_mask.png</textureslidernibfocus>
 					<info>PVR.TimeshiftProgressPlayPos</info>
 					<onup>200</onup>
 					<ondown>200</ondown>

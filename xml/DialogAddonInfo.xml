@@ -18,7 +18,7 @@
 					<width>755</width>
 					<height>435</height>
 					<label></label>
-					<texturenofocus border="21">dialogs/dialog-bg.png</texturenofocus>
+					<texturenofocus border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texturenofocus>
 					<onup>50</onup>
 					<ondown>9000</ondown>
 					<onclick>SetProperty(TextViewer_Header,$LOCALIZE[31141] $INFO[ListItem.AddonVersion],home)</onclick>
@@ -37,7 +37,7 @@
 				<control type="group">
 					<left>606</left>
 					<top>160</top>
-					<visible>Integer.IsEqual(Container(50).NumItems,0)</visible>
+					<visible>false</visible>
 					<control type="image">
 						<width>425</width>
 						<height>260</height>
@@ -117,7 +117,7 @@
 							<top>16</top>
 							<width>393</width>
 							<height>228</height>
-							<texture border="8" colordiffuse="button_focus">buttons/thumbnail_focused.png</texture>
+							<texture border="8" colordiffuse="SkylineFocus">buttons/thumbnail_focused.png</texture>
 						</control>
 					</focusedlayout>
 				</control>
@@ -131,11 +131,10 @@
 				<control type="group">
 					<control type="image">
 						<left>1370</left>
-						<top>420</top>
+						<top>400</top>
 						<width>450</width>
-						<height>396</height>
-						<aspectratio>scale</aspectratio>
-						<texture colordiffuse="AAFFFFFF">colors/black.png</texture>
+						<height>435</height>
+						<texture border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
 					</control>
 					<control type="group">
 						<left>1340</left>
@@ -152,15 +151,15 @@
 									<top>0</top>
 									<width>410</width>
 									<height>30</height>
-									<font>font27_narrow</font>
-									<label>$INFO[ListItem.Label,[COLOR button_focus],[/COLOR]]</label>
+									<font>silo_meta</font>
+									<label>$INFO[ListItem.Label,[COLOR BFEDEDED],[/COLOR]]</label>
 								</control>
 								<control type="label">
 									<left>10</left>
 									<top>30</top>
 									<width>380</width>
 									<height>30</height>
-									<font>font27_narrow</font>
+									<font>silo_meta</font>
 									<label>$INFO[ListItem.Label2]</label>
 								</control>
 								<control type="image">
@@ -177,8 +176,8 @@
 									<top>0</top>
 									<width>410</width>
 									<height>30</height>
-									<font>font27_narrow</font>
-									<label>$INFO[ListItem.Label,[COLOR button_focus],[/COLOR]]</label>
+									<font>silo_meta</font>
+									<label>$INFO[ListItem.Label,[COLOR BFEDEDED],[/COLOR]]</label>
 									<scroll>false</scroll>
 								</control>
 								<control type="label">
@@ -186,7 +185,7 @@
 									<top>30</top>
 									<width>380</width>
 									<height>30</height>
-									<font>font27_narrow</font>
+									<font>silo_meta</font>
 									<label>$INFO[ListItem.Label2]</label>
 									<scroll>false</scroll>
 								</control>
@@ -239,7 +238,7 @@
 					<onup>5000</onup>
 					<ondown>9000</ondown>
 					<align>center</align>
-					<itemgap>-18</itemgap>
+					<itemgap>12</itemgap>
 					<orientation>horizontal</orientation>
 					<include content="InfoDialogButton">
 						<param name="id" value="12" />
@@ -252,16 +251,19 @@
 						<param name="label" value="$LOCALIZE[24020]" />
 					</include>
 					<control type="radiobutton" id="13">
-						<width>262</width>
+						<width>230</width>
 						<height>140</height>
 						<align>center</align>
 						<aligny>top</aligny>
 						<textoffsetx>35</textoffsetx>
 						<textoffsety>76</textoffsety>
-						<radioposx>81</radioposx>
+						<radioposx>65</radioposx>
 						<radioposy>17</radioposy>
 						<radiowidth>100</radiowidth>
-						<font>font12</font>
+						<font>silo_detail</font>
+						<focusedcolor>SkylineFocusText</focusedcolor>
+						<texturefocus border="24" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texturefocus>
+						<texturenofocus border="24" colordiffuse="14FFFFFF">silo/card_landscape_mask.png</texturenofocus>
 						<visible>Control.IsEnabled(13)</visible>
 					</control>
 					<include content="InfoDialogButton">
@@ -305,9 +307,7 @@
 					<width>540</width>
 					<height>540</height>
 					<aspectratio>scale</aspectratio>
-					<texture>dialogs/dialog-bg-nobo.png</texture>
-					<bordertexture border="21" infill="false">overlays/shadow.png</bordertexture>
-					<bordersize>20</bordersize>
+					<texture border="24" colordiffuse="00FFFFFF">silo/card_landscape_mask.png</texture>
 				</control>
 				<control type="image">
 					<left>14</left>
@@ -325,7 +325,7 @@
 						<top>24</top>
 						<width>500</width>
 						<height>500</height>
-						<texture colordiffuse="AAFFFFFF">colors/black.png</texture>
+						<texture border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
 					</control>
 					<control type="textbox">
 						<left>25</left>
@@ -335,7 +335,7 @@
 						<align>center</align>
 						<aligny>center</aligny>
 						<label>$VAR[AddonLifecycleType]</label>
-						<font>font32_title</font>
+						<font>silo_row</font>
 					</control>
 				</control>
 			</control>

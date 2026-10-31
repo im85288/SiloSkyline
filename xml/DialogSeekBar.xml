@@ -8,8 +8,175 @@
 	<zorder>0</zorder>
 	<controls>
 		<include>PVRChannelNumberInput</include>
+		<!-- Silo Skyline Live TV banner (tools/build_tv.py) -->
+		<control type="group">
+			<visible>VideoPlayer.Content(LiveTV) + [Player.ShowInfo | Window.IsActive(fullscreeninfo) | Player.ChannelPreviewActive] + !Window.IsActive(videoosd) + !Window.IsActive(pvrosdchannels) + !Window.IsActive(1196)</visible>
+			<animation effect="slide" start="0,120" end="0,0" time="220" tween="cubic" easing="out">Visible</animation>
+			<animation effect="fade" start="100" end="0" time="160">Hidden</animation>
+			<!-- Twice, so the text reads over bright pictures; the top for the corners. -->
+			<control type="image">
+				<left>0</left><top>480</top><width>1920</width><height>600</height>
+				<texture>silo/scrim_bottom.png</texture>
+			</control>
+			<control type="image">
+				<left>0</left><top>640</top><width>1920</width><height>440</height>
+				<texture>silo/scrim_bottom.png</texture>
+			</control>
+			<control type="image">
+				<left>0</left><top>0</top><width>1920</width><height>200</height>
+				<texture flipy="true">silo/scrim_bottom.png</texture>
+				<animation effect="slide" start="0,-120" end="0,0" time="220" tween="cubic" easing="out">Visible</animation>
+			</control>
+            <control type="label">
+                <left>88</left><top>40</top><width>900</width><height>56</height>
+                <font>silo_meta</font>
+                <textcolor>FFEDEDED</textcolor>
+                <label>$INFO[VideoPlayer.ChannelGroup]</label>
+            </control>
+            <control type="label">
+                <right>88</right><top>40</top><width>600</width><height>56</height>
+                <align>right</align>
+                <font>silo_meta</font>
+                <textcolor>FFEDEDED</textcolor>
+                <label>$INFO[System.Date(ddd d mmm)]$INFO[System.Time,  ·  ,]</label>
+            </control>
+            <control type="group">
+                <top>844</top>
+                <control type="image">
+                    <left>80</left><top>14</top><width>246</width><height>106</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture>$INFO[Player.Icon]</texture>
+                </control>
+                <control type="label">
+                    <left>358</left><width>1474</width><height>60</height>
+                    <font>silo_osd_title</font>
+                    <textcolor>FFEDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
+                    <label fallback="19055">$INFO[VideoPlayer.Title]</label>
+                </control>
+                <control type="grouplist">
+                    <left>358</left><top>66</top><width>1474</width><height>40</height>
+                    <orientation>horizontal</orientation>
+                    <itemgap>22</itemgap>
+                    <control type="label">
+                        <width>auto</width><height>40</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>D9EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
+                        <label>$INFO[VideoPlayer.StartTime]$INFO[VideoPlayer.EndTime, — ,]</label>
+                    </control>
+                    <control type="progress">
+                        <top>17</top><width>90</width><height>6</height>
+                        <texturebg colordiffuse="40FFFFFF">colors/white.png</texturebg>
+                        <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+                        <info>PVR.EpgEventProgress</info>
+                        <visible>!String.IsEmpty(VideoPlayer.EndTime)</visible>
+                    </control>
+                    <control type="label">
+                        <width>auto</width><height>40</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>D9EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
+                        <label>$INFO[PVR.EpgEventRemainingTime(mins),, min]</label>
+                        <visible>!String.IsEmpty(VideoPlayer.EndTime)</visible>
+                    </control>
+                    <control type="label">
+                        <width>auto</width><height>40</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FFEDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
+                        <label>$INFO[VideoPlayer.ChannelNumberLabel,,  ]$INFO[VideoPlayer.ChannelName]</label>
+                    </control>
+                    <control type="button">
+                        <top>5</top><width>auto</width><height>30</height>
+                        <label>$VAR[SiloLiveResolution]</label>
+                        <font>silo_badge</font>
+                        <textoffsetx>9</textoffsetx>
+                        <aligny>center</aligny>
+                        <enable>false</enable>
+                        <disabledcolor>FF141414</disabledcolor>
+                        <texturenofocus border="8" colordiffuse="FFA3A3A3">silo/badge_solid.png</texturenofocus>
+                        <texturefocus border="8" colordiffuse="FFA3A3A3">silo/badge_solid.png</texturefocus>
+                        <visible>!String.IsEmpty(VideoPlayer.VideoResolution)</visible>
+                    </control>
+                    <control type="button">
+                        <top>5</top><width>auto</width><height>30</height>
+                        <label>$VAR[SiloLiveFps] FPS</label>
+                        <font>silo_badge</font>
+                        <textoffsetx>9</textoffsetx>
+                        <aligny>center</aligny>
+                        <enable>false</enable>
+                        <disabledcolor>FF141414</disabledcolor>
+                        <texturenofocus border="8" colordiffuse="FFA3A3A3">silo/badge_solid.png</texturenofocus>
+                        <texturefocus border="8" colordiffuse="FFA3A3A3">silo/badge_solid.png</texturefocus>
+                        <visible>String.StartsWith(Player.Process(videofps),59.9) | String.StartsWith(Player.Process(videofps),60) | String.StartsWith(Player.Process(videofps),50) | String.StartsWith(Player.Process(videofps),48) | String.StartsWith(Player.Process(videofps),29.9) | String.StartsWith(Player.Process(videofps),30) | String.StartsWith(Player.Process(videofps),25) | String.StartsWith(Player.Process(videofps),23.9) | String.StartsWith(Player.Process(videofps),24)</visible>
+                    </control>
+                    <control type="button">
+                        <top>5</top><width>auto</width><height>30</height>
+                        <label>$VAR[SiloLiveHdr]</label>
+                        <font>silo_badge</font>
+                        <textoffsetx>9</textoffsetx>
+                        <aligny>center</aligny>
+                        <enable>false</enable>
+                        <disabledcolor>FF141414</disabledcolor>
+                        <texturenofocus border="8" colordiffuse="FFA3A3A3">silo/badge_solid.png</texturenofocus>
+                        <texturefocus border="8" colordiffuse="FFA3A3A3">silo/badge_solid.png</texturefocus>
+                        <visible>!String.IsEmpty(VideoPlayer.HdrType)</visible>
+                    </control>
+                    <control type="button">
+                        <top>5</top><width>auto</width><height>30</height>
+                        <label>$VAR[SiloLiveAudio]</label>
+                        <font>silo_badge</font>
+                        <textoffsetx>9</textoffsetx>
+                        <aligny>center</aligny>
+                        <enable>false</enable>
+                        <disabledcolor>FF141414</disabledcolor>
+                        <texturenofocus border="8" colordiffuse="FFA3A3A3">silo/badge_solid.png</texturenofocus>
+                        <texturefocus border="8" colordiffuse="FFA3A3A3">silo/badge_solid.png</texturefocus>
+                        <visible>!String.IsEmpty(VideoPlayer.AudioChannels)</visible>
+                    </control>
+                </control>
+
+                <control type="label">
+                    <left>358</left><top>110</top><width>1474</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_detail</font>
+                    <textcolor>D9EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
+                    <label>$INFO[VideoPlayer.Plot]</label>
+                </control>
+                <control type="grouplist">
+                    <left>358</left><top>154</top><width>1474</width><height>40</height>
+                    <orientation>horizontal</orientation>
+                    <itemgap>22</itemgap>
+                    <control type="label">
+                        <width>auto</width><height>40</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>D9EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
+                        <label>$INFO[VideoPlayer.NextStartTime]$INFO[VideoPlayer.NextEndTime, — ,]</label>
+                    </control>
+                    <control type="label">
+                        <width>auto</width><height>40</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>D9EDEDED</textcolor><shadowcolor>CC000000</shadowcolor>
+                        <label>$INFO[VideoPlayer.NextTitle]</label>
+                    </control>
+                </control>
+                <!-- TiviMate's full-width bar: yellow as far as the programme has got. -->
+                <control type="progress">
+                    <left>80</left><top>166</top><width>1760</width><height>4</height>
+                    <texturebg colordiffuse="66FFFFFF">colors/white.png</texturebg>
+                    <midtexture colordiffuse="FFF2D46B">colors/white.png</midtexture>
+                    <info>PVR.EpgEventProgress</info>
+                    <visible>!String.IsEmpty(VideoPlayer.EndTime) + false</visible>
+                </control>
+            </control>
+		</control>
+		<!-- end Silo Skyline Live TV banner -->
 		<control type="group">
 			<visible>!$EXP[SiloVideoPlayer]</visible>
+			<!-- Silo Skyline: not over Live TV, which has the banner above, but for Estuary's own OSD. -->
+			<visible>!VideoPlayer.Content(LiveTV) | Window.IsActive(videoosd)</visible>
 			<animation effect="slide" start="0,200" end="0,0" time="300" tween="cubic" easing="out">VisibleChange</animation>
 			<visible>Player.ShowInfo | Window.IsActive(fullscreeninfo) | Player.ShowTime | Window.IsActive(videoosd) | Window.IsActive(musicosd) | Window.IsActive(playerprocessinfo) | Window.IsActive(pvrosdchannels) | Window.IsActive(pvrchannelguide) | ![!String.IsEmpty(Player.SeekNumeric) | Player.Seeking | Player.HasPerformedSeek(3) | Player.Forwarding | Player.Rewinding | Player.Paused] | !String.IsEmpty(PVR.ChannelNumberInput)</visible>
 			<visible>!Player.HasGame</visible>
@@ -292,6 +459,8 @@
 		<control type="group">
 			<visible>!Window.IsVisible(playerprocessinfo)</visible>
 			<visible>[Player.ShowInfo | Window.IsActive(fullscreeninfo)] + VideoPlayer.Content(LiveTV)</visible>
+			<!-- Silo Skyline: Skyline's banner shows instead, but under Estuary's own OSD. -->
+			<visible>Window.IsActive(videoosd)</visible>
 			<visible>Player.ShowInfo | Window.IsActive(fullscreeninfo) | !Player.Seeking | !Player.HasPerformedSeek(3) | !Player.Forwarding | !Player.Rewinding | !Player.Paused</visible>
 			<animation effect="fade" start="0" end="100" time="300" delay="250">Visible</animation>
 			<animation effect="fade" start="100" end="0" time="100">Hidden</animation>
@@ -430,30 +599,303 @@
 				</control>
 			</control>
 		</control>
-		<!-- Silo Skyline: Silo's player chrome for video. Bottom-up, as in Silo's TV
+<!-- Silo Skyline Showcase pause screen (tools/build_showcase.py) -->
+		<control type="group">
+			<visible>$EXP[SiloVideoPlayer]</visible>
+			<visible>$EXP[SiloPauseScreen]</visible>
+			<animation effect="fade" start="0" end="100" time="400">Visible</animation>
+			<animation effect="fade" start="100" end="0" time="200">Hidden</animation>
+			<control type="image">
+				<left>0</left><top>0</top><width>1920</width><height>1080</height>
+				<texture colordiffuse="B3000000">colors/white.png</texture>
+			</control>
+			<control type="label">
+				<left>120</left><top>150</top><width>900</width><height>32</height>
+				<font>silo_badge</font>
+				<textcolor>87EDEDED</textcolor>
+				<label>YOU'RE WATCHING</label>
+			</control>
+			<control type="image">
+				<left>120</left><top>196</top><width>900</width><height>190</height>
+				<aspectratio align="left" aligny="bottom">keep</aspectratio>
+				<texture>$VAR[PlayerClearLogoVar]</texture>
+			</control>
+			<control type="label">
+				<left>120</left><top>196</top><width>900</width><height>190</height>
+				<aligny>bottom</aligny>
+				<font>silo_osd_title</font>
+				<textcolor>FFEDEDED</textcolor>
+				<label>$VAR[SiloShowcaseName]</label>
+				<shadowcolor>99000000</shadowcolor>
+				<visible>String.IsEmpty(Player.Art(clearlogo)) + String.IsEmpty(Player.Art(tvshow.clearlogo))</visible>
+			</control>
+			<control type="label">
+				<left>120</left><top>404</top><width>900</width><height>50</height>
+				<font>silo_row</font>
+				<textcolor>FFEDEDED</textcolor>
+				<label>$VAR[SiloShowcaseLine]</label>
+			</control>
+			<control type="grouplist">
+				<left>120</left><top>462</top><width>900</width><height>40</height>
+				<orientation>horizontal</orientation>
+				<usecontrolcoords>true</usecontrolcoords>
+				<control type="label">
+					<width>auto</width><height>36</height>
+					<aligny>center</aligny>
+					<font>silo_meta</font>
+					<textcolor>87EDEDED</textcolor>
+					<label>$VAR[SiloShowcaseFacts]  </label>
+				</control>
+				<control type="image">
+					<top>4</top><width>60</width><height>28</height>
+					<texture>silo/imdb.png</texture>
+					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.imdb))</visible>
+				</control>
+				<control type="label">
+					<width>auto</width><height>36</height>
+					<aligny>center</aligny>
+					<font>silo_meta</font>
+					<textcolor>FFEDEDED</textcolor>
+					<label> [B]$INFO[Window(Home).Property(silokodi.playing.rating.imdb)][/B]  </label>
+					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.imdb))</visible>
+				</control>
+				<control type="image">
+					<top>3</top><width>165</width><height>30</height>
+					<texture>silo/tmdb.png</texture>
+					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.tmdb))</visible>
+				</control>
+				<control type="label">
+					<width>auto</width><height>36</height>
+					<aligny>center</aligny>
+					<font>silo_meta</font>
+					<textcolor>FFEDEDED</textcolor>
+					<label> [B]$INFO[Window(Home).Property(silokodi.playing.rating.tmdb)][/B]  </label>
+					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.tmdb))</visible>
+				</control>
+			</control>
+			<control type="textbox">
+				<left>120</left><top>520</top><width>900</width><height>250</height>
+				<font>silo_detail</font>
+				<textcolor>FFEDEDED</textcolor>
+				<label>$INFO[VideoPlayer.Plot]</label>
+			</control>
+			<control type="image">
+				<left>1160</left><top>160</top><width>640</width><height>360</height>
+				<aspectratio scalediffuse="false">scale</aspectratio>
+				<texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloShowcaseStill]</texture>
+			</control>
+			<!-- Where playback is. -->
+			<control type="image">
+				<left>120</left><top>960</top><width>1680</width><height>6</height>
+				<texture colordiffuse="40FFFFFF">colors/white.png</texture>
+			</control>
+			<control type="progress">
+				<left>120</left><top>960</top><width>1680</width><height>6</height>
+				<info>Player.Progress</info>
+				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+				<midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+			</control>
+			<control type="label">
+				<left>120</left><top>980</top><width>800</width><height>36</height>
+				<font>silo_detail</font>
+				<textcolor>87EDEDED</textcolor>
+				<label>$INFO[Player.Time]$INFO[Player.Duration, / ,]</label>
+			</control>
+			<control type="label">
+				<left>1000</left><top>980</top><width>800</width><height>36</height>
+				<align>right</align>
+				<font>silo_detail</font>
+				<textcolor>87EDEDED</textcolor>
+				<label>$INFO[Player.FinishTime,Ends ,]</label>
+			</control>
+		</control>
+		<!-- end Silo Skyline Showcase pause screen -->		<!-- Silo Skyline: Silo's player chrome for video. Bottom-up, as in Silo's TV
 		     app at 1080p: buttons (VideoOSD) from 950, the clock row, the bar with a
 		     round handle, the title and an uppercase eyebrow, over a gradient. -->
 		<control type="group">
-			<visible>$EXP[SiloVideoPlayer]</visible>
+			<visible>$EXP[SiloVideoPlayer] + !$EXP[SiloPauseScreen]</visible>
 			<animation effect="fade" start="0" end="100" time="200">Visible</animation>
 			<animation effect="fade" start="100" end="0" time="200">Hidden</animation>
 			<control type="image">
-				<left>0</left><top>540</top><width>1920</width><height>540</height>
+				<left>0</left><top>420</top><width>1920</width><height>660</height>
 				<texture>silo/scrim_bottom.png</texture>
 			</control>
-			<control type="label">
-				<left>96</left><top>738</top><width>1600</width><height>28</height>
-				<font>silo_badge</font>
-				<textcolor>C7EDEDED</textcolor>
-				<label>[UPPERCASE]$VAR[SiloPlayerEyebrow][/UPPERCASE]</label>
+			<!-- A second pass: the title stays readable over bright pictures. -->
+			<control type="image">
+				<left>0</left><top>640</top><width>1920</width><height>440</height>
+				<texture colordiffuse="B3FFFFFF">silo/scrim_bottom.png</texture>
 			</control>
 			<control type="label">
-				<left>96</left><top>766</top><width>1600</width><height>66</height>
-				<font>silo_row</font>
+				<left>96</left><top>684</top><width>1600</width><height>28</height>
+				<font>silo_badge</font>
+				<textcolor>E6EDEDED</textcolor>
+				<label>[UPPERCASE]$VAR[SiloPlayerEyebrow][/UPPERCASE]</label>
+				<visible>Skin.HasSetting(SkylineSiloOSD)</visible>
+				<shadowcolor>99000000</shadowcolor>
+			</control>
+			<control type="label">
+				<left>96</left><top>716</top><width>1600</width><height>80</height>
+				<font>silo_osd_title</font>
 				<textcolor>FFEDEDED</textcolor>
 				<label>$INFO[VideoPlayer.Title]</label>
+				<shadowcolor>99000000</shadowcolor>
+				<visible>Skin.HasSetting(SkylineSiloOSD)</visible>
 			</control>
-			<!-- The bar: track, buffered, played. -->
+<!-- Silo Skyline Showcase overlay (tools/build_showcase.py) -->
+			<control type="group">
+				<visible>!Skin.HasSetting(SkylineSiloOSD)</visible>
+				<control type="image">
+					<left>96</left><top>588</top><width>160</width><height>240</height>
+					<aspectratio>scale</aspectratio>
+					<texture background="true" diffuse="silo/card_poster_mask.png">$VAR[SiloShowcasePoster]</texture>
+				</control>
+				<control type="image">
+					<left>288</left><top>588</top><width>720</width><height>120</height>
+					<aspectratio align="left" aligny="bottom">keep</aspectratio>
+					<texture>$VAR[PlayerClearLogoVar]</texture>
+				</control>
+				<control type="label">
+					<left>288</left><top>588</top><width>720</width><height>120</height>
+					<aligny>bottom</aligny>
+					<font>silo_osd_title</font>
+					<textcolor>FFEDEDED</textcolor>
+					<label>$VAR[SiloShowcaseName]</label>
+					<shadowcolor>99000000</shadowcolor>
+					<visible>String.IsEmpty(Player.Art(clearlogo)) + String.IsEmpty(Player.Art(tvshow.clearlogo))</visible>
+				</control>
+				<control type="label">
+					<left>288</left><top>720</top><width>1500</width><height>44</height>
+					<font>silo_meta</font>
+					<textcolor>FFEDEDED</textcolor>
+					<label>$VAR[SiloShowcaseLine]</label>
+					<shadowcolor>99000000</shadowcolor>
+				</control>
+				<control type="grouplist">
+					<left>288</left><top>776</top><width>1536</width><height>40</height>
+					<orientation>horizontal</orientation>
+					<itemgap>10</itemgap>
+					<usecontrolcoords>true</usecontrolcoords>
+					<control type="button">
+						<width>auto</width><height>36</height>
+						<label>$VAR[SiloShowcaseMpaa]</label>
+						<font>silo_badge</font>
+						<textoffsetx>12</textoffsetx>
+						<aligny>center</aligny>
+						<enable>false</enable>
+						<disabledcolor>FFEDEDED</disabledcolor>
+						<texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+						<texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
+						<visible>[!String.IsEmpty(Window(Home).Property(silokodi.playing.mpaa)) | !String.IsEmpty(VideoPlayer.mpaa)]</visible>
+					</control>
+					<control type="button">
+						<width>auto</width><height>36</height>
+						<label>$INFO[Window(Home).Property(silokodi.playing.badge1)]</label>
+						<font>silo_badge</font>
+						<textoffsetx>12</textoffsetx>
+						<aligny>center</aligny>
+						<enable>false</enable>
+						<disabledcolor>FFEDEDED</disabledcolor>
+						<texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+						<texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
+						<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.badge1))</visible>
+					</control>
+					<control type="button">
+						<width>auto</width><height>36</height>
+						<label>$INFO[Window(Home).Property(silokodi.playing.badge2)]</label>
+						<font>silo_badge</font>
+						<textoffsetx>12</textoffsetx>
+						<aligny>center</aligny>
+						<enable>false</enable>
+						<disabledcolor>FFEDEDED</disabledcolor>
+						<texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+						<texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
+						<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.badge2))</visible>
+					</control>
+					<control type="button">
+						<width>auto</width><height>36</height>
+						<label>$INFO[Window(Home).Property(silokodi.playing.badge3)]</label>
+						<font>silo_badge</font>
+						<textoffsetx>12</textoffsetx>
+						<aligny>center</aligny>
+						<enable>false</enable>
+						<disabledcolor>FFEDEDED</disabledcolor>
+						<texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+						<texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
+						<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.badge3))</visible>
+					</control>
+					<control type="button">
+						<width>auto</width><height>36</height>
+						<label>$VAR[SiloShowcaseResolution]</label>
+						<font>silo_badge</font>
+						<textoffsetx>12</textoffsetx>
+						<aligny>center</aligny>
+						<enable>false</enable>
+						<disabledcolor>FFEDEDED</disabledcolor>
+						<texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+						<texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
+						<visible>String.IsEmpty(Window(Home).Property(silokodi.playing.badge1)) + !String.IsEmpty(VideoPlayer.VideoResolution)</visible>
+					</control>
+					<control type="button">
+						<width>auto</width><height>36</height>
+						<label>$VAR[SiloShowcaseHdr]</label>
+						<font>silo_badge</font>
+						<textoffsetx>12</textoffsetx>
+						<aligny>center</aligny>
+						<enable>false</enable>
+						<disabledcolor>FFEDEDED</disabledcolor>
+						<texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+						<texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
+						<visible>String.IsEmpty(Window(Home).Property(silokodi.playing.badge1)) + !String.IsEmpty(VideoPlayer.HdrType)</visible>
+					</control>
+					<control type="button">
+						<width>auto</width><height>36</height>
+						<label>$VAR[SiloShowcaseAudio]</label>
+						<font>silo_badge</font>
+						<textoffsetx>12</textoffsetx>
+						<aligny>center</aligny>
+						<enable>false</enable>
+						<disabledcolor>FFEDEDED</disabledcolor>
+						<texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+						<texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
+						<visible>String.IsEmpty(Window(Home).Property(silokodi.playing.badge1)) + !String.IsEmpty(VideoPlayer.AudioCodec)</visible>
+					</control>
+					<control type="image">
+						<top>4</top><width>60</width><height>28</height>
+						<texture>silo/imdb.png</texture>
+						<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.imdb))</visible>
+					</control>
+					<control type="label">
+						<width>auto</width><height>36</height>
+						<aligny>center</aligny>
+						<font>silo_meta</font>
+						<textcolor>FFEDEDED</textcolor>
+						<label> [B]$INFO[Window(Home).Property(silokodi.playing.rating.imdb)][/B]  </label>
+						<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.imdb))</visible>
+					</control>
+					<control type="image">
+						<top>3</top><width>165</width><height>30</height>
+						<texture>silo/tmdb.png</texture>
+						<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.tmdb))</visible>
+					</control>
+					<control type="label">
+						<width>auto</width><height>36</height>
+						<aligny>center</aligny>
+						<font>silo_meta</font>
+						<textcolor>FFEDEDED</textcolor>
+						<label> [B]$INFO[Window(Home).Property(silokodi.playing.rating.tmdb)][/B]  </label>
+						<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.tmdb))</visible>
+					</control>
+				</control>
+				<control type="label">
+					<left>1424</left><top>40</top><width>400</width><height>60</height>
+					<align>right</align>
+					<font>silo_osd_title</font>
+					<textcolor>FFEDEDED</textcolor>
+					<label>$INFO[System.Time]</label>
+					<shadowcolor>99000000</shadowcolor>
+				</control>
+			</control>
+			<!-- end Silo Skyline Showcase overlay -->			<!-- The bar: track, buffered, played. -->
 			<control type="image">
 				<left>96</left><top>862</top><width>1728</width><height>8</height>
 				<texture colordiffuse="33FFFFFF">colors/white.png</texture>
@@ -470,7 +912,52 @@
 				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
 				<midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
 			</control>
-			<!-- The handle: where playback is, or where a seek will land. -->
+			<!-- Silo's marker bands (from SiloKodiConnect), over the bar, the played part too:
+			     intro cyan, recap green, credits orange, preview purple, at 60%. -->
+			<control type="ranges">
+				<left>96</left><top>862</top><width>1728</width><height>8</height>
+				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+				<lefttexture />
+				<midtexture colordiffuse="9922D3EE">colors/white.png</midtexture>
+				<righttexture />
+				<info>Window(Home).Property(silokodi.markers.intro)</info>
+			</control>
+			<control type="ranges">
+				<left>96</left><top>862</top><width>1728</width><height>8</height>
+				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+				<lefttexture />
+				<midtexture colordiffuse="998BC34A">colors/white.png</midtexture>
+				<righttexture />
+				<info>Window(Home).Property(silokodi.markers.recap)</info>
+			</control>
+			<control type="ranges">
+				<left>96</left><top>862</top><width>1728</width><height>8</height>
+				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+				<lefttexture />
+				<midtexture colordiffuse="99FFB74D">colors/white.png</midtexture>
+				<righttexture />
+				<info>Window(Home).Property(silokodi.markers.credits)</info>
+			</control>
+			<control type="ranges">
+				<left>96</left><top>862</top><width>1728</width><height>8</height>
+				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+				<lefttexture />
+				<midtexture colordiffuse="99BA68C8">colors/white.png</midtexture>
+				<righttexture />
+				<info>Window(Home).Property(silokodi.markers.preview)</info>
+			</control>
+<!-- Silo Skyline Showcase chapters (tools/build_showcase.py) -->
+			<!-- Showcase: the chapters' starts, ticks on the bar. -->
+			<control type="ranges">
+				<left>96</left><top>858</top><width>1728</width><height>16</height>
+				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+				<lefttexture />
+				<midtexture colordiffuse="00FFFFFF">colors/white.png</midtexture>
+				<righttexture colordiffuse="CCFFFFFF">colors/white.png</righttexture>
+				<info>Player.Chapters</info>
+				<visible>!Skin.HasSetting(SkylineSiloOSD)</visible>
+			</control>
+			<!-- end Silo Skyline Showcase chapters -->			<!-- The handle: where playback is, or where a seek will land. -->
 			<control type="slider">
 				<left>81</left><top>851</top><width>1758</width><height>30</height>
 				<info>Player.Progress</info>
@@ -492,6 +979,7 @@
 				<font>silo_detail</font>
 				<textcolor>FFEDEDED</textcolor>
 				<label>$VAR[SiloPlayerTime]</label>
+				<shadowcolor>99000000</shadowcolor>
 			</control>
 			<control type="label">
 				<left>924</left><top>890</top><width>900</width><height>36</height>
@@ -499,6 +987,7 @@
 				<font>silo_detail</font>
 				<textcolor>99EDEDED</textcolor>
 				<label>$INFO[Player.TimeRemaining,−,]$INFO[Player.FinishTime, · Ends ,]</label>
+				<shadowcolor>99000000</shadowcolor>
 			</control>
 		</control>
 	</controls>

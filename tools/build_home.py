@@ -12,11 +12,62 @@ Layout (Silo TV's 960-unit grid doubled to 1920x1080):
   SiloKodiConnect publishes as Home window properties (silo.*).
 """
 import os
+import re
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PAGES = ('home', 'movies', 'series')
-TAB_LABELS = {'home': 'Home', 'movies': 'Movies', 'series': 'Series'}
+ROOT =os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Pages with a tab in the bar, then 'custom': the rows of a custom menu item
+# (Skin Shortcuts) the user opened.
+TABBED = ('home', 'movies', 'series', 'requests')
+PAGES = TABBED + ('custom',)
+TAB_LABELS = {'home': 'Home', 'movies': 'Movies', 'series': 'Series', 'requests': 'Requests'}
 MAX_ROWS = 12
+# Custom menu items (Skin Shortcuts): bar slots, and widgets per item.
+CUSTOM_SLOTS = 5
+WIDGETS = 6
+CUSTOM_IDS = list(range(9031, 9031 + CUSTOM_SLOTS))
+TV_TAB = 9006  # Live TV's guide, when Kodi has TV channels
+SHORTCUTS = 9100  # hidden list holding Skin Shortcuts' main menu
+SUBMENU = 9240    # the dropdown of a custom item's submenu
+HOME_CARDS = 20   # cards in a published row (SiloKodiConnect rows.CARDS): each adds ~9 ms to Home's load
+# Pages whose rows are SiloKodiConnect's published cards (Movies' and
+# Series' rows are native Kodi lists where they can be, plugin rows otherwise).
+PUBLISHED_PAGES = ('home', 'requests')
+# Home's first rows only are published cards (at hand the moment Home opens);
+# the rest load from SiloKodiConnect's rows as Movies' do, filling while the
+# first are looked at. Each published card costs Home about 9 ms to load.
+HOME_PUBLISHED_ROWS = 4
+HOME_ROWS = 18  # Silo's Home rows (its admin's choice)
+POSTER_ONLY = ('requests',)  # Silo's request rows are all posters
+# Cards per published row: every slot is parsed as the skin loads (on a SHIELD,
+# 2,200 slots took 25 s; Home's 600, 1 s), so other pages show fewer.
+PAGE_CARDS = {'home': HOME_CARDS}
+OTHER_CARDS = 12
+HOME_CARD_FIELDS = ('type', 'dbid', 'card.title', 'card.sub', 'card.wide_sub', 'hero.title', 'hero.meta',
+                    'hero.facts', 'rating.imdb', 'rating.tmdb',
+                    'hero.detail', 'plot', 'mpaa', 'badge1', 'badge2', 'badge3', 'tint', 'percent', 'playcount',
+                    'art.poster', 'art.landscape', 'art.fanart', 'art.clearlogo', 'request.type', 'request.tmdb',
+                    'status.tint', 'status.seg1', 'status.seg2', 'status.seg3', 'status.seg4',
+                    'request.library', 'request.state', 'request.more', 'request.logo', 'request.from', 'request.to')
+# The fields a page's cards can have, written into Home.xml for every slot:
+# only Requests' cards carry a request or its status, and Requests' rows are
+# all posters (no wide caption or art). Each unused field cost every Home card.
+PAGE_FIELDS = {
+    'home': tuple(f for f in HOME_CARD_FIELDS if not f.startswith(('request.', 'status.'))),
+    'requests': tuple(f for f in HOME_CARD_FIELDS if f not in ('card.wide_sub', 'art.landscape')),
+}
+# Rows a page can show; Requests has Silo's Discover rows (six title rows,
+# then Studios, Networks and Genres), and every slot costs Home.xml size.
+# Silo's libraries have 6 rows each: fewer slots keep Home.xml quick to load.
+PAGE_ROWS = {'home': HOME_ROWS, 'movies': 8, 'series': 8, 'requests': 12, 'custom': WIDGETS}
+
+
+def published(page, slot):
+    """Whether a page's row slot holds published cards, not a path to load."""
+    return page in PUBLISHED_PAGES and not (page == 'home' and slot > HOME_PUBLISHED_ROWS)
+
+
+def rows_of(page):
+    return PAGE_ROWS.get(page, MAX_ROWS)
 LOOKAHEAD = 4  # rows a move may skip over when they are empty
 
 SAFE_X = 88
@@ -24,39 +75,96 @@ BAR_TOP = 56
 TEXT = 'FFEDEDED'
 TEXT_DIM = 'BFEDEDED'      # Silo's secondary text: 75%
 TAB_DIM = 'B3EDEDED'       # Silo's dimmed bar items: 70%
-TITLE_DIM = 'C7EDEDED'     # a card's title until it has focus: 78%
+# Measured on Silo's Apple TV app (October 2026) against Kodi on the SHIELD.
+TITLE_DIM = '66EDEDED'     # a card's title until it has focus: 40%
+SUB_DIM = '4AEDEDED'       # its second line until it has focus: 29%
+HERO_META = '87EDEDED'     # the hero's info line: 53%
+GRID_BACKDROP = '40FFFFFF'  # the focused title's backdrop behind a grid or list page: 25%
+PLOT = '8AEDEDED'          # its plot: 54%
+CAST = '73EDEDED'          # its cast line: 45%
 BACKGROUND = 'FF0D0F12'     # Silo's near-black page
-ROWS_TOP = 612             # row titles sit where Silo's do
+ROWS_TOP = 592             # row titles sit where Silo's do (Silo TV, October 2026)
 # As in Silo, the row band shows the focused row and a sliver of the next
 # row's title, never its cards. Each row is the band's full height with its
 # content in the top ROW_PITCH, and rows overlap by the rest (a negative
 # item gap): Kodi scrolls a grouplist just far enough to show the focused
-# row whole, which puts it at the top and the next title in the last 48 px.
+# row whole, which puts it at the top and the next title in the last 24 px
+# (just below a poster row's captions, as in Silo).
 BAND_H = 1080 - ROWS_TOP
-ROW_PITCH = BAND_H - 48
+ROW_PITCH = BAND_H - 24
+# Cards sit this far below their row's title, leaving Silo's gap between them.
+CARDS_TOP = 96
 
 # Cards as Silo TV draws them: dense posters (88x132 units) and backdrops
 # (180x101), each with a title and a second line beneath.
-POSTER = {'width': 176, 'height': 264, 'gap': 40, 'mask': 'silo/card_poster_mask.png',
-          'ring': 'silo/card_poster_focus.png', 'art': '$VAR[SiloPosterArt]',
-          'sub': '$VAR[SiloCardYear]', 'radius': 12}
-LANDSCAPE = {'width': 360, 'height': 202, 'gap': 40, 'mask': 'silo/card_landscape_mask.png',
-             'ring': 'silo/card_landscape_focus.png', 'art': '$VAR[SiloLandscapeArt]',
-             'sub': '$VAR[SiloCardEpisode]', 'radius': 14}
+POSTER = {'name': 'Poster', 'width': 176, 'height': 264, 'gap': 40, 'mask': 'silo/card_poster_mask.png', 'rim': 'silo/card_poster_rim.png',
+          'art': '$VAR[SiloPosterArt]', 'sub': '$VAR[SiloCardYear]', 'radius': 18}
+LANDSCAPE = {'name': 'Landscape', 'width': 360, 'height': 202, 'gap': 40, 'mask': 'silo/card_landscape_mask.png', 'rim': 'silo/card_landscape_rim.png',
+             'art': '$VAR[SiloLandscapeArt]', 'sub': '$VAR[SiloCardEpisode]', 'radius': 20}
+# A grid's poster (the request browse page): six to a row, as Browse's.
+GRID_POSTER = dict(POSTER, name='GridPoster', width=256, height=384)
 CAPTION_H = 76             # title and second line under a card
+# Focus as Silo's Apple TV app shows it: the card grows, with no ring.
+FOCUS_ZOOM = 110
+
+
+def focus_zoom(condition, indent=24):
+    return ('\n%s<animation effect="zoom" start="100" end="%d" time="180" tween="sine" easing="out" '
+            'center="auto" condition="%s">Conditional</animation>' % (' ' * indent, FOCUS_ZOOM, condition))
+
+
+def watched_disc(x, y, visible, indent=24):
+    """Silo's watched mark: a black tick on an off-white disc, inside the poster's corner."""
+    pad = ' ' * indent
+    return '''
+%(p)s<control type="group">
+%(p)s    <left>%(x)d</left><top>%(y)d</top>
+%(p)s    <visible>%(visible)s</visible>
+%(p)s    <control type="image">
+%(p)s        <width>40</width><height>40</height>
+%(p)s        <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+%(p)s    </control>
+%(p)s    <control type="image">
+%(p)s        <left>9</left><top>9</top><width>22</width><height>22</height>
+%(p)s        <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+%(p)s    </control>
+%(p)s</control>''' % {'p': pad, 'x': x, 'y': y, 'visible': visible}
+
+
+def focus_sheen(width, height, mask, rim, condition, indent=24):
+    """Silo's Apple TV focus over the art, as measured there: a 6% white veil
+    and a hairline rim at 20%."""
+    pad = ' ' * indent
+    return '''
+%(p)s<control type="group">
+%(p)s    <left>6</left><top>6</top>
+%(p)s    <visible>%(condition)s</visible>
+%(p)s    <control type="image">
+%(p)s        <width>%(w)d</width><height>%(h)d</height>
+%(p)s        <texture diffuse="%(mask)s" colordiffuse="0FFFFFFF">colors/white.png</texture>
+%(p)s    </control>
+%(p)s    <control type="image">
+%(p)s        <width>%(w)d</width><height>%(h)d</height>
+%(p)s        <texture colordiffuse="33FFFFFF">%(rim)s</texture>
+%(p)s    </control>
+%(p)s</control>''' % {'p': pad, 'w': width, 'h': height, 'mask': mask, 'rim': rim, 'condition': condition}
 
 # Fonts (Inter, as the Silo apps use); Font.xml gets these between markers.
 FONTS = [  # name, file, size
     ('silo_tab', 'Inter-SemiBold.ttf', 30),
     ('silo_row', 'Inter-Bold.ttf', 34),
     ('silo_title', 'Inter-Bold.ttf', 76),
+    ('silo_osd_title', 'Inter-Bold.ttf', 46),  # the player's episode or film title
     ('silo_meta', 'Inter-Medium.ttf', 28),
     ('silo_plot', 'Inter-Regular.ttf', 28),
     ('silo_detail', 'Inter-Medium.ttf', 24),
+    ('silo_bio', 'Inter-Regular.ttf', 25),  # a person's biography, as Silo's Apple TV app
     ('silo_badge', 'Inter-SemiBold.ttf', 20),
     ('silo_card_title', 'Inter-SemiBold.ttf', 26),
     ('silo_card_sub', 'Inter-Medium.ttf', 24),
     ('silo_wordmark', 'Inter-Bold.ttf', 44),
+    ('silo_clock', 'Inter-SemiBold.ttf', 58),
+    ('silo_mono', 'NotoMono-Regular.ttf', 21),  # System info's columns (build_frame.py)  # the shared frame's clock (build_frame.py)
     ('silo_key', 'Inter-Medium.ttf', 40),
 ]
 
@@ -76,26 +184,116 @@ def list_id(page_index, slot, landscape):
     return 5000 + 100 * page_index + (50 if landscape else 0) + slot
 
 
-def card_layout(card, focused, control_id=None):
-    ring = ''
-    zoom = ''
-    if focused:
-        ring = '''
-                        <control type="image">
-                            <left>0</left><top>0</top>
-                            <width>%(rw)d</width><height>%(rh)d</height>
-                            <texture colordiffuse="%(text)s">%(ring)s</texture>
-                            <visible>Control.HasFocus(%(id)d)</visible>
-                        </control>''' % {'rw': card['width'] + 12, 'rh': card['height'] + 12, 'text': TEXT,
-                                         'ring': card['ring'], 'id': control_id}
-        # Kodi draws every row's selected item with this layout, focused or
-        # not: only the row that has focus shows the ring and the lift.
-        zoom = ('\n                        <animation effect="zoom" start="100" end="104" time="160" tween="sine" '
-                'center="auto" condition="Control.HasFocus(%d)">Conditional</animation>' % control_id)
+def styles(page):
+    """A row slot's lists: a poster and a landscape list (only the one for the
+    row's style shows, so only its path loads), or, for published cards, one
+    list that draws either style. Published cards are written into Home.xml,
+    so a second list doubled what Kodi parses as the skin loads."""
+    return (False,) if page in PUBLISHED_PAGES else (False, True)
+
+
+def home_waiting(row):
+    """Home before a row has focus, showing its published row `row`'s first
+    card (row 1's, or row 2's when row 1 has none)."""
+    condition = ('String.IsEmpty(%s) + [String.IsEqual(%s,home) | String.IsEmpty(%s)] + Integer.IsGreater(%s,0)'
+                 % (prop('silo.row'), prop('silo.page'), prop('silo.page'), prop('silo.home.%d.cards' % row)))
+    return condition if row == 1 else condition + ' + !Integer.IsGreater(%s,0)' % prop('silo.home.1.cards')
+
+
+def waiting_rows():
+    """[(condition, list id)]: on a page other than Home, before any row has
+    had focus, the hero shows the selected item of the page's first loaded
+    row (Kodi gives a list's item without focus), not a black hero. The
+    first showing one: Requests' first rows are Yours', hidden under Discover,
+    and Kodi gives no item for a hidden list."""
+    out = []
+    for index, page in enumerate(PAGES):
+        if page == 'home':
+            continue
+        for slot in range(1, (LOOKAHEAD if page == 'requests' else 2) + 1):
+            for landscape in styles(page):
+                target = list_id(index, slot, landscape)
+                out.append(('String.IsEmpty(%s) + %s + %s + Integer.IsGreater(Container(%d).NumItems,0)'
+                            % (prop('silo.row'), page_visible(page), shown(target), target), target))
+    return out
+
+
+def card_layout(card, focused, control_id=None, near=None):
+    """A row's card: the shared include from Includes_SiloCards.xml (a
+    focused card is told its list's id), which keeps Home.xml small. near:
+    when the card's artwork shows (rows_near), else always."""
+    if not focused:
+        if near:
+            return ('\n                    <include content="SiloCard%s"><param name="near" value="%s" /></include>'
+                    % (card['name'], near))
+        return '\n                    <include>SiloCard%s</include>' % card['name']
+    return ('\n                    <include content="SiloCardFocused%s"><param name="id" value="%d" /></include>'
+            % (card['name'], control_id))
+
+
+def published_item(prefix, page):
+    """One card slot of a published row: its page's fields from the Home window."""
+    return ('\n                        <item><label>$INFO[Window(Home).Property(%s.label)]</label>' % prefix +
+            ''.join('<property name="home.%s">$INFO[Window(Home).Property(%s.%s)]</property>' % (field, prefix, field)
+                    for field in PAGE_FIELDS.get(page, HOME_CARD_FIELDS)) +
+            '<visible>!String.IsEmpty(Window(Home).Property(%s.type))</visible></item>' % prefix)
+
+
+def write_card_includes():
+    """The card includes every row (Home, Search, More Like This) uses, and
+    a Home card: one item of SiloKodiConnect's published rows."""
+    home_card = '''
+    <include name="SiloHomeCard">
+        <param name="p" />
+        <definition>
+            <item>
+                <label>$INFO[Window(Home).Property($PARAM[p].label)]</label>%s
+                <visible>!String.IsEmpty(Window(Home).Property($PARAM[p].type))</visible>
+            </item>
+        </definition>
+    </include>''' % ''.join('\n                <property name="home.%s">$INFO[Window(Home).Property($PARAM[p].%s)]</property>'
+                            % (field, field) for field in HOME_CARD_FIELDS)
+    includes = home_card + ''.join('''
+    <include name="SiloCard%(name)s">
+        <param name="near" default="true" />
+        <definition>%(normal)s
+        </definition>
+    </include>
+    <include name="SiloCardFocused%(name)s">
+        <param name="id" />
+        <param name="near" default="true" />
+        <definition>%(focused)s
+        </definition>
+    </include>''' % {'name': card['name'], 'normal': card_body(card, False, near='$PARAM[near]'),
+                     'focused': card_body(card, True, near='$PARAM[near]')}
+                       for card in (POSTER, LANDSCAPE, GRID_POSTER)) + '''
+    <include name="SiloCardBrand">%s
+    </include>
+    <include name="SiloCardFocusedBrand">
+        <param name="id" />
+        <definition>%s
+        </definition>
+    </include>''' % (brand_body(False), brand_body(True))
+    with open(os.path.join(ROOT, 'xml', 'Includes_SiloCards.xml'), 'w') as handle:
+        handle.write('<?xml version="1.0" encoding="UTF-8"?>\n<!-- Generated by tools/build_home.py: Silo\'s cards, '
+                     'shared by every row. -->\n<includes>%s\n</includes>\n' % includes)
+    path = os.path.join(ROOT, 'xml', 'Includes.xml')
+    text = open(path).read()
+    if 'Includes_SiloCards.xml' not in text:
+        text = text.replace('\t<include file="Includes_Home.xml" />',
+                            '\t<include file="Includes_Home.xml" />\n\t<include file="Includes_SiloCards.xml" />', 1)
+        with open(path, 'w') as handle:
+            handle.write(text)
+
+
+def card_body(card, focused, control_id='$PARAM[id]', near=None):
+    # Kodi draws every row's selected item with this layout, focused or
+    # not: only the row that has focus lifts its card.
+    zoom = focus_zoom('Control.HasFocus(%s)' % control_id) if focused else ''
     # Silo dims a card's title until the card has focus.
-    title_visible = title_focused = ''
+    title_visible = title_focused = sub_focused = ''
     if focused:
-        title_visible = '\n                            <visible>!Control.HasFocus(%d)</visible>' % control_id
+        title_visible = '\n                            <visible>!Control.HasFocus(%s)</visible>' % control_id
         title_focused = '''
                         <control type="label">
                             <left>6</left><top>%(t1)d</top>
@@ -103,21 +301,34 @@ def card_layout(card, focused, control_id=None):
                             <font>silo_card_title</font>
                             <textcolor>%(text)s</textcolor>
                             <label>$VAR[SiloCardTitle]</label>
-                            <visible>Control.HasFocus(%(id)d)</visible>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
+                            <visible>Control.HasFocus(%(id)s)</visible>
                         </control>''' % {'t1': card['height'] + 20, 'w': card['width'], 'text': TEXT, 'id': control_id}
+        sub_focused = '''
+                        <control type="label">
+                            <left>6</left><top>%(t2)d</top>
+                            <width>%(w)d</width><height>32</height>
+                            <font>silo_card_sub</font>
+                            <textcolor>%(text)s</textcolor>
+                            <label>%(sub)s</label>
+                            <visible>Control.HasFocus(%(id)s)</visible>
+                        </control>''' % {'t2': card['height'] + 54, 'w': card['width'], 'text': TEXT, 'sub': card['sub'],
+                                         'id': control_id}
     return '''
                     <control type="group">%(zoom)s
                         <control type="image">
                             <left>6</left><top>6</top>
                             <width>%(w)d</width><height>%(h)d</height>
                             <texture background="true" diffuse="%(mask)s" fallback="colors/grey.png">%(art)s</texture>
-                            <aspectratio>scale</aspectratio>
+                            <aspectratio>scale</aspectratio>%(near)s
                         </control>
                         <control type="image">
                             <left>6</left><top>6</top>
                             <width>%(w)d</width><height>%(h)d</height>
                             <texture diffuse="%(mask)s">silo/card_scrim.png</texture>
-                        </control>
+                        </control>%(no_art)s
                         <control type="progress">
                             <left>%(px)d</left><top>%(pt)d</top>
                             <width>%(pw)d</width><height>6</height>
@@ -126,12 +337,14 @@ def card_layout(card, focused, control_id=None):
                             <info>ListItem.PercentPlayed</info>
                             <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                         </control>
-                        <control type="image">
-                            <right>16</right><top>16</top>
-                            <width>32</width><height>32</height>
-                            <texture colordiffuse="%(text)s">OverlayWatched.png</texture>
-                            <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
-                        </control>%(ring)s
+                        <control type="progress">
+                            <left>%(px)d</left><top>%(pt)d</top>
+                            <width>%(pw)d</width><height>6</height>
+                            <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
+                            <midtexture colordiffuse="%(text)s">colors/white.png</midtexture>
+                            <info>ListItem.Property(home.percent)</info>
+                            <visible>!String.IsEmpty(ListItem.Property(home.percent))</visible>
+                        </control>%(sheen)s%(watched)s
                         <control type="label">
                             <left>6</left><top>%(t1)d</top>
                             <width>%(w)d</width><height>34</height>
@@ -143,17 +356,136 @@ def card_layout(card, focused, control_id=None):
                             <left>6</left><top>%(t2)d</top>
                             <width>%(w)d</width><height>32</height>
                             <font>silo_card_sub</font>
-                            <textcolor>%(dim)s</textcolor>
-                            <label>%(sub)s</label>
-                        </control>
+                            <textcolor>%(sub_dim)s</textcolor>
+                            <label>%(sub)s</label>%(title_visible)s
+                        </control>%(sub_focused)s
                     </control>''' % {'zoom': zoom, 'w': card['width'], 'h': card['height'], 'mask': card['mask'],
                                     'art': card['art'], 'title_color': TITLE_DIM, 'title_visible': title_visible,
-                                    'title_focused': title_focused,
+                                    # When the artwork shows (the includes' near, rows_near).
+                                    'near': '\n                            <visible>%s</visible>' % near if near else '',
+                                    'title_focused': title_focused, 'sub_focused': sub_focused,
                                     # On the card's bottom edge, short of the rounded corners
                                     # (Kodi can't clip a progress bar to the card's mask).
                                     'px': 6 + card['radius'], 'pt': card['height'], 'pw': card['width'] - 2 * card['radius'],
-                                    'text': TEXT, 'dim': TEXT_DIM, 'ring': ring, 'sub': card['sub'],
-                                    't1': card['height'] + 20, 't2': card['height'] + 54}
+                                    'text': TEXT, 'sub_dim': SUB_DIM, 'sub': card['sub'],
+                                    't1': card['height'] + 20, 't2': card['height'] + 54,
+                                    'sheen': focus_sheen(card['width'], card['height'], card['mask'], card['rim'],
+                                                         'Control.HasFocus(%s)' % control_id) if focused else '',
+                                    # From the poster's left: <right> is the item's edge, gap included.
+                                    'watched': watched_disc(6 + card['width'] - 10 - 40, 16,
+                                                            'Integer.IsGreater(ListItem.PlayCount,0) | '
+                                                            '!String.IsEmpty(ListItem.Property(home.playcount))'),
+                                    'no_art': no_art_card(card) + request_tags(card)}
+
+
+def request_tags(card):
+    """Silo's tag on a Requests poster, at its top left: LIBRARY when the
+    title is in the library, else its state (Requested, Queued...): one tag,
+    as LIBRARY already says it's available. A published card's or a plugin item's."""
+    if card['name'] not in ('Poster', 'GridPoster'):
+        return ''
+    def tag(label, visible, fill, ink, top, width):
+        # A fixed pill and a label, not an auto-width button: Kodi sized
+        # those only while their row had focus, leaving an empty pill.
+        return '''
+                        <control type="group">
+                            <left>14</left><top>%(top)d</top>
+                            <visible>%(visible)s</visible>
+                            <control type="image">
+                                <width>%(w)d</width><height>30</height>
+                                <texture border="8" colordiffuse="%(fill)s">silo/badge_solid.png</texture>
+                            </control>
+                            <control type="label">
+                                <width>%(w)d</width><height>30</height>
+                                <align>center</align><aligny>center</aligny>
+                                <font>silo_badge</font>
+                                <textcolor>%(ink)s</textcolor>
+                                <label>%(label)s</label>
+                            </control>
+                        </control>''' % {'label': label, 'visible': visible, 'fill': fill, 'ink': ink, 'top': top, 'w': width}
+    # Kodi doesn't read a $VAR in a visible condition: the properties themselves.
+    library = '[!String.IsEmpty(ListItem.Property(home.request.library)) | !String.IsEmpty(ListItem.Property(silo.request.library))]'
+    state = '[!String.IsEmpty(ListItem.Property(home.request.state)) | !String.IsEmpty(ListItem.Property(silo.request.status))]'
+    state_label = '$INFO[ListItem.Property(home.request.state)]$INFO[ListItem.Property(silo.request.status)]'
+    return (tag('LIBRARY', library, 'CC16181C', TEXT, 14, 96) +
+            tag(state_label, state + ' + !' + library, 'F2EDEDED', 'FF101010', 14, 124))
+
+
+# Silo's Studios, Networks and Genres cards: a wide tile with the brand's logo
+# (TMDB's, in white) on Silo's dark blue, or a genre's name on its colours.
+BRAND = {'name': 'Brand', 'width': 360, 'height': 180, 'gap': 40, 'mask': 'silo/card_landscape_mask.png',
+         'rim': 'silo/card_landscape_rim.png', 'radius': 20}
+
+
+def brand_body(focused, control_id='$PARAM[id]'):
+    card = BRAND
+    lit = 'Control.HasFocus(%s)' % control_id
+    return '''
+                    <control type="group">%(zoom)s
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>%(w)d</width><height>%(h)d</height>
+                            <texture diffuse="%(mask)s" colordiffuse="FF1E293B">colors/white.png</texture>
+                            <visible>String.IsEmpty(ListItem.Property(home.request.from))</visible>
+                        </control>
+                        <!-- A genre: its two colours, the second fading in from the right. -->
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>%(w)d</width><height>%(h)d</height>
+                            <texture diffuse="%(mask)s" colordiffuse="$INFO[ListItem.Property(home.request.from)]">colors/white.png</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(home.request.from))</visible>
+                        </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>%(w)d</width><height>%(h)d</height>
+                            <texture diffuse="%(mask)s" flipx="true" colordiffuse="$INFO[ListItem.Property(home.request.to)]">silo/scrim_side.png</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(home.request.to))</visible>
+                        </control>
+                        <control type="image">
+                            <left>%(lx)d</left><top>%(ly)d</top>
+                            <width>%(lw)d</width><height>%(lh)d</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture background="true">$INFO[ListItem.Property(home.request.logo)]</texture>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>6</top>
+                            <width>%(w)d</width><height>%(h)d</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_row</font>
+                            <textcolor>%(text)s</textcolor>
+                            <label>$INFO[ListItem.Property(home.card.title)]</label>
+                            <visible>String.IsEmpty(ListItem.Property(home.request.logo))</visible>
+                        </control>%(sheen)s
+                    </control>''' % {'zoom': focus_zoom(lit) if focused else '', 'w': card['width'], 'h': card['height'],
+                                    'mask': card['mask'], 'text': TEXT, 'lx': 6 + 40, 'ly': 6 + 36,
+                                    'lw': card['width'] - 80, 'lh': card['height'] - 72,
+                                    'sheen': focus_sheen(card['width'], card['height'], card['mask'], card['rim'], lit)
+                                    if focused else ''}
+
+
+def no_art_card(card):
+    """A poster with no art at all: Silo's card colour with the title on it,
+    in place of the grey a missing picture leaves."""
+    if card['name'] not in ('Poster', 'GridPoster'):
+        return ''
+    return '''
+                        <control type="group">
+                            <visible>$EXP[SiloNoPosterArt]</visible>
+                            <control type="image">
+                                <left>6</left><top>6</top>
+                                <width>%(w)d</width><height>%(h)d</height>
+                                <texture diffuse="%(mask)s" colordiffuse="FF262A31">colors/white.png</texture>
+                            </control>
+                            <control type="textbox">
+                                <left>22</left><top>22</top>
+                                <width>%(tw)d</width><height>%(th)d</height>
+                                <align>center</align><aligny>center</aligny>
+                                <font>silo_card_title</font>
+                                <textcolor>%(dim)s</textcolor>
+                                <label>$VAR[SiloCardTitle]</label>
+                            </control>
+                        </control>''' % {'w': card['width'], 'h': card['height'], 'mask': card['mask'],
+                                         'tw': card['width'] - 32, 'th': card['height'] - 32, 'dim': TEXT_DIM}
 
 
 def shown(target):
@@ -168,10 +500,27 @@ def shown(target):
 def row_rules(page, page_index, slot, landscape):
     key = 'silo.%s.%d' % (page, slot)
     lid = list_id(page_index, slot, landscape)
-    style = ('String.IsEqual(%s,landscape)' if landscape else '!String.IsEqual(%s,landscape)') % prop(key + '.style')
+    # The list for the row's style (a published page's one list draws either).
+    style = '' if page in PUBLISHED_PAGES else ' + ' + (
+        ('String.IsEqual(%s,landscape)' if landscape else '!String.IsEqual(%s,landscape)') % prop(key + '.style'))
+    if published(page, slot):
+        # Published cards: the row shows when SiloKodiConnect has cards for
+        # it. Not the list's item count: Kodi doesn't evaluate a hidden list's
+        # items, so the row would wait for the page's loading flag. Its one
+        # list draws either style (styles()).
+        rule = '%s + !String.IsEmpty(%s) + Integer.IsGreater(%s,0)' % (
+            page_visible(page), prop(key + '.path'), prop(key + '.cards'))
+        if page == 'requests':
+            # Yours' rows under the Yours pill, Discover's under Discover.
+            rule += ' + [[String.IsEqual(%s,yours) + %s] | [String.IsEmpty(%s) + !%s]]' % (
+                prop(key + '.section'), YOURS_SHOWN, prop(key + '.section'), YOURS_SHOWN)
+        return rule
     # Empty rows hide, as in Silo; Kodi still loads a list hidden this way.
-    return '%s + !String.IsEmpty(%s) + %s + [Integer.IsGreater(Container(%d).NumItems,0) | Container(%d).IsUpdating]' \
-        % (page_visible(page), prop(key + '.path'), style, lid, lid)
+    # silo.<page>.loading (SiloKodiConnect) keeps rows shown while they load:
+    # Kodi never loads a hidden list whose path changed.
+    return ('%s + !String.IsEmpty(%s)%s + [Integer.IsGreater(Container(%d).NumItems,0) | Container(%d).IsUpdating'
+            ' | String.IsEqual(%s,1)]' % (page_visible(page), prop(key + '.path'), style, lid, lid,
+                                         prop('silo.%s.loading' % page)))
 
 
 def first_visible(action, candidates, indent='                    '):
@@ -185,7 +534,7 @@ def first_visible(action, candidates, indent='                    '):
 
 
 def page_rows(page_index, slots):
-    return [list_id(page_index, slot, landscape) for slot in slots for landscape in (False, True)]
+    return [list_id(page_index, slot, landscape) for slot in slots for landscape in styles(PAGES[page_index])]
 
 
 def moves(page_index, slot):
@@ -193,70 +542,194 @@ def moves(page_index, slot):
     up from the top row to the menu bar. Kodi doesn't move focus between
     lists in groups inside a grouplist, so each row names its neighbours."""
     # Look a few rows ahead: enough to skip empty rows without bloating the XML.
-    down = page_rows(page_index, range(slot + 1, min(MAX_ROWS, slot + LOOKAHEAD) + 1))
+    down = page_rows(page_index, range(slot + 1, min(rows_of(PAGES[page_index]), slot + LOOKAHEAD) + 1))
+    if PAGES[page_index] in COLLECTION_PAGES:
+        down.append(collection_id(page_index))
     up = page_rows(page_index, range(slot - 1, max(0, slot - LOOKAHEAD), -1))
     out = first_visible('ondown', down) + first_visible('onup', up)
     # The top row goes up to the current page's tab (a button: focusing the
     # bar's grouplist itself leaves left and right with nowhere to go).
     above = ' + '.join('!' + shown(k) for k in up)
-    out += '\n                    <onup%s>SetFocus(%d)</onup>' % (' condition="%s"' % above if above else '',
-                                                               9002 + page_index)
+    target = '%d' % (9002 + page_index) if PAGES[page_index] in TABBED else '$INFO[%s]' % prop('silo.custom.button')
+    # Up from the top row: the page's pills (a custom item's when it has a
+    # submenu), else its tab. Kodi runs every onup whose condition holds.
+    if PAGES[page_index] in PILL_PAGES:
+        ups = [(above, '%d' % pills_id(page_index))]
+    elif PAGES[page_index] == 'custom':
+        ups = [(' + '.join(c for c in (above, CUSTOM_HAS_PILLS) if c), '%d' % CUSTOM_PILLS),
+               (' + '.join(c for c in (above, '!' + CUSTOM_HAS_PILLS) if c), target)]
+    else:
+        ups = [(above, target)]
+    for condition, to in ups:
+        out += '\n                    <onup%s>SetFocus(%s)</onup>' % (' condition="%s"' % condition if condition else '', to)
+    # Back goes to the page's tab, as in Silo.
+    out += '\n                    <onback>SetFocus(%s)</onback>' % target
     return out
+
+
+ROW_CLICKS = '''
+                    <!-- A title Silo can request opens with Silo's full details. -->
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
+                    <!-- A published card opens its info page through SiloKodiConnect:
+                         a title Silo can request, its request page. -->
+                    <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
+                    <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + %(library)s">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + %(library)s]">Action(Info)</onclick>''' % {
+    'library': '[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | '
+               'String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)'}
+
+
+def rows_near(page_index, slot):
+    """When a row's cards show their artwork: its row within one above or two
+    below the focused one (the first rows before any has focus). Kodi keeps
+    a laid-out card's picture, and every row is laid out (off screen too):
+    Home's 18 rows held 165 MB more than this on a SHIELD, which a 4K film
+    starting then needed. A row's titles still load, so moves stay quick."""
+    ids = page_rows(page_index, [k for k in range(slot - 2, slot + 2) if 1 <= k <= rows_of(PAGES[page_index])])
+    terms = ['String.IsEqual(%s,%d)' % (prop('silo.row'), i) for i in ids]
+    if slot <= 3:
+        terms.insert(0, 'String.IsEmpty(%s)' % prop('silo.row'))
+    return '[%s]' % ' | '.join(terms)
 
 
 def row(page, page_index, slot, landscape):
     card = LANDSCAPE if landscape else POSTER
     key = 'silo.%s.%d' % (page, slot)
     rules = '$EXP[SiloRow%d]' % list_id(page_index, slot, landscape)
-    # The library_updated suffix changes when SiloKodiConnect writes the
-    # library, which makes Kodi reload the row. Kodi reads a $VAR in a content
-    # path only once, when the window opens, so this must stay $INFO: a row
-    # without a path logs one harmless error at start-up.
-    path = '$INFO[%s]&amp;refresh=$INFO[%s]' % (prop(key + '.path'), prop('silokodi.library_updated'))
-    item_w = card['width'] + card['gap']
-    item_h = card['height'] + 12 + CAPTION_H
+    # SiloKodiConnect publishes each row's path under its style (the slot has
+    # a poster and a landscape list, so only the list that shows loads), empty
+    # until the page has been viewed, and with a refresh token it changes when
+    # it writes the library, which reloads the row. An empty path keeps Kodi
+    # from trying the row too early: a list whose load failed never retries.
+    # Kodi reads a $VAR in a content path only once, so this must stay $INFO.
+    path = '$INFO[%s]' % prop(key + ('.landscape' if landscape else '.poster'))
+    if page in PUBLISHED_PAGES:
+        # A Home row past the published ones: its one list loads whichever
+        # path its style has (the other is empty).
+        path = '$INFO[%s]$INFO[%s]' % (prop(key + '.poster'), prop(key + '.landscape'))
+    if page == 'custom':
+        # A Skin Shortcuts widget: any Kodi path, used as it is.
+        path = '$INFO[%s]' % prop(key + '.path')
+    # Home's, Movies', Series' and Requests' rows: the cards SiloKodiConnect
+    # publishes, in Silo's order, so a row draws at once (no plugin, no
+    # Python) and keeps Silo's ranking. A custom page's widgets are any
+    # Kodi path, so they load as they are.
+    content = '<content target="videos">%s</content>' % path
+    if page != 'custom':
+        # A Kodi library row (Movies' and Series' Recently Added, say) comes
+        # in its sort from SiloKodiConnect: Kodi ignores a videodb path's own
+        # order, and sorts before it cuts the row to its limit. Empty for a
+        # plugin row, which keeps its order. browse="never": no "More..." item
+        # after the limit (Kodi 20+ adds one by default), as Silo's rows end.
+        content = ('<content target="videos" sortby="$INFO[%s]" sortorder="$INFO[%s]" limit="$INFO[%s]" '
+                   'browse="never">%s</content>') % (
+            prop(key + '.sort'), prop(key + '.order'), prop(key + '.limit'), path)
+    if page in POSTER_ONLY and landscape:
+        content = '<content></content>'  # never shown: no slots to parse
+    elif published(page, slot):
+        # Written out, not an include with a parameter: Kodi expands those
+        # slowly as the skin loads (thousands of them took 25 s on a SHIELD).
+        content = '<content>%s\n                    </content>' % ''.join(
+            published_item('silo.%s.%d.%d' % (page, slot, card), page)
+            for card in range(1, PAGE_CARDS.get(page, OTHER_CARDS) + 1))
+    def layouts(card, condition=''):
+        when = ' condition="%s"' % condition if condition else ''
+        size = 'width="%d" height="%d"%s' % (card['width'] + card['gap'], card['height'] + 12 + CAPTION_H, when)
+        return ('\n                    <itemlayout %s>%s\n                    </itemlayout>'
+                '\n                    <focusedlayout %s>%s\n                    </focusedlayout>'
+                % (size, card_layout(card, False, near=rows_near(page_index, slot)), size,
+                   card_layout(card, True, list_id(page_index, slot, landscape))))
+    if page == 'requests':
+        # Poster rows, and Silo's Studios, Networks and Genres rows of tiles.
+        brand = 'String.IsEqual(%s,brand)' % prop(key + '.style')
+        item_layouts = layouts(BRAND, brand) + layouts(POSTER, '!' + brand)
+        item_h = max(c['height'] for c in (POSTER, BRAND)) + 12 + CAPTION_H
+    elif page in PUBLISHED_PAGES and page not in POSTER_ONLY:
+        # One list for either style: Kodi picks the item layout by condition.
+        wide = 'String.IsEqual(%s,landscape)' % prop(key + '.style')
+        item_layouts = layouts(LANDSCAPE, wide) + layouts(POSTER, '!' + wide)
+        item_h = max(c['height'] for c in (POSTER, LANDSCAPE)) + 12 + CAPTION_H
+    else:
+        item_layouts = layouts(card)
+        item_h = card['height'] + 12 + CAPTION_H
     return '''
             <control type="group">
                 <height>%(group_h)d</height>
                 <visible>%(rules)s</visible>
+                <!-- Silo marks Continue Watching with a play icon before its title. -->
+                <control type="image">
+                    <left>%(x)d</left><top>9</top>
+                    <width>28</width><height>28</height>
+                    <texture colordiffuse="%(text)s">silo/play_circle.png</texture>
+                    <visible>String.IsEqual(%(type)s,continue_watching)</visible>
+                </control>
                 <control type="label">
                     <left>%(x)d</left><top>0</top>
                     <width>1500</width><height>46</height>
                     <font>silo_row</font>
                     <textcolor>%(text)s</textcolor>
                     <label>$INFO[%(title)s]</label>
+                    <visible>!String.IsEqual(%(type)s,continue_watching)</visible>
+                </control>
+                <control type="label">
+                    <left>%(icon_x)d</left><top>0</top>
+                    <width>1500</width><height>46</height>
+                    <font>silo_row</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label>$INFO[%(title)s]</label>
+                    <visible>String.IsEqual(%(type)s,continue_watching)</visible>
                 </control>
                 <control type="list" id="%(id)d">
                     <visible>%(rules)s</visible>
-                    <left>%(lx)d</left><top>56</top>
+                    <left>%(lx)d</left><top>%(cards_top)d</top>
                     <width>%(lw)d</width><height>%(item_h)d</height>
                     <orientation>horizontal</orientation>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <preloaditems>2</preloaditems>
-                    <onclick>Action(Info)</onclick>
+%(clicks)s
                     <onfocus>SetProperty(silo.row,%(id)d,home)</onfocus>%(moves)s
-                    <content target="videos">%(path)s</content>
-                    <itemlayout width="%(item_w)d" height="%(item_h)d">%(normal)s
-                    </itemlayout>
-                    <focusedlayout width="%(item_w)d" height="%(item_h)d">%(focused)s
-                    </focusedlayout>
+                    %(content)s%(layouts)s
                 </control>
             </control>''' % {
-        'group_h': BAND_H, 'rules': rules, 'x': SAFE_X, 'text': TEXT, 'title': prop(key + '.title'),
-        'id': list_id(page_index, slot, landscape), 'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'item_h': item_h,
-        'moves': moves(page_index, slot), 'path': path, 'item_w': item_w, 'normal': card_layout(card, False),
-        'focused': card_layout(card, True, list_id(page_index, slot, landscape))}
+        'group_h': BAND_H, 'rules': rules, 'x': SAFE_X, 'text': TEXT, 'title': prop(key + '.title'), 'type': prop(key + '.type'), 'icon_x': SAFE_X + 42,
+        'cards_top': CARDS_TOP, 'id': list_id(page_index, slot, landscape), 'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'item_h': item_h,
+        'moves': moves(page_index, slot), 'path': path, 'content': content, 'layouts': item_layouts,
+        # A custom item's widgets are any Kodi list: OK does what Kodi does
+        # (plays an item, opens a folder). Silo's rows open details.
+        'clicks': '' if page == 'custom' else ROW_CLICKS}
 
 
 # Silo dims the whole bar to 70% while focus is down in the rows.
 BAR_DIM = '!ControlGroup(9000).HasFocus() + !Control.HasFocus(9011)'
-BAR_ORDER = [9001, 9002, 9003, 9004, 9009, 9010, 9011]  # Search, Home, Movies, Series, Settings, Power, profile
+BAR_ORDER = [9001, 9002, 9003, 9004, 9005, TV_TAB] + CUSTOM_IDS + [9009, 9010, 9011]  # Search, tabs, TV, custom items, Settings, Power, profile
 
 
-def bar_moves(control_id):
+def bar_moves(control_id, down=None, menu=None):
     """Left, right and down for a bar button. Movies and Series can be
-    hidden, so each direction takes the nearest visible button."""
-    out = bar_down('                    ')
+    hidden, so each direction takes the nearest visible button. down: the
+    button's own Down (a tab's sub-menu), in place of the rows."""
+    # Leaving a button opens its dropdown again next time (Back closed it).
+    clear = 'ClearProperty(silo.drop.closed,home)'
+    out = ''.join('\n                    <%s>%s</%s>' % (a, clear, a) for a in ('onleft', 'onright'))
+    if menu:
+        # Back on the button closes its open dropdown, as in Silo; when it is
+        # closed, Back does what it always did, and Down goes to the rows.
+        out += close_on_back(menu)
+        closed = 'String.IsEqual(%s,%d)' % (prop('silo.drop.closed'), menu)
+        out += only_when(bar_down('                    '), closed)
+        out += '\n                    <ondown condition="!%s">%s</ondown>' % (closed, down)
+    else:
+        out += ('\n                    <ondown>%s</ondown>' % down) if down else bar_down('                    ')
+    # Last, so the conditions before it still see a dropdown Back closed.
+    out += '\n                    <ondown>%s</ondown>' % clear
     index = BAR_ORDER.index(control_id)
     for action, neighbours in (('onright', BAR_ORDER[index + 1:]), ('onleft', BAR_ORDER[:index][::-1])):
         skipped = []
@@ -267,14 +740,40 @@ def bar_moves(control_id):
     return out
 
 
-# Silo's library sections for a page's tab (TvLibraryPill.set): OK on the tab of
-# the page you are on opens them (no marker, by request); down still goes to the rows. Collections are
+def only_when(actions, condition):
+    """Actions (<ondown> and the like) that also need condition."""
+    return re.sub(r'<(on\w+)( condition="([^"]*)")?>',
+                  lambda m: '<%s condition="%s%s">' % (m.group(1), condition,
+                                                       ' + [%s]' % m.group(3) if m.group(3) else ''),
+                  actions)
+
+
+def close_on_back(menu, condition=None):
+    shown = '!String.IsEqual(%s,%d)' % (prop('silo.drop.closed'), menu)
+    return '\n                    <onback condition="%s">SetProperty(silo.drop.closed,%d,home)</onback>' % (
+        ' + '.join(c for c in (condition, shown) if c), menu)
+
+
+# Silo's library sections for a page's tab (TvLibraryPill.set): a dropdown
+# under the tab whenever it has focus, as Silo's; Down goes into it, OK on the
+# tab opens the page. Collections are
 # the page's libraries' collections, linked by SiloKodiConnect.
+YOURS = 'Yours$INFO[Window(Home).Property(silokodi.requests_mine),   ,]'
+# The Requests page's view: Discover's rows, or Yours' (In progress, Available)
+# under the same hero, as Silo's two pills.
+YOURS_SHOWN = 'String.IsEqual(Window(Home).Property(silo.requests.view),yours)'
 SECTIONS = {
-    'movies': [('Recommended', None), ('Browse', 'videodb://movies/titles/'),
+    # As Silo's Apple TV app: Browse, its newest-first Recently Added, Genres
+    # (Kodi's genre list) and Collections.
+    'movies': [('Recommended', None), ('Browse', 'videodb://movies/titles/'), ('Recently Added', None),
+               ('Genres', 'videodb://movies/genres/'),
                ('Collections', '$INFO[Window(Home).Property(silo.movies.collections)]')],
-    'series': [('Recommended', None), ('Browse', 'videodb://tvshows/titles/'),
+    'series': [('Recommended', None), ('Browse', 'videodb://tvshows/titles/'), ('Recently Added', None),
+               ('Genres', 'videodb://tvshows/genres/'),
                ('Collections', '$INFO[Window(Home).Property(silo.series.collections)]')],
+    # Silo's Requests: Discover (the page's rows) and Yours (the profile's
+    # requests, with their count). Search finds a title not yet in the library.
+    'requests': [('Discover', None), (YOURS, None)],
 }
 BAR_GAP = 8
 
@@ -284,18 +783,15 @@ def tab_width(page):
 
 
 def open_sections(page, control_id):
-    """OK on the tab of the page you are on opens its sections. Kodi checks a
-    button's click conditions before running any of its actions."""
-    if page not in SECTIONS:
-        return ''
-    return ('                    <onclick condition="%s">SetFocus(%d,0,absolute)</onclick>\n'
-            % (page_visible(page), control_id + 200))
+    """A tab's sections open with Down (see bar_moves); nothing here now."""
+    return ''
 
 
 def bar_positions():
     """Each bar button's left edge: the bar is a centred grouplist."""
-    widths = [60] + [tab_width(page) for page in PAGES] + [60, 60]
-    ids = [9001] + [9002 + index for index in range(len(PAGES))] + [9009, 9010]
+    # TV's width too (it shows when Kodi has TV channels), so the bar keeps room for it.
+    widths = [60] + [tab_width(page) for page in TABBED] + [60 + 17 * 2, 60, 60]
+    ids = [9001] + [9002 + index for index in range(len(TABBED))] + [TV_TAB, 9009, 9010]
     total = sum(widths) + BAR_GAP * (len(widths) - 1)
     x, out = (1920 - total) // 2, {}
     for control_id, width in zip(ids, widths):
@@ -304,8 +800,413 @@ def bar_positions():
     return out
 
 
+DROP_W, DROP_ROW = 460, 64  # Silo's dropdown under a tab
+
+
+DROP_DWELL = 250  # ms a tab holds focus before its dropdown opens
+DROPDOWNS = []    # (shown condition, list id) of every dropdown built, for the dim behind them
+
+
+def dropdown_dim():
+    """Silo's scrim behind an open dropdown: the page darkens to 55% (Kodi
+    can't blur) while one is open and Back hasn't closed it, under the bar."""
+    open_ = ' | '.join('[[%s] + !String.IsEqual(%s,%d)]' % (shown, prop('silo.drop.closed'), list_id)
+                       for shown, list_id in DROPDOWNS)
+    return '''
+        <control type="image">
+            <left>0</left><top>0</top><width>1920</width><height>1080</height>
+            <texture colordiffuse="8C000000">colors/white.png</texture>
+            <visible>%s</visible>
+            <animation effect="fade" start="0" end="100" time="150" delay="%d">Visible</animation>
+            <animation effect="fade" start="100" end="0" time="150">Hidden</animation>
+        </control>''' % (open_, DROP_DWELL)
+
+
+def dropdown(x, list_id, back, heading, content, shown, rows, fit=False, header=None, head_h=58):
+    """Silo's dropdown under a tab: a heading and the entries (icon and label,
+    the focused one a white pill), with no hint, as Silo's Apple TV app. It
+    shows while the tab or the dropdown has focus (Kodi can't focus a hidden
+    control, so it's there whenever its tab is); Up from the first entry and
+    Back return to the tab, Down past the last closes it and goes to the rows.
+    header: XML in place of the heading, head_h tall (the avatar card's profile)."""
+    DROPDOWNS.append((shown, list_id))
+    def entry(focused):
+        lit = 'Control.HasFocus(%d)' % list_id
+        def body(colour, visible):
+            return '''
+                    <control type="image">
+                        <left>24</left><top>%(it)d</top><width>22</width><height>22</height>
+                        <texture colordiffuse="%(colour)s">$VAR[SiloDropIcon]</texture>%(v)s
+                    </control>
+                    <control type="label">
+                        <left>%(lx)s</left><width>%(lw)d</width><height>%(h)d</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>%(colour)s</textcolor>
+                        <label>$INFO[ListItem.Label]</label>%(v)s
+                    </control>''' % {'it': (DROP_ROW - 22) // 2, 'colour': colour, 'v': visible, 'h': DROP_ROW,
+                                 'lx': 62, 'lw': DROP_W - 100}
+        if not focused:
+            return body(TEXT, '')
+        on, off = '\n                        <visible>%s</visible>' % lit, '\n                        <visible>!%s</visible>' % lit
+        return ('''
+                    <control type="image">
+                        <left>4</left><top>4</top><width>%d</width><height>%d</height>
+                        <texture border="28" colordiffuse="%s">silo/pill.png</texture>%s
+                    </control>''' % (DROP_W - 40, DROP_ROW - 8, TEXT, on) + body('FF000000', on) + body(TEXT, off))
+    height = head_h + rows * DROP_ROW + 16
+    def frame(n, visible):
+        return '''
+            <control type="group">%(v)s
+                <control type="image">
+                    <width>%(w)d</width><height>%(h)d</height>
+                    <texture border="24" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+                </control>
+            </control>''' % {'v': '\n                <visible>%s</visible>' % visible if visible else '', 'w': DROP_W,
+                             'h': head_h + n * DROP_ROW + 16}
+    # A submenu's length varies (fit): one frame per length, the right one shown.
+    frames = ''.join(frame(n, 'Integer.IsEqual(Container(%d).NumItems,%d)' % (list_id, n)) for n in range(1, rows + 1)) \
+        if fit else frame(rows, '')
+    return '''
+        <control type="group">
+            <left>%(x)d</left><top>%(top)d</top>
+            <visible>%(shown)s</visible>
+            <!-- It opens once the tab has held focus a moment (Silo's 250 ms
+                 dwell), so sweeping across the bar doesn't flash every menu. -->
+            <animation effect="fade" start="0" end="100" time="180" delay="%(dwell)d">Visible</animation>
+            <animation effect="zoom" start="96" end="100" center="%(cx)d,0" time="180" delay="%(dwell)d" tween="cubic" easing="out">Visible</animation>
+            <!-- Back closes it, as in Silo: faded out rather than hidden, since
+                 Kodi can't focus a hidden control (Down opens it again). -->
+            <animation effect="fade" start="100" end="0" time="120" condition="String.IsEqual(%(closed)s,%(id)d)">Conditional</animation>
+%(frames)s%(header)s
+            <control type="list" id="%(id)d">
+                <left>16</left><top>%(head_h)d</top><width>%(liw)d</width><height>%(lh)d</height>
+                <orientation>vertical</orientation>
+                <onup>%(back)s</onup>
+                <onback>SetProperty(silo.drop.closed,%(id)d,home)</onback>
+                <onback>%(back)s</onback>
+                <onleft>noop</onleft><onright>noop</onright>
+                <!-- Down past the last entry: closed, and on to the page's rows. -->
+                <ondown>SetProperty(silo.drop.closed,%(id)d,home)</ondown>%(to_rows)s
+                <itemlayout width="%(liw)d" height="%(row)d">%(normal)s
+                </itemlayout>
+                <focusedlayout width="%(liw)d" height="%(row)d">%(focused)s
+                </focusedlayout>
+                <content>%(content)s
+                </content>
+            </control>
+        </control>''' % {'x': x, 'top': BAR_TOP + 76, 'shown': shown, 'w': DROP_W, 'h': height, 'lw': DROP_W - 56,
+                         'closed': prop('silo.drop.closed'), 'heading': heading, 'id': list_id, 'liw': DROP_W - 32, 'lh': rows * DROP_ROW, 'back': back,
+                         'row': DROP_ROW, 'normal': entry(False), 'focused': entry(True), 'content': content, 'frames': frames,
+                         'to_rows': bar_down('                '), 'dwell': DROP_DWELL, 'cx': DROP_W // 2,
+                         'head_h': head_h, 'header': header if header is not None else '''
+            <control type="label">
+                <left>28</left><top>16</top><width>%d</width><height>40</height>
+                <aligny>center</aligny>
+                <font>silo_badge</font>
+                <textcolor>99EDEDED</textcolor>
+                <label>[UPPERCASE]%s[/UPPERCASE]</label>
+            </control>''' % (DROP_W - 56, heading)}
+
+
+def custom_submenu():
+    """A custom item's submenu (Skin Shortcuts' entries for the item selected
+    in the hidden menu list): the dropdown under the first custom item (their
+    places vary), shown while an item that has one has focus, entered with Down."""
+    x = bar_positions()[9005] + tab_width('requests') + BAR_GAP - 16
+    return dropdown(x, SUBMENU, 'SetFocus($INFO[%s])' % prop('silo.submenu.from'),
+                    '$INFO[Container(%d).ListItem.Label]' % SHORTCUTS, '<include>skinshortcuts-submenu</include>',
+                    # Shown while an item with a submenu has focus (Kodi can't focus a hidden
+                    # control), as the tabs' sections.
+                    ' | '.join(['Control.HasFocus(%d)' % SUBMENU] + [
+                        '[Control.HasFocus(%d) + String.IsEqual(%s,True)]' % (control_id, shortcut(slot, 'Property(hasSubmenu)'))
+                        for slot, control_id in enumerate(CUSTOM_IDS)]), 5, fit=True)
+
+
+# A dropdown entry's icon: one chosen in the menu editor (siloIcon), the
+# section's own, else a plain list mark (a play mark read as "plays it").
+DROP_ICON = '''    <variable name="SiloDropIcon">
+        <value condition="!String.IsEmpty(ListItem.Property(siloIcon))">$INFO[ListItem.Property(siloIcon)]</value>
+        <value condition="String.StartsWith(ListItem.Icon,silo/)">$INFO[ListItem.Icon]</value>
+        <value>silo/menu_default.png</value>
+    </variable>
+'''
+SECTION_ICONS = {'Recommended': 'silo/menu_recommended.png', 'Browse': 'silo/menu_browse.png',
+                 'Collections': 'silo/menu_collections.png', 'Discover': 'silo/menu_recommended.png',
+                 'Recently Added': 'silo/menu_history.png',
+                 'Genres': 'silo/menu_default.png'}
+
+
+COLLECTION_KEYS = ('collections', 'collection')
+
+
+def browse_clear():
+    """Every Browse list path (Kodi loads a hidden grid's path too)."""
+    return ['ClearProperty(silo.browse.list.%s,home)' % key for key in PERSONAL_KEYS + COLLECTION_KEYS]
+
+
+def collections_actions(path):
+    return (['SetProperty(silo.browse.type,collections,home)', 'ClearProperty(silo.browse.letter,home)'] + browse_clear()
+            + ['SetProperty(silo.browse.list,%s,home)' % path, 'SetProperty(silo.browse.list.collections,%s,home)' % path,
+               'ActivateWindow(1191)'])
+
+
+def collection_actions(path, title):
+    """One collection in Browse: Back closes the window (it wasn't opened from the cards)."""
+    return (['SetProperty(silo.browse.type,collection,home)', 'ClearProperty(silo.browse.from,home)'] + browse_clear()
+            + ['SetProperty(silo.browse.title,%s,home)' % title, 'SetProperty(silo.browse.list,%s,home)' % path,
+               'SetProperty(silo.browse.list.collection,%s,home)' % path, 'ActivateWindow(1191)'])
+
+
+def section_actions(page, label, path):
+    """What choosing one of a tab's sections does (its dropdown entry or pill)."""
+    if label in ('Browse', 'Recently Added'):
+        # Silo's Browse: Silo Skyline's own grid (tools/build_library.py);
+        # Recently Added is the same grid sorted newest first (Browse's
+        # Sort remembers it).
+        kind = 'movies' if page == 'movies' else 'tvshows'
+        newest = (['Skin.SetString(silo.sort.%s,dateadded)' % kind, 'Skin.SetBool(silo.sort.%s.desc)' % kind]
+                  if label == 'Recently Added' else [])
+        return newest + (['SetProperty(silo.browse.type,%s,home)' % kind, 'ClearProperty(silo.browse.letter,home)',
+                          'ClearProperty(silo.browse.list,home)']
+                         + browse_clear()
+                         + ['SetProperty(silo.browse.path,videodb://%s/titles/,home)' % kind, 'ActivateWindow(1191)'])
+    if label == 'Collections':
+        # Silo's collections in Skyline's Browse window (OK opens details).
+        return collections_actions(path)
+    if label == YOURS:
+        return ['SetProperty(silo.requests.view,yours,home)', 'ClearProperty(silo.row,home)']
+    if page == 'requests':  # Discover
+        return ['ClearProperty(silo.requests.view,home)', 'ClearProperty(silo.row,home)']
+    if path:
+        return ['ActivateWindow(Videos,%s,return)' % path]
+    # Recommended: the page itself (its rows).
+    return ['SetProperty(silo.page,%s,home)' % page, 'ClearProperty(silo.row,home)', 'SetFocus(4000)']
+
+
+# As Silo's Apple TV app, a page's sections as pills under the bar (the first,
+# the page itself, selected) in place of a dropdown under its tab: Movies,
+# Series and Requests, and a custom item's submenu (CUSTOM_PILLS). Movies and
+# Series end with a Collections row of fan cards, the biggest eight then See all.
+PILL_PAGES = ('movies', 'series', 'requests')
+REQUEST_BROWSE = 1197  # Silo's request browse page: a studio's, network's or genre's titles
+COLLECTION_PAGES = ('movies', 'series')
+CUSTOM_PILLS = 4699
+PILL_W = 300  # a custom item's submenu pill (a list's items are one width)
+PILLS_TOP, PILL_H, PILL_GAP = 140, 48, 12
+COLLECTION_SLOT = 49  # the Collections row's list id slot (list_id)
+
+
+def pills_id(page_index):
+    return 4600 + page_index
+
+
+def collection_id(page_index):
+    return list_id(page_index, COLLECTION_SLOT, False)
+
+
+def page_pills():
+    out = ''
+    for index, page in enumerate(PAGES):
+        if page not in PILL_PAGES:
+            continue
+        gid = pills_id(index)
+        buttons = ''
+        for number, (label, path) in enumerate(SECTIONS[page]):
+            selected = number == 0  # Recommended: this page
+            clicks = ''.join('\n                    <onclick>%s</onclick>' % a
+                             for a in section_actions(page, label, path) if not a.startswith('SetFocus(4000)'))
+            colour, rest = (TEXT, '33FFFFFF') if selected else (TAB_DIM, '12FFFFFF')
+            if page == 'requests':
+                # Discover and Yours switch the page's rows: the one showing is lit.
+                colour, rest = '$VAR[SiloRequestsPill%d]' % number, '$VAR[SiloRequestsPillFill%d]' % number
+            elif selected:
+                clicks = '\n                    <onclick>noop</onclick>'
+            buttons += '''
+                <control type="button" id="%(id)d">
+                    <width>auto</width><height>%(h)d</height>
+                    <label>%(label)s</label>
+                    <font>silo_meta</font>
+                    <textoffsetx>22</textoffsetx>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>%(colour)s</textcolor>
+                    <focusedcolor>FF000000</focusedcolor>
+                    <texturefocus border="24" colordiffuse="%(text)s">silo/pill.png</texturefocus>
+                    <texturenofocus border="24" colordiffuse="%(rest)s">silo/pill.png</texturenofocus>%(clicks)s
+                </control>''' % {'id': gid * 10 + number, 'h': PILL_H, 'label': label, 'text': TEXT, 'clicks': clicks,
+                                 'colour': colour, 'rest': rest}
+        rows = page_rows(index, range(1, LOOKAHEAD + 1)) + ([collection_id(index)] if page in COLLECTION_PAGES else [])
+        out += '''
+        <control type="grouplist" id="%(gid)d">
+            <left>%(x)d</left><top>%(top)d</top>
+            <width>%(w)d</width><height>%(h)d</height>
+            <orientation>horizontal</orientation>
+            <itemgap>%(gap)d</itemgap>
+            <visible>%(visible)s</visible>
+            <animation effect="fade" start="100" end="70" time="200" condition="!ControlGroup(%(gid)d).HasFocus()">Conditional</animation>
+            <onup>SetFocus(%(tab)d)</onup>
+            <onback>SetFocus(%(tab)d)</onback>%(down)s
+            <onleft>noop</onleft><onright>noop</onright>%(buttons)s
+        </control>''' % {'gid': gid, 'x': SAFE_X, 'top': PILLS_TOP, 'w': 1920 - 2 * SAFE_X, 'h': PILL_H, 'gap': PILL_GAP,
+                         'visible': page_visible(page), 'tab': 9002 + index, 'buttons': buttons,
+                         'down': first_visible('ondown', rows, '            ')}
+    return out
+
+
+CUSTOM_HAS_PILLS = 'String.IsEqual(Container(%d).ListItem.Property(hasSubmenu),True)' % SHORTCUTS
+
+
+def custom_pills():
+    """A custom item's submenu as pills on its page (Skin Shortcuts' entries
+    for the item selected in the hidden menu list, which its tab selects)."""
+    index = PAGES.index('custom')
+    def pill(focused):
+        lit = 'Control.HasFocus(%d)' % CUSTOM_PILLS
+        def body(fill, colour, visible):
+            return '''
+                    <control type="image">
+                        <width>%(w)d</width><height>%(h)d</height>
+                        <texture border="24" colordiffuse="%(fill)s">silo/pill.png</texture>%(v)s
+                    </control>
+                    <control type="label">
+                        <left>20</left><width>%(lw)d</width><height>%(h)d</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>%(colour)s</textcolor>
+                        <label>$INFO[ListItem.Label]</label>%(v)s
+                    </control>''' % {'w': PILL_W, 'h': PILL_H, 'lw': PILL_W - 40, 'fill': fill, 'colour': colour,
+                                     'v': '\n                        <visible>%s</visible>' % visible if visible else ''}
+        if not focused:
+            return body('12FFFFFF', TAB_DIM, '')
+        return body(TEXT, 'FF000000', lit) + body('12FFFFFF', TAB_DIM, '!' + lit)
+    button = '$INFO[%s]' % prop('silo.custom.button')
+    return '''
+        <control type="list" id="%(id)d">
+            <left>%(x)d</left><top>%(top)d</top>
+            <width>%(w)d</width><height>%(h)d</height>
+            <orientation>horizontal</orientation>
+            <visible>%(visible)s + %(has)s</visible>
+            <animation effect="fade" start="100" end="70" time="200" condition="!Control.HasFocus(%(id)d)">Conditional</animation>
+            <onup>SetFocus(%(button)s)</onup>
+            <onback>SetFocus(%(button)s)</onback>%(down)s
+            <itemlayout width="%(iw)d" height="%(h)d">%(normal)s
+            </itemlayout>
+            <focusedlayout width="%(iw)d" height="%(h)d">%(focused)s
+            </focusedlayout>
+            <content><include>skinshortcuts-submenu</include></content>
+        </control>''' % {'id': CUSTOM_PILLS, 'x': SAFE_X, 'top': PILLS_TOP, 'w': 1920 - 2 * SAFE_X, 'h': PILL_H,
+                         'visible': page_visible('custom'), 'has': CUSTOM_HAS_PILLS, 'button': button,
+                         'down': first_visible('ondown', page_rows(index, range(1, LOOKAHEAD + 1)), '            '),
+                         'iw': PILL_W + PILL_GAP, 'normal': pill(False), 'focused': pill(True)}
+
+
+def collection_rule(page, page_index):
+    # Shown whenever the page's libraries have collections (SiloKodiConnect
+    # publishes the path only then): Kodi never loads a hidden list.
+    return '%s + !String.IsEmpty(%s)' % (page_visible(page), prop('silo.%s.collections' % page))
+
+
+def collection_row(page, page_index):
+    """The page's Collections row: Silo's fan cards, then See all."""
+    cid = collection_id(page_index)
+    slots = range(rows_of(page), 0, -1)
+    up = page_rows(page_index, slots)
+    above = ' + '.join('!' + shown(k) for k in up)
+    moves = first_visible('onup', up)
+    moves += '\n                    <onup condition="%s">SetFocus(%d)</onup>' % (above, pills_id(page_index))
+    moves += '\n                    <onback>SetProperty(silo.drop.closed,%d,home)</onback>' % (9002 + page_index + 200)
+    moves += '\n                    <onback>SetFocus(%d)</onback>' % (9002 + page_index)
+    item_w, item_h = FAN_CARD_W + 40, FAN_CARD_H + 12 + 24
+    return '''
+            <control type="group">
+                <height>%(group_h)d</height>
+                <visible>$EXP[SiloRow%(id)d]</visible>
+                <control type="label">
+                    <left>%(x)d</left><top>0</top>
+                    <width>1500</width><height>46</height>
+                    <font>silo_row</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label>Collections</label>
+                </control>
+                <control type="list" id="%(id)d">
+                    <visible>$EXP[SiloRow%(id)d]</visible>
+                    <left>%(lx)d</left><top>%(cards_top)d</top>
+                    <width>%(lw)d</width><height>%(item_h)d</height>
+                    <orientation>horizontal</orientation>
+                    <scrolltime tween="cubic" easing="out">280</scrolltime>
+%(clicks)s
+                    <onfocus>SetProperty(silo.row,%(id)d,home)</onfocus>%(moves)s
+                    <content target="videos">$INFO[%(path)s,,&amp;top=8]</content>
+                    <itemlayout width="%(item_w)d" height="%(item_h)d">%(normal)s
+                    </itemlayout>
+                    <focusedlayout width="%(item_w)d" height="%(item_h)d">%(focused)s
+                    </focusedlayout>
+                </control>
+            </control>''' % {'group_h': BAND_H, 'id': cid, 'x': SAFE_X, 'text': TEXT, 'lx': SAFE_X - 6,
+                             'lw': 1920 - SAFE_X + 6, 'cards_top': CARDS_TOP, 'moves': moves,
+                             'path': prop('silo.%s.collections' % page), 'item_w': item_w, 'item_h': item_h,
+                             'normal': fan_row_card(False, cid), 'focused': fan_row_card(True, cid),
+                             'clicks': ''.join('\n                    <onclick condition="%s">%s</onclick>' % (c, a)
+                                               for c, actions in (('String.IsEqual(ListItem.Property(silo.see_all),true)',
+                                                                   collections_actions('$INFO[%s]' % prop('silo.%s.collections' % page))),
+                                                                  ('!String.IsEqual(ListItem.Property(silo.see_all),true)',
+                                                                   collection_actions('$INFO[ListItem.FolderPath]', '$INFO[ListItem.Label]')))
+                                               for a in actions)}
+
+
+FAN_CARD_W, FAN_CARD_H = 430, 234
+
+
+def fan_row_card(focused, list_id_):
+    """A Collections row card: Silo's fan card (430x234), or See all."""
+    lit = 'Control.HasFocus(%d)' % list_id_
+    see_all = 'String.IsEqual(ListItem.Property(silo.see_all),true)'
+    minis = ''
+    for number, x, angle in ((3, 132, 7), (1, 28, -8), (2, 80, -1)):
+        minis += '''
+                        <control type="image">
+                            <left>%(x)d</left><top>%(y)d</top><width>104</width><height>156</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Property(silo.fan%(n)d)]</texture>
+                            <animation effect="rotate" end="%(a)d" center="auto" time="0" condition="true">Conditional</animation>
+                            <visible>!String.IsEmpty(ListItem.Property(silo.fan%(n)d))</visible>
+                        </control>''' % {'x': x, 'y': (FAN_CARD_H - 156) // 2 + 6, 'n': number, 'a': -angle}
+    zoom = focus_zoom(lit, 20) if focused else ''
+    return '''
+                    <control type="group">%(zoom)s
+                        <control type="image">
+                            <left>6</left><top>6</top><width>%(w)d</width><height>%(h)d</height>
+                            <texture border="24" colordiffuse="FF1E2024">silo/card_landscape_mask.png</texture>
+                        </control>
+                        <control type="group">
+                            <visible>!%(see_all)s</visible>%(minis)s
+                            <control type="textbox">
+                                <left>230</left><top>40</top><width>184</width><height>110</height>
+                                <font>silo_card_title</font>
+                                <textcolor>%(text)s</textcolor>
+                                <label>$INFO[ListItem.Label]</label>
+                            </control>
+                            <control type="label">
+                                <left>230</left><top>%(cy)d</top><width>184</width><height>30</height>
+                                <font>silo_badge</font>
+                                <textcolor>99EDEDED</textcolor>
+                                <label>[UPPERCASE]$INFO[ListItem.Property(silo.count),, titles][/UPPERCASE]</label>
+                            </control>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>6</top><width>%(w)d</width><height>%(h)d</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_row</font>
+                            <textcolor>%(text)s</textcolor>
+                            <label>$INFO[ListItem.Label]  ›</label>
+                            <visible>%(see_all)s</visible>
+                        </control>
+                    </control>''' % {'zoom': zoom, 'w': FAN_CARD_W, 'h': FAN_CARD_H, 'minis': minis, 'text': TEXT,
+                                     'cy': FAN_CARD_H - 54, 'see_all': see_all}
+
+
 def sections_menus():
-    """The dropdowns under the Movies and Series tabs, styled as the power menu."""
+    """The Movies and Series sections: Silo's dropdown under their tabs."""
     out = ''
     positions = bar_positions()
     for index, page in enumerate(PAGES):
@@ -314,72 +1215,114 @@ def sections_menus():
         tab_id = 9002 + index
         items = ''
         for label, path in SECTIONS[page]:
-            if path:
-                action = 'ActivateWindow(Videos,%s,return)' % path
-            else:
-                action = 'SetFocus(4000)'
+            actions = section_actions(page, label, path)
             items += '''
                     <item>
                         <label>%s</label>
-                        <onclick>%s</onclick>
-                    </item>''' % (label, action)
-        out += '''
-        <control type="group">
-            <left>%(x)d</left><top>%(top)d</top>
-            <!-- Present but faded out until it has focus: Kodi can't focus a hidden control. -->
-            <animation effect="fade" start="100" end="0" time="120" condition="!Control.HasFocus(%(id)d)">Conditional</animation>
-            <control type="image">
-                <width>340</width><height>%(h)d</height>
-                <texture border="14" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
-            </control>
-            <control type="list" id="%(id)d">
-                <left>10</left><top>10</top>
-                <width>320</width><height>%(lh)d</height>
-                <orientation>vertical</orientation>
-                <onup>%(tab)d</onup>
-                <onback>SetFocus(%(tab)d)</onback>
-                <onleft>noop</onleft><onright>noop</onright>
-                <itemlayout width="320" height="64">
-                    <control type="label">
-                        <left>28</left><width>280</width><height>64</height>
-                        <aligny>center</aligny>
-                        <font>silo_meta</font>
-                        <textcolor>%(text)s</textcolor>
-                        <label>$INFO[ListItem.Label]</label>
-                    </control>
-                </itemlayout>
-                <focusedlayout width="320" height="64">
-                    <control type="image">
-                        <width>320</width><height>64</height>
-                        <texture border="30" colordiffuse="%(text)s">silo/pill.png</texture>
-                    </control>
-                    <control type="label">
-                        <left>28</left><width>280</width><height>64</height>
-                        <aligny>center</aligny>
-                        <font>silo_meta</font>
-                        <textcolor>FF000000</textcolor>
-                        <label>$INFO[ListItem.Label]</label>
-                    </control>
-                </focusedlayout>
-                <content>%(items)s
-                </content>
-            </control>
-        </control>''' % {'x': positions[tab_id] - 10, 'top': BAR_TOP + 74, 'id': tab_id + 200, 'tab': tab_id,
-                         'h': 20 + 64 * len(SECTIONS[page]), 'lh': 64 * len(SECTIONS[page]), 'text': TEXT,
-                         'items': items}
+                        <icon>%s</icon>%s
+                    </item>''' % (label, SECTION_ICONS.get(label, ''),
+                                ''.join('\n                        <onclick>%s</onclick>' % a for a in actions))
+        out += dropdown(positions[tab_id] - 16, tab_id + 200, 'SetFocus(%d)' % tab_id, TAB_LABELS[page], items,
+                        'Control.HasFocus(%d) | Control.HasFocus(%d)' % (tab_id, tab_id + 200), len(SECTIONS[page]))
     return out
+
+AVATAR_MENU = 9211
+PLUGIN_URL = 'plugin://plugin.video.silokodiconnect/'
+# The avatar card's lists. Each has its own grid in Browse with its own path
+# (silo.browse.list.<key>); only the open one's is set, since Kodi loads a
+# grid's path even while the grid is hidden.
+PERSONAL_KEYS = ('watchlist', 'favorites', 'history')
+
+
+def avatar_menu():
+    """Silo's profile menu: a card under the avatar, shown while it has focus;
+    Down or OK goes in. Switch Profile is Kodi's own profile switch when Kodi
+    has profiles, else SiloKodiConnect's switch of the Silo profile."""
+    def personal(key):
+        path = '%s?mode=widget&amp;section=%s' % (PLUGIN_URL, key)
+        return (['SetProperty(silo.browse.type,%s,home)' % key, 'ClearProperty(silo.browse.letter,home)',
+                 'SetProperty(silo.browse.list,%s,home)' % path, 'SetProperty(silo.browse.list.%s,%s,home)' % (key, path)]
+                + ['ClearProperty(silo.browse.list.%s,home)' % other for other in PERSONAL_KEYS + COLLECTION_KEYS
+                   if other != key]
+                + ['ActivateWindow(1191)'])
+    entries = [
+        ('Switch Profile', 'profile', [('Integer.IsGreater(System.ProfileCount,1)', 'System.LogOff'),
+                                       ('!Integer.IsGreater(System.ProfileCount,1)', 'RunPlugin(%s?mode=profile)' % PLUGIN_URL)]),
+        ('Watchlist', 'watchlist', personal('watchlist')),
+        ('Favorites', 'favorites', personal('favorites')),
+        ('History', 'history', personal('history')),
+        ('Settings', 'settings', ['ActivateWindow(Videos,%s,return)' % PLUGIN_URL]),
+        ('Sign Out', 'signout', ['RunPlugin(%s?mode=signout)' % PLUGIN_URL]),
+    ]
+    items = ''
+    for label, icon, actions in entries:
+        clicks = ''.join('\n                        <onclick condition="%s">%s</onclick>' % a if isinstance(a, tuple)
+                         else '\n                        <onclick>%s</onclick>' % a for a in actions)
+        items += '''
+                    <item>
+                        <label>%s</label>
+                        <icon>silo/menu_%s.png</icon>%s
+                    </item>''' % (label, icon, clicks)
+    # Silo's profile header: the picture (or initial), the name and the
+    # server's host in mono, over a hairline.
+    has_picture = '!String.IsEmpty(%s)' % prop('silo.avatar')
+    header = '''
+            <control type="image">
+                <left>28</left><top>22</top><width>56</width><height>56</height>
+                <texture colordiffuse="33FFFFFF">silo/avatar_mask.png</texture>
+                <visible>!%(has_picture)s</visible>
+            </control>
+            <control type="label">
+                <left>28</left><top>22</top><width>56</width><height>56</height>
+                <align>center</align><aligny>center</aligny>
+                <font>silo_tab</font>
+                <textcolor>%(text)s</textcolor>
+                <label>$INFO[%(initial)s]</label>
+                <visible>!%(has_picture)s</visible>
+            </control>
+            <control type="image">
+                <left>28</left><top>22</top><width>56</width><height>56</height>
+                <aspectratio>scale</aspectratio>
+                <texture background="true" diffuse="silo/avatar_mask.png">$INFO[%(picture)s]</texture>
+                <visible>%(has_picture)s</visible>
+            </control>
+            <control type="label">
+                <left>100</left><top>20</top><width>%(lw)d</width><height>34</height>
+                <aligny>center</aligny>
+                <font>silo_meta</font>
+                <textcolor>%(text)s</textcolor>
+                <label>$INFO[%(name)s]</label>
+            </control>
+            <control type="label">
+                <left>100</left><top>52</top><width>%(lw)d</width><height>28</height>
+                <aligny>center</aligny>
+                <font>silo_mono</font>
+                <textcolor>99EDEDED</textcolor>
+                <label>$INFO[%(server)s]</label>
+            </control>
+            <control type="image">
+                <left>28</left><top>98</top><width>%(rule)d</width><height>2</height>
+                <texture colordiffuse="1AFFFFFF">colors/white.png</texture>
+            </control>''' % {'has_picture': has_picture, 'text': TEXT, 'initial': prop('silo.profile_initial'),
+                             'picture': prop('silo.avatar'), 'name': prop('silo.profile_name'),
+                             'server': prop('silo.server'), 'lw': DROP_W - 128, 'rule': DROP_W - 56}
+    return dropdown(1920 - SAFE_X - DROP_W, AVATAR_MENU, 'SetFocus(9011)', '', items,
+                    'Control.HasFocus(9011) | Control.HasFocus(%d)' % AVATAR_MENU, len(entries),
+                    header=header, head_h=110)
 
 
 def tab(control_id, page, page_index):
     visible = '' if page == 'home' else \
         '\n                <visible>String.Contains(%s,%s)</visible>' % (prop('silo.pages'), page)
+    # The group has an id (the button's + 300) so the grouplist can point the
+    # custom buttons beside it here.
     return '''
-            <control type="group">
+            <control type="group" id="%(group)d">
                 <width>%(width)d</width><height>60</height>%(visible)s
                 <control type="image">
                     <width>%(width)d</width><height>60</height>
                     <texture border="30" colordiffuse="26FFFFFF">silo/pill.png</texture>
-                    <visible>%(selected)s + !Control.HasFocus(%(id)d)</visible>
+                    <visible>[%(selected)s | Control.HasFocus(%(menu)d)] + !Control.HasFocus(%(id)d)</visible>
                 </control>
                 <control type="button" id="%(id)d">%(visible)s
                     <width>%(width)d</width><height>60</height>
@@ -391,24 +1334,48 @@ def tab(control_id, page, page_index):
                     <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
                     <texturenofocus />
 %(open_sections)s                    <onclick%(unless_open)s>SetProperty(silo.page,%(page)s,home)</onclick>
-                    <onclick%(unless_open)s>ClearProperty(silo.row,home)</onclick>%(moves)s
+                    <onclick%(unless_open)s>ClearProperty(silo.row,home)</onclick>%(reset)s%(moves)s
 %(focus_rows)s
                 </control>
-            </control>''' % {'width': tab_width(page), 'visible': visible,
+            </control>''' % {'width': tab_width(page), 'visible': visible, 'group': control_id + 300,
+                            # Requests opens on Discover.
+                            'reset': '\n                    <onclick>ClearProperty(silo.requests.view,home)</onclick>'
+                            if page == 'requests' else '',
                             'selected': page_visible(page), 'id': control_id,
+                            # While focus is in its dropdown the tab keeps the
+                            # faint "selected" pill, as Silo's Apple TV app.
+                            'menu': control_id + 200 if page in SECTIONS else 0,
                             'label': TAB_LABELS[page],
                             'dim': TAB_DIM, 'text': TEXT, 'page': page,
                             'moves': bar_moves(control_id),
-                            'focus_rows': first_visible('onclick', page_rows(page_index, range(1, LOOKAHEAD + 1)))
-                            .replace('<onclick condition="', '<onclick condition="' + (
-                                '![' + page_visible(page) + '] + ' if page in SECTIONS else '')),
-                            'unless_open': ' condition="![' + page_visible(page) + ']"' if page in SECTIONS else '',
+                            'focus_rows': first_visible('onclick', page_rows(page_index, range(1, LOOKAHEAD + 1))),
+                            'unless_open': '',
                             'open_sections': open_sections(page, control_id)}
+
+
+def tv_tab():
+    """TV, after Requests when Live TV has channels: TiviMate's guide in
+    Silo's look (tools/build_tv.py). A button of the bar's own, as the custom
+    items: Kodi moves left and right past it when it's hidden."""
+    return '''
+                <control type="button" id="%(id)d">
+                    <visible>PVR.HasTVChannels</visible>
+                    <width>auto</width><height>60</height>
+                    <label>$LOCALIZE[19020]</label>
+                    <font>silo_tab</font>
+                    <textoffsetx>24</textoffsetx>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>%(dim)s</textcolor>
+                    <focusedcolor>FF000000</focusedcolor>
+                    <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
+                    <texturenofocus />%(moves)s
+                    <onclick>ActivateWindow(TVGuide)</onclick>
+                </control>''' % {'id': TV_TAB, 'dim': TAB_DIM, 'text': TEXT, 'moves': bar_down('                    ')}
 
 
 def icon_tab(control_id, icon, action):
     return '''
-            <control type="group">
+            <control type="group" id="%(group)d">
                 <width>60</width><height>60</height>
                 <control type="button" id="%(id)d">
                     <width>60</width><height>60</height>
@@ -429,13 +1396,13 @@ def icon_tab(control_id, icon, action):
                     <texture colordiffuse="%(dim)s">%(icon)s</texture>
                     <visible>!Control.HasFocus(%(id)d)</visible>
                 </control>
-            </control>''' % {'id': control_id, 'text': TEXT, 'action': action, 'icon': icon, 'dim': TAB_DIM,
+            </control>''' % {'id': control_id, 'group': control_id + 300, 'text': TEXT, 'action': action, 'icon': icon, 'dim': TAB_DIM,
                             'moves': bar_moves(control_id)}
 
 
 def avatar():
     """The profile's avatar at the bar's right edge, as in Silo: its picture,
-    or its initial in a circle; it opens SiloKodiConnect's menu."""
+    or its initial in a circle; its card (avatar_menu) drops under it."""
     has_picture = '!String.IsEmpty(%s)' % prop('silo.avatar')
     return '''
         <control type="group">
@@ -448,7 +1415,7 @@ def avatar():
                 <label />
                 <texturefocus />
                 <texturenofocus />
-                <onclick>ActivateWindow(Videos,plugin://plugin.video.silokodiconnect/,return)</onclick>%(moves)s
+                <onclick>SetFocus(%(menu)d,0,absolute)</onclick>%(moves)s
             </control>
             <control type="image">
                 <left>4</left><top>4</top>
@@ -477,17 +1444,114 @@ def avatar():
                 <texture colordiffuse="%(text)s">silo/avatar_ring.png</texture>
                 <visible>Control.HasFocus(9011)</visible>
             </control>
+            <!-- Its card has focus: a faint ring, as a tab's "selected" pill. -->
+            <control type="image">
+                <width>64</width><height>64</height>
+                <texture colordiffuse="66FFFFFF">silo/avatar_ring.png</texture>
+                <visible>Control.HasFocus(%(menu)d)</visible>
+            </control>
         </control>''' % {'left': 1920 - SAFE_X - 64, 'top': BAR_TOP, 'name': prop('silo.profile_name'),
-                         'moves': bar_moves(9011), 'has_picture': has_picture, 'text': TEXT,
+                         'moves': bar_moves(9011, 'SetFocus(%d,0,absolute)' % AVATAR_MENU, AVATAR_MENU), 'menu': AVATAR_MENU, 'has_picture': has_picture, 'text': TEXT,
                          'initial': prop('silo.profile_initial'), 'picture': prop('silo.avatar'),
                          'bar_dim': BAR_DIM}
+
+
+def shortcut(slot, field):
+    return 'Container(%d).ListItemAbsolute(%d).%s' % (SHORTCUTS, slot, field)
+
+
+def custom_items():
+    """The user's own menu items (Skin Shortcuts), as tabs after Requests.
+    An item with widgets opens them as rows (the 'custom' page); any other
+    runs its action. Returns the hidden list holding the menu, and the tabs."""
+    index = PAGES.index('custom')
+    buttons = ''
+    for slot, control_id in enumerate(CUSTOM_IDS):
+        label = shortcut(slot, 'Label')
+        has_widgets = '!String.IsEmpty(%s)' % shortcut(slot, 'Property(widgetPath)')
+        # OK opens the item's page when it has widgets or a submenu (its
+        # pills); an item that is only a submenu focuses the pills.
+        has_submenu = 'String.IsEqual(%s,True)' % shortcut(slot, 'Property(hasSubmenu)')
+        to_submenu = '%s + !%s' % (has_submenu, has_widgets)
+        go = '[%s | %s]' % (has_widgets, has_submenu)
+        actions = ''
+        for n in range(1, WIDGETS + 1):
+            suffix = '' if n == 1 else '.%d' % n
+            for key, field in (('title', 'widgetName'), ('path', 'widgetPath')):
+                actions += ('\n                    <onclick condition="%s">SetProperty(silo.custom.%d.%s,$INFO[%s],home)'
+                            '</onclick>' % (go, n, key, shortcut(slot, 'Property(%s%s)' % (field, suffix))))
+            # The card style chosen in the menu editor, else from what it lists.
+            chosen = shortcut(slot, 'Property(widgetStyle%s)' % suffix)
+            wide = ('[String.IsEqual(%s,landscape) | [String.IsEmpty(%s) + String.IsEqual(%s,episodes)]]'
+                    % (chosen, chosen, shortcut(slot, 'Property(widgetType%s)' % suffix)))
+            actions += ('\n                    <onclick condition="%s + %s">SetProperty(silo.custom.%d.style,landscape,home)'
+                        '</onclick>\n                    <onclick condition="%s + !%s">'
+                        'SetProperty(silo.custom.%d.style,poster,home)</onclick>' % (go, wide, n, go,
+                                                                                     wide, n))
+        buttons += '''
+                <control type="button" id="%(id)d">
+                    <visible>!String.IsEmpty(%(label)s)</visible>
+                    <width>auto</width><height>60</height>
+                    <label>$INFO[%(label)s]</label>
+                    <font>silo_tab</font>
+                    <textoffsetx>24</textoffsetx>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>%(dim)s</textcolor>
+                    <focusedcolor>FF000000</focusedcolor>
+                    <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
+                    <texturenofocus border="30" colordiffuse="%(nofocus)s">silo/pill.png</texturenofocus>%(moves)s
+                    <onclick condition="!%(go)s">$INFO[%(path)s]</onclick>
+                    <onclick condition="%(go)s">SetProperty(silo.page,custom,home)</onclick>
+                    <onclick condition="%(go)s">ClearProperty(silo.row,home)</onclick>
+                    <onclick condition="%(go)s">SetProperty(silo.custom.button,%(id)d,home)</onclick>%(actions)s
+                    <onclick condition="%(has_widgets)s">SetProperty(silo.custom.loading,1,home)</onclick>
+                    <!-- Select the item in the hidden menu list, so the pills list its submenu. -->
+                    <onclick condition="%(go)s">SetFocus(%(shortcuts)d,%(slot)d,absolute)</onclick>
+                    <onclick condition="%(go)s + !%(to_submenu)s">SetFocus(%(id)d)</onclick>
+                    <onclick condition="%(to_submenu)s">SetFocus(%(pills)d,0,absolute)</onclick>
+                </control>''' % {'label': label, 'pills': CUSTOM_PILLS, 'id': control_id, 'dim': TAB_DIM, 'text': TEXT, 'has_widgets': has_widgets,
+                             'path': shortcut(slot, 'Property(path)'), 'actions': actions,
+                             'go': go, 'to_submenu': to_submenu, 'shortcuts': SHORTCUTS, 'slot': slot,
+                             'submenu': SUBMENU, 'has_submenu': has_submenu,
+                             'nofocus': '$VAR[SiloCustomTab%d]' % control_id,
+                             # Left and right come from the grouplist: Kodi points its direct
+                             # children at their neighbours (passing hidden ones), over ours.
+                             'moves': bar_down('                    ')}
+    return '''
+        <!-- Skin Shortcuts' main menu, built into script-skinshortcuts-includes.xml. -->
+        <control type="list" id="%d">
+            <left>-3000</left><top>0</top><width>10</width><height>10</height>
+            <itemlayout width="10" height="10" />
+            <focusedlayout width="10" height="10" />
+            <content><include>skinshortcuts-mainmenu</include></content>
+        </control>''' % SHORTCUTS, buttons
+
+def custom_tab_variables():
+    """A custom item's faint pill while its page shows, as the tabs'."""
+    out = ''
+    for control_id in CUSTOM_IDS:
+        out += ('    <variable name="SiloCustomTab%d">\n'
+                '        <value condition="String.IsEqual(%s,custom) + String.IsEqual(%s,%d)">26FFFFFF</value>\n'
+                # Its submenu has focus: the same faint pill.
+                '        <value condition="Control.HasFocus(%d) + String.IsEqual(%s,%d)">26FFFFFF</value>\n'
+                '        <value>00FFFFFF</value>\n    </variable>\n' % (control_id, prop('silo.page'),
+                                                                        prop('silo.custom.button'), control_id,
+                                                                        SUBMENU, prop('silo.submenu.from'), control_id))
+    return out
 
 
 def bar_down(indent='            '):
     """Down from the bar: the first row showing, on whichever page is shown
     (only one page's rows are ever visible)."""
-    return ''.join(first_visible('ondown', page_rows(index, range(1, LOOKAHEAD + 1)), indent)
-                   for index in range(len(PAGES)))
+    out = ''.join(first_visible('ondown', page_rows(index, range(1, LOOKAHEAD + 1)), indent)
+                  for index in range(len(PAGES)))
+    # A page with pills but no rows (a custom item that is only a submenu).
+    for index, page in enumerate(PAGES):
+        pills = pills_id(index) if page in PILL_PAGES else CUSTOM_PILLS if page == 'custom' else None
+        if pills:
+            none = ' + '.join('!' + shown(k) for k in page_rows(index, range(1, LOOKAHEAD + 1)))
+            out += '\n%s<ondown condition="%s + %s">SetFocus(%d)</ondown>' % (indent, page_visible(page), none, pills)
+    return out
 
 
 def badge(label, height, font):
@@ -500,20 +1564,29 @@ def badge(label, height, font):
                     <aligny>center</aligny>
                     <enable>false</enable>
                     <disabledcolor>%(text)s</disabledcolor>
-                    <texturenofocus border="8" colordiffuse="99EDEDED">silo/badge_outline.png</texturenofocus>
-                    <texturefocus border="8" colordiffuse="99EDEDED">silo/badge_outline.png</texturefocus>
+                    <!-- Silo's Apple TV badge: an outline only. -->
+                    <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
+                    <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
                     <visible>$EXP[%(shown)s]</visible>
                 </control>''' % {'h': height, 'label': label, 'font': font, 'text': TEXT,
                                   'shown': label.replace('$VAR[', 'Has').rstrip(']')}
 
 
 def build():
+    del DROPDOWNS[:]
+    # The tabs' sections are pills on their pages now; only the avatar has a card.
+    sections = avatar_menu()
     rows = ''.join(row(page, index, slot, landscape)
                    for index, page in enumerate(PAGES)
-                   for slot in range(1, MAX_ROWS + 1)
-                   for landscape in (False, True))
-    tabs = icon_tab(9001, 'icons/search.png', 'ActivateWindow(1190)')
-    tabs += ''.join(tab(9002 + index, page, index) for index, page in enumerate(PAGES))
+                   for slot in range(1, rows_of(page) + 1)
+                   for landscape in styles(page)) + \
+        ''.join(collection_row(page, index) for index, page in enumerate(PAGES) if page in COLLECTION_PAGES)
+    tabs = icon_tab(9001, 'icons/search.png', 'ClearProperty(silo.search.mode,home)</onclick>\n'
+                    '                    <onclick>ActivateWindow(1190)')
+    tabs += ''.join(tab(9002 + index, page, index) for index, page in enumerate(TABBED))
+    tabs += tv_tab()
+    shortcuts_list, custom_tabs = custom_items()
+    tabs += custom_tabs
     tabs += icon_tab(9009, 'icons/settings.png', 'ActivateWindow(Settings)')
     # Estuary keeps the power menu on its home screen; this replaces it.
     tabs += icon_tab(9010, 'icons/power.png', 'ActivateWindow(ShutdownMenu)')
@@ -521,8 +1594,19 @@ def build():
     return '''<?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated by tools/build_home.py: edit that, not this. -->
 <window>
+    <!-- Back from a trailer started from an info page (Kodi leaves it playing): stop it, which reopens the page. -->
+    <!-- A video left playing behind the menus (Back from the player, a trailer's
+         page, or Live TV left from the guide): stopped, as in Silo's apps, since
+         these pages cover the screen and there's no way back to it. Kodi saves
+         where it stopped; the TV guide keeps Live TV playing in its preview. -->
+    <onload condition="Player.HasVideo">PlayerControl(Stop)</onload>
     <defaultcontrol always="true">4000</defaultcontrol>
     <onload condition="String.IsEmpty(Window(Home).Property(silo.home.count))">SetFocus(9002)</onload>
+    <!-- Kodi starting: the first-row timer may take focus from the bar for a while. -->
+    <onload condition="String.IsEmpty(Window(Home).Property(silo.home.count))">SetProperty(silo.startup,1,home)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(silo.home.count))">AlarmClock(silostartup,ClearProperty(silo.startup,home),00:%(splash_max)d,silent)</onload>
+    <!-- Skin Shortcuts writes the user's menu into script-skinshortcuts-includes.xml when it changed. -->
+    <onload condition="System.HasAddon(script.skinshortcuts)">RunScript(script.skinshortcuts,type=buildxml&amp;mainmenuID=%(shortcuts)d&amp;group=mainmenu)</onload>
     <backgroundcolor>%(background)s</backgroundcolor>
     <controls>
         <!-- Silo's ambient wash: the focused title's colour, richest behind the art
@@ -547,10 +1631,11 @@ def build():
             <texture background="true" diffuse="silo/hero_mask.png">$VAR[SiloHeroArt]</texture>
         </control>
 
-        <!-- Marquee: never focusable; follows whichever card has focus. -->
+        <!-- Marquee: never focusable; follows whichever card has focus (on
+             Home, its first card until a row has focus). -->
         <control type="group">
             <left>%(x)d</left>
-            <visible>!String.IsEmpty(%(row_prop)s)</visible>
+            <visible>!String.IsEmpty(%(row_prop)s) | [[String.IsEqual(Window(Home).Property(silo.page),home) | String.IsEmpty(Window(Home).Property(silo.page))] + [Integer.IsGreater(Window(Home).Property(silo.home.1.cards),0) | Integer.IsGreater(Window(Home).Property(silo.home.2.cards),0)]] | %(waiting)s</visible>
             <animation effect="fade" start="0" end="100" time="240">Visible</animation>
             <control type="image">
                 <top>190</top>
@@ -578,24 +1663,72 @@ def build():
                     <width>auto</width><height>40</height>
                     <aligny>center</aligny>
                     <font>silo_meta</font>
-                    <textcolor>%(text)s</textcolor>
-                    <label>$VAR[SiloMetaLine]</label>
+                    <textcolor>%(meta)s</textcolor>
+                    <label>$VAR[SiloHeroFacts]</label>
+                </control>
+                <!-- The ratings' marks, as the info page: images, so the line is in parts. -->
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(meta)s</textcolor>
+                    <label>[COLOR 80EDEDED]·[/COLOR]</label>
+                    <visible>$EXP[HasSiloHeroImdb]</visible>
+                </control>
+                <control type="image">
+                    <top>6</top><width>60</width><height>28</height>
+                    <texture>silo/imdb.png</texture>
+                    <visible>$EXP[HasSiloHeroImdb]</visible>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(meta)s</textcolor>
+                    <label>  [B]$VAR[SiloHeroImdb][/B]</label>
+                    <visible>$EXP[HasSiloHeroImdb]</visible>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(meta)s</textcolor>
+                    <label>[COLOR 80EDEDED]·[/COLOR]</label>
+                    <visible>$EXP[HasSiloHeroTmdb]</visible>
+                </control>
+                <control type="image">
+                    <top>5</top><width>165</width><height>30</height>
+                    <texture>silo/tmdb.png</texture>
+                    <visible>$EXP[HasSiloHeroTmdb]</visible>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(meta)s</textcolor>
+                    <label>  [B]$VAR[SiloHeroTmdb][/B]</label>
+                    <visible>$EXP[HasSiloHeroTmdb]</visible>
                 </control>
             </control>
             <control type="textbox">
                 <top>424</top>
                 <width>860</width><height>76</height>
                 <font>silo_plot</font>
-                <textcolor>%(dim)s</textcolor>
+                <textcolor>%(plot)s</textcolor>
                 <label>$VAR[SiloPlot]</label>
                 <autoscroll>false</autoscroll>
             </control>
-            <control type="label">
+            <control type="grouplist">
                 <top>504</top>
                 <width>1000</width><height>34</height>
-                <font>silo_detail</font>
-                <textcolor>%(dim)s</textcolor>
-                <label>$VAR[SiloDetail]</label>
+                <orientation>horizontal</orientation>
+                <itemgap>8</itemgap>
+                <control type="label">
+                    <width>auto</width><height>34</height>
+                    <font>silo_detail</font>
+                    <textcolor>%(cast)s</textcolor>
+                    <label>$VAR[SiloStatusDot]$VAR[SiloDetail]</label>
+                </control>%(status_track)s
             </control>
             <!-- Quality badges. -->
             <control type="grouplist">
@@ -626,39 +1759,53 @@ def build():
             <visible>%(no_rows)s</visible>
         </control>
 
+        <!-- Movies' and Series' sections as pills under the bar. -->%(pills)s
+
+        <!-- The page darkens behind an open dropdown; the bar stays lit. -->%(drop_dim)s
+
         <!-- Top menu bar. -->
-        <control type="label">
-            <left>%(x)d</left><top>%(bar_top)d</top>
-            <width>300</width><height>64</height>
-            <aligny>center</aligny>
-            <font>silo_wordmark</font>
-            <textcolor>%(text)s</textcolor>
-            <label>Silo</label>
-            <animation effect="fade" start="100" end="70" time="200" condition="%(bar_dim)s">Conditional</animation>
-        </control>
+%(wordmark)s
+        <!-- Starts where the built-in tabs sit centred, so Movies and Series stay
+             over their dropdowns; the user's own items extend it to the right. -->
         <control type="grouplist" id="9000">
             <animation effect="fade" start="100" end="70" time="200" condition="%(bar_dim)s">Conditional</animation>
-            <left>0</left><top>%(tabs_top)d</top>
-            <width>1920</width><height>60</height>
+            <left>%(bar_left)d</left><top>%(tabs_top)d</top>
+            <width>%(bar_w)d</width><height>60</height>
             <orientation>horizontal</orientation>
-            <align>center</align>
             <itemgap>8</itemgap>%(bar_down)s%(tabs)s
         </control>
 %(avatar)s
-%(sections)s
+%(custom)s
+%(sections)s%(splash)s
+        <!-- A trailer from an info page: its cover (Includes_SiloFrame.xml). -->
+        <include>SiloTrailerCover</include>
     </controls>
 </window>
-''' % {'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'rows_top': ROWS_TOP, 'rows_h': BAND_H,
+''' % {'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'meta': HERO_META, 'plot': PLOT, 'cast': CAST, 'rows_top': ROWS_TOP, 'rows_h': BAND_H,
        'row_overlap': ROW_PITCH - BAND_H,
        'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
-       'bar_down': bar_down(), 'avatar': avatar(), 'sections': sections_menus(), 'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'background': BACKGROUND,
-       'mpaa_badge': badge('$VAR[SiloMpaa]', 40, 'silo_meta'),
-       'quality_badges': ''.join(badge('$VAR[SiloBadge%d]' % n, 36, 'silo_badge') for n in (1, 2, 3))}
+       'bar_down': bar_down(), 'avatar': avatar(), 'custom': shortcuts_list,
+       'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections, 'drop_dim': dropdown_dim(), 'pills': page_pills() + custom_pills(),
+       'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'wordmark': wordmark(SAFE_X, BAR_TOP, '\n            <animation effect="fade" start="100" end="70" time="200" condition="%s">Conditional</animation>' % BAR_DIM), 'waiting': ' | '.join('[%s]' % c for c, _ in waiting_rows()), 'background': BACKGROUND, 'splash_max': SPLASH_MAX,
+       # The age rating as Silo draws it: the quality badges' size, centred on the info line.
+       'splash': splash(), 'mpaa_badge': badge('$VAR[SiloMpaa]', 34, 'silo_badge').replace(
+           '<width>auto</width><height>34</height>', '<top>3</top><width>auto</width><height>34</height>', 1),
+       'quality_badges': ''.join(badge('$VAR[SiloBadge%d]' % n, 36, 'silo_badge') for n in (1, 2, 3)),
+       # Silo's request stage track: four short bars, empty for anything else.
+       'status_track': ''.join('''
+                <control type="image">
+                    <top>15</top><width>36</width><height>4</height>
+                    <texture colordiffuse="$VAR[SiloStatusSeg%d]">$VAR[SiloStatusBar]</texture>
+                </control>''' % n for n in range(1, 5))}
 
 
 # The hero and marquee read from the row that last had focus (silo.row), so
 # they stay put while the menu bar has focus, as in Silo. Each entry is a
 # (condition, value) template; LI stands for that row's ListItem.
+# A Home card: an item SiloKodiConnect published as properties (rows.py).
+HOME_CARD = '!String.IsEmpty(LI.Property(home.type))'
+HERO_STATIC = {'SiloHeroArt': 'home.art.fanart', 'SiloLogoArt': 'home.art.clearlogo', 'SiloTitle': 'home.hero.title', 'SiloMetaLine': 'home.hero.meta', 'SiloHeroFacts': 'home.hero.facts', 'SiloHeroImdb': 'home.rating.imdb', 'SiloHeroTmdb': 'home.rating.tmdb', 'SiloPlot': 'home.plot', 'SiloDetail': 'home.hero.detail', 'SiloMpaa': 'home.mpaa', 'SiloHeroTint': 'home.tint', 'SiloBadge1': 'home.badge1', 'SiloBadge2': 'home.badge2', 'SiloBadge3': 'home.badge3'}
+
 HERO = [
     ('SiloHeroArt', [('!String.IsEmpty(LI.Art(fanart))', '$INFO[LI.Art(fanart)]'),
                      ('!String.IsEmpty(LI.Art(tvshow.fanart))', '$INFO[LI.Art(tvshow.fanart)]'),
@@ -669,41 +1816,85 @@ HERO = [
     ('SiloTitle', [('!String.IsEmpty(LI.Art(clearlogo)) | !String.IsEmpty(LI.Art(tvshow.clearlogo))', ''),
                    ('String.IsEqual(LI.DBType,episode)', '$INFO[LI.TVShowTitle]'),
                    (None, '$INFO[LI.Label]')]),
-    # Silo: "S02E02 · Song 2" for an episode, "2005 · IMDb 8.4 · Horror" otherwise.
+    # Silo: "S02E02 · Song 2" for an episode, "2005 · Horror · IMDb 8.4" otherwise.
     ('SiloMetaLine', [('String.IsEqual(LI.DBType,episode)', '$INFO[LI.Property(silo.code)]$INFO[LI.Title, · ,]'),
-                      (None, '$INFO[LI.Year]$INFO[LI.Property(silo.rating), · ,]'
-                       '$INFO[LI.Property(silo.genre), · ,]')]),
+                      ('!String.IsEmpty(LI.Property(silo.genre))', '$INFO[LI.Year]$INFO[LI.Property(silo.genre), · ,]'
+                       '$INFO[LI.Property(silo.rating), · ,]'),
+                      (None, '$INFO[LI.Year]$INFO[LI.Art(silogenre), · ,]$INFO[LI.Property(silo.rating), · ,]')]),
+    # The info line in parts, with the ratings' marks between them (IMDb's badge,
+    # TMDB's wordmark, as the info page): an episode's has no ratings.
+    ('SiloHeroFacts', [('String.IsEqual(LI.DBType,episode)', '$INFO[LI.Property(silo.code)]$INFO[LI.Title, · ,]'),
+                       ('!String.IsEmpty(LI.Property(silo.genre))', '$INFO[LI.Year]$INFO[LI.Property(silo.genre), · ,]'),
+                       (None, '$INFO[LI.Year]$INFO[LI.Art(silogenre), · ,]')]),
+    ('SiloHeroImdb', [('String.IsEqual(LI.DBType,episode)', ''),
+                      ('!String.IsEmpty(LI.Property(silo.rating.imdb))', '$INFO[LI.Property(silo.rating.imdb)]'),
+                      (None, '$INFO[LI.Rating(imdb)]')]),
+    ('SiloHeroTmdb', [('String.IsEqual(LI.DBType,episode)', ''),
+                      ('!String.IsEmpty(LI.Property(silo.rating.tmdb))', '$INFO[LI.Property(silo.rating.tmdb)]'),
+                      (None, '$INFO[LI.Rating(themoviedb)]')]),
     ('SiloPlot', [(None, '$INFO[LI.Plot]')]),
     # "Aired Sep 25, 2026 · Tom Hardy, Helen Mirren, Pierce Brosnan"
-    ('SiloDetail', [('String.IsEqual(LI.DBType,episode)', '$INFO[LI.Property(silo.aired)]'
+    # A Requests card: its state (Requested, Downloading, Available...).
+    ('SiloDetail', [('!String.IsEmpty(LI.Property(silo.request.label))', '$INFO[LI.Property(silo.request.label)]'),
+                    ('String.IsEqual(LI.DBType,episode)', '$INFO[LI.Property(silo.aired)]'
                      '$INFO[LI.Property(silo.cast), · ,]'),
-                    (None, '$INFO[LI.Property(silo.cast)]')]),
-    ('SiloMpaa', [(None, '$INFO[LI.Property(silo.mpaa)]')]),
-    ('SiloHeroTint', [(None, '$INFO[LI.Property(silo.tint)]')]),
-    ('SiloBadge1', [(None, '$INFO[LI.Property(silo.badge1)]')]),
-    ('SiloBadge2', [(None, '$INFO[LI.Property(silo.badge2)]')]),
-    ('SiloBadge3', [(None, '$INFO[LI.Property(silo.badge3)]')]),
-]
+                    ('!String.IsEmpty(LI.Property(silo.cast))', '$INFO[LI.Property(silo.cast)]'),
+                    (None, '$INFO[LI.Art(silocast)]')]),
+    ('SiloMpaa', [('!String.IsEmpty(LI.Property(silo.mpaa))', '$INFO[LI.Property(silo.mpaa)]'),
+                  (None, '$INFO[LI.Mpaa]')]),
+    # A request's dot before its phrase, and Silo's four-step track after it.
+    ('SiloStatusDot', [(HOME_CARD + ' + !String.IsEmpty(LI.Property(home.status.tint))',
+                        '[COLOR $INFO[LI.Property(home.status.tint)]]•[/COLOR]  '),
+                       ('!String.IsEmpty(LI.Property(silo.request.tint))',
+                        '[COLOR $INFO[LI.Property(silo.request.tint)]]•[/COLOR]  ')]),
+    # A request's progress, as Silo: not for a title already in the library.
+    ('SiloStatusBar', [(HOME_CARD + ' + !String.IsEmpty(LI.Property(home.status.seg1)) + '
+                        'String.IsEmpty(LI.Property(home.request.library))', 'colors/white.png')]),
+] + [('SiloStatusSeg%d' % n, [(HOME_CARD, '$INFO[LI.Property(home.status.seg%d)]' % n)]) for n in range(1, 5)] + [
+    # A title from one of Kodi's own lists (Movies' Recently Added...) has no
+    # silo.* properties: SiloKodiConnect keeps its genre, cast, badges and tint
+    # in the library as text in art entries (silogenre...), read only as text.
+    # Kodi gives a library item those entries in any list, so the property wins.
+    (name, [('!String.IsEmpty(LI.Property(silo.%s))' % key, '$INFO[LI.Property(silo.%s)]' % key),
+            (None, '$INFO[LI.Art(silo%s)]' % key)])
+    for name, key in (('SiloHeroTint', 'tint'), ('SiloBadge1', 'badge1'), ('SiloBadge2', 'badge2'),
+                      ('SiloBadge3', 'badge3'))]
 
 CARDS = '''
     <variable name="SiloCardTitle">
+        <value condition="!String.IsEmpty(ListItem.Property(home.type))">$INFO[ListItem.Property(home.card.title)]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.TVShowTitle]</value>
         <value>$INFO[ListItem.Label]</value>
     </variable>
     <variable name="SiloCardEpisode">
-        <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code)]$INFO[ListItem.Title, • ,]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(home.status.tint))">[COLOR $INFO[ListItem.Property(home.status.tint)]]•[/COLOR] $INFO[ListItem.Property(home.card.wide_sub)]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(home.type))">$INFO[ListItem.Property(home.card.wide_sub)]</value>
+        <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code)]$INFO[ListItem.Title, · ,]</value>
         <value>$INFO[ListItem.Year]</value>
     </variable>
     <variable name="SiloCardYear">
+        <value condition="String.IsEqual(ListItem.Property(home.type),request) | !String.IsEmpty(ListItem.Property(home.request.library))">$INFO[ListItem.Property(home.card.sub)]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(silo.request.caption))">$INFO[ListItem.Property(silo.request.caption)]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(home.status.tint))">[COLOR $INFO[ListItem.Property(home.status.tint)]]•[/COLOR] $INFO[ListItem.Property(home.card.sub)]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(home.type))">$INFO[ListItem.Property(home.card.sub)]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(silo.request.tint))">[COLOR $INFO[ListItem.Property(silo.request.tint)]]•[/COLOR] $INFO[ListItem.Property(silo.request.label)]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(silo.request.label))">$INFO[ListItem.Property(silo.request.label)]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code)]</value>
         <value>$INFO[ListItem.Year]</value>
     </variable>
+    <!-- A title with no poster (often one Silo can request) shows its
+         backdrop, cropped; with no art at all, its name (SiloNoPosterArt). -->
     <variable name="SiloPosterArt">
+        <value condition="!String.IsEmpty(ListItem.Property(home.type)) + !String.IsEmpty(ListItem.Property(home.art.poster))">$INFO[ListItem.Property(home.art.poster)]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(home.type))">$INFO[ListItem.Property(home.art.fanart)]</value>
         <value condition="!String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
         <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
-        <value>$INFO[ListItem.Art(thumb)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+        <value>$INFO[ListItem.Art(fanart)]</value>
     </variable>
+    <expression name="SiloNoPosterArt">[!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.art.poster)) + String.IsEmpty(ListItem.Property(home.art.fanart))] | [String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Art(poster)) + String.IsEmpty(ListItem.Art(tvshow.poster)) + String.IsEmpty(ListItem.Art(thumb)) + String.IsEmpty(ListItem.Art(fanart))]</expression>
     <variable name="SiloLandscapeArt">
+        <value condition="!String.IsEmpty(ListItem.Property(home.type))">$INFO[ListItem.Property(home.art.landscape)]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
         <value condition="!String.IsEmpty(ListItem.Art(landscape))">$INFO[ListItem.Art(landscape)]</value>
         <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
@@ -722,31 +1913,88 @@ EMPTY_HOME = '''    <variable name="SiloEmptyHome">
 '''
 
 
+def request_pill_variables():
+    """The Requests pills' colours: Discover (0) or Yours (1), the view showing lit."""
+    out = ''
+    for number, lit in ((0, '!' + YOURS_SHOWN), (1, YOURS_SHOWN)):
+        out += ('    <variable name="SiloRequestsPill%d">\n        <value condition="%s">%s</value>\n'
+                '        <value>%s</value>\n    </variable>\n' % (number, lit, TEXT, TAB_DIM))
+        out += ('    <variable name="SiloRequestsPillFill%d">\n        <value condition="%s">33FFFFFF</value>\n'
+                '        <value>12FFFFFF</value>\n    </variable>\n' % (number, lit))
+    return out
+
+
 def variables():
-    rows = [list_id(index, slot, landscape) for index in range(len(PAGES))
-            for slot in range(1, MAX_ROWS + 1) for landscape in (False, True)]
-    out = '\n    <!-- Silo Skyline (tools/build_home.py) -->' + CARDS
+    rows = [list_id(index, slot, landscape) for index, page in enumerate(PAGES)
+            for slot in range(1, rows_of(page) + 1) for landscape in styles(page)]
+    # The Collections rows: the hero shows the focused collection's name.
+    hero_rows = rows + [collection_id(index) for index, page in enumerate(PAGES) if page in COLLECTION_PAGES]
+    out = ('\n    <!-- Silo Skyline (tools/build_home.py) -->' + CARDS + custom_tab_variables() + DROP_ICON
+           + request_pill_variables())
     for index, page in enumerate(PAGES):
-        for slot in range(1, MAX_ROWS + 1):
-            for landscape in (False, True):
+        for slot in range(1, rows_of(page) + 1):
+            for landscape in styles(page):
                 out += '    <expression name="SiloRow%d">%s</expression>\n' % (
                     list_id(index, slot, landscape), row_rules(page, index, slot, landscape))
+        if page in COLLECTION_PAGES:
+            out += '    <expression name="SiloRow%d">%s</expression>\n' % (collection_id(index), collection_rule(page, index))
     # Kodi's conditions can't test a $VAR, so each badge's "has text" is an
     # expression over the remembered row, like the hero variables.
-    for name, item_property in (('SiloMpaa', 'silo.mpaa'), ('SiloTint', 'silo.tint'),
-                                ('SiloBadge1', 'silo.badge1'),
-                                ('SiloBadge2', 'silo.badge2'), ('SiloBadge3', 'silo.badge3')):
-        terms = ['[String.IsEqual(%s,%d) + !String.IsEmpty(Container(%d).ListItem.Property(%s))]'
-                 % (prop('silo.row'), row_id, row_id, item_property) for row_id in rows]
+    # Each also has Kodi's own field for an item Kodi lists itself (native).
+    for name, item_property, native in (('SiloMpaa', 'silo.mpaa', 'Mpaa'), ('SiloTint', 'silo.tint', 'Art(silotint)'),
+                                        ('SiloBadge1', 'silo.badge1', 'Art(silobadge1)'),
+                                        ('SiloBadge2', 'silo.badge2', 'Art(silobadge2)'),
+                                        ('SiloBadge3', 'silo.badge3', 'Art(silobadge3)')):
+        home_property = 'home.' + item_property.split('.', 1)[1]
+        def has(row_id):
+            return ('[!String.IsEmpty(Container(%(r)d).ListItem.Property(%(p)s)) | '
+                    '!String.IsEmpty(Container(%(r)d).ListItem.Property(%(h)s)) | '
+                    '!String.IsEmpty(Container(%(r)d).ListItem.%(n)s)]'
+                    % {'r': row_id, 'p': item_property, 'h': home_property, 'n': native})
+        terms = ['[String.IsEqual(%s,%d) + %s]' % (prop('silo.row'), row_id, has(row_id)) for row_id in rows]
+        terms += ['[%s + %s]' % (waiting, has(row_id)) for waiting, row_id in waiting_rows()]
+        terms += ['[%s + !String.IsEmpty(%s)]' % (home_waiting(row), prop('silo.home.%d.1.%s' % (row, home_property[5:])))
+                  for row in (1, 2)]
+        out += '    <expression name="Has%s">%s</expression>\n' % (name, ' | '.join(terms))
+    # The ratings' marks: Silo's score (a library item, or a Home card's), else
+    # Kodi's own rating for an item it lists itself; never an episode's.
+    for name, item_property, home_property, kodi_rating in (
+            ('SiloHeroImdb', 'silo.rating.imdb', 'home.rating.imdb', 'imdb'),
+            ('SiloHeroTmdb', 'silo.rating.tmdb', 'home.rating.tmdb', 'themoviedb')):
+        def has(item):
+            return ('[!String.IsEqual(%(i)s.DBType,episode) + [!String.IsEmpty(%(i)s.Property(%(p)s)) | '
+                    '!String.IsEmpty(%(i)s.Property(%(h)s)) | !String.IsEmpty(%(i)s.Rating(%(k)s))]]'
+                    % {'i': item, 'p': item_property, 'h': home_property, 'k': kodi_rating})
+        terms = ['[String.IsEqual(%s,%d) + %s]' % (prop('silo.row'), row_id, has('Container(%d).ListItem' % row_id))
+                 for row_id in rows]
+        terms += ['[%s + %s]' % (waiting, has('Container(%d).ListItem' % row_id)) for waiting, row_id in waiting_rows()]
+        terms += ['[%s + !String.IsEmpty(%s)]' % (home_waiting(row), prop('silo.home.%d.1.%s' % (row, home_property[5:])))
+                  for row in (1, 2)]
         out += '    <expression name="Has%s">%s</expression>\n' % (name, ' | '.join(terms))
     out += EMPTY_HOME
     for name, entries in HERO:
+        # A Home card (SiloKodiConnect's published rows) carries its text ready.
+        if name in HERO_STATIC:
+            entries = [(HOME_CARD, '$INFO[LI.Property(%s)]' % HERO_STATIC[name])] + entries
         out += '    <variable name="%s">\n' % name
-        for row_id in rows:
+        for row_id in hero_rows:
             item = 'Container(%d).ListItem' % row_id
             mine = 'String.IsEqual(%s,%d)' % (prop('silo.row'), row_id)
             for condition, value in entries:
                 full = mine + (' + [%s]' % condition.replace('LI', item) if condition else '')
+                out += '        <value condition="%s">%s</value>\n' % (full, value.replace('LI', item))
+        # Switching to Home clears the remembered row until the first row takes
+        # focus (a timer): show Home's first card meanwhile, not a black hero.
+        if name in HERO_STATIC:
+            field = HERO_STATIC[name][len('home.'):]
+            for row in (1, 2):
+                out += '        <value condition="%s">$INFO[%s]</value>\n' % (
+                    home_waiting(row), prop('silo.home.%d.1.%s' % (row, field)))
+        # Another page before a row has focus: its first loaded row's item.
+        for waiting, row_id in waiting_rows():
+            item = 'Container(%d).ListItem' % row_id
+            for condition, value in entries:
+                full = waiting + (' + [%s]' % condition.replace('LI', item) if condition else '')
                 out += '        <value condition="%s">%s</value>\n' % (full, value.replace('LI', item))
         out += '    </variable>\n'
     return out + '    <!-- end Silo Skyline -->\n'
@@ -779,17 +2027,18 @@ def first_row_timer():
     """A skin timer (xml/Timers.xml) that puts focus on the first row once it
     has loaded, so the hero is filled at start-up: rows load after Home opens,
     and Kodi can't focus an empty list. It waits until no row has been chosen
-    and focus is on the current page's tab or off the bar (avatar included), then focuses the
-    first row showing a second later; it starts again if that row was still
-    loading. Timers.xml gets its conditions in full: it has no $EXP."""
+    and focus is nowhere (Home's default row couldn't take it), never on the
+    bar or the avatar, then focuses the first row showing a second later; it
+    starts again if that row was still loading. Timers.xml gets its conditions in full: it has no $EXP."""
     ready, focus = [], []
     for index, page in enumerate(PAGES):
-        rows = [(slot, landscape) for slot in range(1, LOOKAHEAD + 1) for landscape in (False, True)]
+        rows = [(slot, landscape) for slot in range(1, LOOKAHEAD + 1) for landscape in styles(page)]
         loaded = ' | '.join('Integer.IsGreater(Container(%d).NumItems,0)' % list_id(index, slot, landscape)
                             for slot, landscape in rows)
-        ready.append('[%s + [%s] + [Control.HasFocus(%d) | [!ControlGroup(9000).HasFocus() + '
-                     '!Control.HasFocus(9011)]]]'
-                     % (page_visible(page), loaded, 9002 + index))
+        # Not from the bar, where someone chose to be (a tab's page fills its
+        # hero from its first row without focus), except as Kodi starts.
+        ready.append('[%s + [%s] + [[!ControlGroup(9000).HasFocus() + !Control.HasFocus(9011)] | '
+                     '!String.IsEmpty(%s)]]' % (page_visible(page), loaded, prop('silo.startup')))
         shown_rows = [('[%s]' % row_rules(page, index, slot, landscape), list_id(index, slot, landscape))
                       for slot, landscape in rows]
         for position, (rule, target) in enumerate(shown_rows):
@@ -804,7 +2053,83 @@ def first_row_timer():
             '        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(%s),1) | !Window.IsActive(home) | '
             '!String.IsEmpty(%s)</stop>\n%s'
             '    </timer>\n' % (name, prop('silo.row'), ' | '.join(ready), name, prop('silo.row'), ''.join(focus))
-            + TIMER_END)
+            + splash_timer() + TIMER_END)
+
+
+SPLASH_MAX = 20  # seconds: the splash never holds longer, whatever happens
+
+
+def splash_timer():
+    """Lifts the splash (silo.ready) once Home's first rows have items, or
+    after SPLASH_MAX seconds (signed out, no rows, Silo unreachable)."""
+    loaded = ' | '.join('Integer.IsGreater(Container(%d).NumItems,0)' % list_id(0, slot, landscape)
+                        for slot in (1, 2) for landscape in styles('home'))
+    return ('    <timer>\n'
+            '        <name>silo_splash</name>\n'
+            '        <description>Lift the start-up splash once Home has rows (tools/build_home.py)</description>\n'
+            '        <start>Window.IsActive(home) + String.IsEmpty(%(ready)s)</start>\n'
+            '        <stop>%(loaded)s | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_splash),%(max)d)</stop>\n'
+            '        <onstop>SetProperty(silo.ready,1,home)</onstop>\n'
+            '    </timer>\n' % {'ready': prop('silo.ready'), 'loaded': loaded, 'max': SPLASH_MAX})
+
+
+def wordmark(x, top, extra=''):
+    """Skyline's mark and name, top left on Home."""
+    return '''        <!-- Skyline's mark and name (media/silo/skyline_mark.png). -->
+        <control type="grouplist">
+            <left>%(x)d</left><top>%(top)d</top>
+            <width>440</width><height>64</height>
+            <orientation>horizontal</orientation>
+            <itemgap>12</itemgap>
+            <usecontrolcoords>true</usecontrolcoords>%(extra)s
+            <control type="image">
+                <top>6</top><width>52</width><height>52</height>
+                <texture>silo/skyline_mark.png</texture>
+            </control>
+            <control type="label">
+                <width>auto</width><height>64</height>
+                <aligny>center</aligny>
+                <font>silo_wordmark</font>
+                <textcolor>%(text)s</textcolor>
+                <label>Skyline</label>
+            </control>
+        </control>''' % {'x': x, 'top': top, 'extra': extra, 'text': TEXT, 'dim': TEXT_DIM}
+
+
+def splash():
+    """Skyline's start-up screen over Home until its first rows are in (a
+    property, so it shows once per Kodi start, never on returning to Home)."""
+    return '''
+        <control type="group">
+            <visible>String.IsEmpty(%(ready)s)</visible>
+            <animation effect="fade" start="100" end="0" time="400">Hidden</animation>
+            <control type="image">
+                <width>1920</width><height>1080</height>
+                <texture>silo/splash_bg.png</texture>
+            </control>
+            <control type="image">
+                <left>840</left><top>270</top><width>240</width><height>240</height>
+                <texture>silo/skyline_mark.png</texture>
+            </control>
+            <control type="grouplist">
+                <left>0</left><top>540</top><width>1920</width><height>110</height>
+                <orientation>horizontal</orientation>
+                <align>center</align>
+                <itemgap>22</itemgap>
+                <control type="label">
+                    <width>auto</width><height>110</height>
+                    <aligny>center</aligny>
+                    <font>silo_title</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label>Skyline</label>
+                </control>
+            </control>
+            <control type="image">
+                <left>936</left><top>720</top><width>48</width><height>48</height>
+                <animation effect="rotate" start="0" end="-360" center="auto" time="900" loop="true" reversible="false" condition="true">Conditional</animation>
+                <texture colordiffuse="99EDEDED">silo/spinner_arc.png</texture>
+            </control>
+        </control>''' % {'ready': prop('silo.ready'), 'background': BACKGROUND, 'text': TEXT}
 
 
 TIMER_START, TIMER_END = '    <!-- Silo Skyline (tools/build_home.py) -->\n', '    <!-- end Silo Skyline -->\n'
@@ -820,6 +2145,7 @@ def add_timer():
 
 
 if __name__ == '__main__':
+    write_card_includes()
     with open(os.path.join(ROOT, 'xml', 'Home.xml'), 'w', encoding='utf-8') as handle:
         handle.write(build())
     add_variables()

@@ -1,0 +1,349 @@
+#!/usr/bin/env python3
+"""Write the menu editor for the user's own menu items (Skin Shortcuts).
+
+Skin Shortcuts opens xml/script-skinshortcuts.xml as its management dialog
+and acts on its buttons by id: 211 the items, 301 add, 302 delete, 303/304
+move, 305 rename, 307 change the action, 313 show or hide, 401 choose what
+an item opens, 405 its submenu, 312 choose a widget (widgetID picks widget
+2 and on), and a button named in shortcuts/overrides.xml's propertySettings
+offers that property's values (here each widget's card style).
+
+Also writes shortcuts/overrides.xml and the editor's variables.
+"""
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from build_home import ROOT, TEXT, WIDGETS  # noqa: E402
+
+ITEM = 'Container(211).ListItem'
+WIDGET_BUTTON = 9450   # + n: choose widget n
+STYLE_BUTTON = 9470    # + n: widget n's card style
+STYLES = (('poster', 'Poster'), ('landscape', 'Landscape'))
+ICON_BUTTON = 9480     # a submenu entry's icon in its tab's dropdown
+# (value, label): the icons a submenu entry can have (Skin Shortcuts lists
+# them; its own "None" leaves the default, a list mark).
+ICONS = (('silo/menu_default.png', 'List'), ('silo/menu_recommended.png', 'Sparkle'),
+         ('silo/menu_browse.png', 'Grid'),
+         ('silo/menu_collections.png', 'Collection'), ('silo/play_circle.png', 'Play'),
+         ('icons/search.png', 'Search'), ('icons/sidemenu/movies.png', 'Film'),
+         ('icons/sidemenu/tv.png', 'TV'), ('icons/sidemenu/favourites.png', 'Star'))
+# The same dialog edits a submenu (group = the item's id), which has no
+# widgets or options of its own.
+MAIN_MENU = 'String.IsEqual(Window.Property(groupname),mainmenu)'
+
+
+def suffix(n):
+    return '' if n == 1 else '.%d' % n
+
+
+def has_widget(n):
+    return '!String.IsEmpty(%s.Property(widgetPath%s))' % (ITEM, suffix(n))
+
+
+def row(control_id, label, value='', onclicks=(), visible='', indent=False, title=''):
+    """A row of the right-hand list. A row that starts a section is taller
+    and carries the section's title in its top 50 px."""
+    clicks = ''.join('\n                    <onclick>%s</onclick>' % action for action in onclicks)
+    height, top = (120, 50) if title else (70, 0)
+    return '''
+                <control type="group" id="%(group)d">
+                    <width>1060</width><height>%(height)d</height>%(visible)s
+                    <control type="label">
+                        <left>32</left><width>1000</width><height>44</height>
+                        <aligny>bottom</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>8CEDEDED</textcolor>
+                        <label>%(title)s</label>
+                    </control>
+                    <control type="button" id="%(id)d">
+                        <top>%(top)d</top>
+                        <include>SiloShortcutButton</include>
+                        <label>%(label)s</label>
+                        <label2>%(value)s</label2>
+                        <textoffsetx>%(offset)d</textoffsetx>%(clicks)s
+                        <onleft>211</onleft>
+                        <!--MOVES %(id)d-->
+                    </control>
+                </control>''' % {'id': control_id, 'label': label, 'value': value, 'clicks': clicks,
+                                 'offset': 64 if indent else 32, 'title': title, 'height': height, 'top': top,
+                                 # The grouplist moves only between children with ids.
+                                 'group': control_id + 20000,
+                                 'visible': '\n                    <visible>%s</visible>' % visible if visible else ''}
+
+
+def heading(text):
+    """A section title, drawn by the next row above itself: Kodi's grouplist
+    stops up/down at any control between buttons, even a disabled one."""
+    return text
+
+
+def widget_rows():
+    out = ''
+    for n in range(1, WIDGETS + 1):
+        # Widget 1 is the item's own widget properties: no widgetID.
+        pick = ['ClearProperty(widgetID)' if n == 1 else 'SetProperty(widgetID,%d)' % n, 'SendClick(312)']
+        shown = MAIN_MENU if n == 1 else '%s + [%s | %s]' % (MAIN_MENU, has_widget(n - 1), has_widget(n))
+        out += row(WIDGET_BUTTON + n, 'Widget %d' % n, '$VAR[SiloShortcutWidget%d]' % n, pick, shown,
+                   title='WIDGETS' if n == 1 else '')
+        out += row(STYLE_BUTTON + n, 'Card style', '$VAR[SiloShortcutStyle%d]' % n,
+                   visible='%s + %s' % (MAIN_MENU, has_widget(n)), indent=True)
+    return out
+
+
+def dialog():
+    rows = (row(313, 'Status', '$VAR[SiloShortcutStatus]', title='THIS ITEM') +
+            row(401, 'Choose what it opens') +
+            row(307, 'Action', '$INFO[%s.Property(path)]' % ITEM) +
+            row(305, 'Label', '$INFO[%s.Label]' % ITEM) +
+            widget_rows() +
+            row(405, 'Submenu', 'Edit', visible=MAIN_MENU, title='OPTIONS') +
+            # A submenu entry's icon in its item's dropdown on Home.
+            row(ICON_BUTTON, 'Icon', '$VAR[SiloShortcutIcon]', visible='!' + MAIN_MENU, title='OPTIONS'))
+    return '''<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated by tools/build_shortcuts.py: Skin Shortcuts' manager for the
+     user's own menu items, in the shared frame. -->
+<window>
+    <defaultcontrol always="true">211</defaultcontrol>
+    <!-- Skin Shortcuts fills the item list just after the window opens, so the
+         default focus finds it empty and nothing has focus: the first key
+         press was lost. Focus it again once it has items. -->
+    <onload>AlarmClock(silo_editor_focus,SetFocus(399),00:01,silent)</onload>
+    <include>Animation_DialogPopupOpenClose</include>
+    <controls>
+        <!-- The shared frame (tools/build_frame.py): a page of its own, as Settings. -->
+        <include>SiloPage</include>
+        <include content="SiloFrame">
+            <param name="title">Customise menu</param>
+            <param name="sub">Your items sit after Requests. An item with widgets shows them as rows on its own page.</param>
+        </include>
+        <include>SiloPanel</include>
+        <control type="group">
+            <left>74</left><top>96</top>
+            <width>1600</width><height>940</height>
+
+            <!-- The items. -->
+            <control type="list" id="211">
+                <left>36</left><top>140</top>
+                <width>560</width><height>504</height>
+                <orientation>vertical</orientation>
+                <onright>9000</onright>
+                <ondown>301</ondown>
+                <scrolltime tween="cubic" easing="out">200</scrolltime>
+                <itemlayout width="560" height="84">%(item)s
+                </itemlayout>
+                <focusedlayout width="560" height="84">%(item_focused)s
+                </focusedlayout>
+            </control>
+            <control type="label">
+                <left>60</left><top>160</top>
+                <width>520</width><height>120</height>
+                <font>silo_meta</font>
+                <textcolor>99EDEDED</textcolor>
+                <label>No items yet: choose Add an item.</label>
+                <visible>!Integer.IsGreater(Container(211).NumItems,0)</visible>
+            </control>
+
+            <!-- The menu's own actions, under the items. -->
+            <control type="grouplist" id="9010">
+                <left>36</left><top>620</top>
+                <width>560</width><height>300</height>
+                <orientation>vertical</orientation>
+                <itemgap>8</itemgap>
+                <onup>211</onup>
+                <onright>9000</onright>%(actions)s
+            </control>
+
+            <!-- The selected item: its settings, widgets and options. -->
+            <control type="image">
+                <left>618</left><top>130</top><width>2</width><height>770</height>
+                <texture colordiffuse="14FFFFFF">colors/white.png</texture>
+            </control>
+            <control type="grouplist" id="9000">
+                <left>644</left><top>120</top>
+                <width>1060</width><height>790</height>
+                <orientation>vertical</orientation>
+                <itemgap>0</itemgap>
+                <onleft>211</onleft>
+                <scrolltime tween="cubic" easing="out">200</scrolltime>%(rows)s
+            </control>
+            <!-- The first focus, once the items are in: the list if it has any,
+                 else Add (an alarm can't choose; this off-screen button does). -->
+            <control type="button" id="399">
+                <left>-3000</left><top>0</top><width>10</width><height>10</height>
+                <texturefocus /><texturenofocus />
+                <onfocus condition="Integer.IsGreater(Container(211).NumItems,0)">SetFocus(211)</onfocus>
+                <onfocus condition="!Integer.IsGreater(Container(211).NumItems,0)">SetFocus(301)</onfocus>
+            </control>
+            <!-- Skin Shortcuts' widget chooser, clicked by the Widget buttons. -->
+            <control type="button" id="312">
+                <left>-3000</left><top>0</top><width>10</width><height>10</height>
+                <texturefocus /><texturenofocus />
+            </control>
+        </control>
+    </controls>
+</window>
+''' % {'text': TEXT, 'rows': rows, 'actions': menu_actions(), 'item': item_layout(False), 'item_focused': item_layout(True)}
+
+
+def menu_actions():
+    """Add, move and delete, beside the items they act on."""
+    out = ''
+    for control_id, label, visible in ((301, 'Add an item', ''),
+                                       (303, 'Move up', 'Integer.IsGreater(Container(211).NumItems,1)'),
+                                       (304, 'Move down', 'Integer.IsGreater(Container(211).NumItems,1)'),
+                                       (302, 'Delete', 'Integer.IsGreater(Container(211).NumItems,0)')):
+        out += '''
+                <control type="button" id="%d">
+                    <width>560</width><height>68</height>
+                    <textoffsetx>28</textoffsetx>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%s</textcolor>
+                    <focusedcolor>FF000000</focusedcolor>
+                    <texturefocus border="30" colordiffuse="%s">silo/pill.png</texturefocus>
+                    <texturenofocus border="30" colordiffuse="14FFFFFF">silo/pill.png</texturenofocus>
+                    <label>%s</label>%s
+                </control>''' % (control_id, TEXT, TEXT, label, '\n                    <visible>%s</visible>' % visible if visible else '')
+    return out
+
+
+def item_layout(focused):
+    """An item: its label, then its widgets or what it opens; dimmed if hidden."""
+    pill = ''
+    if focused:
+        pill = '''
+                    <control type="image">
+                        <width>560</width><height>84</height>
+                        <texture border="30" colordiffuse="%s">silo/pill.png</texture>
+                        <visible>Control.HasFocus(211)</visible>
+                    </control>
+                    <control type="image">
+                        <width>560</width><height>84</height>
+                        <texture border="30" colordiffuse="2EFFFFFF">silo/pill.png</texture>
+                        <visible>!Control.HasFocus(211)</visible>
+                    </control>''' % TEXT
+    labels = ''
+    for selected in ((True, False) if focused else (False,)):
+        condition = 'Control.HasFocus(211)' if selected else ('!Control.HasFocus(211)' if focused
+                                                                        else '')
+        visible = '\n                        <visible>%s</visible>' % condition if condition else ''
+        labels += '''
+                    <control type="label">
+                        <left>28</left><top>8</top><width>504</width><height>38</height>
+                        <font>silo_meta</font>
+                        <textcolor>%(main)s</textcolor>
+                        <label>$INFO[ListItem.Label]</label>%(visible)s
+                    </control>
+                    <control type="label">
+                        <left>28</left><top>44</top><width>504</width><height>32</height>
+                        <font>silo_detail</font>
+                        <textcolor>%(sub)s</textcolor>
+                        <label>$VAR[SiloShortcutDetail]</label>%(visible)s
+                    </control>''' % {'main': 'FF000000' if selected else TEXT,
+                                     'sub': 'B3000000' if selected else '99EDEDED', 'visible': visible}
+    return '''
+                    <control type="group">
+                        <animation effect="fade" start="100" end="45" time="0" condition="String.IsEqual(ListItem.Property(skinshortcuts-disabled),True)">Conditional</animation>%s%s
+                    </control>''' % (pill, labels)
+
+
+def variables():
+    out = '''    <variable name="SiloShortcutDetail">
+        <value condition="String.IsEqual(ListItem.Property(skinshortcuts-disabled),True)">Hidden$INFO[ListItem.Property(widgetName), · ,]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(widgetPath))">$INFO[ListItem.Property(widgetName)]$INFO[ListItem.Property(widgetName.2), · ,]$INFO[ListItem.Property(widgetName.3), · ,]</value>
+        <value>$INFO[ListItem.Label2]</value>
+    </variable>
+    <variable name="SiloShortcutStatus">
+        <value condition="String.IsEqual(%(item)s.Property(skinshortcuts-disabled),True)">Hidden</value>
+        <value>Shown</value>
+    </variable>
+''' % {'item': ITEM}
+    out += '    <variable name="SiloShortcutIcon">\n' + ''.join(
+        '        <value condition="String.IsEqual(%s.Property(siloIcon),%s)">%s</value>\n' % (ITEM, value, label)
+        for value, label in ICONS) + '        <value>Default</value>\n    </variable>\n'
+    for n in range(1, WIDGETS + 1):
+        s = suffix(n)
+        out += '''    <variable name="SiloShortcutWidget%(n)d">
+        <value condition="%(has)s">$INFO[%(item)s.Property(widgetName%(s)s)]</value>
+        <value>None</value>
+    </variable>
+    <variable name="SiloShortcutStyle%(n)d">
+        <value condition="String.IsEqual(%(item)s.Property(widgetStyle%(s)s),poster)">Poster</value>
+        <value condition="String.IsEqual(%(item)s.Property(widgetStyle%(s)s),landscape)">Landscape</value>
+        <value>Auto</value>
+    </variable>
+''' % {'n': n, 's': s, 'item': ITEM, 'has': has_widget(n)}
+    return out
+
+
+def overrides():
+    settings = ''
+    for n in range(1, WIDGETS + 1):
+        prop = 'widgetStyle' + suffix(n)
+        settings += ('    <propertySettings property="%s" buttonID="%d" title="Card style" />\n'
+                     % (prop, STYLE_BUTTON + n))
+        for value, label in STYLES:
+            settings += '    <property property="%s" label="%s">%s</property>\n' % (prop, label, value)
+    settings += '    <propertySettings property="siloIcon" buttonID="%d" title="Icon" />\n' % ICON_BUTTON
+    for value, label in ICONS:
+        settings += '    <property property="siloIcon" label="%s">%s</property>\n' % (label, value)
+    return '''<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated by tools/build_shortcuts.py. -->
+<overrides>
+    <!-- Widgets may be playlists. -->
+    <widgetPlaylists>True</widgetPlaylists>
+    <!-- Silo Skyline's own menu, starting empty: not the menu another skin
+         left in Skin Shortcuts' shared files. -->
+    <doNotShareMenu />
+    <!-- Each widget's card style: Poster or Landscape; Skin Shortcuts' own
+         "None" leaves it to what the widget lists (shown as Auto). -->
+%s</overrides>
+''' % settings
+
+
+START, END = '    <!-- Silo Skyline menu editor (tools/build_shortcuts.py) -->\n', '    <!-- end Silo Skyline menu editor -->\n'
+
+
+def add_variables():
+    path = os.path.join(ROOT, 'xml', 'Variables.xml')
+    text = open(path, encoding='utf-8').read()
+    # The editor's variables were hand-written before this script.
+    old = text.find('\t<!-- Silo Skyline menu manager (script-skinshortcuts.xml, hand-written) -->')
+    if old >= 0:
+        end = text.index('\t</variable>\n', text.index('name="SiloShortcutWidget4"', old)) + len('\t</variable>\n')
+        text = text[:old] + text[end:]
+    if START in text:
+        text = text[:text.index(START)] + text[text.index(END) + len(END):]
+    text = text.replace('</includes>', START + variables() + END + '</includes>')
+    with open(path, 'w', encoding='utf-8') as handle:
+        handle.write(text)
+
+
+def with_moves(xml):
+    """Up and down for each row's button: the next or previous row shown.
+    Its button sits in a group (for its section title), so the grouplist's
+    own moves never reach it."""
+    import re
+    ids = [int(found) for found in re.findall(r'<!--MOVES (\d+)-->', xml)]
+    for index, control_id in enumerate(ids):
+        moves = ''
+        for action, others in (('ondown', ids[index + 1:]), ('onup', ids[:index][::-1])):
+            skipped = []
+            for target in others:
+                condition = ' + '.join(['Control.IsVisible(%d)' % (target + 20000)] +
+                                       ['!Control.IsVisible(%d)' % (k + 20000) for k in skipped])
+                moves += '\n                        <%s condition="%s">SetFocus(%d)</%s>' % (action, condition, target,
+                                                                                        action)
+                skipped.append(target)
+        xml = xml.replace('\n                        <!--MOVES %d-->' % control_id, moves)
+    return xml
+
+
+if __name__ == '__main__':
+    with open(os.path.join(ROOT, 'xml', 'script-skinshortcuts.xml'), 'w', encoding='utf-8') as handle:
+        handle.write(with_moves(dialog()))
+    with open(os.path.join(ROOT, 'shortcuts', 'overrides.xml'), 'w', encoding='utf-8') as handle:
+        handle.write(overrides())
+    add_variables()
+    print('Wrote xml/script-skinshortcuts.xml, shortcuts/overrides.xml and their variables in xml/Variables.xml')

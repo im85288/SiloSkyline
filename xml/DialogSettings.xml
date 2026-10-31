@@ -15,13 +15,6 @@
 				<param name="header_label" value="" />
 				<param name="header_id" value="2" />
 			</include>
-			<control type="image">
-				<left>10</left>
-				<top>80</top>
-				<width>1200</width>
-				<height>790</height>
-				<texture border="40">buttons/dialogbutton-nofo.png</texture>
-			</control>
 			<control type="grouplist" id="5">
 				<description>control area</description>
 				<left>29</left>
@@ -49,7 +42,7 @@
 			<control type="image" id="11">
 				<description>separator image</description>
 				<height>3</height>
-				<texture colordiffuse="AAAAAAAA" border="3">dialogs/separator-grey.png</texture>
+				<texture colordiffuse="14FFFFFF">colors/white.png</texture>
 			</control>
 			<control type="edit" id="12">
 				<include>DefaultSettingButton</include>
