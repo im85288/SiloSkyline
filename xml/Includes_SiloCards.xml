@@ -36,6 +36,12 @@
                 <property name="home.status.seg2">$INFO[Window(Home).Property($PARAM[p].status.seg2)]</property>
                 <property name="home.status.seg3">$INFO[Window(Home).Property($PARAM[p].status.seg3)]</property>
                 <property name="home.status.seg4">$INFO[Window(Home).Property($PARAM[p].status.seg4)]</property>
+                <property name="home.request.library">$INFO[Window(Home).Property($PARAM[p].request.library)]</property>
+                <property name="home.request.state">$INFO[Window(Home).Property($PARAM[p].request.state)]</property>
+                <property name="home.request.more">$INFO[Window(Home).Property($PARAM[p].request.more)]</property>
+                <property name="home.request.logo">$INFO[Window(Home).Property($PARAM[p].request.logo)]</property>
+                <property name="home.request.from">$INFO[Window(Home).Property($PARAM[p].request.from)]</property>
+                <property name="home.request.to">$INFO[Window(Home).Property($PARAM[p].request.to)]</property>
                 <visible>!String.IsEmpty(Window(Home).Property($PARAM[p].type))</visible>
             </item>
         </definition>
@@ -67,6 +73,36 @@
                                 <font>silo_card_title</font>
                                 <textcolor>BFEDEDED</textcolor>
                                 <label>$VAR[SiloCardTitle]</label>
+                            </control>
+                        </control>
+                        <control type="group">
+                            <left>14</left><top>14</top>
+                            <visible>[!String.IsEmpty(ListItem.Property(home.request.library)) | !String.IsEmpty(ListItem.Property(silo.request.library))]</visible>
+                            <control type="image">
+                                <width>96</width><height>30</height>
+                                <texture border="8" colordiffuse="CC16181C">silo/badge_solid.png</texture>
+                            </control>
+                            <control type="label">
+                                <width>96</width><height>30</height>
+                                <align>center</align><aligny>center</aligny>
+                                <font>silo_badge</font>
+                                <textcolor>FFEDEDED</textcolor>
+                                <label>LIBRARY</label>
+                            </control>
+                        </control>
+                        <control type="group">
+                            <left>14</left><top>14</top>
+                            <visible>[!String.IsEmpty(ListItem.Property(home.request.state)) | !String.IsEmpty(ListItem.Property(silo.request.status))] + ![!String.IsEmpty(ListItem.Property(home.request.library)) | !String.IsEmpty(ListItem.Property(silo.request.library))]</visible>
+                            <control type="image">
+                                <width>124</width><height>30</height>
+                                <texture border="8" colordiffuse="F2EDEDED">silo/badge_solid.png</texture>
+                            </control>
+                            <control type="label">
+                                <width>124</width><height>30</height>
+                                <align>center</align><aligny>center</aligny>
+                                <font>silo_badge</font>
+                                <textcolor>FF101010</textcolor>
+                                <label>$INFO[ListItem.Property(home.request.state)]$INFO[ListItem.Property(silo.request.status)]</label>
                             </control>
                         </control>
                         <control type="progress">
@@ -143,6 +179,36 @@
                                 <font>silo_card_title</font>
                                 <textcolor>BFEDEDED</textcolor>
                                 <label>$VAR[SiloCardTitle]</label>
+                            </control>
+                        </control>
+                        <control type="group">
+                            <left>14</left><top>14</top>
+                            <visible>[!String.IsEmpty(ListItem.Property(home.request.library)) | !String.IsEmpty(ListItem.Property(silo.request.library))]</visible>
+                            <control type="image">
+                                <width>96</width><height>30</height>
+                                <texture border="8" colordiffuse="CC16181C">silo/badge_solid.png</texture>
+                            </control>
+                            <control type="label">
+                                <width>96</width><height>30</height>
+                                <align>center</align><aligny>center</aligny>
+                                <font>silo_badge</font>
+                                <textcolor>FFEDEDED</textcolor>
+                                <label>LIBRARY</label>
+                            </control>
+                        </control>
+                        <control type="group">
+                            <left>14</left><top>14</top>
+                            <visible>[!String.IsEmpty(ListItem.Property(home.request.state)) | !String.IsEmpty(ListItem.Property(silo.request.status))] + ![!String.IsEmpty(ListItem.Property(home.request.library)) | !String.IsEmpty(ListItem.Property(silo.request.library))]</visible>
+                            <control type="image">
+                                <width>124</width><height>30</height>
+                                <texture border="8" colordiffuse="F2EDEDED">silo/badge_solid.png</texture>
+                            </control>
+                            <control type="label">
+                                <width>124</width><height>30</height>
+                                <align>center</align><aligny>center</aligny>
+                                <font>silo_badge</font>
+                                <textcolor>FF101010</textcolor>
+                                <label>$INFO[ListItem.Property(home.request.state)]$INFO[ListItem.Property(silo.request.status)]</label>
                             </control>
                         </control>
                         <control type="progress">
@@ -370,6 +436,341 @@
                             <textcolor>FFEDEDED</textcolor>
                             <label>$VAR[SiloCardEpisode]</label>
                             <visible>Control.HasFocus($PARAM[id])</visible>
+                        </control>
+                    </control>
+        </definition>
+    </include>
+    <include name="SiloCardGridPoster">
+                    <control type="group">
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>256</width><height>384</height>
+                            <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloPosterArt]</texture>
+                            <aspectratio>scale</aspectratio>
+                        </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>256</width><height>384</height>
+                            <texture diffuse="silo/card_poster_mask.png">silo/card_scrim.png</texture>
+                        </control>
+                        <control type="group">
+                            <visible>$EXP[SiloNoPosterArt]</visible>
+                            <control type="image">
+                                <left>6</left><top>6</top>
+                                <width>256</width><height>384</height>
+                                <texture diffuse="silo/card_poster_mask.png" colordiffuse="SkylineCardEmpty">colors/white.png</texture>
+                            </control>
+                            <control type="textbox">
+                                <left>22</left><top>22</top>
+                                <width>224</width><height>352</height>
+                                <align>center</align><aligny>center</aligny>
+                                <font>silo_card_title</font>
+                                <textcolor>BFEDEDED</textcolor>
+                                <label>$VAR[SiloCardTitle]</label>
+                            </control>
+                        </control>
+                        <control type="group">
+                            <left>14</left><top>14</top>
+                            <visible>[!String.IsEmpty(ListItem.Property(home.request.library)) | !String.IsEmpty(ListItem.Property(silo.request.library))]</visible>
+                            <control type="image">
+                                <width>96</width><height>30</height>
+                                <texture border="8" colordiffuse="CC16181C">silo/badge_solid.png</texture>
+                            </control>
+                            <control type="label">
+                                <width>96</width><height>30</height>
+                                <align>center</align><aligny>center</aligny>
+                                <font>silo_badge</font>
+                                <textcolor>FFEDEDED</textcolor>
+                                <label>LIBRARY</label>
+                            </control>
+                        </control>
+                        <control type="group">
+                            <left>14</left><top>14</top>
+                            <visible>[!String.IsEmpty(ListItem.Property(home.request.state)) | !String.IsEmpty(ListItem.Property(silo.request.status))] + ![!String.IsEmpty(ListItem.Property(home.request.library)) | !String.IsEmpty(ListItem.Property(silo.request.library))]</visible>
+                            <control type="image">
+                                <width>124</width><height>30</height>
+                                <texture border="8" colordiffuse="F2EDEDED">silo/badge_solid.png</texture>
+                            </control>
+                            <control type="label">
+                                <width>124</width><height>30</height>
+                                <align>center</align><aligny>center</aligny>
+                                <font>silo_badge</font>
+                                <textcolor>FF101010</textcolor>
+                                <label>$INFO[ListItem.Property(home.request.state)]$INFO[ListItem.Property(silo.request.status)]</label>
+                            </control>
+                        </control>
+                        <control type="progress">
+                            <left>24</left><top>384</top>
+                            <width>220</width><height>6</height>
+                            <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
+                            <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+                            <info>ListItem.PercentPlayed</info>
+                            <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
+                        </control>
+                        <control type="progress">
+                            <left>24</left><top>384</top>
+                            <width>220</width><height>6</height>
+                            <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
+                            <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+                            <info>ListItem.Property(home.percent)</info>
+                            <visible>!String.IsEmpty(ListItem.Property(home.percent))</visible>
+                        </control>
+                        <control type="group">
+                            <left>212</left><top>16</top>
+                            <visible>Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))</visible>
+                            <control type="image">
+                                <width>40</width><height>40</height>
+                                <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+                            </control>
+                            <control type="image">
+                                <left>9</left><top>9</top><width>22</width><height>22</height>
+                                <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                            </control>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>404</top>
+                            <width>256</width><height>34</height>
+                            <font>silo_card_title</font>
+                            <textcolor>66EDEDED</textcolor>
+                            <label>$VAR[SiloCardTitle]</label>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>438</top>
+                            <width>256</width><height>32</height>
+                            <font>silo_card_sub</font>
+                            <textcolor>4AEDEDED</textcolor>
+                            <label>$VAR[SiloCardYear]</label>
+                        </control>
+                    </control>
+    </include>
+    <include name="SiloCardFocusedGridPoster">
+        <param name="id" />
+        <definition>
+                    <control type="group">
+                        <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus($PARAM[id])">Conditional</animation>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>256</width><height>384</height>
+                            <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloPosterArt]</texture>
+                            <aspectratio>scale</aspectratio>
+                        </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>256</width><height>384</height>
+                            <texture diffuse="silo/card_poster_mask.png">silo/card_scrim.png</texture>
+                        </control>
+                        <control type="group">
+                            <visible>$EXP[SiloNoPosterArt]</visible>
+                            <control type="image">
+                                <left>6</left><top>6</top>
+                                <width>256</width><height>384</height>
+                                <texture diffuse="silo/card_poster_mask.png" colordiffuse="SkylineCardEmpty">colors/white.png</texture>
+                            </control>
+                            <control type="textbox">
+                                <left>22</left><top>22</top>
+                                <width>224</width><height>352</height>
+                                <align>center</align><aligny>center</aligny>
+                                <font>silo_card_title</font>
+                                <textcolor>BFEDEDED</textcolor>
+                                <label>$VAR[SiloCardTitle]</label>
+                            </control>
+                        </control>
+                        <control type="group">
+                            <left>14</left><top>14</top>
+                            <visible>[!String.IsEmpty(ListItem.Property(home.request.library)) | !String.IsEmpty(ListItem.Property(silo.request.library))]</visible>
+                            <control type="image">
+                                <width>96</width><height>30</height>
+                                <texture border="8" colordiffuse="CC16181C">silo/badge_solid.png</texture>
+                            </control>
+                            <control type="label">
+                                <width>96</width><height>30</height>
+                                <align>center</align><aligny>center</aligny>
+                                <font>silo_badge</font>
+                                <textcolor>FFEDEDED</textcolor>
+                                <label>LIBRARY</label>
+                            </control>
+                        </control>
+                        <control type="group">
+                            <left>14</left><top>14</top>
+                            <visible>[!String.IsEmpty(ListItem.Property(home.request.state)) | !String.IsEmpty(ListItem.Property(silo.request.status))] + ![!String.IsEmpty(ListItem.Property(home.request.library)) | !String.IsEmpty(ListItem.Property(silo.request.library))]</visible>
+                            <control type="image">
+                                <width>124</width><height>30</height>
+                                <texture border="8" colordiffuse="F2EDEDED">silo/badge_solid.png</texture>
+                            </control>
+                            <control type="label">
+                                <width>124</width><height>30</height>
+                                <align>center</align><aligny>center</aligny>
+                                <font>silo_badge</font>
+                                <textcolor>FF101010</textcolor>
+                                <label>$INFO[ListItem.Property(home.request.state)]$INFO[ListItem.Property(silo.request.status)]</label>
+                            </control>
+                        </control>
+                        <control type="progress">
+                            <left>24</left><top>384</top>
+                            <width>220</width><height>6</height>
+                            <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
+                            <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+                            <info>ListItem.PercentPlayed</info>
+                            <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
+                        </control>
+                        <control type="progress">
+                            <left>24</left><top>384</top>
+                            <width>220</width><height>6</height>
+                            <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
+                            <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+                            <info>ListItem.Property(home.percent)</info>
+                            <visible>!String.IsEmpty(ListItem.Property(home.percent))</visible>
+                        </control>
+                        <control type="group">
+                            <left>6</left><top>6</top>
+                            <visible>Control.HasFocus($PARAM[id])</visible>
+                            <control type="image">
+                                <width>256</width><height>384</height>
+                                <texture diffuse="silo/card_poster_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
+                            </control>
+                            <control type="image">
+                                <width>256</width><height>384</height>
+                                <texture colordiffuse="33FFFFFF">silo/card_poster_rim.png</texture>
+                            </control>
+                        </control>
+                        <control type="group">
+                            <left>212</left><top>16</top>
+                            <visible>Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))</visible>
+                            <control type="image">
+                                <width>40</width><height>40</height>
+                                <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+                            </control>
+                            <control type="image">
+                                <left>9</left><top>9</top><width>22</width><height>22</height>
+                                <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                            </control>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>404</top>
+                            <width>256</width><height>34</height>
+                            <font>silo_card_title</font>
+                            <textcolor>66EDEDED</textcolor>
+                            <label>$VAR[SiloCardTitle]</label>
+                            <visible>!Control.HasFocus($PARAM[id])</visible>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>404</top>
+                            <width>256</width><height>34</height>
+                            <font>silo_card_title</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$VAR[SiloCardTitle]</label>
+                            <!-- The whole title, scrolling, on the focused card. -->
+                            <scroll>true</scroll>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
+                            <visible>Control.HasFocus($PARAM[id])</visible>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>438</top>
+                            <width>256</width><height>32</height>
+                            <font>silo_card_sub</font>
+                            <textcolor>4AEDEDED</textcolor>
+                            <label>$VAR[SiloCardYear]</label>
+                            <visible>!Control.HasFocus($PARAM[id])</visible>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>438</top>
+                            <width>256</width><height>32</height>
+                            <font>silo_card_sub</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$VAR[SiloCardYear]</label>
+                            <visible>Control.HasFocus($PARAM[id])</visible>
+                        </control>
+                    </control>
+        </definition>
+    </include>
+    <include name="SiloCardBrand">
+                    <control type="group">
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>180</height>
+                            <texture diffuse="silo/card_landscape_mask.png" colordiffuse="FF1E293B">colors/white.png</texture>
+                            <visible>String.IsEmpty(ListItem.Property(home.request.from))</visible>
+                        </control>
+                        <!-- A genre: its two colours, the second fading in from the right. -->
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>180</height>
+                            <texture diffuse="silo/card_landscape_mask.png" colordiffuse="$INFO[ListItem.Property(home.request.from)]">colors/white.png</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(home.request.from))</visible>
+                        </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>180</height>
+                            <texture diffuse="silo/card_landscape_mask.png" flipx="true" colordiffuse="$INFO[ListItem.Property(home.request.to)]">silo/scrim_side.png</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(home.request.to))</visible>
+                        </control>
+                        <control type="image">
+                            <left>46</left><top>42</top>
+                            <width>280</width><height>108</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture background="true">$INFO[ListItem.Property(home.request.logo)]</texture>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>180</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_row</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[ListItem.Property(home.card.title)]</label>
+                            <visible>String.IsEmpty(ListItem.Property(home.request.logo))</visible>
+                        </control>
+                    </control>
+    </include>
+    <include name="SiloCardFocusedBrand">
+        <param name="id" />
+        <definition>
+                    <control type="group">
+                        <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus($PARAM[id])">Conditional</animation>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>180</height>
+                            <texture diffuse="silo/card_landscape_mask.png" colordiffuse="FF1E293B">colors/white.png</texture>
+                            <visible>String.IsEmpty(ListItem.Property(home.request.from))</visible>
+                        </control>
+                        <!-- A genre: its two colours, the second fading in from the right. -->
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>180</height>
+                            <texture diffuse="silo/card_landscape_mask.png" colordiffuse="$INFO[ListItem.Property(home.request.from)]">colors/white.png</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(home.request.from))</visible>
+                        </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>180</height>
+                            <texture diffuse="silo/card_landscape_mask.png" flipx="true" colordiffuse="$INFO[ListItem.Property(home.request.to)]">silo/scrim_side.png</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(home.request.to))</visible>
+                        </control>
+                        <control type="image">
+                            <left>46</left><top>42</top>
+                            <width>280</width><height>108</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture background="true">$INFO[ListItem.Property(home.request.logo)]</texture>
+                        </control>
+                        <control type="label">
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>180</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_row</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>$INFO[ListItem.Property(home.card.title)]</label>
+                            <visible>String.IsEmpty(ListItem.Property(home.request.logo))</visible>
+                        </control>
+                        <control type="group">
+                            <left>6</left><top>6</top>
+                            <visible>Control.HasFocus($PARAM[id])</visible>
+                            <control type="image">
+                                <width>360</width><height>180</height>
+                                <texture diffuse="silo/card_landscape_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
+                            </control>
+                            <control type="image">
+                                <width>360</width><height>180</height>
+                                <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
+                            </control>
                         </control>
                     </control>
         </definition>
