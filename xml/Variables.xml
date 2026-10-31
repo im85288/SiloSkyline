@@ -6939,10 +6939,10 @@
         <value condition="!String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.Premiered]$INFO[VideoPlayer.Duration(mins), · , min]</value>
         <value>$INFO[VideoPlayer.Year]$INFO[VideoPlayer.Duration(mins), · , min]</value>
     </variable>
-    <expression name="SiloPauseScreen">Skin.HasSetting(SkylineShowcaseOSD) + $EXP[SiloVideoPlayer] + Player.Paused + !Window.IsActive(videoosd) + System.IdleTime(10)</expression>
+    <expression name="SiloPauseScreen">!Skin.HasSetting(SkylineSiloOSD) + $EXP[SiloVideoPlayer] + Player.Paused + !Window.IsActive(videoosd) + System.IdleTime(10)</expression>
     
     <variable name="SkylinePlayerStyle">
-        <value condition="Skin.HasSetting(SkylineShowcaseOSD)">Showcase</value>
+        <value condition="!Skin.HasSetting(SkylineSiloOSD)">Showcase</value>
         <value>Silo</value>
     </variable>
     <!-- end Silo Skyline Showcase --></includes>

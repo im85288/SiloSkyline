@@ -394,14 +394,14 @@
     <timer>
         <name>silo_pause_screen</name>
         <description>Showcase's pause screen: ten seconds paused with no key pressed closes the OSD so it can show (tools/build_showcase.py)</description>
-        <start>Skin.HasSetting(SkylineShowcaseOSD) + Player.Paused + System.IdleTime(10) + Window.IsActive(videoosd) + !Window.IsActive(1180)</start>
+        <start>!Skin.HasSetting(SkylineSiloOSD) + Player.Paused + System.IdleTime(10) + Window.IsActive(videoosd) + !Window.IsActive(1180)</start>
         <onstart>Dialog.Close(videoosd)</onstart>
         <stop>!Window.IsActive(videoosd) | !Player.Paused</stop>
     </timer>
     <timer>
         <name>silo_pause_shown</name>
         <description>Showcase's pause screen has shown since the video paused: Back dismisses it (window 1188, tools/build_showcase.py)</description>
-        <start reset="true">Skin.HasSetting(SkylineShowcaseOSD) + Window.IsActive(fullscreenvideo) + !VideoPlayer.Content(LiveTV) + !Player.HasGame + Player.Paused + !Window.IsActive(videoosd) + System.IdleTime(10)</start>
+        <start reset="true">!Skin.HasSetting(SkylineSiloOSD) + Window.IsActive(fullscreenvideo) + !VideoPlayer.Content(LiveTV) + !Player.HasGame + Player.Paused + !Window.IsActive(videoosd) + System.IdleTime(10)</start>
         <stop>!Player.Paused | Window.IsActive(videoosd)</stop>
     </timer>
     <!-- end Silo Skyline Showcase timer --></timers>

@@ -631,7 +631,51 @@ def skin_settings(text):
     text = text.replace('<control type="group">\n\t\t\t<right>0</right>\n\t\t\t<top>133</top>\n\t\t\t<bottom>137</bottom>\n\t\t\t<width>60</width>',
                         '<control type="group">\n\t\t\t<left>%d</left>\n\t\t\t<top>%d</top>\n\t\t\t<height>%d</height>\n\t\t\t<width>8</width>' % (
                             PANEL_X + PANEL_W - 22, PANEL_Y + 170, PANEL_H - 190), 1)
-    return text
+    return skyline_options(text)
+
+
+# Estuary's options that do nothing in Skyline: the weather in the top bar (no
+# top bar), touch mode (Skyline's windows are for remotes), media flags,
+# rating circles and auto-scrolling (Estuary's music and add-on views only),
+# and the profile label (Skyline shows the avatar). Main menu items (Skyline's
+# menu is Skin Shortcuts') and Artwork (Estuary's backgrounds) go whole.
+UNUSED_OPTIONS = (702, 703, 704, 705, 706, 707)
+UNUSED_SECTIONS = ((2, 610), (3, 600))  # (category item, its grouplist)
+PLAYER_SECTION = (4, 622)
+
+
+def drop_control(text, opening):
+    """text without the control that opens with `opening` (its whole line to
+    its matching </control>), if there is one."""
+    start = text.find(opening)
+    if start < 0:
+        return text
+    start = text.rindex('\n', 0, start) + 1
+    depth, at = 0, start
+    while True:
+        nxt_open, nxt_close = text.find('<control', at), text.find('</control>', at)
+        if nxt_open != -1 and nxt_open < nxt_close:
+            depth, at = depth + 1, nxt_open + 8
+            continue
+        depth, at = depth - 1, nxt_close + len('</control>')
+        if depth == 0:
+            return text[:start] + text[text.index('\n', at) + 1:]
+
+
+def skyline_options(text):
+    """Skin settings with only what Skyline uses: General, and Player (Estuary's
+    On screen display: the OSD's auto-close, and Skyline's player style)."""
+    for option in UNUSED_OPTIONS:
+        text = re.sub(r'\t*<control type="(?:radio)?button" id="%d">.*?</control>\n' % option, '', text, count=1, flags=re.S)
+    for item, grouplist in UNUSED_SECTIONS:
+        text = re.sub(r'\t*<item id="%d">.*?</item>\n' % item, '', text, count=1, flags=re.S)
+        text = drop_control(text, '<control type="grouplist" id="%d">' % grouplist)
+    item, grouplist = PLAYER_SECTION
+    text = re.sub(r'(<item id="%d">\s*<label>)\$LOCALIZE\[31170\](</label>)' % item, r'\1Player\2', text, count=1)
+    # What pointed at Main menu items' list points at Player's.
+    for tag in ('onup', 'ondown', 'onleft', 'onright'):
+        text = text.replace('<%s>610</%s>' % (tag, tag), '<%s>%d</%s>' % (tag, grouplist, tag))
+    return text.replace('Control.IsVisible(610)', 'Control.IsVisible(%d)' % grouplist)
 
 
 def file_manager_window():

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Skyline's Showcase player style, an option beside Silo's (Settings,
-General, Player style):
+"""Skyline's Showcase player style, the default, with Silo's as the other
+choice (skin settings, Player, Player style):
 
     python3 tools/build_showcase.py
 
@@ -21,13 +21,15 @@ still; the title's text stands in for a missing logo.
 Each part goes between its own markers, so running this again replaces it.
 """
 import os
+import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_home import ROOT, TEXT  # noqa: E402
 
-SETTING = 'SkylineShowcaseOSD'
-ON = 'Skin.HasSetting(%s)' % SETTING
+# Showcase is the default: the setting (off until chosen) picks Silo's player.
+SETTING = 'SkylineSiloOSD'
+ON = '!Skin.HasSetting(%s)' % SETTING
 # The pause screen, as Netflix's: Showcase, a video paused with no key pressed
 # for ten seconds (the OSD closes then, silo_pause_screen); any key hides it.
 PAUSE_IDLE = 10
@@ -361,9 +363,10 @@ def main():
         # Silo's eyebrow and title give way to Showcase's, and the chrome to the pause screen.
         for label in ('<label>[UPPERCASE]$VAR[SiloPlayerEyebrow][/UPPERCASE]</label>',
                       '<label>$INFO[VideoPlayer.Title]</label>\n\t\t\t\t<shadowcolor>99000000</shadowcolor>'):
-            hidden = label + '\n\t\t\t\t<visible>!%s</visible>' % ON
-            if hidden not in text:
-                text = text.replace(label, hidden, 1)
+            # Silo's eyebrow and title show only with Silo's player (any visible
+            # line an earlier build put after them goes).
+            text = re.sub(re.escape(label) + r'(\n\t\t\t\t<visible>[^<]*</visible>)*',
+                          lambda m: label + '\n\t\t\t\t<visible>Skin.HasSetting(%s)</visible>' % SETTING, text, count=1)
         chrome = '<visible>$EXP[SiloVideoPlayer]</visible>\n\t\t\t<animation effect="fade" start="0" end="100" time="200">Visible</animation>'
         if '!$EXP[SiloPauseScreen]' not in text:
             text = text.replace(chrome, chrome.replace('</visible>', ' + !$EXP[SiloPauseScreen]</visible>', 1), 1)
@@ -380,8 +383,9 @@ def main():
     style = ('\n    <variable name="SkylinePlayerStyle">\n        <value condition="%s">Showcase</value>\n'
              '        <value>Silo</value>\n    </variable>\n    ' % ON)
     edit('Variables.xml', lambda text: put(text, 'Showcase', variables() + style.lstrip(' '), '</includes>'))
+    # First in Player (build_frame.skyline_options), above the OSD's auto-close.
     edit('SkinSettings.xml', lambda text: put(text, 'player style', SETTING_BUTTON,
-                                               '\t\t\t\t<control type="radiobutton" id="701">'))
+                                               '\t\t\t\t<control type="radiobutton" id="623">'))
     print('Wrote the Showcase player style into DialogSeekBar.xml, Timers.xml, Variables.xml and SkinSettings.xml')
 
 
