@@ -192,16 +192,18 @@ def home_waiting(row):
 def waiting_rows():
     """[(condition, list id)]: on a page other than Home, before any row has
     had focus, the hero shows the selected item of the page's first loaded
-    row (Kodi gives a list's item without focus), not a black hero."""
+    row (Kodi gives a list's item without focus), not a black hero. The
+    first showing one: Requests' first rows are Yours', hidden under Discover,
+    and Kodi gives no item for a hidden list."""
     out = []
     for index, page in enumerate(PAGES):
         if page == 'home':
             continue
-        for slot in (1, 2):
+        for slot in range(1, (LOOKAHEAD if page == 'requests' else 2) + 1):
             for landscape in styles(page):
                 target = list_id(index, slot, landscape)
-                out.append(('String.IsEmpty(%s) + %s + Integer.IsGreater(Container(%d).NumItems,0)'
-                            % (prop('silo.row'), page_visible(page), target), target))
+                out.append(('String.IsEmpty(%s) + %s + %s + Integer.IsGreater(Container(%d).NumItems,0)'
+                            % (prop('silo.row'), page_visible(page), shown(target), target), target))
     return out
 
 
