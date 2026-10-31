@@ -28,7 +28,7 @@ CUSTOM_IDS = list(range(9031, 9031 + CUSTOM_SLOTS))
 TV_TAB = 9006  # Live TV's guide, when Kodi has TV channels
 SHORTCUTS = 9100  # hidden list holding Skin Shortcuts' main menu
 SUBMENU = 9240    # the dropdown of a custom item's submenu
-HOME_CARDS = 25   # cards in a published row (SiloKodiConnect rows.CARDS)
+HOME_CARDS = 20   # cards in a published row (SiloKodiConnect rows.CARDS): each adds ~9 ms to Home's load
 # Pages whose rows are SiloKodiConnect's published cards (Movies' and
 # Series' rows are native Kodi lists where they can be, plugin rows otherwise).
 PUBLISHED_PAGES = ('home', 'requests')
@@ -587,8 +587,10 @@ def row(page, page_index, slot, landscape):
         # A Kodi library row (Movies' and Series' Recently Added, say) comes
         # in its sort from SiloKodiConnect: Kodi ignores a videodb path's own
         # order, and sorts before it cuts the row to its limit. Empty for a
-        # plugin row, which keeps its order.
-        content = '<content target="videos" sortby="$INFO[%s]" sortorder="$INFO[%s]" limit="$INFO[%s]">%s</content>' % (
+        # plugin row, which keeps its order. browse="never": no "More..." item
+        # after the limit (Kodi 20+ adds one by default), as Silo's rows end.
+        content = ('<content target="videos" sortby="$INFO[%s]" sortorder="$INFO[%s]" limit="$INFO[%s]" '
+                   'browse="never">%s</content>') % (
             prop(key + '.sort'), prop(key + '.order'), prop(key + '.limit'), path)
     if page in POSTER_ONLY and landscape:
         content = '<content></content>'  # never shown: no slots to parse
