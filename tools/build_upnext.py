@@ -14,6 +14,12 @@ Silo's Next Up takes over the screen and shrinks the video into a frame
 beside the details. Kodi can't draw the playing video inside a dialog, so
 the frame shows the next episode's still; the rest is laid out as Silo TV's
 grid (the show's art behind, the panel and its buttons top right).
+
+With the Showcase player style (the default) it takes the pause screen's look
+instead (tools/build_showcase.py): the playing video dimmed behind, "UP NEXT",
+the show's logo, the episode, its facts and plot, and its still on the right.
+Up Next finds its controls by id, so the countdown, the buttons and the
+eyebrow are shared and slide into the Showcase layout.
 """
 import os
 import sys
@@ -22,6 +28,15 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_home import LANDSCAPE, ROOT, SAFE_X, TEXT, card_body  # noqa: E402
 
 UPNEXT = 'service.upnext'
+SILO = 'Skin.HasSetting(SkylineSiloOSD)'      # Silo's player style chosen
+SHOWCASE = '!' + SILO
+DIM = '87EDEDED'
+
+
+def to_showcase(dx, dy, indent='                '):
+    """A shared control's move into the Showcase layout."""
+    return ('\n%s<animation effect="slide" end="%d,%d" time="0" condition="%s">Conditional</animation>'
+            % (indent, dx, dy, SHOWCASE))
 
 
 def button(control_id, label, width, onleft=None, onright=None):
@@ -67,7 +82,66 @@ PANEL_X = MARGIN + PANE_W + GAP
 PANEL_W = 1920 - MARGIN - PANEL_X
 
 
-def label(top, height, font, color, text, visible='', extra=''):
+# The Showcase layout: the pause screen's (tools/build_showcase.py).
+SHOWCASE_X, SHOWCASE_TOP = 120, 150
+SHOWCASE_STILL_X, SHOWCASE_STILL_TOP = 1160, 160
+SHOWCASE_BUTTONS_TOP = 730
+
+
+def showcase():
+    """The Showcase look's own parts: the dimmed video, the logo, the episode,
+    its facts and plot, and its still."""
+    return '''
+        <control type="group">
+            <visible>%(on)s</visible>
+            <animation effect="fade" start="0" end="100" time="400">WindowOpen</animation>
+            <animation effect="fade" start="100" end="0" time="240">WindowClose</animation>
+            <control type="image">
+                <width>1920</width><height>1080</height>
+                <texture colordiffuse="B3000000">colors/white.png</texture>
+            </control>
+            <control type="image">
+                <left>%(x)d</left><top>196</top><width>900</width><height>190</height>
+                <aspectratio align="left" aligny="bottom">keep</aspectratio>
+                <texture background="true">$INFO[Window.Property(clearlogo)]</texture>
+            </control>
+            <control type="label">
+                <left>%(x)d</left><top>196</top><width>900</width><height>190</height>
+                <aligny>bottom</aligny>
+                <font>silo_osd_title</font>
+                <textcolor>%(text)s</textcolor>
+                <label>$INFO[Window.Property(tvshowtitle)]</label>
+                <visible>String.IsEmpty(Window.Property(clearlogo))</visible>
+            </control>
+            <control type="label">
+                <left>%(x)d</left><top>404</top><width>900</width><height>50</height>
+                <font>silo_row</font>
+                <textcolor>%(text)s</textcolor>
+                <label>$INFO[Window.Property(season),S,]$INFO[Window.Property(episode), · E,]$INFO[Window.Property(title), · ,]</label>
+            </control>
+            <control type="label">
+                <left>%(x)d</left><top>462</top><width>900</width><height>40</height>
+                <font>silo_meta</font>
+                <textcolor>%(dim)s</textcolor>
+                <label>$INFO[Window.Property(year)]$INFO[Window.Property(endtime),  ·  Ends at ,]</label>
+            </control>
+            <control type="textbox">
+                <left>%(x)d</left><top>520</top><width>900</width><height>170</height>
+                <font>silo_detail</font>
+                <textcolor>%(text)s</textcolor>
+                <label>$INFO[Window.Property(plot)]</label>
+                <autoscroll>false</autoscroll>
+            </control>
+            <control type="image">
+                <left>%(sx)d</left><top>%(sy)d</top><width>640</width><height>360</height>
+                <aspectratio>scale</aspectratio>
+                <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloUpNextArt]</texture>
+            </control>
+        </control>''' % {'on': SHOWCASE, 'x': SHOWCASE_X, 'text': TEXT, 'dim': DIM, 'sx': SHOWCASE_STILL_X,
+                         'sy': SHOWCASE_STILL_TOP}
+
+
+def label(top, height, font, color, text, visible='', extra='', shared=False):
     return '''
             <control type="label">
                 <left>%(x)d</left><top>%(top)d</top>
@@ -78,26 +152,27 @@ def label(top, height, font, color, text, visible='', extra=''):
                 <label>%(text)s</label>%(visible)s%(extra)s
             </control>''' % {'x': PANEL_X, 'top': top, 'w': PANEL_W, 'h': height, 'font': font,
                              'color': color, 'text': text, 'extra': extra,
-                             'visible': '\n                <visible>%s</visible>' % visible if visible else ''}
+                             'visible': ('\n                <visible>%s</visible>' % visible if visible else '')
+                             + (to_showcase(SHOWCASE_X - PANEL_X, SHOWCASE_TOP - top) if shared else '')}
 
 
 def popup(still_watching):
     top = PANE_TOP + 10
     if still_watching:
-        eyebrows = label(top, 36, 'silo_meta', '85EDEDED', '$ADDON[%s 30024]' % UPNEXT)
+        eyebrows = label(top, 36, 'silo_meta', '85EDEDED', '$ADDON[%s 30024]' % UPNEXT, shared=True)
         main = '$ADDON[%s 30010]' % UPNEXT  # Continue watching
         what = 'Up Next asks before it plays another episode.'
     else:
         credits = 'String.IsEqual(Window.Property(credits_countdown),true)'
         eyebrows = (
             label(top, 36, 'silo_meta', '85EDEDED', 'UP NEXT',
-                  '!%s + Integer.IsGreater(Player.TimeRemaining,59)' % credits) +
+                  '!%s + Integer.IsGreater(Player.TimeRemaining,59)' % credits, shared=True) +
             label(top, 36, 'silo_meta', '85EDEDED', 'UP NEXT IN $INFO[Window.Property(remaining)] S',
-                  '!%s + !Integer.IsGreater(Player.TimeRemaining,59)' % credits) +
+                  '!%s + !Integer.IsGreater(Player.TimeRemaining,59)' % credits, shared=True) +
             # While the credits roll: the countdown and how to keep watching them.
             label(top, 36, 'silo_meta', '85EDEDED',
                   '$ADDON[%s 30050]  ·  $ADDON[%s 30051]' % (UPNEXT, UPNEXT), credits,
-                  '\n                <description>credits countdown</description>').replace(
+                  '\n                <description>credits countdown</description>', shared=True).replace(
                       '<control type="label">', '<control type="label" id="3015">', 1))
         main = 'Play Now'
         what = 'Up Next offers the next episode as this one ends.'
@@ -111,6 +186,7 @@ def popup(still_watching):
     <zorder>1</zorder>
     <controls>
         <control type="group">
+            <visible>%(silo)s</visible>
             <animation effect="fade" start="0" end="100" time="300">WindowOpen</animation>
             <animation effect="fade" start="100" end="0" time="240">WindowClose</animation>
             <control type="image">
@@ -127,12 +203,14 @@ def popup(still_watching):
                 <width>1920</width><height>720</height>
                 <texture>silo/scrim_bottom.png</texture>
             </control>
-        </control>
+        </control>%(showcase)s
         <control type="group">
             <animation effect="fade" start="0" end="100" time="300">WindowOpen</animation>
             <animation effect="slide" start="0,40" end="0,0" time="300" tween="cubic" easing="out">WindowOpen</animation>
             <animation effect="fade" start="100" end="0" time="240">WindowClose</animation>
             <!-- The pane: the next episode's still with a hairline edge, and the countdown. -->
+            <control type="group">
+            <visible>%(silo)s</visible>
             <control type="image">
                 <left>%(x)d</left><top>%(pane_top)d</top>
                 <width>%(pane_w)d</width><height>%(pane_h)d</height>
@@ -154,21 +232,27 @@ def popup(still_watching):
                 <width>%(pane_w)d</width><height>%(pane_h)d</height>
                 <texture border="14" colordiffuse="29FFFFFF">silo/card_landscape_focus.png</texture>
             </control>
-            <control type="progress" id="3014">
+            </control>
+            <control type="progress" id="3014">%(bar_move)s
                 <left>%(bar_x)d</left><top>%(bar_top)d</top>
                 <width>%(bar_w)d</width><height>6</height>
                 <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
                 <lefttexture /><righttexture /><overlaytexture />
                 <midtexture colordiffuse="%(text)s">colors/white.png</midtexture>
             </control>
-            <!-- The panel. -->%(eyebrows)s%(show)s%(episode)s%(plot)s
-            <control type="grouplist" id="3000">
+            <!-- The panel. -->%(eyebrows)s
+            <control type="group">
+            <visible>%(silo)s</visible>%(show)s%(episode)s%(plot)s
+            </control>
+            <control type="grouplist" id="3000">%(buttons_move)s
                 <left>%(panel_x)d</left><top>%(buttons_top)d</top>
                 <width>%(panel_w)d</width><height>80</height>
                 <orientation>horizontal</orientation>
                 <itemgap>20</itemgap>%(main)s%(close)s
             </control>
-            <!-- On Deck: the rest of Continue Watching. -->
+            <!-- On Deck: the rest of Continue Watching (Silo's style). -->
+            <control type="group">
+            <visible>%(silo)s</visible>
             <control type="label">
                 <left>%(x)d</left><top>%(deck_top)d</top>
                 <width>1200</width><height>46</height>
@@ -200,10 +284,13 @@ def popup(still_watching):
                 <focusedlayout width="%(deck_item_w)d" height="%(deck_h)d">%(deck_card_focused)s
                 </focusedlayout>
             </control>
+            </control>
         </control>
     </controls>
 </window>
-''' % {'what': what, 'x': MARGIN, 'pane_top': PANE_TOP, 'pane_w': PANE_W, 'pane_h': PANE_H,
+''' % {'what': what, 'x': MARGIN, 'silo': SILO, 'showcase': showcase(),
+       'bar_move': to_showcase(SHOWCASE_STILL_X + 30 - (MARGIN + 18), SHOWCASE_STILL_TOP + 376 - (PANE_TOP + PANE_H - 6)),
+       'buttons_move': to_showcase(SHOWCASE_X - PANEL_X, SHOWCASE_BUTTONS_TOP - (PANE_TOP + PANE_H - 80)), 'pane_top': PANE_TOP, 'pane_w': PANE_W, 'pane_h': PANE_H,
        'bar_x': MARGIN + 18, 'bar_top': PANE_TOP + PANE_H - 6, 'bar_w': PANE_W - 36, 'text': TEXT,
        'panel_x': PANEL_X, 'panel_w': PANEL_W, 'buttons_top': PANE_TOP + PANE_H - 80, 'eyebrows': eyebrows,
        'deck': ON_DECK, 'deck_top': PANE_TOP + PANE_H + 56, 'deck_list_top': PANE_TOP + PANE_H + 112,
