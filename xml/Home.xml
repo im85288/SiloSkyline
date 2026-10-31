@@ -261,12 +261,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5001,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5002]">SetFocus(5002)</ondown>
                     <ondown condition="$EXP[SiloRow5003] + !$EXP[SiloRow5002]">SetFocus(5003)</ondown>
@@ -354,12 +358,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5002,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5003]">SetFocus(5003)</ondown>
                     <ondown condition="$EXP[SiloRow5004] + !$EXP[SiloRow5003]">SetFocus(5004)</ondown>
@@ -448,12 +456,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5003,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5004]">SetFocus(5004)</ondown>
                     <ondown condition="$EXP[SiloRow5005] + !$EXP[SiloRow5004]">SetFocus(5005)</ondown>
@@ -543,12 +555,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5004,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5005]">SetFocus(5005)</ondown>
                     <ondown condition="$EXP[SiloRow5006] + !$EXP[SiloRow5005]">SetFocus(5006)</ondown>
@@ -639,12 +655,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5005,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5006]">SetFocus(5006)</ondown>
                     <ondown condition="$EXP[SiloRow5007] + !$EXP[SiloRow5006]">SetFocus(5007)</ondown>
@@ -735,12 +755,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5006,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5007]">SetFocus(5007)</ondown>
                     <ondown condition="$EXP[SiloRow5008] + !$EXP[SiloRow5007]">SetFocus(5008)</ondown>
@@ -831,12 +855,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5007,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5008]">SetFocus(5008)</ondown>
                     <ondown condition="$EXP[SiloRow5009] + !$EXP[SiloRow5008]">SetFocus(5009)</ondown>
@@ -927,12 +955,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5008,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5009]">SetFocus(5009)</ondown>
                     <ondown condition="$EXP[SiloRow5010] + !$EXP[SiloRow5009]">SetFocus(5010)</ondown>
@@ -1023,12 +1055,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5009,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5010]">SetFocus(5010)</ondown>
                     <ondown condition="$EXP[SiloRow5011] + !$EXP[SiloRow5010]">SetFocus(5011)</ondown>
@@ -1118,12 +1154,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5010,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5011]">SetFocus(5011)</ondown>
                     <ondown condition="$EXP[SiloRow5012] + !$EXP[SiloRow5011]">SetFocus(5012)</ondown>
@@ -1212,12 +1252,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5011,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5012]">SetFocus(5012)</ondown>
                     <onup condition="$EXP[SiloRow5010]">SetFocus(5010)</onup>
@@ -1305,12 +1349,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5012,home)</onfocus>
                     <onup condition="$EXP[SiloRow5011]">SetFocus(5011)</onup>
                     <onup condition="$EXP[SiloRow5010] + !$EXP[SiloRow5011]">SetFocus(5010)</onup>
@@ -1397,12 +1445,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5101,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5102]">SetFocus(5102)</ondown>
                     <ondown condition="$EXP[SiloRow5152] + !$EXP[SiloRow5102]">SetFocus(5152)</ondown>
@@ -1463,12 +1515,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5151,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5102]">SetFocus(5102)</ondown>
                     <ondown condition="$EXP[SiloRow5152] + !$EXP[SiloRow5102]">SetFocus(5152)</ondown>
@@ -1529,12 +1585,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5102,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5103]">SetFocus(5103)</ondown>
                     <ondown condition="$EXP[SiloRow5153] + !$EXP[SiloRow5103]">SetFocus(5153)</ondown>
@@ -1597,12 +1657,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5152,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5103]">SetFocus(5103)</ondown>
                     <ondown condition="$EXP[SiloRow5153] + !$EXP[SiloRow5103]">SetFocus(5153)</ondown>
@@ -1665,12 +1729,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5103,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5104]">SetFocus(5104)</ondown>
                     <ondown condition="$EXP[SiloRow5154] + !$EXP[SiloRow5104]">SetFocus(5154)</ondown>
@@ -1735,12 +1803,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5153,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5104]">SetFocus(5104)</ondown>
                     <ondown condition="$EXP[SiloRow5154] + !$EXP[SiloRow5104]">SetFocus(5154)</ondown>
@@ -1805,12 +1877,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5104,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5105]">SetFocus(5105)</ondown>
                     <ondown condition="$EXP[SiloRow5155] + !$EXP[SiloRow5105]">SetFocus(5155)</ondown>
@@ -1877,12 +1953,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5154,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5105]">SetFocus(5105)</ondown>
                     <ondown condition="$EXP[SiloRow5155] + !$EXP[SiloRow5105]">SetFocus(5155)</ondown>
@@ -1949,12 +2029,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5105,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5106]">SetFocus(5106)</ondown>
                     <ondown condition="$EXP[SiloRow5156] + !$EXP[SiloRow5106]">SetFocus(5156)</ondown>
@@ -2019,12 +2103,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5155,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5106]">SetFocus(5106)</ondown>
                     <ondown condition="$EXP[SiloRow5156] + !$EXP[SiloRow5106]">SetFocus(5156)</ondown>
@@ -2089,12 +2177,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5106,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5107]">SetFocus(5107)</ondown>
                     <ondown condition="$EXP[SiloRow5157] + !$EXP[SiloRow5107]">SetFocus(5157)</ondown>
@@ -2157,12 +2249,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5156,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5107]">SetFocus(5107)</ondown>
                     <ondown condition="$EXP[SiloRow5157] + !$EXP[SiloRow5107]">SetFocus(5157)</ondown>
@@ -2225,12 +2321,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5107,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5108]">SetFocus(5108)</ondown>
                     <ondown condition="$EXP[SiloRow5158] + !$EXP[SiloRow5108]">SetFocus(5158)</ondown>
@@ -2291,12 +2391,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5157,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5108]">SetFocus(5108)</ondown>
                     <ondown condition="$EXP[SiloRow5158] + !$EXP[SiloRow5108]">SetFocus(5158)</ondown>
@@ -2357,12 +2461,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5108,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5149]">SetFocus(5149)</ondown>
                     <onup condition="$EXP[SiloRow5107]">SetFocus(5107)</onup>
@@ -2421,12 +2529,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5158,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5149]">SetFocus(5149)</ondown>
                     <onup condition="$EXP[SiloRow5107]">SetFocus(5107)</onup>
@@ -2485,12 +2597,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5201,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5202]">SetFocus(5202)</ondown>
                     <ondown condition="$EXP[SiloRow5252] + !$EXP[SiloRow5202]">SetFocus(5252)</ondown>
@@ -2551,12 +2667,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5251,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5202]">SetFocus(5202)</ondown>
                     <ondown condition="$EXP[SiloRow5252] + !$EXP[SiloRow5202]">SetFocus(5252)</ondown>
@@ -2617,12 +2737,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5202,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5203]">SetFocus(5203)</ondown>
                     <ondown condition="$EXP[SiloRow5253] + !$EXP[SiloRow5203]">SetFocus(5253)</ondown>
@@ -2685,12 +2809,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5252,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5203]">SetFocus(5203)</ondown>
                     <ondown condition="$EXP[SiloRow5253] + !$EXP[SiloRow5203]">SetFocus(5253)</ondown>
@@ -2753,12 +2881,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5203,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5204]">SetFocus(5204)</ondown>
                     <ondown condition="$EXP[SiloRow5254] + !$EXP[SiloRow5204]">SetFocus(5254)</ondown>
@@ -2823,12 +2955,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5253,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5204]">SetFocus(5204)</ondown>
                     <ondown condition="$EXP[SiloRow5254] + !$EXP[SiloRow5204]">SetFocus(5254)</ondown>
@@ -2893,12 +3029,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5204,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5205]">SetFocus(5205)</ondown>
                     <ondown condition="$EXP[SiloRow5255] + !$EXP[SiloRow5205]">SetFocus(5255)</ondown>
@@ -2965,12 +3105,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5254,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5205]">SetFocus(5205)</ondown>
                     <ondown condition="$EXP[SiloRow5255] + !$EXP[SiloRow5205]">SetFocus(5255)</ondown>
@@ -3037,12 +3181,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5205,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5206]">SetFocus(5206)</ondown>
                     <ondown condition="$EXP[SiloRow5256] + !$EXP[SiloRow5206]">SetFocus(5256)</ondown>
@@ -3107,12 +3255,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5255,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5206]">SetFocus(5206)</ondown>
                     <ondown condition="$EXP[SiloRow5256] + !$EXP[SiloRow5206]">SetFocus(5256)</ondown>
@@ -3177,12 +3329,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5206,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5207]">SetFocus(5207)</ondown>
                     <ondown condition="$EXP[SiloRow5257] + !$EXP[SiloRow5207]">SetFocus(5257)</ondown>
@@ -3245,12 +3401,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5256,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5207]">SetFocus(5207)</ondown>
                     <ondown condition="$EXP[SiloRow5257] + !$EXP[SiloRow5207]">SetFocus(5257)</ondown>
@@ -3313,12 +3473,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5207,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5208]">SetFocus(5208)</ondown>
                     <ondown condition="$EXP[SiloRow5258] + !$EXP[SiloRow5208]">SetFocus(5258)</ondown>
@@ -3379,12 +3543,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5257,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5208]">SetFocus(5208)</ondown>
                     <ondown condition="$EXP[SiloRow5258] + !$EXP[SiloRow5208]">SetFocus(5258)</ondown>
@@ -3445,12 +3613,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5208,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5249]">SetFocus(5249)</ondown>
                     <onup condition="$EXP[SiloRow5207]">SetFocus(5207)</onup>
@@ -3509,12 +3681,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5258,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5249]">SetFocus(5249)</ondown>
                     <onup condition="$EXP[SiloRow5207]">SetFocus(5207)</onup>
@@ -3573,12 +3749,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5301,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5302]">SetFocus(5302)</ondown>
                     <ondown condition="$EXP[SiloRow5303] + !$EXP[SiloRow5302]">SetFocus(5303)</ondown>
@@ -3653,12 +3833,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5302,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5303]">SetFocus(5303)</ondown>
                     <ondown condition="$EXP[SiloRow5304] + !$EXP[SiloRow5303]">SetFocus(5304)</ondown>
@@ -3734,12 +3918,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5303,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5304]">SetFocus(5304)</ondown>
                     <ondown condition="$EXP[SiloRow5305] + !$EXP[SiloRow5304]">SetFocus(5305)</ondown>
@@ -3816,12 +4004,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5304,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5305]">SetFocus(5305)</ondown>
                     <ondown condition="$EXP[SiloRow5306] + !$EXP[SiloRow5305]">SetFocus(5306)</ondown>
@@ -3899,12 +4091,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5305,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5306]">SetFocus(5306)</ondown>
                     <ondown condition="$EXP[SiloRow5307] + !$EXP[SiloRow5306]">SetFocus(5307)</ondown>
@@ -3982,12 +4178,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5306,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5307]">SetFocus(5307)</ondown>
                     <ondown condition="$EXP[SiloRow5308] + !$EXP[SiloRow5307]">SetFocus(5308)</ondown>
@@ -4065,12 +4265,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5307,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5308]">SetFocus(5308)</ondown>
                     <ondown condition="$EXP[SiloRow5309] + !$EXP[SiloRow5308]">SetFocus(5309)</ondown>
@@ -4148,12 +4352,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5308,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5309]">SetFocus(5309)</ondown>
                     <ondown condition="$EXP[SiloRow5310] + !$EXP[SiloRow5309]">SetFocus(5310)</ondown>
@@ -4231,12 +4439,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5309,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5310]">SetFocus(5310)</ondown>
                     <ondown condition="$EXP[SiloRow5311] + !$EXP[SiloRow5310]">SetFocus(5311)</ondown>
@@ -4313,12 +4525,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5310,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5311]">SetFocus(5311)</ondown>
                     <ondown condition="$EXP[SiloRow5312] + !$EXP[SiloRow5311]">SetFocus(5312)</ondown>
@@ -4394,12 +4610,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5311,home)</onfocus>
                     <ondown condition="$EXP[SiloRow5312]">SetFocus(5312)</ondown>
                     <onup condition="$EXP[SiloRow5310]">SetFocus(5310)</onup>
@@ -4474,12 +4694,16 @@
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)]">Action(Info)</onclick>
                     <onfocus>SetProperty(silo.row,5312,home)</onfocus>
                     <onup condition="$EXP[SiloRow5311]">SetFocus(5311)</onup>
                     <onup condition="$EXP[SiloRow5310] + !$EXP[SiloRow5311]">SetFocus(5310)</onup>

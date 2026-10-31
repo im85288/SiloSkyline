@@ -13,7 +13,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import GRID_POSTER, ROOT, TEXT, TAB_DIM, REQUEST_BROWSE  # noqa: E402
+from build_home import GRID_POSTER, ROOT, TEXT, TAB_DIM, REQUEST_BROWSE, GRID_BACKDROP  # noqa: E402
 
 GRID = 50
 MOVIES, SERIES = 70, 71
@@ -90,7 +90,7 @@ def build():
             <left>576</left><top>0</top><width>1344</width><height>756</height>
             <aspectratio>stretch</aspectratio>
             <fadetime>240</fadetime>
-            <texture background="true" colordiffuse="40FFFFFF" diffuse="silo/hero_mask.png">$INFO[Container(%(grid)d).ListItem.Art(fanart)]</texture>
+            <texture background="true" colordiffuse="%(backdrop)s" diffuse="silo/hero_mask.png">$INFO[Container(%(grid)d).ListItem.Art(fanart)]</texture>
         </control>
         <include content="SiloFrame">
             <param name="title">$INFO[Window(Home).Property(silo.rbrowse.title)]</param>
@@ -113,7 +113,7 @@ def build():
         </control>
     </controls>
 </window>
-''' % {'window': REQUEST_BROWSE, 'grid': GRID, 'genre': GENRE, 'movies': MOVIES, 'iw': item[0], 'ih': item[1],
+''' % {'backdrop': GRID_BACKDROP, 'window': REQUEST_BROWSE, 'grid': GRID, 'genre': GENRE, 'movies': MOVIES, 'iw': item[0], 'ih': item[1],
        'path': PATH, 'clicks': CLICKS, 'cards': cards(GRID, item[0], item[1]),
        'pills': pill(MOVIES, 'Movies', 'movie', 'noop', SERIES) + pill(SERIES, 'Series', 'series', MOVIES, 'noop')}
 

@@ -15,7 +15,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import wordmark, focus_sheen, focus_zoom, watched_disc, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM  # noqa: E402
+from build_home import wordmark, focus_sheen, focus_zoom, watched_disc, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM, GRID_BACKDROP  # noqa: E402
 
 GRID = 'Container.Content(movies) | Container.Content(tvshows) | Container.Content(sets) | Container.Content(seasons)'
 EPISODES = 'Container.Content(episodes)'
@@ -372,7 +372,7 @@ def build():
             <width>1344</width><height>756</height>
             <aspectratio>stretch</aspectratio>
             <fadetime>240</fadetime>
-            <texture background="true" colordiffuse="59FFFFFF" diffuse="silo/hero_mask.png">$VAR[SiloBrowseArt]</texture>
+            <texture background="true" colordiffuse="%(backdrop)s" diffuse="silo/hero_mask.png">$VAR[SiloBrowseArt]</texture>
         </control>
 
         <!-- The shared frame (tools/build_frame.py): where you are and the clock. -->
@@ -456,7 +456,7 @@ def build():
         <include>SiloTrailerCover</include>
     </controls>
 </window>
-''' % {'wordmark': wordmark(SAFE_X, 56), 'background': BACKGROUND, 'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'lx': SAFE_X - 36,
+''' % {'backdrop': GRID_BACKDROP, 'wordmark': wordmark(SAFE_X, 56), 'background': BACKGROUND, 'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'lx': SAFE_X - 36,
        'views_top': VIEWS_TOP, 'views_h': 1080 - VIEWS_TOP, 'gx': SAFE_X - 6,
        'gw': 1920 - 2 * (SAFE_X - 6), 'pw': poster_item_w, 'ph': POSTER_ITEM_H,
        'ew': 1920 - 2 * (SAFE_X - 6), 'eh': EPISODE_ITEM_H,

@@ -21,7 +21,7 @@ import sys
 from urllib.parse import quote
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import focus_sheen, focus_zoom, watched_disc, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM  # noqa: E402
+from build_home import focus_sheen, focus_zoom, watched_disc, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM, GRID_BACKDROP  # noqa: E402
 
 WINDOW_ID = 1191
 TYPE = 'Window(Home).Property(silo.browse.type)'
@@ -462,7 +462,7 @@ def build():
             <left>576</left><top>0</top><width>1344</width><height>756</height>
             <aspectratio>stretch</aspectratio>
             <fadetime>240</fadetime>
-            <texture background="true" colordiffuse="40FFFFFF" diffuse="silo/hero_mask.png">$VAR[SiloLibraryFanart]</texture>
+            <texture background="true" colordiffuse="%(backdrop)s" diffuse="silo/hero_mask.png">$VAR[SiloLibraryFanart]</texture>
         </control>
         <include content="SiloFrame">
             <param name="title">$VAR[SiloLibraryTitle]</param>
@@ -491,7 +491,7 @@ def build():
         <include>SiloTrailerCover</include>
     </controls>
 </window>
-''' % {'window': WINDOW_ID, 'grid': GRID_ID, 'background': BACKGROUND, 'letter': LETTER, 'gx': GRID_X,
+''' % {'backdrop': GRID_BACKDROP, 'window': WINDOW_ID, 'grid': GRID_ID, 'background': BACKGROUND, 'letter': LETTER, 'gx': GRID_X,
        'gy': GRID_TOP, 'gh': 1080 - GRID_TOP, 'az': AZ_ID, 'personal': IS_PERSONAL,
        'loading': ' | '.join('[%s + Container(%d).IsUpdating]' % (is_list(key), list_id)
                              for key, list_id in [('collections', 56), ('collection', 55)]

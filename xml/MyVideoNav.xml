@@ -23,7 +23,7 @@
             <width>1344</width><height>756</height>
             <aspectratio>stretch</aspectratio>
             <fadetime>240</fadetime>
-            <texture background="true" colordiffuse="59FFFFFF" diffuse="silo/hero_mask.png">$VAR[SiloBrowseArt]</texture>
+            <texture background="true" colordiffuse="40FFFFFF" diffuse="silo/hero_mask.png">$VAR[SiloBrowseArt]</texture>
         </control>
 
         <!-- The shared frame (tools/build_frame.py): where you are and the clock. -->

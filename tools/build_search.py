@@ -15,7 +15,7 @@ import sys
 from urllib.parse import quote
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import wordmark, BACKGROUND, POSTER, ROOT, SAFE_X, TEXT, TEXT_DIM, card_layout  # noqa: E402
+from build_home import wordmark, BACKGROUND, POSTER, ROOT, SAFE_X, TEXT, TEXT_DIM, card_layout, GRID_BACKDROP  # noqa: E402
 
 WINDOW_ID = 1190
 QUERY = 'Skin.String(silo.search)'
@@ -148,7 +148,7 @@ def build():
             <width>1344</width><height>756</height>
             <aspectratio>stretch</aspectratio>
             <fadetime>240</fadetime>
-            <texture background="true" colordiffuse="59FFFFFF" diffuse="silo/hero_mask.png">$INFO[Container.ListItem.Art(fanart)]</texture>
+            <texture background="true" colordiffuse="%(backdrop)s" diffuse="silo/hero_mask.png">$INFO[Container.ListItem.Art(fanart)]</texture>
         </control>
         <!-- The shared frame (tools/build_frame.py). -->
         <include content="SiloFrame">
@@ -220,7 +220,7 @@ def build():
         <include>SiloTrailerCover</include>
     </controls>
 </window>
-''' % {'wordmark': wordmark(SAFE_X, 56), 'window': WINDOW_ID, 'pill': PILL_ID, 'background': BACKGROUND, 'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM,
+''' % {'backdrop': GRID_BACKDROP, 'wordmark': wordmark(SAFE_X, 56), 'window': WINDOW_ID, 'pill': PILL_ID, 'background': BACKGROUND, 'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM,
        'pill_down': pill_down, 'rows_top': ROWS_TOP, 'rows_h': 1080 - ROWS_TOP, 'query': QUERY,
        'nothing': nothing, 'rows': ''.join(row(i, *r) for i, r in enumerate(ROWS)), 'loading': LOADING}
 

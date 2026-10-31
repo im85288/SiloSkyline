@@ -69,6 +69,7 @@ TAB_DIM = 'B3EDEDED'       # Silo's dimmed bar items: 70%
 TITLE_DIM = '66EDEDED'     # a card's title until it has focus: 40%
 SUB_DIM = '4AEDEDED'       # its second line until it has focus: 29%
 HERO_META = '87EDEDED'     # the hero's info line: 53%
+GRID_BACKDROP = '40FFFFFF'  # the focused title's backdrop behind a grid or list page: 25%
 PLOT = '8AEDEDED'          # its plot: 54%
 CAST = '73EDEDED'          # its cast line: 45%
 BACKGROUND = 'FF0D0F12'     # Silo's near-black page
@@ -549,12 +550,18 @@ ROW_CLICKS = '''
                     <!-- A published card opens its info page through SiloKodiConnect:
                          a title Silo can request, its request page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
-                    <!-- A studio, network or genre tile, or a row's See all: Silo's browse page. -->
+                    <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)]">Action(Info)</onclick>'''
+                    <!-- A library title from one of Kodi's own lists (Movies' and Series'
+                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         has the same facts, badges, trailers and More Like This. -->
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + %(library)s">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + %(library)s]">Action(Info)</onclick>''' % {
+    'library': '[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | '
+               'String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)'}
 
 
 def row(page, page_index, slot, landscape):
@@ -1768,12 +1775,14 @@ HERO = [
                    (None, '$INFO[LI.Label]')]),
     # Silo: "S02E02 · Song 2" for an episode, "2005 · Horror · IMDb 8.4" otherwise.
     ('SiloMetaLine', [('String.IsEqual(LI.DBType,episode)', '$INFO[LI.Property(silo.code)]$INFO[LI.Title, · ,]'),
-                      (None, '$INFO[LI.Year]$INFO[LI.Property(silo.genre), · ,]'
-                       '$INFO[LI.Property(silo.rating), · ,]')]),
+                      ('!String.IsEmpty(LI.Property(silo.genre))', '$INFO[LI.Year]$INFO[LI.Property(silo.genre), · ,]'
+                       '$INFO[LI.Property(silo.rating), · ,]'),
+                      (None, '$INFO[LI.Year]$INFO[LI.Art(silogenre), · ,]$INFO[LI.Property(silo.rating), · ,]')]),
     # The info line in parts, with the ratings' marks between them (IMDb's badge,
     # TMDB's wordmark, as the info page): an episode's has no ratings.
     ('SiloHeroFacts', [('String.IsEqual(LI.DBType,episode)', '$INFO[LI.Property(silo.code)]$INFO[LI.Title, · ,]'),
-                       (None, '$INFO[LI.Year]$INFO[LI.Property(silo.genre), · ,]')]),
+                       ('!String.IsEmpty(LI.Property(silo.genre))', '$INFO[LI.Year]$INFO[LI.Property(silo.genre), · ,]'),
+                       (None, '$INFO[LI.Year]$INFO[LI.Art(silogenre), · ,]')]),
     ('SiloHeroImdb', [('String.IsEqual(LI.DBType,episode)', ''),
                       ('!String.IsEmpty(LI.Property(silo.rating.imdb))', '$INFO[LI.Property(silo.rating.imdb)]'),
                       (None, '$INFO[LI.Rating(imdb)]')]),
@@ -1786,8 +1795,10 @@ HERO = [
     ('SiloDetail', [('!String.IsEmpty(LI.Property(silo.request.label))', '$INFO[LI.Property(silo.request.label)]'),
                     ('String.IsEqual(LI.DBType,episode)', '$INFO[LI.Property(silo.aired)]'
                      '$INFO[LI.Property(silo.cast), · ,]'),
-                    (None, '$INFO[LI.Property(silo.cast)]')]),
-    ('SiloMpaa', [(None, '$INFO[LI.Property(silo.mpaa)]')]),
+                    ('!String.IsEmpty(LI.Property(silo.cast))', '$INFO[LI.Property(silo.cast)]'),
+                    (None, '$INFO[LI.Art(silocast)]')]),
+    ('SiloMpaa', [('!String.IsEmpty(LI.Property(silo.mpaa))', '$INFO[LI.Property(silo.mpaa)]'),
+                  (None, '$INFO[LI.Mpaa]')]),
     # A request's dot before its phrase, and Silo's four-step track after it.
     ('SiloStatusDot', [(HOME_CARD + ' + !String.IsEmpty(LI.Property(home.status.tint))',
                         '[COLOR $INFO[LI.Property(home.status.tint)]]•[/COLOR]  '),
@@ -1797,11 +1808,14 @@ HERO = [
     ('SiloStatusBar', [(HOME_CARD + ' + !String.IsEmpty(LI.Property(home.status.seg1)) + '
                         'String.IsEmpty(LI.Property(home.request.library))', 'colors/white.png')]),
 ] + [('SiloStatusSeg%d' % n, [(HOME_CARD, '$INFO[LI.Property(home.status.seg%d)]' % n)]) for n in range(1, 5)] + [
-    ('SiloHeroTint', [(None, '$INFO[LI.Property(silo.tint)]')]),
-    ('SiloBadge1', [(None, '$INFO[LI.Property(silo.badge1)]')]),
-    ('SiloBadge2', [(None, '$INFO[LI.Property(silo.badge2)]')]),
-    ('SiloBadge3', [(None, '$INFO[LI.Property(silo.badge3)]')]),
-]
+    # A title from one of Kodi's own lists (Movies' Recently Added...) has no
+    # silo.* properties: SiloKodiConnect keeps its genre, cast, badges and tint
+    # in the library as text in art entries (silogenre...), read only as text.
+    # Kodi gives a library item those entries in any list, so the property wins.
+    (name, [('!String.IsEmpty(LI.Property(silo.%s))' % key, '$INFO[LI.Property(silo.%s)]' % key),
+            (None, '$INFO[LI.Art(silo%s)]' % key)])
+    for name, key in (('SiloHeroTint', 'tint'), ('SiloBadge1', 'badge1'), ('SiloBadge2', 'badge2'),
+                      ('SiloBadge3', 'badge3'))]
 
 CARDS = '''
     <variable name="SiloCardTitle">
@@ -1812,7 +1826,7 @@ CARDS = '''
     <variable name="SiloCardEpisode">
         <value condition="!String.IsEmpty(ListItem.Property(home.status.tint))">[COLOR $INFO[ListItem.Property(home.status.tint)]]•[/COLOR] $INFO[ListItem.Property(home.card.wide_sub)]</value>
         <value condition="!String.IsEmpty(ListItem.Property(home.type))">$INFO[ListItem.Property(home.card.wide_sub)]</value>
-        <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code)]$INFO[ListItem.Title, • ,]</value>
+        <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code)]$INFO[ListItem.Title, · ,]</value>
         <value>$INFO[ListItem.Year]</value>
     </variable>
     <variable name="SiloCardYear">
@@ -1883,16 +1897,19 @@ def variables():
             out += '    <expression name="SiloRow%d">%s</expression>\n' % (collection_id(index), collection_rule(page, index))
     # Kodi's conditions can't test a $VAR, so each badge's "has text" is an
     # expression over the remembered row, like the hero variables.
-    for name, item_property in (('SiloMpaa', 'silo.mpaa'), ('SiloTint', 'silo.tint'),
-                                ('SiloBadge1', 'silo.badge1'),
-                                ('SiloBadge2', 'silo.badge2'), ('SiloBadge3', 'silo.badge3')):
+    # Each also has Kodi's own field for an item Kodi lists itself (native).
+    for name, item_property, native in (('SiloMpaa', 'silo.mpaa', 'Mpaa'), ('SiloTint', 'silo.tint', 'Art(silotint)'),
+                                        ('SiloBadge1', 'silo.badge1', 'Art(silobadge1)'),
+                                        ('SiloBadge2', 'silo.badge2', 'Art(silobadge2)'),
+                                        ('SiloBadge3', 'silo.badge3', 'Art(silobadge3)')):
         home_property = 'home.' + item_property.split('.', 1)[1]
-        terms = ['[String.IsEqual(%s,%d) + [!String.IsEmpty(Container(%d).ListItem.Property(%s)) | '
-                 '!String.IsEmpty(Container(%d).ListItem.Property(%s))]]'
-                 % (prop('silo.row'), row_id, row_id, item_property, row_id, home_property) for row_id in rows]
-        terms += ['[%s + [!String.IsEmpty(Container(%d).ListItem.Property(%s)) | '
-                  '!String.IsEmpty(Container(%d).ListItem.Property(%s))]]'
-                  % (waiting, row_id, item_property, row_id, home_property) for waiting, row_id in waiting_rows()]
+        def has(row_id):
+            return ('[!String.IsEmpty(Container(%(r)d).ListItem.Property(%(p)s)) | '
+                    '!String.IsEmpty(Container(%(r)d).ListItem.Property(%(h)s)) | '
+                    '!String.IsEmpty(Container(%(r)d).ListItem.%(n)s)]'
+                    % {'r': row_id, 'p': item_property, 'h': home_property, 'n': native})
+        terms = ['[String.IsEqual(%s,%d) + %s]' % (prop('silo.row'), row_id, has(row_id)) for row_id in rows]
+        terms += ['[%s + %s]' % (waiting, has(row_id)) for waiting, row_id in waiting_rows()]
         terms += ['[%s + !String.IsEmpty(%s)]' % (home_waiting(row), prop('silo.home.%d.1.%s' % (row, home_property[5:])))
                   for row in (1, 2)]
         out += '    <expression name="Has%s">%s</expression>\n' % (name, ' | '.join(terms))
