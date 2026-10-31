@@ -19,7 +19,7 @@ import xml.etree.ElementTree as ElementTree
 TOOLS = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(TOOLS)
 BUILDERS = ('build_home', 'build_info', 'build_browse', 'build_search', 'build_upnext', 'build_shortcuts',
-            'build_options', 'build_frame', 'build_library', 'build_person', 'build_tv', 'build_requests',
+            'build_options', 'build_frame', 'build_library', 'build_person', 'build_tv', 'build_requests', 'build_showcase',
             'build_colours')
 
 

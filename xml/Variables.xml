@@ -6824,4 +6824,125 @@
         <value>12FFFFFF</value>
     </variable>
     <!-- end Silo Skyline request browse -->
-</includes>
+<!-- Silo Skyline Showcase (tools/build_showcase.py) -->
+    <variable name="SiloShowcasePoster">
+        <value condition="!String.IsEmpty(Player.Art(tvshow.poster))">$INFO[Player.Art(tvshow.poster)]</value>
+        <value condition="!String.IsEmpty(Player.Art(poster))">$INFO[Player.Art(poster)]</value>
+        <value>$INFO[Player.Art(thumb)]</value>
+    </variable>
+    <variable name="SiloShowcaseStill">
+        <value condition="!String.IsEmpty(VideoPlayer.TVShowTitle) + !String.IsEmpty(Player.Art(thumb))">$INFO[Player.Art(thumb)]</value>
+        <value>$INFO[Player.Art(fanart)]</value>
+    </variable>
+    <variable name="SiloShowcaseLine">
+        <value condition="!String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.Season,S,]$INFO[VideoPlayer.Episode, · E,]$INFO[VideoPlayer.Title, · ,]</value>
+        <value>$INFO[VideoPlayer.Year]$INFO[VideoPlayer.Genre, · ,]</value>
+    </variable>
+    <variable name="SiloShowcaseName">
+        <value condition="!String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.TVShowTitle]</value>
+        <value>$INFO[VideoPlayer.Title]</value>
+    </variable>
+    <variable name="SiloShowcaseResolution">
+        <value condition="String.IsEqual(VideoPlayer.VideoResolution,4K)">4K</value>
+        <value condition="String.IsEqual(VideoPlayer.VideoResolution,2160)">4K</value>
+        <value condition="String.IsEqual(VideoPlayer.VideoResolution,1080)">1080P</value>
+        <value condition="String.IsEqual(VideoPlayer.VideoResolution,720)">720P</value>
+        <value condition="!String.IsEmpty(VideoPlayer.VideoResolution)">SD</value>
+    </variable>
+    <variable name="SiloShowcaseHdr">
+        <value condition="String.IsEqual(VideoPlayer.HdrType,dolbyvision)">DOLBY VISION</value>
+        <value condition="String.IsEqual(VideoPlayer.HdrType,hdr10plus)">HDR10+</value>
+        <value condition="String.IsEqual(VideoPlayer.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(VideoPlayer.HdrType,hlg)">HLG</value>
+    </variable>
+    <variable name="SiloShowcaseAudio">
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos) + String.IsEqual(VideoPlayer.AudioChannels,8)">ATMOS 7.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos) + String.IsEqual(VideoPlayer.AudioChannels,7)">ATMOS 6.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos) + String.IsEqual(VideoPlayer.AudioChannels,6)">ATMOS 5.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos) + String.IsEqual(VideoPlayer.AudioChannels,2)">ATMOS 2.0</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos) + String.IsEqual(VideoPlayer.AudioChannels,1)">ATMOS MONO</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos) + String.IsEqual(VideoPlayer.AudioChannels,8)">ATMOS 7.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos) + String.IsEqual(VideoPlayer.AudioChannels,7)">ATMOS 6.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos) + String.IsEqual(VideoPlayer.AudioChannels,6)">ATMOS 5.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos) + String.IsEqual(VideoPlayer.AudioChannels,2)">ATMOS 2.0</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos) + String.IsEqual(VideoPlayer.AudioChannels,1)">ATMOS MONO</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.IsEqual(VideoPlayer.AudioChannels,8)">TRUEHD 7.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.IsEqual(VideoPlayer.AudioChannels,7)">TRUEHD 6.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.IsEqual(VideoPlayer.AudioChannels,6)">TRUEHD 5.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.IsEqual(VideoPlayer.AudioChannels,2)">TRUEHD 2.0</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.IsEqual(VideoPlayer.AudioChannels,1)">TRUEHD MONO</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.IsEqual(VideoPlayer.AudioChannels,8)">EAC3 7.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.IsEqual(VideoPlayer.AudioChannels,7)">EAC3 6.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.IsEqual(VideoPlayer.AudioChannels,6)">EAC3 5.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.IsEqual(VideoPlayer.AudioChannels,2)">EAC3 2.0</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.IsEqual(VideoPlayer.AudioChannels,1)">EAC3 MONO</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,ac3) + String.IsEqual(VideoPlayer.AudioChannels,8)">AC3 7.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,ac3) + String.IsEqual(VideoPlayer.AudioChannels,7)">AC3 6.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,ac3) + String.IsEqual(VideoPlayer.AudioChannels,6)">AC3 5.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,ac3) + String.IsEqual(VideoPlayer.AudioChannels,2)">AC3 2.0</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,ac3) + String.IsEqual(VideoPlayer.AudioChannels,1)">AC3 MONO</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.IsEqual(VideoPlayer.AudioChannels,8)">DTS-HD MA 7.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.IsEqual(VideoPlayer.AudioChannels,7)">DTS-HD MA 6.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.IsEqual(VideoPlayer.AudioChannels,6)">DTS-HD MA 5.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.IsEqual(VideoPlayer.AudioChannels,2)">DTS-HD MA 2.0</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.IsEqual(VideoPlayer.AudioChannels,1)">DTS-HD MA MONO</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dts) + String.IsEqual(VideoPlayer.AudioChannels,8)">DTS 7.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dts) + String.IsEqual(VideoPlayer.AudioChannels,7)">DTS 6.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dts) + String.IsEqual(VideoPlayer.AudioChannels,6)">DTS 5.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dts) + String.IsEqual(VideoPlayer.AudioChannels,2)">DTS 2.0</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dts) + String.IsEqual(VideoPlayer.AudioChannels,1)">DTS MONO</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dca) + String.IsEqual(VideoPlayer.AudioChannels,8)">DTS 7.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dca) + String.IsEqual(VideoPlayer.AudioChannels,7)">DTS 6.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dca) + String.IsEqual(VideoPlayer.AudioChannels,6)">DTS 5.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dca) + String.IsEqual(VideoPlayer.AudioChannels,2)">DTS 2.0</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dca) + String.IsEqual(VideoPlayer.AudioChannels,1)">DTS MONO</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aac) + String.IsEqual(VideoPlayer.AudioChannels,8)">AAC 7.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aac) + String.IsEqual(VideoPlayer.AudioChannels,7)">AAC 6.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aac) + String.IsEqual(VideoPlayer.AudioChannels,6)">AAC 5.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aac) + String.IsEqual(VideoPlayer.AudioChannels,2)">AAC 2.0</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aac) + String.IsEqual(VideoPlayer.AudioChannels,1)">AAC MONO</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,flac) + String.IsEqual(VideoPlayer.AudioChannels,8)">FLAC 7.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,flac) + String.IsEqual(VideoPlayer.AudioChannels,7)">FLAC 6.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,flac) + String.IsEqual(VideoPlayer.AudioChannels,6)">FLAC 5.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,flac) + String.IsEqual(VideoPlayer.AudioChannels,2)">FLAC 2.0</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,flac) + String.IsEqual(VideoPlayer.AudioChannels,1)">FLAC MONO</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,opus) + String.IsEqual(VideoPlayer.AudioChannels,8)">OPUS 7.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,opus) + String.IsEqual(VideoPlayer.AudioChannels,7)">OPUS 6.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,opus) + String.IsEqual(VideoPlayer.AudioChannels,6)">OPUS 5.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,opus) + String.IsEqual(VideoPlayer.AudioChannels,2)">OPUS 2.0</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,opus) + String.IsEqual(VideoPlayer.AudioChannels,1)">OPUS MONO</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp3) + String.IsEqual(VideoPlayer.AudioChannels,8)">MP3 7.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp3) + String.IsEqual(VideoPlayer.AudioChannels,7)">MP3 6.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp3) + String.IsEqual(VideoPlayer.AudioChannels,6)">MP3 5.1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp3) + String.IsEqual(VideoPlayer.AudioChannels,2)">MP3 2.0</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp3) + String.IsEqual(VideoPlayer.AudioChannels,1)">MP3 MONO</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)">ATMOS</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)">ATMOS</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd)">TRUEHD</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3)">EAC3</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,ac3)">AC3</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)">DTS-HD MA</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dts)">DTS</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dca)">DTS</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aac)">AAC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,flac)">FLAC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,opus)">OPUS</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp3)">MP3</value>
+        <value>[UPPERCASE]$INFO[VideoPlayer.AudioCodec][/UPPERCASE]</value>
+    </variable>
+    <variable name="SiloShowcaseMpaa">
+        <value condition="!String.IsEmpty(Window(Home).Property(silokodi.playing.mpaa))">$INFO[Window(Home).Property(silokodi.playing.mpaa)]</value>
+        <value>$INFO[VideoPlayer.mpaa]</value>
+    </variable>
+    <variable name="SiloShowcaseFacts">
+        <value condition="!String.IsEmpty(VideoPlayer.TVShowTitle) + !String.IsEmpty(Window(Home).Property(silokodi.playing.air_date))">$INFO[Window(Home).Property(silokodi.playing.air_date)]$INFO[VideoPlayer.Duration(mins), · , min]</value>
+        <value condition="!String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.Premiered]$INFO[VideoPlayer.Duration(mins), · , min]</value>
+        <value>$INFO[VideoPlayer.Year]$INFO[VideoPlayer.Duration(mins), · , min]</value>
+    </variable>
+    <expression name="SiloPauseScreen">Skin.HasSetting(SkylineShowcaseOSD) + $EXP[SiloVideoPlayer] + Player.Paused + !Window.IsActive(videoosd) + System.IdleTime(10)</expression>
+    
+    <variable name="SkylinePlayerStyle">
+        <value condition="Skin.HasSetting(SkylineShowcaseOSD)">Showcase</value>
+        <value>Silo</value>
+    </variable>
+    <!-- end Silo Skyline Showcase --></includes>
