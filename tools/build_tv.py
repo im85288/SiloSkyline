@@ -781,7 +781,9 @@ def quick_row(focused):
     """A channel in the quick guide: logo, number and name, what's on now
     with how far through it; the focused row a white bar, dark text; the
     playing channel's name yellow with TiviMate's ▶."""
-    lit = 'Control.HasFocus(11)'
+    # Not while SiloKodiConnect switches the guide's group: Kodi focuses the
+    # channels for a moment as it rebuilds, which flashed the highlight.
+    lit = '[Control.HasFocus(11) + String.IsEmpty(Window(Home).Property(silokodi.quick.switching))]'
 
     def row(now_colour, dim_colour, visible):
         return '''
@@ -1014,6 +1016,37 @@ def quick_rows():
     return ''.join(rows)
 
 
+# The quick guide's groups, as TiviMate's: Left from the channels slides in
+# Kodi's TV groups, the guide's own picked; as the list moves SiloKodiConnect
+# steps the guide along with it (its quick.py).
+GROUPS_ID, GROUP_W, GROUP_ROW = 15, 460, 76
+# Open while it has focus, and while SiloKodiConnect switches the guide's group
+# (Kodi focuses the channels as it rebuilds; without this the list closed and reopened).
+IN_GROUPS = '[Control.HasFocus(%d) | !String.IsEmpty(Window(Home).Property(silokodi.quick.switching))]' % GROUPS_ID
+
+
+def group_row(focused):
+    lit = 'Control.HasFocus(%d)' % GROUPS_ID
+    label = """
+                    <control type="label">
+                        <left>%d</left><top>0</top><width>%d</width><height>%d</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>%s</textcolor>
+                        <label>$INFO[ListItem.Label]</label>%s
+                    </control>"""
+    if not focused:
+        return label % (SAFE_X - 30, GROUP_W - SAFE_X, GROUP_ROW, 'D9EDEDED', '')
+    return ("""
+                    <control type="image">
+                        <left>%d</left><top>6</top><width>%d</width><height>%d</height>
+                        <texture border="20" colordiffuse="%s">silo/card_landscape_mask.png</texture>
+                        <visible>%s</visible>
+                    </control>""" % (SAFE_X - 58, GROUP_W - SAFE_X + 30, GROUP_ROW - 12, TEXT, lit)
+            + label % (SAFE_X - 30, GROUP_W - SAFE_X, GROUP_ROW, 'FF000000', '\n                        <visible>%s</visible>' % lit)
+            + label % (SAFE_X - 30, GROUP_W - SAFE_X, GROUP_ROW, 'D9EDEDED', '\n                        <visible>!%s</visible>' % lit))
+
+
 def build_quick_guide():
     """Kodi's channel list while Live TV plays (DialogPVRChannelsOSD; Left in
     our keymap), as TiviMate's: the channels down the left, the focused
@@ -1062,8 +1095,37 @@ def build_quick_guide():
                  open. A visible condition, not a Conditional animation: Kodi didn't reverse
                  those, so Left back from the schedule focused an invisible list. Hidden, it
                  still takes focus (allowhiddenfocus), and shows as focus arrives. -->
+            <!-- The groups (Left from the channels): in from the left, the channels pushed over. -->
+            <control type="group">
+                <visible allowhiddenfocus="true">%(in_groups)s</visible>
+                <animation effect="slide" start="-%(gw)d,0" end="0,0" time="200" tween="cubic" easing="out">Visible</animation>
+                <animation effect="slide" start="0,0" end="-%(gw)d,0" time="160" tween="cubic" easing="in">Hidden</animation>
+                <control type="image">
+                    <left>0</left><top>0</top><width>%(gw)d</width><height>1080</height>
+                    <texture colordiffuse="F2%(bg)s">colors/white.png</texture>
+                </control>
+                <control type="fixedlist" id="%(groups_id)d">
+                    <visible allowhiddenfocus="true">%(in_groups)s</visible>
+                    <left>0</left><top>20</top><width>%(gw)d</width><height>%(gh)d</height>
+                    <orientation>vertical</orientation>
+                    <focusposition>6</focusposition>
+                    <movement>6</movement>
+                    <scrolltime tween="cubic" easing="out">160</scrolltime>
+                    <onright>11</onright>
+                    <onleft>noop</onleft>
+                    <onback>11</onback>
+                    <!-- The guide follows the list as it moves (SiloKodiConnect); OK goes into its channels. -->
+                    <onclick>SetFocus(11)</onclick>
+                    <content target="videos">pvr://channels/tv/</content>
+                    <itemlayout width="%(gw)d" height="%(grow)d">%(group)s
+                    </itemlayout>
+                    <focusedlayout width="%(gw)d" height="%(grow)d">%(group_focused)s
+                    </focusedlayout>
+                </control>
+            </control>
             <control type="group">
                 <visible allowhiddenfocus="true">!%(view)s</visible>
+                <animation effect="slide" start="0,0" end="%(gw)d,0" time="200" tween="cubic" easing="out" condition="%(in_groups)s">Conditional</animation>
                 <animation effect="slide" start="0,0" end="-%(sx_end)d,0" time="220" tween="cubic" easing="out">Hidden</animation>
                 <animation effect="fade" start="100" end="0" time="220">Hidden</animation>
                 <animation effect="slide" start="-%(sx_end)d,0" end="0,0" time="220" tween="cubic" easing="out">Visible</animation>
@@ -1076,10 +1138,12 @@ def build_quick_guide():
                 <control type="image">
                     <left>%(w)d</left><top>0</top><width>%(sw)d</width><height>1080</height>
                     <texture colordiffuse="CC%(bg)s">colors/white.png</texture>
+                    <visible>!%(in_groups)s</visible>
                 </control>
                 <control type="image">
                     <left>%(sx_end)d</left><top>0</top><width>200</width><height>1080</height>
                     <texture colordiffuse="CC%(bg)s">silo/scrim_side.png</texture>
+                    <visible>!%(in_groups)s</visible>
                 </control>
                 <!-- TiviMate's title bar: a solid, lighter band behind the group's name. -->
                 <control type="image">
@@ -1094,6 +1158,8 @@ def build_quick_guide():
                 </control>
                 <control type="fixedlist" id="11">
                     <left>0</left><top>110</top><width>%(w)d</width><height>%(lh)d</height>
+                    <!-- Left: the groups (SiloKodiConnect puts the list on the guide's own). -->
+                    <onleft>SetFocus(%(groups_id)d)</onleft>
                     <!-- Right: into this channel's whole schedule, catch-up included (TiviMate's). -->
                     <onright>SetProperty(silo.sched.number,$INFO[Container(11).ListItem.ChannelNumberLabel],home)</onright>
                     <onright>SetProperty(silo.sched.name,$INFO[Container(11).ListItem.ChannelName],home)</onright>
@@ -1113,6 +1179,7 @@ def build_quick_guide():
                 <!-- The focused channel's schedule, from just before what's on now. -->
                 <control type="group">
                     <left>%(sx)d</left><top>40</top>
+                    <visible>!%(in_groups)s</visible>
                     <control type="image">
                         <width>104</width><height>56</height>
                         <aspectratio align="left">keep</aspectratio>
@@ -1230,7 +1297,9 @@ def build_quick_guide():
        'days_middle': DAYS_ROWS // 2, 'strip_x': DAYS_X - 12, 'strip_w': FULL_PANEL - DAYS_X + 12,
        'strip_h': 1080 - DAYS_TOP,
        'day': day_row(False), 'day_focused': day_row(True),
-       'card': programme_card(focused, now_timeline, '![%s]' % IN_SCHED),
+       'card': programme_card(focused, now_timeline, '![%s] + !%s' % (IN_SCHED, IN_GROUPS)),
+       'in_groups': IN_GROUPS, 'groups_id': GROUPS_ID, 'gw': GROUP_W, 'gh': GROUP_ROW * 13, 'grow': GROUP_ROW,
+       'group': group_row(False), 'group_focused': group_row(True),
        'sched_card': programme_card(sched, sched_timeline,
                                     '[%s] + String.IsEmpty(%s.Property(silo.header))' % (IN_SCHED, sched))}
 

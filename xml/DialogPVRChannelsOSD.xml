@@ -10,8 +10,65 @@
                  open. A visible condition, not a Conditional animation: Kodi didn't reverse
                  those, so Left back from the schedule focused an invisible list. Hidden, it
                  still takes focus (allowhiddenfocus), and shows as focus arrives. -->
+            <!-- The groups (Left from the channels): in from the left, the channels pushed over. -->
+            <control type="group">
+                <visible allowhiddenfocus="true">[Control.HasFocus(15) | !String.IsEmpty(Window(Home).Property(silokodi.quick.switching))]</visible>
+                <animation effect="slide" start="-460,0" end="0,0" time="200" tween="cubic" easing="out">Visible</animation>
+                <animation effect="slide" start="0,0" end="-460,0" time="160" tween="cubic" easing="in">Hidden</animation>
+                <control type="image">
+                    <left>0</left><top>0</top><width>460</width><height>1080</height>
+                    <texture colordiffuse="SkylineLivePanel">colors/white.png</texture>
+                </control>
+                <control type="fixedlist" id="15">
+                    <visible allowhiddenfocus="true">[Control.HasFocus(15) | !String.IsEmpty(Window(Home).Property(silokodi.quick.switching))]</visible>
+                    <left>0</left><top>20</top><width>460</width><height>988</height>
+                    <orientation>vertical</orientation>
+                    <focusposition>6</focusposition>
+                    <movement>6</movement>
+                    <scrolltime tween="cubic" easing="out">160</scrolltime>
+                    <onright>11</onright>
+                    <onleft>noop</onleft>
+                    <onback>11</onback>
+                    <!-- The guide follows the list as it moves (SiloKodiConnect); OK goes into its channels. -->
+                    <onclick>SetFocus(11)</onclick>
+                    <content target="videos">pvr://channels/tv/</content>
+                    <itemlayout width="460" height="76">
+                    <control type="label">
+                        <left>58</left><top>0</top><width>372</width><height>76</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>D9EDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                    </itemlayout>
+                    <focusedlayout width="460" height="76">
+                    <control type="image">
+                        <left>30</left><top>6</top><width>402</width><height>64</height>
+                        <texture border="20" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
+                        <visible>Control.HasFocus(15)</visible>
+                    </control>
+                    <control type="label">
+                        <left>58</left><top>0</top><width>372</width><height>76</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>SkylineFocusText</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>Control.HasFocus(15)</visible>
+                    </control>
+                    <control type="label">
+                        <left>58</left><top>0</top><width>372</width><height>76</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>D9EDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>!Control.HasFocus(15)</visible>
+                    </control>
+                    </focusedlayout>
+                </control>
+            </control>
             <control type="group">
                 <visible allowhiddenfocus="true">![Control.HasFocus(14) | Control.HasFocus(13) | String.IsEqual(Window(Home).Property(silo.sched.want),1)]</visible>
+                <animation effect="slide" start="0,0" end="460,0" time="200" tween="cubic" easing="out" condition="[Control.HasFocus(15) | !String.IsEmpty(Window(Home).Property(silokodi.quick.switching))]">Conditional</animation>
                 <animation effect="slide" start="0,0" end="-1220,0" time="220" tween="cubic" easing="out">Hidden</animation>
                 <animation effect="fade" start="100" end="0" time="220">Hidden</animation>
                 <animation effect="slide" start="-1220,0" end="0,0" time="220" tween="cubic" easing="out">Visible</animation>
@@ -24,10 +81,12 @@
                 <control type="image">
                     <left>640</left><top>0</top><width>580</width><height>1080</height>
                     <texture colordiffuse="SkylineLiveVeil">colors/white.png</texture>
+                    <visible>![Control.HasFocus(15) | !String.IsEmpty(Window(Home).Property(silokodi.quick.switching))]</visible>
                 </control>
                 <control type="image">
                     <left>1220</left><top>0</top><width>200</width><height>1080</height>
                     <texture colordiffuse="SkylineLiveVeil">silo/scrim_side.png</texture>
+                    <visible>![Control.HasFocus(15) | !String.IsEmpty(Window(Home).Property(silokodi.quick.switching))]</visible>
                 </control>
                 <!-- TiviMate's title bar: a solid, lighter band behind the group's name. -->
                 <control type="image">
@@ -42,6 +101,8 @@
                 </control>
                 <control type="fixedlist" id="11">
                     <left>0</left><top>110</top><width>640</width><height>954</height>
+                    <!-- Left: the groups (SiloKodiConnect puts the list on the guide's own). -->
+                    <onleft>SetFocus(15)</onleft>
                     <!-- Right: into this channel's whole schedule, catch-up included (TiviMate's). -->
                     <onright>SetProperty(silo.sched.number,$INFO[Container(11).ListItem.ChannelNumberLabel],home)</onright>
                     <onright>SetProperty(silo.sched.name,$INFO[Container(11).ListItem.ChannelName],home)</onright>
@@ -106,10 +167,10 @@
                     <control type="image">
                         <left>30</left><top>4</top><width>592</width><height>98</height>
                         <texture border="20" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
-                        <visible>Control.HasFocus(11)</visible>
+                        <visible>[Control.HasFocus(11) + String.IsEmpty(Window(Home).Property(silokodi.quick.switching))]</visible>
                     </control>
                     <control type="group">
-                        <visible>Control.HasFocus(11)</visible>
+                        <visible>[Control.HasFocus(11) + String.IsEmpty(Window(Home).Property(silokodi.quick.switching))]</visible>
                         <control type="image">
                             <left>48</left><top>16</top><width>104</width><height>72</height>
                             <aspectratio>keep</aspectratio>
@@ -147,7 +208,7 @@
                         </control>
                     </control>
                     <control type="group">
-                        <visible>!Control.HasFocus(11)</visible>
+                        <visible>![Control.HasFocus(11) + String.IsEmpty(Window(Home).Property(silokodi.quick.switching))]</visible>
                         <control type="image">
                             <left>48</left><top>16</top><width>104</width><height>72</height>
                             <aspectratio>keep</aspectratio>
@@ -192,7 +253,7 @@
                             <!-- Kodi marks the playing channel selected: the same colour then. -->
                             <selectedcolor>SkylineFocusText</selectedcolor>
                             <label>▶</label>
-                            <visible>ListItem.IsPlaying + Control.HasFocus(11)</visible>
+                            <visible>ListItem.IsPlaying + [Control.HasFocus(11) + String.IsEmpty(Window(Home).Property(silokodi.quick.switching))]</visible>
                         </control>
                         <control type="label">
                             <left>574</left><top>18</top><width>28</width><height>28</height>
@@ -202,13 +263,14 @@
                             <!-- Kodi marks the playing channel selected: the same colour then. -->
                             <selectedcolor>FFF2D46B</selectedcolor>
                             <label>▶</label>
-                            <visible>ListItem.IsPlaying + !Control.HasFocus(11)</visible>
+                            <visible>ListItem.IsPlaying + ![Control.HasFocus(11) + String.IsEmpty(Window(Home).Property(silokodi.quick.switching))]</visible>
                         </control>
                     </focusedlayout>
                 </control>
                 <!-- The focused channel's schedule, from just before what's on now. -->
                 <control type="group">
                     <left>670</left><top>40</top>
+                    <visible>![Control.HasFocus(15) | !String.IsEmpty(Window(Home).Property(silokodi.quick.switching))]</visible>
                     <control type="image">
                         <width>104</width><height>56</height>
                         <aspectratio align="left">keep</aspectratio>
@@ -1478,7 +1540,7 @@
         </control>
         <control type="group">
             <left>1232</left><top>48</top>
-            <visible>![Control.HasFocus(14) | Control.HasFocus(13)]</visible>
+            <visible>![Control.HasFocus(14) | Control.HasFocus(13)] + ![Control.HasFocus(15) | !String.IsEmpty(Window(Home).Property(silokodi.quick.switching))]</visible>
             <animation effect="fade" start="0" end="100" time="200">WindowOpen</animation>
             <animation effect="fade" start="100" end="0" time="120">WindowClose</animation>
             <control type="image">

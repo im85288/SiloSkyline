@@ -73,7 +73,7 @@
         </control>
 
         <!-- Channel groups (Kodi fills list 11): Silo's pills. -->
-        <control type="list" id="11">
+        <control type="list" id="15">
             <left>88</left><top>336</top><width>1744</width><height>52</height>
             <orientation>horizontal</orientation>
             <ondown>51</ondown>
@@ -102,7 +102,7 @@
                     <control type="image">
                         <width>300</width><height>52</height>
                         <texture border="26" colordiffuse="SkylineFocus">silo/pill.png</texture>
-                        <visible>Control.HasFocus(11)</visible>
+                        <visible>Control.HasFocus(15)</visible>
                     </control>
                     <control type="label">
                         <left>22</left><width>256</width><height>52</height>
@@ -111,12 +111,12 @@
                         <textcolor>SkylineFocusText</textcolor>
                         <selectedcolor>SkylineFocusText</selectedcolor>
                         <label>$INFO[ListItem.Label]</label>
-                        <visible>Control.HasFocus(11)</visible>
+                        <visible>Control.HasFocus(15)</visible>
                     </control>
                     <control type="image">
                         <width>300</width><height>52</height>
                         <texture border="28" colordiffuse="D9FFFFFF">silo/season_ring.png</texture>
-                        <visible>!Control.HasFocus(11)</visible>
+                        <visible>!Control.HasFocus(15)</visible>
                     </control>
                     <control type="label">
                         <left>22</left><width>256</width><height>52</height>
@@ -125,7 +125,7 @@
                         <textcolor>FFEDEDED</textcolor>
                         <selectedcolor>FFEDEDED</selectedcolor>
                         <label>$INFO[ListItem.Label]</label>
-                        <visible>!Control.HasFocus(11)</visible>
+                        <visible>!Control.HasFocus(15)</visible>
                     </control>
             </focusedlayout>
         </control>
@@ -138,7 +138,7 @@
             <viewtype label="19298">list</viewtype>
             <timeblocks>21</timeblocks>
             <rulerunit>6</rulerunit>
-            <onup>11</onup>
+            <onup>15</onup>
             <scrolltime tween="cubic" easing="out">240</scrolltime>
             <!-- Now: a white line at the current time with TiviMate's dot at its top, what has aired shaded. -->
             <progresstexture border="0,16,18,0" colordiffuse="F2FFFFFF">silo/epg_now.png</progresstexture>
