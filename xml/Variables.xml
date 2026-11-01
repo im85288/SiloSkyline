@@ -7343,11 +7343,11 @@
         <value></value>
     </variable>
     <variable name="SiloDetailFactsAfter">
-        <value condition="Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]">$INFO[Container(64).ListItem.Season,  [COLOR 80EDEDED]·[/COLOR]  Season ,]$INFO[Container(64).ListItem.Episode,  [COLOR 80EDEDED]·[/COLOR]  Episode ,]</value>
-        <value condition="Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]">$INFO[Container(61).ListItem.Season,  [COLOR 80EDEDED]·[/COLOR]  Season ,]$INFO[Container(61).ListItem.Episode,  [COLOR 80EDEDED]·[/COLOR]  Episode ,]</value>
+        <value condition="Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]">$INFO[Container(64).ListItem.Season,  [COLOR 80EDEDED]·[/COLOR]  S,]$INFO[Container(64).ListItem.Episode, E,]</value>
+        <value condition="Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]">$INFO[Container(61).ListItem.Season,  [COLOR 80EDEDED]·[/COLOR]  S,]$INFO[Container(61).ListItem.Episode, E,]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))">$VAR[SiloDetailGenres]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">$VAR[SiloDetailGenres]</value>
-        <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.air_date))">$INFO[ListItem.Season,  [COLOR 80EDEDED]·[/COLOR]  Season ,]$INFO[ListItem.Episode,  [COLOR 80EDEDED]·[/COLOR]  Episode ,]</value>
+        <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.air_date))">$INFO[ListItem.Season,  [COLOR 80EDEDED]·[/COLOR]  S,]$INFO[ListItem.Episode, E,]</value>
         <value condition="String.IsEqual(ListItem.DBType,movie) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]">$VAR[SiloDetailGenres]</value>
         <value condition="String.IsEqual(ListItem.DBType,tvshow) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]">$VAR[SiloDetailGenres]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.code))"></value>

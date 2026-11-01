@@ -67,7 +67,7 @@
             <!-- Age rating, then the facts. -->
             <control type="grouplist">
                 <top>180</top>
-                <width>1200</width><height>40</height>
+                <width>1500</width><height>40</height>
                 <orientation>horizontal</orientation>
                 <itemgap>0</itemgap>
                 <usecontrolcoords>true</usecontrolcoords>
