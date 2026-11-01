@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Placeholder: Skin Shortcuts replaces this file with the user's menu when
-     Home opens (RunScript(script.skinshortcuts,type=buildxml...)). -->
+     Home opens (RunScript(script.skinshortcuts,type=buildxml...)). Each
+     include holds one hidden item: Kodi warns of an empty include ("Skin has
+     invalid include") when Home loads before Skin Shortcuts has built it. -->
 <includes>
-    <include name="skinshortcuts-mainmenu" />
-    <include name="skinshortcuts-submenu" />
+    <include name="skinshortcuts-mainmenu">
+        <item><label></label><visible>false</visible></item>
+    </include>
+    <include name="skinshortcuts-submenu">
+        <item><label></label><visible>false</visible></item>
+    </include>
 </includes>
