@@ -3,6 +3,9 @@
 <window id="1193">
     <onunload condition="String.IsEqual(Window(Home).Property(silo.browse.from),collections)">SetProperty(silo.browse.type,collections,home)</onunload>
     <onunload condition="String.IsEqual(Window(Home).Property(silo.browse.from),collections)">SetProperty(silo.browse.list,$INFO[Window(Home).Property(silo.browse.list.collections)],home)</onunload>
+    <onunload condition="String.IsEqual(Window(Home).Property(silo.browse.from),genres)">ClearProperty(silo.browse.genre,home)</onunload>
+    <onunload condition="String.IsEqual(Window(Home).Property(silo.browse.from),genres)">SetProperty(silo.browse.type,genres,home)</onunload>
+    <onunload condition="String.IsEqual(Window(Home).Property(silo.browse.from),genres)">SetProperty(silo.browse.list,$INFO[Window(Home).Property(silo.browse.list.genres)],home)</onunload>
     <!-- Back from a trailer started from an info page (Kodi leaves it playing): stop it, which reopens the page. -->
     <!-- A video left playing behind the menus (Back from the player, a trailer's
          page, or Live TV left from the guide): stopped, as in Silo's apps, since
@@ -23,6 +26,7 @@
     <onload condition="String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">SetFocus(53)</onload>
     <onload condition="String.IsEqual(Window(Home).Property(silo.browse.type),collections) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">SetFocus(56)</onload>
     <onload condition="String.IsEqual(Window(Home).Property(silo.browse.type),collection) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">SetFocus(55)</onload>
+    <onload condition="String.IsEqual(Window(Home).Property(silo.browse.type),genres) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">SetFocus(59)</onload>
     <onload condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEmpty(Skin.String(silo.view.movies))] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEmpty(Skin.String(silo.view.tvshows))]]">SetProperty(silo.browse.vpath.grid,$INFO[Window(Home).Property(silo.browse.path)],home)</onload>
     <onload condition="![[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEmpty(Skin.String(silo.view.movies))] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEmpty(Skin.String(silo.view.tvshows))]]">ClearProperty(silo.browse.vpath.grid,home)</onload>
     <onload condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]]">SetProperty(silo.browse.vpath.hero,$INFO[Window(Home).Property(silo.browse.path)],home)</onload>
@@ -820,6 +824,62 @@
             <label>Nothing here yet. Add titles from Silo and they appear here.</label>
             <visible>String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + !Container(53).IsUpdating + Integer.IsEqual(Container(53).NumItems,0)</visible>
         </control>
+        <control type="panel" id="59">
+            <left>82</left><top>252</top>
+            <width>1744</width><height>828</height>
+            <orientation>vertical</orientation>
+            <visible>String.IsEqual(Window(Home).Property(silo.browse.type),genres) + !String.IsEmpty(Window(Home).Property(silo.browse.list))</visible>
+            <scrolltime tween="cubic" easing="out">240</scrolltime>
+            <onclick>SetProperty(silo.browse.from,genres,home)</onclick>
+            <onclick>SetProperty(silo.browse.genre,$INFO[ListItem.Label],home)</onclick>
+            <onclick>SetProperty(silo.browse.path,$INFO[ListItem.FolderPath],home)</onclick>
+            <onclick>ClearProperty(silo.browse.letter,home)</onclick>
+            <onclick>ClearProperty(silo.browse.list,home)</onclick>
+            <onclick>SetProperty(silo.browse.type,$INFO[Window(Home).Property(silo.browse.genrekind)],home)</onclick>
+            <onclick>ActivateWindow(1193)</onclick>
+            <itemlayout width="276" height="80">
+                    <control type="image">
+                        <width>260</width><height>64</height>
+                        <texture border="32" colordiffuse="12FFFFFF">silo/pill.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>24</left><width>212</width><height>64</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+            </itemlayout>
+            <focusedlayout width="276" height="80">
+                    <control type="image">
+                        <width>260</width><height>64</height>
+                        <texture border="32" colordiffuse="SkylineFocus">silo/pill.png</texture>
+                        <visible>Control.HasFocus(59)</visible>
+                    </control>
+                    <control type="label">
+                        <left>24</left><width>212</width><height>64</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>SkylineFocusText</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>Control.HasFocus(59)</visible>
+                    </control>
+                    <control type="image">
+                        <width>260</width><height>64</height>
+                        <texture border="32" colordiffuse="12FFFFFF">silo/pill.png</texture>
+                        <visible>!Control.HasFocus(59)</visible>
+                    </control>
+                    <control type="label">
+                        <left>24</left><width>212</width><height>64</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>!Control.HasFocus(59)</visible>
+                    </control>
+            </focusedlayout>
+            <content target="videos">$INFO[Window(Home).Property(silo.browse.list.genres)]</content>
+        </control>
         <control type="panel" id="55">
             <left>82</left><top>252</top>
             <width>1620</width><height>828</height>
@@ -1193,9 +1253,9 @@
             </focusedlayout>
             <content target="videos">$INFO[Window(Home).Property(silo.browse.list.collections)]</content>
         </control>
-        <!-- Silo's A-Z. -->
+        <!-- Silo's A-Z (not in a genre: a letter's filter would drop it). -->
         <control type="list" id="60">
-            <visible>!!String.IsEmpty(Window(Home).Property(silo.browse.list))</visible>
+            <visible>!!String.IsEmpty(Window(Home).Property(silo.browse.list)) + String.IsEmpty(Window(Home).Property(silo.browse.genre))</visible>
             <left>1736</left><top>252</top>
             <width>96</width><height>828</height>
             <orientation>vertical</orientation>

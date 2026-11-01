@@ -395,8 +395,9 @@ def build():
                     <onclick condition="%(other_season)s">PlayMedia($ESCINFO[Container(61).ListItemAbsolute(0).FileNameAndPath],noresume)</onclick>
                     <onclick condition="!%(other_season)s + %(has_next)s + Integer.IsGreater(Container(62).ListItem.PercentPlayed,0)">PlayMedia($ESCINFO[Container(62).ListItem.FileNameAndPath],resume)</onclick>
                     <onclick condition="!%(other_season)s + %(has_next)s + !Integer.IsGreater(Container(62).ListItem.PercentPlayed,0)">PlayMedia($ESCINFO[Container(62).ListItem.FileNameAndPath],noresume)</onclick>
-                    <onclick condition="!%(other_season)s + !%(has_next)s">ActivateWindow(Videos,videodb://tvshows/titles/$INFO[ListItem.DBID]/,return)</onclick>
-                    <onclick>Dialog.Close(movieinformation)</onclick>
+                    <!-- Nothing to play next (every episode watched): the page's own seasons, not Kodi's folder. -->
+                    <onclick condition="!%(other_season)s + !%(has_next)s">SetFocus(60)</onclick>
+                    <onclick condition="%(other_season)s | %(has_next)s">Dialog.Close(movieinformation)</onclick>
                     <visible>%(show)s</visible>
                 </control>
                 <!-- A Requests card: Request it, or its state when Silo already has it. -->

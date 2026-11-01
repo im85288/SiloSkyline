@@ -5646,6 +5646,8 @@
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collection,home)</onclick>
+                    <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.genres,home)</onclick>
+                    <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.genre,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">SetProperty(silo.browse.list,$INFO[Window(Home).Property(silo.movies.collections)],home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">SetProperty(silo.browse.list.collections,$INFO[Window(Home).Property(silo.movies.collections)],home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ActivateWindow(1191)</onclick>
@@ -5656,6 +5658,8 @@
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collection,home)</onclick>
+                    <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.genres,home)</onclick>
+                    <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.genre,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">SetProperty(silo.browse.title,$INFO[ListItem.Label],home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">SetProperty(silo.browse.list,$INFO[ListItem.FolderPath],home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">SetProperty(silo.browse.list.collection,$INFO[ListItem.FolderPath],home)</onclick>
@@ -5812,6 +5816,8 @@
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collection,home)</onclick>
+                    <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.genres,home)</onclick>
+                    <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.genre,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">SetProperty(silo.browse.list,$INFO[Window(Home).Property(silo.series.collections)],home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">SetProperty(silo.browse.list.collections,$INFO[Window(Home).Property(silo.series.collections)],home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ActivateWindow(1191)</onclick>
@@ -5822,6 +5828,8 @@
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collection,home)</onclick>
+                    <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.genres,home)</onclick>
+                    <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.genre,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">SetProperty(silo.browse.title,$INFO[ListItem.Label],home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">SetProperty(silo.browse.list,$INFO[ListItem.FolderPath],home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">SetProperty(silo.browse.list.collection,$INFO[ListItem.FolderPath],home)</onclick>
@@ -6016,6 +6024,8 @@
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.genre,home)</onclick>
                     <onclick>SetProperty(silo.browse.path,videodb://movies/titles/,home)</onclick>
                     <onclick>ActivateWindow(1191)</onclick>
                 </control>
@@ -6039,6 +6049,8 @@
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.genre,home)</onclick>
                     <onclick>SetProperty(silo.browse.path,videodb://movies/titles/,home)</onclick>
                     <onclick>ActivateWindow(1191)</onclick>
                 </control>
@@ -6052,7 +6064,20 @@
                     <focusedcolor>SkylineFocusText</focusedcolor>
                     <texturefocus border="24" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus border="24" colordiffuse="12FFFFFF">silo/pill.png</texturenofocus>
-                    <onclick>ActivateWindow(Videos,videodb://movies/genres/,return)</onclick>
+                    <onclick>SetProperty(silo.browse.type,genres,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.from,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.letter,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.genre,home)</onclick>
+                    <onclick>SetProperty(silo.browse.genrekind,movies,home)</onclick>
+                    <onclick>SetProperty(silo.browse.list,videodb://movies/genres/,home)</onclick>
+                    <onclick>SetProperty(silo.browse.list.genres,videodb://movies/genres/,home)</onclick>
+                    <onclick>ActivateWindow(1191)</onclick>
                 </control>
                 <control type="button" id="46014">
                     <width>auto</width><height>48</height>
@@ -6071,6 +6096,8 @@
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.genre,home)</onclick>
                     <onclick>SetProperty(silo.browse.list,$INFO[Window(Home).Property(silo.movies.collections)],home)</onclick>
                     <onclick>SetProperty(silo.browse.list.collections,$INFO[Window(Home).Property(silo.movies.collections)],home)</onclick>
                     <onclick>ActivateWindow(1191)</onclick>
@@ -6125,6 +6152,8 @@
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.genre,home)</onclick>
                     <onclick>SetProperty(silo.browse.path,videodb://tvshows/titles/,home)</onclick>
                     <onclick>ActivateWindow(1191)</onclick>
                 </control>
@@ -6148,6 +6177,8 @@
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.genre,home)</onclick>
                     <onclick>SetProperty(silo.browse.path,videodb://tvshows/titles/,home)</onclick>
                     <onclick>ActivateWindow(1191)</onclick>
                 </control>
@@ -6161,7 +6192,20 @@
                     <focusedcolor>SkylineFocusText</focusedcolor>
                     <texturefocus border="24" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus border="24" colordiffuse="12FFFFFF">silo/pill.png</texturenofocus>
-                    <onclick>ActivateWindow(Videos,videodb://tvshows/genres/,return)</onclick>
+                    <onclick>SetProperty(silo.browse.type,genres,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.from,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.letter,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.genre,home)</onclick>
+                    <onclick>SetProperty(silo.browse.genrekind,tvshows,home)</onclick>
+                    <onclick>SetProperty(silo.browse.list,videodb://tvshows/genres/,home)</onclick>
+                    <onclick>SetProperty(silo.browse.list.genres,videodb://tvshows/genres/,home)</onclick>
+                    <onclick>ActivateWindow(1191)</onclick>
                 </control>
                 <control type="button" id="46024">
                     <width>auto</width><height>48</height>
@@ -6180,6 +6224,8 @@
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.genre,home)</onclick>
                     <onclick>SetProperty(silo.browse.list,$INFO[Window(Home).Property(silo.series.collections)],home)</onclick>
                     <onclick>SetProperty(silo.browse.list.collections,$INFO[Window(Home).Property(silo.series.collections)],home)</onclick>
                     <onclick>ActivateWindow(1191)</onclick>
@@ -7634,6 +7680,7 @@
                         <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
                         <onclick>ActivateWindow(1191)</onclick>
                     </item>
                     <item>
@@ -7647,6 +7694,7 @@
                         <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
                         <onclick>ActivateWindow(1191)</onclick>
                     </item>
                     <item>
@@ -7660,6 +7708,7 @@
                         <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
                         <onclick>ActivateWindow(1191)</onclick>
                     </item>
                     <item>

@@ -309,20 +309,20 @@
     <timer>
         <name>silo_sort_top</name>
         <start reset="true">String.IsEqual(Window(Home).Property(silo.browse.resort),1)</start>
-        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_sort_top),1) + !Container(50).IsUpdating + !Container(57).IsUpdating + !Container(58).IsUpdating | !Window.IsActive(1191)</stop>
-        <onstop condition="Window.IsActive(1191) + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEmpty(Skin.String(silo.view.movies))] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEmpty(Skin.String(silo.view.tvshows))]]">SetFocus(50,0,absolute)</onstop>
-        <onstop condition="Window.IsActive(1191) + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]]">SetFocus(57,0,absolute)</onstop>
-        <onstop condition="Window.IsActive(1191) + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]]">SetFocus(58,0,absolute)</onstop>
+        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_sort_top),1) + !Container(50).IsUpdating + !Container(57).IsUpdating + !Container(58).IsUpdating | ![Window.IsActive(1191) | Window.IsActive(1193)]</stop>
+        <onstop condition="[Window.IsActive(1191) | Window.IsActive(1193)] + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEmpty(Skin.String(silo.view.movies))] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEmpty(Skin.String(silo.view.tvshows))]]">SetFocus(50,0,absolute)</onstop>
+        <onstop condition="[Window.IsActive(1191) | Window.IsActive(1193)] + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]]">SetFocus(57,0,absolute)</onstop>
+        <onstop condition="[Window.IsActive(1191) | Window.IsActive(1193)] + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]]">SetFocus(58,0,absolute)</onstop>
         <onstop>ClearProperty(silo.browse.resort,home)</onstop>
     </timer>
     <timer>
         <name>silo_browse_view_focus</name>
         <description>Browse's view takes focus once its titles are in, after opening or choosing it (Kodi can't focus an empty list)</description>
-        <start reset="true">Window.IsActive(1191) + String.IsEqual(Window(Home).Property(silo.browse.focusview),1) + [[[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEmpty(Skin.String(silo.view.movies))] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEmpty(Skin.String(silo.view.tvshows))]] + Integer.IsGreater(Container(50).NumItems,0)] | [[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]] + Integer.IsGreater(Container(57).NumItems,0)] | [[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]] + Integer.IsGreater(Container(58).NumItems,0)]]</start>
+        <start reset="true">[Window.IsActive(1191) | Window.IsActive(1193)] + String.IsEqual(Window(Home).Property(silo.browse.focusview),1) + [[[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEmpty(Skin.String(silo.view.movies))] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEmpty(Skin.String(silo.view.tvshows))]] + Integer.IsGreater(Container(50).NumItems,0)] | [[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]] + Integer.IsGreater(Container(57).NumItems,0)] | [[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]] + Integer.IsGreater(Container(58).NumItems,0)]]</start>
         <stop>true</stop>
-        <onstop condition="Window.IsActive(1191) + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEmpty(Skin.String(silo.view.movies))] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEmpty(Skin.String(silo.view.tvshows))]]">SetFocus(50)</onstop>
-        <onstop condition="Window.IsActive(1191) + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]]">SetFocus(57)</onstop>
-        <onstop condition="Window.IsActive(1191) + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]]">SetFocus(58)</onstop>
+        <onstop condition="[Window.IsActive(1191) | Window.IsActive(1193)] + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEmpty(Skin.String(silo.view.movies))] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEmpty(Skin.String(silo.view.tvshows))]]">SetFocus(50)</onstop>
+        <onstop condition="[Window.IsActive(1191) | Window.IsActive(1193)] + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]]">SetFocus(57)</onstop>
+        <onstop condition="[Window.IsActive(1191) | Window.IsActive(1193)] + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]]">SetFocus(58)</onstop>
         <onstop>ClearProperty(silo.browse.focusview,home)</onstop>
     </timer>
     <timer>
@@ -336,6 +336,12 @@
         <start reset="true">[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + String.IsEqual(Window(Home).Property(silo.browse.type),collection) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Integer.IsGreater(Container(55).NumItems,0) + !Control.HasFocus(55) + !Control.HasFocus(61)</start>
         <stop>true</stop>
         <onstop condition="[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + !Control.HasFocus(55)">SetFocus(55)</onstop>
+    </timer>
+    <timer>
+        <name>silo_focus_genres</name>
+        <start reset="true">[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + String.IsEqual(Window(Home).Property(silo.browse.type),genres) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Integer.IsGreater(Container(59).NumItems,0) + !Control.HasFocus(59) + !Control.HasFocus(61)</start>
+        <stop>true</stop>
+        <onstop condition="[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + !Control.HasFocus(59)">SetFocus(59)</onstop>
     </timer>
     <timer>
         <name>silo_focus_watchlist</name>

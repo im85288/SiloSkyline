@@ -6760,6 +6760,8 @@
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),favorites) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">Favorites</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">History</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),collections)">Collections</value>
+        <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),genres)">Genres</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(silo.browse.genre))">$INFO[Window(Home).Property(silo.browse.genre)]</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),collection)">$INFO[Window(Home).Property(silo.browse.title)]</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),tvshows)">Series</value>
         <value>Movies</value>
@@ -6772,6 +6774,7 @@
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Integer.IsGreater(Container(53).NumItems,0)">$INFO[Container(53).NumItems,, titles]</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list))"></value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),collections)">$INFO[Container(56).NumItems,, collections]</value>
+        <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),genres)">$INFO[Container(59).NumItems,, genres]</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),collection)">$INFO[Container(55).NumItems,, titles]</value>
         <value condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]]">$INFO[Container(57).NumItems,, titles]$INFO[Window(Home).Property(silo.browse.letter),  ·  ,]</value>
         <value condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]]">$INFO[Container(58).NumItems,, titles]$INFO[Window(Home).Property(silo.browse.letter),  ·  ,]</value>

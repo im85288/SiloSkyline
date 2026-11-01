@@ -937,12 +937,13 @@ SECTION_ICONS = {'Recommended': 'silo/menu_recommended.png', 'Browse': 'silo/men
                  'Genres': 'silo/menu_default.png'}
 
 
-COLLECTION_KEYS = ('collections', 'collection')
+COLLECTION_KEYS = ('collections', 'collection', 'genres')
 
 
 def browse_clear():
     """Every Browse list path (Kodi loads a hidden grid's path too)."""
-    return ['ClearProperty(silo.browse.list.%s,home)' % key for key in PERSONAL_KEYS + COLLECTION_KEYS]
+    return (['ClearProperty(silo.browse.list.%s,home)' % key for key in PERSONAL_KEYS + COLLECTION_KEYS]
+            + ['ClearProperty(silo.browse.genre,home)'])
 
 
 def collections_actions(path):
@@ -974,6 +975,14 @@ def section_actions(page, label, path):
     if label == 'Collections':
         # Silo's collections in Skyline's Browse window (OK opens details).
         return collections_actions(path)
+    if label == 'Genres':
+        # The library's genres as Silo's chips in Skyline's Browse window; one
+        # opens its titles there too (tools/build_library.py), not in Kodi's.
+        kind = 'movies' if page == 'movies' else 'tvshows'
+        return (['SetProperty(silo.browse.type,genres,home)', 'ClearProperty(silo.browse.from,home)',
+                 'ClearProperty(silo.browse.letter,home)'] + browse_clear()
+                + ['SetProperty(silo.browse.genrekind,%s,home)' % kind, 'SetProperty(silo.browse.list,%s,home)' % path,
+                   'SetProperty(silo.browse.list.genres,%s,home)' % path, 'ActivateWindow(1191)'])
     if label == YOURS:
         return ['SetProperty(silo.requests.view,yours,home)', 'ClearProperty(silo.row,home)']
     if page == 'requests':  # Discover

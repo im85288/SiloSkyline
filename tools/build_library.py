@@ -756,6 +756,12 @@ def empty_note(key, list_id):
 # own (COLLECTION_WINDOW, this window again), so Kodi's Back returns to the
 # cards: Back in a window always closes it, whatever a control's onback does.
 FANS_ID, COLLECTION_ID, COLLECTION_AZ = 56, 55, 61
+# The library's genres as Silo's chips (silo.browse.type genres, the list in
+# silo.browse.list.genres, the kind in silo.browse.genrekind). One chosen opens
+# its titles in COLLECTION_WINDOW, as a collection does, with Browse's sorts and
+# views (silo.browse.genre its name) and no A-Z: a letter's filter drops the genre.
+GENRES_ID = 59
+GENRE = 'Window(Home).Property(silo.browse.genre)'
 COLLECTION_WINDOW = 1193
 JUMP_LETTERS = ['#'] + [chr(c) for c in range(ord('A'), ord('Z') + 1)]
 
@@ -771,7 +777,30 @@ def collection_controls():
                     <label>%s</label>
                     <onclick>NotifyAll(silokodi,jump.%d.%s)</onclick>
                 </item>''' % (letter, COLLECTION_ID, letter) for letter in JUMP_LETTERS)
-    return grid + '''        <control type="list" id="%(az)d">
+    from build_browse import chip, CHIP_W, CHIP_H, CHIP_GAP
+    genres = '''        <control type="panel" id="%(id)d">
+            <left>%(gx)d</left><top>%(gy)d</top>
+            <width>%(gw)d</width><height>%(gh)d</height>
+            <orientation>vertical</orientation>
+            <visible>%(visible)s</visible>
+            <scrolltime tween="cubic" easing="out">240</scrolltime>
+            <onclick>SetProperty(silo.browse.from,genres,home)</onclick>
+            <onclick>SetProperty(silo.browse.genre,$INFO[ListItem.Label],home)</onclick>
+            <onclick>SetProperty(silo.browse.path,$INFO[ListItem.FolderPath],home)</onclick>
+            <onclick>ClearProperty(silo.browse.letter,home)</onclick>
+            <onclick>ClearProperty(silo.browse.list,home)</onclick>
+            <onclick>SetProperty(silo.browse.type,$INFO[Window(Home).Property(silo.browse.genrekind)],home)</onclick>
+            <onclick>ActivateWindow(%(window)d)</onclick>
+            <itemlayout width="%(iw)d" height="%(ih)d">%(chip)s
+            </itemlayout>
+            <focusedlayout width="%(iw)d" height="%(ih)d">%(chip_focused)s
+            </focusedlayout>
+            <content target="videos">$INFO[Window(Home).Property(silo.browse.list.genres)]</content>
+        </control>
+''' % {'id': GENRES_ID, 'gx': GRID_X, 'gy': GRID_TOP, 'gw': 1920 - 2 * SAFE_X, 'gh': 1080 - GRID_TOP,
+       'visible': is_list('genres'), 'window': COLLECTION_WINDOW, 'iw': CHIP_W + CHIP_GAP, 'ih': CHIP_H + CHIP_GAP,
+       'chip': chip(False, GENRES_ID), 'chip_focused': chip(True, GENRES_ID)}
+    return genres + grid + '''        <control type="list" id="%(az)d">
             <visible>%(one)s</visible>
             <left>%(ax)d</left><top>%(gy)d</top>
             <width>%(aw)d</width><height>%(gh)d</height>
@@ -845,9 +874,9 @@ def build():
             <param name="title">$VAR[SiloLibraryTitle]</param>
             <param name="sub">$VAR[SiloLibrarySub]</param>
         </include>
-%(panels)s        <!-- Silo's A-Z. -->
+%(panels)s        <!-- Silo's A-Z (not in a genre: a letter's filter would drop it). -->
         <control type="list" id="%(az)d">
-            <visible>!%(personal)s</visible>
+            <visible>!%(personal)s + String.IsEmpty(%(genre)s)</visible>
             <left>%(ax)d</left><top>%(gy)d</top>
             <width>%(aw)d</width><height>%(gh)d</height>
             <orientation>vertical</orientation>
@@ -869,7 +898,7 @@ def build():
     </controls>
 </window>
 ''' % {'backdrop': GRID_BACKDROP, 'window': WINDOW_ID, 'grid': GRID_ID, 'background': BACKGROUND, 'letter': LETTER, 'gx': GRID_X,
-       'gy': GRID_TOP, 'gh': 1080 - GRID_TOP, 'az': AZ_ID, 'personal': IS_PERSONAL,
+       'gy': GRID_TOP, 'gh': 1080 - GRID_TOP, 'az': AZ_ID, 'personal': IS_PERSONAL, 'genre': GENRE,
        'loading': ' | '.join('[%s + Container(%d).IsUpdating]' % (is_list(key), list_id)
                              for key, list_id in [('collections', 56), ('collection', 55)]
                              + [(key, list_id) for key, (_, list_id) in PERSONAL.items()]),
@@ -886,6 +915,7 @@ def build():
                          for key, (_, list_id) in PERSONAL.items())
                  + '    <onload condition="%s">SetFocus(%d)</onload>\n' % (is_list('collections'), FANS_ID)
                  + '    <onload condition="%s">SetFocus(%d)</onload>\n' % (is_list('collection'), COLLECTION_ID)
+                 + '    <onload condition="%s">SetFocus(%d)</onload>\n' % (is_list('genres'), GENRES_ID)
                  # The open view loads Browse's path (the others none), and the
                  # hero or list view takes focus once its titles are in.
                  + ''.join('    <onload condition="%s">%s</onload>\n' % (c, a) for c, a in show_view())
@@ -914,12 +944,15 @@ VARIABLES = '''
     <!-- Silo Skyline library (tools/build_library.py) -->
     <variable name="SiloLibraryTitle">
 %(personal)s        <value condition="String.IsEqual(%(type)s,collections)">Collections</value>
+        <value condition="String.IsEqual(%(type)s,genres)">Genres</value>
+        <value condition="!String.IsEmpty(%(genre)s)">$INFO[%(genre)s]</value>
         <value condition="String.IsEqual(%(type)s,collection)">$INFO[Window(Home).Property(silo.browse.title)]</value>
         <value condition="String.IsEqual(%(type)s,tvshows)">Series</value>
         <value>Movies</value>
     </variable>
     <variable name="SiloLibrarySub">
 %(subs)s        <value condition="String.IsEqual(%(type)s,collections)">$INFO[Container(56).NumItems,, collections]</value>
+        <value condition="String.IsEqual(%(type)s,genres)">$INFO[Container(%(genres)d).NumItems,, genres]</value>
         <value condition="String.IsEqual(%(type)s,collection)">$INFO[Container(55).NumItems,, titles]</value>
 %(view_subs)s        <value>$INFO[Container(%(grid)d).NumItems,, titles]$INFO[%(letter)s,  ·  ,]</value>
     </variable>
@@ -951,7 +984,7 @@ VARIABLES = '''
 %(view_labels)s        <value>Grid</value>
     </variable>
     <!-- end Silo Skyline library -->
-''' % {'type': TYPE, 'grid': GRID_ID, 'letter': LETTER,
+''' % {'type': TYPE, 'grid': GRID_ID, 'letter': LETTER, 'genre': GENRE, 'genres': GENRES_ID,
        'view_subs': ''.join('        <value condition="%s">$INFO[Container(%d).NumItems,, titles]$INFO[%s,  ·  ,]</value>\n'
                             % (view_is(v), ctrl, LETTER) for _, v, ctrl in VIEWS[1:]),
        # The hero and list views draw the backdrop themselves.
@@ -996,29 +1029,32 @@ TIMER_START, TIMER_END = '    <!-- Silo Skyline library (tools/build_library.py)
 # After a sort change, the grid's top once the re-sorted list is in: a second
 # at least (the change reaches the grid on a later frame) and until it has
 # stopped updating (a big library takes longer), not a fixed wait.
+# Browse, or its copy for a collection's or a genre's titles.
+BROWSE_ACTIVE = '[Window.IsActive(%d) | Window.IsActive(%d)]' % (WINDOW_ID, COLLECTION_WINDOW)
 TIMERS = '''    <timer>
         <name>silo_sort_top</name>
         <start reset="true">String.IsEqual(Window(Home).Property(silo.browse.resort),1)</start>
-        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_sort_top),1) + !Container(%(grid)d).IsUpdating + !Container(%(hero)d).IsUpdating + !Container(%(list)d).IsUpdating | !Window.IsActive(%(window)d)</stop>
+        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_sort_top),1) + !Container(%(grid)d).IsUpdating + !Container(%(hero)d).IsUpdating + !Container(%(list)d).IsUpdating | !%(window)s</stop>
 %(tops)s        <onstop>ClearProperty(silo.browse.resort,home)</onstop>
     </timer>
     <timer>
         <name>silo_browse_view_focus</name>
         <description>Browse's view takes focus once its titles are in, after opening or choosing it (Kodi can't focus an empty list)</description>
-        <start reset="true">Window.IsActive(%(window)d) + String.IsEqual(Window(Home).Property(silo.browse.focusview),1) + [[%(is_grid)s + Integer.IsGreater(Container(%(grid)d).NumItems,0)] | [%(is_hero)s + Integer.IsGreater(Container(%(hero)d).NumItems,0)] | [%(is_list)s + Integer.IsGreater(Container(%(list)d).NumItems,0)]]</start>
+        <start reset="true">%(window)s + String.IsEqual(Window(Home).Property(silo.browse.focusview),1) + [[%(is_grid)s + Integer.IsGreater(Container(%(grid)d).NumItems,0)] | [%(is_hero)s + Integer.IsGreater(Container(%(hero)d).NumItems,0)] | [%(is_list)s + Integer.IsGreater(Container(%(list)d).NumItems,0)]]</start>
         <stop>true</stop>
 %(focus)s        <onstop>ClearProperty(silo.browse.focusview,home)</onstop>
     </timer>
-''' % {'grid': GRID_ID, 'hero': HERO_ID, 'list': LIST_VIEW_ID, 'window': WINDOW_ID,
+''' % {'grid': GRID_ID, 'hero': HERO_ID, 'list': LIST_VIEW_ID, 'window': BROWSE_ACTIVE,
        'is_grid': view_is('grid'), 'is_hero': view_is('hero'), 'is_list': view_is('list'),
-       'tops': ''.join('        <onstop condition="Window.IsActive(%d) + %s">%s</onstop>\n' % (WINDOW_ID, c, a)
+       'tops': ''.join('        <onstop condition="%s + %s">%s</onstop>\n' % (BROWSE_ACTIVE, c, a)
                        for c, a in focus_view('SetFocus(%d,0,absolute)')),
-       'focus': ''.join('        <onstop condition="Window.IsActive(%d) + %s">%s</onstop>\n' % (WINDOW_ID, c, a)
+       'focus': ''.join('        <onstop condition="%s + %s">%s</onstop>\n' % (BROWSE_ACTIVE, c, a)
                         for c, a in focus_view())}
 # A list from SiloKodiConnect can still be loading as the window opens, and
 # Kodi can't focus an empty list (its onload SetFocus fails and focus is
 # lost): focus each one once it has items, unless something of it has focus.
-FOCUS_WHEN_LOADED = [('collections', 56), ('collection', 55)] + [(key, list_id) for key, (_, list_id) in PERSONAL.items()]
+FOCUS_WHEN_LOADED = ([('collections', 56), ('collection', 55), ('genres', GENRES_ID)]
+                     + [(key, list_id) for key, (_, list_id) in PERSONAL.items()])
 TIMERS += ''.join('''    <timer>
         <name>silo_focus_%(key)s</name>
         <start reset="true">[Window.IsActive(%(window)d) | Window.IsActive(%(other)d)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + String.IsEqual(Window(Home).Property(silo.browse.type),%(key)s) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Integer.IsGreater(Container(%(id)d).NumItems,0) + !Control.HasFocus(%(id)d) + !Control.HasFocus(61)</start>
@@ -1045,6 +1081,11 @@ if __name__ == '__main__':
     back = '\n'.join('    <onunload condition="String.IsEqual(Window(Home).Property(silo.browse.from),collections)">%s</onunload>'
                      % action for action in ('SetProperty(silo.browse.type,collections,home)',
                                              'SetProperty(silo.browse.list,$INFO[Window(Home).Property(silo.browse.list.collections)],home)'))
+    # A genre's titles, over the genres; leaving them shows the genres again.
+    back += '\n' + '\n'.join('    <onunload condition="String.IsEqual(Window(Home).Property(silo.browse.from),genres)">%s</onunload>'
+                             % action for action in ('ClearProperty(silo.browse.genre,home)',
+                                                     'SetProperty(silo.browse.type,genres,home)',
+                                                     'SetProperty(silo.browse.list,$INFO[Window(Home).Property(silo.browse.list.genres)],home)'))
     with open(os.path.join(ROOT, 'xml', 'Custom_%d_SiloCollection.xml' % COLLECTION_WINDOW), 'w', encoding='utf-8') as handle:
         handle.write(text.replace('<window id="%d">' % WINDOW_ID, '<window id="%d">\n%s' % (COLLECTION_WINDOW, back), 1))
     add_variables()
