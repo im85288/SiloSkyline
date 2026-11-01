@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Silo Skyline: Silo's dropdown, a dark rounded panel with the focused row
-     a white pill (Estuary's actions and layout logic unchanged). -->
+<!-- Silo Skyline: Silo's Apple TV menu, a dark glass panel with the focused
+     row a white rounded bar (Estuary's actions and layout logic unchanged). -->
 <window>
 	<defaultcontrol>996</defaultcontrol>
 	<include>Animation_DialogPopupOpenClose</include>
@@ -16,7 +16,7 @@
 			<height>3240</height>
 			<animation effect="fade" start="0" end="100" time="300">WindowOpen</animation>
 			<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
-			<texture colordiffuse="B0FFFFFF">colors/black.png</texture>
+			<texture colordiffuse="66FFFFFF">colors/black.png</texture>
 		</control>
 		<control type="button">
 			<left>-1920</left>
@@ -28,19 +28,26 @@
 			<onclick>Action(close)</onclick>
 		</control>
 		<control type="group">
+			<!-- An info page's More (SiloKodiConnect sets silo.popover to its row
+			     count): under the More button, where Kodi can't place it. -->
+			<animation effect="slide" end="604,85" time="0" condition="String.IsEqual(Window(Home).Property(silo.popover),1)">Conditional</animation>
+			<animation effect="slide" end="604,117" time="0" condition="String.IsEqual(Window(Home).Property(silo.popover),2)">Conditional</animation>
+			<animation effect="slide" end="604,149" time="0" condition="String.IsEqual(Window(Home).Property(silo.popover),3)">Conditional</animation>
+			<animation effect="slide" end="604,181" time="0" condition="String.IsEqual(Window(Home).Property(silo.popover),4)">Conditional</animation>
 			<control type="image" id="999">
 				<description>background image</description>
 				<left>0</left>
 				<top>0</top>
 				<width>520</width>
 				<height>780</height>
-				<texture border="14" colordiffuse="F21C1F24">silo/card_landscape_mask.png</texture>
+				<!-- Silo's Apple TV menu: a dark glass panel with a faint rim. -->
+				<texture border="28">silo/menu_panel.png</texture>
 			</control>
 			<control type="grouplist" id="996">
 				<description>grouplist for context buttons</description>
-				<left>10</left>
-				<top>10</top>
-				<width>500</width>
+				<left>12</left>
+				<top>12</top>
+				<width>496</width>
 				<height max="760">auto</height>
 				<usecontrolcoords>true</usecontrolcoords>
 			</control>
@@ -55,15 +62,16 @@
 			<description>button template</description>
 			<left>0</left>
 			<top></top>
-			<width>500</width>
+			<width>496</width>
 			<height>64</height>
 			<align>left</align>
 			<aligny>center</aligny>
-			<textoffsetx>28</textoffsetx>
+			<textoffsetx>24</textoffsetx>
 			<font>silo_meta</font>
 			<textcolor>FFEDEDED</textcolor>
-			<focusedcolor>FF000000</focusedcolor>
-			<texturefocus border="30" colordiffuse="FFEDEDED">silo/pill.png</texturefocus>
+			<focusedcolor>SkylineFocusText</focusedcolor>
+			<!-- The focused row: a white rounded bar, as on Silo's Apple TV app. -->
+			<texturefocus border="20" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texturefocus>
 			<texturenofocus />
 		</control>
 	</controls>

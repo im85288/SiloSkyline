@@ -15,22 +15,32 @@ import sys
 from urllib.parse import quote
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import BACKGROUND, POSTER, ROOT, SAFE_X, TEXT, TEXT_DIM, card_layout  # noqa: E402
+from build_home import wordmark, BACKGROUND, POSTER, ROOT, SAFE_X, TEXT, TEXT_DIM, card_layout, GRID_BACKDROP  # noqa: E402
 
 WINDOW_ID = 1190
 QUERY = 'Skin.String(silo.search)'
+LOADING = 'silo.search.loading'  # on Home, for a moment after new words
 PILL_ID = 100
 # (list id, row title, library path, smart-filter type)
+# The third row is Silo's own search for titles to request (SiloKodiConnect),
+# shown only when the add-on is there and found some.
 ROWS = [(201, 'Movies', 'videodb://movies/titles/', 'movies'),
-        (202, 'Shows', 'videodb://tvshows/titles/', 'tvshows')]
+        (202, 'Shows', 'videodb://tvshows/titles/', 'tvshows'),
+        (203, 'Request', 'plugin://plugin.video.silokodiconnect/?mode=requests', None)]
+# Requests' "Search to request" sets Window(Home).Property(silo.search.mode)
+# to requests: only Silo's row shows (the menu bar's Search clears it).
+REQUEST_ONLY = 'String.IsEqual(Window(Home).Property(silo.search.mode),requests)'
+LIBRARY_LISTS = (201, 202)
 ROWS_TOP = 236
-# Both rows fit below the pill without scrolling.
-ROW_H = (1080 - ROWS_TOP) // len(ROWS)
+# Two rows fit below the pill; the third scrolls into view.
+ROW_H = (1080 - ROWS_TOP) // 2
 
 
 def search_path(path, kind):
     """The library folder filtered to titles containing the search words. The
     filter is URL-encoded around a marker that becomes the words."""
+    if kind is None:
+        return path + '&amp;search=$INFO[%s]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]' % QUERY
     marker = 'SILOQUERY'
     rules = {'type': kind, 'order': {'method': 'sorttitle', 'direction': 'ascending'},
              'rules': {'and': [{'field': 'title', 'operator': 'contains', 'value': [marker]}]}}
@@ -39,7 +49,13 @@ def search_path(path, kind):
 
 
 def has_items(list_id):
-    return 'Integer.IsGreater(Container(%d).NumItems,0)' % list_id
+    has = 'Integer.IsGreater(Container(%d).NumItems,0)' % list_id
+    return '[!%s + %s]' % (REQUEST_ONLY, has) if list_id in LIBRARY_LISTS else has
+
+
+def shown(list_id, condition):
+    """A row's visibility: a library row never shows in request-only mode."""
+    return '!%s + [%s]' % (REQUEST_ONLY, condition) if list_id in LIBRARY_LISTS else condition
 
 
 def row(index, list_id, title, path, kind):
@@ -60,26 +76,29 @@ def row(index, list_id, title, path, kind):
     return '''
             <control type="group">
                 <height>%(row_h)d</height>
-                <visible>%(has)s | Container(%(id)d).IsUpdating</visible>
+                <visible>%(group_shown)s</visible>
                 <control type="label">
                     <left>%(x)d</left>
                     <width>1500</width><height>46</height>
                     <font>silo_row</font>
                     <textcolor>%(text)s</textcolor>
                     <label>%(title)s$INFO[Container(%(id)d).NumItems,  ·  ,]</label>
+                    <visible>%(title_shown)s</visible>
                 </control>
                 <control type="list" id="%(id)d">
                     <!-- The list's own condition lets Kodi load it while it is hidden:
                          it doesn't process a list inside a hidden group. -->
-                    <visible>%(has)s | Container(%(id)d).IsUpdating</visible>
+                    <visible>%(group_shown)s</visible>
                     <left>%(lx)d</left><top>56</top>
                     <width>%(lw)d</width><height>%(item_h)d</height>
                     <orientation>horizontal</orientation>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <!-- Through SiloKodiConnect, when it is there, so the page has
                          Silo's details and More Like This, as from Home. -->
-                    <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
-                    <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>%(moves)s
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>%(moves)s
                     <content target="videos">%(path)s</content>
                     <itemlayout width="%(item_w)d" height="%(item_h)d">%(normal)s
                     </itemlayout>
@@ -89,7 +108,11 @@ def row(index, list_id, title, path, kind):
             </control>''' % {'row_h': ROW_H, 'has': has_items(list_id), 'id': list_id, 'x': SAFE_X, 'text': TEXT,
                              'title': title, 'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'item_h': item_h,
                              'item_w': item_w, 'moves': moves, 'path': search_path(path, kind),
-                             'normal': card_layout(POSTER, False), 'focused': card_layout(POSTER, True, list_id)}
+                             'normal': card_layout(POSTER, False), 'focused': card_layout(POSTER, True, list_id),
+                             'loading': LOADING,
+                             'group_shown': shown(list_id, '%s | Container(%d).IsUpdating | String.IsEqual(Window(Home).Property(%s),1)'
+                                                  % (has_items(list_id), list_id, LOADING)),
+                             'title_shown': shown(list_id, '%s | Container(%d).IsUpdating' % (has_items(list_id), list_id))}
 
 
 def build():
@@ -98,10 +121,17 @@ def build():
     for index, target in enumerate(lists):
         condition = ' + '.join([has_items(target)] + ['!' + has_items(k) for k in lists[:index]])
         pill_down += '\n                <ondown condition="%s">SetFocus(%d)</ondown>' % (condition, target)
-    nothing = ' + '.join('!%s + !Container(%d).IsUpdating' % (has_items(k), k) for k in lists)
+    nothing = ' + '.join('!%s + !Container(%d).IsUpdating' % (has_items(k), k) for k in lists) \
+        + ' + !String.IsEqual(Window(Home).Property(%s),1)' % LOADING
     return '''<?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated by tools/build_search.py: edit that, not this. -->
 <window id="%(window)d">
+    <!-- Back from a trailer started from an info page (Kodi leaves it playing): stop it, which reopens the page. -->
+    <!-- A video left playing behind the menus (Back from the player, a trailer's
+         page, or Live TV left from the guide): stopped, as in Silo's apps, since
+         these pages cover the screen and there's no way back to it. Kodi saves
+         where it stopped; the TV guide keeps Live TV playing in its preview. -->
+    <onload condition="Player.HasVideo">PlayerControl(Stop)</onload>
     <defaultcontrol always="true">%(pill)d</defaultcontrol>
     <backgroundcolor>%(background)s</backgroundcolor>
     <onload condition="String.IsEmpty(%(query)s)">Skin.SetString(silo.search)</onload>
@@ -118,26 +148,27 @@ def build():
             <width>1344</width><height>756</height>
             <aspectratio>stretch</aspectratio>
             <fadetime>240</fadetime>
-            <texture background="true" colordiffuse="59FFFFFF" diffuse="silo/hero_mask.png">$INFO[Container.ListItem.Art(fanart)]</texture>
+            <texture background="true" colordiffuse="%(backdrop)s" diffuse="silo/hero_mask.png">$INFO[Container.ListItem.Art(fanart)]</texture>
         </control>
-        <control type="label">
-            <left>%(x)d</left><top>56</top>
-            <width>300</width><height>64</height>
-            <aligny>center</aligny>
-            <font>silo_wordmark</font>
-            <textcolor>%(text)s</textcolor>
-            <label>Silo</label>
-        </control>
+        <!-- The shared frame (tools/build_frame.py). -->
+        <include content="SiloFrame">
+            <param name="title">$VAR[SiloSearchTitle]</param>
+        </include>
 
         <!-- The search words, in a pill that asks for them again. -->
         <control type="group">
-            <left>%(x)d</left><top>140</top>
+            <left>%(x)d</left><top>158</top>
             <control type="button" id="%(pill)d">
                 <width>900</width><height>64</height>
                 <label />
                 <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
                 <texturenofocus border="30" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
-                <onclick>Skin.SetString(silo.search)</onclick>%(pill_down)s
+                <onclick>Skin.SetString(silo.search)</onclick>
+                <!-- Kodi never loads a hidden list whose path changed: a row with
+                     no titles for the last words would stay hidden and empty, so
+                     every row shows while the new words load. -->
+                <onclick>SetProperty(%(loading)s,1,home)</onclick>
+                <onclick>AlarmClock(silosearch,ClearProperty(%(loading)s,home),00:04,silent)</onclick>%(pill_down)s
             </control>
             <control type="image">
                 <left>24</left><top>16</top>
@@ -185,21 +216,28 @@ def build():
             <scrolltime tween="cubic" easing="out">300</scrolltime>
             <visible>!String.IsEmpty(%(query)s)</visible>%(rows)s
         </control>
+        <!-- A trailer from an info page: its cover (Includes_SiloFrame.xml). -->
+        <include>SiloTrailerCover</include>
     </controls>
 </window>
-''' % {'window': WINDOW_ID, 'pill': PILL_ID, 'background': BACKGROUND, 'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM,
+''' % {'backdrop': GRID_BACKDROP, 'wordmark': wordmark(SAFE_X, 56), 'window': WINDOW_ID, 'pill': PILL_ID, 'background': BACKGROUND, 'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM,
        'pill_down': pill_down, 'rows_top': ROWS_TOP, 'rows_h': 1080 - ROWS_TOP, 'query': QUERY,
-       'nothing': nothing, 'rows': ''.join(row(i, *r) for i, r in enumerate(ROWS))}
+       'nothing': nothing, 'rows': ''.join(row(i, *r) for i, r in enumerate(ROWS)), 'loading': LOADING}
 
 
 VARIABLES = '''
     <!-- Silo Skyline search (tools/build_search.py) -->
+    <variable name="SiloSearchTitle">
+        <value condition="%(request_only)s">Search to request</value>
+        <value>Search</value>
+    </variable>
     <variable name="SiloSearchPill">
+        <value condition="String.IsEmpty(%(query)s) + %(request_only)s">Find a film or show to request</value>
         <value condition="String.IsEmpty(%(query)s)">Search films and shows</value>
         <value>$INFO[%(query)s]</value>
     </variable>
     <!-- end Silo Skyline search -->
-''' % {'query': QUERY}
+''' % {'query': QUERY, 'request_only': REQUEST_ONLY}
 
 
 def add_variables():

@@ -12,13 +12,7 @@
 				<param name="header_label" value="" />
 				<param name="header_id" value="1" />
 			</include>
-			<control type="image">
-				<left>0</left>
-				<top>80</top>
-				<width>920</width>
-				<bottom>2</bottom>
-				<texture border="40">buttons/dialogbutton-nofo.png</texture>
-			</control>
+			<!-- Silo Skyline: no Estuary panel behind the list. -->
 			<control type="list" id="3">
 				<left>20</left>
 				<top>100</top>
@@ -93,6 +87,8 @@
 						<font>font12</font>
 						<textcolor>grey</textcolor>
 						<label>$INFO[ListItem.Label2]</label>
+						<!-- Silo Skyline: not Skin Shortcuts' "folder" under every source. -->
+						<visible>!String.IsEqual(ListItem.Label2,folder)</visible>
 					</control>
 				</itemlayout>
 				<focusedlayout height="125" width="880">
@@ -101,7 +97,8 @@
 						<top>0</top>
 						<right>0</right>
 						<bottom>0</bottom>
-						<texture colordiffuse="button_focus">lists/focus.png</texture>
+						<!-- Silo Skyline: the white rounded bar of Silo's Apple TV menus. -->
+						<texture border="20" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
 						<animation effect="fade" start="100" end="50" time="0">UnFocus</animation>
 					</control>
 					<control type="image">
@@ -141,6 +138,7 @@
 						<aligny>center</aligny>
 						<scroll>true</scroll>
 						<font>font14</font>
+						<textcolor>SkylineFocusText</textcolor>
 						<label>$INFO[ListItem.Label]</label>
 					</control>
 					<control type="textbox">
@@ -149,7 +147,10 @@
 						<right>20</right>
 						<height>67</height>
 						<font>font12</font>
+						<textcolor>SkylineFocusTextDim</textcolor>
 						<label>$INFO[ListItem.Label2]</label>
+						<!-- Silo Skyline: not Skin Shortcuts' "folder" under every source. -->
+						<visible>!String.IsEqual(ListItem.Label2,folder)</visible>
 					</control>
 				</focusedlayout>
 			</control>
@@ -173,19 +174,42 @@
 				<textcolor>grey</textcolor>
 				<label>$VAR[SelectLabel]</label>
 			</control>
+			<!-- Silo Skyline: the focused entry, large, as a widget picker shows it. -->
+			<control type="group">
+				<left>920</left><top>370</top>
+				<width>300</width><height>300</height>
+				<visible>Control.IsVisible(6) + !String.IsEmpty(Container(6).ListItem.Icon)</visible>
+				<control type="image">
+					<left>50</left><top>0</top>
+					<width>200</width><height>200</height>
+					<aspectratio>keep</aspectratio>
+					<texture>$INFO[Container(6).ListItem.Icon]</texture>
+				</control>
+				<control type="label">
+					<left>20</left><top>214</top>
+					<width>260</width><height>40</height>
+					<align>center</align>
+					<font>silo_meta</font>
+					<textcolor>FFEDEDED</textcolor>
+					<label>$INFO[Container(6).ListItem.Label]</label>
+				</control>
+			</control>
 			<control type="grouplist" id="9001">
 				<left>920</left>
 				<top>80</top>
 				<onleft>61</onleft>
 				<itemgap>dialogbuttons_itemgap</itemgap>
 				<onright>3</onright>
+				<!-- Silo Skyline: only when Kodi gives them a label. -->
 				<include content="DefaultDialogButton">
 					<param name="id" value="5" />
 					<param name="label" value="" />
+					<param name="visible" value="!String.IsEmpty(Control.GetLabel(5))" />
 				</include>
 				<include content="DefaultDialogButton">
 					<param name="id" value="8" />
 					<param name="label" value="" />
+					<param name="visible" value="!String.IsEmpty(Control.GetLabel(8))" />
 				</include>
 				<include content="DefaultDialogButton">
 					<param name="id" value="7" />
@@ -263,7 +287,7 @@
 						</itemlayout>
 						<focusedlayout width="408" height="374">
 							<control type="image">
-								<texture colordiffuse="button_focus">lists/focus.png</texture>
+								<texture border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texture>
 								<visible>Control.HasFocus(3)</visible>
 							</control>
 							<control type="image">

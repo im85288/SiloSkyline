@@ -8,9 +8,9 @@
 		<radioposx>370</radioposx>
 		<aligny>center</aligny>
 		<invalidcolor>invalid</invalidcolor>
-		<texturefocus colordiffuse="button_focus">lists/focus.png</texturefocus>
+		<texturefocus border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texturefocus>
 		<texturenofocus />
-		<alttexturefocus colordiffuse="button_focus">lists/focus.png</alttexturefocus>
+		<alttexturefocus border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</alttexturefocus>
 		<alttexturenofocus></alttexturenofocus>
 	</include>
 	<include name="PVRQuickNavItemsCommon">

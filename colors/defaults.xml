@@ -18,6 +18,21 @@
 	<color name="text_shadow">22000000</color>
 	<color name="border_alpha">60FFFFFF</color>
 	<color name="disabled">40FFFFFF</color>
-	<color name="selected">FFFFB70F</color>
+	<color name="selected">FFF3D3A0</color>
 	<color name="invalid">FFFF0000</color>
+	<!-- Skyline's own (tools/build_colours.py), as Silo: the default theme.
+	     Zephyr.xml and OLED.xml override these. -->
+	<color name="SkylineBackground">FF0D0F12</color>
+	<color name="SkylinePanel">F21C1F24</color>
+	<color name="SkylineDialog">FF131417</color>
+	<color name="SkylineCard">FF1A1D27</color>
+	<color name="SkylineCardEmpty">FF262A31</color>
+	<color name="SkylineFocus">FFEDEDED</color>
+	<color name="SkylineFocusText">FF000000</color>
+	<color name="SkylineFocusTextDim">8C000000</color>
+	<!-- Live TV's panels (tools/build_colours.py). -->
+	<color name="SkylineLivePanel">F2272A30</color>
+	<color name="SkylineLiveCard">E6272A30</color>
+	<color name="SkylineLiveVeil">CC272A30</color>
+	<color name="SkylineLiveBar">FF33373E</color>
 </colors>

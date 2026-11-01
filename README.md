@@ -1,6 +1,6 @@
-# Silo Skyline
+# Skyline
 
-A Kodi skin laid out like the [Silo](https://github.com/Silo-Server/silo-server) TV apps' Skyline home, for
+Skyline is a Kodi skin laid out like the [Silo](https://github.com/Silo-Server/silo-server) TV apps' Skyline home, for
 Kodi 21 (Omega). It works with [SiloKodiConnect](https://github.com/im85288/SiloKodiConnect), which puts a
 Silo server's movies and TV shows into Kodi's library: the skin builds its pages from the rows on your Silo
 home screen, so they follow whatever Silo shows.
@@ -21,9 +21,27 @@ Community project: not made or endorsed by the Silo team.
   Browse pill, Trailer and Versions buttons when a title has them, and the cast as round photos.
 - **Inter** throughout, as the Silo apps use.
 
-| Movies | Episode | Film |
+| Movies | Series | Film |
 |---|---|---|
-| ![Movies](resources/screenshot-02.jpg) | ![Episode](resources/screenshot-03.jpg) | ![Film](resources/screenshot-04.jpg) |
+| ![Movies](resources/screenshot-02.jpg) | ![Series](resources/screenshot-03.jpg) | ![Film](resources/screenshot-04.jpg) |
+
+## Your own menu items
+
+With [Skin Shortcuts](https://github.com/mikesilvo164/script.skinshortcuts) installed, **Settings -> Customise
+menu** adds items of your own beside the avatar: any add-on, library node, playlist or other shortcut, renamed
+and in your order. Give an item up to four widgets and it opens them as rows on its own page, like Home's;
+an item without widgets runs its action. The Silo tabs stay as they are.
+
+## Colours
+
+**Settings -> Interface -> Skin -> Colours** (or Skyline's skin settings) offers three colour themes:
+
+- **Silo** (the default): Silo's near-black pages and white focus.
+- **Zephyr**: a flatter dark grey with a blue focus, as Arctic Zephyr.
+- **OLED**: true black pages and near-black panels.
+
+**Artwork background** in the skin settings shows the selected title's fanart, dimmed, behind every
+screen, as Arctic Zephyr does.
 
 ## Install
 
@@ -45,7 +63,14 @@ The Silo screens are generated: edit the scripts in `tools/`, not the XML they w
 - `tools/build_info.py` writes `xml/DialogVideoInfo.xml` and its variables.
 - `tools/build_browse.py` writes `xml/MyVideoNav.xml` (library browsing) and its variables.
 - `tools/build_search.py` writes `xml/Custom_1190_SiloSearch.xml` (search) and its variables.
+- `tools/build_upnext.py` writes Up Next's windows (`xml/script-upnext-*.xml`: Next Up, Still watching,
+  Skip intro) in Silo's player style, and their variables.
+- `xml/script-skinshortcuts.xml` (the menu manager) and `shortcuts/` are hand-written; Skin Shortcuts
+  writes `xml/script-skinshortcuts-includes.xml` on the device, over the placeholder here.
 - `tools/make_textures.py` draws the masks, focus rings, pills and badges in `media/silo/`.
+
+- `tools/build_colours.py` runs last: it turns the colours a theme changes (pages, panels, the focus and
+  what's drawn on it) into the names `colors/defaults.xml`, `Zephyr.xml` and `OLED.xml` define.
 
 Run `build_home.py` first, then the others, since they all write blocks into `xml/Variables.xml`. Kodi reads a
 `$VAR` in a list's content path only once, when the window opens, so content paths stay `$INFO`; check

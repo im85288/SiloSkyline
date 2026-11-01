@@ -20,7 +20,7 @@
 				<height>647</height>
 				<shadowcolor>black</shadowcolor>
 				<pagecontrol>3000</pagecontrol>
-				<font>font14</font>
+				<font>silo_meta</font>
 				<monofont>Mono26</monofont>
 			</control>
 			<control type="scrollbar" id="3000">
@@ -40,8 +40,8 @@
 			<top>113</top>
 			<width>48</width>
 			<height>20</height>
-			<texturefocus colordiffuse="button_focus" flipy="true">overlays/arrowdown.png</texturefocus>
-			<texturenofocus colordiffuse="button_focus" flipy="true">overlays/arrowdown.png</texturenofocus>
+			<texturefocus colordiffuse="FFEDEDED" flipy="true">overlays/arrowdown.png</texturefocus>
+			<texturenofocus colordiffuse="FFEDEDED" flipy="true">overlays/arrowdown.png</texturenofocus>
 			<onclick>SetFocus(3000)</onclick>
 			<onclick>Up</onclick>
 		</control>
@@ -52,19 +52,19 @@
 			<height>20</height>
 			<onclick>SetFocus(3000)</onclick>
 			<onclick>Down</onclick>
-			<texturefocus colordiffuse="button_focus">overlays/arrowdown.png</texturefocus>
-			<texturenofocus colordiffuse="button_focus">overlays/arrowdown.png</texturenofocus>
+			<texturefocus colordiffuse="FFEDEDED">overlays/arrowdown.png</texturefocus>
+			<texturenofocus colordiffuse="FFEDEDED">overlays/arrowdown.png</texturenofocus>
 		</control>
 		<control type="label">
 			<left>1310</left>
 			<top>880</top>
 			<width>330</width>
 			<height>35</height>
-			<font>font12</font>
+			<font>silo_detail</font>
 			<textcolor>grey</textcolor>
 			<align>right</align>
 			<aligny>center</aligny>
-			<label>$LOCALIZE[31035] [COLOR=button_focus]$INFO[Container(5).CurrentPage]/$INFO[Container(5).NumPages][/COLOR]</label>
+			<label>$LOCALIZE[31035] [COLOR=FFEDEDED]$INFO[Container(5).CurrentPage]/$INFO[Container(5).NumPages][/COLOR]</label>
 			<wrapmultiline>true</wrapmultiline>
 			<visible>Integer.IsGreater(Container(5).NumPages,1)</visible>
 		</control>

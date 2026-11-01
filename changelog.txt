@@ -1,3 +1,16 @@
+[B]0.3.0[/B]
+• Requests: Silo's Discover and Yours, request buttons, search and status cards
+• Home: 18 of Silo's rows (the first four published as cards), lazy far rows, ratings' marks,
+  Silo's three-line Continue Watching cards with time left, watched cards dimmed
+• Netflix touches: Top 10 rows (chosen in the settings), New Episode tabs, the hero's
+  "#3 in ..." line, a slow drift on the backdrop, Remove from Continue Watching
+• Browse: Grid, Hero and List views, Sort, an Unwatched filter, genre chips and collections
+• Showcase player style (the default): a richer overlay, a pause screen and Up Next to match
+• Live TV in TiviMate's way: guide, quick guide, OK screen, catch-up and recent channels
+• Person pages, trailers, watchlist, menus and dialogs as Silo's Apple TV app
+• Colour themes (Silo, Zephyr, OLED), artwork background and your own menu items
+• One command rebuilds the whole skin; build tools left out of release zips
+
 [B]0.2.0[/B]
 • Series and episode pages: season pills, episode rails, Play or Resume for the next episode, opening on it
 • More Like This, Silo's ambient tint and art fade, round cast photos
