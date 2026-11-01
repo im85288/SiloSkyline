@@ -261,15 +261,21 @@
                         <control type="group">
                             <left>16</left><top>128</top>
                             <visible>[!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))] + ![!String.IsEmpty(ListItem.Property(home.rank)) | !String.IsEmpty(ListItem.Property(silo.rank))]</visible>
+                            <!-- Outlined, as the hero's 4K and Dolby Vision badges, over a
+                                 faint dark fill so it reads on bright artwork. -->
                             <control type="image">
                                 <width>268</width><height>30</height>
-                                <texture border="8" colordiffuse="FFE50914">silo/badge_solid.png</texture>
+                                <texture border="8" colordiffuse="8C000000">silo/badge_solid.png</texture>
+                            </control>
+                            <control type="image">
+                                <width>268</width><height>30</height>
+                                <texture border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texture>
                             </control>
                             <control type="label">
                                 <width>268</width><height>30</height>
                                 <align>center</align><aligny>center</aligny>
                                 <font>silo_badge</font>
-                                <textcolor>FFFFFFFF</textcolor>
+                                <textcolor>FFEDEDED</textcolor>
                                 <label>NEW EPISODE</label>
                             </control>
                         </control>
@@ -360,15 +366,21 @@
                         <control type="group">
                             <left>16</left><top>128</top>
                             <visible>[!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))] + ![!String.IsEmpty(ListItem.Property(home.rank)) | !String.IsEmpty(ListItem.Property(silo.rank))]</visible>
+                            <!-- Outlined, as the hero's 4K and Dolby Vision badges, over a
+                                 faint dark fill so it reads on bright artwork. -->
                             <control type="image">
                                 <width>268</width><height>30</height>
-                                <texture border="8" colordiffuse="FFE50914">silo/badge_solid.png</texture>
+                                <texture border="8" colordiffuse="8C000000">silo/badge_solid.png</texture>
+                            </control>
+                            <control type="image">
+                                <width>268</width><height>30</height>
+                                <texture border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texture>
                             </control>
                             <control type="label">
                                 <width>268</width><height>30</height>
                                 <align>center</align><aligny>center</aligny>
                                 <font>silo_badge</font>
-                                <textcolor>FFFFFFFF</textcolor>
+                                <textcolor>FFEDEDED</textcolor>
                                 <label>NEW EPISODE</label>
                             </control>
                         </control>

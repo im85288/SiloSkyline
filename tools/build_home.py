@@ -132,19 +132,25 @@ def new_tag(card, indent=24):
 %(p)s<control type="group">
 %(p)s    <left>%(x)d</left><top>%(y)d</top>
 %(p)s    <visible>%(visible)s</visible>
+%(p)s    <!-- Outlined, as the hero's 4K and Dolby Vision badges, over a
+%(p)s         faint dark fill so it reads on bright artwork. -->
 %(p)s    <control type="image">
 %(p)s        <width>%(w)d</width><height>%(h)d</height>
-%(p)s        <texture border="8" colordiffuse="FFE50914">silo/badge_solid.png</texture>
+%(p)s        <texture border="8" colordiffuse="8C000000">silo/badge_solid.png</texture>
+%(p)s    </control>
+%(p)s    <control type="image">
+%(p)s        <width>%(w)d</width><height>%(h)d</height>
+%(p)s        <texture border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texture>
 %(p)s    </control>
 %(p)s    <control type="label">
 %(p)s        <width>%(w)d</width><height>%(h)d</height>
 %(p)s        <align>center</align><aligny>center</aligny>
 %(p)s        <font>silo_badge</font>
-%(p)s        <textcolor>FFFFFFFF</textcolor>
+%(p)s        <textcolor>%(text)s</textcolor>
 %(p)s        <label>NEW EPISODE</label>
 %(p)s    </control>
 %(p)s</control>''' % {'p': pad, 'x': 16, 'y': 6 + card['height'] - 10 - NEW_H, 'w': card['width'] - 20, 'h': NEW_H,
-                       'visible': NEW_EPISODE}
+                       'visible': NEW_EPISODE, 'text': TEXT}
 
 
 def watched_disc(x, y, visible, indent=24):
@@ -1751,13 +1757,13 @@ def build():
                     <visible>$EXP[HasSiloHeroRank]</visible>
                     <control type="image">
                         <top>4</top><width>92</width><height>32</height>
-                        <texture border="8" colordiffuse="FFE50914">silo/badge_solid.png</texture>
+                        <texture border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texture>
                     </control>
                     <control type="label">
                         <top>4</top><width>92</width><height>32</height>
                         <align>center</align><aligny>center</aligny>
                         <font>silo_badge</font>
-                        <textcolor>FFFFFFFF</textcolor>
+                        <textcolor>%(text)s</textcolor>
                         <label>TOP 10</label>
                     </control>
                 </control>
@@ -2086,7 +2092,7 @@ def hero_reason():
     for row_id, slot in slots:
         out += '        <value condition="%s + %s">#$INFO[%s.Property(home.place)]$INFO[%s.Property(silo.place)] in $INFO[%s]</value>\n' % (
             mine(row_id), RANK_OF.replace('LI', item(row_id)), item(row_id), item(row_id), prop('silo.home.%d.title' % slot))
-        out += '        <value condition="%s + %s">[COLOR FFE50914][B]New Episode[/B][/COLOR]</value>\n' % (
+        out += '        <value condition="%s + %s">New Episode</value>\n' % (
             mine(row_id), NEW_OF.replace('LI', item(row_id)))
     return out + '    </variable>\n'
 

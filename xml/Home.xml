@@ -66,13 +66,13 @@
                     <visible>$EXP[HasSiloHeroRank]</visible>
                     <control type="image">
                         <top>4</top><width>92</width><height>32</height>
-                        <texture border="8" colordiffuse="FFE50914">silo/badge_solid.png</texture>
+                        <texture border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texture>
                     </control>
                     <control type="label">
                         <top>4</top><width>92</width><height>32</height>
                         <align>center</align><aligny>center</aligny>
                         <font>silo_badge</font>
-                        <textcolor>FFFFFFFF</textcolor>
+                        <textcolor>FFEDEDED</textcolor>
                         <label>TOP 10</label>
                     </control>
                 </control>
