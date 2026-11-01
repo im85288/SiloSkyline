@@ -1,3 +1,14 @@
+[B]0.4.0[/B]
+• Box sets: one card per box set in Browse (BOX SET, film count, years), a box set page with
+  Play and its films in release order, a film's box set row, and box sets first in search
+• Ratings: Rotten Tomatoes' critics' score beside IMDb's and TMDB's; a Rate button on title pages
+• Series > Coming Soon from Silo's calendar
+• Theme tunes on show pages (a skin setting, on by default)
+• Showcase player: Episodes and Next Episode buttons, the focused button's name, the badges
+  without the poster or ratings, lighter shading
+• Live TV quick guide: the channel groups on Left, as TiviMate's
+• Info page: a quieter plot; an episode's facts fit with every rating
+
 [B]0.3.0[/B]
 • Requests: Silo's Discover and Yours, request buttons, search and status cards
 • Home: 18 of Silo's rows (the first four published as cards), lazy far rows, ratings' marks,

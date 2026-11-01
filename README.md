@@ -22,13 +22,15 @@ Community project: not made or endorsed by the Silo team.
   started with an episode out this week; Top 10 rows numbered on their posters; and a "TOP 10 · #3 in IMDb
   Popular Shows" line over the hero for a title in a chart's top ten.
 - **Browse.** Films and series in Grid, Hero or List view, with Sort, an Unwatched filter, A-Z, genre chips and
-  collections, all in Silo's own windows.
+  collections, all in Silo's own windows. Silo's box sets (Harry Potter's eight films, say) show as one card,
+  with BOX SET and the film count, and open a box set page: its films in release order and a Play button for
+  the next one to watch. A film's page has its box set's row; search lists box sets first.
 - **Detail, person and Requests pages** as Silo's Apple TV app: Play / Resume, trailers, watchlist, season
   pills and episode rails, More Like This, cast to their person pages, and Silo's Requests (Discover and Yours).
   A Rate button gives a title one to five stars, and a show's theme tune plays while its page is open.
 - **Coming Soon** on Series: each show you've started with its next episode's date, from Silo's calendar.
-- **Showcase player** (the default): a richer overlay, a Netflix-style pause screen after 10 seconds, and Up
-  Next to match. Silo's own player style is the other choice.
+- **Showcase player** (the default): a richer overlay with Episodes (the season over the buttons) and Next
+  Episode, the focused button's name, a Netflix-style pause screen after 10 seconds, and Up Next to match. Silo's own player style is the other choice.
 - **Live TV** laid out as TiviMate, in Silo's look: guide, quick guide (its channel groups on Left), OK screen, catch-up and recent channels.
 - Silo-style menus, dialogs, keyboard, notifications and settings; **Inter** throughout, as the Silo apps use.
 
