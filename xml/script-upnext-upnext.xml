@@ -245,6 +245,13 @@
                             <width>288</width><height>162</height>
                             <texture diffuse="silo/card_landscape_mask.png">silo/card_scrim.png</texture>
                         </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>288</width><height>162</height>
+                            <texture diffuse="silo/card_landscape_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                            <visible>[Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))]</visible>
+                            <animation effect="fade" time="160">VisibleChange</animation>
+                        </control>
                         <control type="progress">
                             <left>26</left><top>162</top>
                             <width>248</width><height>6</height>
@@ -302,6 +309,13 @@
                             <left>6</left><top>6</top>
                             <width>288</width><height>162</height>
                             <texture diffuse="silo/card_landscape_mask.png">silo/card_scrim.png</texture>
+                        </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>288</width><height>162</height>
+                            <texture diffuse="silo/card_landscape_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                            <visible>[Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))] + !Control.HasFocus(3100)</visible>
+                            <animation effect="fade" time="160">VisibleChange</animation>
                         </control>
                         <control type="progress">
                             <left>26</left><top>162</top>

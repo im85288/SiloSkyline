@@ -113,6 +113,9 @@ def focus_zoom(condition, indent=24):
             'center="auto" condition="%s">Conditional</animation>' % (' ' * indent, FOCUS_ZOOM, condition))
 
 
+WATCHED = 'Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))'
+
+
 def watched_disc(x, y, visible, indent=24):
     """Silo's watched mark: a black tick on an off-white disc, inside the poster's corner."""
     pad = ' ' * indent
@@ -129,6 +132,21 @@ def watched_disc(x, y, visible, indent=24):
 %(p)s        <texture colordiffuse="FF000000">OverlayWatched.png</texture>
 %(p)s    </control>
 %(p)s</control>''' % {'p': pad, 'x': x, 'y': y, 'visible': visible}
+
+
+def watched_dim(card, focus, indent=24):
+    """A watched title's card, dimmed so what's left to watch stands out; it
+    lifts while the card has focus. Drawn under the watched mark."""
+    pad = ' ' * indent
+    visible = '[%s]' % WATCHED + (' + !%s' % focus if focus else '')
+    return '''
+%(p)s<control type="image">
+%(p)s    <left>6</left><top>6</top>
+%(p)s    <width>%(w)d</width><height>%(h)d</height>
+%(p)s    <texture diffuse="%(mask)s" colordiffuse="99000000">colors/white.png</texture>
+%(p)s    <visible>%(v)s</visible>
+%(p)s    <animation effect="fade" time="160">VisibleChange</animation>
+%(p)s</control>''' % {'p': pad, 'w': card['width'], 'h': card['height'], 'mask': card['mask'], 'v': visible}
 
 
 def focus_sheen(width, height, mask, rim, condition, indent=24):
@@ -328,7 +346,7 @@ def card_body(card, focused, control_id='$PARAM[id]', near=None):
                             <left>6</left><top>6</top>
                             <width>%(w)d</width><height>%(h)d</height>
                             <texture diffuse="%(mask)s">silo/card_scrim.png</texture>
-                        </control>%(no_art)s
+                        </control>%(no_art)s%(dim)s
                         <control type="progress">
                             <left>%(px)d</left><top>%(pt)d</top>
                             <width>%(pw)d</width><height>6</height>
@@ -372,10 +390,9 @@ def card_body(card, focused, control_id='$PARAM[id]', near=None):
                                     'sheen': focus_sheen(card['width'], card['height'], card['mask'], card['rim'],
                                                          'Control.HasFocus(%s)' % control_id) if focused else '',
                                     # From the poster's left: <right> is the item's edge, gap included.
-                                    'watched': watched_disc(6 + card['width'] - 10 - 40, 16,
-                                                            'Integer.IsGreater(ListItem.PlayCount,0) | '
-                                                            '!String.IsEmpty(ListItem.Property(home.playcount))'),
-                                    'no_art': no_art_card(card) + request_tags(card)}
+                                    'watched': watched_disc(6 + card['width'] - 10 - 40, 16, WATCHED),
+                                    'no_art': no_art_card(card) + request_tags(card),
+                                    'dim': watched_dim(card, 'Control.HasFocus(%s)' % control_id if focused else '')}
 
 
 def request_tags(card):

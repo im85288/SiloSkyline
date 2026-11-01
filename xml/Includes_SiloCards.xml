@@ -108,6 +108,13 @@
                                 <label>$INFO[ListItem.Property(home.request.state)]$INFO[ListItem.Property(silo.request.status)]</label>
                             </control>
                         </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>176</width><height>264</height>
+                            <texture diffuse="silo/card_poster_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                            <visible>[Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))]</visible>
+                            <animation effect="fade" time="160">VisibleChange</animation>
+                        </control>
                         <control type="progress">
                             <left>24</left><top>264</top>
                             <width>140</width><height>6</height>
@@ -217,6 +224,13 @@
                                 <label>$INFO[ListItem.Property(home.request.state)]$INFO[ListItem.Property(silo.request.status)]</label>
                             </control>
                         </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>176</width><height>264</height>
+                            <texture diffuse="silo/card_poster_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                            <visible>[Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))] + !Control.HasFocus($PARAM[id])</visible>
+                            <animation effect="fade" time="160">VisibleChange</animation>
+                        </control>
                         <control type="progress">
                             <left>24</left><top>264</top>
                             <width>140</width><height>6</height>
@@ -311,6 +325,13 @@
                             <width>360</width><height>202</height>
                             <texture diffuse="silo/card_landscape_mask.png">silo/card_scrim.png</texture>
                         </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>202</height>
+                            <texture diffuse="silo/card_landscape_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                            <visible>[Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))]</visible>
+                            <animation effect="fade" time="160">VisibleChange</animation>
+                        </control>
                         <control type="progress">
                             <left>26</left><top>202</top>
                             <width>320</width><height>6</height>
@@ -373,6 +394,13 @@
                             <left>6</left><top>6</top>
                             <width>360</width><height>202</height>
                             <texture diffuse="silo/card_landscape_mask.png">silo/card_scrim.png</texture>
+                        </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>202</height>
+                            <texture diffuse="silo/card_landscape_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                            <visible>[Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))] + !Control.HasFocus($PARAM[id])</visible>
+                            <animation effect="fade" time="160">VisibleChange</animation>
                         </control>
                         <control type="progress">
                             <left>26</left><top>202</top>
@@ -514,6 +542,13 @@
                                 <label>$INFO[ListItem.Property(home.request.state)]$INFO[ListItem.Property(silo.request.status)]</label>
                             </control>
                         </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>256</width><height>384</height>
+                            <texture diffuse="silo/card_poster_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                            <visible>[Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))]</visible>
+                            <animation effect="fade" time="160">VisibleChange</animation>
+                        </control>
                         <control type="progress">
                             <left>24</left><top>384</top>
                             <width>220</width><height>6</height>
@@ -622,6 +657,13 @@
                                 <textcolor>FF101010</textcolor>
                                 <label>$INFO[ListItem.Property(home.request.state)]$INFO[ListItem.Property(silo.request.status)]</label>
                             </control>
+                        </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>256</width><height>384</height>
+                            <texture diffuse="silo/card_poster_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                            <visible>[Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))] + !Control.HasFocus($PARAM[id])</visible>
+                            <animation effect="fade" time="160">VisibleChange</animation>
                         </control>
                         <control type="progress">
                             <left>24</left><top>384</top>
