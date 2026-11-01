@@ -21,7 +21,9 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_home import wordmark, focus_sheen, focus_zoom, watched_disc, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM, GRID_BACKDROP  # noqa: E402
 
-GRID = 'Container.Content(movies) | Container.Content(tvshows) | Container.Content(sets) | Container.Content(seasons)'
+# An add-on's videos (content videos) get the poster grid too, and its views.
+GRID = ('Container.Content(movies) | Container.Content(tvshows) | Container.Content(sets) | Container.Content(seasons)'
+        ' | Container.Content(videos)')
 HERO_VIEW, DETAIL_VIEW = 55, 56
 TITLE_VIEWS = (51, HERO_VIEW, DETAIL_VIEW)  # the views films and shows can use
 MENU_ID, MENU_W = 9000, 560
@@ -39,7 +41,9 @@ POSTER_ITEM_H = POSTER_H + 12 + 76 + 24
 # SiloKodiConnect (NotifyAll) to jump the grid to the first title from it.
 JUMP_ID = 60
 LETTERS = ['#'] + [chr(c) for c in range(ord('A'), ord('Z') + 1)]
-JUMP_BAR = '[Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(Container.NumItems,20)'
+# The library's own films and shows only: an add-on's lists are seldom in title order.
+JUMP_BAR = ('[Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(Container.NumItems,20)'
+            ' + String.StartsWith(Container.FolderPath,videodb://)')
 # Episode list: a 16:9 still, then the episode's details beside it.
 STILL_W, STILL_H = 360, 202
 WATCHED = ('Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0)'
@@ -785,7 +789,7 @@ VARIABLES = '''
     <expression name="SiloBrowseGrid">[%(grid)s] + !$EXP[SiloBrowseFans]</expression>
     <expression name="SiloBrowseEpisodes">%(episodes)s</expression>
     <!-- Films and shows: the views they have beside the poster grid (hero, list). -->
-    <expression name="SiloBrowseTitles">[Container.Content(movies) | Container.Content(tvshows)] + !$EXP[SiloBrowseFans]</expression>
+    <expression name="SiloBrowseTitles">[Container.Content(movies) | Container.Content(tvshows) | Container.Content(videos)] + !$EXP[SiloBrowseFans]</expression>
     <!-- The genre in a view's facts: SiloKodiConnect's first (kept in the library), else Kodi's. -->
     <variable name="SiloViewGenre">
         <value condition="!String.IsEmpty(ListItem.Art(silogenre))">$INFO[ListItem.Art(silogenre),  ·  ,]</value>

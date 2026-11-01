@@ -6544,10 +6544,10 @@
     <!-- Silo Skyline browse (tools/build_browse.py) -->
     <expression name="SiloBrowseFans">Container.Content(sets) + String.IsEqual(Container.Property(silo.fans),true)</expression>
     <expression name="SiloBrowseChips">Container.Content(genres)</expression>
-    <expression name="SiloBrowseGrid">[Container.Content(movies) | Container.Content(tvshows) | Container.Content(sets) | Container.Content(seasons)] + !$EXP[SiloBrowseFans]</expression>
+    <expression name="SiloBrowseGrid">[Container.Content(movies) | Container.Content(tvshows) | Container.Content(sets) | Container.Content(seasons) | Container.Content(videos)] + !$EXP[SiloBrowseFans]</expression>
     <expression name="SiloBrowseEpisodes">Container.Content(episodes)</expression>
     <!-- Films and shows: the views they have beside the poster grid (hero, list). -->
-    <expression name="SiloBrowseTitles">[Container.Content(movies) | Container.Content(tvshows)] + !$EXP[SiloBrowseFans]</expression>
+    <expression name="SiloBrowseTitles">[Container.Content(movies) | Container.Content(tvshows) | Container.Content(videos)] + !$EXP[SiloBrowseFans]</expression>
     <!-- The genre in a view's facts: SiloKodiConnect's first (kept in the library), else Kodi's. -->
     <variable name="SiloViewGenre">
         <value condition="!String.IsEmpty(ListItem.Art(silogenre))">$INFO[ListItem.Art(silogenre),  ·  ,]</value>

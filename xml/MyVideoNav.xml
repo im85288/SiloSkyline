@@ -350,7 +350,7 @@
             <scrolltime tween="cubic" easing="out">280</scrolltime>
             <viewtype label="Posters">poster</viewtype>
             <onleft condition="$EXP[SiloBrowseTitles]">9000</onleft>
-            <onright condition="[Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(Container.NumItems,20)">60</onright>
+            <onright condition="[Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(Container.NumItems,20) + String.StartsWith(Container.FolderPath,videodb://)">60</onright>
             <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + [Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
             <visible>$EXP[SiloBrowseGrid]</visible>
             <itemlayout width="270" height="481">
@@ -491,7 +491,7 @@
             <onleft condition="Control.IsVisible(56)">56</onleft>
             <onright>noop</onright>
             <scrolltime tween="cubic" easing="out">200</scrolltime>
-            <visible>$EXP[SiloBrowseGrid] + [Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(Container.NumItems,20)</visible>
+            <visible>$EXP[SiloBrowseGrid] + [Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(Container.NumItems,20) + String.StartsWith(Container.FolderPath,videodb://)</visible>
             <itemlayout width="96" height="30" condition="!Control.HasFocus(60)">
                 <control type="image">
                     <left>43</left><top>10</top><width>10</width><height>10</height>
@@ -806,7 +806,7 @@
             <viewtype label="Hero">bigwide</viewtype>
             <visible>$EXP[SiloBrowseTitles]</visible>
             <onleft>9000</onleft>
-            <onright condition="[Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(Container.NumItems,20)">60</onright>
+            <onright condition="[Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(Container.NumItems,20) + String.StartsWith(Container.FolderPath,videodb://)">60</onright>
             <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + [Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
             <itemlayout width="203" height="292">
                 <control type="group">
@@ -970,7 +970,7 @@
             <viewtype label="List">biginfo</viewtype>
             <visible>$EXP[SiloBrowseTitles]</visible>
             <onleft>9000</onleft>
-            <onright condition="[Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(Container.NumItems,20)">60</onright>
+            <onright condition="[Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(Container.NumItems,20) + String.StartsWith(Container.FolderPath,videodb://)">60</onright>
             <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + [Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
             <itemlayout width="780" height="66">
                 <control type="label">
