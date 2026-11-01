@@ -11,15 +11,24 @@ Community project: not made or endorsed by the Silo team.
 
 ## What it does
 
-- **Silo's home layout.** The focused title's artwork sits crisp in the top right and fades into the page;
-  its clear logo, facts line (age rating, episode, air date or year, genre, IMDb rating), plot, cast and
-  quality badges (4K, Dolby Vision or HDR10, audio) fill the top left; rows of titles run underneath.
-- **Pages from Silo.** Home, Movies and Series, each with the rows Silo shows for that page (Continue
-  Watching, Because You Watched…, Recently Added, genre rows). SiloKodiConnect publishes them as window
-  properties when it starts and after every sync; rows reload when the library changes.
-- **Silo-style detail page.** Logo, facts, a three-line synopsis, credit line, badges, a Play / Resume /
-  Browse pill, Trailer and Versions buttons when a title has them, and the cast as round photos.
-- **Inter** throughout, as the Silo apps use.
+- **Silo's home layout.** The focused title's artwork sits crisp in the top right, drifting slowly, and fades
+  into the page; its clear logo, facts (age rating, year or episode, genre, IMDb and TMDB ratings), plot,
+  cast and quality badges (4K, Dolby Vision or HDR10, audio) fill the top left; rows of titles run underneath.
+- **Pages from Silo.** Home, Movies and Series with the rows Silo shows for each, in Silo's order:
+  SiloKodiConnect publishes Home's first rows as ready-made cards, so they draw at once, and the rest load as
+  you reach them. Rows far from the one you're on drop their artwork to save memory.
+- **Netflix touches.** Continue Watching cards in Silo's three lines with the time left; Remove from Continue
+  Watching on the context menu key (a long OK); watched titles dimmed; a NEW EPISODE tab on shows you've
+  started with an episode out this week; Top 10 rows numbered on their posters; and a "TOP 10 · #3 in IMDb
+  Popular Shows" line over the hero for a title in a chart's top ten.
+- **Browse.** Films and series in Grid, Hero or List view, with Sort, an Unwatched filter, A-Z, genre chips and
+  collections, all in Silo's own windows.
+- **Detail, person and Requests pages** as Silo's Apple TV app: Play / Resume, trailers, watchlist, season
+  pills and episode rails, More Like This, cast to their person pages, and Silo's Requests (Discover and Yours).
+- **Showcase player** (the default): a richer overlay, a Netflix-style pause screen after 10 seconds, and Up
+  Next to match. Silo's own player style is the other choice.
+- **Live TV** laid out as TiviMate, in Silo's look: guide, quick guide, OK screen, catch-up and recent channels.
+- Silo-style menus, dialogs, keyboard, notifications and settings; **Inter** throughout, as the Silo apps use.
 
 | Movies | Series | Film |
 |---|---|---|
@@ -43,9 +52,15 @@ an item without widgets runs its action. The Silo tabs stay as they are.
 **Artwork background** in the skin settings shows the selected title's fanart, dimmed, behind every
 screen, as Arctic Zephyr does.
 
+## Skin settings
+
+- **General:** Colours; Recommended add-ons (Up Next, YouTube and more, with what each adds); **Top 10
+  rows**, which opens SiloKodiConnect's choice of Home rows to number; Artwork background; Use slide animations.
+- **Player:** Player style (Showcase or Silo's) and the overlay's auto-close.
+
 ## Install
 
-Install and sign in to SiloKodiConnect 0.9.3 or newer first, then build a zip and use Kodi's
+Install and sign in to SiloKodiConnect 0.10.0 or newer first, then build a zip and use Kodi's
 **Add-ons -> Install from zip file**:
 
 ```bash
@@ -56,27 +71,36 @@ Switch to it under **Settings -> Interface -> Skin**. Without SiloKodiConnect, H
 
 ## Development
 
-The Silo screens are generated: edit the scripts in `tools/`, not the XML they write.
+The Silo screens are generated: edit the scripts in `tools/`, not the XML they write. One command rebuilds
+everything in the order that works and checks that every `xml/*.xml` parses:
 
-- `tools/build_home.py` writes `xml/Home.xml`, its block in `xml/Variables.xml`, the Inter fonts in
-  `xml/Font.xml` and the start-up focus timer in `xml/Timers.xml`.
-- `tools/build_info.py` writes `xml/DialogVideoInfo.xml` and its variables.
-- `tools/build_browse.py` writes `xml/MyVideoNav.xml` (library browsing) and its variables.
-- `tools/build_search.py` writes `xml/Custom_1190_SiloSearch.xml` (search) and its variables.
-- `tools/build_upnext.py` writes Up Next's windows (`xml/script-upnext-*.xml`: Next Up, Still watching,
-  Skip intro) in Silo's player style, and their variables.
-- `xml/script-skinshortcuts.xml` (the menu manager) and `shortcuts/` are hand-written; Skin Shortcuts
-  writes `xml/script-skinshortcuts-includes.xml` on the device, over the placeholder here.
-- `tools/make_textures.py` draws the masks, focus rings, pills and badges in `media/silo/`.
+```bash
+python3 tools/build_all.py
+```
 
-- `tools/build_colours.py` runs last: it turns the colours a theme changes (pages, panels, the focus and
-  what's drawn on it) into the names `colors/defaults.xml`, `Zephyr.xml` and `OLED.xml` define.
+- `build_home.py`: Home (`xml/Home.xml`), the shared card includes (`xml/Includes_SiloCards.xml`), Inter in
+  `xml/Font.xml`, and Home's blocks in `xml/Variables.xml` and `xml/Timers.xml`.
+- `build_frame.py`: the frame every other screen shares: menus, dialogs, settings, the top bar.
+- `build_info.py`: the detail page (`xml/DialogVideoInfo.xml`).
+- `build_library.py`: Browse (`xml/Custom_1191_SiloLibrary.xml`, and its copy 1193 for a collection's or a
+  genre's titles).
+- `build_browse.py`: Kodi's own library window (`xml/MyVideoNav.xml`), for add-ons' lists.
+- `build_search.py`, `build_person.py`, `build_requests.py`: search, person and request browse pages.
+- `build_showcase.py`, `build_options.py`, `build_upnext.py`: the player's styles, its Options sheet and Up
+  Next's windows.
+- `build_tv.py`: Live TV's guide and programme information.
+- `build_shortcuts.py`: the menu editor for your own menu items. Skin Shortcuts writes
+  `xml/script-skinshortcuts-includes.xml` on the device, over the placeholder here.
+- `build_colours.py` runs last: it turns the colours a theme changes into the names `colors/defaults.xml`,
+  `Zephyr.xml` and `OLED.xml` define.
+- `make_textures.py` draws the masks, focus rings, pills and badges in `media/silo/`.
 
-Run `build_home.py` first, then the others, since they all write blocks into `xml/Variables.xml`. Kodi reads a
-`$VAR` in a list's content path only once, when the window opens, so content paths stay `$INFO`; check
-changes with a cold Kodi start, not only `ReloadSkin()`.
+Kodi reads a `$VAR` in a list's content path only once, when the window opens, so content paths stay `$INFO`;
+and it keeps a list item's layout once picked, so marks follow item properties, not layouts. Check changes
+with a cold Kodi start, not only `ReloadSkin()`. On a 2 GB SHIELD, measure Kodi's native heap on Home before
+adding rows or pictures (`adb shell dumpsys meminfo org.xbmc.kodi`): it is about 225 MB now.
 
-Everything else is Estuary as shipped with Kodi 21, which the Silo screens replace page by page.
+Skyline began as Estuary from Kodi 21; the few screens not yet redrawn are still Estuary's.
 
 ## Licence
 
