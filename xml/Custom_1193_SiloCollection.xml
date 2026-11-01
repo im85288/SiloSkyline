@@ -159,7 +159,7 @@
                 </control>
                 </control>
             </focusedlayout>
-            <content target="videos" sortby="$INFO[Window(Home).Property(silo.browse.sort)]" sortorder="$INFO[Window(Home).Property(silo.browse.order)]">$INFO[Window(Home).Property(silo.browse.vpath.grid)]</content>
+            <content target="videos" sortby="$INFO[Window(Home).Property(silo.browse.sort)]" sortorder="$INFO[Window(Home).Property(silo.browse.order)]">$INFO[Window(Home).Property(silo.browse.vpath.grid)]$VAR[SiloBrowseFilter_grid]</content>
         </control>
         <control type="panel" id="57">
             <left>82</left><top>496</top>
@@ -228,7 +228,7 @@
                 </control>
                 </control>
             </focusedlayout>
-            <content target="videos" sortby="$INFO[Window(Home).Property(silo.browse.sort)]" sortorder="$INFO[Window(Home).Property(silo.browse.order)]">$INFO[Window(Home).Property(silo.browse.vpath.hero)]</content>
+            <content target="videos" sortby="$INFO[Window(Home).Property(silo.browse.sort)]" sortorder="$INFO[Window(Home).Property(silo.browse.order)]">$INFO[Window(Home).Property(silo.browse.vpath.hero)]$VAR[SiloBrowseFilter_hero]</content>
         </control>
         <!-- Silo's Sort: a pill above the grid, its list below it. -->
         <control type="button" id="70">
@@ -264,7 +264,7 @@
             <onclick condition="String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.sort.tvshows),rating)">SetFocus(71,3,absolute)</onclick>
             <ondown condition="String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.sort.tvshows),rating)">SetFocus(71,3,absolute)</ondown>
 
-            <onleft>noop</onleft><onright>72</onright><onup>noop</onup>
+            <onleft>noop</onleft><onright>74</onright><onup>noop</onup>
         </control>
             <control type="image">
                 <left>114</left><top>183</top><width>26</width><height>26</height>
@@ -295,7 +295,25 @@
             <ondown condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]]">SetFocus(73,1,absolute)</ondown>
             <onclick condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]]">SetFocus(73,2,absolute)</onclick>
             <ondown condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]]">SetFocus(73,2,absolute)</ondown>
-            <onleft>70</onleft><onright>noop</onright><onup>noop</onup>
+            <onleft>74</onleft><onright>noop</onright><onup>noop</onup>
+        </control>
+        <!-- Unwatched only (Infuse): a toggle left of View; Down goes to the titles. -->
+        <control type="button" id="74">
+            <right>484</right><top>168</top>
+            <width>300</width><height>56</height>
+            <label>Show · $VAR[SiloBrowseShowLabel]</label>
+            <font>silo_meta</font>
+            <align>center</align><aligny>center</aligny>
+            <textcolor>FFEDEDED</textcolor>
+            <focusedcolor>SkylineFocusText</focusedcolor>
+            <texturefocus border="28" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+            <texturenofocus border="28" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
+            <visible>!!String.IsEmpty(Window(Home).Property(silo.browse.list))</visible>
+            <onclick>Skin.ToggleSetting(silo.unwatched)</onclick>
+            <ondown condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEmpty(Skin.String(silo.view.movies))] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEmpty(Skin.String(silo.view.tvshows))]]">SetFocus(50)</ondown>
+            <ondown condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]]">SetFocus(57)</ondown>
+            <ondown condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]]">SetFocus(58)</ondown>
+            <onleft>70</onleft><onright>72</onright><onup>noop</onup>
         </control>
         <!-- The hero view: the focused title over two rows of posters. -->
         <control type="group">
@@ -504,7 +522,7 @@
                     <visible>!Control.HasFocus(58)</visible>
                 </control>
             </focusedlayout>
-            <content target="videos" sortby="$INFO[Window(Home).Property(silo.browse.sort)]" sortorder="$INFO[Window(Home).Property(silo.browse.order)]">$INFO[Window(Home).Property(silo.browse.vpath.list)]</content>
+            <content target="videos" sortby="$INFO[Window(Home).Property(silo.browse.sort)]" sortorder="$INFO[Window(Home).Property(silo.browse.order)]">$INFO[Window(Home).Property(silo.browse.vpath.list)]$VAR[SiloBrowseFilter_list]</content>
         </control>
         <control type="panel" id="51">
             <left>82</left><top>252</top>

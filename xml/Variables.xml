@@ -832,11 +832,19 @@
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code)]$INFO[ListItem.Title, · ,]</value>
         <value>$INFO[ListItem.Year]</value>
     </variable>
+    <!-- A wide card's third line, as Silo's web app: time left, or Next Episode. -->
+    <variable name="SiloCardStatus">
+        <value condition="!String.IsEmpty(ListItem.Property(home.left))">$INFO[ListItem.Property(home.left)]</value>
+        <value>$INFO[ListItem.Property(silo.left)]</value>
+    </variable>
     <variable name="SiloCardYear">
         <value condition="String.IsEqual(ListItem.Property(home.type),request) | !String.IsEmpty(ListItem.Property(home.request.library))">$INFO[ListItem.Property(home.card.sub)]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.request.caption))">$INFO[ListItem.Property(silo.request.caption)]</value>
         <value condition="!String.IsEmpty(ListItem.Property(home.status.tint))">[COLOR $INFO[ListItem.Property(home.status.tint)]]•[/COLOR] $INFO[ListItem.Property(home.card.sub)]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(home.left))">$INFO[ListItem.Property(home.card.sub),, · ]$INFO[ListItem.Property(home.left)]</value>
         <value condition="!String.IsEmpty(ListItem.Property(home.type))">$INFO[ListItem.Property(home.card.sub)]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(silo.left)) + String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code),, · ]$INFO[ListItem.Property(silo.left)]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(silo.left))">$INFO[ListItem.Year,, · ]$INFO[ListItem.Property(silo.left)]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.request.tint))">[COLOR $INFO[ListItem.Property(silo.request.tint)]]•[/COLOR] $INFO[ListItem.Property(silo.request.label)]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.request.label))">$INFO[ListItem.Property(silo.request.label)]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code)]</value>
@@ -6755,6 +6763,28 @@
     <!-- end Silo Skyline options -->
 
     <!-- Silo Skyline library (tools/build_library.py) -->
+    <variable name="SiloBrowseShowLabel">
+        <value condition="Skin.HasSetting(silo.unwatched)">Unwatched</value>
+        <value>All</value>
+    </variable>
+    <variable name="SiloBrowseFilter_grid">
+        <value condition="Skin.HasSetting(silo.unwatched) + String.Contains(Window(Home).Property(silo.browse.vpath.grid),?) + String.IsEqual(Window(Home).Property(silo.browse.type),tvshows)">&amp;filter=%7B%22type%22%3A%22tvshows%22%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22playcount%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%220%22%5D%7D%5D%7D%7D</value>
+        <value condition="Skin.HasSetting(silo.unwatched) + !String.Contains(Window(Home).Property(silo.browse.vpath.grid),?) + String.IsEqual(Window(Home).Property(silo.browse.type),tvshows)">?filter=%7B%22type%22%3A%22tvshows%22%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22playcount%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%220%22%5D%7D%5D%7D%7D</value>
+        <value condition="Skin.HasSetting(silo.unwatched) + String.Contains(Window(Home).Property(silo.browse.vpath.grid),?)">&amp;filter=%7B%22type%22%3A%22movies%22%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22playcount%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%220%22%5D%7D%5D%7D%7D</value>
+        <value condition="Skin.HasSetting(silo.unwatched) + !String.Contains(Window(Home).Property(silo.browse.vpath.grid),?)">?filter=%7B%22type%22%3A%22movies%22%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22playcount%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%220%22%5D%7D%5D%7D%7D</value>
+    </variable>
+    <variable name="SiloBrowseFilter_hero">
+        <value condition="Skin.HasSetting(silo.unwatched) + String.Contains(Window(Home).Property(silo.browse.vpath.hero),?) + String.IsEqual(Window(Home).Property(silo.browse.type),tvshows)">&amp;filter=%7B%22type%22%3A%22tvshows%22%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22playcount%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%220%22%5D%7D%5D%7D%7D</value>
+        <value condition="Skin.HasSetting(silo.unwatched) + !String.Contains(Window(Home).Property(silo.browse.vpath.hero),?) + String.IsEqual(Window(Home).Property(silo.browse.type),tvshows)">?filter=%7B%22type%22%3A%22tvshows%22%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22playcount%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%220%22%5D%7D%5D%7D%7D</value>
+        <value condition="Skin.HasSetting(silo.unwatched) + String.Contains(Window(Home).Property(silo.browse.vpath.hero),?)">&amp;filter=%7B%22type%22%3A%22movies%22%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22playcount%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%220%22%5D%7D%5D%7D%7D</value>
+        <value condition="Skin.HasSetting(silo.unwatched) + !String.Contains(Window(Home).Property(silo.browse.vpath.hero),?)">?filter=%7B%22type%22%3A%22movies%22%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22playcount%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%220%22%5D%7D%5D%7D%7D</value>
+    </variable>
+    <variable name="SiloBrowseFilter_list">
+        <value condition="Skin.HasSetting(silo.unwatched) + String.Contains(Window(Home).Property(silo.browse.vpath.list),?) + String.IsEqual(Window(Home).Property(silo.browse.type),tvshows)">&amp;filter=%7B%22type%22%3A%22tvshows%22%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22playcount%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%220%22%5D%7D%5D%7D%7D</value>
+        <value condition="Skin.HasSetting(silo.unwatched) + !String.Contains(Window(Home).Property(silo.browse.vpath.list),?) + String.IsEqual(Window(Home).Property(silo.browse.type),tvshows)">?filter=%7B%22type%22%3A%22tvshows%22%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22playcount%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%220%22%5D%7D%5D%7D%7D</value>
+        <value condition="Skin.HasSetting(silo.unwatched) + String.Contains(Window(Home).Property(silo.browse.vpath.list),?)">&amp;filter=%7B%22type%22%3A%22movies%22%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22playcount%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%220%22%5D%7D%5D%7D%7D</value>
+        <value condition="Skin.HasSetting(silo.unwatched) + !String.Contains(Window(Home).Property(silo.browse.vpath.list),?)">?filter=%7B%22type%22%3A%22movies%22%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22playcount%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%220%22%5D%7D%5D%7D%7D</value>
+    </variable>
     <variable name="SiloLibraryTitle">
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),watchlist) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">Watchlist</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),favorites) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">Favorites</value>

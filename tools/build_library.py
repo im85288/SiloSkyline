@@ -71,6 +71,15 @@ SORT_W, SORT_ROW, SORT_HEAD = 440, 64, 58
 # container's path too, and each would hold the whole library.
 HERO_ID, LIST_VIEW_ID = 57, 58
 VIEW_ID, VIEW_LIST_ID = 72, 73
+# Infuse's Unwatched filter: a pill left of View, kept for every Browse list.
+UNWATCHED_ID = 74
+UNWATCHED = 'Skin.HasSetting(silo.unwatched)'
+
+
+def unwatched_query(kind):
+    """Kodi's library filter for titles not watched (a show: not every episode)."""
+    rule = {'type': kind, 'rules': {'and': [{'field': 'playcount', 'operator': 'is', 'value': ['0']}]}}
+    return quote(json.dumps(rule, separators=(',', ':')), safe='')
 VIEWS = [('Grid', 'grid', GRID_ID), ('Hero', 'hero', HERO_ID), ('List', 'list', LIST_VIEW_ID)]
 VPATH = 'Window(Home).Property(silo.browse.vpath.%s)'
 HERO_COLS = 8
@@ -402,7 +411,7 @@ def sort_controls():
             <texturenofocus border="28" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
             <visible>!%(personal)s</visible>
 %(open_list)s
-            <onleft>noop</onleft><onright>%(view)d</onright><onup>noop</onup>
+            <onleft>noop</onleft><onright>%(unwatched)d</onright><onup>noop</onup>
         </control>%(pill_icons)s
         <!-- DROPDOWN -->
         <control type="group">
@@ -433,7 +442,7 @@ def sort_controls():
 ''' % {'pill': SORT_ID, 'list': SORT_LIST_ID, 'x': SAFE_X, 'top': SORT_TOP, 'text': TEXT,
        'personal': IS_PERSONAL, 'ly': SORT_TOP + 68, 'frames': frames, 'head': SORT_HEAD,
        'lw': SORT_W - 32, 'lh': len(SORTS) * SORT_ROW, 'row': SORT_ROW, 'normal': row(False), 'focused': row(True),
-       'items': items, 'open_list': open_list, 'view': VIEW_ID,
+       'items': items, 'open_list': open_list, 'view': VIEW_ID, 'unwatched': UNWATCHED_ID,
        'pill_icons': pill_icon('FF000000', '!%s + Control.HasFocus(%d)' % (IS_PERSONAL, SORT_ID))
                      + pill_icon(TEXT, '!%s + !Control.HasFocus(%d)' % (IS_PERSONAL, SORT_ID))}
 
@@ -549,7 +558,22 @@ def view_controls():
             <texturefocus border="28" colordiffuse="%(text)s">silo/pill.png</texturefocus>
             <texturenofocus border="28" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
             <visible>!%(personal)s</visible>
-%(open_list)s            <onleft>%(sort)d</onleft><onright>noop</onright><onup>noop</onup>
+%(open_list)s            <onleft>%(unwatched)d</onleft><onright>noop</onright><onup>noop</onup>
+        </control>
+        <!-- Unwatched only (Infuse): a toggle left of View; Down goes to the titles. -->
+        <control type="button" id="%(unwatched)d">
+            <right>%(ux)d</right><top>%(top)d</top>
+            <width>%(uw)d</width><height>56</height>
+            <label>Show · $VAR[SiloBrowseShowLabel]</label>
+            <font>silo_meta</font>
+            <align>center</align><aligny>center</aligny>
+            <textcolor>%(text)s</textcolor>
+            <focusedcolor>FF000000</focusedcolor>
+            <texturefocus border="28" colordiffuse="%(text)s">silo/pill.png</texturefocus>
+            <texturenofocus border="28" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
+            <visible>!%(personal)s</visible>
+            <onclick>Skin.ToggleSetting(silo.unwatched)</onclick>
+%(unwatched_down)s            <onleft>%(sort)d</onleft><onright>%(pill)d</onright><onup>noop</onup>
         </control>
         <!-- DROPDOWN -->
         <control type="group">
@@ -675,9 +699,11 @@ def view_controls():
             </itemlayout>
             <focusedlayout width="%(lvw)d" height="%(lrow)d">%(lrow_focused)s
             </focusedlayout>
-            <content target="videos" sortby="$INFO[%(sort_by)s]" sortorder="$INFO[%(sort_order)s]">$INFO[%(vpath_list)s]</content>
+            <content target="videos" sortby="$INFO[%(sort_by)s]" sortorder="$INFO[%(sort_order)s]">$INFO[%(vpath_list)s]$VAR[SiloBrowseFilter_list]</content>
         </control>
 """ % {'list': VIEW_LIST_ID, 'pill': VIEW_ID, 'px': SAFE_X + AZ_W + 24, 'pw': 260, 'top': SORT_TOP,
+       'unwatched': UNWATCHED_ID, 'ux': SAFE_X + AZ_W + 24 + 260 + 16, 'uw': 300,
+       'unwatched_down': ''.join('            <ondown condition="%s">%s</ondown>\n' % (c, a) for c, a in focus_view()),
        'ly': SORT_TOP + 68, 'open_list': open_list, 'fh': SORT_HEAD + 16 + SORT_ROW * len(VIEWS), 'head': SORT_HEAD,
        'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'personal': IS_PERSONAL, 'sort': SORT_ID, 'vw': VIEW_W,
        'lw': VIEW_W - 32,
@@ -922,10 +948,10 @@ def build():
                  + '    <onload condition="!%s + [%s | %s]">SetProperty(silo.browse.focusview,1,home)</onload>\n'
                  % (IS_PERSONAL, view_is('hero'), view_is('list')),
        'panels': panel(GRID_ID, '<content target="videos" sortby="$INFO[%s]" sortorder="$INFO[%s]">'
-                       '$INFO[%s]</content>' % (SORT_BY, SORT_ORDER, VPATH % 'grid'), str(AZ_ID),
+                       '$INFO[%s]$VAR[SiloBrowseFilter_grid]</content>' % (SORT_BY, SORT_ORDER, VPATH % 'grid'), str(AZ_ID),
                        '!%s + %s' % (IS_PERSONAL, view_is('grid')), str(SORT_ID))
                  + panel(HERO_ID, '<content target="videos" sortby="$INFO[%s]" sortorder="$INFO[%s]">'
-                         '$INFO[%s]</content>' % (SORT_BY, SORT_ORDER, VPATH % 'hero'), str(AZ_ID),
+                         '$INFO[%s]$VAR[SiloBrowseFilter_hero]</content>' % (SORT_BY, SORT_ORDER, VPATH % 'hero'), str(AZ_ID),
                          '!%s + %s' % (IS_PERSONAL, view_is('hero')), str(SORT_ID), hero=True)
                  + sort_controls() + view_controls()
                  # Each grid has its own path (only the open list's is set: Kodi
@@ -1015,13 +1041,32 @@ VARIABLES = '''
                           % (is_list(key), list_id) for key, (_, list_id) in PERSONAL.items())}
 
 
+def filter_variables():
+    """The Show pill's label, and each view's filter for its list path while
+    Unwatched is on (Kodi's filter option; '&' when the path has a query)."""
+    out = '''    <variable name="SiloBrowseShowLabel">
+        <value condition="%s">Unwatched</value>
+        <value>All</value>
+    </variable>
+''' % UNWATCHED
+    for _, view, _ in VIEWS:
+        path = VPATH % view
+        out += '    <variable name="SiloBrowseFilter_%s">\n' % view
+        for kind, condition in (('tvshows', 'String.IsEqual(%s,tvshows)' % TYPE), ('movies', None)):
+            for joiner, has_query in (('&amp;', True), ('?', False)):
+                parts = [UNWATCHED, ('' if has_query else '!') + 'String.Contains(%s,?)' % path] + ([condition] if condition else [])
+                out += '        <value condition="%s">%sfilter=%s</value>\n' % (' + '.join(parts), joiner, unwatched_query(kind))
+        out += '    </variable>\n'
+    return out
+
+
 def add_variables():
     path = os.path.join(ROOT, 'xml', 'Variables.xml')
     text = open(path, encoding='utf-8').read()
     start, end = '    <!-- Silo Skyline library (tools/build_library.py) -->', '    <!-- end Silo Skyline library -->\n'
     if start in text:
         text = text[:text.index(start) - 1] + text[text.index(end) + len(end):]
-    text = text.replace('</includes>', VARIABLES + '</includes>')
+    text = text.replace('</includes>', VARIABLES.replace(start + '\n', start + '\n' + filter_variables(), 1) + '</includes>')
     open(path, 'w', encoding='utf-8').write(text)
 
 

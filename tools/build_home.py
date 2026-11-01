@@ -45,7 +45,7 @@ OTHER_CARDS = 12
 HOME_CARD_FIELDS = ('type', 'dbid', 'card.title', 'card.sub', 'card.wide_sub', 'hero.title', 'hero.meta',
                     'hero.facts', 'rating.imdb', 'rating.tmdb',
                     'hero.detail', 'plot', 'mpaa', 'badge1', 'badge2', 'badge3', 'tint', 'percent', 'playcount',
-                    'art.poster', 'art.landscape', 'art.fanart', 'art.clearlogo', 'request.type', 'request.tmdb',
+                    'new', 'left', 'art.poster', 'art.landscape', 'art.fanart', 'art.clearlogo', 'request.type', 'request.tmdb',
                     'status.tint', 'status.seg1', 'status.seg2', 'status.seg3', 'status.seg4',
                     'request.library', 'request.state', 'request.more', 'request.logo', 'request.from', 'request.to')
 # The fields a page's cards can have, written into Home.xml for every slot:
@@ -53,7 +53,7 @@ HOME_CARD_FIELDS = ('type', 'dbid', 'card.title', 'card.sub', 'card.wide_sub', '
 # all posters (no wide caption or art). Each unused field cost every Home card.
 PAGE_FIELDS = {
     'home': tuple(f for f in HOME_CARD_FIELDS if not f.startswith(('request.', 'status.'))),
-    'requests': tuple(f for f in HOME_CARD_FIELDS if f not in ('card.wide_sub', 'art.landscape')),
+    'requests': tuple(f for f in HOME_CARD_FIELDS if f not in ('card.wide_sub', 'art.landscape', 'new', 'left')),
 }
 # Rows a page can show; Requests has Silo's Discover rows (six title rows,
 # then Studios, Networks and Genres), and every slot costs Home.xml size.
@@ -100,7 +100,9 @@ CARDS_TOP = 96
 POSTER = {'name': 'Poster', 'width': 176, 'height': 264, 'gap': 40, 'mask': 'silo/card_poster_mask.png', 'rim': 'silo/card_poster_rim.png',
           'art': '$VAR[SiloPosterArt]', 'sub': '$VAR[SiloCardYear]', 'radius': 18}
 LANDSCAPE = {'name': 'Landscape', 'width': 360, 'height': 202, 'gap': 40, 'mask': 'silo/card_landscape_mask.png', 'rim': 'silo/card_landscape_rim.png',
-             'art': '$VAR[SiloLandscapeArt]', 'sub': '$VAR[SiloCardEpisode]', 'radius': 20}
+             'art': '$VAR[SiloLandscapeArt]', 'sub': '$VAR[SiloCardEpisode]', 'radius': 20,
+             # As Silo's web app: a third line, and the show's name always bright.
+             'status': '$VAR[SiloCardStatus]', 'bright': True}
 # A grid's poster (the request browse page): six to a row, as Browse's.
 GRID_POSTER = dict(POSTER, name='GridPoster', width=256, height=384)
 CAPTION_H = 76             # title and second line under a card
@@ -114,6 +116,32 @@ def focus_zoom(condition, indent=24):
 
 
 WATCHED = 'Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))'
+NEW_EPISODE = '!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))'
+NEW_H = 30
+
+
+def new_tag(card, indent=24):
+    """Netflix's New Episode tab across the poster's foot: a show you've
+    started with an episode you haven't watched that aired this week
+    (SiloKodiConnect's silo.new). It covers a poster's own next-episode text."""
+    pad = ' ' * indent
+    return '''
+%(p)s<control type="group">
+%(p)s    <left>%(x)d</left><top>%(y)d</top>
+%(p)s    <visible>%(visible)s</visible>
+%(p)s    <control type="image">
+%(p)s        <width>%(w)d</width><height>%(h)d</height>
+%(p)s        <texture border="8" colordiffuse="FFE50914">silo/badge_solid.png</texture>
+%(p)s    </control>
+%(p)s    <control type="label">
+%(p)s        <width>%(w)d</width><height>%(h)d</height>
+%(p)s        <align>center</align><aligny>center</aligny>
+%(p)s        <font>silo_badge</font>
+%(p)s        <textcolor>FFFFFFFF</textcolor>
+%(p)s        <label>NEW EPISODE</label>
+%(p)s    </control>
+%(p)s</control>''' % {'p': pad, 'x': 16, 'y': 6 + card['height'] - 10 - NEW_H, 'w': card['width'] - 20, 'h': NEW_H,
+                       'visible': NEW_EPISODE}
 
 
 def watched_disc(x, y, visible, indent=24):
@@ -376,9 +404,18 @@ def card_body(card, focused, control_id='$PARAM[id]', near=None):
                             <font>silo_card_sub</font>
                             <textcolor>%(sub_dim)s</textcolor>
                             <label>%(sub)s</label>%(title_visible)s
-                        </control>%(sub_focused)s
+                        </control>%(sub_focused)s%(status)s
                     </control>''' % {'zoom': zoom, 'w': card['width'], 'h': card['height'], 'mask': card['mask'],
-                                    'art': card['art'], 'title_color': TITLE_DIM, 'title_visible': title_visible,
+                                    'art': card['art'], 'title_color': TEXT if card.get('bright') else TITLE_DIM,
+                                    'title_visible': title_visible,
+                                    'status': '''
+                        <control type="label">
+                            <left>6</left><top>%d</top>
+                            <width>%d</width><height>32</height>
+                            <font>silo_card_sub</font>
+                            <textcolor>%s</textcolor>
+                            <label>%s</label>
+                        </control>''' % (card['height'] + 86, card['width'], SUB_DIM, card['status']) if card.get('status') else '',
                                     # When the artwork shows (the includes' near, rows_near).
                                     'near': '\n                            <visible>%s</visible>' % near if near else '',
                                     'title_focused': title_focused, 'sub_focused': sub_focused,
@@ -390,7 +427,8 @@ def card_body(card, focused, control_id='$PARAM[id]', near=None):
                                     'sheen': focus_sheen(card['width'], card['height'], card['mask'], card['rim'],
                                                          'Control.HasFocus(%s)' % control_id) if focused else '',
                                     # From the poster's left: <right> is the item's edge, gap included.
-                                    'watched': watched_disc(6 + card['width'] - 10 - 40, 16, WATCHED),
+                                    'watched': watched_disc(6 + card['width'] - 10 - 40, 16, WATCHED)
+                                               + new_tag(card),
                                     'no_art': no_art_card(card) + request_tags(card),
                                     'dim': watched_dim(card, 'Control.HasFocus(%s)' % control_id if focused else '')}
 
@@ -1900,11 +1938,19 @@ CARDS = '''
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code)]$INFO[ListItem.Title, · ,]</value>
         <value>$INFO[ListItem.Year]</value>
     </variable>
+    <!-- A wide card's third line, as Silo's web app: time left, or Next Episode. -->
+    <variable name="SiloCardStatus">
+        <value condition="!String.IsEmpty(ListItem.Property(home.left))">$INFO[ListItem.Property(home.left)]</value>
+        <value>$INFO[ListItem.Property(silo.left)]</value>
+    </variable>
     <variable name="SiloCardYear">
         <value condition="String.IsEqual(ListItem.Property(home.type),request) | !String.IsEmpty(ListItem.Property(home.request.library))">$INFO[ListItem.Property(home.card.sub)]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.request.caption))">$INFO[ListItem.Property(silo.request.caption)]</value>
         <value condition="!String.IsEmpty(ListItem.Property(home.status.tint))">[COLOR $INFO[ListItem.Property(home.status.tint)]]•[/COLOR] $INFO[ListItem.Property(home.card.sub)]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(home.left))">$INFO[ListItem.Property(home.card.sub),, · ]$INFO[ListItem.Property(home.left)]</value>
         <value condition="!String.IsEmpty(ListItem.Property(home.type))">$INFO[ListItem.Property(home.card.sub)]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(silo.left)) + String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code),, · ]$INFO[ListItem.Property(silo.left)]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(silo.left))">$INFO[ListItem.Year,, · ]$INFO[ListItem.Property(silo.left)]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.request.tint))">[COLOR $INFO[ListItem.Property(silo.request.tint)]]•[/COLOR] $INFO[ListItem.Property(silo.request.label)]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.request.label))">$INFO[ListItem.Property(silo.request.label)]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Property(silo.code)]</value>
