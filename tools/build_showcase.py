@@ -5,9 +5,10 @@ choice (skin settings, Player, Player style):
     python3 tools/build_showcase.py
 
 Silo's player chrome (DialogSeekBar.xml, hand-written) shows an eyebrow and
-the title over the bar. Showcase puts the title's poster and logo there with
-the episode line and the hero's badges (age, resolution, HDR, audio, IMDb,
-TMDB), marks the bar's chapters with the current one's name under it and adds
+the title over the bar. Showcase puts the title's logo there with the episode
+line and the hero's badges (age, resolution, HDR, audio: what's playing, as
+Netflix's and Apple's players lead with; the ratings wait for the pause
+screen), marks the bar's chapters with the current one's name under it and adds
 a clock; after ten seconds paused with no key pressed, the OSD closes and a
 pause screen ("You're watching") shows
 the logo, episode, facts, plot and still over the dimmed picture, as
@@ -15,8 +16,7 @@ Netflix's and Apple's TV app do. It is in DialogSeekBar.xml too, which Kodi
 opens while paused: in VideoFullScreen.xml its pictures loaded as a 4K film
 started, and the SHIELD (2 GB) killed Kodi for memory.
 
-Only the art Silo gives is used: poster, clearlogo, fanart and an episode's
-still; the title's text stands in for a missing logo.
+Only the art Silo gives is used: clearlogo, fanart and an episode's still; the title's text stands in for a missing logo.
 
 Each part goes between its own markers, so running this again replaces it.
 """
@@ -83,12 +83,8 @@ def variables():
     def variable(name, values):
         return '    <variable name="%s">\n%s    </variable>\n' % (name, ''.join(
             '        <value%s>%s</value>\n' % (' condition="%s"' % c if c else '', v) for c, v in values))
-    out = variable('SiloShowcasePoster', [
-        ('!String.IsEmpty(Player.Art(tvshow.poster))', '$INFO[Player.Art(tvshow.poster)]'),
-        ('!String.IsEmpty(Player.Art(poster))', '$INFO[Player.Art(poster)]'),
-        (None, '$INFO[Player.Art(thumb)]')])
     # The pause screen's picture: an episode's still, else the film's backdrop.
-    out += variable('SiloShowcaseStill', [
+    out = variable('SiloShowcaseStill', [
         ('!String.IsEmpty(VideoPlayer.TVShowTitle) + !String.IsEmpty(Player.Art(thumb))', '$INFO[Player.Art(thumb)]'),
         (None, '$INFO[Player.Art(fanart)]')])
     # Under the logo: "S3 · E5 · Unbowed and Unbent", or a film's year and genres.
@@ -118,6 +114,25 @@ def variables():
          '$INFO[%s]$INFO[VideoPlayer.Duration(mins), · , min]' % PLAYING % 'air_date'),
         ('!String.IsEmpty(VideoPlayer.TVShowTitle)', '$INFO[VideoPlayer.Premiered]$INFO[VideoPlayer.Duration(mins), · , min]'),
         (None, '$INFO[VideoPlayer.Year]$INFO[VideoPlayer.Duration(mins), · , min]')])
+    # The focused player button's name, under its row (VideoOSD.xml).
+    out += variable('SiloOSDLeftName', [
+        ('Control.HasFocus(609)', 'Back 10 seconds'),
+        ('Control.HasFocus(602) + Player.Paused', 'Play'),
+        ('Control.HasFocus(602)', 'Pause'),
+        ('Control.HasFocus(610)', 'Forward 30 seconds')])
+    out += variable('SiloOSDRightName', [
+        ('Control.HasFocus(70051) + !String.IsEmpty(Window(Home).Property(silo.osd.episodes))', 'Hide episodes'),
+        ('Control.HasFocus(70051)', 'Episodes'),
+        ('Control.HasFocus(70050) + !String.IsEmpty(%s)' % PLAYING % 'next_label',
+         'Next episode  ·  $INFO[%s]' % PLAYING % 'next_label'),
+        ('Control.HasFocus(70050)', 'Next episode'),
+        ('Control.HasFocus(70046)', 'Subtitles'),
+        ('Control.HasFocus(70048)', 'Options'),
+        ('Control.HasFocus(70049)', 'Close'),
+        ('Control.HasFocus(804)', 'Disc menu'),
+        ('Control.HasFocus(70042)', 'Playlist'),
+        ('Control.HasFocus(70045)', 'Teletext'),
+        ('Control.HasFocus(70047)', '3D')])
     out += '    <expression name="SiloPauseScreen">%s</expression>\n' % PAUSE_SCREEN
     return '\n' + out + '    '
 
@@ -203,27 +218,22 @@ def logo(left, top, width, height, font):
 
 
 def overlay():
-    """Screen 1, over Silo's bar: poster, logo, line and badges; a clock."""
+    """Screen 1, over Silo's bar: logo, line and badges; a clock."""
     return '''
 			<control type="group">
-				<visible>%(on)s</visible>
-				<control type="image">
-					<left>96</left><top>588</top><width>160</width><height>240</height>
-					<aspectratio>scale</aspectratio>
-					<texture background="true" diffuse="silo/card_poster_mask.png">$VAR[SiloShowcasePoster]</texture>
-				</control>%(logo)s
+				<visible>%(on)s</visible>%(logo)s
 				<control type="label">
-					<left>288</left><top>720</top><width>1500</width><height>44</height>
+					<left>96</left><top>720</top><width>1500</width><height>44</height>
 					<font>silo_meta</font>
 					<textcolor>%(text)s</textcolor>
 					<label>$VAR[SiloShowcaseLine]</label>
 					<shadowcolor>99000000</shadowcolor>
 				</control>
 				<control type="grouplist">
-					<left>288</left><top>776</top><width>1536</width><height>40</height>
+					<left>96</left><top>776</top><width>1728</width><height>40</height>
 					<orientation>horizontal</orientation>
 					<itemgap>10</itemgap>
-					<usecontrolcoords>true</usecontrolcoords>%(badges)s%(ratings)s
+					<usecontrolcoords>true</usecontrolcoords>%(badges)s
 				</control>
 				<control type="label">
 					<left>1424</left><top>40</top><width>400</width><height>60</height>
@@ -234,15 +244,14 @@ def overlay():
 					<shadowcolor>99000000</shadowcolor>
 				</control>
 			</control>''' % {
-        'on': ON, 'text': TEXT, 'logo': logo(288, 588, 720, 120, 'silo_osd_title').replace('\n\t\t\t', '\n\t\t\t\t'),
+        'on': ON, 'text': TEXT, 'logo': logo(96, 588, 720, 120, 'silo_osd_title').replace('\n\t\t\t', '\n\t\t\t\t'),
         # SiloKodiConnect's badges for what's playing, else Kodi's player's own.
         'badges': badge('$VAR[SiloShowcaseMpaa]', '[!String.IsEmpty(%s) | !String.IsEmpty(VideoPlayer.mpaa)]' % PLAYING % 'mpaa')
         + ''.join(badge('$INFO[%s]' % PLAYING % name, '!String.IsEmpty(%s)' % PLAYING % name)
                   for name in ('badge1', 'badge2', 'badge3'))
         + ''.join(badge(label, 'String.IsEmpty(%s) + !String.IsEmpty(%s)' % (PLAYING % 'badge1', shown)) for label, shown in (
             ('$VAR[SiloShowcaseResolution]', 'VideoPlayer.VideoResolution'), ('$VAR[SiloShowcaseHdr]', 'VideoPlayer.HdrType'),
-            ('$VAR[SiloShowcaseAudio]', 'VideoPlayer.AudioCodec'))),
-        'ratings': ratings()}
+            ('$VAR[SiloShowcaseAudio]', 'VideoPlayer.AudioCodec')))}
 
 
 CHAPTERS = '''
@@ -391,6 +400,11 @@ def main():
         chrome = '<visible>$EXP[SiloVideoPlayer]</visible>\n\t\t\t<animation effect="fade" start="0" end="100" time="200">Visible</animation>'
         if '!$EXP[SiloPauseScreen]' not in text:
             text = text.replace(chrome, chrome.replace('</visible>', ' + !$EXP[SiloPauseScreen]</visible>', 1), 1)
+        # The chrome steps aside while the OSD's Episodes strip is open (VideoOSD.xml).
+        episodes = ' + String.IsEmpty(Window(Home).Property(silo.osd.episodes))'
+        paused = chrome.replace('</visible>', ' + !$EXP[SiloPauseScreen]</visible>', 1)
+        if episodes not in text:
+            text = text.replace(paused, paused.replace('</visible>', episodes + '</visible>', 1), 1)
         text = put(text, 'Showcase overlay', overlay() + '\n\t\t\t', '\t\t\t<!-- The bar: track, buffered, played. -->')
         return put(text, 'Showcase chapters', CHAPTERS + '\n\t\t\t', '\t\t\t<!-- The handle: where playback is')
 

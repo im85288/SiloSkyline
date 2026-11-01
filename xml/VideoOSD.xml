@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <window>
 	<onload condition="!Player.PauseEnabled">SetFocus(603)</onload>
+	<onunload>ClearProperty(silo.osd.episodes,home)</onunload>
 	<defaultcontrol always="true">602</defaultcontrol>
 	<depth>DepthOSD</depth>
 	<controls>
@@ -268,7 +269,8 @@
 					<itemgap>10</itemgap>
 					<scrolltime tween="sine">200</scrolltime>
 					<orientation>horizontal</orientation>
-					<onup>87</onup>
+					<onup condition="!!String.IsEmpty(Window(Home).Property(silo.osd.episodes))">87</onup>
+					<onup condition="!String.IsEmpty(Window(Home).Property(silo.osd.episodes))">7100</onup>
 					<ondown condition="Control.HasFocus(70043)">11104</ondown>
 					<ondown condition="Control.HasFocus(704)">12104</ondown>
 					<ondown condition="Control.HasFocus(255)">13103</ondown>
@@ -330,12 +332,26 @@
 						<onclick>ActivateWindow(Teletext)</onclick>
 						<visible>VideoPlayer.HasTeletext</visible>
 					</control>
+					<!-- Silo Skyline: Episodes, the season in a strip over the buttons
+					     (SiloKodiConnect's silokodi.playing.season_path), as Netflix's. -->
+					<control type="radiobutton" id="70051">
+						<include content="OSDButton">
+							<param name="texture" value="silo/episodes.png"/>
+						</include>
+						<onclick condition="!!String.IsEmpty(Window(Home).Property(silo.osd.episodes))">SetProperty(silo.osd.episodes,1,home)</onclick>
+						<onclick condition="!!String.IsEmpty(Window(Home).Property(silo.osd.episodes))">SetFocus(7100,$INFO[Window(Home).Property(silokodi.playing.episode_index)],absolute)</onclick>
+						<onclick condition="!String.IsEmpty(Window(Home).Property(silo.osd.episodes))">ClearProperty(silo.osd.episodes,home)</onclick>
+						<visible>$EXP[SiloVideoPlayer] + !String.IsEmpty(Window(Home).Property(silokodi.playing.season_path))</visible>
+					</control>
+					<!-- Next Episode: the playlist's next, else the library's
+					     (silokodi.playing.next, as Up Next would play). -->
 					<control type="radiobutton" id="70050">
 						<include content="OSDButton">
-							<param name="texture" value="osd/fullscreen/buttons/next.png"/>
+							<param name="texture" value="silo/next_episode.png"/>
 						</include>
-						<onclick>PlayerControl(Next)</onclick>
-						<visible>$EXP[SiloVideoPlayer] + Integer.IsGreater(Playlist.Length(video),1)</visible>
+						<onclick condition="Integer.IsGreater(Playlist.Length(video),1)">PlayerControl(Next)</onclick>
+						<onclick condition="!Integer.IsGreater(Playlist.Length(video),1)">PlayMedia($INFO[Window(Home).Property(silokodi.playing.next)])</onclick>
+						<visible>$EXP[SiloVideoPlayer] + [Integer.IsGreater(Playlist.Length(video),1) | !String.IsEmpty(Window(Home).Property(silokodi.playing.next))]</visible>
 					</control>
 					<control type="radiobutton" id="70046">
 						<include content="OSDButton">
@@ -390,7 +406,7 @@
 				<animation type="WindowClose" condition="Window.IsVisible(fullscreeninfo)" reversible="False">
 					<effect type="fade" start="100" end="0" time="300"/>
 				</animation>
-				<visible>Player.SeekEnabled</visible>
+				<visible>Player.SeekEnabled + !!String.IsEmpty(Window(Home).Property(silo.osd.episodes))</visible>
 				<control type="button" id="87">
 					<include>HiddenObject</include>
 					<onup>200</onup>
@@ -455,6 +471,192 @@
 					<action>pvr.seek</action>
 					<visible>Control.HasFocus(87) + VideoPlayer.Content(LiveTV)</visible>
 				</control>
+			</control>
+		</control>
+
+		<!-- Silo Skyline: the focused player button's name, under its row, as
+		     Netflix and Apple TV name theirs. -->
+		<control type="label">
+			<left>96</left><top>1032</top><width>800</width><height>36</height>
+			<font>silo_detail</font>
+			<textcolor>D9EDEDED</textcolor>
+			<label>$VAR[SiloOSDLeftName]</label>
+			<visible>$EXP[SiloVideoPlayer] + [Control.HasFocus(609) | Control.HasFocus(602) | Control.HasFocus(610)]</visible>
+		</control>
+		<control type="label">
+			<right>96</right><top>1032</top><width>800</width><height>36</height>
+			<align>right</align>
+			<font>silo_detail</font>
+			<textcolor>D9EDEDED</textcolor>
+			<label>$VAR[SiloOSDRightName]</label>
+			<visible>$EXP[SiloVideoPlayer] + [Control.HasFocus(70051) | Control.HasFocus(70050) | Control.HasFocus(70046) | Control.HasFocus(70048) | Control.HasFocus(70049) | Control.HasFocus(804) | Control.HasFocus(70042) | Control.HasFocus(70045) | Control.HasFocus(70047)]</visible>
+		</control>
+		<!-- Silo Skyline: Episodes, the playing season over the buttons; OK plays
+		     one, Down or Back goes back to the buttons. Its list loads only
+		     while it shows. -->
+		<control type="group">
+			<visible>$EXP[SiloVideoPlayer] + !String.IsEmpty(Window(Home).Property(silo.osd.episodes))</visible>
+			<animation effect="fade" start="0" end="100" time="200">Visible</animation>
+			<animation effect="slide" start="0,60" end="0,0" time="200" tween="cubic" easing="out">Visible</animation>
+			<animation effect="fade" start="100" end="0" time="150">Hidden</animation>
+			<control type="image">
+				<left>0</left><top>420</top><width>1920</width><height>660</height>
+				<texture>silo/scrim_bottom.png</texture>
+			</control>
+			<control type="image">
+				<left>0</left><top>600</top><width>1920</width><height>480</height>
+				<texture>silo/scrim_bottom.png</texture>
+			</control>
+			<control type="label">
+				<left>96</left><top>560</top><width>1200</width><height>50</height>
+				<font>silo_row</font>
+				<textcolor>FFEDEDED</textcolor>
+				<label>$INFO[VideoPlayer.TVShowTitle]$INFO[VideoPlayer.Season,  ·  Season ,]</label>
+			</control>
+			<control type="fixedlist" id="7100">
+				<left>90</left><top>620</top><width>1830</width><height>300</height>
+				<orientation>horizontal</orientation>
+				<focusposition>0</focusposition>
+				<movement>3</movement>
+				<scrolltime tween="cubic" easing="out">200</scrolltime>
+				<ondown>ClearProperty(silo.osd.episodes,home)</ondown>
+				<ondown>SetFocus(70051)</ondown>
+				<onback>ClearProperty(silo.osd.episodes,home)</onback>
+				<onback>SetFocus(70051)</onback>
+				<onup>noop</onup>
+				<onclick>ClearProperty(silo.osd.episodes,home)</onclick>
+				<onclick condition="!ListItem.IsPlaying">PlayMedia($INFO[ListItem.FileNameAndPath])</onclick>
+				<onclick>Dialog.Close(videoosd)</onclick>
+				<content sortby="episode" sortorder="ascending">$INFO[Window(Home).Property(silokodi.playing.season_path)]</content>
+				<itemlayout width="400" height="300">
+					<control type="group">
+					<control type="image">
+						<left>6</left><top>6</top><width>360</width><height>202</height>
+						<aspectratio>scale</aspectratio>
+						<texture background="true" diffuse="silo/card_landscape_mask.png" fallback="DefaultTVShows.png">$INFO[ListItem.Art(thumb)]</texture>
+					</control>
+					<control type="progress">
+						<left>18</left><top>192</top><width>336</width><height>6</height>
+						<info>ListItem.PercentPlayed</info>
+						<texturebg colordiffuse="66FFFFFF">colors/white.png</texturebg>
+						<midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+						<visible>Integer.IsGreater(ListItem.PercentPlayed,0) + !ListItem.IsPlaying</visible>
+					</control>
+					<!-- The playing one. -->
+					<control type="group">
+						<left>18</left><top>18</top>
+						<visible>ListItem.IsPlaying</visible>
+						<control type="image">
+							<width>150</width><height>34</height>
+							<texture border="8" colordiffuse="D9000000">silo/badge_solid.png</texture>
+						</control>
+						<control type="label">
+							<width>150</width><height>34</height>
+							<align>center</align><aligny>center</aligny>
+							<font>silo_badge</font>
+							<textcolor>FFEDEDED</textcolor>
+							<label>PLAYING</label>
+						</control>
+					</control>
+					<control type="group">
+						<left>316</left><top>16</top>
+						<visible>Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsPlaying</visible>
+						<control type="image">
+							<width>40</width><height>40</height>
+							<texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+						</control>
+						<control type="image">
+							<left>9</left><top>9</top><width>22</width><height>22</height>
+							<texture colordiffuse="FF000000">OverlayWatched.png</texture>
+						</control>
+					</control>
+					<control type="label">
+						<left>6</left><top>222</top><width>360</width><height>34</height>
+						<font>silo_card_title</font>
+						<textcolor>FFEDEDED</textcolor>
+						<selectedcolor>FFEDEDED</selectedcolor>
+						<label>$INFO[ListItem.Episode,E,]$INFO[ListItem.Title, · ,]</label>
+					</control>
+					<control type="label">
+						<left>6</left><top>256</top><width>360</width><height>30</height>
+						<font>silo_detail</font>
+						<textcolor>99EDEDED</textcolor>
+						<selectedcolor>99EDEDED</selectedcolor>
+						<label>$INFO[ListItem.Duration(mins),, min]</label>
+					</control>
+					</control>
+				</itemlayout>
+				<focusedlayout width="400" height="300">
+					<control type="group">
+						<animation effect="zoom" start="100" end="108" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus(7100)">Conditional</animation>
+					<control type="image">
+						<left>6</left><top>6</top><width>360</width><height>202</height>
+						<aspectratio>scale</aspectratio>
+						<texture background="true" diffuse="silo/card_landscape_mask.png" fallback="DefaultTVShows.png">$INFO[ListItem.Art(thumb)]</texture>
+					</control>
+					<control type="progress">
+						<left>18</left><top>192</top><width>336</width><height>6</height>
+						<info>ListItem.PercentPlayed</info>
+						<texturebg colordiffuse="66FFFFFF">colors/white.png</texturebg>
+						<midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+						<visible>Integer.IsGreater(ListItem.PercentPlayed,0) + !ListItem.IsPlaying</visible>
+					</control>
+					<control type="group">
+						<left>6</left><top>6</top>
+						<visible>Control.HasFocus(7100)</visible>
+						<control type="image">
+							<width>360</width><height>202</height>
+							<texture diffuse="silo/card_landscape_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
+						</control>
+						<control type="image">
+							<width>360</width><height>202</height>
+							<texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
+						</control>
+					</control>
+					<!-- The playing one. -->
+					<control type="group">
+						<left>18</left><top>18</top>
+						<visible>ListItem.IsPlaying</visible>
+						<control type="image">
+							<width>150</width><height>34</height>
+							<texture border="8" colordiffuse="D9000000">silo/badge_solid.png</texture>
+						</control>
+						<control type="label">
+							<width>150</width><height>34</height>
+							<align>center</align><aligny>center</aligny>
+							<font>silo_badge</font>
+							<textcolor>FFEDEDED</textcolor>
+							<label>PLAYING</label>
+						</control>
+					</control>
+					<control type="group">
+						<left>316</left><top>16</top>
+						<visible>Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsPlaying</visible>
+						<control type="image">
+							<width>40</width><height>40</height>
+							<texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+						</control>
+						<control type="image">
+							<left>9</left><top>9</top><width>22</width><height>22</height>
+							<texture colordiffuse="FF000000">OverlayWatched.png</texture>
+						</control>
+					</control>
+					<control type="label">
+						<left>6</left><top>222</top><width>360</width><height>34</height>
+						<font>silo_card_title</font>
+						<textcolor>FFEDEDED</textcolor>
+						<selectedcolor>FFEDEDED</selectedcolor>
+						<label>$INFO[ListItem.Episode,E,]$INFO[ListItem.Title, · ,]</label>
+					</control>
+					<control type="label">
+						<left>6</left><top>256</top><width>360</width><height>30</height>
+						<font>silo_detail</font>
+						<textcolor>99EDEDED</textcolor>
+						<selectedcolor>99EDEDED</selectedcolor>
+						<label>$INFO[ListItem.Duration(mins),, min]</label>
+					</control>
+					</control>
+				</focusedlayout>
 			</control>
 		</control>
 	</controls>

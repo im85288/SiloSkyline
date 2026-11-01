@@ -413,6 +413,36 @@ if __name__ == '__main__':
                         break
         return hits / float(SUB * SUB)
     write_png('options.png', 96, 96, sliders)
+
+    # Episodes: a card with two more stacked behind it, as Netflix's.
+    def episodes(x, y, size=96.0, stroke=5.0):
+        hits = 0
+        for sy in range(SUB):
+            for sx in range(SUB):
+                px = (x - 0.5 + (sx + 0.5) / SUB) / size
+                py = (y - 0.5 + (sy + 0.5) / SUB) / size
+                half = stroke / 2 / size
+                front = (0.30 <= px <= 0.70 and 0.42 <= py <= 0.68 and
+                         (abs(px - 0.30) <= half or abs(px - 0.70) <= half or
+                          abs(py - 0.42) <= half or abs(py - 0.68) <= half))
+                behind = any(abs(py - row) <= half and 0.30 + inset <= px <= 0.70 - inset
+                             for row, inset in ((0.355, 0.04), (0.29, 0.08)))
+                hits += front or behind
+        return hits / float(SUB * SUB)
+    write_png('episodes.png', 96, 96, episodes)
+
+    # Next Episode: a play triangle against a bar (skip to next).
+    def next_episode(x, y, size=96.0):
+        hits = 0
+        for sy in range(SUB):
+            for sx in range(SUB):
+                px = (x - 0.5 + (sx + 0.5) / SUB) / size
+                py = (y - 0.5 + (sy + 0.5) / SUB) / size
+                triangle = 0.34 <= px <= 0.58 and abs(py - 0.5) <= (0.58 - px) * 0.75
+                bar = 0.60 <= px <= 0.66 and abs(py - 0.5) <= 0.18
+                hits += triangle or bar
+        return hits / float(SUB * SUB)
+    write_png('next_episode.png', 96, 96, next_episode)
     # Skyline's mark: its own shape, not Silo's (Silo's brand policy keeps
     # its three-bar logo and colours for Silo itself): a round dusk sky,
     # violet to coral, with a white city skyline across its lower half.

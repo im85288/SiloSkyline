@@ -7968,11 +7968,6 @@
     </variable>
     <!-- end Silo Skyline request browse -->
 <!-- Silo Skyline Showcase (tools/build_showcase.py) -->
-    <variable name="SiloShowcasePoster">
-        <value condition="!String.IsEmpty(Player.Art(tvshow.poster))">$INFO[Player.Art(tvshow.poster)]</value>
-        <value condition="!String.IsEmpty(Player.Art(poster))">$INFO[Player.Art(poster)]</value>
-        <value>$INFO[Player.Art(thumb)]</value>
-    </variable>
     <variable name="SiloShowcaseStill">
         <value condition="!String.IsEmpty(VideoPlayer.TVShowTitle) + !String.IsEmpty(Player.Art(thumb))">$INFO[Player.Art(thumb)]</value>
         <value>$INFO[Player.Art(fanart)]</value>
@@ -8081,6 +8076,25 @@
         <value condition="!String.IsEmpty(VideoPlayer.TVShowTitle) + !String.IsEmpty(Window(Home).Property(silokodi.playing.air_date))">$INFO[Window(Home).Property(silokodi.playing.air_date)]$INFO[VideoPlayer.Duration(mins), · , min]</value>
         <value condition="!String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.Premiered]$INFO[VideoPlayer.Duration(mins), · , min]</value>
         <value>$INFO[VideoPlayer.Year]$INFO[VideoPlayer.Duration(mins), · , min]</value>
+    </variable>
+    <variable name="SiloOSDLeftName">
+        <value condition="Control.HasFocus(609)">Back 10 seconds</value>
+        <value condition="Control.HasFocus(602) + Player.Paused">Play</value>
+        <value condition="Control.HasFocus(602)">Pause</value>
+        <value condition="Control.HasFocus(610)">Forward 30 seconds</value>
+    </variable>
+    <variable name="SiloOSDRightName">
+        <value condition="Control.HasFocus(70051) + !String.IsEmpty(Window(Home).Property(silo.osd.episodes))">Hide episodes</value>
+        <value condition="Control.HasFocus(70051)">Episodes</value>
+        <value condition="Control.HasFocus(70050) + !String.IsEmpty(Window(Home).Property(silokodi.playing.next_label))">Next episode  ·  $INFO[Window(Home).Property(silokodi.playing.next_label)]</value>
+        <value condition="Control.HasFocus(70050)">Next episode</value>
+        <value condition="Control.HasFocus(70046)">Subtitles</value>
+        <value condition="Control.HasFocus(70048)">Options</value>
+        <value condition="Control.HasFocus(70049)">Close</value>
+        <value condition="Control.HasFocus(804)">Disc menu</value>
+        <value condition="Control.HasFocus(70042)">Playlist</value>
+        <value condition="Control.HasFocus(70045)">Teletext</value>
+        <value condition="Control.HasFocus(70047)">3D</value>
     </variable>
     <expression name="SiloPauseScreen">!Skin.HasSetting(SkylineSiloOSD) + $EXP[SiloVideoPlayer] + Player.Paused + !Window.IsActive(videoosd) + System.IdleTime(10)</expression>
     

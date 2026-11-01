@@ -731,11 +731,12 @@
 		     app at 1080p: buttons (VideoOSD) from 950, the clock row, the bar with a
 		     round handle, the title and an uppercase eyebrow, over a gradient. -->
 		<control type="group">
-			<visible>$EXP[SiloVideoPlayer] + !$EXP[SiloPauseScreen]</visible>
+			<visible>$EXP[SiloVideoPlayer] + !$EXP[SiloPauseScreen] + String.IsEmpty(Window(Home).Property(silo.osd.episodes))</visible>
 			<animation effect="fade" start="0" end="100" time="200">Visible</animation>
 			<animation effect="fade" start="100" end="0" time="200">Hidden</animation>
+			<!-- From under the logo down, so the picture above stays bright, as Netflix's. -->
 			<control type="image">
-				<left>0</left><top>420</top><width>1920</width><height>660</height>
+				<left>0</left><top>520</top><width>1920</width><height>560</height>
 				<texture>silo/scrim_bottom.png</texture>
 			</control>
 			<!-- A second pass: the title stays readable over bright pictures. -->
@@ -763,17 +764,12 @@
 			<control type="group">
 				<visible>!Skin.HasSetting(SkylineSiloOSD)</visible>
 				<control type="image">
-					<left>96</left><top>588</top><width>160</width><height>240</height>
-					<aspectratio>scale</aspectratio>
-					<texture background="true" diffuse="silo/card_poster_mask.png">$VAR[SiloShowcasePoster]</texture>
-				</control>
-				<control type="image">
-					<left>288</left><top>588</top><width>720</width><height>120</height>
+					<left>96</left><top>588</top><width>720</width><height>120</height>
 					<aspectratio align="left" aligny="bottom">keep</aspectratio>
 					<texture>$VAR[PlayerClearLogoVar]</texture>
 				</control>
 				<control type="label">
-					<left>288</left><top>588</top><width>720</width><height>120</height>
+					<left>96</left><top>588</top><width>720</width><height>120</height>
 					<aligny>bottom</aligny>
 					<font>silo_osd_title</font>
 					<textcolor>FFEDEDED</textcolor>
@@ -782,14 +778,14 @@
 					<visible>String.IsEmpty(Player.Art(clearlogo)) + String.IsEmpty(Player.Art(tvshow.clearlogo))</visible>
 				</control>
 				<control type="label">
-					<left>288</left><top>720</top><width>1500</width><height>44</height>
+					<left>96</left><top>720</top><width>1500</width><height>44</height>
 					<font>silo_meta</font>
 					<textcolor>FFEDEDED</textcolor>
 					<label>$VAR[SiloShowcaseLine]</label>
 					<shadowcolor>99000000</shadowcolor>
 				</control>
 				<control type="grouplist">
-					<left>288</left><top>776</top><width>1536</width><height>40</height>
+					<left>96</left><top>776</top><width>1728</width><height>40</height>
 					<orientation>horizontal</orientation>
 					<itemgap>10</itemgap>
 					<usecontrolcoords>true</usecontrolcoords>
@@ -876,50 +872,6 @@
 						<texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
 						<texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
 						<visible>String.IsEmpty(Window(Home).Property(silokodi.playing.badge1)) + !String.IsEmpty(VideoPlayer.AudioCodec)</visible>
-					</control>
-					<control type="image">
-						<top>4</top><width>60</width><height>28</height>
-						<texture>silo/imdb.png</texture>
-						<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.imdb))</visible>
-					</control>
-					<control type="label">
-						<width>auto</width><height>36</height>
-						<aligny>center</aligny>
-						<font>silo_meta</font>
-						<textcolor>FFEDEDED</textcolor>
-						<label> [B]$INFO[Window(Home).Property(silokodi.playing.rating.imdb)][/B]  </label>
-						<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.imdb))</visible>
-					</control>
-					<control type="image">
-						<top>3</top><width>165</width><height>30</height>
-						<texture>silo/tmdb.png</texture>
-						<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.tmdb))</visible>
-					</control>
-					<control type="label">
-						<width>auto</width><height>36</height>
-						<aligny>center</aligny>
-						<font>silo_meta</font>
-						<textcolor>FFEDEDED</textcolor>
-						<label> [B]$INFO[Window(Home).Property(silokodi.playing.rating.tmdb)][/B]  </label>
-						<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.tmdb))</visible>
-					</control>
-					<control type="image">
-						<top>2</top><width>32</width><height>32</height>
-						<texture>silo/rt_fresh.png</texture>
-						<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.rtcritic)) + Integer.IsGreaterOrEqual(Window(Home).Property(silokodi.playing.rating.rtcritic),60)</visible>
-					</control>
-					<control type="image">
-						<top>2</top><width>32</width><height>32</height>
-						<texture>silo/rt_rotten.png</texture>
-						<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.rtcritic)) + !Integer.IsGreaterOrEqual(Window(Home).Property(silokodi.playing.rating.rtcritic),60)</visible>
-					</control>
-					<control type="label">
-						<width>auto</width><height>36</height>
-						<aligny>center</aligny>
-						<font>silo_meta</font>
-						<textcolor>FFEDEDED</textcolor>
-						<label> [B]$INFO[Window(Home).Property(silokodi.playing.rating.rtcritic)]%[/B]  </label>
-						<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.rtcritic))</visible>
 					</control>
 				</control>
 				<control type="label">
