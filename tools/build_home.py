@@ -45,7 +45,7 @@ OTHER_CARDS = 12
 HOME_CARD_FIELDS = ('type', 'dbid', 'card.title', 'card.sub', 'card.wide_sub', 'hero.title', 'hero.meta',
                     'hero.facts', 'rating.imdb', 'rating.tmdb',
                     'hero.detail', 'plot', 'mpaa', 'badge1', 'badge2', 'badge3', 'tint', 'percent', 'playcount',
-                    'new', 'left', 'dismiss', 'rank', 'art.poster', 'art.landscape', 'art.fanart', 'art.clearlogo', 'request.type', 'request.tmdb',
+                    'new', 'left', 'dismiss', 'rank', 'place', 'art.poster', 'art.landscape', 'art.fanart', 'art.clearlogo', 'request.type', 'request.tmdb',
                     'status.tint', 'status.seg1', 'status.seg2', 'status.seg3', 'status.seg4',
                     'request.library', 'request.state', 'request.more', 'request.logo', 'request.from', 'request.to')
 # The fields a page's cards can have, written into Home.xml for every slot:
@@ -53,7 +53,7 @@ HOME_CARD_FIELDS = ('type', 'dbid', 'card.title', 'card.sub', 'card.wide_sub', '
 # all posters (no wide caption or art). Each unused field cost every Home card.
 PAGE_FIELDS = {
     'home': tuple(f for f in HOME_CARD_FIELDS if not f.startswith(('request.', 'status.'))),
-    'requests': tuple(f for f in HOME_CARD_FIELDS if f not in ('card.wide_sub', 'art.landscape', 'new', 'left', 'dismiss', 'rank')),
+    'requests': tuple(f for f in HOME_CARD_FIELDS if f not in ('card.wide_sub', 'art.landscape', 'new', 'left', 'dismiss', 'rank', 'place')),
 }
 # Rows a page can show; Requests has Silo's Discover rows (six title rows,
 # then Studios, Networks and Genres), and every slot costs Home.xml size.
@@ -1721,6 +1721,15 @@ def build():
             <aspectratio>stretch</aspectratio>
             <fadetime>240</fadetime>
             <texture background="true" diffuse="silo/hero_mask.png">$VAR[SiloHeroArt]</texture>
+            <!-- Netflix and Apple TV hold the hero while you fly along a row:
+                 hidden while the row moves (each Left or Right, and a held
+                 key's fast scroll), Kodi loads none of the backdrops passed. -->
+            <visible>!Container.Scrolling + !Container.OnNext + !Container.OnPrevious</visible>
+            <animation effect="fade" start="100" end="0" time="160">Hidden</animation>
+            <animation effect="fade" start="0" end="100" time="320">Visible</animation>
+            <!-- Apple TV's slow drift: a gentle zoom from the top right, there and back. -->
+            <animation effect="zoom" start="100" end="106" time="18000" center="1920,0" tween="sine" easing="inout"
+                       pulse="true" condition="true">Conditional</animation>
         </control>
 
         <!-- Marquee: never focusable; follows whichever card has focus (on
@@ -1729,6 +1738,37 @@ def build():
             <left>%(x)d</left>
             <visible>!String.IsEmpty(%(row_prop)s) | [[String.IsEqual(Window(Home).Property(silo.page),home) | String.IsEmpty(Window(Home).Property(silo.page))] + [Integer.IsGreater(Window(Home).Property(silo.home.1.cards),0) | Integer.IsGreater(Window(Home).Property(silo.home.2.cards),0)]] | %(waiting)s</visible>
             <animation effect="fade" start="0" end="100" time="240">Visible</animation>
+            <!-- Why this title, as Netflix's: its place in a Top 10 row
+                 (a red TOP 10 badge), or a new episode. -->
+            <control type="grouplist">
+                <top>140</top>
+                <width>1100</width><height>40</height>
+                <orientation>horizontal</orientation>
+                <itemgap>14</itemgap>
+                <usecontrolcoords>true</usecontrolcoords>
+                <control type="group">
+                    <width>92</width><height>40</height>
+                    <visible>$EXP[HasSiloHeroRank]</visible>
+                    <control type="image">
+                        <top>4</top><width>92</width><height>32</height>
+                        <texture border="8" colordiffuse="FFE50914">silo/badge_solid.png</texture>
+                    </control>
+                    <control type="label">
+                        <top>4</top><width>92</width><height>32</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <label>TOP 10</label>
+                    </control>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label>$VAR[SiloHeroReason]</label>
+                </control>
+            </control>
             <control type="image">
                 <top>190</top>
                 <width>880</width><height>170</height>
@@ -2026,6 +2066,31 @@ def request_pill_variables():
     return out
 
 
+# A title's place in a chart row's first ten (SiloKodiConnect's place: any
+# ranking row, numbered on its posters or not).
+RANK_OF = '[!String.IsEmpty(LI.Property(home.place)) | !String.IsEmpty(LI.Property(silo.place))]'
+NEW_OF = '[!String.IsEmpty(LI.Property(home.new)) | !String.IsEmpty(LI.Property(silo.new))]'
+
+
+def hero_reason():
+    """Netflix's line above the hero's title, for Home's rows (only they are
+    charts): "#3 in IMDb Popular Shows" in a chart's top ten, else "New Episode".
+    HasSiloHeroRank shows the TOP 10 badge before it."""
+    home = PAGES.index('home')
+    slots = [(list_id(home, slot, False), slot) for slot in range(1, rows_of('home') + 1)]
+    mine = lambda row_id: 'String.IsEqual(%s,%d)' % (prop('silo.row'), row_id)
+    item = lambda row_id: 'Container(%d).ListItem' % row_id
+    out = '    <expression name="HasSiloHeroRank">%s</expression>\n' % ' | '.join(
+        '[%s + %s]' % (mine(row_id), RANK_OF.replace('LI', item(row_id))) for row_id, _ in slots)
+    out += '    <variable name="SiloHeroReason">\n'
+    for row_id, slot in slots:
+        out += '        <value condition="%s + %s">#$INFO[%s.Property(home.place)]$INFO[%s.Property(silo.place)] in $INFO[%s]</value>\n' % (
+            mine(row_id), RANK_OF.replace('LI', item(row_id)), item(row_id), item(row_id), prop('silo.home.%d.title' % slot))
+        out += '        <value condition="%s + %s">[COLOR FFE50914][B]New Episode[/B][/COLOR]</value>\n' % (
+            mine(row_id), NEW_OF.replace('LI', item(row_id)))
+    return out + '    </variable>\n'
+
+
 def variables():
     rows = [list_id(index, slot, landscape) for index, page in enumerate(PAGES)
             for slot in range(1, rows_of(page) + 1) for landscape in styles(page)]
@@ -2074,7 +2139,7 @@ def variables():
         terms += ['[%s + !String.IsEmpty(%s)]' % (home_waiting(row), prop('silo.home.%d.1.%s' % (row, home_property[5:])))
                   for row in (1, 2)]
         out += '    <expression name="Has%s">%s</expression>\n' % (name, ' | '.join(terms))
-    out += EMPTY_HOME
+    out += EMPTY_HOME + hero_reason()
     for name, entries in HERO:
         # A Home card (SiloKodiConnect's published rows) carries its text ready.
         if name in HERO_STATIC:

@@ -29,6 +29,7 @@
                 <property name="home.left">$INFO[Window(Home).Property($PARAM[p].left)]</property>
                 <property name="home.dismiss">$INFO[Window(Home).Property($PARAM[p].dismiss)]</property>
                 <property name="home.rank">$INFO[Window(Home).Property($PARAM[p].rank)]</property>
+                <property name="home.place">$INFO[Window(Home).Property($PARAM[p].place)]</property>
                 <property name="home.art.poster">$INFO[Window(Home).Property($PARAM[p].art.poster)]</property>
                 <property name="home.art.landscape">$INFO[Window(Home).Property($PARAM[p].art.landscape)]</property>
                 <property name="home.art.fanart">$INFO[Window(Home).Property($PARAM[p].art.fanart)]</property>
