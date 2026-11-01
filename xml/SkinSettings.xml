@@ -47,6 +47,13 @@
 					<include>DefaultSettingButton</include>
 					<onclick>ActivateWindow(1192)</onclick>
 				</control>
+				<control type="button" id="794">
+					<label>Top 10 rows</label>
+					<label2>Numbered Home rows</label2>
+					<include>DefaultSettingButton</include>
+					<onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=top10)</onclick>
+					<visible>System.HasAddon(plugin.video.silokodiconnect)</visible>
+				</control>
 				<control type="radiobutton" id="791">
 					<label>Artwork background</label>
 					<include>DefaultSettingButton</include>

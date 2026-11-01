@@ -27,6 +27,8 @@
                 <property name="home.playcount">$INFO[Window(Home).Property($PARAM[p].playcount)]</property>
                 <property name="home.new">$INFO[Window(Home).Property($PARAM[p].new)]</property>
                 <property name="home.left">$INFO[Window(Home).Property($PARAM[p].left)]</property>
+                <property name="home.dismiss">$INFO[Window(Home).Property($PARAM[p].dismiss)]</property>
+                <property name="home.rank">$INFO[Window(Home).Property($PARAM[p].rank)]</property>
                 <property name="home.art.poster">$INFO[Window(Home).Property($PARAM[p].art.poster)]</property>
                 <property name="home.art.landscape">$INFO[Window(Home).Property($PARAM[p].art.landscape)]</property>
                 <property name="home.art.fanart">$INFO[Window(Home).Property($PARAM[p].art.fanart)]</property>
@@ -147,7 +149,7 @@
                         </control>
                         <control type="group">
                             <left>16</left><top>230</top>
-                            <visible>!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))</visible>
+                            <visible>[!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))] + ![!String.IsEmpty(ListItem.Property(home.rank)) | !String.IsEmpty(ListItem.Property(silo.rank))]</visible>
                             <control type="image">
                                 <width>156</width><height>30</height>
                                 <texture border="8" colordiffuse="FFE50914">silo/badge_solid.png</texture>
@@ -159,6 +161,16 @@
                                 <textcolor>FFFFFFFF</textcolor>
                                 <label>NEW EPISODE</label>
                             </control>
+                        </control>
+                        <control type="label">
+                            <left>16</left><top>144</top>
+                            <width>176</width><height>110</height>
+                            <aligny>bottom</aligny>
+                            <font>silo_rank</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <shadowcolor>E6000000</shadowcolor>
+                            <label>$INFO[ListItem.Property(home.rank)]$INFO[ListItem.Property(silo.rank)]</label>
+                            <visible>[!String.IsEmpty(ListItem.Property(home.rank)) | !String.IsEmpty(ListItem.Property(silo.rank))]</visible>
                         </control>
                         <control type="label">
                             <left>6</left><top>284</top>
@@ -290,7 +302,7 @@
                         </control>
                         <control type="group">
                             <left>16</left><top>230</top>
-                            <visible>!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))</visible>
+                            <visible>[!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))] + ![!String.IsEmpty(ListItem.Property(home.rank)) | !String.IsEmpty(ListItem.Property(silo.rank))]</visible>
                             <control type="image">
                                 <width>156</width><height>30</height>
                                 <texture border="8" colordiffuse="FFE50914">silo/badge_solid.png</texture>
@@ -302,6 +314,16 @@
                                 <textcolor>FFFFFFFF</textcolor>
                                 <label>NEW EPISODE</label>
                             </control>
+                        </control>
+                        <control type="label">
+                            <left>16</left><top>144</top>
+                            <width>176</width><height>110</height>
+                            <aligny>bottom</aligny>
+                            <font>silo_rank</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <shadowcolor>E6000000</shadowcolor>
+                            <label>$INFO[ListItem.Property(home.rank)]$INFO[ListItem.Property(silo.rank)]</label>
+                            <visible>[!String.IsEmpty(ListItem.Property(home.rank)) | !String.IsEmpty(ListItem.Property(silo.rank))]</visible>
                         </control>
                         <control type="label">
                             <left>6</left><top>284</top>
@@ -394,7 +416,7 @@
                         </control>
                         <control type="group">
                             <left>16</left><top>168</top>
-                            <visible>!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))</visible>
+                            <visible>[!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))] + ![!String.IsEmpty(ListItem.Property(home.rank)) | !String.IsEmpty(ListItem.Property(silo.rank))]</visible>
                             <control type="image">
                                 <width>340</width><height>30</height>
                                 <texture border="8" colordiffuse="FFE50914">silo/badge_solid.png</texture>
@@ -498,7 +520,7 @@
                         </control>
                         <control type="group">
                             <left>16</left><top>168</top>
-                            <visible>!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))</visible>
+                            <visible>[!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))] + ![!String.IsEmpty(ListItem.Property(home.rank)) | !String.IsEmpty(ListItem.Property(silo.rank))]</visible>
                             <control type="image">
                                 <width>340</width><height>30</height>
                                 <texture border="8" colordiffuse="FFE50914">silo/badge_solid.png</texture>
@@ -655,7 +677,7 @@
                         </control>
                         <control type="group">
                             <left>16</left><top>350</top>
-                            <visible>!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))</visible>
+                            <visible>[!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))] + ![!String.IsEmpty(ListItem.Property(home.rank)) | !String.IsEmpty(ListItem.Property(silo.rank))]</visible>
                             <control type="image">
                                 <width>236</width><height>30</height>
                                 <texture border="8" colordiffuse="FFE50914">silo/badge_solid.png</texture>
@@ -798,7 +820,7 @@
                         </control>
                         <control type="group">
                             <left>16</left><top>350</top>
-                            <visible>!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))</visible>
+                            <visible>[!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))] + ![!String.IsEmpty(ListItem.Property(home.rank)) | !String.IsEmpty(ListItem.Property(silo.rank))]</visible>
                             <control type="image">
                                 <width>236</width><height>30</height>
                                 <texture border="8" colordiffuse="FFE50914">silo/badge_solid.png</texture>

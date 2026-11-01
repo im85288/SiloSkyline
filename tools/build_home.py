@@ -45,7 +45,7 @@ OTHER_CARDS = 12
 HOME_CARD_FIELDS = ('type', 'dbid', 'card.title', 'card.sub', 'card.wide_sub', 'hero.title', 'hero.meta',
                     'hero.facts', 'rating.imdb', 'rating.tmdb',
                     'hero.detail', 'plot', 'mpaa', 'badge1', 'badge2', 'badge3', 'tint', 'percent', 'playcount',
-                    'new', 'left', 'art.poster', 'art.landscape', 'art.fanart', 'art.clearlogo', 'request.type', 'request.tmdb',
+                    'new', 'left', 'dismiss', 'rank', 'art.poster', 'art.landscape', 'art.fanart', 'art.clearlogo', 'request.type', 'request.tmdb',
                     'status.tint', 'status.seg1', 'status.seg2', 'status.seg3', 'status.seg4',
                     'request.library', 'request.state', 'request.more', 'request.logo', 'request.from', 'request.to')
 # The fields a page's cards can have, written into Home.xml for every slot:
@@ -53,7 +53,7 @@ HOME_CARD_FIELDS = ('type', 'dbid', 'card.title', 'card.sub', 'card.wide_sub', '
 # all posters (no wide caption or art). Each unused field cost every Home card.
 PAGE_FIELDS = {
     'home': tuple(f for f in HOME_CARD_FIELDS if not f.startswith(('request.', 'status.'))),
-    'requests': tuple(f for f in HOME_CARD_FIELDS if f not in ('card.wide_sub', 'art.landscape', 'new', 'left')),
+    'requests': tuple(f for f in HOME_CARD_FIELDS if f not in ('card.wide_sub', 'art.landscape', 'new', 'left', 'dismiss', 'rank')),
 }
 # Rows a page can show; Requests has Silo's Discover rows (six title rows,
 # then Studios, Networks and Genres), and every slot costs Home.xml size.
@@ -105,6 +105,7 @@ LANDSCAPE = {'name': 'Landscape', 'width': 360, 'height': 202, 'gap': 40, 'mask'
              'status': '$VAR[SiloCardStatus]', 'bright': True}
 # A grid's poster (the request browse page): six to a row, as Browse's.
 GRID_POSTER = dict(POSTER, name='GridPoster', width=256, height=384)
+# A ranked row's card (Netflix's Top 10): a numeral, then the poster.
 CAPTION_H = 76             # title and second line under a card
 # Focus as Silo's Apple TV app shows it: the card grows, with no ring.
 FOCUS_ZOOM = 110
@@ -116,7 +117,9 @@ def focus_zoom(condition, indent=24):
 
 
 WATCHED = 'Integer.IsGreater(ListItem.PlayCount,0) | !String.IsEmpty(ListItem.Property(home.playcount))'
-NEW_EPISODE = '!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))'
+RANKED = '[!String.IsEmpty(ListItem.Property(home.rank)) | !String.IsEmpty(ListItem.Property(silo.rank))]'
+# A ranked card has no New Episode tab, so its numeral is always in one place.
+NEW_EPISODE = '[!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))] + !' + RANKED
 NEW_H = 30
 
 
@@ -160,6 +163,28 @@ def watched_disc(x, y, visible, indent=24):
 %(p)s        <texture colordiffuse="FF000000">OverlayWatched.png</texture>
 %(p)s    </control>
 %(p)s</control>''' % {'p': pad, 'x': x, 'y': y, 'visible': visible}
+
+
+RANK = '$INFO[ListItem.Property(home.rank)]$INFO[ListItem.Property(silo.rank)]'
+
+
+
+def rank_numeral(card, indent=24):
+    """Netflix's Top 10: the title's place in a ranked row (SiloKodiConnect's
+    rank), a big numeral in the poster's bottom-left corner, in the same
+    place on every card (a ranked card has no New Episode tab)."""
+    pad = ' ' * indent
+    return '''
+%(p)s<control type="label">
+%(p)s    <left>16</left><top>%(y)d</top>
+%(p)s    <width>%(w)d</width><height>110</height>
+%(p)s    <aligny>bottom</aligny>
+%(p)s    <font>silo_rank</font>
+%(p)s    <textcolor>FFEDEDED</textcolor>
+%(p)s    <shadowcolor>E6000000</shadowcolor>
+%(p)s    <label>%(rank)s</label>
+%(p)s    <visible>%(ranked)s</visible>
+%(p)s</control>''' % {'p': pad, 'y': 6 + card['height'] - 110 - 16, 'w': card['width'], 'rank': RANK, 'ranked': RANKED}
 
 
 def watched_dim(card, focus, indent=24):
@@ -212,6 +237,7 @@ FONTS = [  # name, file, size
     ('silo_clock', 'Inter-SemiBold.ttf', 58),
     ('silo_mono', 'NotoMono-Regular.ttf', 21),  # System info's columns (build_frame.py)  # the shared frame's clock (build_frame.py)
     ('silo_key', 'Inter-Medium.ttf', 40),
+    ('silo_rank', 'Inter-Bold.ttf', 96),  # a Top 10 row's numerals (Netflix)
 ]
 
 
@@ -428,7 +454,7 @@ def card_body(card, focused, control_id='$PARAM[id]', near=None):
                                                          'Control.HasFocus(%s)' % control_id) if focused else '',
                                     # From the poster's left: <right> is the item's edge, gap included.
                                     'watched': watched_disc(6 + card['width'] - 10 - 40, 16, WATCHED)
-                                               + new_tag(card),
+                                               + new_tag(card) + (rank_numeral(card) if card['name'] == 'Poster' else ''),
                                     'no_art': no_art_card(card) + request_tags(card),
                                     'dim': watched_dim(card, 'Control.HasFocus(%s)' % control_id if focused else '')}
 
@@ -668,8 +694,8 @@ def row(page, page_index, slot, landscape):
     path = '$INFO[%s]' % prop(key + ('.landscape' if landscape else '.poster'))
     if page in PUBLISHED_PAGES:
         # A Home row past the published ones: its one list loads whichever
-        # path its style has (the other is empty).
-        path = '$INFO[%s]$INFO[%s]' % (prop(key + '.poster'), prop(key + '.landscape'))
+        # path its style has (the others are empty).
+        path = '$INFO[%s]$INFO[%s]$INFO[%s]' % (prop(key + '.poster'), prop(key + '.landscape'), prop(key + '.ranked'))
     if page == 'custom':
         # A Skin Shortcuts widget: any Kodi path, used as it is.
         path = '$INFO[%s]' % prop(key + '.path')
@@ -709,6 +735,8 @@ def row(page, page_index, slot, landscape):
         item_h = max(c['height'] for c in (POSTER, BRAND)) + 12 + CAPTION_H
     elif page in PUBLISHED_PAGES and page not in POSTER_ONLY:
         # One list for either style: Kodi picks the item layout by condition.
+        # A ranked row's cards are posters with their numerals: a card's
+        # layout is kept once picked, so ranking shows by the card's rank.
         wide = 'String.IsEqual(%s,landscape)' % prop(key + '.style')
         item_layouts = layouts(LANDSCAPE, wide) + layouts(POSTER, '!' + wide)
         item_h = max(c['height'] for c in (POSTER, LANDSCAPE)) + 12 + CAPTION_H

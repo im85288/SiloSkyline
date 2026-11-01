@@ -209,6 +209,11 @@
 			<filename>Inter-Medium.ttf</filename>
 			<size>40</size>
 		</font>
+		<font>
+			<name>silo_rank</name>
+			<filename>Inter-Bold.ttf</filename>
+			<size>96</size>
+		</font>
 		<!-- end Silo Skyline -->
 	</fontset>
 	<fontset id="Arial" idloc="31053">
@@ -431,6 +436,11 @@
 			<name>silo_key</name>
 			<filename>Inter-Medium.ttf</filename>
 			<size>40</size>
+		</font>
+		<font>
+			<name>silo_rank</name>
+			<filename>Inter-Bold.ttf</filename>
+			<size>96</size>
 		</font>
 		<!-- end Silo Skyline -->
 	</fontset>

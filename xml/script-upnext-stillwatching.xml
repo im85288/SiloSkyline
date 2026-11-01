@@ -260,7 +260,7 @@
                         </control>
                         <control type="group">
                             <left>16</left><top>128</top>
-                            <visible>!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))</visible>
+                            <visible>[!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))] + ![!String.IsEmpty(ListItem.Property(home.rank)) | !String.IsEmpty(ListItem.Property(silo.rank))]</visible>
                             <control type="image">
                                 <width>268</width><height>30</height>
                                 <texture border="8" colordiffuse="FFE50914">silo/badge_solid.png</texture>
@@ -359,7 +359,7 @@
                         </control>
                         <control type="group">
                             <left>16</left><top>128</top>
-                            <visible>!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))</visible>
+                            <visible>[!String.IsEmpty(ListItem.Property(home.new)) | !String.IsEmpty(ListItem.Property(silo.new))] + ![!String.IsEmpty(ListItem.Property(home.rank)) | !String.IsEmpty(ListItem.Property(silo.rank))]</visible>
                             <control type="image">
                                 <width>268</width><height>30</height>
                                 <texture border="8" colordiffuse="FFE50914">silo/badge_solid.png</texture>

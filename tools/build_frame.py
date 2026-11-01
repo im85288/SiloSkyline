@@ -576,6 +576,13 @@ def skin_settings(text):
 \t\t\t\t\t<include>DefaultSettingButton</include>
 \t\t\t\t\t<onclick>ActivateWindow(1192)</onclick>
 \t\t\t\t</control>
+\t\t\t\t<control type="button" id="794">
+\t\t\t\t\t<label>Top 10 rows</label>
+\t\t\t\t\t<label2>Numbered Home rows</label2>
+\t\t\t\t\t<include>DefaultSettingButton</include>
+\t\t\t\t\t<onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=top10)</onclick>
+\t\t\t\t\t<visible>System.HasAddon(plugin.video.silokodiconnect)</visible>
+\t\t\t\t</control>
 \t\t\t\t<control type="radiobutton" id="791">
 \t\t\t\t\t<label>Artwork background</label>
 \t\t\t\t\t<include>DefaultSettingButton</include>
