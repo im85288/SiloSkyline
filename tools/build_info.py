@@ -335,13 +335,20 @@ def build():
                     <font>silo_meta</font>
                     <textcolor>%(text)s</textcolor>
                     <label>$VAR[SiloDetailFactsTmdb]</label>
+                </control>%(rt_marks)s
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label>$VAR[SiloDetailFactsAfter]</label>
                 </control>
             </control>
             <control type="textbox">
                 <top>236</top>
                 <width>1080</width><height>106</height>
                 <font>silo_plot</font>
-                <textcolor>%(text)s</textcolor>
+                <textcolor>%(dim)s</textcolor>
                 <label>$VAR[SiloDetailPlot]</label>
             </control>
             <control type="label">
@@ -683,7 +690,7 @@ def build():
     </controls>
 </window>
 ''' % {'background': BACKGROUND, 'x': SAFE_X, 'top': TOP, 'text': TEXT, 'dim': TEXT_DIM, 'has_logo': has_logo,
-       'facts_dot': FACTS_DOT, 'imdb_shown': split_ratings(VARIABLES)[1], 'tmdb_shown': split_ratings(VARIABLES)[2], 'other_season': OTHER_SEASON,
+       'rt_marks': rt_marks(), 'facts_dot': FACTS_DOT, 'imdb_shown': split_ratings(VARIABLES)[1], 'tmdb_shown': split_ratings(VARIABLES)[2], 'other_season': OTHER_SEASON,
        'mpaa': badge('$VAR[SiloDetailMpaa]', '[!String.IsEmpty(ListItem.Mpaa) | '
                      '!String.IsEmpty(ListItem.Property(silo.mpaa))]', 'silo_badge', 34).replace(
                          '<height>34</height>', '<top>3</top><height>34</height>', 1),
@@ -1204,6 +1211,57 @@ def rating_mark(source):
 
 
 IMDB_MARK, TMDB_MARK = rating_mark('IMDb'), rating_mark('TMDB')
+# The rails and pills show their episode's facts: no Rotten Tomatoes there.
+ON_RAILS = 'Control.HasFocus(60) | Control.HasFocus(61) | Control.HasFocus(64) | Control.HasFocus(65)'
+
+
+def rt_marks():
+    """Rotten Tomatoes' critics' mark after TMDB's: the Fresh tomato (60%
+    and up) or Rotten splat, then the percentage. SiloKodiConnect's property
+    (an episode shows its series'), else its art extra (a title Kodi opened
+    itself): one of them, as a title can have both."""
+    out = ''
+    for key, art, fresh, rotten in (('rtcritic', 'silortcritic', 'silo/rt_fresh.png', 'silo/rt_rotten.png'),):
+        sources = ('ListItem.Property(silo.rating.%s)' % key, 'ListItem.Art(%s)' % art)
+        shown = '![%s] + [%s]' % (ON_RAILS, ' | '.join('!String.IsEmpty(%s)' % v for v in sources))
+        high = ' | '.join('Integer.IsGreaterOrEqual(%s,60)' % v for v in sources)
+        out += """
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label>%(dot)s</label>
+                    <visible>%(shown)s</visible>
+                </control>
+                <control type="image">
+                    <top>4</top><width>32</width><height>32</height>
+                    <texture>%(fresh)s</texture>
+                    <visible>%(shown)s + [%(high)s]</visible>
+                </control>
+                <control type="image">
+                    <top>4</top><width>32</width><height>32</height>
+                    <texture>%(rotten)s</texture>
+                    <visible>%(shown)s + ![%(high)s]</visible>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label> [B]$INFO[%(own)s]%%[/B]</label>
+                    <visible>%(shown)s + !String.IsEmpty(%(own)s)</visible>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label> [B]$INFO[%(extra)s]%%[/B]</label>
+                    <visible>%(shown)s + String.IsEmpty(%(own)s)</visible>
+                </control>""" % {'text': TEXT, 'dot': FACTS_DOT, 'shown': shown, 'high': high, 'fresh': fresh,
+                                 'rotten': rotten, 'own': sources[0], 'extra': sources[1]}
+    return out
 
 
 def split_ratings(variables):
@@ -1212,16 +1270,17 @@ def split_ratings(variables):
     SiloDetailFactsTmdb from that score on; and when each mark shows (the
     value Kodi picks has that score)."""
     block = re.search(r'    <variable name="SiloDetailFacts">\n(.*?)    </variable>\n', variables, re.S)
-    parts = ([], [], [])
+    parts = ([], [], [], [])
     shown = {'imdb': [], 'tmdb': []}
     earlier = []
     for condition, value in re.findall(r'        <value(?: condition="([^"]*)")?>(.*)</value>\n', block.group(1)):
         attribute = ' condition="%s"' % condition if condition else ''
         imdb, tmdb = IMDB_MARK.search(value), TMDB_MARK.search(value)
-        pieces = ['', '', '']
+        pieces = ['', '', '', '']
         rest = value
         if tmdb:
-            pieces[2] = '$INFO[%s,  [B],[/B]]%s' % (tmdb.group(1), rest[tmdb.end():])
+            pieces[2] = '$INFO[%s,  [B],[/B]]' % tmdb.group(1)
+            pieces[3] = rest[tmdb.end():]
             rest = rest[:tmdb.start()]
         if imdb:
             pieces[1] = '$INFO[%s,  [B],[/B]]%s' % (imdb.group(1), rest[imdb.end():])
@@ -1237,10 +1296,11 @@ def split_ratings(variables):
         if condition:
             earlier.append(condition)
     replaced = ''.join('    <variable name="%s">\n%s    </variable>\n' % (name, ''.join(part)) for name, part in
-                       zip(('SiloDetailFacts', 'SiloDetailFactsImdb', 'SiloDetailFactsTmdb'), parts))
+                       zip(('SiloDetailFacts', 'SiloDetailFactsImdb', 'SiloDetailFactsTmdb', 'SiloDetailFactsAfter'),
+                           parts))
     variables = variables.replace(block.group(0), replaced)
     # Silo's facts separator: a dim dot in wide gaps (measured on its Apple TV app).
-    for name in ('SiloDetailFacts', 'SiloDetailFactsImdb', 'SiloDetailFactsTmdb', 'SiloDetailSeasons',
+    for name in ('SiloDetailFacts', 'SiloDetailFactsImdb', 'SiloDetailFactsTmdb', 'SiloDetailFactsAfter', 'SiloDetailSeasons',
                  'SiloDetailGenres', 'SiloDetailRating'):
         found = re.search(r'    <variable name="%s">\n.*?    </variable>\n' % name, variables, re.S).group(0)
         variables = variables.replace(found, found.replace(' · ', FACTS_DOT))

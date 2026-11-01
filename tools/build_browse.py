@@ -19,7 +19,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import wordmark, focus_sheen, focus_zoom, watched_disc, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM, GRID_BACKDROP  # noqa: E402
+from build_home import rt_list_marks, wordmark, focus_sheen, focus_zoom, watched_disc, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM, GRID_BACKDROP  # noqa: E402
 
 # An add-on's videos (content videos) get the poster grid too, and its views.
 GRID = ('Container.Content(movies) | Container.Content(tvshows) | Container.Content(sets) | Container.Content(seasons)'
@@ -366,7 +366,7 @@ def rating_marks(indent):
 %(i)s    <label> [B]$INFO[%(score)s][/B]   </label>
 %(i)s    <visible>!String.IsEmpty(%(score)s)</visible>
 %(i)s</control>''' % {'i': indent, 'top': top, 'w': width, 'h': height, 'mark': mark, 'score': score, 'dim': TEXT_DIM}
-    return out
+    return out + rt_list_marks('ListItem', indent, TEXT_DIM)
 
 
 def mpaa_badge(indent):

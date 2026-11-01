@@ -1019,14 +1019,14 @@ def quick_rows():
 # The quick guide's groups, as TiviMate's: Left from the channels slides in
 # Kodi's TV groups, the guide's own picked; as the list moves SiloKodiConnect
 # steps the guide along with it (its quick.py).
-GROUPS_ID, GROUP_W, GROUP_ROW = 15, 460, 76
+QUICK_GROUPS_ID, GROUP_W, GROUP_ROW = 15, 460, 76
 # Open while it has focus, and while SiloKodiConnect switches the guide's group
 # (Kodi focuses the channels as it rebuilds; without this the list closed and reopened).
-IN_GROUPS = '[Control.HasFocus(%d) | !String.IsEmpty(Window(Home).Property(silokodi.quick.switching))]' % GROUPS_ID
+IN_GROUPS = '[Control.HasFocus(%d) | !String.IsEmpty(Window(Home).Property(silokodi.quick.switching))]' % QUICK_GROUPS_ID
 
 
 def group_row(focused):
-    lit = 'Control.HasFocus(%d)' % GROUPS_ID
+    lit = 'Control.HasFocus(%d)' % QUICK_GROUPS_ID
     label = """
                     <control type="label">
                         <left>%d</left><top>0</top><width>%d</width><height>%d</height>
@@ -1298,7 +1298,7 @@ def build_quick_guide():
        'strip_h': 1080 - DAYS_TOP,
        'day': day_row(False), 'day_focused': day_row(True),
        'card': programme_card(focused, now_timeline, '![%s] + !%s' % (IN_SCHED, IN_GROUPS)),
-       'in_groups': IN_GROUPS, 'groups_id': GROUPS_ID, 'gw': GROUP_W, 'gh': GROUP_ROW * 13, 'grow': GROUP_ROW,
+       'in_groups': IN_GROUPS, 'groups_id': QUICK_GROUPS_ID, 'gw': GROUP_W, 'gh': GROUP_ROW * 13, 'grow': GROUP_ROW,
        'group': group_row(False), 'group_focused': group_row(True),
        'sched_card': programme_card(sched, sched_timeline,
                                     '[%s] + String.IsEmpty(%s.Property(silo.header))' % (IN_SCHED, sched))}

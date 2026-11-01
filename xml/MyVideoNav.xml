@@ -790,6 +790,24 @@
                     <label> [B]$INFO[ListItem.Art(silotmdb)][/B]   </label>
                     <visible>!String.IsEmpty(ListItem.Art(silotmdb))</visible>
                 </control>
+                <control type="image">
+                    <top>4</top><width>32</width><height>32</height>
+                    <texture>silo/rt_fresh.png</texture>
+                    <visible>!String.IsEmpty(ListItem.Art(silortcritic)) + Integer.IsGreaterOrEqual(ListItem.Art(silortcritic),60)</visible>
+                </control>
+                <control type="image">
+                    <top>4</top><width>32</width><height>32</height>
+                    <texture>silo/rt_rotten.png</texture>
+                    <visible>!String.IsEmpty(ListItem.Art(silortcritic)) + !Integer.IsGreaterOrEqual(ListItem.Art(silortcritic),60)</visible>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>BFEDEDED</textcolor>
+                    <label> [B]$INFO[ListItem.Art(silortcritic)]%[/B]   </label>
+                    <visible>!String.IsEmpty(ListItem.Art(silortcritic))</visible>
+                </control>
             </control>
             <control type="textbox">
                 <left>88</left><top>394</top><width>980</width><height>66</height>
@@ -941,6 +959,24 @@
                     <textcolor>BFEDEDED</textcolor>
                     <label> [B]$INFO[ListItem.Art(silotmdb)][/B]   </label>
                     <visible>!String.IsEmpty(ListItem.Art(silotmdb))</visible>
+                </control>
+                <control type="image">
+                    <top>4</top><width>32</width><height>32</height>
+                    <texture>silo/rt_fresh.png</texture>
+                    <visible>!String.IsEmpty(ListItem.Art(silortcritic)) + Integer.IsGreaterOrEqual(ListItem.Art(silortcritic),60)</visible>
+                </control>
+                <control type="image">
+                    <top>4</top><width>32</width><height>32</height>
+                    <texture>silo/rt_rotten.png</texture>
+                    <visible>!String.IsEmpty(ListItem.Art(silortcritic)) + !Integer.IsGreaterOrEqual(ListItem.Art(silortcritic),60)</visible>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>BFEDEDED</textcolor>
+                    <label> [B]$INFO[ListItem.Art(silortcritic)]%[/B]   </label>
+                    <visible>!String.IsEmpty(ListItem.Art(silortcritic))</visible>
                 </control>
             </control>
             <control type="label">

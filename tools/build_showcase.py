@@ -139,7 +139,7 @@ def badge(label, visible):
 
 
 def ratings(indent='\t\t\t\t\t'):
-    """The IMDb and TMDB marks with their scores, as the hero has them."""
+    """The IMDb, TMDB and Rotten Tomatoes marks with their scores, as the hero has them."""
     out = ''
     for rating, mark, width, height, top in (('imdb', 'silo/imdb.png', 60, 28, 4), ('tmdb', 'silo/tmdb.png', 165, 30, 3)):
         score = PLAYING % ('rating.' + rating)
@@ -159,6 +159,27 @@ def ratings(indent='\t\t\t\t\t'):
 %(i)s	<visible>%(shown)s</visible>
 %(i)s</control>''' % {'i': indent, 'top': top, 'w': width, 'h': height, 'mark': mark, 'shown': shown,
                        'score': score, 'text': TEXT}
+    # Rotten Tomatoes' critics': the Fresh tomato (60% and up) or the Rotten splat.
+    for rating, fresh, rotten in (('rtcritic', 'silo/rt_fresh.png', 'silo/rt_rotten.png'),):
+        score = PLAYING % ('rating.' + rating)
+        shown = '!String.IsEmpty(%s)' % score
+        for mark, condition in ((fresh, 'Integer.IsGreaterOrEqual(%s,60)' % score),
+                                (rotten, '!Integer.IsGreaterOrEqual(%s,60)' % score)):
+            out += '''
+%(i)s<control type="image">
+%(i)s	<top>2</top><width>32</width><height>32</height>
+%(i)s	<texture>%(mark)s</texture>
+%(i)s	<visible>%(shown)s + %(condition)s</visible>
+%(i)s</control>''' % {'i': indent, 'mark': mark, 'shown': shown, 'condition': condition}
+        out += '''
+%(i)s<control type="label">
+%(i)s	<width>auto</width><height>36</height>
+%(i)s	<aligny>center</aligny>
+%(i)s	<font>silo_meta</font>
+%(i)s	<textcolor>%(text)s</textcolor>
+%(i)s	<label> [B]$INFO[%(score)s]%%[/B]  </label>
+%(i)s	<visible>%(shown)s</visible>
+%(i)s</control>''' % {'i': indent, 'shown': shown, 'score': score, 'text': TEXT}
     return out
 
 

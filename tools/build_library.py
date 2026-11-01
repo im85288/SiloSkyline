@@ -22,7 +22,7 @@ import sys
 from urllib.parse import quote
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import focus_sheen, focus_zoom, watched_disc, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM, GRID_BACKDROP  # noqa: E402
+from build_home import rt_list_marks, focus_sheen, focus_zoom, watched_disc, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM, GRID_BACKDROP  # noqa: E402
 
 WINDOW_ID = 1191
 TYPE = 'Window(Home).Property(silo.browse.type)'
@@ -469,7 +469,7 @@ def marks(item, indent):
 %(i)s    <label> [B]$INFO[%(score)s][/B]   </label>
 %(i)s    <visible>!String.IsEmpty(%(score)s)</visible>
 %(i)s</control>""" % {'i': indent, 'top': top, 'w': width, 'h': height, 'mark': mark, 'score': score, 'dim': TEXT_DIM}
-    return out
+    return out + rt_list_marks(item, indent, TEXT_DIM)
 
 
 def title_art(item, left, top, width, height):

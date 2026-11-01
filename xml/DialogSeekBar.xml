@@ -672,6 +672,24 @@
 					<label> [B]$INFO[Window(Home).Property(silokodi.playing.rating.tmdb)][/B]  </label>
 					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.tmdb))</visible>
 				</control>
+				<control type="image">
+					<top>2</top><width>32</width><height>32</height>
+					<texture>silo/rt_fresh.png</texture>
+					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.rtcritic)) + Integer.IsGreaterOrEqual(Window(Home).Property(silokodi.playing.rating.rtcritic),60)</visible>
+				</control>
+				<control type="image">
+					<top>2</top><width>32</width><height>32</height>
+					<texture>silo/rt_rotten.png</texture>
+					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.rtcritic)) + !Integer.IsGreaterOrEqual(Window(Home).Property(silokodi.playing.rating.rtcritic),60)</visible>
+				</control>
+				<control type="label">
+					<width>auto</width><height>36</height>
+					<aligny>center</aligny>
+					<font>silo_meta</font>
+					<textcolor>FFEDEDED</textcolor>
+					<label> [B]$INFO[Window(Home).Property(silokodi.playing.rating.rtcritic)]%[/B]  </label>
+					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.rtcritic))</visible>
+				</control>
 			</control>
 			<control type="textbox">
 				<left>120</left><top>520</top><width>900</width><height>250</height>
@@ -884,6 +902,24 @@
 						<textcolor>FFEDEDED</textcolor>
 						<label> [B]$INFO[Window(Home).Property(silokodi.playing.rating.tmdb)][/B]  </label>
 						<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.tmdb))</visible>
+					</control>
+					<control type="image">
+						<top>2</top><width>32</width><height>32</height>
+						<texture>silo/rt_fresh.png</texture>
+						<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.rtcritic)) + Integer.IsGreaterOrEqual(Window(Home).Property(silokodi.playing.rating.rtcritic),60)</visible>
+					</control>
+					<control type="image">
+						<top>2</top><width>32</width><height>32</height>
+						<texture>silo/rt_rotten.png</texture>
+						<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.rtcritic)) + !Integer.IsGreaterOrEqual(Window(Home).Property(silokodi.playing.rating.rtcritic),60)</visible>
+					</control>
+					<control type="label">
+						<width>auto</width><height>36</height>
+						<aligny>center</aligny>
+						<font>silo_meta</font>
+						<textcolor>FFEDEDED</textcolor>
+						<label> [B]$INFO[Window(Home).Property(silokodi.playing.rating.rtcritic)]%[/B]  </label>
+						<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.rtcritic))</visible>
 					</control>
 				</control>
 				<control type="label">

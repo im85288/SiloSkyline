@@ -43,7 +43,7 @@ POSTER_ONLY = ('requests',)  # Silo's request rows are all posters
 PAGE_CARDS = {'home': HOME_CARDS}
 OTHER_CARDS = 12
 HOME_CARD_FIELDS = ('type', 'dbid', 'card.title', 'card.sub', 'card.wide_sub', 'hero.title', 'hero.meta',
-                    'hero.facts', 'rating.imdb', 'rating.tmdb',
+                    'hero.facts', 'rating.imdb', 'rating.tmdb', 'rating.rtcritic',
                     'hero.detail', 'plot', 'mpaa', 'badge1', 'badge2', 'badge3', 'tint', 'percent', 'playcount',
                     'new', 'left', 'dismiss', 'rank', 'place', 'art.poster', 'art.landscape', 'art.fanart', 'art.clearlogo', 'request.type', 'request.tmdb',
                     'status.tint', 'status.seg1', 'status.seg2', 'status.seg3', 'status.seg4',
@@ -1857,6 +1857,28 @@ def build():
                     <label>  [B]$VAR[SiloHeroTmdb][/B]</label>
                     <visible>$EXP[HasSiloHeroTmdb]</visible>
                 </control>
+                <!-- Rotten Tomatoes': the critics' Fresh tomato or Rotten splat. -->
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(meta)s</textcolor>
+                    <label>[COLOR 80EDEDED]·[/COLOR]</label>
+                    <visible>$EXP[HasSiloHeroRtCritic]</visible>
+                </control>
+                <control type="image">
+                    <top>4</top><width>32</width><height>32</height>
+                    <texture>$VAR[SiloHeroRtCriticMark]</texture>
+                    <visible>$EXP[HasSiloHeroRtCritic]</visible>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>%(meta)s</textcolor>
+                    <label> [B]$VAR[SiloHeroRtCritic]%%[/B]</label>
+                    <visible>$EXP[HasSiloHeroRtCritic]</visible>
+                </control>
             </control>
             <control type="textbox">
                 <top>424</top>
@@ -1952,7 +1974,7 @@ def build():
 # (condition, value) template; LI stands for that row's ListItem.
 # A Home card: an item SiloKodiConnect published as properties (rows.py).
 HOME_CARD = '!String.IsEmpty(LI.Property(home.type))'
-HERO_STATIC = {'SiloHeroArt': 'home.art.fanart', 'SiloLogoArt': 'home.art.clearlogo', 'SiloTitle': 'home.hero.title', 'SiloMetaLine': 'home.hero.meta', 'SiloHeroFacts': 'home.hero.facts', 'SiloHeroImdb': 'home.rating.imdb', 'SiloHeroTmdb': 'home.rating.tmdb', 'SiloPlot': 'home.plot', 'SiloDetail': 'home.hero.detail', 'SiloMpaa': 'home.mpaa', 'SiloHeroTint': 'home.tint', 'SiloBadge1': 'home.badge1', 'SiloBadge2': 'home.badge2', 'SiloBadge3': 'home.badge3'}
+HERO_STATIC = {'SiloHeroArt': 'home.art.fanart', 'SiloLogoArt': 'home.art.clearlogo', 'SiloTitle': 'home.hero.title', 'SiloMetaLine': 'home.hero.meta', 'SiloHeroFacts': 'home.hero.facts', 'SiloHeroImdb': 'home.rating.imdb', 'SiloHeroTmdb': 'home.rating.tmdb', 'SiloHeroRtCritic': 'home.rating.rtcritic', 'SiloPlot': 'home.plot', 'SiloDetail': 'home.hero.detail', 'SiloMpaa': 'home.mpaa', 'SiloHeroTint': 'home.tint', 'SiloBadge1': 'home.badge1', 'SiloBadge2': 'home.badge2', 'SiloBadge3': 'home.badge3'}
 
 HERO = [
     ('SiloHeroArt', [('!String.IsEmpty(LI.Art(fanart))', '$INFO[LI.Art(fanart)]'),
@@ -1982,6 +2004,9 @@ HERO = [
                       # Kodi's own lists: SiloKodiConnect's extra (they load only the default rating).
                       ('!String.IsEmpty(LI.Art(silotmdb))', '$INFO[LI.Art(silotmdb)]'),
                       (None, '$INFO[LI.Rating(themoviedb)]')]),
+    ('SiloHeroRtCritic', [('String.IsEqual(LI.DBType,episode)', ''),
+                          ('!String.IsEmpty(LI.Property(silo.rating.rtcritic))', '$INFO[LI.Property(silo.rating.rtcritic)]'),
+                          (None, '$INFO[LI.Art(silortcritic)]')]),
     ('SiloPlot', [(None, '$INFO[LI.Plot]')]),
     # "Aired Sep 25, 2026 · Tom Hardy, Helen Mirren, Pierce Brosnan"
     # A Requests card: its state (Requested, Downloading, Available...).
@@ -2107,6 +2132,65 @@ def hero_reason():
     return out + '    </variable>\n'
 
 
+# A title's scores kept as text art by SiloKodiConnect, for Kodi's own lists
+# (they load only a title's default rating).
+RATING_ART = {'themoviedb': 'silotmdb', 'rottentomatoes': 'silortcritic'}
+# Rotten Tomatoes' critics' mark: (variable, score, art extra, 60% and up, under).
+RT_MARKS = (('SiloHeroRtCriticMark', 'rating.rtcritic', 'silortcritic', 'silo/rt_fresh.png', 'silo/rt_rotten.png'),)
+
+
+def rt_list_marks(item, indent, colour):
+    """Rotten Tomatoes' critics' mark with its score for a title in a list (Browse,
+    Kodi's own lists), from SiloKodiConnect's art extras: Kodi's lists load
+    only a title's default rating."""
+    out = ''
+    for _, score, art, fresh, rotten in RT_MARKS:
+        value = '%s.Art(%s)' % (item, art)
+        for mark, condition in ((fresh, 'Integer.IsGreaterOrEqual(%s,60)' % value),
+                                (rotten, '!Integer.IsGreaterOrEqual(%s,60)' % value)):
+            out += """
+%(i)s<control type="image">
+%(i)s    <top>4</top><width>32</width><height>32</height>
+%(i)s    <texture>%(mark)s</texture>
+%(i)s    <visible>!String.IsEmpty(%(v)s) + %(c)s</visible>
+%(i)s</control>""" % {'i': indent, 'mark': mark, 'v': value, 'c': condition}
+        out += """
+%(i)s<control type="label">
+%(i)s    <width>auto</width><height>40</height>
+%(i)s    <aligny>center</aligny>
+%(i)s    <font>silo_meta</font>
+%(i)s    <textcolor>%(colour)s</textcolor>
+%(i)s    <label> [B]$INFO[%(v)s]%%[/B]   </label>
+%(i)s    <visible>!String.IsEmpty(%(v)s)</visible>
+%(i)s</control>""" % {'i': indent, 'v': value, 'colour': colour}
+    return out
+
+
+def rt_marks(rows):
+    """The hero's Rotten Tomatoes picture: the critics' Fresh tomato or Rotten
+    splat, by whether the remembered row's title scores 60% or more."""
+    out = ''
+    for name, score, art, fresh, rotten in RT_MARKS:
+        def values(condition, item):
+            found = ''
+            for source in ('Property(home.%s)' % score, 'Property(silo.%s)' % score, 'Art(%s)' % art):
+                value = '%s.%s' % (item, source)
+                found += '        <value condition="%s + Integer.IsGreaterOrEqual(%s,60)">%s</value>\n' % (condition, value, fresh)
+                found += '        <value condition="%s + !String.IsEmpty(%s)">%s</value>\n' % (condition, value, rotten)
+            return found
+        out += '    <variable name="%s">\n' % name
+        for row_id in rows:
+            out += values('String.IsEqual(%s,%d)' % (prop('silo.row'), row_id), 'Container(%d).ListItem' % row_id)
+        for row in (1, 2):
+            value = prop('silo.home.%d.1.%s' % (row, score))
+            out += '        <value condition="%s + Integer.IsGreaterOrEqual(%s,60)">%s</value>\n' % (home_waiting(row), value, fresh)
+            out += '        <value condition="%s + !String.IsEmpty(%s)">%s</value>\n' % (home_waiting(row), value, rotten)
+        for waiting, row_id in waiting_rows():
+            out += values(waiting, 'Container(%d).ListItem' % row_id)
+        out += '    </variable>\n'
+    return out
+
+
 def variables():
     rows = [list_id(index, slot, landscape) for index, page in enumerate(PAGES)
             for slot in range(1, rows_of(page) + 1) for landscape in styles(page)]
@@ -2143,18 +2227,21 @@ def variables():
     # Kodi's own rating for an item it lists itself; never an episode's.
     for name, item_property, home_property, kodi_rating in (
             ('SiloHeroImdb', 'silo.rating.imdb', 'home.rating.imdb', 'imdb'),
-            ('SiloHeroTmdb', 'silo.rating.tmdb', 'home.rating.tmdb', 'themoviedb')):
+            ('SiloHeroTmdb', 'silo.rating.tmdb', 'home.rating.tmdb', 'themoviedb'),
+            ('SiloHeroRtCritic', 'silo.rating.rtcritic', 'home.rating.rtcritic', 'rottentomatoes')):
         def has(item):
+            art = RATING_ART.get(kodi_rating)
             return ('[!String.IsEqual(%(i)s.DBType,episode) + [!String.IsEmpty(%(i)s.Property(%(p)s)) | '
                     '!String.IsEmpty(%(i)s.Property(%(h)s)) | !String.IsEmpty(%(i)s.Rating(%(k)s))%(x)s]]'
                     % {'i': item, 'p': item_property, 'h': home_property, 'k': kodi_rating,
-                       'x': ' | !String.IsEmpty(%s.Art(silotmdb))' % item if kodi_rating == 'themoviedb' else ''})
+                       'x': ' | !String.IsEmpty(%s.Art(%s))' % (item, art) if art else ''})
         terms = ['[String.IsEqual(%s,%d) + %s]' % (prop('silo.row'), row_id, has('Container(%d).ListItem' % row_id))
                  for row_id in rows]
         terms += ['[%s + %s]' % (waiting, has('Container(%d).ListItem' % row_id)) for waiting, row_id in waiting_rows()]
         terms += ['[%s + !String.IsEmpty(%s)]' % (home_waiting(row), prop('silo.home.%d.1.%s' % (row, home_property[5:])))
                   for row in (1, 2)]
         out += '    <expression name="Has%s">%s</expression>\n' % (name, ' | '.join(terms))
+    out += rt_marks(rows)
     out += EMPTY_HOME + hero_reason()
     for name, entries in HERO:
         # A Home card (SiloKodiConnect's published rows) carries its text ready.

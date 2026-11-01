@@ -224,6 +224,46 @@ def person_placeholder(size=172):
     write_png('person_placeholder.png', size, size, alpha, rgb=(0x2A, 0x2E, 0x35))
 
 
+def layered(layers):
+    """A colour picture from layers, top first: [(inside(x, y), (r, g, b))].
+    Each pixel takes the colours of the layers its samples land in."""
+    def alpha_at(x, y):
+        hits, totals = 0, [0, 0, 0]
+        for sy in range(SUB):
+            for sx in range(SUB):
+                px, py = x - 0.5 + (sx + 0.5) / SUB, y - 0.5 + (sy + 0.5) / SUB
+                for inside, colour in layers:
+                    if inside(px, py):
+                        hits += 1
+                        totals = [t + c for t, c in zip(totals, colour)]
+                        break
+        if not hits:
+            return 0.0, (255, 255, 255)
+        return hits / float(SUB * SUB), tuple(int(t / hits + 0.5) for t in totals)
+    return alpha_at
+
+
+def rotten_tomatoes_marks():
+    """Rotten Tomatoes' critics' marks, 64 px: the Fresh tomato (60% and up)
+    or the Rotten splat."""
+    import math
+    red, green, leaf = (0xFA, 0x32, 0x0A), (0x0A, 0xB4, 0x5A), (0x17, 0x8A, 0x2E)
+
+    def circle(cx, cy, r):
+        return lambda x, y: (x - cx) ** 2 + (y - cy) ** 2 <= r * r
+
+    def leaves(x, y):
+        # Five pointed leaves from the tomato's top.
+        dx, dy = x - 32, y - 16
+        r = math.hypot(dx, dy)
+        return r <= 12 and math.cos(5 * math.atan2(dy, dx)) > 0.35 + r / 30.0
+    write_png('rt_fresh.png', 64, 64, layered([(leaves, leaf), (circle(32, 37, 24), red)]))
+
+    blobs = [circle(32, 33, 18)] + [circle(32 + 20 * math.cos(a), 33 + 18 * math.sin(a), 7 + (i % 2) * 3)
+                                    for i, a in enumerate(i * 2 * math.pi / 7 + 0.3 for i in range(7))]
+    write_png('rt_rotten.png', 64, 64, layered([(lambda x, y: any(b(x, y) for b in blobs), green)]))
+
+
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
     hero_mask()
@@ -530,4 +570,5 @@ if __name__ == '__main__':
     write_png('splash_bg.png', 384, 216, splash_bg)
     person_placeholder()
     focus_ring('avatar_ring.png', 64, 64, 32, 3)
+    rotten_tomatoes_marks()
     print('Wrote', ', '.join(sorted(os.listdir(OUT))))

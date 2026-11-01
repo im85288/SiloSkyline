@@ -138,12 +138,53 @@
                     <textcolor>FFEDEDED</textcolor>
                     <label>$VAR[SiloDetailFactsTmdb]</label>
                 </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>  [COLOR 80EDEDED]·[/COLOR]  </label>
+                    <visible>![Control.HasFocus(60) | Control.HasFocus(61) | Control.HasFocus(64) | Control.HasFocus(65)] + [!String.IsEmpty(ListItem.Property(silo.rating.rtcritic)) | !String.IsEmpty(ListItem.Art(silortcritic))]</visible>
+                </control>
+                <control type="image">
+                    <top>4</top><width>32</width><height>32</height>
+                    <texture>silo/rt_fresh.png</texture>
+                    <visible>![Control.HasFocus(60) | Control.HasFocus(61) | Control.HasFocus(64) | Control.HasFocus(65)] + [!String.IsEmpty(ListItem.Property(silo.rating.rtcritic)) | !String.IsEmpty(ListItem.Art(silortcritic))] + [Integer.IsGreaterOrEqual(ListItem.Property(silo.rating.rtcritic),60) | Integer.IsGreaterOrEqual(ListItem.Art(silortcritic),60)]</visible>
+                </control>
+                <control type="image">
+                    <top>4</top><width>32</width><height>32</height>
+                    <texture>silo/rt_rotten.png</texture>
+                    <visible>![Control.HasFocus(60) | Control.HasFocus(61) | Control.HasFocus(64) | Control.HasFocus(65)] + [!String.IsEmpty(ListItem.Property(silo.rating.rtcritic)) | !String.IsEmpty(ListItem.Art(silortcritic))] + ![Integer.IsGreaterOrEqual(ListItem.Property(silo.rating.rtcritic),60) | Integer.IsGreaterOrEqual(ListItem.Art(silortcritic),60)]</visible>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label> [B]$INFO[ListItem.Property(silo.rating.rtcritic)]%[/B]</label>
+                    <visible>![Control.HasFocus(60) | Control.HasFocus(61) | Control.HasFocus(64) | Control.HasFocus(65)] + [!String.IsEmpty(ListItem.Property(silo.rating.rtcritic)) | !String.IsEmpty(ListItem.Art(silortcritic))] + !String.IsEmpty(ListItem.Property(silo.rating.rtcritic))</visible>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label> [B]$INFO[ListItem.Art(silortcritic)]%[/B]</label>
+                    <visible>![Control.HasFocus(60) | Control.HasFocus(61) | Control.HasFocus(64) | Control.HasFocus(65)] + [!String.IsEmpty(ListItem.Property(silo.rating.rtcritic)) | !String.IsEmpty(ListItem.Art(silortcritic))] + String.IsEmpty(ListItem.Property(silo.rating.rtcritic))</visible>
+                </control>
+                <control type="label">
+                    <width>auto</width><height>40</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>$VAR[SiloDetailFactsAfter]</label>
+                </control>
             </control>
             <control type="textbox">
                 <top>236</top>
                 <width>1080</width><height>106</height>
                 <font>silo_plot</font>
-                <textcolor>FFEDEDED</textcolor>
+                <textcolor>BFEDEDED</textcolor>
                 <label>$VAR[SiloDetailPlot]</label>
             </control>
             <control type="label">
