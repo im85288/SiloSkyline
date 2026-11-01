@@ -32,7 +32,9 @@ LIST = 'Window(Home).Property(silo.browse.list)'
 GRID_ID, AZ_ID = 50, 60
 # Each list has its own grid: Kodi reopens a grid on the title last selected
 # in it, so a shared one would open History on a title picked in Favorites.
-PERSONAL = {'watchlist': ('Watchlist', 51), 'favorites': ('Favorites', 52), 'history': ('History', 53)}
+PERSONAL = {'watchlist': ('Watchlist', 51), 'favorites': ('Favorites', 52), 'history': ('History', 53),
+            # Silo's calendar: each started show's next episode (SiloKodiConnect).
+            'comingsoon': ('Coming Soon', 54)}
 IS_PERSONAL = '!String.IsEmpty(%s)' % LIST
 COLS = 6
 GRID_X, GRID_TOP = SAFE_X - 6, 252
@@ -156,7 +158,7 @@ def card(focused, control_id=GRID_ID, size=None):
                     <left>6</left><top>%(yy)d</top><width>%(w)d</width><height>34</height>
                     <font>silo_detail</font>
                     <textcolor>%(dim)s</textcolor>
-                    <label>$INFO[ListItem.Year]</label>
+                    <label>$VAR[SiloBrowseCardSub]</label>
                 </control>
                 </control>''' % {'pw': POSTER_W, 'ph': POSTER_H, 'zoom': zoom, 'title': title,
                                  'sheen': focus_sheen(POSTER_W, POSTER_H, 'silo/card_poster_mask.png', 'silo/card_poster_rim.png',
@@ -767,11 +769,12 @@ def empty_note(key, list_id):
             <width>%(gw)d</width><height>60</height>
             <font>silo_plot</font>
             <textcolor>%(dim)s</textcolor>
-            <label>Nothing here yet. Add titles from Silo and they appear here.</label>
+            <label>%(note)s</label>
             <visible>%(personal)s + !Container(%(list)d).IsUpdating + Integer.IsEqual(Container(%(list)d).NumItems,0)</visible>
         </control>
 ''' % {'gx': SAFE_X, 'top': GRID_TOP + 20, 'gw': 1920 - 2 * SAFE_X, 'dim': TEXT_DIM, 'personal': is_list(key),
-       'list': list_id}
+       'list': list_id, 'note': 'No new episodes of your shows in the next two weeks.' if key == 'comingsoon'
+       else 'Nothing here yet. Add titles from Silo and they appear here.'}
 
 
 # Silo's collections, here rather than in Kodi's library window (where OK
@@ -1044,7 +1047,13 @@ VARIABLES = '''
 def filter_variables():
     """The Show pill's label, and each view's filter for its list path while
     Unwatched is on (Kodi's filter option; '&' when the path has a query)."""
-    out = '''    <variable name="SiloBrowseShowLabel">
+    out = '''    <!-- A grid card's line under its title: its own (Coming Soon's date and
+         episode, SiloKodiConnect's silo.caption), else its year. -->
+    <variable name="SiloBrowseCardSub">
+        <value condition="!String.IsEmpty(ListItem.Property(silo.caption))">$INFO[ListItem.Property(silo.caption)]</value>
+        <value>$INFO[ListItem.Year]</value>
+    </variable>
+    <variable name="SiloBrowseShowLabel">
         <value condition="%s">Unwatched</value>
         <value>All</value>
     </variable>

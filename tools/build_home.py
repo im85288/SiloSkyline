@@ -858,7 +858,7 @@ SECTIONS = {
                ('Genres', 'videodb://movies/genres/'),
                ('Collections', '$INFO[Window(Home).Property(silo.movies.collections)]')],
     'series': [('Recommended', None), ('Browse', 'videodb://tvshows/titles/'), ('Recently Added', None),
-               ('Genres', 'videodb://tvshows/genres/'),
+               ('Genres', 'videodb://tvshows/genres/'), ('Coming Soon', None),
                ('Collections', '$INFO[Window(Home).Property(silo.series.collections)]')],
     # Silo's Requests: Discover (the page's rows) and Yours (the profile's
     # requests, with their count). Search finds a title not yet in the library.
@@ -1072,6 +1072,16 @@ def section_actions(page, label, path):
                  'ClearProperty(silo.browse.letter,home)'] + browse_clear()
                 + ['SetProperty(silo.browse.genrekind,%s,home)' % kind, 'SetProperty(silo.browse.list,%s,home)' % path,
                    'SetProperty(silo.browse.list.genres,%s,home)' % path, 'ActivateWindow(1191)'])
+    if label == 'Coming Soon':
+        # Silo's calendar, as Apple TV's Upcoming: each show you've started
+        # with its next episode's date, in Skyline's Browse window.
+        path = '%s?mode=widget&amp;section=comingsoon' % PLUGIN_URL
+        return (['SetProperty(silo.browse.type,comingsoon,home)', 'ClearProperty(silo.browse.from,home)',
+                 'ClearProperty(silo.browse.letter,home)', 'SetProperty(silo.browse.list,%s,home)' % path,
+                 'SetProperty(silo.browse.list.comingsoon,%s,home)' % path]
+                + ['ClearProperty(silo.browse.list.%s,home)' % other for other in PERSONAL_KEYS + COLLECTION_KEYS
+                   if other != 'comingsoon']
+                + ['ActivateWindow(1191)'])
     if label == YOURS:
         return ['SetProperty(silo.requests.view,yours,home)', 'ClearProperty(silo.row,home)']
     if page == 'requests':  # Discover
@@ -1329,7 +1339,7 @@ PLUGIN_URL = 'plugin://plugin.video.silokodiconnect/'
 # The avatar card's lists. Each has its own grid in Browse with its own path
 # (silo.browse.list.<key>); only the open one's is set, since Kodi loads a
 # grid's path even while the grid is hidden.
-PERSONAL_KEYS = ('watchlist', 'favorites', 'history')
+PERSONAL_KEYS = ('watchlist', 'favorites', 'history', 'comingsoon')
 
 
 def avatar_menu():

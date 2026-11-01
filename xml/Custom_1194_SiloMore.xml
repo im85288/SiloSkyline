@@ -13,6 +13,7 @@
         <animation effect="slide" end="80,0" time="0" condition="String.IsEqual(Window(Home).Property(silo.more.b11),1)">Conditional</animation>
         <animation effect="slide" end="80,0" time="0" condition="String.IsEqual(Window(Home).Property(silo.more.b351),1)">Conditional</animation>
         <animation effect="slide" end="80,0" time="0" condition="String.IsEqual(Window(Home).Property(silo.more.b352),1)">Conditional</animation>
+        <animation effect="slide" end="80,0" time="0" condition="String.IsEqual(Window(Home).Property(silo.more.b353),1)">Conditional</animation>
         <animation effect="slide" end="80,0" time="0" condition="String.IsEqual(Window(Home).Property(silo.more.b14),1)">Conditional</animation>
         <control type="image">
             <width>560</width><height>140</height>

@@ -44,7 +44,7 @@ def badge(label, condition, font='silo_badge', height=36):
 # The round buttons in the row's order, with their names: the focused one
 # opens into a white pill with its name, as in Silo's Apple TV app.
 ROUND_BUTTONS = [(304, 'Start over'), (302, 'Previous'), (11, 'Trailer'), (351, 'Trailer'), (352, 'Watchlist'),
-                 (14, 'Versions'), (303, 'More')]
+                 (353, 'Rate'), (14, 'Versions'), (303, 'More')]
 
 
 MORE_WINDOW, MORE_LIST = 1194, 3810
@@ -460,7 +460,7 @@ def build():
                         <texture colordiffuse="%(text)s">osd/fullscreen/buttons/play.png</texture>
                         <visible>!Control.HasFocus(308)</visible>
                     </control>
-                </control>%(start_over)s%(previous)s%(trailer)s%(silo_trailer)s%(watchlist)s%(versions)s%(more)s
+                </control>%(start_over)s%(previous)s%(trailer)s%(silo_trailer)s%(watchlist)s%(rate)s%(versions)s%(more)s
             </control>
         </control>
 
@@ -727,6 +727,12 @@ def build():
            '?mode=watchlist&amp;id=$INFO[ListItem.Property(silo.content_id)]&amp;add=0)</onclick>\n'
            '                    <onclick condition="!$EXP[SiloOnWatchlist]">RunPlugin(plugin://plugin.video.silokodiconnect/'
            '?mode=watchlist&amp;id=$INFO[ListItem.Property(silo.content_id)]&amp;add=1)'),
+       # Silo's rating, for a film or series (SiloKodiConnect's silo.myrating,
+       # '0' not rated): a filled star once rated; OK chooses the stars.
+       'rate': round_button(
+           353, '$VAR[SiloRateIcon]', '!String.IsEmpty(ListItem.Property(silo.myrating))',
+           'RunPlugin(plugin://plugin.video.silokodiconnect/?mode=rate'
+           '&amp;id=$INFO[ListItem.Property(silo.content_id)]&amp;current=$VAR[SiloMyRating])'),
        'versions': round_button(14, 'icons/infodialogs/versions.png',
                                 'String.IsEqual(ListItem.DBType,movie) + Integer.IsGreater(ListItem.VideoVersionsCount,1)'),
        'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'person': person(False), 'person_focused': person(True),
@@ -1081,6 +1087,16 @@ VARIABLES = '''
         <value condition="$EXP[SiloOnWatchlist]">silo/menu_watchlist.png</value>
         <value>silo/menu_watchlist_add.png</value>
     </variable>
+    <!-- The profile's stars for the title: as just rated on this page
+         (Window(movieinformation) silo.myrating.for/.now), else as it opened. -->
+    <variable name="SiloMyRating">
+        <value condition="String.IsEqual(Window(movieinformation).Property(silo.myrating.for),ListItem.Property(silo.content_id))">$INFO[Window(movieinformation).Property(silo.myrating.now)]</value>
+        <value>$INFO[ListItem.Property(silo.myrating)]</value>
+    </variable>
+    <variable name="SiloRateIcon">
+        <value condition="[String.IsEqual(Window(movieinformation).Property(silo.myrating.for),ListItem.Property(silo.content_id)) + Integer.IsGreater(Window(movieinformation).Property(silo.myrating.now),0)] | [!String.IsEqual(Window(movieinformation).Property(silo.myrating.for),ListItem.Property(silo.content_id)) + Integer.IsGreater(ListItem.Property(silo.myrating),0)]">silo/menu_rated.png</value>
+        <value>silo/menu_rate.png</value>
+    </variable>
     <variable name="SiloDetailHdr">
         <value condition="String.IsEqual(ListItem.HdrType,dolbyvision)">DOLBY VISION</value>
         <value condition="String.IsEqual(ListItem.HdrType,hdr10plus)">HDR10+</value>
@@ -1312,7 +1328,7 @@ def add_timers():
 # (round buttons and Play sit in groups, which Kodi's grouplist can't move
 # between, so each button names its neighbours).
 ACTIONS = [(300, 300), (301, 301), (308, 1008), (304, 1304), (302, 1302), (11, 1011), (351, 1351), (352, 1352),
-           (14, 1014), (303, 1303)]
+           (353, 1353), (14, 1014), (303, 1303)]
 
 
 def with_action_moves(xml):

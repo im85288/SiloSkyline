@@ -5684,6 +5684,7 @@
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.watchlist,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.comingsoon,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -5696,6 +5697,7 @@
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.watchlist,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.comingsoon,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -5854,6 +5856,7 @@
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.watchlist,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.comingsoon,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -5866,6 +5869,7 @@
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.watchlist,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.comingsoon,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -6062,6 +6066,7 @@
                     <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -6087,6 +6092,7 @@
                     <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -6110,6 +6116,7 @@
                     <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -6134,6 +6141,7 @@
                     <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -6190,6 +6198,7 @@
                     <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -6215,6 +6224,7 @@
                     <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -6238,6 +6248,7 @@
                     <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -6248,6 +6259,29 @@
                     <onclick>ActivateWindow(1191)</onclick>
                 </control>
                 <control type="button" id="46024">
+                    <width>auto</width><height>48</height>
+                    <label>Coming Soon</label>
+                    <font>silo_meta</font>
+                    <textoffsetx>22</textoffsetx>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>B3EDEDED</textcolor>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="24" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                    <texturenofocus border="24" colordiffuse="12FFFFFF">silo/pill.png</texturenofocus>
+                    <onclick>SetProperty(silo.browse.type,comingsoon,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.from,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.letter,home)</onclick>
+                    <onclick>SetProperty(silo.browse.list,plugin://plugin.video.silokodiconnect/?mode=widget&amp;section=comingsoon,home)</onclick>
+                    <onclick>SetProperty(silo.browse.list.comingsoon,plugin://plugin.video.silokodiconnect/?mode=widget&amp;section=comingsoon,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
+                    <onclick>ActivateWindow(1191)</onclick>
+                </control>
+                <control type="button" id="46025">
                     <width>auto</width><height>48</height>
                     <label>Collections</label>
                     <font>silo_meta</font>
@@ -6262,6 +6296,7 @@
                     <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -7718,6 +7753,7 @@
                         <onclick>SetProperty(silo.browse.list.watchlist,plugin://plugin.video.silokodiconnect/?mode=widget&amp;section=watchlist,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -7732,6 +7768,7 @@
                         <onclick>SetProperty(silo.browse.list.favorites,plugin://plugin.video.silokodiconnect/?mode=widget&amp;section=favorites,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -7746,6 +7783,7 @@
                         <onclick>SetProperty(silo.browse.list.history,plugin://plugin.video.silokodiconnect/?mode=widget&amp;section=history,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>

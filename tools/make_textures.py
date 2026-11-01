@@ -496,8 +496,23 @@ if __name__ == '__main__':
     def list_rows(x, y):
         rows = (12, 24, 36)
         return any((x - 9) ** 2 + (y - r) ** 2 <= 3.4 ** 2 or (16 <= x <= 40 and abs(y - r) <= 2.4) for r in rows)
+    # Silo's ratings on a title's page: a five-point star, filled once rated.
+    star_points = [(24 + (20 if i % 2 == 0 else 8.2) * math.sin(i * math.pi / 5),
+                    25.5 - (20 if i % 2 == 0 else 8.2) * math.cos(i * math.pi / 5)) for i in range(10)]
+    def in_polygon(x, y, points):
+        inside = False
+        for (ax, ay), (bx, by) in zip(points, points[1:] + points[:1]):
+            if (ay > y) != (by > y) and x < ax + (y - ay) * (bx - ax) / (by - ay):
+                inside = not inside
+        return inside
+    def star(x, y):
+        return in_polygon(x, y, star_points)
+    def star_outline(x, y):
+        """Not rated: the star's outline, about 3.5 px."""
+        inner = [(24 + (x0 - 24) * 0.66, 25.5 + (y0 - 25.5) * 0.66) for x0, y0 in star_points]
+        return star(x, y) and not in_polygon(x, y, inner)
     for name, inside in (('default', list_rows), ('search', magnifier), ('profile', person), ('watchlist', bookmark), ('watchlist_add', bookmark_outline), ('favorites', heart),
-                         ('history', clock), ('settings', gear), ('signout', sign_out)):
+                         ('history', clock), ('settings', gear), ('signout', sign_out), ('rated', star), ('rate', star_outline)):
         write_png('menu_%s.png' % name, 48, 48, shape(inside))
 
     # The splash: a near-black with soft glows of the mark's dusk colours

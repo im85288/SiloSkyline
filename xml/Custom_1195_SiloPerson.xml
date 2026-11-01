@@ -229,7 +229,7 @@
                     <left>6</left><top>427</top><width>246</width><height>34</height>
                     <font>silo_detail</font>
                     <textcolor>4AEDEDED</textcolor>
-                    <label>$INFO[ListItem.Year]</label>
+                    <label>$VAR[SiloBrowseCardSub]</label>
                 </control>
                 </control>
                 </itemlayout>
@@ -278,7 +278,7 @@
                     <left>6</left><top>427</top><width>246</width><height>34</height>
                     <font>silo_detail</font>
                     <textcolor>FFEDEDED</textcolor>
-                    <label>$INFO[ListItem.Year]</label>
+                    <label>$VAR[SiloBrowseCardSub]</label>
                 </control>
                 </control>
                 </focusedlayout>
