@@ -583,6 +583,13 @@ def skin_settings(text):
 \t\t\t\t\t<onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=top10)</onclick>
 \t\t\t\t\t<visible>System.HasAddon(plugin.video.silokodiconnect)</visible>
 \t\t\t\t</control>
+\t\t\t\t<control type="radiobutton" id="795">
+\t\t\t\t\t<label>Theme music on show pages</label>
+\t\t\t\t\t<include>DefaultSettingButton</include>
+\t\t\t\t\t<selected>!Skin.HasSetting(SkylineNoThemeMusic)</selected>
+\t\t\t\t\t<onclick>Skin.ToggleSetting(SkylineNoThemeMusic)</onclick>
+\t\t\t\t\t<visible>System.HasAddon(plugin.video.silokodiconnect)</visible>
+\t\t\t\t</control>
 \t\t\t\t<control type="radiobutton" id="791">
 \t\t\t\t\t<label>Artwork background</label>
 \t\t\t\t\t<include>DefaultSettingButton</include>

@@ -54,6 +54,13 @@
 					<onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=top10)</onclick>
 					<visible>System.HasAddon(plugin.video.silokodiconnect)</visible>
 				</control>
+				<control type="radiobutton" id="795">
+					<label>Theme music on show pages</label>
+					<include>DefaultSettingButton</include>
+					<selected>!Skin.HasSetting(SkylineNoThemeMusic)</selected>
+					<onclick>Skin.ToggleSetting(SkylineNoThemeMusic)</onclick>
+					<visible>System.HasAddon(plugin.video.silokodiconnect)</visible>
+				</control>
 				<control type="radiobutton" id="791">
 					<label>Artwork background</label>
 					<include>DefaultSettingButton</include>

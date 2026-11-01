@@ -494,6 +494,10 @@ def build():
                     <left>%(lx)d</left><top>0</top>
                     <width>%(lw)d</width><height>56</height>
                     <orientation>horizontal</orientation>
+                    <!-- The page is reused: until this show's seasons are in, the last
+                         show's stay in the list. Faded, not hidden (Kodi never loads a
+                         hidden list whose path changed). -->
+                    <animation effect="fade" start="100" end="0" time="0" condition="!String.IsEqual(Container(60).ListItem.TVShowTitle,ListItem.Title)">Conditional</animation>
                     <onup>5000</onup>
                     <ondown>61</ondown>
                     <scrolltime tween="cubic" easing="out">200</scrolltime>
@@ -507,6 +511,7 @@ def build():
                     <left>%(lx)d</left><top>76</top>
                     <width>%(lw)d</width><height>%(episode_h)d</height>
                     <orientation>horizontal</orientation>
+                    <animation effect="fade" start="100" end="0" time="0" condition="!String.IsEqual(Container(61).ListItem.TVShowTitle,ListItem.Title)">Conditional</animation>
                     <onup>60</onup>
                     <ondown condition="Integer.IsGreater(Container(70).NumItems,0)">70</ondown>
                     <ondown condition="!Integer.IsGreater(Container(70).NumItems,0) + %(has_videos)s">71</ondown>
