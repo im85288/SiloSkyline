@@ -47,7 +47,7 @@
                 <left>576</left><top>0</top><width>1344</width><height>756</height>
                 <aspectratio>scale</aspectratio>
                 <fadetime>240</fadetime>
-                <texture background="true" colordiffuse="80FFFFFF" diffuse="silo/hero_mask.png">$INFO[Container(57).ListItem.Art(fanart)]</texture>
+                <texture background="true" colordiffuse="80FFFFFF" diffuse="silo/hero_mask.png">$VAR[SiloBrowseHeroFanart]</texture>
             </control>
             <!-- The header, Sort and View stay readable over a bright picture. -->
             <control type="image">
@@ -69,20 +69,22 @@
             <onup>70</onup>
             <scrolltime tween="cubic" easing="out">280</scrolltime>
             <!-- Details, not Kodi's play or open (SiloKodiConnect's info page, else Kodi's). -->
-            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+            <!-- A box set's card opens the box set (SiloKodiConnect's page for Kodi's movie set). -->
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + [Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=set&amp;dbid=$INFO[ListItem.SetId])</onclick>
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + ![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
             <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
             <itemlayout width="270" height="485">
                 <control type="group">
                 <control type="image">
                     <left>6</left><top>6</top><width>246</width><height>369</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
                 </control>
                 <!-- The rating is in Silo's poster art itself (top left). -->
                 <!-- Watched: Silo's frosted disc with a white tick, top right. -->
                 <control type="group">
                     <left>202</left><top>16</top>
-                    <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
+                    <visible>![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]</visible>
                     <control type="image">
                         <width>40</width><height>40</height>
                         <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
@@ -92,11 +94,37 @@
                         <texture colordiffuse="FF000000">OverlayWatched.png</texture>
                     </control>
                 </control>
+                <control type="group">
+                    <left>6</left><top>6</top>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <control type="image">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>BOX SET</label>
+                    </control>
+                    <control type="image">
+                        <left>0</left><top>279</top><width>246</width><height>90</height>
+                        <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>0</left><top>317</top><width>228</width><height>40</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                    </control>
+                </control>
                 <control type="label">
                     <left>6</left><top>387</top><width>246</width><height>44</height>
                     <font>silo_card_title</font>
                     <textcolor>66EDEDED</textcolor>
-                    <label>$INFO[ListItem.Label]</label>
+                    <label>$VAR[SiloBrowseCardTitle]</label>
                 </control>
                 <control type="label">
                     <left>6</left><top>427</top><width>246</width><height>34</height>
@@ -112,7 +140,7 @@
                 <control type="image">
                     <left>6</left><top>6</top><width>246</width><height>369</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
                 </control>
                 <!-- The rating is in Silo's poster art itself (top left). -->
                 <!-- Watched: Silo's frosted disc with a white tick, top right. -->
@@ -130,7 +158,7 @@
                 </control>
                 <control type="group">
                     <left>202</left><top>16</top>
-                    <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
+                    <visible>![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]</visible>
                     <control type="image">
                         <width>40</width><height>40</height>
                         <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
@@ -140,11 +168,37 @@
                         <texture colordiffuse="FF000000">OverlayWatched.png</texture>
                     </control>
                 </control>
+                <control type="group">
+                    <left>6</left><top>6</top>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <control type="image">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>BOX SET</label>
+                    </control>
+                    <control type="image">
+                        <left>0</left><top>279</top><width>246</width><height>90</height>
+                        <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>0</left><top>317</top><width>228</width><height>40</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                    </control>
+                </control>
                 <control type="label">
                     <left>6</left><top>387</top><width>246</width><height>44</height>
                     <font>silo_card_title</font>
                     <textcolor>FFEDEDED</textcolor>
-                    <label>$INFO[ListItem.Label]</label>
+                    <label>$VAR[SiloBrowseCardTitle]</label>
                     <scroll>true</scroll>
                 </control>
                 <control type="label">
@@ -167,14 +221,16 @@
             <onup>70</onup>
             <scrolltime tween="cubic" easing="out">280</scrolltime>
             <!-- Details, not Kodi's play or open (SiloKodiConnect's info page, else Kodi's). -->
-            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+            <!-- A box set's card opens the box set (SiloKodiConnect's page for Kodi's movie set). -->
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + [Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=set&amp;dbid=$INFO[ListItem.SetId])</onclick>
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + ![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
             <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
             <itemlayout width="203" height="288">
                 <control type="group">
                 <control type="image">
                     <left>6</left><top>6</top><width>179</width><height>268</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
                 </control>
                 <control type="group">
                     <left>135</left><top>16</top>
@@ -188,6 +244,32 @@
                         <texture colordiffuse="FF000000">OverlayWatched.png</texture>
                     </control>
                 </control>
+                <control type="group">
+                    <left>6</left><top>6</top>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <control type="image">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>BOX SET</label>
+                    </control>
+                    <control type="image">
+                        <left>0</left><top>178</top><width>179</width><height>90</height>
+                        <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>0</left><top>216</top><width>161</width><height>40</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                    </control>
+                </control>
                 </control>
             </itemlayout>
             <focusedlayout width="203" height="288">
@@ -196,7 +278,7 @@
                 <control type="image">
                     <left>6</left><top>6</top><width>179</width><height>268</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
                 </control>
                 <control type="group">
                     <left>6</left><top>6</top>
@@ -220,6 +302,32 @@
                     <control type="image">
                         <left>9</left><top>9</top><width>22</width><height>22</height>
                         <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>6</left><top>6</top>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <control type="image">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>BOX SET</label>
+                    </control>
+                    <control type="image">
+                        <left>0</left><top>178</top><width>179</width><height>90</height>
+                        <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>0</left><top>216</top><width>161</width><height>40</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
                     </control>
                 </control>
                 </control>
@@ -318,6 +426,7 @@
                 <left>88</left><top>236</top><width>760</width><height>130</height>
                 <aspectratio align="left" aligny="bottom">keep</aspectratio>
                 <texture background="true">$INFO[Container(57).ListItem.Art(clearlogo)]</texture>
+                <visible>![Integer.IsGreater(Container(57).ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
             </control>
             <control type="label">
                 <left>88</left><top>236</top><width>760</width><height>130</height>
@@ -325,9 +434,35 @@
                 <font>silo_osd_title</font>
                 <textcolor>FFEDEDED</textcolor>
                 <label>$INFO[Container(57).ListItem.Label]</label>
-                <visible>String.IsEmpty(Container(57).ListItem.Art(clearlogo))</visible>
+                <visible>String.IsEmpty(Container(57).ListItem.Art(clearlogo)) + ![Integer.IsGreater(Container(57).ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+            </control>
+            <!-- A box set: its name, "Box set · 8 films · 2001 – 2011" and overview
+                 (SiloKodiConnect's set art), as Silo's box set page. -->
+            <control type="label">
+                <left>88</left><top>236</top><width>1200</width><height>130</height>
+                <aligny>bottom</aligny>
+                <font>silo_osd_title</font>
+                <textcolor>FFEDEDED</textcolor>
+                <label>$INFO[Container(57).ListItem.Set]</label>
+                <visible>[Integer.IsGreater(Container(57).ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+            </control>
+            <control type="label">
+                <left>88</left><top>378</top><width>1100</width><height>40</height>
+                <aligny>center</aligny>
+                <font>silo_meta</font>
+                <textcolor>BFEDEDED</textcolor>
+                <label>Box set$INFO[Container(57).ListItem.Art(set.silocount),  ·  ,]$INFO[Container(57).ListItem.Art(set.siloyears),  ·  ,]</label>
+                <visible>[Integer.IsGreater(Container(57).ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+            </control>
+            <control type="textbox">
+                <left>88</left><top>424</top><width>960</width><height>62</height>
+                <font>silo_detail</font>
+                <textcolor>FFEDEDED</textcolor>
+                <label>$INFO[Container(57).ListItem.Art(set.silooverview)]</label>
+                <visible>[Integer.IsGreater(Container(57).ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
             </control>
             <control type="grouplist">
+                <visible>![Integer.IsGreater(Container(57).ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
                 <left>88</left><top>378</top><width>1100</width><height>40</height>
                 <orientation>horizontal</orientation>
                 <usecontrolcoords>true</usecontrolcoords>
@@ -388,6 +523,7 @@
                 <font>silo_detail</font>
                 <textcolor>FFEDEDED</textcolor>
                 <label>$INFO[Container(57).ListItem.Plot]</label>
+                <visible>![Integer.IsGreater(Container(57).ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
             </control>
         </control>
         <!-- The list view's details: the focused title's poster and facts. -->
@@ -408,6 +544,7 @@
                 <left>1230</left><top>252</top><width>482</width><height>140</height>
                 <aspectratio align="left" aligny="bottom">keep</aspectratio>
                 <texture background="true">$INFO[Container(58).ListItem.Art(clearlogo)]</texture>
+                <visible>!false</visible>
             </control>
             <control type="label">
                 <left>1230</left><top>252</top><width>482</width><height>140</height>
@@ -415,7 +552,7 @@
                 <font>silo_osd_title</font>
                 <textcolor>FFEDEDED</textcolor>
                 <label>$INFO[Container(58).ListItem.Label]</label>
-                <visible>String.IsEmpty(Container(58).ListItem.Art(clearlogo))</visible>
+                <visible>String.IsEmpty(Container(58).ListItem.Art(clearlogo)) + !false</visible>
             </control>
             <control type="label">
                 <left>1230</left><top>408</top><width>482</width><height>40</height>
@@ -497,7 +634,9 @@
             <visible>!!String.IsEmpty(Window(Home).Property(silo.browse.list)) + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]]</visible>
             <onup>70</onup><onright>60</onright><onleft>noop</onleft>
             <scrolltime tween="cubic" easing="out">200</scrolltime>
-            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+            <!-- A box set's card opens the box set (SiloKodiConnect's page for Kodi's movie set). -->
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + [Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=set&amp;dbid=$INFO[ListItem.SetId])</onclick>
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + ![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
             <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
             <itemlayout width="780" height="66">
                 <control type="label">
@@ -566,20 +705,22 @@
             <onup>noop</onup>
             <scrolltime tween="cubic" easing="out">280</scrolltime>
             <!-- Details, not Kodi's play or open (SiloKodiConnect's info page, else Kodi's). -->
-            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+            <!-- A box set's card opens the box set (SiloKodiConnect's page for Kodi's movie set). -->
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + [Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=set&amp;dbid=$INFO[ListItem.SetId])</onclick>
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + ![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
             <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
             <itemlayout width="270" height="485">
                 <control type="group">
                 <control type="image">
                     <left>6</left><top>6</top><width>246</width><height>369</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
                 </control>
                 <!-- The rating is in Silo's poster art itself (top left). -->
                 <!-- Watched: Silo's frosted disc with a white tick, top right. -->
                 <control type="group">
                     <left>202</left><top>16</top>
-                    <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
+                    <visible>![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]</visible>
                     <control type="image">
                         <width>40</width><height>40</height>
                         <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
@@ -589,11 +730,37 @@
                         <texture colordiffuse="FF000000">OverlayWatched.png</texture>
                     </control>
                 </control>
+                <control type="group">
+                    <left>6</left><top>6</top>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <control type="image">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>BOX SET</label>
+                    </control>
+                    <control type="image">
+                        <left>0</left><top>279</top><width>246</width><height>90</height>
+                        <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>0</left><top>317</top><width>228</width><height>40</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                    </control>
+                </control>
                 <control type="label">
                     <left>6</left><top>387</top><width>246</width><height>44</height>
                     <font>silo_card_title</font>
                     <textcolor>66EDEDED</textcolor>
-                    <label>$INFO[ListItem.Label]</label>
+                    <label>$VAR[SiloBrowseCardTitle]</label>
                 </control>
                 <control type="label">
                     <left>6</left><top>427</top><width>246</width><height>34</height>
@@ -609,7 +776,7 @@
                 <control type="image">
                     <left>6</left><top>6</top><width>246</width><height>369</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
                 </control>
                 <!-- The rating is in Silo's poster art itself (top left). -->
                 <!-- Watched: Silo's frosted disc with a white tick, top right. -->
@@ -627,7 +794,7 @@
                 </control>
                 <control type="group">
                     <left>202</left><top>16</top>
-                    <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
+                    <visible>![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]</visible>
                     <control type="image">
                         <width>40</width><height>40</height>
                         <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
@@ -637,11 +804,37 @@
                         <texture colordiffuse="FF000000">OverlayWatched.png</texture>
                     </control>
                 </control>
+                <control type="group">
+                    <left>6</left><top>6</top>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <control type="image">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>BOX SET</label>
+                    </control>
+                    <control type="image">
+                        <left>0</left><top>279</top><width>246</width><height>90</height>
+                        <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>0</left><top>317</top><width>228</width><height>40</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                    </control>
+                </control>
                 <control type="label">
                     <left>6</left><top>387</top><width>246</width><height>44</height>
                     <font>silo_card_title</font>
                     <textcolor>FFEDEDED</textcolor>
-                    <label>$INFO[ListItem.Label]</label>
+                    <label>$VAR[SiloBrowseCardTitle]</label>
                     <scroll>true</scroll>
                 </control>
                 <control type="label">
@@ -672,20 +865,22 @@
             <onup>noop</onup>
             <scrolltime tween="cubic" easing="out">280</scrolltime>
             <!-- Details, not Kodi's play or open (SiloKodiConnect's info page, else Kodi's). -->
-            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+            <!-- A box set's card opens the box set (SiloKodiConnect's page for Kodi's movie set). -->
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + [Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=set&amp;dbid=$INFO[ListItem.SetId])</onclick>
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + ![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
             <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
             <itemlayout width="270" height="485">
                 <control type="group">
                 <control type="image">
                     <left>6</left><top>6</top><width>246</width><height>369</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
                 </control>
                 <!-- The rating is in Silo's poster art itself (top left). -->
                 <!-- Watched: Silo's frosted disc with a white tick, top right. -->
                 <control type="group">
                     <left>202</left><top>16</top>
-                    <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
+                    <visible>![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]</visible>
                     <control type="image">
                         <width>40</width><height>40</height>
                         <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
@@ -695,11 +890,37 @@
                         <texture colordiffuse="FF000000">OverlayWatched.png</texture>
                     </control>
                 </control>
+                <control type="group">
+                    <left>6</left><top>6</top>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <control type="image">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>BOX SET</label>
+                    </control>
+                    <control type="image">
+                        <left>0</left><top>279</top><width>246</width><height>90</height>
+                        <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>0</left><top>317</top><width>228</width><height>40</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                    </control>
+                </control>
                 <control type="label">
                     <left>6</left><top>387</top><width>246</width><height>44</height>
                     <font>silo_card_title</font>
                     <textcolor>66EDEDED</textcolor>
-                    <label>$INFO[ListItem.Label]</label>
+                    <label>$VAR[SiloBrowseCardTitle]</label>
                 </control>
                 <control type="label">
                     <left>6</left><top>427</top><width>246</width><height>34</height>
@@ -715,7 +936,7 @@
                 <control type="image">
                     <left>6</left><top>6</top><width>246</width><height>369</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
                 </control>
                 <!-- The rating is in Silo's poster art itself (top left). -->
                 <!-- Watched: Silo's frosted disc with a white tick, top right. -->
@@ -733,7 +954,7 @@
                 </control>
                 <control type="group">
                     <left>202</left><top>16</top>
-                    <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
+                    <visible>![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]</visible>
                     <control type="image">
                         <width>40</width><height>40</height>
                         <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
@@ -743,11 +964,37 @@
                         <texture colordiffuse="FF000000">OverlayWatched.png</texture>
                     </control>
                 </control>
+                <control type="group">
+                    <left>6</left><top>6</top>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <control type="image">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>BOX SET</label>
+                    </control>
+                    <control type="image">
+                        <left>0</left><top>279</top><width>246</width><height>90</height>
+                        <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>0</left><top>317</top><width>228</width><height>40</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                    </control>
+                </control>
                 <control type="label">
                     <left>6</left><top>387</top><width>246</width><height>44</height>
                     <font>silo_card_title</font>
                     <textcolor>FFEDEDED</textcolor>
-                    <label>$INFO[ListItem.Label]</label>
+                    <label>$VAR[SiloBrowseCardTitle]</label>
                     <scroll>true</scroll>
                 </control>
                 <control type="label">
@@ -778,20 +1025,22 @@
             <onup>noop</onup>
             <scrolltime tween="cubic" easing="out">280</scrolltime>
             <!-- Details, not Kodi's play or open (SiloKodiConnect's info page, else Kodi's). -->
-            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+            <!-- A box set's card opens the box set (SiloKodiConnect's page for Kodi's movie set). -->
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + [Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=set&amp;dbid=$INFO[ListItem.SetId])</onclick>
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + ![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
             <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
             <itemlayout width="270" height="485">
                 <control type="group">
                 <control type="image">
                     <left>6</left><top>6</top><width>246</width><height>369</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
                 </control>
                 <!-- The rating is in Silo's poster art itself (top left). -->
                 <!-- Watched: Silo's frosted disc with a white tick, top right. -->
                 <control type="group">
                     <left>202</left><top>16</top>
-                    <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
+                    <visible>![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]</visible>
                     <control type="image">
                         <width>40</width><height>40</height>
                         <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
@@ -801,11 +1050,37 @@
                         <texture colordiffuse="FF000000">OverlayWatched.png</texture>
                     </control>
                 </control>
+                <control type="group">
+                    <left>6</left><top>6</top>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <control type="image">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>BOX SET</label>
+                    </control>
+                    <control type="image">
+                        <left>0</left><top>279</top><width>246</width><height>90</height>
+                        <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>0</left><top>317</top><width>228</width><height>40</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                    </control>
+                </control>
                 <control type="label">
                     <left>6</left><top>387</top><width>246</width><height>44</height>
                     <font>silo_card_title</font>
                     <textcolor>66EDEDED</textcolor>
-                    <label>$INFO[ListItem.Label]</label>
+                    <label>$VAR[SiloBrowseCardTitle]</label>
                 </control>
                 <control type="label">
                     <left>6</left><top>427</top><width>246</width><height>34</height>
@@ -821,7 +1096,7 @@
                 <control type="image">
                     <left>6</left><top>6</top><width>246</width><height>369</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
                 </control>
                 <!-- The rating is in Silo's poster art itself (top left). -->
                 <!-- Watched: Silo's frosted disc with a white tick, top right. -->
@@ -839,7 +1114,7 @@
                 </control>
                 <control type="group">
                     <left>202</left><top>16</top>
-                    <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
+                    <visible>![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]</visible>
                     <control type="image">
                         <width>40</width><height>40</height>
                         <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
@@ -849,11 +1124,37 @@
                         <texture colordiffuse="FF000000">OverlayWatched.png</texture>
                     </control>
                 </control>
+                <control type="group">
+                    <left>6</left><top>6</top>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <control type="image">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>BOX SET</label>
+                    </control>
+                    <control type="image">
+                        <left>0</left><top>279</top><width>246</width><height>90</height>
+                        <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>0</left><top>317</top><width>228</width><height>40</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                    </control>
+                </control>
                 <control type="label">
                     <left>6</left><top>387</top><width>246</width><height>44</height>
                     <font>silo_card_title</font>
                     <textcolor>FFEDEDED</textcolor>
-                    <label>$INFO[ListItem.Label]</label>
+                    <label>$VAR[SiloBrowseCardTitle]</label>
                     <scroll>true</scroll>
                 </control>
                 <control type="label">
@@ -884,20 +1185,22 @@
             <onup>noop</onup>
             <scrolltime tween="cubic" easing="out">280</scrolltime>
             <!-- Details, not Kodi's play or open (SiloKodiConnect's info page, else Kodi's). -->
-            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+            <!-- A box set's card opens the box set (SiloKodiConnect's page for Kodi's movie set). -->
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + [Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=set&amp;dbid=$INFO[ListItem.SetId])</onclick>
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + ![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
             <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
             <itemlayout width="270" height="485">
                 <control type="group">
                 <control type="image">
                     <left>6</left><top>6</top><width>246</width><height>369</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
                 </control>
                 <!-- The rating is in Silo's poster art itself (top left). -->
                 <!-- Watched: Silo's frosted disc with a white tick, top right. -->
                 <control type="group">
                     <left>202</left><top>16</top>
-                    <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
+                    <visible>![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]</visible>
                     <control type="image">
                         <width>40</width><height>40</height>
                         <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
@@ -907,11 +1210,37 @@
                         <texture colordiffuse="FF000000">OverlayWatched.png</texture>
                     </control>
                 </control>
+                <control type="group">
+                    <left>6</left><top>6</top>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <control type="image">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>BOX SET</label>
+                    </control>
+                    <control type="image">
+                        <left>0</left><top>279</top><width>246</width><height>90</height>
+                        <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>0</left><top>317</top><width>228</width><height>40</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                    </control>
+                </control>
                 <control type="label">
                     <left>6</left><top>387</top><width>246</width><height>44</height>
                     <font>silo_card_title</font>
                     <textcolor>66EDEDED</textcolor>
-                    <label>$INFO[ListItem.Label]</label>
+                    <label>$VAR[SiloBrowseCardTitle]</label>
                 </control>
                 <control type="label">
                     <left>6</left><top>427</top><width>246</width><height>34</height>
@@ -927,7 +1256,7 @@
                 <control type="image">
                     <left>6</left><top>6</top><width>246</width><height>369</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
                 </control>
                 <!-- The rating is in Silo's poster art itself (top left). -->
                 <!-- Watched: Silo's frosted disc with a white tick, top right. -->
@@ -945,7 +1274,7 @@
                 </control>
                 <control type="group">
                     <left>202</left><top>16</top>
-                    <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
+                    <visible>![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]</visible>
                     <control type="image">
                         <width>40</width><height>40</height>
                         <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
@@ -955,11 +1284,37 @@
                         <texture colordiffuse="FF000000">OverlayWatched.png</texture>
                     </control>
                 </control>
+                <control type="group">
+                    <left>6</left><top>6</top>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <control type="image">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>BOX SET</label>
+                    </control>
+                    <control type="image">
+                        <left>0</left><top>279</top><width>246</width><height>90</height>
+                        <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>0</left><top>317</top><width>228</width><height>40</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                    </control>
+                </control>
                 <control type="label">
                     <left>6</left><top>387</top><width>246</width><height>44</height>
                     <font>silo_card_title</font>
                     <textcolor>FFEDEDED</textcolor>
-                    <label>$INFO[ListItem.Label]</label>
+                    <label>$VAR[SiloBrowseCardTitle]</label>
                     <scroll>true</scroll>
                 </control>
                 <control type="label">
@@ -1046,20 +1401,22 @@
             <onup>noop</onup>
             <scrolltime tween="cubic" easing="out">280</scrolltime>
             <!-- Details, not Kodi's play or open (SiloKodiConnect's info page, else Kodi's). -->
-            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+            <!-- A box set's card opens the box set (SiloKodiConnect's page for Kodi's movie set). -->
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + [Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=set&amp;dbid=$INFO[ListItem.SetId])</onclick>
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + ![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
             <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
             <itemlayout width="270" height="485">
                 <control type="group">
                 <control type="image">
                     <left>6</left><top>6</top><width>246</width><height>369</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
                 </control>
                 <!-- The rating is in Silo's poster art itself (top left). -->
                 <!-- Watched: Silo's frosted disc with a white tick, top right. -->
                 <control type="group">
                     <left>202</left><top>16</top>
-                    <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
+                    <visible>![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]</visible>
                     <control type="image">
                         <width>40</width><height>40</height>
                         <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
@@ -1069,11 +1426,37 @@
                         <texture colordiffuse="FF000000">OverlayWatched.png</texture>
                     </control>
                 </control>
+                <control type="group">
+                    <left>6</left><top>6</top>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <control type="image">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>BOX SET</label>
+                    </control>
+                    <control type="image">
+                        <left>0</left><top>279</top><width>246</width><height>90</height>
+                        <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>0</left><top>317</top><width>228</width><height>40</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                    </control>
+                </control>
                 <control type="label">
                     <left>6</left><top>387</top><width>246</width><height>44</height>
                     <font>silo_card_title</font>
                     <textcolor>66EDEDED</textcolor>
-                    <label>$INFO[ListItem.Label]</label>
+                    <label>$VAR[SiloBrowseCardTitle]</label>
                 </control>
                 <control type="label">
                     <left>6</left><top>427</top><width>246</width><height>34</height>
@@ -1089,7 +1472,7 @@
                 <control type="image">
                     <left>6</left><top>6</top><width>246</width><height>369</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
                 </control>
                 <!-- The rating is in Silo's poster art itself (top left). -->
                 <!-- Watched: Silo's frosted disc with a white tick, top right. -->
@@ -1107,7 +1490,7 @@
                 </control>
                 <control type="group">
                     <left>202</left><top>16</top>
-                    <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
+                    <visible>![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]</visible>
                     <control type="image">
                         <width>40</width><height>40</height>
                         <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
@@ -1117,11 +1500,37 @@
                         <texture colordiffuse="FF000000">OverlayWatched.png</texture>
                     </control>
                 </control>
+                <control type="group">
+                    <left>6</left><top>6</top>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <control type="image">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>BOX SET</label>
+                    </control>
+                    <control type="image">
+                        <left>0</left><top>279</top><width>246</width><height>90</height>
+                        <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>0</left><top>317</top><width>228</width><height>40</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                    </control>
+                </control>
                 <control type="label">
                     <left>6</left><top>387</top><width>246</width><height>44</height>
                     <font>silo_card_title</font>
                     <textcolor>FFEDEDED</textcolor>
-                    <label>$INFO[ListItem.Label]</label>
+                    <label>$VAR[SiloBrowseCardTitle]</label>
                     <scroll>true</scroll>
                 </control>
                 <control type="label">

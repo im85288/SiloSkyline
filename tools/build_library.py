@@ -76,11 +76,21 @@ VIEW_ID, VIEW_LIST_ID = 72, 73
 # Infuse's Unwatched filter: a pill left of View, kept for every Browse list.
 UNWATCHED_ID = 74
 UNWATCHED = 'Skin.HasSetting(silo.unwatched)'
+# Silo's box sets in a films grid: SiloKodiConnect tags each box set's films but
+# its first by title, which the grid hides (BOX_SET_MEMBER, kodidb.py); the
+# first stands for the box set there, with the set's art, as Silo's grouped
+# browse. Not in a set's own folder, which lists them all.
+GROUPED = ('[String.StartsWith(%s,videodb://movies/) + !String.StartsWith(%s,videodb://movies/sets/)]' % (PATH, PATH))
+BOX_SET = '[Integer.IsGreater(ListItem.SetId,0) + %s]' % GROUPED
+BOX_SET_MEMBER = 'Silo box set member'
 
 
-def unwatched_query(kind):
-    """Kodi's library filter for titles not watched (a show: not every episode)."""
-    rule = {'type': kind, 'rules': {'and': [{'field': 'playcount', 'operator': 'is', 'value': ['0']}]}}
+def library_filter(kind, unwatched, grouped):
+    """Kodi's library filter: titles not watched (a show: not every episode),
+    and in a films grid without its box sets' other films (BOX_SET)."""
+    rules = ([{'field': 'playcount', 'operator': 'is', 'value': ['0']}] if unwatched else []) + \
+        ([{'field': 'tag', 'operator': 'isnot', 'value': [BOX_SET_MEMBER]}] if grouped else [])
+    rule = {'type': kind, 'rules': {'and': rules}}
     return quote(json.dumps(rule, separators=(',', ':')), safe='')
 VIEWS = [('Grid', 'grid', GRID_ID), ('Hero', 'hero', HERO_ID), ('List', 'list', LIST_VIEW_ID)]
 VPATH = 'Window(Home).Property(silo.browse.vpath.%s)'
@@ -130,6 +140,40 @@ def letter_path(kind, letter):
     return 'videodb://%s/titles/?xsp=%s' % (kind, quote(json.dumps(query, separators=(',', ':')), safe=''))
 
 
+def box_set_marks(width, height, indent=16, visible=None):
+    """A box set card's marks, as Silo's: BOX SET top left, the film count
+    bottom right (SiloKodiConnect's set art 'silocount')."""
+    pad = ' ' * indent
+    return '''
+%(p)s<control type="group">
+%(p)s    <left>6</left><top>6</top>
+%(p)s    <visible>%(box)s</visible>
+%(p)s    <control type="image">
+%(p)s        <left>14</left><top>14</top><width>132</width><height>40</height>
+%(p)s        <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+%(p)s    </control>
+%(p)s    <control type="label">
+%(p)s        <left>14</left><top>14</top><width>132</width><height>40</height>
+%(p)s        <align>center</align><aligny>center</aligny>
+%(p)s        <font>silo_badge</font>
+%(p)s        <textcolor>%(text)s</textcolor>
+%(p)s        <label>BOX SET</label>
+%(p)s    </control>
+%(p)s    <control type="image">
+%(p)s        <left>0</left><top>%(scrim_y)d</top><width>%(w)d</width><height>90</height>
+%(p)s        <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+%(p)s    </control>
+%(p)s    <control type="label">
+%(p)s        <left>0</left><top>%(count_y)d</top><width>%(count_w)d</width><height>40</height>
+%(p)s        <align>right</align><aligny>center</aligny>
+%(p)s        <font>silo_detail</font>
+%(p)s        <textcolor>%(text)s</textcolor>
+%(p)s        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+%(p)s    </control>
+%(p)s</control>''' % {'p': pad, 'box': visible or BOX_SET, 'text': TEXT, 'w': width, 'scrim_y': height - 90,
+                       'count_y': height - 52, 'count_w': width - 18}
+
+
 def card(focused, control_id=GRID_ID, size=None):
     """A grid's poster card; size (width, height) for the hero grid's, which
     has no captions (the hero names the title)."""
@@ -142,7 +186,7 @@ def card(focused, control_id=GRID_ID, size=None):
                     <left>6</left><top>%(ty)d</top><width>%(w)d</width><height>44</height>
                     <font>silo_card_title</font>
                     <textcolor>%(colour)s</textcolor>
-                    <label>$INFO[ListItem.Label]</label>%(scroll)s
+                    <label>$VAR[SiloBrowseCardTitle]</label>%(scroll)s
                 </control>''' % {'ty': POSTER_H + 18, 'w': POSTER_W, 'colour': TEXT if focused else TITLE_DIM,
                                   'scroll': '\n                    <scroll>true</scroll>' if focused else ''}
     return '''
@@ -150,10 +194,10 @@ def card(focused, control_id=GRID_ID, size=None):
                 <control type="image">
                     <left>6</left><top>6</top><width>%(pw)d</width><height>%(ph)d</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
                 </control>
                 <!-- The rating is in Silo's poster art itself (top left). -->
-                <!-- Watched: Silo's frosted disc with a white tick, top right. -->%(sheen)s%(watched)s%(title)s
+                <!-- Watched: Silo's frosted disc with a white tick, top right. -->%(sheen)s%(watched)s%(box)s%(title)s
                 <control type="label">
                     <left>6</left><top>%(yy)d</top><width>%(w)d</width><height>34</height>
                     <font>silo_detail</font>
@@ -163,10 +207,12 @@ def card(focused, control_id=GRID_ID, size=None):
                 </control>''' % {'pw': POSTER_W, 'ph': POSTER_H, 'zoom': zoom, 'title': title,
                                  'sheen': focus_sheen(POSTER_W, POSTER_H, 'silo/card_poster_mask.png', 'silo/card_poster_rim.png',
                                                       lit, 16) if focused else '',
-                                 'watched': watched_disc(POSTER_W - 44, 16, 'Integer.IsGreater(ListItem.PlayCount,0) | '
+                                 # A box set's card shows no one film's watched state.
+                                 'watched': watched_disc(POSTER_W - 44, 16, '!%s + [Integer.IsGreater(ListItem.PlayCount,0) | '
                                                          '[Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + '
-                                                         'Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]', 16),
-                                 'yy': POSTER_H + 58, 'w': POSTER_W, 'dim': TEXT if focused else SUB_DIM}
+                                                         'Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]' % BOX_SET, 16),
+                                 'yy': POSTER_H + 58, 'w': POSTER_W, 'dim': TEXT if focused else SUB_DIM,
+                                 'box': box_set_marks(POSTER_W, POSTER_H)}
 
 
 def hero_card(focused, control_id, width, height):
@@ -176,9 +222,9 @@ def hero_card(focused, control_id, width, height):
                 <control type="image">
                     <left>6</left><top>6</top><width>%(w)d</width><height>%(h)d</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
-                </control>%(sheen)s%(watched)s
-                </control>''' % {'w': width, 'h': height, 'zoom': focus_zoom(lit, 20) if focused else '',
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
+                </control>%(sheen)s%(watched)s%(box)s
+                </control>''' % {'box': box_set_marks(width, height), 'w': width, 'h': height, 'zoom': focus_zoom(lit, 20) if focused else '',
                                  'sheen': focus_sheen(width, height, 'silo/card_poster_mask.png', 'silo/card_poster_rim.png',
                                                       lit, 16) if focused else '',
                                  'watched': watched_disc(width - 44, 16, 'Integer.IsGreater(ListItem.PlayCount,0) | '
@@ -268,7 +314,9 @@ def panel(control_id, content, right, visible, up='noop', hero=False, left='<onl
             <onup>%(up)s</onup>
             <scrolltime tween="cubic" easing="out">280</scrolltime>
             <!-- Details, not Kodi's play or open (SiloKodiConnect's info page, else Kodi's). -->
-            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+            <!-- A box set's card opens the box set (SiloKodiConnect's page for Kodi's movie set). -->
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + %(box)s">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=set&amp;dbid=$INFO[ListItem.SetId])</onclick>
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + !%(box)s">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
             <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
             <itemlayout width="%(iw)d" height="%(ih)d">%(card)s
             </itemlayout>
@@ -276,7 +324,7 @@ def panel(control_id, content, right, visible, up='noop', hero=False, left='<onl
             </focusedlayout>
             %(content)s
         </control>
-''' % dict({'id': control_id, 'gx': GRID_X, 'gy': GRID_TOP, 'gw': COLS * ITEM_W, 'gh': 1080 - GRID_TOP,
+''' % dict({'box': BOX_SET, 'id': control_id, 'gx': GRID_X, 'gy': GRID_TOP, 'gw': COLS * ITEM_W, 'gh': 1080 - GRID_TOP,
             'visible': visible, 'right': right, 'iw': ITEM_W, 'ih': ITEM_H, 'card': card(False),
             'card_focused': card(True, control_id), 'content': content, 'up': up, 'left': left},
            **({'gy': HERO_GRID_TOP, 'gw': HERO_COLS * HERO_ITEM_W, 'gh': 1080 - HERO_GRID_TOP, 'iw': HERO_ITEM_W,
@@ -360,7 +408,7 @@ def sort_controls():
                         <right>22</right><top>%(ay)d</top><width>22</width><height>22</height>
                         <texture colordiffuse="%(colour)s">$VAR[SiloSortArrowIcon]</texture>
                         %(v_chosen)s
-                    </control>''' % {'iy': (SORT_ROW - 26) // 2, 'ay': (SORT_ROW - 22) // 2, 'lw': SORT_W - 260,
+                    </control>''' % {'box': BOX_SET, 'iy': (SORT_ROW - 26) // 2, 'ay': (SORT_ROW - 22) // 2, 'lw': SORT_W - 260,
                                      'row': SORT_ROW, 'colour': colour, 'dim': dim, 'v': both(''),
                                      'v_chosen': both(chosen)}
         if not focused:
@@ -472,13 +520,15 @@ def marks(item, indent):
     return out + rt_list_marks(item, indent, TEXT_DIM)
 
 
-def title_art(item, left, top, width, height):
-    """The title's clearlogo, or its name in Silo's title font without one."""
+def title_art(item, left, top, width, height, hidden='false'):
+    """The title's clearlogo, or its name in Silo's title font without one;
+    neither while hidden (a box set has its own name)."""
     return """
         <control type="image">
             <left>%(x)d</left><top>%(y)d</top><width>%(w)d</width><height>%(h)d</height>
             <aspectratio align="left" aligny="bottom">keep</aspectratio>
             <texture background="true">$INFO[%(item)s.Art(clearlogo)]</texture>
+            <visible>!%(hidden)s</visible>
         </control>
         <control type="label">
             <left>%(x)d</left><top>%(y)d</top><width>%(w)d</width><height>%(h)d</height>
@@ -486,8 +536,8 @@ def title_art(item, left, top, width, height):
             <font>silo_osd_title</font>
             <textcolor>%(text)s</textcolor>
             <label>$INFO[%(item)s.Label]</label>
-            <visible>String.IsEmpty(%(item)s.Art(clearlogo))</visible>
-        </control>""" % {'x': left, 'y': top, 'w': width, 'h': height, 'item': item, 'text': TEXT}
+            <visible>String.IsEmpty(%(item)s.Art(clearlogo)) + !%(hidden)s</visible>
+        </control>""" % {'x': left, 'y': top, 'w': width, 'h': height, 'item': item, 'text': TEXT, 'hidden': hidden}
 
 
 # A title's facts as the hero's: year, runtime (a film), genre (SiloKodiConnect's
@@ -501,6 +551,7 @@ def view_controls():
     """The View pill (right of Sort, at the right edge), its list, and the
     hero and list views with their details."""
     hero, lst = 'Container(%d).ListItem' % HERO_ID, 'Container(%d).ListItem' % LIST_VIEW_ID
+    hero_box = BOX_SET.replace('ListItem.', hero + '.')
     pick = ''
     for label, view, control in VIEWS:
         clicks = [(c, a) for c, a in [(None, 'ClearProperty(silo.browse.vpath.%s,home)' % v) for _, v, _ in VIEWS if v != view]]
@@ -614,7 +665,7 @@ def view_controls():
                 <left>576</left><top>0</top><width>1344</width><height>756</height>
                 <aspectratio>scale</aspectratio>
                 <fadetime>240</fadetime>
-                <texture background="true" colordiffuse="80FFFFFF" diffuse="silo/hero_mask.png">$INFO[%(hero)s.Art(fanart)]</texture>
+                <texture background="true" colordiffuse="80FFFFFF" diffuse="silo/hero_mask.png">$VAR[SiloBrowseHeroFanart]</texture>
             </control>
             <!-- The header, Sort and View stay readable over a bright picture. -->
             <control type="image">
@@ -626,7 +677,33 @@ def view_controls():
         <!-- The hero view: the focused title over two rows of posters. -->
         <control type="group">
             <visible>!%(personal)s + %(is_hero)s</visible>%(hero_title)s
+            <!-- A box set: its name, "Box set · 8 films · 2001 – 2011" and overview
+                 (SiloKodiConnect's set art), as Silo's box set page. -->
+            <control type="label">
+                <left>%(sx)d</left><top>236</top><width>1200</width><height>130</height>
+                <aligny>bottom</aligny>
+                <font>silo_osd_title</font>
+                <textcolor>%(text)s</textcolor>
+                <label>$INFO[%(hero)s.Set]</label>
+                <visible>%(hero_box)s</visible>
+            </control>
+            <control type="label">
+                <left>%(sx)d</left><top>%(fy)d</top><width>1100</width><height>40</height>
+                <aligny>center</aligny>
+                <font>silo_meta</font>
+                <textcolor>%(dim)s</textcolor>
+                <label>Box set$INFO[%(hero)s.Art(set.silocount),  ·  ,]$INFO[%(hero)s.Art(set.siloyears),  ·  ,]</label>
+                <visible>%(hero_box)s</visible>
+            </control>
+            <control type="textbox">
+                <left>%(sx)d</left><top>%(py)d</top><width>960</width><height>62</height>
+                <font>silo_detail</font>
+                <textcolor>%(text)s</textcolor>
+                <label>$INFO[%(hero)s.Art(set.silooverview)]</label>
+                <visible>%(hero_box)s</visible>
+            </control>
             <control type="grouplist">
+                <visible>!%(hero_box)s</visible>
                 <left>%(sx)d</left><top>%(fy)d</top><width>1100</width><height>40</height>
                 <orientation>horizontal</orientation>
                 <usecontrolcoords>true</usecontrolcoords>
@@ -643,6 +720,7 @@ def view_controls():
                 <font>silo_detail</font>
                 <textcolor>%(text)s</textcolor>
                 <label>$INFO[%(hero)s.Plot]</label>
+                <visible>!%(hero_box)s</visible>
             </control>
         </control>
         <!-- The list view's details: the focused title's poster and facts. -->
@@ -695,7 +773,9 @@ def view_controls():
             <visible>!%(personal)s + %(is_list)s</visible>
             <onup>%(sort)d</onup><onright>%(az)d</onright><onleft>noop</onleft>
             <scrolltime tween="cubic" easing="out">200</scrolltime>
-            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+            <!-- A box set's card opens the box set (SiloKodiConnect's page for Kodi's movie set). -->
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + %(box)s">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=set&amp;dbid=$INFO[ListItem.SetId])</onclick>
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + !%(box)s">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
             <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
             <itemlayout width="%(lvw)d" height="%(lrow)d">%(lrow_normal)s
             </itemlayout>
@@ -703,7 +783,7 @@ def view_controls():
             </focusedlayout>
             <content target="videos" sortby="$INFO[%(sort_by)s]" sortorder="$INFO[%(sort_order)s]">$INFO[%(vpath_list)s]$VAR[SiloBrowseFilter_list]</content>
         </control>
-""" % {'list': VIEW_LIST_ID, 'pill': VIEW_ID, 'px': SAFE_X + AZ_W + 24, 'pw': 260, 'top': SORT_TOP,
+""" % {'box': BOX_SET, 'list': VIEW_LIST_ID, 'pill': VIEW_ID, 'px': SAFE_X + AZ_W + 24, 'pw': 260, 'top': SORT_TOP,
        'unwatched': UNWATCHED_ID, 'ux': SAFE_X + AZ_W + 24 + 260 + 16, 'uw': 300,
        'unwatched_down': ''.join('            <ondown condition="%s">%s</ondown>\n' % (c, a) for c, a in focus_view()),
        'ly': SORT_TOP + 68, 'open_list': open_list, 'fh': SORT_HEAD + 16 + SORT_ROW * len(VIEWS), 'head': SORT_HEAD,
@@ -711,7 +791,8 @@ def view_controls():
        'lw': VIEW_W - 32,
        'lh': SORT_ROW * len(VIEWS), 'row': SORT_ROW, 'normal': row(False), 'focused': row(True), 'items': pick,
        'is_hero': view_is('hero'), 'is_list': view_is('list'), 'hero': hero, 'lst': lst, 'backdrop': GRID_BACKDROP,
-       'hero_title': title_art(hero, SAFE_X, 236, 760, 130).replace('\n        ', '\n            '),
+       'hero_title': title_art(hero, SAFE_X, 236, 760, 130, hero_box).replace('\n        ', '\n            '),
+       'hero_box': hero_box,
        'sx': SAFE_X, 'fy': 378, 'py': 424, 'hero_facts': facts(hero), 'hero_marks': marks(hero, '                '),
        'dx': SAFE_X + 812, 'dy': GRID_TOP, 'ix': SAFE_X + 812 + 330, 'iw': 1920 - SAFE_X - AZ_W - 24 - (SAFE_X + 812 + 330),
        'list_title': title_art(lst, SAFE_X + 812 + 330, GRID_TOP, 1920 - SAFE_X - AZ_W - 24 - (SAFE_X + 812 + 330), 140).replace('\n        ', '\n            '),
@@ -719,7 +800,7 @@ def view_controls():
        'list_facts': facts(lst), 'list_marks': marks(lst, '                '),
        'ply': GRID_TOP + 480, 'plw': 1920 - SAFE_X - AZ_W - 24 - (SAFE_X + 812),
        'lv': LIST_VIEW_ID, 'lx': SAFE_X - 6, 'gy': GRID_TOP, 'lvw': 780, 'gh': 1080 - GRID_TOP - 24, 'az': AZ_ID,
-       'lrow': LIST_ROW, 'lrow_normal': list_row(False), 'lrow_focused': list_row(True),
+       'box': BOX_SET, 'lrow': LIST_ROW, 'lrow_normal': list_row(False), 'lrow_focused': list_row(True),
        'sort_by': SORT_BY, 'sort_order': SORT_ORDER, 'vpath_list': VPATH % 'list'}
 
 
@@ -1046,25 +1127,46 @@ VARIABLES = '''
 
 def filter_variables():
     """The Show pill's label, and each view's filter for its list path while
-    Unwatched is on (Kodi's filter option; '&' when the path has a query)."""
+    Unwatched is on, and for a films grid always (its box sets' other films
+    hidden): Kodi's filter option, '&' when the path has a query."""
     out = '''    <!-- A grid card's line under its title: its own (Coming Soon's date and
          episode, SiloKodiConnect's silo.caption), else its year. -->
     <variable name="SiloBrowseCardSub">
+        <value condition="%(box)s">$INFO[ListItem.Art(set.siloyears)]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.caption))">$INFO[ListItem.Property(silo.caption)]</value>
         <value>$INFO[ListItem.Year]</value>
     </variable>
+    <variable name="SiloBrowseCardTitle">
+        <value condition="%(box)s">$INFO[ListItem.Set]</value>
+        <value>$INFO[ListItem.Label]</value>
+    </variable>
+    <variable name="SiloBrowsePoster">
+        <value condition="%(box)s + !String.IsEmpty(ListItem.Art(set.poster))">$INFO[ListItem.Art(set.poster)]</value>
+        <value>$INFO[ListItem.Art(poster)]</value>
+    </variable>
+    <variable name="SiloBrowseHeroFanart">
+        <value condition="%(hero_box)s + !String.IsEmpty(Container(%(hero_id)d).ListItem.Art(set.fanart))">$INFO[Container(%(hero_id)d).ListItem.Art(set.fanart)]</value>
+        <value>$INFO[Container(%(hero_id)d).ListItem.Art(fanart)]</value>
+    </variable>
     <variable name="SiloBrowseShowLabel">
-        <value condition="%s">Unwatched</value>
+        <value condition="%(unwatched)s">Unwatched</value>
         <value>All</value>
     </variable>
-''' % UNWATCHED
+''' % {'unwatched': UNWATCHED, 'box': BOX_SET, 'hero_id': HERO_ID,
+       'hero_box': BOX_SET.replace('ListItem.', 'Container(%d).ListItem.' % HERO_ID)}
     for _, view, _ in VIEWS:
         path = VPATH % view
         out += '    <variable name="SiloBrowseFilter_%s">\n' % view
-        for kind, condition in (('tvshows', 'String.IsEqual(%s,tvshows)' % TYPE), ('movies', None)):
+        # A films grid hides its box sets' other films (BOX_SET) whether or not Unwatched is on.
+        cases = [('tvshows', ['String.IsEqual(%s,tvshows)' % TYPE, UNWATCHED], True, False),
+                 ('movies', [UNWATCHED, GROUPED], True, True),
+                 ('movies', [GROUPED], False, True),
+                 ('movies', [UNWATCHED], True, False)]
+        for kind, conditions, unwatched, grouped in cases:
             for joiner, has_query in (('&amp;', True), ('?', False)):
-                parts = [UNWATCHED, ('' if has_query else '!') + 'String.Contains(%s,?)' % path] + ([condition] if condition else [])
-                out += '        <value condition="%s">%sfilter=%s</value>\n' % (' + '.join(parts), joiner, unwatched_query(kind))
+                parts = conditions + [('' if has_query else '!') + 'String.Contains(%s,?)' % path]
+                out += '        <value condition="%s">%sfilter=%s</value>\n' % (
+                    ' + '.join(parts), joiner, library_filter(kind, unwatched, grouped))
         out += '    </variable>\n'
     return out
 

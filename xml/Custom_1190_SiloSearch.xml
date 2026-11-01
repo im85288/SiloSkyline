@@ -44,9 +44,10 @@
                      every row shows while the new words load. -->
                 <onclick>SetProperty(silo.search.loading,1,home)</onclick>
                 <onclick>AlarmClock(silosearch,ClearProperty(silo.search.loading,home),00:04,silent)</onclick>
-                <ondown condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)]">SetFocus(201)</ondown>
-                <ondown condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)]">SetFocus(202)</ondown>
-                <ondown condition="Integer.IsGreater(Container(203).NumItems,0) + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)]">SetFocus(203)</ondown>
+                <ondown condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(204).NumItems,0)]">SetFocus(204)</ondown>
+                <ondown condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(204).NumItems,0)]">SetFocus(201)</ondown>
+                <ondown condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(204).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)]">SetFocus(202)</ondown>
+                <ondown condition="Integer.IsGreater(Container(203).NumItems,0) + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(204).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)]">SetFocus(203)</ondown>
             </control>
             <control type="image">
                 <left>24</left><top>16</top>
@@ -84,7 +85,7 @@
             <font>silo_row</font>
             <textcolor>BFEDEDED</textcolor>
             <label>No titles match "$INFO[Skin.String(silo.search)]"</label>
-            <visible>!String.IsEmpty(Skin.String(silo.search)) + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)] + !Container(201).IsUpdating + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)] + !Container(202).IsUpdating + !Integer.IsGreater(Container(203).NumItems,0) + !Container(203).IsUpdating + !String.IsEqual(Window(Home).Property(silo.search.loading),1)</visible>
+            <visible>!String.IsEmpty(Skin.String(silo.search)) + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(204).NumItems,0)] + !Container(204).IsUpdating + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)] + !Container(201).IsUpdating + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)] + !Container(202).IsUpdating + !Integer.IsGreater(Container(203).NumItems,0) + !Container(203).IsUpdating + !String.IsEqual(Window(Home).Property(silo.search.loading),1)</visible>
         </control>
         <control type="grouplist">
             <top>236</top>
@@ -93,6 +94,146 @@
             <itemgap>0</itemgap>
             <scrolltime tween="cubic" easing="out">300</scrolltime>
             <visible>!String.IsEmpty(Skin.String(silo.search))</visible>
+            <control type="group">
+                <height>422</height>
+                <visible>!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + [[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(204).NumItems,0)] | Container(204).IsUpdating | String.IsEqual(Window(Home).Property(silo.search.loading),1)]</visible>
+                <control type="label">
+                    <left>88</left>
+                    <width>1500</width><height>46</height>
+                    <font>silo_row</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>Box sets$INFO[Container(204).NumItems,  ·  ,]</label>
+                    <visible>!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + [[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(204).NumItems,0)] | Container(204).IsUpdating]</visible>
+                </control>
+                <control type="list" id="204">
+                    <!-- The list's own condition lets Kodi load it while it is hidden:
+                         it doesn't process a list inside a hidden group. -->
+                    <visible>!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + [[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(204).NumItems,0)] | Container(204).IsUpdating | String.IsEqual(Window(Home).Property(silo.search.loading),1)]</visible>
+                    <left>82</left><top>56</top>
+                    <width>1838</width><height>352</height>
+                    <orientation>horizontal</orientation>
+                    <scrolltime tween="cubic" easing="out">280</scrolltime>
+                    <!-- Through SiloKodiConnect, when it is there, so the page has
+                         Silo's details and More Like This, as from Home. -->
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=set&amp;dbid=$INFO[ListItem.SetId])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
+                    <ondown condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)]">SetFocus(201)</ondown>
+                    <ondown condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)]">SetFocus(202)</ondown>
+                    <ondown condition="Integer.IsGreater(Container(203).NumItems,0) + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)]">SetFocus(203)</ondown>
+                    <onup>SetFocus(100)</onup>
+                    <content target="videos">videodb://movies/titles/?xsp=%7B%22type%22%3A%22movies%22%2C%22order%22%3A%7B%22method%22%3A%22sorttitle%22%2C%22direction%22%3A%22ascending%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22set%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B%22$INFO[Skin.String(silo.search)]%22%5D%7D%2C%7B%22field%22%3A%22tag%22%2C%22operator%22%3A%22isnot%22%2C%22value%22%3A%5B%22Silo%20box%20set%20member%22%5D%7D%5D%7D%7D</content>
+                    <itemlayout width="216" height="352">
+                    <control type="group">
+                    <control type="image">
+                        <left>6</left><top>6</top><width>176</width><height>264</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(set.poster)]</texture>
+                    </control>
+                    <control type="group">
+                        <left>6</left><top>6</top>
+                        <visible>true</visible>
+                        <control type="image">
+                            <left>14</left><top>14</top><width>132</width><height>40</height>
+                            <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+                        </control>
+                        <control type="label">
+                            <left>14</left><top>14</top><width>132</width><height>40</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_badge</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>BOX SET</label>
+                        </control>
+                        <control type="image">
+                            <left>0</left><top>174</top><width>176</width><height>90</height>
+                            <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+                        </control>
+                        <control type="label">
+                            <left>0</left><top>212</top><width>158</width><height>40</height>
+                            <align>right</align><aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                        </control>
+                    </control>
+                    <control type="label">
+                        <left>6</left><top>280</top><width>176</width><height>40</height>
+                        <font>silo_card_title</font>
+                        <textcolor>66EDEDED</textcolor>
+                        <label>$INFO[ListItem.Set]</label>
+                    </control>
+                    <control type="label">
+                        <left>6</left><top>316</top><width>176</width><height>32</height>
+                        <font>silo_detail</font>
+                        <textcolor>4AEDEDED</textcolor>
+                        <label>$INFO[ListItem.Art(set.siloyears)]</label>
+                    </control>
+                    </control>
+                    </itemlayout>
+                    <focusedlayout width="216" height="352">
+                    <control type="group">
+                    <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus(204)">Conditional</animation>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>176</width><height>264</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(set.poster)]</texture>
+                    </control>
+                    <control type="group">
+                        <left>6</left><top>6</top>
+                        <visible>Control.HasFocus(204)</visible>
+                        <control type="image">
+                            <width>176</width><height>264</height>
+                            <texture diffuse="silo/card_poster_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
+                        </control>
+                        <control type="image">
+                            <width>176</width><height>264</height>
+                            <texture colordiffuse="33FFFFFF">silo/card_poster_rim.png</texture>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <left>6</left><top>6</top>
+                        <visible>true</visible>
+                        <control type="image">
+                            <left>14</left><top>14</top><width>132</width><height>40</height>
+                            <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+                        </control>
+                        <control type="label">
+                            <left>14</left><top>14</top><width>132</width><height>40</height>
+                            <align>center</align><aligny>center</aligny>
+                            <font>silo_badge</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>BOX SET</label>
+                        </control>
+                        <control type="image">
+                            <left>0</left><top>174</top><width>176</width><height>90</height>
+                            <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+                        </control>
+                        <control type="label">
+                            <left>0</left><top>212</top><width>158</width><height>40</height>
+                            <align>right</align><aligny>center</aligny>
+                            <font>silo_detail</font>
+                            <textcolor>FFEDEDED</textcolor>
+                            <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                        </control>
+                    </control>
+                    <control type="label">
+                        <left>6</left><top>280</top><width>176</width><height>40</height>
+                        <font>silo_card_title</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Set]</label>
+                        <scroll>true</scroll>
+                    </control>
+                    <control type="label">
+                        <left>6</left><top>316</top><width>176</width><height>32</height>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Art(set.siloyears)]</label>
+                    </control>
+                    </control>
+                    </focusedlayout>
+                </control>
+            </control>
             <control type="group">
                 <height>422</height>
                 <visible>!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + [[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)] | Container(201).IsUpdating | String.IsEqual(Window(Home).Property(silo.search.loading),1)]</visible>
@@ -118,9 +259,10 @@
                     <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
                     <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
                     <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
+                    <onup condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(204).NumItems,0)]">SetFocus(204)</onup>
                     <ondown condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)]">SetFocus(202)</ondown>
                     <ondown condition="Integer.IsGreater(Container(203).NumItems,0) + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)]">SetFocus(203)</ondown>
-                    <onup>SetFocus(100)</onup>
+                    <onup condition="![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(204).NumItems,0)]">SetFocus(100)</onup>
                     <content target="videos">videodb://movies/titles/?xsp=%7B%22type%22%3A%22movies%22%2C%22order%22%3A%7B%22method%22%3A%22sorttitle%22%2C%22direction%22%3A%22ascending%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B%22$INFO[Skin.String(silo.search)]%22%5D%7D%5D%7D%7D</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
@@ -156,8 +298,9 @@
                     <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
                     <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
                     <onup condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)]">SetFocus(201)</onup>
+                    <onup condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(204).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)]">SetFocus(204)</onup>
                     <ondown condition="Integer.IsGreater(Container(203).NumItems,0)">SetFocus(203)</ondown>
-                    <onup condition="![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)]">SetFocus(100)</onup>
+                    <onup condition="![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(204).NumItems,0)]">SetFocus(100)</onup>
                     <content target="videos">videodb://tvshows/titles/?xsp=%7B%22type%22%3A%22tvshows%22%2C%22order%22%3A%7B%22method%22%3A%22sorttitle%22%2C%22direction%22%3A%22ascending%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B%22$INFO[Skin.String(silo.search)]%22%5D%7D%5D%7D%7D</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
@@ -194,7 +337,8 @@
                     <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
                     <onup condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)]">SetFocus(202)</onup>
                     <onup condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)]">SetFocus(201)</onup>
-                    <onup condition="![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)]">SetFocus(100)</onup>
+                    <onup condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(204).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)]">SetFocus(204)</onup>
+                    <onup condition="![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(204).NumItems,0)]">SetFocus(100)</onup>
                     <content target="videos">plugin://plugin.video.silokodiconnect/?mode=requests&amp;search=$INFO[Skin.String(silo.search)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>

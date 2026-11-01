@@ -15,7 +15,8 @@ import sys
 from urllib.parse import quote
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import wordmark, BACKGROUND, POSTER, ROOT, SAFE_X, TEXT, TEXT_DIM, card_layout, GRID_BACKDROP  # noqa: E402
+from build_home import focus_sheen, focus_zoom, wordmark, BACKGROUND, POSTER, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM, card_layout, GRID_BACKDROP  # noqa: E402
+from build_library import box_set_marks, BOX_SET_MEMBER  # noqa: E402
 
 WINDOW_ID = 1190
 QUERY = 'Skin.String(silo.search)'
@@ -24,13 +25,17 @@ PILL_ID = 100
 # (list id, row title, library path, smart-filter type)
 # The third row is Silo's own search for titles to request (SiloKodiConnect),
 # shown only when the add-on is there and found some.
-ROWS = [(201, 'Movies', 'videodb://movies/titles/', 'movies'),
+# Silo's search lists matching box sets ahead of the films (which it lists too):
+# the films whose box set's name has the words, less the films SiloKodiConnect
+# tags (BOX_SET_MEMBER), leave one per box set, drawn as the box set.
+ROWS = [(204, 'Box sets', 'videodb://movies/titles/', 'boxsets'),
+        (201, 'Movies', 'videodb://movies/titles/', 'movies'),
         (202, 'Shows', 'videodb://tvshows/titles/', 'tvshows'),
         (203, 'Request', 'plugin://plugin.video.silokodiconnect/?mode=requests', None)]
 # Requests' "Search to request" sets Window(Home).Property(silo.search.mode)
 # to requests: only Silo's row shows (the menu bar's Search clears it).
 REQUEST_ONLY = 'String.IsEqual(Window(Home).Property(silo.search.mode),requests)'
-LIBRARY_LISTS = (201, 202)
+LIBRARY_LISTS = (204, 201, 202)
 ROWS_TOP = 236
 # Two rows fit below the pill; the third scrolls into view.
 ROW_H = (1080 - ROWS_TOP) // 2
@@ -42,10 +47,48 @@ def search_path(path, kind):
     if kind is None:
         return path + '&amp;search=$INFO[%s]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]' % QUERY
     marker = 'SILOQUERY'
-    rules = {'type': kind, 'order': {'method': 'sorttitle', 'direction': 'ascending'},
-             'rules': {'and': [{'field': 'title', 'operator': 'contains', 'value': [marker]}]}}
+    if kind == 'boxsets':
+        rules = {'type': 'movies', 'order': {'method': 'sorttitle', 'direction': 'ascending'},
+                 'rules': {'and': [{'field': 'set', 'operator': 'contains', 'value': [marker]},
+                                   {'field': 'tag', 'operator': 'isnot', 'value': [BOX_SET_MEMBER]}]}}
+    else:
+        rules = {'type': kind, 'order': {'method': 'sorttitle', 'direction': 'ascending'},
+                 'rules': {'and': [{'field': 'title', 'operator': 'contains', 'value': [marker]}]}}
     encoded = quote(json.dumps(rules, separators=(',', ':')), safe='')
     return path + '?xsp=' + encoded.replace(marker, '$INFO[%s]' % QUERY)
+
+
+def box_set_card(focused, list_id):
+    """A box set in search, as Silo's: its poster with BOX SET and the film
+    count, its name and years."""
+    width, height = POSTER['width'], POSTER['height']
+    lit = 'Control.HasFocus(%d)' % list_id
+    return '''
+                    <control type="group">%(zoom)s
+                    <control type="image">
+                        <left>6</left><top>6</top><width>%(w)d</width><height>%(h)d</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(set.poster)]</texture>
+                    </control>%(sheen)s%(marks)s
+                    <control type="label">
+                        <left>6</left><top>%(ty)d</top><width>%(w)d</width><height>40</height>
+                        <font>silo_card_title</font>
+                        <textcolor>%(colour)s</textcolor>
+                        <label>$INFO[ListItem.Set]</label>%(scroll)s
+                    </control>
+                    <control type="label">
+                        <left>6</left><top>%(yy)d</top><width>%(w)d</width><height>32</height>
+                        <font>silo_detail</font>
+                        <textcolor>%(dim)s</textcolor>
+                        <label>$INFO[ListItem.Art(set.siloyears)]</label>
+                    </control>
+                    </control>''' % {'w': width, 'h': height, 'ty': height + 16, 'yy': height + 52,
+                                       'zoom': focus_zoom(lit, 20) if focused else '',
+                                       'sheen': focus_sheen(width, height, POSTER['mask'], POSTER['rim'], lit, 20)
+                                       if focused else '',
+                                       'marks': box_set_marks(width, height, 20, 'true'),
+                                       'colour': TEXT if focused else TITLE_DIM, 'dim': TEXT if focused else SUB_DIM,
+                                       'scroll': '\n                        <scroll>true</scroll>' if focused else ''}
 
 
 def has_items(list_id):
@@ -97,7 +140,7 @@ def row(index, list_id, title, path, kind):
                          Silo's details and More Like This, as from Home. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=%(info_type)s&amp;dbid=%(info_id)s)</onclick>
                     <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>%(moves)s
                     <content target="videos">%(path)s</content>
                     <itemlayout width="%(item_w)d" height="%(item_h)d">%(normal)s
@@ -108,7 +151,10 @@ def row(index, list_id, title, path, kind):
             </control>''' % {'row_h': ROW_H, 'has': has_items(list_id), 'id': list_id, 'x': SAFE_X, 'text': TEXT,
                              'title': title, 'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'item_h': item_h,
                              'item_w': item_w, 'moves': moves, 'path': search_path(path, kind),
-                             'normal': card_layout(POSTER, False), 'focused': card_layout(POSTER, True, list_id),
+                             'normal': box_set_card(False, list_id) if kind == 'boxsets' else card_layout(POSTER, False),
+                             'focused': box_set_card(True, list_id) if kind == 'boxsets' else card_layout(POSTER, True, list_id),
+                             'info_type': 'set' if kind == 'boxsets' else '$INFO[ListItem.DBType]',
+                             'info_id': '$INFO[ListItem.SetId]' if kind == 'boxsets' else '$INFO[ListItem.DBID]',
                              'loading': LOADING,
                              'group_shown': shown(list_id, '%s | Container(%d).IsUpdating | String.IsEqual(Window(Home).Property(%s),1)'
                                                   % (has_items(list_id), list_id, LOADING)),

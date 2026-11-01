@@ -215,6 +215,7 @@ def build():
     <defaultcontrol always="true">308</defaultcontrol>
     <onload condition="%(show)s">SetFocus(300)</onload>
     <onload condition="%(request)s">SetFocus(301)</onload>
+    <onload condition="%(box_set)s">SetFocus(318)</onload>
     <onload condition="String.IsEqual(Window(home).Property(silo.from_rail),1) + Integer.IsGreater(Container(70).NumItems,0)">SetFocus(70)</onload>
     <onload condition="String.IsEqual(Window(home).Property(silo.from_rail),1)">SetFocus(5000)</onload>
     <onload>ClearProperty(silo.from_rail,home)</onload>
@@ -259,7 +260,7 @@ def build():
             <left>%(x)d</left><top>%(top)d</top>
             <!-- More Like This and Trailers &amp; More fill the screen to its edge: the
                  page slides up so a focused poster's title and year stay on screen. -->
-            <animation effect="slide" end="0,-%(lift)d" time="300" tween="cubic" easing="out" condition="Control.HasFocus(63) | Control.HasFocus(71)">Conditional</animation>
+            <animation effect="slide" end="0,-%(lift)d" time="300" tween="cubic" easing="out" condition="Control.HasFocus(63) | Control.HasFocus(66) | Control.HasFocus(71)">Conditional</animation>
             <!-- Logo, or the title in text. -->
             <control type="image">
                 <width>820</width><height>160</height>
@@ -384,7 +385,8 @@ def build():
                 <ondown condition="%(show)s">60</ondown>
                 <ondown condition="%(episode)s + %(episode_pills)s">65</ondown>
                 <ondown condition="%(episode)s + !%(episode_pills)s + %(has_season)s">64</ondown>
-                <ondown condition="!%(show)s + ![%(episode)s + %(has_season)s]">70</ondown>
+                <ondown condition="%(box_row)s">66</ondown>
+                <ondown condition="!%(box_row)s + !%(show)s + ![%(episode)s + %(has_season)s]">70</ondown>
                 <!-- A show: Play or Resume its next episode, as in Silo (Kodi's button 8
                      would Browse); Browse once every episode is watched. Kodi reserves
                      ids 5-15 in this window (12 chooses art), so this is 300. -->
@@ -427,7 +429,7 @@ def build():
                      grouplist moves only between children with ids. -->
                 <control type="group" id="1008">
                     <width>340</width><height>64</height>
-                    <visible>!%(show)s + !%(request)s</visible>
+                    <visible>!%(show)s + !%(request)s + !%(box_set)s</visible>
                     <!-- Not Kodi's Play button (id 8), which asks whether to resume:
                          Resume resumes, as in Silo, and Start over plays from the start. -->
                     <control type="button" id="308">
@@ -467,6 +469,25 @@ def build():
                         <texture colordiffuse="%(text)s">osd/fullscreen/buttons/play.png</texture>
                         <visible>!Control.HasFocus(308)</visible>
                     </control>
+                </control>
+                <!-- A box set: Play (or Resume) its first unwatched film, named, as Silo's. -->
+                <control type="group" id="1018">
+                    <width>860</width><height>64</height>
+                    <visible>%(box_set)s</visible>
+                    <control type="button" id="318">
+                        <width>auto</width><height>64</height>
+                        <label>$INFO[ListItem.Property(silo.boxset.play_label)]</label>
+                        <font>silo_tab</font>
+                        <textoffsetx>40</textoffsetx>
+                        <aligny>center</aligny>
+                        <textcolor>%(text)s</textcolor>
+                        <focusedcolor>FF000000</focusedcolor>
+                        <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
+                        <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
+                        <onclick condition="String.IsEqual(ListItem.Property(silo.boxset.resume),true)">PlayMedia($ESCINFO[ListItem.Property(silo.boxset.play)],resume)</onclick>
+                        <onclick condition="!String.IsEqual(ListItem.Property(silo.boxset.resume),true)">PlayMedia($ESCINFO[ListItem.Property(silo.boxset.play)],noresume)</onclick>
+                        <onclick>Dialog.Close(movieinformation)</onclick>
+                    </control>
                 </control>%(start_over)s%(previous)s%(trailer)s%(silo_trailer)s%(watchlist)s%(rate)s%(versions)s%(more)s
             </control>
         </control>
@@ -488,7 +509,7 @@ def build():
             <top>%(lower_top)d</top>
             <!-- More Like This and Trailers &amp; More fill the screen to its edge: the
                  page slides up so a focused poster's title and year stay on screen. -->
-            <animation effect="slide" end="0,-%(lift)d" time="300" tween="cubic" easing="out" condition="Control.HasFocus(63) | Control.HasFocus(71)">Conditional</animation>
+            <animation effect="slide" end="0,-%(lift)d" time="300" tween="cubic" easing="out" condition="Control.HasFocus(63) | Control.HasFocus(66) | Control.HasFocus(71)">Conditional</animation>
             <width>1920</width><height>%(lower_h)d</height>
             <orientation>vertical</orientation>
             <itemgap>0</itemgap>
@@ -587,6 +608,39 @@ def build():
                     </focusedlayout>
                 </control>
             </control>
+            <!-- A box set's films in release order: on its page ("Movies") and on
+                 each film's (the box set's name), the film itself outlined. -->
+            <control type="group">
+                <height>%(similar_h)d</height>
+                <visible>%(box_row)s</visible>
+                <control type="label">
+                    <left>%(x)d</left>
+                    <width>1400</width><height>46</height>
+                    <font>silo_row</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label>$VAR[SiloDetailBoxSetRow]</label>
+                </control>
+                <control type="list" id="66">
+                    <left>%(lx)d</left><top>56</top>
+                    <width>%(lw)d</width><height>%(similar_item_h)d</height>
+                    <orientation>horizontal</orientation>
+                    <scrolltime tween="cubic" easing="out">280</scrolltime>
+                    <onup>5000</onup>
+                    <ondown condition="Integer.IsGreater(Container(70).NumItems,0)">70</ondown>
+                    <ondown condition="!Integer.IsGreater(Container(70).NumItems,0) + %(has_videos)s">71</ondown>
+                    <ondown condition="!Integer.IsGreater(Container(70).NumItems,0) + !%(has_videos)s + %(has_similar)s">63</ondown>
+                    <!-- Another film: this page closes and SiloKodiConnect opens its page. -->
+                    <onclick condition="!String.IsEqual(ListItem.DBID,Window(movieinformation).Property(silo.page_dbid)) | %(box_set_page)s">SetProperty(silo.from_rail,1,home)</onclick>
+                    <onclick condition="!String.IsEqual(ListItem.DBID,Window(movieinformation).Property(silo.page_dbid)) | %(box_set_page)s">Dialog.Close(movieinformation)</onclick>
+                    <onclick condition="!String.IsEqual(ListItem.DBID,Window(movieinformation).Property(silo.page_dbid)) | %(box_set_page)s">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=movie&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEqual(ListItem.DBID,Window(movieinformation).Property(silo.page_dbid)) + !%(box_set_page)s">SetFocus(5000)</onclick>
+                    <content target="videos" sortby="year" sortorder="ascending">videodb://movies/sets/$INFO[ListItem.Property(silo.set_id)]/</content>
+                    <itemlayout width="%(similar_item_w)d" height="%(similar_item_h)d">%(box_card)s
+                    </itemlayout>
+                    <focusedlayout width="%(similar_item_w)d" height="%(similar_item_h)d">%(box_card_focused)s
+                    </focusedlayout>
+                </control>
+            </control>
             <!-- Cast & crew: Kodi fills list 50. -->
             <control type="group">
                 <height>%(cast_h)d</height>
@@ -609,7 +663,8 @@ def build():
                     <orientation>horizontal</orientation>
                     <onup condition="%(show)s">61</onup>
                     <onup condition="%(episode)s + %(has_season)s">64</onup>
-                    <onup condition="!%(show)s + ![%(episode)s + %(has_season)s]">5000</onup>
+                    <onup condition="%(box_row)s">66</onup>
+                    <onup condition="!%(box_row)s + !%(show)s + ![%(episode)s + %(has_season)s]">5000</onup>
                     <!-- A cast member's page (SiloKodiConnect: Silo's person, their titles here). -->
                     <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=person&amp;id=$INFO[Window(movieinformation).Property(silo.content_id)]&amp;name=$INFO[ListItem.Label])</onclick>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
@@ -641,7 +696,8 @@ def build():
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <onup condition="Integer.IsGreater(Container(70).NumItems,0)">70</onup>
                     <onup condition="!Integer.IsGreater(Container(70).NumItems,0) + %(show)s">61</onup>
-                    <onup condition="!Integer.IsGreater(Container(70).NumItems,0) + !%(show)s">5000</onup>
+                    <onup condition="!Integer.IsGreater(Container(70).NumItems,0) + %(box_row)s">66</onup>
+                    <onup condition="!Integer.IsGreater(Container(70).NumItems,0) + !%(show)s + !%(box_row)s">5000</onup>
                     <ondown condition="%(has_similar)s">63</ondown>%(video_play)s
                     <itemlayout width="%(video_item_w)d" height="%(video_item_h)d">%(video_card)s
                     </itemlayout>
@@ -670,7 +726,8 @@ def build():
                     <onup condition="%(has_videos)s">71</onup>
                     <onup condition="!%(has_videos)s + Integer.IsGreater(Container(70).NumItems,0)">70</onup>
                     <onup condition="!%(has_videos)s + !Integer.IsGreater(Container(70).NumItems,0) + %(show)s">61</onup>
-                    <onup condition="!%(has_videos)s + !Integer.IsGreater(Container(70).NumItems,0) + !%(show)s">5000</onup>
+                    <onup condition="!%(has_videos)s + !Integer.IsGreater(Container(70).NumItems,0) + %(box_row)s">66</onup>
+                    <onup condition="!%(has_videos)s + !Integer.IsGreater(Container(70).NumItems,0) + !%(show)s + !%(box_row)s">5000</onup>
                     <!-- Kodi can't open an info page from inside one: close this one and
                          have SiloKodiConnect open the chosen title's. That page opens with
                          the column below still scrolled to this rail; silo.from_rail has
@@ -754,6 +811,8 @@ def build():
        'video_card': video_card(False), 'video_card_focused': video_card(True),
        'similar_item_w': POSTER['width'] + POSTER['gap'], 'similar_item_h': POSTER['height'] + 12 + 76,
        'similar_card': card_layout(POSTER, False), 'similar_card_focused': card_layout(POSTER, True, 63),
+       'box_card': box_card(False), 'box_card_focused': box_card(True), 'box_set': BOX_SET, 'box_row': BOX_ROW,
+       'box_set_page': 'String.IsEqual(Window(movieinformation).Property(silo.page_type),set)',
        'has_season': 'Integer.IsGreater(Container(64).NumItems,0)', 'episode_pills': EPISODE_PILLS,
        'episode_season': season(False, 65), 'episode_season_focused': season(True, 65),
        'season_card': episode_card(False, 64), 'season_card_focused': episode_card(True, 64, CURRENT),
@@ -766,6 +825,10 @@ def build():
 # A series Silo can request is a tvshow to Kodi too, but has no library
 # seasons or episodes: those sections are for library shows only.
 NOT_REQUEST = 'String.IsEmpty(ListItem.Property(silo.request.tmdb))'
+# Silo's box sets, as Kodi's movie sets (SiloKodiConnect): a box set's page, and
+# the row of a box set's films on its page and on each film's (silo.set_id).
+BOX_SET = 'String.IsEqual(ListItem.DBType,set)'
+BOX_ROW = '!String.IsEmpty(ListItem.Property(silo.set_id))'
 SHOW = '[String.IsEqual(ListItem.DBType,tvshow) + %s]' % NOT_REQUEST
 EPISODE_PILLS = '[Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]'
 # On an episode's page: the episode opened (silo.episode_id, set on load).
@@ -785,6 +848,18 @@ SECTION_H = 1080 - LOWER_TOP
 
 
 PILL_W, PILL_ITEM_W = 168, 184  # a season pill, and its slot with the gap
+
+
+def box_card(focused):
+    """A box set row's poster (More Like This's), the film whose page this is outlined."""
+    this = ('String.IsEqual(ListItem.DBID,Window(movieinformation).Property(silo.page_dbid)) + '
+            'String.IsEqual(Window(movieinformation).Property(silo.page_type),movie)')
+    return card_layout(POSTER, focused, 66) + '''
+                    <control type="image">
+                        <left>6</left><top>6</top><width>%d</width><height>%d</height>
+                        <texture colordiffuse="FFEDEDED">silo/card_poster_rim.png</texture>
+                        <visible>%s</visible>
+                    </control>''' % (POSTER['width'], POSTER['height'], this)
 
 
 def show_pill():
@@ -1009,7 +1084,12 @@ VARIABLES = '''
         <value condition="!String.IsEmpty(ListItem.Mpaa)">$INFO[ListItem.Mpaa]</value>
         <value>$INFO[ListItem.Property(silo.mpaa)]</value>
     </variable>
+    <variable name="SiloDetailBoxSetRow">
+        <value condition="String.IsEqual(ListItem.DBType,set)">Movies</value>
+        <value>$INFO[ListItem.Property(silo.set_title)]</value>
+    </variable>
     <variable name="SiloDetailFacts">
+        <value condition="String.IsEqual(ListItem.DBType,set)">Box set$INFO[ListItem.Property(silo.boxset.count), · ,]$INFO[ListItem.Property(silo.boxset.years), · ,]</value>
         <value condition="Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]">$INFO[Container(64).ListItem.Premiered]$INFO[Container(64).ListItem.Duration(mins), · , min]$INFO[Container(64).ListItem.Rating(imdb), · [COLOR BFEDEDED]IMDb[/COLOR] [B],[/B]]$INFO[Container(64).ListItem.Rating(themoviedb), · [COLOR BFEDEDED]TMDB[/COLOR] [B],[/B]]$INFO[Container(64).ListItem.Season, · S,]$INFO[Container(64).ListItem.Episode, E,]</value>
         <value condition="Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]">$INFO[Container(61).ListItem.Premiered]$INFO[Container(61).ListItem.Duration(mins), · , min]$INFO[Container(61).ListItem.Rating(imdb), · [COLOR BFEDEDED]IMDb[/COLOR] [B],[/B]]$INFO[Container(61).ListItem.Rating(themoviedb), · [COLOR BFEDEDED]TMDB[/COLOR] [B],[/B]]$INFO[Container(61).ListItem.Season, · S,]$INFO[Container(61).ListItem.Episode, E,]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))">$INFO[ListItem.Year]$VAR[SiloDetailSeasons]$INFO[ListItem.Property(silo.rating.tmdb), · [COLOR BFEDEDED]TMDB[/COLOR] [B],[/B]]$VAR[SiloDetailGenres]</value>
@@ -1392,7 +1472,7 @@ def add_timers():
 # The action row's buttons in order, with the control whose visibility counts
 # (round buttons and Play sit in groups, which Kodi's grouplist can't move
 # between, so each button names its neighbours).
-ACTIONS = [(300, 300), (301, 301), (308, 1008), (304, 1304), (302, 1302), (11, 1011), (351, 1351), (352, 1352),
+ACTIONS = [(300, 300), (301, 301), (308, 1008), (318, 1018), (304, 1304), (302, 1302), (11, 1011), (351, 1351), (352, 1352),
            (353, 1353), (14, 1014), (303, 1303)]
 
 

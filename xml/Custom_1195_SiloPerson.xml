@@ -203,13 +203,13 @@
                 <control type="image">
                     <left>6</left><top>6</top><width>246</width><height>369</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
                 </control>
                 <!-- The rating is in Silo's poster art itself (top left). -->
                 <!-- Watched: Silo's frosted disc with a white tick, top right. -->
                 <control type="group">
                     <left>202</left><top>16</top>
-                    <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
+                    <visible>![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]</visible>
                     <control type="image">
                         <width>40</width><height>40</height>
                         <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
@@ -219,11 +219,37 @@
                         <texture colordiffuse="FF000000">OverlayWatched.png</texture>
                     </control>
                 </control>
+                <control type="group">
+                    <left>6</left><top>6</top>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <control type="image">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>BOX SET</label>
+                    </control>
+                    <control type="image">
+                        <left>0</left><top>279</top><width>246</width><height>90</height>
+                        <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>0</left><top>317</top><width>228</width><height>40</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                    </control>
+                </control>
                 <control type="label">
                     <left>6</left><top>387</top><width>246</width><height>44</height>
                     <font>silo_card_title</font>
                     <textcolor>66EDEDED</textcolor>
-                    <label>$INFO[ListItem.Label]</label>
+                    <label>$VAR[SiloBrowseCardTitle]</label>
                 </control>
                 <control type="label">
                     <left>6</left><top>427</top><width>246</width><height>34</height>
@@ -239,7 +265,7 @@
                 <control type="image">
                     <left>6</left><top>6</top><width>246</width><height>369</height>
                     <aspectratio>scale</aspectratio>
-                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$INFO[ListItem.Art(poster)]</texture>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
                 </control>
                 <!-- The rating is in Silo's poster art itself (top left). -->
                 <!-- Watched: Silo's frosted disc with a white tick, top right. -->
@@ -257,7 +283,7 @@
                 </control>
                 <control type="group">
                     <left>202</left><top>16</top>
-                    <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
+                    <visible>![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]</visible>
                     <control type="image">
                         <width>40</width><height>40</height>
                         <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
@@ -267,11 +293,37 @@
                         <texture colordiffuse="FF000000">OverlayWatched.png</texture>
                     </control>
                 </control>
+                <control type="group">
+                    <left>6</left><top>6</top>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <control type="image">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>BOX SET</label>
+                    </control>
+                    <control type="image">
+                        <left>0</left><top>279</top><width>246</width><height>90</height>
+                        <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>0</left><top>317</top><width>228</width><height>40</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                    </control>
+                </control>
                 <control type="label">
                     <left>6</left><top>387</top><width>246</width><height>44</height>
                     <font>silo_card_title</font>
                     <textcolor>FFEDEDED</textcolor>
-                    <label>$INFO[ListItem.Label]</label>
+                    <label>$VAR[SiloBrowseCardTitle]</label>
                     <scroll>true</scroll>
                 </control>
                 <control type="label">
