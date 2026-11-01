@@ -12,7 +12,7 @@ Community project: not made or endorsed by the Silo team.
 ## What it does
 
 - **Silo's home layout.** The focused title's artwork sits crisp in the top right, drifting slowly, and fades
-  into the page; its clear logo, facts (age rating, year or episode, genre, IMDb and TMDB ratings), plot,
+  into the page; its clear logo, facts (age rating, year or episode, genre, IMDb, TMDB and Rotten Tomatoes ratings), plot,
   cast and quality badges (4K, Dolby Vision or HDR10, audio) fill the top left; rows of titles run underneath.
 - **Pages from Silo.** Home, Movies and Series with the rows Silo shows for each, in Silo's order:
   SiloKodiConnect publishes Home's first rows as ready-made cards, so they draw at once, and the rest load as
@@ -25,9 +25,11 @@ Community project: not made or endorsed by the Silo team.
   collections, all in Silo's own windows.
 - **Detail, person and Requests pages** as Silo's Apple TV app: Play / Resume, trailers, watchlist, season
   pills and episode rails, More Like This, cast to their person pages, and Silo's Requests (Discover and Yours).
+  A Rate button gives a title one to five stars, and a show's theme tune plays while its page is open.
+- **Coming Soon** on Series: each show you've started with its next episode's date, from Silo's calendar.
 - **Showcase player** (the default): a richer overlay, a Netflix-style pause screen after 10 seconds, and Up
   Next to match. Silo's own player style is the other choice.
-- **Live TV** laid out as TiviMate, in Silo's look: guide, quick guide, OK screen, catch-up and recent channels.
+- **Live TV** laid out as TiviMate, in Silo's look: guide, quick guide (its channel groups on Left), OK screen, catch-up and recent channels.
 - Silo-style menus, dialogs, keyboard, notifications and settings; **Inter** throughout, as the Silo apps use.
 
 | Movies | Series | Film |
@@ -55,7 +57,8 @@ screen, as Arctic Zephyr does.
 ## Skin settings
 
 - **General:** Colours; Recommended add-ons (Up Next, YouTube and more, with what each adds); **Top 10
-  rows**, which opens SiloKodiConnect's choice of Home rows to number; Artwork background; Use slide animations.
+  rows**, which opens SiloKodiConnect's choice of Home rows to number; Artwork background; Use slide animations;
+  Theme music on show pages (on by default).
 - **Player:** Player style (Showcase or Silo's) and the overlay's auto-close.
 
 ## Install
