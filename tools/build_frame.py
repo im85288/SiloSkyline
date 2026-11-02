@@ -590,6 +590,24 @@ def skin_settings(text):
 \t\t\t\t\t<onclick>Skin.ToggleSetting(SkylineNoThemeMusic)</onclick>
 \t\t\t\t\t<visible>System.HasAddon(plugin.video.silokodiconnect)</visible>
 \t\t\t\t</control>
+\t\t\t\t<control type="radiobutton" id="796">
+\t\t\t\t\t<label>IMDb ratings</label>
+\t\t\t\t\t<include>DefaultSettingButton</include>
+\t\t\t\t\t<selected>!Skin.HasSetting(SkylineHideImdb)</selected>
+\t\t\t\t\t<onclick>Skin.ToggleSetting(SkylineHideImdb)</onclick>
+\t\t\t\t</control>
+\t\t\t\t<control type="radiobutton" id="797">
+\t\t\t\t\t<label>TMDB ratings</label>
+\t\t\t\t\t<include>DefaultSettingButton</include>
+\t\t\t\t\t<selected>!Skin.HasSetting(SkylineHideTmdb)</selected>
+\t\t\t\t\t<onclick>Skin.ToggleSetting(SkylineHideTmdb)</onclick>
+\t\t\t\t</control>
+\t\t\t\t<control type="radiobutton" id="798">
+\t\t\t\t\t<label>Rotten Tomatoes ratings</label>
+\t\t\t\t\t<include>DefaultSettingButton</include>
+\t\t\t\t\t<selected>!Skin.HasSetting(SkylineHideRt)</selected>
+\t\t\t\t\t<onclick>Skin.ToggleSetting(SkylineHideRt)</onclick>
+\t\t\t\t</control>
 \t\t\t\t<control type="radiobutton" id="791">
 \t\t\t\t\t<label>Artwork background</label>
 \t\t\t\t\t<include>DefaultSettingButton</include>

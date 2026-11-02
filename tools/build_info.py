@@ -18,7 +18,7 @@ import sys
 from urllib.parse import quote
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import focus_sheen, focus_zoom, watched_mark, BACKGROUND, POSTER, ROOT, SAFE_X, TEXT, TEXT_DIM, card_layout  # noqa: E402
+from build_home import RATING_SHOWN, focus_sheen, focus_zoom, watched_mark, BACKGROUND, POSTER, ROOT, SAFE_X, TEXT, TEXT_DIM, card_layout  # noqa: E402
 
 # Silo's detail hero: 100 px down (tvOS 100pt on a 1080pt canvas).
 TOP = 100
@@ -1258,7 +1258,8 @@ def rt_marks():
     out = ''
     for key, art, fresh, rotten in (('rtcritic', 'silortcritic', 'silo/rt_fresh.png', 'silo/rt_rotten.png'),):
         sources = ('ListItem.Property(silo.rating.%s)' % key, 'ListItem.Art(%s)' % art)
-        shown = '![%s] + [%s]' % (ON_RAILS, ' | '.join('!String.IsEmpty(%s)' % v for v in sources))
+        shown = '![%s] + [%s] + %s' % (ON_RAILS, ' | '.join('!String.IsEmpty(%s)' % v for v in sources),
+                                       RATING_SHOWN['rottentomatoes'])
         high = ' | '.join('Integer.IsGreaterOrEqual(%s,60)' % v for v in sources)
         out += """
                 <control type="label">
@@ -1303,7 +1304,8 @@ def split_ratings(variables):
     """The facts line around the rating sources' marks (images): SiloDetailFacts
     up to IMDb's, SiloDetailFactsImdb from its score up to TMDB's,
     SiloDetailFactsTmdb from that score on; and when each mark shows (the
-    value Kodi picks has that score)."""
+    value Kodi picks has that score, and its source isn't turned off in the
+    skin settings: then its score goes too, the rest of the line stays)."""
     block = re.search(r'    <variable name="SiloDetailFacts">\n(.*?)    </variable>\n', variables, re.S)
     parts = ([], [], [], [])
     shown = {'imdb': [], 'tmdb': []}
@@ -1312,16 +1314,23 @@ def split_ratings(variables):
         attribute = ' condition="%s"' % condition if condition else ''
         imdb, tmdb = IMDB_MARK.search(value), TMDB_MARK.search(value)
         pieces = ['', '', '', '']
+        hidden = {}  # a part's value while its source is turned off
         rest = value
         if tmdb:
             pieces[2] = '$INFO[%s,  [B],[/B]]' % tmdb.group(1)
+            hidden[2] = ('SkylineHideTmdb', '')
             pieces[3] = rest[tmdb.end():]
             rest = rest[:tmdb.start()]
         if imdb:
             pieces[1] = '$INFO[%s,  [B],[/B]]%s' % (imdb.group(1), rest[imdb.end():])
+            hidden[1] = ('SkylineHideImdb', rest[imdb.end():])
             rest = rest[:imdb.start()]
         pieces[0] = rest
-        for part, piece in zip(parts, pieces):
+        for index, (part, piece) in enumerate(zip(parts, pieces)):
+            if index in hidden:
+                setting, without = hidden[index]
+                off = ((condition + ' + ') if condition else '') + 'Skin.HasSetting(%s)' % setting
+                part.append('        <value condition="%s">%s</value>\n' % (off, without))
             part.append('        <value%s>%s</value>\n' % (attribute, piece))
         for key, mark in (('imdb', imdb), ('tmdb', tmdb)):
             if mark:
@@ -1340,7 +1349,8 @@ def split_ratings(variables):
         found = re.search(r'    <variable name="%s">\n.*?    </variable>\n' % name, variables, re.S).group(0)
         variables = variables.replace(found, found.replace(' · ', FACTS_DOT))
     return (variables,
-            ' | '.join(shown['imdb']) or 'false', ' | '.join(shown['tmdb']) or 'false')
+            '[%s] + %s' % (' | '.join(shown['imdb']) or 'false', RATING_SHOWN['imdb']),
+            '[%s] + %s' % (' | '.join(shown['tmdb']) or 'false', RATING_SHOWN['themoviedb']))
 
 
 def add_variables():

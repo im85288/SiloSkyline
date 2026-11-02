@@ -649,7 +649,7 @@
 				<control type="image">
 					<top>4</top><width>60</width><height>28</height>
 					<texture>silo/imdb.png</texture>
-					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.imdb))</visible>
+					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.imdb)) + !Skin.HasSetting(SkylineHideImdb)</visible>
 				</control>
 				<control type="label">
 					<width>auto</width><height>36</height>
@@ -657,12 +657,12 @@
 					<font>silo_meta</font>
 					<textcolor>FFEDEDED</textcolor>
 					<label> [B]$INFO[Window(Home).Property(silokodi.playing.rating.imdb)][/B]  </label>
-					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.imdb))</visible>
+					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.imdb)) + !Skin.HasSetting(SkylineHideImdb)</visible>
 				</control>
 				<control type="image">
 					<top>3</top><width>165</width><height>30</height>
 					<texture>silo/tmdb.png</texture>
-					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.tmdb))</visible>
+					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.tmdb)) + !Skin.HasSetting(SkylineHideTmdb)</visible>
 				</control>
 				<control type="label">
 					<width>auto</width><height>36</height>
@@ -670,17 +670,17 @@
 					<font>silo_meta</font>
 					<textcolor>FFEDEDED</textcolor>
 					<label> [B]$INFO[Window(Home).Property(silokodi.playing.rating.tmdb)][/B]  </label>
-					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.tmdb))</visible>
+					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.tmdb)) + !Skin.HasSetting(SkylineHideTmdb)</visible>
 				</control>
 				<control type="image">
 					<top>2</top><width>32</width><height>32</height>
 					<texture>silo/rt_fresh.png</texture>
-					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.rtcritic)) + Integer.IsGreaterOrEqual(Window(Home).Property(silokodi.playing.rating.rtcritic),60)</visible>
+					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.rtcritic)) + !Skin.HasSetting(SkylineHideRt) + Integer.IsGreaterOrEqual(Window(Home).Property(silokodi.playing.rating.rtcritic),60)</visible>
 				</control>
 				<control type="image">
 					<top>2</top><width>32</width><height>32</height>
 					<texture>silo/rt_rotten.png</texture>
-					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.rtcritic)) + !Integer.IsGreaterOrEqual(Window(Home).Property(silokodi.playing.rating.rtcritic),60)</visible>
+					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.rtcritic)) + !Skin.HasSetting(SkylineHideRt) + !Integer.IsGreaterOrEqual(Window(Home).Property(silokodi.playing.rating.rtcritic),60)</visible>
 				</control>
 				<control type="label">
 					<width>auto</width><height>36</height>
@@ -688,7 +688,7 @@
 					<font>silo_meta</font>
 					<textcolor>FFEDEDED</textcolor>
 					<label> [B]$INFO[Window(Home).Property(silokodi.playing.rating.rtcritic)]%[/B]  </label>
-					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.rtcritic))</visible>
+					<visible>!String.IsEmpty(Window(Home).Property(silokodi.playing.rating.rtcritic)) + !Skin.HasSetting(SkylineHideRt)</visible>
 				</control>
 			</control>
 			<control type="textbox">

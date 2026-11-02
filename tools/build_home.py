@@ -2151,6 +2151,9 @@ def hero_reason():
 # A title's scores kept as text art by SiloKodiConnect, for Kodi's own lists
 # (they load only a title's default rating).
 RATING_ART = {'themoviedb': 'silotmdb', 'rottentomatoes': 'silortcritic'}
+# Each rating source shown unless turned off (Skin settings > General): by Kodi's rating name.
+RATING_SHOWN = {'imdb': '!Skin.HasSetting(SkylineHideImdb)', 'themoviedb': '!Skin.HasSetting(SkylineHideTmdb)',
+                'rottentomatoes': '!Skin.HasSetting(SkylineHideRt)'}
 # Rotten Tomatoes' critics' mark: (variable, score, art extra, 60% and up, under).
 RT_MARKS = (('SiloHeroRtCriticMark', 'rating.rtcritic', 'silortcritic', 'silo/rt_fresh.png', 'silo/rt_rotten.png'),)
 
@@ -2168,8 +2171,8 @@ def rt_list_marks(item, indent, colour):
 %(i)s<control type="image">
 %(i)s    <top>4</top><width>32</width><height>32</height>
 %(i)s    <texture>%(mark)s</texture>
-%(i)s    <visible>!String.IsEmpty(%(v)s) + %(c)s</visible>
-%(i)s</control>""" % {'i': indent, 'mark': mark, 'v': value, 'c': condition}
+%(i)s    <visible>!String.IsEmpty(%(v)s) + %(c)s + %(on)s</visible>
+%(i)s</control>""" % {'i': indent, 'mark': mark, 'v': value, 'c': condition, 'on': RATING_SHOWN['rottentomatoes']}
         out += """
 %(i)s<control type="label">
 %(i)s    <width>auto</width><height>40</height>
@@ -2177,8 +2180,8 @@ def rt_list_marks(item, indent, colour):
 %(i)s    <font>silo_meta</font>
 %(i)s    <textcolor>%(colour)s</textcolor>
 %(i)s    <label> [B]$INFO[%(v)s]%%[/B]   </label>
-%(i)s    <visible>!String.IsEmpty(%(v)s)</visible>
-%(i)s</control>""" % {'i': indent, 'v': value, 'colour': colour}
+%(i)s    <visible>!String.IsEmpty(%(v)s) + %(on)s</visible>
+%(i)s</control>""" % {'i': indent, 'v': value, 'colour': colour, 'on': RATING_SHOWN['rottentomatoes']}
     return out
 
 
@@ -2256,7 +2259,7 @@ def variables():
         terms += ['[%s + %s]' % (waiting, has('Container(%d).ListItem' % row_id)) for waiting, row_id in waiting_rows()]
         terms += ['[%s + !String.IsEmpty(%s)]' % (home_waiting(row), prop('silo.home.%d.1.%s' % (row, home_property[5:])))
                   for row in (1, 2)]
-        out += '    <expression name="Has%s">%s</expression>\n' % (name, ' | '.join(terms))
+        out += '    <expression name="Has%s">[%s] + %s</expression>\n' % (name, ' | '.join(terms), RATING_SHOWN[kodi_rating])
     out += rt_marks(rows)
     out += EMPTY_HOME + hero_reason()
     for name, entries in HERO:

@@ -22,7 +22,7 @@ import sys
 from urllib.parse import quote
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import rt_list_marks, focus_sheen, focus_zoom, watched_mark, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM, GRID_BACKDROP  # noqa: E402
+from build_home import rt_list_marks, RATING_SHOWN, focus_sheen, focus_zoom, watched_mark, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM, GRID_BACKDROP  # noqa: E402
 
 WINDOW_ID = 1191
 TYPE = 'Window(Home).Property(silo.browse.type)'
@@ -511,7 +511,7 @@ def marks(item, indent):
 %(i)s<control type="image">
 %(i)s    <top>%(top)d</top><width>%(w)d</width><height>%(h)d</height>
 %(i)s    <texture>%(mark)s</texture>
-%(i)s    <visible>!String.IsEmpty(%(score)s)</visible>
+%(i)s    <visible>!String.IsEmpty(%(score)s) + %(on)s</visible>
 %(i)s</control>
 %(i)s<control type="label">
 %(i)s    <width>auto</width><height>40</height>
@@ -519,8 +519,8 @@ def marks(item, indent):
 %(i)s    <font>silo_meta</font>
 %(i)s    <textcolor>%(dim)s</textcolor>
 %(i)s    <label> [B]$INFO[%(score)s][/B]   </label>
-%(i)s    <visible>!String.IsEmpty(%(score)s)</visible>
-%(i)s</control>""" % {'i': indent, 'top': top, 'w': width, 'h': height, 'mark': mark, 'score': score, 'dim': TEXT_DIM}
+%(i)s    <visible>!String.IsEmpty(%(score)s) + %(on)s</visible>
+%(i)s</control>""" % {'i': indent, 'top': top, 'w': width, 'h': height, 'mark': mark, 'score': score, 'on': RATING_SHOWN[rating], 'dim': TEXT_DIM}
     return out + rt_list_marks(item, indent, TEXT_DIM)
 
 

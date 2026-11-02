@@ -60,7 +60,8 @@ screen, as Arctic Zephyr does.
 
 - **General:** Colours; Recommended add-ons (Up Next, YouTube and more, with what each adds); **Top 10
   rows**, which opens SiloKodiConnect's choice of Home rows to number; Artwork background; Use slide animations;
-  Theme music on show pages (on by default).
+  Theme music on show pages; IMDb, TMDB and Rotten Tomatoes ratings, each shown or hidden everywhere (all on by
+  default).
 - **Player:** Player style (Showcase or Silo's) and the overlay's auto-close.
 
 ## Install

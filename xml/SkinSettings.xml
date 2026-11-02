@@ -61,6 +61,24 @@
 					<onclick>Skin.ToggleSetting(SkylineNoThemeMusic)</onclick>
 					<visible>System.HasAddon(plugin.video.silokodiconnect)</visible>
 				</control>
+				<control type="radiobutton" id="796">
+					<label>IMDb ratings</label>
+					<include>DefaultSettingButton</include>
+					<selected>!Skin.HasSetting(SkylineHideImdb)</selected>
+					<onclick>Skin.ToggleSetting(SkylineHideImdb)</onclick>
+				</control>
+				<control type="radiobutton" id="797">
+					<label>TMDB ratings</label>
+					<include>DefaultSettingButton</include>
+					<selected>!Skin.HasSetting(SkylineHideTmdb)</selected>
+					<onclick>Skin.ToggleSetting(SkylineHideTmdb)</onclick>
+				</control>
+				<control type="radiobutton" id="798">
+					<label>Rotten Tomatoes ratings</label>
+					<include>DefaultSettingButton</include>
+					<selected>!Skin.HasSetting(SkylineHideRt)</selected>
+					<onclick>Skin.ToggleSetting(SkylineHideRt)</onclick>
+				</control>
 				<control type="radiobutton" id="791">
 					<label>Artwork background</label>
 					<include>DefaultSettingButton</include>

@@ -781,7 +781,7 @@
                 <control type="image">
                     <top>6</top><width>60</width><height>28</height>
                     <texture>silo/imdb.png</texture>
-                    <visible>!String.IsEmpty(ListItem.Rating(imdb))</visible>
+                    <visible>!String.IsEmpty(ListItem.Rating(imdb)) + !Skin.HasSetting(SkylineHideImdb)</visible>
                 </control>
                 <control type="label">
                     <width>auto</width><height>40</height>
@@ -789,12 +789,12 @@
                     <font>silo_meta</font>
                     <textcolor>BFEDEDED</textcolor>
                     <label> [B]$INFO[ListItem.Rating(imdb)][/B]   </label>
-                    <visible>!String.IsEmpty(ListItem.Rating(imdb))</visible>
+                    <visible>!String.IsEmpty(ListItem.Rating(imdb)) + !Skin.HasSetting(SkylineHideImdb)</visible>
                 </control>
                 <control type="image">
                     <top>5</top><width>165</width><height>30</height>
                     <texture>silo/tmdb.png</texture>
-                    <visible>!String.IsEmpty(ListItem.Art(silotmdb))</visible>
+                    <visible>!String.IsEmpty(ListItem.Art(silotmdb)) + !Skin.HasSetting(SkylineHideTmdb)</visible>
                 </control>
                 <control type="label">
                     <width>auto</width><height>40</height>
@@ -802,17 +802,17 @@
                     <font>silo_meta</font>
                     <textcolor>BFEDEDED</textcolor>
                     <label> [B]$INFO[ListItem.Art(silotmdb)][/B]   </label>
-                    <visible>!String.IsEmpty(ListItem.Art(silotmdb))</visible>
+                    <visible>!String.IsEmpty(ListItem.Art(silotmdb)) + !Skin.HasSetting(SkylineHideTmdb)</visible>
                 </control>
                 <control type="image">
                     <top>4</top><width>32</width><height>32</height>
                     <texture>silo/rt_fresh.png</texture>
-                    <visible>!String.IsEmpty(ListItem.Art(silortcritic)) + Integer.IsGreaterOrEqual(ListItem.Art(silortcritic),60)</visible>
+                    <visible>!String.IsEmpty(ListItem.Art(silortcritic)) + Integer.IsGreaterOrEqual(ListItem.Art(silortcritic),60) + !Skin.HasSetting(SkylineHideRt)</visible>
                 </control>
                 <control type="image">
                     <top>4</top><width>32</width><height>32</height>
                     <texture>silo/rt_rotten.png</texture>
-                    <visible>!String.IsEmpty(ListItem.Art(silortcritic)) + !Integer.IsGreaterOrEqual(ListItem.Art(silortcritic),60)</visible>
+                    <visible>!String.IsEmpty(ListItem.Art(silortcritic)) + !Integer.IsGreaterOrEqual(ListItem.Art(silortcritic),60) + !Skin.HasSetting(SkylineHideRt)</visible>
                 </control>
                 <control type="label">
                     <width>auto</width><height>40</height>
@@ -820,7 +820,7 @@
                     <font>silo_meta</font>
                     <textcolor>BFEDEDED</textcolor>
                     <label> [B]$INFO[ListItem.Art(silortcritic)]%[/B]   </label>
-                    <visible>!String.IsEmpty(ListItem.Art(silortcritic))</visible>
+                    <visible>!String.IsEmpty(ListItem.Art(silortcritic)) + !Skin.HasSetting(SkylineHideRt)</visible>
                 </control>
             </control>
             <control type="textbox">
@@ -965,7 +965,7 @@
                 <control type="image">
                     <top>6</top><width>60</width><height>28</height>
                     <texture>silo/imdb.png</texture>
-                    <visible>!String.IsEmpty(ListItem.Rating(imdb))</visible>
+                    <visible>!String.IsEmpty(ListItem.Rating(imdb)) + !Skin.HasSetting(SkylineHideImdb)</visible>
                 </control>
                 <control type="label">
                     <width>auto</width><height>40</height>
@@ -973,12 +973,12 @@
                     <font>silo_meta</font>
                     <textcolor>BFEDEDED</textcolor>
                     <label> [B]$INFO[ListItem.Rating(imdb)][/B]   </label>
-                    <visible>!String.IsEmpty(ListItem.Rating(imdb))</visible>
+                    <visible>!String.IsEmpty(ListItem.Rating(imdb)) + !Skin.HasSetting(SkylineHideImdb)</visible>
                 </control>
                 <control type="image">
                     <top>5</top><width>165</width><height>30</height>
                     <texture>silo/tmdb.png</texture>
-                    <visible>!String.IsEmpty(ListItem.Art(silotmdb))</visible>
+                    <visible>!String.IsEmpty(ListItem.Art(silotmdb)) + !Skin.HasSetting(SkylineHideTmdb)</visible>
                 </control>
                 <control type="label">
                     <width>auto</width><height>40</height>
@@ -986,17 +986,17 @@
                     <font>silo_meta</font>
                     <textcolor>BFEDEDED</textcolor>
                     <label> [B]$INFO[ListItem.Art(silotmdb)][/B]   </label>
-                    <visible>!String.IsEmpty(ListItem.Art(silotmdb))</visible>
+                    <visible>!String.IsEmpty(ListItem.Art(silotmdb)) + !Skin.HasSetting(SkylineHideTmdb)</visible>
                 </control>
                 <control type="image">
                     <top>4</top><width>32</width><height>32</height>
                     <texture>silo/rt_fresh.png</texture>
-                    <visible>!String.IsEmpty(ListItem.Art(silortcritic)) + Integer.IsGreaterOrEqual(ListItem.Art(silortcritic),60)</visible>
+                    <visible>!String.IsEmpty(ListItem.Art(silortcritic)) + Integer.IsGreaterOrEqual(ListItem.Art(silortcritic),60) + !Skin.HasSetting(SkylineHideRt)</visible>
                 </control>
                 <control type="image">
                     <top>4</top><width>32</width><height>32</height>
                     <texture>silo/rt_rotten.png</texture>
-                    <visible>!String.IsEmpty(ListItem.Art(silortcritic)) + !Integer.IsGreaterOrEqual(ListItem.Art(silortcritic),60)</visible>
+                    <visible>!String.IsEmpty(ListItem.Art(silortcritic)) + !Integer.IsGreaterOrEqual(ListItem.Art(silortcritic),60) + !Skin.HasSetting(SkylineHideRt)</visible>
                 </control>
                 <control type="label">
                     <width>auto</width><height>40</height>
@@ -1004,7 +1004,7 @@
                     <font>silo_meta</font>
                     <textcolor>BFEDEDED</textcolor>
                     <label> [B]$INFO[ListItem.Art(silortcritic)]%[/B]   </label>
-                    <visible>!String.IsEmpty(ListItem.Art(silortcritic))</visible>
+                    <visible>!String.IsEmpty(ListItem.Art(silortcritic)) + !Skin.HasSetting(SkylineHideRt)</visible>
                 </control>
             </control>
             <control type="label">

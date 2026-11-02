@@ -25,7 +25,7 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import ROOT, TEXT, TEXT_DIM  # noqa: E402
+from build_home import RATING_SHOWN, ROOT, TEXT, TEXT_DIM  # noqa: E402
 
 # Showcase is the default: the setting (off until chosen) picks Silo's player.
 SETTING = 'SkylineSiloOSD'
@@ -160,7 +160,7 @@ def ratings(indent='\t\t\t\t\t'):
     out = ''
     for rating, mark, width, height, top in (('imdb', 'silo/imdb.png', 60, 28, 4), ('tmdb', 'silo/tmdb.png', 165, 30, 3)):
         score = PLAYING % ('rating.' + rating)
-        shown = '!String.IsEmpty(%s)' % score
+        shown = '!String.IsEmpty(%s) + %s' % (score, RATING_SHOWN['themoviedb' if rating == 'tmdb' else rating])
         out += '''
 %(i)s<control type="image">
 %(i)s	<top>%(top)d</top><width>%(w)d</width><height>%(h)d</height>
@@ -179,7 +179,7 @@ def ratings(indent='\t\t\t\t\t'):
     # Rotten Tomatoes' critics': the Fresh tomato (60% and up) or the Rotten splat.
     for rating, fresh, rotten in (('rtcritic', 'silo/rt_fresh.png', 'silo/rt_rotten.png'),):
         score = PLAYING % ('rating.' + rating)
-        shown = '!String.IsEmpty(%s)' % score
+        shown = '!String.IsEmpty(%s) + %s' % (score, RATING_SHOWN['rottentomatoes'])
         for mark, condition in ((fresh, 'Integer.IsGreaterOrEqual(%s,60)' % score),
                                 (rotten, '!Integer.IsGreaterOrEqual(%s,60)' % score)):
             out += '''
