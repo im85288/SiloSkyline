@@ -116,6 +116,7 @@
                     <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus border="30" colordiffuse="14FFFFFF">silo/pill.png</texturenofocus>
                     <label>Add an item</label>
+                    <visible>![String.IsEqual(Window.Property(groupname),mainmenu) + Integer.IsGreaterOrEqual(Container(211).NumItems,2)]</visible>
                 </control>
                 <control type="button" id="303">
                     <width>560</width><height>68</height>
@@ -152,6 +153,15 @@
                     <texturenofocus border="30" colordiffuse="14FFFFFF">silo/pill.png</texturenofocus>
                     <label>Delete</label>
                     <visible>Integer.IsGreater(Container(211).NumItems,0)</visible>
+                </control>
+                <control type="label">
+                    <width>560</width><height>68</height>
+                    <textoffsetx>28</textoffsetx>
+                    <aligny>center</aligny>
+                    <font>silo_detail</font>
+                    <textcolor>BFEDEDED</textcolor>
+                    <label>The menu bar has room for 2 items</label>
+                    <visible>[String.IsEqual(Window.Property(groupname),mainmenu) + Integer.IsGreaterOrEqual(Container(211).NumItems,2)]</visible>
                 </control>
             </control>
 

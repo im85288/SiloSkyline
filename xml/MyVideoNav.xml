@@ -481,7 +481,7 @@
                         <textcolor>FFEDEDED</textcolor>
                         <label>$VAR[SiloBrowseLabel]</label>
                         <scroll>true</scroll>
-                        <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
+                        <scrollspeed>50</scrollspeed><scrollsuffix>     ·     </scrollsuffix>
                         <visible>Control.HasFocus(51)</visible>
                     </control>
                     <control type="label">

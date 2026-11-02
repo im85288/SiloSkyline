@@ -355,7 +355,7 @@
                             <label>$VAR[SiloCardTitle]</label>
                             <!-- The whole title, scrolling, on the focused card. -->
                             <scroll>true</scroll>
-                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>     ·     </scrollsuffix>
                             <visible>Control.HasFocus($PARAM[id])</visible>
                         </control>
                         <control type="label">
@@ -575,7 +575,7 @@
                             <label>$VAR[SiloCardTitle]</label>
                             <!-- The whole title, scrolling, on the focused card. -->
                             <scroll>true</scroll>
-                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>     ·     </scrollsuffix>
                             <visible>Control.HasFocus($PARAM[id])</visible>
                         </control>
                         <control type="label">
@@ -887,7 +887,7 @@
                             <label>$VAR[SiloCardTitle]</label>
                             <!-- The whole title, scrolling, on the focused card. -->
                             <scroll>true</scroll>
-                            <scrollspeed>50</scrollspeed><scrollsuffix>      </scrollsuffix>
+                            <scrollspeed>50</scrollspeed><scrollsuffix>     ·     </scrollsuffix>
                             <visible>Control.HasFocus($PARAM[id])</visible>
                         </control>
                         <control type="label">

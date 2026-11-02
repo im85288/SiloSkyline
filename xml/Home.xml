@@ -5707,6 +5707,7 @@
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.comingsoon,home)</onclick>
+                    <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.boxsets,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -5720,6 +5721,7 @@
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.comingsoon,home)</onclick>
+                    <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.boxsets,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -5879,6 +5881,7 @@
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.comingsoon,home)</onclick>
+                    <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.boxsets,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -5892,6 +5895,7 @@
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.comingsoon,home)</onclick>
+                    <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.boxsets,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.Property(silo.see_all),true)">ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -6047,7 +6051,8 @@
             <orientation>horizontal</orientation>
             <itemgap>12</itemgap>
             <visible>String.IsEqual(Window(Home).Property(silo.page),movies)</visible>
-            <animation effect="fade" start="100" end="70" time="200" condition="!ControlGroup(4601).HasFocus()">Conditional</animation>
+            <!-- Dimmed until Up from the top row reaches them: the content comes first, as Netflix's. -->
+            <animation effect="fade" start="100" end="50" time="200" condition="!ControlGroup(4601).HasFocus()">Conditional</animation>
             <onup>SetFocus(9003)</onup>
             <onback>SetFocus(9003)</onback>
             <ondown condition="$EXP[SiloRow5101]">SetFocus(5101)</ondown>
@@ -6089,6 +6094,7 @@
                     <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.boxsets,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -6115,6 +6121,7 @@
                     <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.boxsets,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -6139,6 +6146,7 @@
                     <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.boxsets,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -6149,6 +6157,30 @@
                     <onclick>ActivateWindow(1191)</onclick>
                 </control>
                 <control type="button" id="46014">
+                    <width>auto</width><height>48</height>
+                    <label>Box sets</label>
+                    <font>silo_meta</font>
+                    <textoffsetx>22</textoffsetx>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>B3EDEDED</textcolor>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="24" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                    <texturenofocus border="24" colordiffuse="12FFFFFF">silo/pill.png</texturenofocus>
+                    <onclick>SetProperty(silo.browse.type,boxsets,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.from,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.letter,home)</onclick>
+                    <onclick>SetProperty(silo.browse.list,videodb://movies/sets/,home)</onclick>
+                    <onclick>SetProperty(silo.browse.list.boxsets,videodb://movies/sets/,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
+                    <onclick>ActivateWindow(1191)</onclick>
+                </control>
+                <control type="button" id="46015">
                     <width>auto</width><height>48</height>
                     <label>Collections</label>
                     <font>silo_meta</font>
@@ -6164,6 +6196,7 @@
                     <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.boxsets,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -6179,7 +6212,8 @@
             <orientation>horizontal</orientation>
             <itemgap>12</itemgap>
             <visible>String.IsEqual(Window(Home).Property(silo.page),series)</visible>
-            <animation effect="fade" start="100" end="70" time="200" condition="!ControlGroup(4602).HasFocus()">Conditional</animation>
+            <!-- Dimmed until Up from the top row reaches them: the content comes first, as Netflix's. -->
+            <animation effect="fade" start="100" end="50" time="200" condition="!ControlGroup(4602).HasFocus()">Conditional</animation>
             <onup>SetFocus(9004)</onup>
             <onback>SetFocus(9004)</onback>
             <ondown condition="$EXP[SiloRow5201]">SetFocus(5201)</ondown>
@@ -6221,6 +6255,7 @@
                     <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.boxsets,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -6247,6 +6282,7 @@
                     <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.boxsets,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -6271,6 +6307,7 @@
                     <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.boxsets,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -6298,6 +6335,7 @@
                     <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.boxsets,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -6319,6 +6357,7 @@
                     <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
+                    <onclick>ClearProperty(silo.browse.list.boxsets,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                     <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -6334,7 +6373,8 @@
             <orientation>horizontal</orientation>
             <itemgap>12</itemgap>
             <visible>String.IsEqual(Window(Home).Property(silo.page),requests)</visible>
-            <animation effect="fade" start="100" end="70" time="200" condition="!ControlGroup(4603).HasFocus()">Conditional</animation>
+            <!-- Dimmed until Up from the top row reaches them: the content comes first, as Netflix's. -->
+            <animation effect="fade" start="100" end="50" time="200" condition="!ControlGroup(4603).HasFocus()">Conditional</animation>
             <onup>SetFocus(9005)</onup>
             <onback>SetFocus(9005)</onback>
             <ondown condition="$EXP[SiloRow5301]">SetFocus(5301)</ondown>
@@ -6374,7 +6414,8 @@
             <width>1744</width><height>48</height>
             <orientation>horizontal</orientation>
             <visible>String.IsEqual(Window(Home).Property(silo.page),custom) + String.IsEqual(Container(9100).ListItem.Property(hasSubmenu),True)</visible>
-            <animation effect="fade" start="100" end="70" time="200" condition="!Control.HasFocus(4699)">Conditional</animation>
+            <!-- Dimmed until Up from the top row reaches them: the content comes first, as Netflix's. -->
+            <animation effect="fade" start="100" end="50" time="200" condition="!Control.HasFocus(4699)">Conditional</animation>
             <onup>SetFocus($INFO[Window(Home).Property(silo.custom.button)])</onup>
             <onback>SetFocus($INFO[Window(Home).Property(silo.custom.button)])</onback>
             <ondown condition="$EXP[SiloRow5401]">SetFocus(5401)</ondown>
@@ -6463,9 +6504,11 @@
              over their dropdowns; the user's own items extend it to the right. -->
         <control type="grouplist" id="9000">
             <animation effect="fade" start="100" end="70" time="200" condition="!ControlGroup(9000).HasFocus() + !Control.HasFocus(9011)">Conditional</animation>
-            <left>471</left><top>58</top>
-            <width>1281</width><height>60</height>
+            <left>348</left><top>58</top>
+            <width>1404</width><height>60</height>
             <orientation>horizontal</orientation>
+            <!-- Centred however many custom items it holds. -->
+            <align>center</align>
             <itemgap>8</itemgap>
             <ondown condition="$EXP[SiloRow5001]">SetFocus(5001)</ondown>
             <ondown condition="$EXP[SiloRow5002] + !$EXP[SiloRow5001]">SetFocus(5002)</ondown>
@@ -6558,12 +6601,9 @@
                     <onright condition="Control.IsVisible(9006) + !Control.IsVisible(9002) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005)">SetFocus(9006)</onright>
                     <onright condition="Control.IsVisible(9031) + !Control.IsVisible(9002) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006)">SetFocus(9031)</onright>
                     <onright condition="Control.IsVisible(9032) + !Control.IsVisible(9002) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031)">SetFocus(9032)</onright>
-                    <onright condition="Control.IsVisible(9033) + !Control.IsVisible(9002) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032)">SetFocus(9033)</onright>
-                    <onright condition="Control.IsVisible(9034) + !Control.IsVisible(9002) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033)">SetFocus(9034)</onright>
-                    <onright condition="Control.IsVisible(9035) + !Control.IsVisible(9002) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033) + !Control.IsVisible(9034)">SetFocus(9035)</onright>
-                    <onright condition="Control.IsVisible(9009) + !Control.IsVisible(9002) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033) + !Control.IsVisible(9034) + !Control.IsVisible(9035)">SetFocus(9009)</onright>
-                    <onright condition="Control.IsVisible(9010) + !Control.IsVisible(9002) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033) + !Control.IsVisible(9034) + !Control.IsVisible(9035) + !Control.IsVisible(9009)">SetFocus(9010)</onright>
-                    <onright condition="Control.IsVisible(9011) + !Control.IsVisible(9002) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033) + !Control.IsVisible(9034) + !Control.IsVisible(9035) + !Control.IsVisible(9009) + !Control.IsVisible(9010)">SetFocus(9011)</onright>
+                    <onright condition="Control.IsVisible(9009) + !Control.IsVisible(9002) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032)">SetFocus(9009)</onright>
+                    <onright condition="Control.IsVisible(9010) + !Control.IsVisible(9002) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9009)">SetFocus(9010)</onright>
+                    <onright condition="Control.IsVisible(9011) + !Control.IsVisible(9002) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9009) + !Control.IsVisible(9010)">SetFocus(9011)</onright>
                 </control>
                 <control type="image">
                     <left>14</left><top>14</top>
@@ -6641,12 +6681,9 @@
                     <onright condition="Control.IsVisible(9006) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005)">SetFocus(9006)</onright>
                     <onright condition="Control.IsVisible(9031) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006)">SetFocus(9031)</onright>
                     <onright condition="Control.IsVisible(9032) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031)">SetFocus(9032)</onright>
-                    <onright condition="Control.IsVisible(9033) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032)">SetFocus(9033)</onright>
-                    <onright condition="Control.IsVisible(9034) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033)">SetFocus(9034)</onright>
-                    <onright condition="Control.IsVisible(9035) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033) + !Control.IsVisible(9034)">SetFocus(9035)</onright>
-                    <onright condition="Control.IsVisible(9009) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033) + !Control.IsVisible(9034) + !Control.IsVisible(9035)">SetFocus(9009)</onright>
-                    <onright condition="Control.IsVisible(9010) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033) + !Control.IsVisible(9034) + !Control.IsVisible(9035) + !Control.IsVisible(9009)">SetFocus(9010)</onright>
-                    <onright condition="Control.IsVisible(9011) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033) + !Control.IsVisible(9034) + !Control.IsVisible(9035) + !Control.IsVisible(9009) + !Control.IsVisible(9010)">SetFocus(9011)</onright>
+                    <onright condition="Control.IsVisible(9009) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032)">SetFocus(9009)</onright>
+                    <onright condition="Control.IsVisible(9010) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9009)">SetFocus(9010)</onright>
+                    <onright condition="Control.IsVisible(9011) + !Control.IsVisible(9003) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9009) + !Control.IsVisible(9010)">SetFocus(9011)</onright>
                     <onleft condition="Control.IsVisible(9001)">SetFocus(9001)</onleft>
 
                     <onclick condition="$EXP[SiloRow5001]">SetFocus(5001)</onclick>
@@ -6719,12 +6756,9 @@
                     <onright condition="Control.IsVisible(9006) + !Control.IsVisible(9004) + !Control.IsVisible(9005)">SetFocus(9006)</onright>
                     <onright condition="Control.IsVisible(9031) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006)">SetFocus(9031)</onright>
                     <onright condition="Control.IsVisible(9032) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031)">SetFocus(9032)</onright>
-                    <onright condition="Control.IsVisible(9033) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032)">SetFocus(9033)</onright>
-                    <onright condition="Control.IsVisible(9034) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033)">SetFocus(9034)</onright>
-                    <onright condition="Control.IsVisible(9035) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033) + !Control.IsVisible(9034)">SetFocus(9035)</onright>
-                    <onright condition="Control.IsVisible(9009) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033) + !Control.IsVisible(9034) + !Control.IsVisible(9035)">SetFocus(9009)</onright>
-                    <onright condition="Control.IsVisible(9010) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033) + !Control.IsVisible(9034) + !Control.IsVisible(9035) + !Control.IsVisible(9009)">SetFocus(9010)</onright>
-                    <onright condition="Control.IsVisible(9011) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033) + !Control.IsVisible(9034) + !Control.IsVisible(9035) + !Control.IsVisible(9009) + !Control.IsVisible(9010)">SetFocus(9011)</onright>
+                    <onright condition="Control.IsVisible(9009) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032)">SetFocus(9009)</onright>
+                    <onright condition="Control.IsVisible(9010) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9009)">SetFocus(9010)</onright>
+                    <onright condition="Control.IsVisible(9011) + !Control.IsVisible(9004) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9009) + !Control.IsVisible(9010)">SetFocus(9011)</onright>
                     <onleft condition="Control.IsVisible(9002)">SetFocus(9002)</onleft>
                     <onleft condition="Control.IsVisible(9001) + !Control.IsVisible(9002)">SetFocus(9001)</onleft>
 
@@ -6801,12 +6835,9 @@
                     <onright condition="Control.IsVisible(9006) + !Control.IsVisible(9005)">SetFocus(9006)</onright>
                     <onright condition="Control.IsVisible(9031) + !Control.IsVisible(9005) + !Control.IsVisible(9006)">SetFocus(9031)</onright>
                     <onright condition="Control.IsVisible(9032) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031)">SetFocus(9032)</onright>
-                    <onright condition="Control.IsVisible(9033) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032)">SetFocus(9033)</onright>
-                    <onright condition="Control.IsVisible(9034) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033)">SetFocus(9034)</onright>
-                    <onright condition="Control.IsVisible(9035) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033) + !Control.IsVisible(9034)">SetFocus(9035)</onright>
-                    <onright condition="Control.IsVisible(9009) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033) + !Control.IsVisible(9034) + !Control.IsVisible(9035)">SetFocus(9009)</onright>
-                    <onright condition="Control.IsVisible(9010) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033) + !Control.IsVisible(9034) + !Control.IsVisible(9035) + !Control.IsVisible(9009)">SetFocus(9010)</onright>
-                    <onright condition="Control.IsVisible(9011) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033) + !Control.IsVisible(9034) + !Control.IsVisible(9035) + !Control.IsVisible(9009) + !Control.IsVisible(9010)">SetFocus(9011)</onright>
+                    <onright condition="Control.IsVisible(9009) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032)">SetFocus(9009)</onright>
+                    <onright condition="Control.IsVisible(9010) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9009)">SetFocus(9010)</onright>
+                    <onright condition="Control.IsVisible(9011) + !Control.IsVisible(9005) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9009) + !Control.IsVisible(9010)">SetFocus(9011)</onright>
                     <onleft condition="Control.IsVisible(9003)">SetFocus(9003)</onleft>
                     <onleft condition="Control.IsVisible(9002) + !Control.IsVisible(9003)">SetFocus(9002)</onleft>
                     <onleft condition="Control.IsVisible(9001) + !Control.IsVisible(9003) + !Control.IsVisible(9002)">SetFocus(9001)</onleft>
@@ -6884,12 +6915,9 @@
                     <onright condition="Control.IsVisible(9006)">SetFocus(9006)</onright>
                     <onright condition="Control.IsVisible(9031) + !Control.IsVisible(9006)">SetFocus(9031)</onright>
                     <onright condition="Control.IsVisible(9032) + !Control.IsVisible(9006) + !Control.IsVisible(9031)">SetFocus(9032)</onright>
-                    <onright condition="Control.IsVisible(9033) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032)">SetFocus(9033)</onright>
-                    <onright condition="Control.IsVisible(9034) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033)">SetFocus(9034)</onright>
-                    <onright condition="Control.IsVisible(9035) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033) + !Control.IsVisible(9034)">SetFocus(9035)</onright>
-                    <onright condition="Control.IsVisible(9009) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033) + !Control.IsVisible(9034) + !Control.IsVisible(9035)">SetFocus(9009)</onright>
-                    <onright condition="Control.IsVisible(9010) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033) + !Control.IsVisible(9034) + !Control.IsVisible(9035) + !Control.IsVisible(9009)">SetFocus(9010)</onright>
-                    <onright condition="Control.IsVisible(9011) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9033) + !Control.IsVisible(9034) + !Control.IsVisible(9035) + !Control.IsVisible(9009) + !Control.IsVisible(9010)">SetFocus(9011)</onright>
+                    <onright condition="Control.IsVisible(9009) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032)">SetFocus(9009)</onright>
+                    <onright condition="Control.IsVisible(9010) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9009)">SetFocus(9010)</onright>
+                    <onright condition="Control.IsVisible(9011) + !Control.IsVisible(9006) + !Control.IsVisible(9031) + !Control.IsVisible(9032) + !Control.IsVisible(9009) + !Control.IsVisible(9010)">SetFocus(9011)</onright>
                     <onleft condition="Control.IsVisible(9004)">SetFocus(9004)</onleft>
                     <onleft condition="Control.IsVisible(9003) + !Control.IsVisible(9004)">SetFocus(9003)</onleft>
                     <onleft condition="Control.IsVisible(9002) + !Control.IsVisible(9004) + !Control.IsVisible(9003)">SetFocus(9002)</onleft>
@@ -6952,7 +6980,7 @@
                 </control>
                 <control type="button" id="9031">
                     <visible>!String.IsEmpty(Container(9100).ListItemAbsolute(0).Label)</visible>
-                    <width>auto</width><height>60</height>
+                    <width max="201">auto</width><height>60</height>
                     <label>$INFO[Container(9100).ListItemAbsolute(0).Label]</label>
                     <font>silo_tab</font>
                     <textoffsetx>24</textoffsetx>
@@ -7033,7 +7061,7 @@
                 </control>
                 <control type="button" id="9032">
                     <visible>!String.IsEmpty(Container(9100).ListItemAbsolute(1).Label)</visible>
-                    <width>auto</width><height>60</height>
+                    <width max="201">auto</width><height>60</height>
                     <label>$INFO[Container(9100).ListItemAbsolute(1).Label]</label>
                     <font>silo_tab</font>
                     <textoffsetx>24</textoffsetx>
@@ -7112,249 +7140,6 @@
                     <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(1).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(1).Property(hasSubmenu),True)] + !String.IsEqual(Container(9100).ListItemAbsolute(1).Property(hasSubmenu),True) + !!String.IsEmpty(Container(9100).ListItemAbsolute(1).Property(widgetPath))">SetFocus(9032)</onclick>
                     <onclick condition="String.IsEqual(Container(9100).ListItemAbsolute(1).Property(hasSubmenu),True) + !!String.IsEmpty(Container(9100).ListItemAbsolute(1).Property(widgetPath))">SetFocus(4699,0,absolute)</onclick>
                 </control>
-                <control type="button" id="9033">
-                    <visible>!String.IsEmpty(Container(9100).ListItemAbsolute(2).Label)</visible>
-                    <width>auto</width><height>60</height>
-                    <label>$INFO[Container(9100).ListItemAbsolute(2).Label]</label>
-                    <font>silo_tab</font>
-                    <textoffsetx>24</textoffsetx>
-                    <align>center</align><aligny>center</aligny>
-                    <textcolor>B3EDEDED</textcolor>
-                    <focusedcolor>SkylineFocusText</focusedcolor>
-                    <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
-                    <texturenofocus border="30" colordiffuse="$VAR[SiloCustomTab9033]">silo/pill.png</texturenofocus>
-                    <ondown condition="$EXP[SiloRow5001]">SetFocus(5001)</ondown>
-                    <ondown condition="$EXP[SiloRow5002] + !$EXP[SiloRow5001]">SetFocus(5002)</ondown>
-                    <ondown condition="$EXP[SiloRow5003] + !$EXP[SiloRow5001] + !$EXP[SiloRow5002]">SetFocus(5003)</ondown>
-                    <ondown condition="$EXP[SiloRow5004] + !$EXP[SiloRow5001] + !$EXP[SiloRow5002] + !$EXP[SiloRow5003]">SetFocus(5004)</ondown>
-                    <ondown condition="$EXP[SiloRow5101]">SetFocus(5101)</ondown>
-                    <ondown condition="$EXP[SiloRow5151] + !$EXP[SiloRow5101]">SetFocus(5151)</ondown>
-                    <ondown condition="$EXP[SiloRow5102] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(5102)</ondown>
-                    <ondown condition="$EXP[SiloRow5152] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102]">SetFocus(5152)</ondown>
-                    <ondown condition="$EXP[SiloRow5103] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(5103)</ondown>
-                    <ondown condition="$EXP[SiloRow5153] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103]">SetFocus(5153)</ondown>
-                    <ondown condition="$EXP[SiloRow5104] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(5104)</ondown>
-                    <ondown condition="$EXP[SiloRow5154] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104]">SetFocus(5154)</ondown>
-                    <ondown condition="$EXP[SiloRow5201]">SetFocus(5201)</ondown>
-                    <ondown condition="$EXP[SiloRow5251] + !$EXP[SiloRow5201]">SetFocus(5251)</ondown>
-                    <ondown condition="$EXP[SiloRow5202] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(5202)</ondown>
-                    <ondown condition="$EXP[SiloRow5252] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202]">SetFocus(5252)</ondown>
-                    <ondown condition="$EXP[SiloRow5203] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(5203)</ondown>
-                    <ondown condition="$EXP[SiloRow5253] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203]">SetFocus(5253)</ondown>
-                    <ondown condition="$EXP[SiloRow5204] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(5204)</ondown>
-                    <ondown condition="$EXP[SiloRow5254] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204]">SetFocus(5254)</ondown>
-                    <ondown condition="$EXP[SiloRow5301]">SetFocus(5301)</ondown>
-                    <ondown condition="$EXP[SiloRow5302] + !$EXP[SiloRow5301]">SetFocus(5302)</ondown>
-                    <ondown condition="$EXP[SiloRow5303] + !$EXP[SiloRow5301] + !$EXP[SiloRow5302]">SetFocus(5303)</ondown>
-                    <ondown condition="$EXP[SiloRow5304] + !$EXP[SiloRow5301] + !$EXP[SiloRow5302] + !$EXP[SiloRow5303]">SetFocus(5304)</ondown>
-                    <ondown condition="$EXP[SiloRow5401]">SetFocus(5401)</ondown>
-                    <ondown condition="$EXP[SiloRow5451] + !$EXP[SiloRow5401]">SetFocus(5451)</ondown>
-                    <ondown condition="$EXP[SiloRow5402] + !$EXP[SiloRow5401] + !$EXP[SiloRow5451]">SetFocus(5402)</ondown>
-                    <ondown condition="$EXP[SiloRow5452] + !$EXP[SiloRow5401] + !$EXP[SiloRow5451] + !$EXP[SiloRow5402]">SetFocus(5452)</ondown>
-                    <ondown condition="$EXP[SiloRow5403] + !$EXP[SiloRow5401] + !$EXP[SiloRow5451] + !$EXP[SiloRow5402] + !$EXP[SiloRow5452]">SetFocus(5403)</ondown>
-                    <ondown condition="$EXP[SiloRow5453] + !$EXP[SiloRow5401] + !$EXP[SiloRow5451] + !$EXP[SiloRow5402] + !$EXP[SiloRow5452] + !$EXP[SiloRow5403]">SetFocus(5453)</ondown>
-                    <ondown condition="$EXP[SiloRow5404] + !$EXP[SiloRow5401] + !$EXP[SiloRow5451] + !$EXP[SiloRow5402] + !$EXP[SiloRow5452] + !$EXP[SiloRow5403] + !$EXP[SiloRow5453]">SetFocus(5404)</ondown>
-                    <ondown condition="$EXP[SiloRow5454] + !$EXP[SiloRow5401] + !$EXP[SiloRow5451] + !$EXP[SiloRow5402] + !$EXP[SiloRow5452] + !$EXP[SiloRow5403] + !$EXP[SiloRow5453] + !$EXP[SiloRow5404]">SetFocus(5454)</ondown>
-                    <ondown condition="String.IsEqual(Window(Home).Property(silo.page),movies) + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(4601)</ondown>
-                    <ondown condition="String.IsEqual(Window(Home).Property(silo.page),series) + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(4602)</ondown>
-                    <ondown condition="String.IsEqual(Window(Home).Property(silo.page),requests) + !$EXP[SiloRow5301] + !$EXP[SiloRow5302] + !$EXP[SiloRow5303] + !$EXP[SiloRow5304]">SetFocus(4603)</ondown>
-                    <ondown condition="String.IsEqual(Window(Home).Property(silo.page),custom) + !$EXP[SiloRow5401] + !$EXP[SiloRow5451] + !$EXP[SiloRow5402] + !$EXP[SiloRow5452] + !$EXP[SiloRow5403] + !$EXP[SiloRow5453] + !$EXP[SiloRow5404] + !$EXP[SiloRow5454]">SetFocus(4699)</ondown>
-                    <onclick condition="![!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)]">$INFO[Container(9100).ListItemAbsolute(2).Property(path)]</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)]">SetProperty(silo.page,custom,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)]">ClearProperty(silo.row,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)]">SetProperty(silo.custom.button,9033,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)]">SetProperty(silo.custom.1.title,$INFO[Container(9100).ListItemAbsolute(2).Property(widgetName)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)]">SetProperty(silo.custom.1.path,$INFO[Container(9100).ListItemAbsolute(2).Property(widgetPath)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)] + [String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetStyle),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetStyle)) + String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetType),episodes)]]">SetProperty(silo.custom.1.style,landscape,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)] + ![String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetStyle),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetStyle)) + String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetType),episodes)]]">SetProperty(silo.custom.1.style,poster,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)]">SetProperty(silo.custom.2.title,$INFO[Container(9100).ListItemAbsolute(2).Property(widgetName.2)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)]">SetProperty(silo.custom.2.path,$INFO[Container(9100).ListItemAbsolute(2).Property(widgetPath.2)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)] + [String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetStyle.2),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetStyle.2)) + String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetType.2),episodes)]]">SetProperty(silo.custom.2.style,landscape,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)] + ![String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetStyle.2),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetStyle.2)) + String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetType.2),episodes)]]">SetProperty(silo.custom.2.style,poster,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)]">SetProperty(silo.custom.3.title,$INFO[Container(9100).ListItemAbsolute(2).Property(widgetName.3)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)]">SetProperty(silo.custom.3.path,$INFO[Container(9100).ListItemAbsolute(2).Property(widgetPath.3)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)] + [String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetStyle.3),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetStyle.3)) + String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetType.3),episodes)]]">SetProperty(silo.custom.3.style,landscape,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)] + ![String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetStyle.3),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetStyle.3)) + String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetType.3),episodes)]]">SetProperty(silo.custom.3.style,poster,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)]">SetProperty(silo.custom.4.title,$INFO[Container(9100).ListItemAbsolute(2).Property(widgetName.4)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)]">SetProperty(silo.custom.4.path,$INFO[Container(9100).ListItemAbsolute(2).Property(widgetPath.4)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)] + [String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetStyle.4),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetStyle.4)) + String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetType.4),episodes)]]">SetProperty(silo.custom.4.style,landscape,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)] + ![String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetStyle.4),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetStyle.4)) + String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetType.4),episodes)]]">SetProperty(silo.custom.4.style,poster,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)]">SetProperty(silo.custom.5.title,$INFO[Container(9100).ListItemAbsolute(2).Property(widgetName.5)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)]">SetProperty(silo.custom.5.path,$INFO[Container(9100).ListItemAbsolute(2).Property(widgetPath.5)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)] + [String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetStyle.5),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetStyle.5)) + String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetType.5),episodes)]]">SetProperty(silo.custom.5.style,landscape,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)] + ![String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetStyle.5),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetStyle.5)) + String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetType.5),episodes)]]">SetProperty(silo.custom.5.style,poster,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)]">SetProperty(silo.custom.6.title,$INFO[Container(9100).ListItemAbsolute(2).Property(widgetName.6)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)]">SetProperty(silo.custom.6.path,$INFO[Container(9100).ListItemAbsolute(2).Property(widgetPath.6)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)] + [String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetStyle.6),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetStyle.6)) + String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetType.6),episodes)]]">SetProperty(silo.custom.6.style,landscape,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)] + ![String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetStyle.6),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetStyle.6)) + String.IsEqual(Container(9100).ListItemAbsolute(2).Property(widgetType.6),episodes)]]">SetProperty(silo.custom.6.style,poster,home)</onclick>
-                    <onclick condition="!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath))">SetProperty(silo.custom.loading,1,home)</onclick>
-                    <!-- Select the item in the hidden menu list, so the pills list its submenu. -->
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)]">SetFocus(9100,2,absolute)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True)] + !String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True) + !!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath))">SetFocus(9033)</onclick>
-                    <onclick condition="String.IsEqual(Container(9100).ListItemAbsolute(2).Property(hasSubmenu),True) + !!String.IsEmpty(Container(9100).ListItemAbsolute(2).Property(widgetPath))">SetFocus(4699,0,absolute)</onclick>
-                </control>
-                <control type="button" id="9034">
-                    <visible>!String.IsEmpty(Container(9100).ListItemAbsolute(3).Label)</visible>
-                    <width>auto</width><height>60</height>
-                    <label>$INFO[Container(9100).ListItemAbsolute(3).Label]</label>
-                    <font>silo_tab</font>
-                    <textoffsetx>24</textoffsetx>
-                    <align>center</align><aligny>center</aligny>
-                    <textcolor>B3EDEDED</textcolor>
-                    <focusedcolor>SkylineFocusText</focusedcolor>
-                    <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
-                    <texturenofocus border="30" colordiffuse="$VAR[SiloCustomTab9034]">silo/pill.png</texturenofocus>
-                    <ondown condition="$EXP[SiloRow5001]">SetFocus(5001)</ondown>
-                    <ondown condition="$EXP[SiloRow5002] + !$EXP[SiloRow5001]">SetFocus(5002)</ondown>
-                    <ondown condition="$EXP[SiloRow5003] + !$EXP[SiloRow5001] + !$EXP[SiloRow5002]">SetFocus(5003)</ondown>
-                    <ondown condition="$EXP[SiloRow5004] + !$EXP[SiloRow5001] + !$EXP[SiloRow5002] + !$EXP[SiloRow5003]">SetFocus(5004)</ondown>
-                    <ondown condition="$EXP[SiloRow5101]">SetFocus(5101)</ondown>
-                    <ondown condition="$EXP[SiloRow5151] + !$EXP[SiloRow5101]">SetFocus(5151)</ondown>
-                    <ondown condition="$EXP[SiloRow5102] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(5102)</ondown>
-                    <ondown condition="$EXP[SiloRow5152] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102]">SetFocus(5152)</ondown>
-                    <ondown condition="$EXP[SiloRow5103] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(5103)</ondown>
-                    <ondown condition="$EXP[SiloRow5153] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103]">SetFocus(5153)</ondown>
-                    <ondown condition="$EXP[SiloRow5104] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(5104)</ondown>
-                    <ondown condition="$EXP[SiloRow5154] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104]">SetFocus(5154)</ondown>
-                    <ondown condition="$EXP[SiloRow5201]">SetFocus(5201)</ondown>
-                    <ondown condition="$EXP[SiloRow5251] + !$EXP[SiloRow5201]">SetFocus(5251)</ondown>
-                    <ondown condition="$EXP[SiloRow5202] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(5202)</ondown>
-                    <ondown condition="$EXP[SiloRow5252] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202]">SetFocus(5252)</ondown>
-                    <ondown condition="$EXP[SiloRow5203] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(5203)</ondown>
-                    <ondown condition="$EXP[SiloRow5253] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203]">SetFocus(5253)</ondown>
-                    <ondown condition="$EXP[SiloRow5204] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(5204)</ondown>
-                    <ondown condition="$EXP[SiloRow5254] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204]">SetFocus(5254)</ondown>
-                    <ondown condition="$EXP[SiloRow5301]">SetFocus(5301)</ondown>
-                    <ondown condition="$EXP[SiloRow5302] + !$EXP[SiloRow5301]">SetFocus(5302)</ondown>
-                    <ondown condition="$EXP[SiloRow5303] + !$EXP[SiloRow5301] + !$EXP[SiloRow5302]">SetFocus(5303)</ondown>
-                    <ondown condition="$EXP[SiloRow5304] + !$EXP[SiloRow5301] + !$EXP[SiloRow5302] + !$EXP[SiloRow5303]">SetFocus(5304)</ondown>
-                    <ondown condition="$EXP[SiloRow5401]">SetFocus(5401)</ondown>
-                    <ondown condition="$EXP[SiloRow5451] + !$EXP[SiloRow5401]">SetFocus(5451)</ondown>
-                    <ondown condition="$EXP[SiloRow5402] + !$EXP[SiloRow5401] + !$EXP[SiloRow5451]">SetFocus(5402)</ondown>
-                    <ondown condition="$EXP[SiloRow5452] + !$EXP[SiloRow5401] + !$EXP[SiloRow5451] + !$EXP[SiloRow5402]">SetFocus(5452)</ondown>
-                    <ondown condition="$EXP[SiloRow5403] + !$EXP[SiloRow5401] + !$EXP[SiloRow5451] + !$EXP[SiloRow5402] + !$EXP[SiloRow5452]">SetFocus(5403)</ondown>
-                    <ondown condition="$EXP[SiloRow5453] + !$EXP[SiloRow5401] + !$EXP[SiloRow5451] + !$EXP[SiloRow5402] + !$EXP[SiloRow5452] + !$EXP[SiloRow5403]">SetFocus(5453)</ondown>
-                    <ondown condition="$EXP[SiloRow5404] + !$EXP[SiloRow5401] + !$EXP[SiloRow5451] + !$EXP[SiloRow5402] + !$EXP[SiloRow5452] + !$EXP[SiloRow5403] + !$EXP[SiloRow5453]">SetFocus(5404)</ondown>
-                    <ondown condition="$EXP[SiloRow5454] + !$EXP[SiloRow5401] + !$EXP[SiloRow5451] + !$EXP[SiloRow5402] + !$EXP[SiloRow5452] + !$EXP[SiloRow5403] + !$EXP[SiloRow5453] + !$EXP[SiloRow5404]">SetFocus(5454)</ondown>
-                    <ondown condition="String.IsEqual(Window(Home).Property(silo.page),movies) + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(4601)</ondown>
-                    <ondown condition="String.IsEqual(Window(Home).Property(silo.page),series) + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(4602)</ondown>
-                    <ondown condition="String.IsEqual(Window(Home).Property(silo.page),requests) + !$EXP[SiloRow5301] + !$EXP[SiloRow5302] + !$EXP[SiloRow5303] + !$EXP[SiloRow5304]">SetFocus(4603)</ondown>
-                    <ondown condition="String.IsEqual(Window(Home).Property(silo.page),custom) + !$EXP[SiloRow5401] + !$EXP[SiloRow5451] + !$EXP[SiloRow5402] + !$EXP[SiloRow5452] + !$EXP[SiloRow5403] + !$EXP[SiloRow5453] + !$EXP[SiloRow5404] + !$EXP[SiloRow5454]">SetFocus(4699)</ondown>
-                    <onclick condition="![!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)]">$INFO[Container(9100).ListItemAbsolute(3).Property(path)]</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)]">SetProperty(silo.page,custom,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)]">ClearProperty(silo.row,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)]">SetProperty(silo.custom.button,9034,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)]">SetProperty(silo.custom.1.title,$INFO[Container(9100).ListItemAbsolute(3).Property(widgetName)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)]">SetProperty(silo.custom.1.path,$INFO[Container(9100).ListItemAbsolute(3).Property(widgetPath)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)] + [String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetStyle),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetStyle)) + String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetType),episodes)]]">SetProperty(silo.custom.1.style,landscape,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)] + ![String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetStyle),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetStyle)) + String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetType),episodes)]]">SetProperty(silo.custom.1.style,poster,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)]">SetProperty(silo.custom.2.title,$INFO[Container(9100).ListItemAbsolute(3).Property(widgetName.2)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)]">SetProperty(silo.custom.2.path,$INFO[Container(9100).ListItemAbsolute(3).Property(widgetPath.2)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)] + [String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetStyle.2),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetStyle.2)) + String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetType.2),episodes)]]">SetProperty(silo.custom.2.style,landscape,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)] + ![String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetStyle.2),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetStyle.2)) + String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetType.2),episodes)]]">SetProperty(silo.custom.2.style,poster,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)]">SetProperty(silo.custom.3.title,$INFO[Container(9100).ListItemAbsolute(3).Property(widgetName.3)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)]">SetProperty(silo.custom.3.path,$INFO[Container(9100).ListItemAbsolute(3).Property(widgetPath.3)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)] + [String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetStyle.3),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetStyle.3)) + String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetType.3),episodes)]]">SetProperty(silo.custom.3.style,landscape,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)] + ![String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetStyle.3),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetStyle.3)) + String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetType.3),episodes)]]">SetProperty(silo.custom.3.style,poster,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)]">SetProperty(silo.custom.4.title,$INFO[Container(9100).ListItemAbsolute(3).Property(widgetName.4)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)]">SetProperty(silo.custom.4.path,$INFO[Container(9100).ListItemAbsolute(3).Property(widgetPath.4)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)] + [String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetStyle.4),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetStyle.4)) + String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetType.4),episodes)]]">SetProperty(silo.custom.4.style,landscape,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)] + ![String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetStyle.4),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetStyle.4)) + String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetType.4),episodes)]]">SetProperty(silo.custom.4.style,poster,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)]">SetProperty(silo.custom.5.title,$INFO[Container(9100).ListItemAbsolute(3).Property(widgetName.5)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)]">SetProperty(silo.custom.5.path,$INFO[Container(9100).ListItemAbsolute(3).Property(widgetPath.5)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)] + [String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetStyle.5),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetStyle.5)) + String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetType.5),episodes)]]">SetProperty(silo.custom.5.style,landscape,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)] + ![String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetStyle.5),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetStyle.5)) + String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetType.5),episodes)]]">SetProperty(silo.custom.5.style,poster,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)]">SetProperty(silo.custom.6.title,$INFO[Container(9100).ListItemAbsolute(3).Property(widgetName.6)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)]">SetProperty(silo.custom.6.path,$INFO[Container(9100).ListItemAbsolute(3).Property(widgetPath.6)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)] + [String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetStyle.6),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetStyle.6)) + String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetType.6),episodes)]]">SetProperty(silo.custom.6.style,landscape,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)] + ![String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetStyle.6),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetStyle.6)) + String.IsEqual(Container(9100).ListItemAbsolute(3).Property(widgetType.6),episodes)]]">SetProperty(silo.custom.6.style,poster,home)</onclick>
-                    <onclick condition="!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath))">SetProperty(silo.custom.loading,1,home)</onclick>
-                    <!-- Select the item in the hidden menu list, so the pills list its submenu. -->
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)]">SetFocus(9100,3,absolute)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True)] + !String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True) + !!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath))">SetFocus(9034)</onclick>
-                    <onclick condition="String.IsEqual(Container(9100).ListItemAbsolute(3).Property(hasSubmenu),True) + !!String.IsEmpty(Container(9100).ListItemAbsolute(3).Property(widgetPath))">SetFocus(4699,0,absolute)</onclick>
-                </control>
-                <control type="button" id="9035">
-                    <visible>!String.IsEmpty(Container(9100).ListItemAbsolute(4).Label)</visible>
-                    <width>auto</width><height>60</height>
-                    <label>$INFO[Container(9100).ListItemAbsolute(4).Label]</label>
-                    <font>silo_tab</font>
-                    <textoffsetx>24</textoffsetx>
-                    <align>center</align><aligny>center</aligny>
-                    <textcolor>B3EDEDED</textcolor>
-                    <focusedcolor>SkylineFocusText</focusedcolor>
-                    <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
-                    <texturenofocus border="30" colordiffuse="$VAR[SiloCustomTab9035]">silo/pill.png</texturenofocus>
-                    <ondown condition="$EXP[SiloRow5001]">SetFocus(5001)</ondown>
-                    <ondown condition="$EXP[SiloRow5002] + !$EXP[SiloRow5001]">SetFocus(5002)</ondown>
-                    <ondown condition="$EXP[SiloRow5003] + !$EXP[SiloRow5001] + !$EXP[SiloRow5002]">SetFocus(5003)</ondown>
-                    <ondown condition="$EXP[SiloRow5004] + !$EXP[SiloRow5001] + !$EXP[SiloRow5002] + !$EXP[SiloRow5003]">SetFocus(5004)</ondown>
-                    <ondown condition="$EXP[SiloRow5101]">SetFocus(5101)</ondown>
-                    <ondown condition="$EXP[SiloRow5151] + !$EXP[SiloRow5101]">SetFocus(5151)</ondown>
-                    <ondown condition="$EXP[SiloRow5102] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151]">SetFocus(5102)</ondown>
-                    <ondown condition="$EXP[SiloRow5152] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102]">SetFocus(5152)</ondown>
-                    <ondown condition="$EXP[SiloRow5103] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152]">SetFocus(5103)</ondown>
-                    <ondown condition="$EXP[SiloRow5153] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103]">SetFocus(5153)</ondown>
-                    <ondown condition="$EXP[SiloRow5104] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153]">SetFocus(5104)</ondown>
-                    <ondown condition="$EXP[SiloRow5154] + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104]">SetFocus(5154)</ondown>
-                    <ondown condition="$EXP[SiloRow5201]">SetFocus(5201)</ondown>
-                    <ondown condition="$EXP[SiloRow5251] + !$EXP[SiloRow5201]">SetFocus(5251)</ondown>
-                    <ondown condition="$EXP[SiloRow5202] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251]">SetFocus(5202)</ondown>
-                    <ondown condition="$EXP[SiloRow5252] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202]">SetFocus(5252)</ondown>
-                    <ondown condition="$EXP[SiloRow5203] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252]">SetFocus(5203)</ondown>
-                    <ondown condition="$EXP[SiloRow5253] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203]">SetFocus(5253)</ondown>
-                    <ondown condition="$EXP[SiloRow5204] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253]">SetFocus(5204)</ondown>
-                    <ondown condition="$EXP[SiloRow5254] + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204]">SetFocus(5254)</ondown>
-                    <ondown condition="$EXP[SiloRow5301]">SetFocus(5301)</ondown>
-                    <ondown condition="$EXP[SiloRow5302] + !$EXP[SiloRow5301]">SetFocus(5302)</ondown>
-                    <ondown condition="$EXP[SiloRow5303] + !$EXP[SiloRow5301] + !$EXP[SiloRow5302]">SetFocus(5303)</ondown>
-                    <ondown condition="$EXP[SiloRow5304] + !$EXP[SiloRow5301] + !$EXP[SiloRow5302] + !$EXP[SiloRow5303]">SetFocus(5304)</ondown>
-                    <ondown condition="$EXP[SiloRow5401]">SetFocus(5401)</ondown>
-                    <ondown condition="$EXP[SiloRow5451] + !$EXP[SiloRow5401]">SetFocus(5451)</ondown>
-                    <ondown condition="$EXP[SiloRow5402] + !$EXP[SiloRow5401] + !$EXP[SiloRow5451]">SetFocus(5402)</ondown>
-                    <ondown condition="$EXP[SiloRow5452] + !$EXP[SiloRow5401] + !$EXP[SiloRow5451] + !$EXP[SiloRow5402]">SetFocus(5452)</ondown>
-                    <ondown condition="$EXP[SiloRow5403] + !$EXP[SiloRow5401] + !$EXP[SiloRow5451] + !$EXP[SiloRow5402] + !$EXP[SiloRow5452]">SetFocus(5403)</ondown>
-                    <ondown condition="$EXP[SiloRow5453] + !$EXP[SiloRow5401] + !$EXP[SiloRow5451] + !$EXP[SiloRow5402] + !$EXP[SiloRow5452] + !$EXP[SiloRow5403]">SetFocus(5453)</ondown>
-                    <ondown condition="$EXP[SiloRow5404] + !$EXP[SiloRow5401] + !$EXP[SiloRow5451] + !$EXP[SiloRow5402] + !$EXP[SiloRow5452] + !$EXP[SiloRow5403] + !$EXP[SiloRow5453]">SetFocus(5404)</ondown>
-                    <ondown condition="$EXP[SiloRow5454] + !$EXP[SiloRow5401] + !$EXP[SiloRow5451] + !$EXP[SiloRow5402] + !$EXP[SiloRow5452] + !$EXP[SiloRow5403] + !$EXP[SiloRow5453] + !$EXP[SiloRow5404]">SetFocus(5454)</ondown>
-                    <ondown condition="String.IsEqual(Window(Home).Property(silo.page),movies) + !$EXP[SiloRow5101] + !$EXP[SiloRow5151] + !$EXP[SiloRow5102] + !$EXP[SiloRow5152] + !$EXP[SiloRow5103] + !$EXP[SiloRow5153] + !$EXP[SiloRow5104] + !$EXP[SiloRow5154]">SetFocus(4601)</ondown>
-                    <ondown condition="String.IsEqual(Window(Home).Property(silo.page),series) + !$EXP[SiloRow5201] + !$EXP[SiloRow5251] + !$EXP[SiloRow5202] + !$EXP[SiloRow5252] + !$EXP[SiloRow5203] + !$EXP[SiloRow5253] + !$EXP[SiloRow5204] + !$EXP[SiloRow5254]">SetFocus(4602)</ondown>
-                    <ondown condition="String.IsEqual(Window(Home).Property(silo.page),requests) + !$EXP[SiloRow5301] + !$EXP[SiloRow5302] + !$EXP[SiloRow5303] + !$EXP[SiloRow5304]">SetFocus(4603)</ondown>
-                    <ondown condition="String.IsEqual(Window(Home).Property(silo.page),custom) + !$EXP[SiloRow5401] + !$EXP[SiloRow5451] + !$EXP[SiloRow5402] + !$EXP[SiloRow5452] + !$EXP[SiloRow5403] + !$EXP[SiloRow5453] + !$EXP[SiloRow5404] + !$EXP[SiloRow5454]">SetFocus(4699)</ondown>
-                    <onclick condition="![!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)]">$INFO[Container(9100).ListItemAbsolute(4).Property(path)]</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)]">SetProperty(silo.page,custom,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)]">ClearProperty(silo.row,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)]">SetProperty(silo.custom.button,9035,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)]">SetProperty(silo.custom.1.title,$INFO[Container(9100).ListItemAbsolute(4).Property(widgetName)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)]">SetProperty(silo.custom.1.path,$INFO[Container(9100).ListItemAbsolute(4).Property(widgetPath)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)] + [String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetStyle),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetStyle)) + String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetType),episodes)]]">SetProperty(silo.custom.1.style,landscape,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)] + ![String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetStyle),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetStyle)) + String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetType),episodes)]]">SetProperty(silo.custom.1.style,poster,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)]">SetProperty(silo.custom.2.title,$INFO[Container(9100).ListItemAbsolute(4).Property(widgetName.2)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)]">SetProperty(silo.custom.2.path,$INFO[Container(9100).ListItemAbsolute(4).Property(widgetPath.2)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)] + [String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetStyle.2),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetStyle.2)) + String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetType.2),episodes)]]">SetProperty(silo.custom.2.style,landscape,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)] + ![String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetStyle.2),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetStyle.2)) + String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetType.2),episodes)]]">SetProperty(silo.custom.2.style,poster,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)]">SetProperty(silo.custom.3.title,$INFO[Container(9100).ListItemAbsolute(4).Property(widgetName.3)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)]">SetProperty(silo.custom.3.path,$INFO[Container(9100).ListItemAbsolute(4).Property(widgetPath.3)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)] + [String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetStyle.3),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetStyle.3)) + String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetType.3),episodes)]]">SetProperty(silo.custom.3.style,landscape,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)] + ![String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetStyle.3),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetStyle.3)) + String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetType.3),episodes)]]">SetProperty(silo.custom.3.style,poster,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)]">SetProperty(silo.custom.4.title,$INFO[Container(9100).ListItemAbsolute(4).Property(widgetName.4)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)]">SetProperty(silo.custom.4.path,$INFO[Container(9100).ListItemAbsolute(4).Property(widgetPath.4)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)] + [String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetStyle.4),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetStyle.4)) + String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetType.4),episodes)]]">SetProperty(silo.custom.4.style,landscape,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)] + ![String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetStyle.4),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetStyle.4)) + String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetType.4),episodes)]]">SetProperty(silo.custom.4.style,poster,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)]">SetProperty(silo.custom.5.title,$INFO[Container(9100).ListItemAbsolute(4).Property(widgetName.5)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)]">SetProperty(silo.custom.5.path,$INFO[Container(9100).ListItemAbsolute(4).Property(widgetPath.5)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)] + [String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetStyle.5),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetStyle.5)) + String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetType.5),episodes)]]">SetProperty(silo.custom.5.style,landscape,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)] + ![String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetStyle.5),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetStyle.5)) + String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetType.5),episodes)]]">SetProperty(silo.custom.5.style,poster,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)]">SetProperty(silo.custom.6.title,$INFO[Container(9100).ListItemAbsolute(4).Property(widgetName.6)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)]">SetProperty(silo.custom.6.path,$INFO[Container(9100).ListItemAbsolute(4).Property(widgetPath.6)],home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)] + [String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetStyle.6),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetStyle.6)) + String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetType.6),episodes)]]">SetProperty(silo.custom.6.style,landscape,home)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)] + ![String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetStyle.6),landscape) | [String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetStyle.6)) + String.IsEqual(Container(9100).ListItemAbsolute(4).Property(widgetType.6),episodes)]]">SetProperty(silo.custom.6.style,poster,home)</onclick>
-                    <onclick condition="!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath))">SetProperty(silo.custom.loading,1,home)</onclick>
-                    <!-- Select the item in the hidden menu list, so the pills list its submenu. -->
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)]">SetFocus(9100,4,absolute)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True)] + !String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True) + !!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath))">SetFocus(9035)</onclick>
-                    <onclick condition="String.IsEqual(Container(9100).ListItemAbsolute(4).Property(hasSubmenu),True) + !!String.IsEmpty(Container(9100).ListItemAbsolute(4).Property(widgetPath))">SetFocus(4699,0,absolute)</onclick>
-                </control>
             <control type="group" id="9309">
                 <width>60</width><height>60</height>
                 <control type="button" id="9009">
@@ -7404,17 +7189,14 @@
                     <ondown>ClearProperty(silo.drop.closed,home)</ondown>
                     <onright condition="Control.IsVisible(9010)">SetFocus(9010)</onright>
                     <onright condition="Control.IsVisible(9011) + !Control.IsVisible(9010)">SetFocus(9011)</onright>
-                    <onleft condition="Control.IsVisible(9035)">SetFocus(9035)</onleft>
-                    <onleft condition="Control.IsVisible(9034) + !Control.IsVisible(9035)">SetFocus(9034)</onleft>
-                    <onleft condition="Control.IsVisible(9033) + !Control.IsVisible(9035) + !Control.IsVisible(9034)">SetFocus(9033)</onleft>
-                    <onleft condition="Control.IsVisible(9032) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033)">SetFocus(9032)</onleft>
-                    <onleft condition="Control.IsVisible(9031) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032)">SetFocus(9031)</onleft>
-                    <onleft condition="Control.IsVisible(9006) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032) + !Control.IsVisible(9031)">SetFocus(9006)</onleft>
-                    <onleft condition="Control.IsVisible(9005) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006)">SetFocus(9005)</onleft>
-                    <onleft condition="Control.IsVisible(9004) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005)">SetFocus(9004)</onleft>
-                    <onleft condition="Control.IsVisible(9003) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005) + !Control.IsVisible(9004)">SetFocus(9003)</onleft>
-                    <onleft condition="Control.IsVisible(9002) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005) + !Control.IsVisible(9004) + !Control.IsVisible(9003)">SetFocus(9002)</onleft>
-                    <onleft condition="Control.IsVisible(9001) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005) + !Control.IsVisible(9004) + !Control.IsVisible(9003) + !Control.IsVisible(9002)">SetFocus(9001)</onleft>
+                    <onleft condition="Control.IsVisible(9032)">SetFocus(9032)</onleft>
+                    <onleft condition="Control.IsVisible(9031) + !Control.IsVisible(9032)">SetFocus(9031)</onleft>
+                    <onleft condition="Control.IsVisible(9006) + !Control.IsVisible(9032) + !Control.IsVisible(9031)">SetFocus(9006)</onleft>
+                    <onleft condition="Control.IsVisible(9005) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006)">SetFocus(9005)</onleft>
+                    <onleft condition="Control.IsVisible(9004) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005)">SetFocus(9004)</onleft>
+                    <onleft condition="Control.IsVisible(9003) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005) + !Control.IsVisible(9004)">SetFocus(9003)</onleft>
+                    <onleft condition="Control.IsVisible(9002) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005) + !Control.IsVisible(9004) + !Control.IsVisible(9003)">SetFocus(9002)</onleft>
+                    <onleft condition="Control.IsVisible(9001) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005) + !Control.IsVisible(9004) + !Control.IsVisible(9003) + !Control.IsVisible(9002)">SetFocus(9001)</onleft>
                 </control>
                 <control type="image">
                     <left>14</left><top>14</top>
@@ -7478,17 +7260,14 @@
                     <ondown>ClearProperty(silo.drop.closed,home)</ondown>
                     <onright condition="Control.IsVisible(9011)">SetFocus(9011)</onright>
                     <onleft condition="Control.IsVisible(9009)">SetFocus(9009)</onleft>
-                    <onleft condition="Control.IsVisible(9035) + !Control.IsVisible(9009)">SetFocus(9035)</onleft>
-                    <onleft condition="Control.IsVisible(9034) + !Control.IsVisible(9009) + !Control.IsVisible(9035)">SetFocus(9034)</onleft>
-                    <onleft condition="Control.IsVisible(9033) + !Control.IsVisible(9009) + !Control.IsVisible(9035) + !Control.IsVisible(9034)">SetFocus(9033)</onleft>
-                    <onleft condition="Control.IsVisible(9032) + !Control.IsVisible(9009) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033)">SetFocus(9032)</onleft>
-                    <onleft condition="Control.IsVisible(9031) + !Control.IsVisible(9009) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032)">SetFocus(9031)</onleft>
-                    <onleft condition="Control.IsVisible(9006) + !Control.IsVisible(9009) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032) + !Control.IsVisible(9031)">SetFocus(9006)</onleft>
-                    <onleft condition="Control.IsVisible(9005) + !Control.IsVisible(9009) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006)">SetFocus(9005)</onleft>
-                    <onleft condition="Control.IsVisible(9004) + !Control.IsVisible(9009) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005)">SetFocus(9004)</onleft>
-                    <onleft condition="Control.IsVisible(9003) + !Control.IsVisible(9009) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005) + !Control.IsVisible(9004)">SetFocus(9003)</onleft>
-                    <onleft condition="Control.IsVisible(9002) + !Control.IsVisible(9009) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005) + !Control.IsVisible(9004) + !Control.IsVisible(9003)">SetFocus(9002)</onleft>
-                    <onleft condition="Control.IsVisible(9001) + !Control.IsVisible(9009) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005) + !Control.IsVisible(9004) + !Control.IsVisible(9003) + !Control.IsVisible(9002)">SetFocus(9001)</onleft>
+                    <onleft condition="Control.IsVisible(9032) + !Control.IsVisible(9009)">SetFocus(9032)</onleft>
+                    <onleft condition="Control.IsVisible(9031) + !Control.IsVisible(9009) + !Control.IsVisible(9032)">SetFocus(9031)</onleft>
+                    <onleft condition="Control.IsVisible(9006) + !Control.IsVisible(9009) + !Control.IsVisible(9032) + !Control.IsVisible(9031)">SetFocus(9006)</onleft>
+                    <onleft condition="Control.IsVisible(9005) + !Control.IsVisible(9009) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006)">SetFocus(9005)</onleft>
+                    <onleft condition="Control.IsVisible(9004) + !Control.IsVisible(9009) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005)">SetFocus(9004)</onleft>
+                    <onleft condition="Control.IsVisible(9003) + !Control.IsVisible(9009) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005) + !Control.IsVisible(9004)">SetFocus(9003)</onleft>
+                    <onleft condition="Control.IsVisible(9002) + !Control.IsVisible(9009) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005) + !Control.IsVisible(9004) + !Control.IsVisible(9003)">SetFocus(9002)</onleft>
+                    <onleft condition="Control.IsVisible(9001) + !Control.IsVisible(9009) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005) + !Control.IsVisible(9004) + !Control.IsVisible(9003) + !Control.IsVisible(9002)">SetFocus(9001)</onleft>
                 </control>
                 <control type="image">
                     <left>14</left><top>14</top>
@@ -7559,17 +7338,14 @@
                     <ondown>ClearProperty(silo.drop.closed,home)</ondown>
                     <onleft condition="Control.IsVisible(9010)">SetFocus(9010)</onleft>
                     <onleft condition="Control.IsVisible(9009) + !Control.IsVisible(9010)">SetFocus(9009)</onleft>
-                    <onleft condition="Control.IsVisible(9035) + !Control.IsVisible(9010) + !Control.IsVisible(9009)">SetFocus(9035)</onleft>
-                    <onleft condition="Control.IsVisible(9034) + !Control.IsVisible(9010) + !Control.IsVisible(9009) + !Control.IsVisible(9035)">SetFocus(9034)</onleft>
-                    <onleft condition="Control.IsVisible(9033) + !Control.IsVisible(9010) + !Control.IsVisible(9009) + !Control.IsVisible(9035) + !Control.IsVisible(9034)">SetFocus(9033)</onleft>
-                    <onleft condition="Control.IsVisible(9032) + !Control.IsVisible(9010) + !Control.IsVisible(9009) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033)">SetFocus(9032)</onleft>
-                    <onleft condition="Control.IsVisible(9031) + !Control.IsVisible(9010) + !Control.IsVisible(9009) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032)">SetFocus(9031)</onleft>
-                    <onleft condition="Control.IsVisible(9006) + !Control.IsVisible(9010) + !Control.IsVisible(9009) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032) + !Control.IsVisible(9031)">SetFocus(9006)</onleft>
-                    <onleft condition="Control.IsVisible(9005) + !Control.IsVisible(9010) + !Control.IsVisible(9009) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006)">SetFocus(9005)</onleft>
-                    <onleft condition="Control.IsVisible(9004) + !Control.IsVisible(9010) + !Control.IsVisible(9009) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005)">SetFocus(9004)</onleft>
-                    <onleft condition="Control.IsVisible(9003) + !Control.IsVisible(9010) + !Control.IsVisible(9009) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005) + !Control.IsVisible(9004)">SetFocus(9003)</onleft>
-                    <onleft condition="Control.IsVisible(9002) + !Control.IsVisible(9010) + !Control.IsVisible(9009) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005) + !Control.IsVisible(9004) + !Control.IsVisible(9003)">SetFocus(9002)</onleft>
-                    <onleft condition="Control.IsVisible(9001) + !Control.IsVisible(9010) + !Control.IsVisible(9009) + !Control.IsVisible(9035) + !Control.IsVisible(9034) + !Control.IsVisible(9033) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005) + !Control.IsVisible(9004) + !Control.IsVisible(9003) + !Control.IsVisible(9002)">SetFocus(9001)</onleft>
+                    <onleft condition="Control.IsVisible(9032) + !Control.IsVisible(9010) + !Control.IsVisible(9009)">SetFocus(9032)</onleft>
+                    <onleft condition="Control.IsVisible(9031) + !Control.IsVisible(9010) + !Control.IsVisible(9009) + !Control.IsVisible(9032)">SetFocus(9031)</onleft>
+                    <onleft condition="Control.IsVisible(9006) + !Control.IsVisible(9010) + !Control.IsVisible(9009) + !Control.IsVisible(9032) + !Control.IsVisible(9031)">SetFocus(9006)</onleft>
+                    <onleft condition="Control.IsVisible(9005) + !Control.IsVisible(9010) + !Control.IsVisible(9009) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006)">SetFocus(9005)</onleft>
+                    <onleft condition="Control.IsVisible(9004) + !Control.IsVisible(9010) + !Control.IsVisible(9009) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005)">SetFocus(9004)</onleft>
+                    <onleft condition="Control.IsVisible(9003) + !Control.IsVisible(9010) + !Control.IsVisible(9009) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005) + !Control.IsVisible(9004)">SetFocus(9003)</onleft>
+                    <onleft condition="Control.IsVisible(9002) + !Control.IsVisible(9010) + !Control.IsVisible(9009) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005) + !Control.IsVisible(9004) + !Control.IsVisible(9003)">SetFocus(9002)</onleft>
+                    <onleft condition="Control.IsVisible(9001) + !Control.IsVisible(9010) + !Control.IsVisible(9009) + !Control.IsVisible(9032) + !Control.IsVisible(9031) + !Control.IsVisible(9006) + !Control.IsVisible(9005) + !Control.IsVisible(9004) + !Control.IsVisible(9003) + !Control.IsVisible(9002)">SetFocus(9001)</onleft>
             </control>
             <control type="image">
                 <left>4</left><top>4</top>
@@ -7776,6 +7552,7 @@
                         <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.boxsets,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -7791,6 +7568,7 @@
                         <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.history,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.boxsets,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>
@@ -7806,6 +7584,7 @@
                         <onclick>ClearProperty(silo.browse.list.watchlist,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.favorites,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.comingsoon,home)</onclick>
+                        <onclick>ClearProperty(silo.browse.list.boxsets,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.collections,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.collection,home)</onclick>
                         <onclick>ClearProperty(silo.browse.list.genres,home)</onclick>

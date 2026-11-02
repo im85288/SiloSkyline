@@ -14,7 +14,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import ROOT, TEXT, WIDGETS  # noqa: E402
+from build_home import CUSTOM_SLOTS, ROOT, TEXT, TEXT_DIM, WIDGETS  # noqa: E402
 
 ITEM = 'Container(211).ListItem'
 WIDGET_BUTTON = 9450   # + n: choose widget n
@@ -187,9 +187,12 @@ def dialog():
 
 
 def menu_actions():
-    """Add, move and delete, beside the items they act on."""
+    """Add, move and delete, beside the items they act on. The menu bar has
+    room for CUSTOM_SLOTS items, so Add goes once the main menu has that many
+    (a submenu has no such limit), with a note in its place."""
+    full = '[%s + Integer.IsGreaterOrEqual(Container(211).NumItems,%d)]' % (MAIN_MENU, CUSTOM_SLOTS)
     out = ''
-    for control_id, label, visible in ((301, 'Add an item', ''),
+    for control_id, label, visible in ((301, 'Add an item', '!' + full),
                                        (303, 'Move up', 'Integer.IsGreater(Container(211).NumItems,1)'),
                                        (304, 'Move down', 'Integer.IsGreater(Container(211).NumItems,1)'),
                                        (302, 'Delete', 'Integer.IsGreater(Container(211).NumItems,0)')):
@@ -205,6 +208,16 @@ def menu_actions():
                     <texturenofocus border="30" colordiffuse="14FFFFFF">silo/pill.png</texturenofocus>
                     <label>%s</label>%s
                 </control>''' % (control_id, TEXT, TEXT, label, '\n                    <visible>%s</visible>' % visible if visible else '')
+    out += '''
+                <control type="label">
+                    <width>560</width><height>68</height>
+                    <textoffsetx>28</textoffsetx>
+                    <aligny>center</aligny>
+                    <font>silo_detail</font>
+                    <textcolor>%s</textcolor>
+                    <label>The menu bar has room for %d items</label>
+                    <visible>%s</visible>
+                </control>''' % (TEXT_DIM, CUSTOM_SLOTS, full)
     return out
 
 

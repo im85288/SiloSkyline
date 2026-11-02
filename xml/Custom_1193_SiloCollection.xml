@@ -25,6 +25,7 @@
     <onload condition="String.IsEqual(Window(Home).Property(silo.browse.type),favorites) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">SetFocus(52)</onload>
     <onload condition="String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">SetFocus(53)</onload>
     <onload condition="String.IsEqual(Window(Home).Property(silo.browse.type),comingsoon) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">SetFocus(54)</onload>
+    <onload condition="String.IsEqual(Window(Home).Property(silo.browse.type),boxsets) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">SetFocus(62)</onload>
     <onload condition="String.IsEqual(Window(Home).Property(silo.browse.type),collections) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">SetFocus(56)</onload>
     <onload condition="String.IsEqual(Window(Home).Property(silo.browse.type),collection) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">SetFocus(55)</onload>
     <onload condition="String.IsEqual(Window(Home).Property(silo.browse.type),genres) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">SetFocus(59)</onload>
@@ -108,7 +109,7 @@
                 </control>
                 <control type="group">
                     <left>6</left><top>6</top>
-                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] | String.IsEqual(ListItem.DBType,set)</visible>
                     <control type="image">
                         <left>14</left><top>14</top><width>132</width><height>40</height>
                         <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
@@ -129,7 +130,7 @@
                         <align>right</align><aligny>center</aligny>
                         <font>silo_detail</font>
                         <textcolor>FFEDEDED</textcolor>
-                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)]$INFO[ListItem.Art(silocount)][/B]</label>
                     </control>
                 </control>
                 <control type="label">
@@ -189,7 +190,7 @@
                 </control>
                 <control type="group">
                     <left>6</left><top>6</top>
-                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] | String.IsEqual(ListItem.DBType,set)</visible>
                     <control type="image">
                         <left>14</left><top>14</top><width>132</width><height>40</height>
                         <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
@@ -210,7 +211,7 @@
                         <align>right</align><aligny>center</aligny>
                         <font>silo_detail</font>
                         <textcolor>FFEDEDED</textcolor>
-                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)]$INFO[ListItem.Art(silocount)][/B]</label>
                     </control>
                 </control>
                 <control type="label">
@@ -272,7 +273,7 @@
                 </control>
                 <control type="group">
                     <left>6</left><top>6</top>
-                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] | String.IsEqual(ListItem.DBType,set)</visible>
                     <control type="image">
                         <left>14</left><top>14</top><width>132</width><height>40</height>
                         <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
@@ -293,7 +294,7 @@
                         <align>right</align><aligny>center</aligny>
                         <font>silo_detail</font>
                         <textcolor>FFEDEDED</textcolor>
-                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)]$INFO[ListItem.Art(silocount)][/B]</label>
                     </control>
                 </control>
                 </control>
@@ -339,7 +340,7 @@
                 </control>
                 <control type="group">
                     <left>6</left><top>6</top>
-                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] | String.IsEqual(ListItem.DBType,set)</visible>
                     <control type="image">
                         <left>14</left><top>14</top><width>132</width><height>40</height>
                         <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
@@ -360,7 +361,7 @@
                         <align>right</align><aligny>center</aligny>
                         <font>silo_detail</font>
                         <textcolor>FFEDEDED</textcolor>
-                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)]$INFO[ListItem.Art(silocount)][/B]</label>
                     </control>
                 </control>
                 </control>
@@ -772,7 +773,7 @@
                 </control>
                 <control type="group">
                     <left>6</left><top>6</top>
-                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] | String.IsEqual(ListItem.DBType,set)</visible>
                     <control type="image">
                         <left>14</left><top>14</top><width>132</width><height>40</height>
                         <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
@@ -793,7 +794,7 @@
                         <align>right</align><aligny>center</aligny>
                         <font>silo_detail</font>
                         <textcolor>FFEDEDED</textcolor>
-                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)]$INFO[ListItem.Art(silocount)][/B]</label>
                     </control>
                 </control>
                 <control type="label">
@@ -853,7 +854,7 @@
                 </control>
                 <control type="group">
                     <left>6</left><top>6</top>
-                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] | String.IsEqual(ListItem.DBType,set)</visible>
                     <control type="image">
                         <left>14</left><top>14</top><width>132</width><height>40</height>
                         <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
@@ -874,7 +875,7 @@
                         <align>right</align><aligny>center</aligny>
                         <font>silo_detail</font>
                         <textcolor>FFEDEDED</textcolor>
-                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)]$INFO[ListItem.Art(silocount)][/B]</label>
                     </control>
                 </control>
                 <control type="label">
@@ -946,7 +947,7 @@
                 </control>
                 <control type="group">
                     <left>6</left><top>6</top>
-                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] | String.IsEqual(ListItem.DBType,set)</visible>
                     <control type="image">
                         <left>14</left><top>14</top><width>132</width><height>40</height>
                         <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
@@ -967,7 +968,7 @@
                         <align>right</align><aligny>center</aligny>
                         <font>silo_detail</font>
                         <textcolor>FFEDEDED</textcolor>
-                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)]$INFO[ListItem.Art(silocount)][/B]</label>
                     </control>
                 </control>
                 <control type="label">
@@ -1027,7 +1028,7 @@
                 </control>
                 <control type="group">
                     <left>6</left><top>6</top>
-                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] | String.IsEqual(ListItem.DBType,set)</visible>
                     <control type="image">
                         <left>14</left><top>14</top><width>132</width><height>40</height>
                         <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
@@ -1048,7 +1049,7 @@
                         <align>right</align><aligny>center</aligny>
                         <font>silo_detail</font>
                         <textcolor>FFEDEDED</textcolor>
-                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)]$INFO[ListItem.Art(silocount)][/B]</label>
                     </control>
                 </control>
                 <control type="label">
@@ -1120,7 +1121,7 @@
                 </control>
                 <control type="group">
                     <left>6</left><top>6</top>
-                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] | String.IsEqual(ListItem.DBType,set)</visible>
                     <control type="image">
                         <left>14</left><top>14</top><width>132</width><height>40</height>
                         <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
@@ -1141,7 +1142,7 @@
                         <align>right</align><aligny>center</aligny>
                         <font>silo_detail</font>
                         <textcolor>FFEDEDED</textcolor>
-                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)]$INFO[ListItem.Art(silocount)][/B]</label>
                     </control>
                 </control>
                 <control type="label">
@@ -1201,7 +1202,7 @@
                 </control>
                 <control type="group">
                     <left>6</left><top>6</top>
-                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] | String.IsEqual(ListItem.DBType,set)</visible>
                     <control type="image">
                         <left>14</left><top>14</top><width>132</width><height>40</height>
                         <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
@@ -1222,7 +1223,7 @@
                         <align>right</align><aligny>center</aligny>
                         <font>silo_detail</font>
                         <textcolor>FFEDEDED</textcolor>
-                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)]$INFO[ListItem.Art(silocount)][/B]</label>
                     </control>
                 </control>
                 <control type="label">
@@ -1294,7 +1295,7 @@
                 </control>
                 <control type="group">
                     <left>6</left><top>6</top>
-                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] | String.IsEqual(ListItem.DBType,set)</visible>
                     <control type="image">
                         <left>14</left><top>14</top><width>132</width><height>40</height>
                         <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
@@ -1315,7 +1316,7 @@
                         <align>right</align><aligny>center</aligny>
                         <font>silo_detail</font>
                         <textcolor>FFEDEDED</textcolor>
-                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)]$INFO[ListItem.Art(silocount)][/B]</label>
                     </control>
                 </control>
                 <control type="label">
@@ -1375,7 +1376,7 @@
                 </control>
                 <control type="group">
                     <left>6</left><top>6</top>
-                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] | String.IsEqual(ListItem.DBType,set)</visible>
                     <control type="image">
                         <left>14</left><top>14</top><width>132</width><height>40</height>
                         <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
@@ -1396,7 +1397,7 @@
                         <align>right</align><aligny>center</aligny>
                         <font>silo_detail</font>
                         <textcolor>FFEDEDED</textcolor>
-                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)]$INFO[ListItem.Art(silocount)][/B]</label>
                     </control>
                 </control>
                 <control type="label">
@@ -1423,6 +1424,180 @@
             <textcolor>BFEDEDED</textcolor>
             <label>No new episodes of your shows in the next two weeks.</label>
             <visible>String.IsEqual(Window(Home).Property(silo.browse.type),comingsoon) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + !Container(54).IsUpdating + Integer.IsEqual(Container(54).NumItems,0)</visible>
+        </control>
+        <control type="panel" id="62">
+            <left>82</left><top>252</top>
+            <width>1620</width><height>828</height>
+            <orientation>vertical</orientation>
+            <visible>String.IsEqual(Window(Home).Property(silo.browse.type),boxsets) + !String.IsEmpty(Window(Home).Property(silo.browse.list))</visible>
+            <onright>noop</onright>
+            <onleft>noop</onleft>
+            <onup>noop</onup>
+            <scrolltime tween="cubic" easing="out">280</scrolltime>
+            <!-- Details, not Kodi's play or open (SiloKodiConnect's info page, else Kodi's). -->
+            <!-- A box set's card opens the box set (SiloKodiConnect's page for Kodi's movie set). -->
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + [Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=set&amp;dbid=$INFO[ListItem.SetId])</onclick>
+            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + ![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+            <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
+            <itemlayout width="270" height="485">
+                <control type="group">
+                <control type="image">
+                    <left>6</left><top>6</top><width>246</width><height>369</height>
+                    <aspectratio>scale</aspectratio>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
+                </control>
+                <!-- The rating is in Silo's poster art itself (top left). -->
+                <!-- Watched: Silo's frosted disc with a white tick, top right. -->
+                <control type="image">
+                    <left>6</left><top>6</top>
+                    <width>246</width><height>369</height>
+                    <texture diffuse="silo/card_poster_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                    <visible>[![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]]</visible>
+                    <animation effect="fade" time="160">VisibleChange</animation>
+                </control>
+                <control type="group">
+                    <left>202</left><top>16</top>
+                    <visible>![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]</visible>
+                    <control type="image">
+                        <width>40</width><height>40</height>
+                        <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+                    </control>
+                    <control type="image">
+                        <left>9</left><top>9</top><width>22</width><height>22</height>
+                        <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>6</left><top>6</top>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] | String.IsEqual(ListItem.DBType,set)</visible>
+                    <control type="image">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>BOX SET</label>
+                    </control>
+                    <control type="image">
+                        <left>0</left><top>279</top><width>246</width><height>90</height>
+                        <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>0</left><top>317</top><width>228</width><height>40</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)]$INFO[ListItem.Art(silocount)][/B]</label>
+                    </control>
+                </control>
+                <control type="label">
+                    <left>6</left><top>387</top><width>246</width><height>44</height>
+                    <font>silo_card_title</font>
+                    <textcolor>66EDEDED</textcolor>
+                    <label>$VAR[SiloBrowseCardTitle]</label>
+                </control>
+                <control type="label">
+                    <left>6</left><top>427</top><width>246</width><height>34</height>
+                    <font>silo_detail</font>
+                    <textcolor>4AEDEDED</textcolor>
+                    <label>$VAR[SiloBrowseCardSub]</label>
+                </control>
+                </control>
+            </itemlayout>
+            <focusedlayout width="270" height="485">
+                <control type="group">
+                    <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus(62)">Conditional</animation>
+                <control type="image">
+                    <left>6</left><top>6</top><width>246</width><height>369</height>
+                    <aspectratio>scale</aspectratio>
+                    <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
+                </control>
+                <!-- The rating is in Silo's poster art itself (top left). -->
+                <!-- Watched: Silo's frosted disc with a white tick, top right. -->
+                <control type="group">
+                    <left>6</left><top>6</top>
+                    <visible>Control.HasFocus(62)</visible>
+                    <control type="image">
+                        <width>246</width><height>369</height>
+                        <texture diffuse="silo/card_poster_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
+                    </control>
+                    <control type="image">
+                        <width>246</width><height>369</height>
+                        <texture colordiffuse="33FFFFFF">silo/card_poster_rim.png</texture>
+                    </control>
+                </control>
+                <control type="image">
+                    <left>6</left><top>6</top>
+                    <width>246</width><height>369</height>
+                    <texture diffuse="silo/card_poster_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                    <visible>[![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]] + !Control.HasFocus(62)</visible>
+                    <animation effect="fade" time="160">VisibleChange</animation>
+                </control>
+                <control type="group">
+                    <left>202</left><top>16</top>
+                    <visible>![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]</visible>
+                    <control type="image">
+                        <width>40</width><height>40</height>
+                        <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+                    </control>
+                    <control type="image">
+                        <left>9</left><top>9</top><width>22</width><height>22</height>
+                        <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>6</left><top>6</top>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] | String.IsEqual(ListItem.DBType,set)</visible>
+                    <control type="image">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>14</left><top>14</top><width>132</width><height>40</height>
+                        <align>center</align><aligny>center</aligny>
+                        <font>silo_badge</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>BOX SET</label>
+                    </control>
+                    <control type="image">
+                        <left>0</left><top>279</top><width>246</width><height>90</height>
+                        <texture diffuse="silo/card_poster_mask.png" flipy="false">silo/card_scrim.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>0</left><top>317</top><width>228</width><height>40</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)]$INFO[ListItem.Art(silocount)][/B]</label>
+                    </control>
+                </control>
+                <control type="label">
+                    <left>6</left><top>387</top><width>246</width><height>44</height>
+                    <font>silo_card_title</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>$VAR[SiloBrowseCardTitle]</label>
+                    <scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
+                </control>
+                <control type="label">
+                    <left>6</left><top>427</top><width>246</width><height>34</height>
+                    <font>silo_detail</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>$VAR[SiloBrowseCardSub]</label>
+                </control>
+                </control>
+            </focusedlayout>
+            <content target="videos">$INFO[Window(Home).Property(silo.browse.list.boxsets)]</content>
+        </control>
+        <control type="label">
+            <left>88</left><top>272</top>
+            <width>1744</width><height>60</height>
+            <font>silo_plot</font>
+            <textcolor>BFEDEDED</textcolor>
+            <label>No box sets yet: Silo groups a library's films into box sets once they're turned on for it.</label>
+            <visible>String.IsEqual(Window(Home).Property(silo.browse.type),boxsets) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + !Container(62).IsUpdating + Integer.IsEqual(Container(62).NumItems,0)</visible>
         </control>
         <control type="panel" id="59">
             <left>82</left><top>252</top>
@@ -1524,7 +1699,7 @@
                 </control>
                 <control type="group">
                     <left>6</left><top>6</top>
-                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] | String.IsEqual(ListItem.DBType,set)</visible>
                     <control type="image">
                         <left>14</left><top>14</top><width>132</width><height>40</height>
                         <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
@@ -1545,7 +1720,7 @@
                         <align>right</align><aligny>center</aligny>
                         <font>silo_detail</font>
                         <textcolor>FFEDEDED</textcolor>
-                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)]$INFO[ListItem.Art(silocount)][/B]</label>
                     </control>
                 </control>
                 <control type="label">
@@ -1605,7 +1780,7 @@
                 </control>
                 <control type="group">
                     <left>6</left><top>6</top>
-                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]</visible>
+                    <visible>[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] | String.IsEqual(ListItem.DBType,set)</visible>
                     <control type="image">
                         <left>14</left><top>14</top><width>132</width><height>40</height>
                         <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
@@ -1626,7 +1801,7 @@
                         <align>right</align><aligny>center</aligny>
                         <font>silo_detail</font>
                         <textcolor>FFEDEDED</textcolor>
-                        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                        <label>[B]$INFO[ListItem.Art(set.silocount)]$INFO[ListItem.Art(silocount)][/B]</label>
                     </control>
                 </control>
                 <control type="label">
@@ -2678,7 +2853,7 @@
             <left>928</left><top>508</top><width>64</width><height>64</height>
             <texture colordiffuse="99EDEDED">silo/spinner_arc.png</texture>
             <animation effect="rotate" start="0" end="-360" center="auto" time="900" loop="true" condition="true">Conditional</animation>
-            <visible>[String.IsEqual(Window(Home).Property(silo.browse.type),collections) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Container(56).IsUpdating] | [String.IsEqual(Window(Home).Property(silo.browse.type),collection) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Container(55).IsUpdating] | [String.IsEqual(Window(Home).Property(silo.browse.type),watchlist) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Container(51).IsUpdating] | [String.IsEqual(Window(Home).Property(silo.browse.type),favorites) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Container(52).IsUpdating] | [String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Container(53).IsUpdating] | [String.IsEqual(Window(Home).Property(silo.browse.type),comingsoon) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Container(54).IsUpdating]</visible>
+            <visible>[String.IsEqual(Window(Home).Property(silo.browse.type),collections) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Container(56).IsUpdating] | [String.IsEqual(Window(Home).Property(silo.browse.type),collection) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Container(55).IsUpdating] | [String.IsEqual(Window(Home).Property(silo.browse.type),watchlist) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Container(51).IsUpdating] | [String.IsEqual(Window(Home).Property(silo.browse.type),favorites) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Container(52).IsUpdating] | [String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Container(53).IsUpdating] | [String.IsEqual(Window(Home).Property(silo.browse.type),comingsoon) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Container(54).IsUpdating] | [String.IsEqual(Window(Home).Property(silo.browse.type),boxsets) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Container(62).IsUpdating]</visible>
         </control>
         <!-- A trailer from an info page: its cover (Includes_SiloFrame.xml). -->
         <include>SiloTrailerCover</include>

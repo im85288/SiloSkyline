@@ -24,7 +24,8 @@ Community project: not made or endorsed by the Silo team.
 - **Browse.** Films and series in Grid, Hero or List view, with Sort, an Unwatched filter, A-Z, genre chips and
   collections, all in Silo's own windows. Silo's box sets (Harry Potter's eight films, say) show as one card,
   with BOX SET and the film count, and open a box set page: its films in release order and a Play button for
-  the next one to watch. A film's page has its box set's row; search lists box sets first.
+  the next one to watch. Movies > Box sets lists them all; a film's page has its box set's row; search
+  lists box sets first.
 - **Detail, person and Requests pages** as Silo's Apple TV app: Play / Resume, trailers, watchlist, season
   pills and episode rails, More Like This, cast to their person pages, and Silo's Requests (Discover and Yours).
   A Rate button gives a title one to five stars, and a show's theme tune plays while its page is open.
@@ -41,9 +42,10 @@ Community project: not made or endorsed by the Silo team.
 ## Your own menu items
 
 With [Skin Shortcuts](https://github.com/mikesilvo164/script.skinshortcuts) installed, **Settings -> Customise
-menu** adds items of your own beside the avatar: any add-on, library node, playlist or other shortcut, renamed
-and in your order. Give an item up to four widgets and it opens them as rows on its own page, like Home's;
-an item without widgets runs its action. The Silo tabs stay as they are.
+menu** adds up to two items of your own to the menu bar (what fits beside the Silo tabs; a long name ends in
+"..."): any add-on, library node, playlist or other shortcut, renamed and in your order. Give an item up to six
+widgets and it opens them as rows on its own page, like Home's; an item without widgets runs its action. A
+submenu shows as pills on the item's page, reached with Down from the bar, as the Movies and Series sections are.
 
 ## Colours
 

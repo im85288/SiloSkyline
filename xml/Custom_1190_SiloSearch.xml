@@ -133,7 +133,7 @@
                     </control>
                     <control type="group">
                         <left>6</left><top>6</top>
-                        <visible>true</visible>
+                        <visible>true | String.IsEqual(ListItem.DBType,set)</visible>
                         <control type="image">
                             <left>14</left><top>14</top><width>132</width><height>40</height>
                             <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
@@ -154,7 +154,7 @@
                             <align>right</align><aligny>center</aligny>
                             <font>silo_detail</font>
                             <textcolor>FFEDEDED</textcolor>
-                            <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                            <label>[B]$INFO[ListItem.Art(set.silocount)]$INFO[ListItem.Art(silocount)][/B]</label>
                         </control>
                     </control>
                     <control type="label">
@@ -193,7 +193,7 @@
                     </control>
                     <control type="group">
                         <left>6</left><top>6</top>
-                        <visible>true</visible>
+                        <visible>true | String.IsEqual(ListItem.DBType,set)</visible>
                         <control type="image">
                             <left>14</left><top>14</top><width>132</width><height>40</height>
                             <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
@@ -214,7 +214,7 @@
                             <align>right</align><aligny>center</aligny>
                             <font>silo_detail</font>
                             <textcolor>FFEDEDED</textcolor>
-                            <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+                            <label>[B]$INFO[ListItem.Art(set.silocount)]$INFO[ListItem.Art(silocount)][/B]</label>
                         </control>
                     </control>
                     <control type="label">

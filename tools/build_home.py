@@ -22,7 +22,9 @@ PAGES = TABBED + ('custom',)
 TAB_LABELS = {'home': 'Home', 'movies': 'Movies', 'series': 'Series', 'requests': 'Requests'}
 MAX_ROWS = 12
 # Custom menu items (Skin Shortcuts): bar slots, and widgets per item.
-CUSTOM_SLOTS = 5
+# Two fit beside the built-in buttons (measured: 425 px spare between the
+# logo and the avatar); a longer name ends in "..." (custom_button_max).
+CUSTOM_SLOTS = 2
 WIDGETS = 6
 CUSTOM_IDS = list(range(9031, 9031 + CUSTOM_SLOTS))
 TV_TAB = 9006  # Live TV's guide, when Kodi has TV channels
@@ -872,6 +874,8 @@ SECTIONS = {
     # (Kodi's genre list) and Collections.
     'movies': [('Recommended', None), ('Browse', 'videodb://movies/titles/'), ('Recently Added', None),
                ('Genres', 'videodb://movies/genres/'),
+               # Silo's box sets (Kodi's movie sets, from SiloKodiConnect), each opening its page.
+               ('Box sets', 'videodb://movies/sets/'),
                ('Collections', '$INFO[Window(Home).Property(silo.movies.collections)]')],
     'series': [('Recommended', None), ('Browse', 'videodb://tvshows/titles/'), ('Recently Added', None),
                ('Genres', 'videodb://tvshows/genres/'), ('Coming Soon', None),
@@ -890,6 +894,17 @@ def tab_width(page):
 def open_sections(page, control_id):
     """A tab's sections open with Down (see bar_moves); nothing here now."""
     return ''
+
+
+# The bar's span: from just after the logo (wordmark) to just before the avatar.
+BAR_LEFT, BAR_RIGHT = SAFE_X + 260, 1920 - SAFE_X - 64 - 16
+
+
+def custom_button_max():
+    """A custom item's widest: the bar's spare room shared between the slots."""
+    widths = [60] + [tab_width(page) for page in TABBED] + [60 + 17 * 2, 60, 60]
+    built_in = sum(widths) + BAR_GAP * len(widths)
+    return (BAR_RIGHT - BAR_LEFT - built_in) // CUSTOM_SLOTS - BAR_GAP
 
 
 def bar_positions():
@@ -1039,7 +1054,7 @@ DROP_ICON = '''    <variable name="SiloDropIcon">
 SECTION_ICONS = {'Recommended': 'silo/menu_recommended.png', 'Browse': 'silo/menu_browse.png',
                  'Collections': 'silo/menu_collections.png', 'Discover': 'silo/menu_recommended.png',
                  'Recently Added': 'silo/menu_history.png',
-                 'Genres': 'silo/menu_default.png'}
+                 'Genres': 'silo/menu_default.png', 'Box sets': 'silo/icon_versions.png'}
 
 
 COLLECTION_KEYS = ('collections', 'collection', 'genres')
@@ -1097,6 +1112,14 @@ def section_actions(page, label, path):
                  'SetProperty(silo.browse.list.comingsoon,%s,home)' % path]
                 + ['ClearProperty(silo.browse.list.%s,home)' % other for other in PERSONAL_KEYS + COLLECTION_KEYS
                    if other != 'comingsoon']
+                + ['ActivateWindow(1191)'])
+    if label == 'Box sets':
+        # The movie sets in Skyline's Browse window, as a grid of their own.
+        return (['SetProperty(silo.browse.type,boxsets,home)', 'ClearProperty(silo.browse.from,home)',
+                 'ClearProperty(silo.browse.letter,home)', 'SetProperty(silo.browse.list,%s,home)' % path,
+                 'SetProperty(silo.browse.list.boxsets,%s,home)' % path]
+                + ['ClearProperty(silo.browse.list.%s,home)' % other for other in PERSONAL_KEYS + COLLECTION_KEYS
+                   if other != 'boxsets']
                 + ['ActivateWindow(1191)'])
     if label == YOURS:
         return ['SetProperty(silo.requests.view,yours,home)', 'ClearProperty(silo.row,home)']
@@ -1167,7 +1190,8 @@ def page_pills():
             <orientation>horizontal</orientation>
             <itemgap>%(gap)d</itemgap>
             <visible>%(visible)s</visible>
-            <animation effect="fade" start="100" end="70" time="200" condition="!ControlGroup(%(gid)d).HasFocus()">Conditional</animation>
+            <!-- Dimmed until Up from the top row reaches them: the content comes first, as Netflix's. -->
+            <animation effect="fade" start="100" end="50" time="200" condition="!ControlGroup(%(gid)d).HasFocus()">Conditional</animation>
             <onup>SetFocus(%(tab)d)</onup>
             <onback>SetFocus(%(tab)d)</onback>%(down)s
             <onleft>noop</onleft><onright>noop</onright>%(buttons)s
@@ -1210,7 +1234,8 @@ def custom_pills():
             <width>%(w)d</width><height>%(h)d</height>
             <orientation>horizontal</orientation>
             <visible>%(visible)s + %(has)s</visible>
-            <animation effect="fade" start="100" end="70" time="200" condition="!Control.HasFocus(%(id)d)">Conditional</animation>
+            <!-- Dimmed until Up from the top row reaches them: the content comes first, as Netflix's. -->
+            <animation effect="fade" start="100" end="50" time="200" condition="!Control.HasFocus(%(id)d)">Conditional</animation>
             <onup>SetFocus(%(button)s)</onup>
             <onback>SetFocus(%(button)s)</onback>%(down)s
             <itemlayout width="%(iw)d" height="%(h)d">%(normal)s
@@ -1355,7 +1380,7 @@ PLUGIN_URL = 'plugin://plugin.video.silokodiconnect/'
 # The avatar card's lists. Each has its own grid in Browse with its own path
 # (silo.browse.list.<key>); only the open one's is set, since Kodi loads a
 # grid's path even while the grid is hidden.
-PERSONAL_KEYS = ('watchlist', 'favorites', 'history', 'comingsoon')
+PERSONAL_KEYS = ('watchlist', 'favorites', 'history', 'comingsoon', 'boxsets')
 
 
 def avatar_menu():
@@ -1615,7 +1640,7 @@ def custom_items():
         buttons += '''
                 <control type="button" id="%(id)d">
                     <visible>!String.IsEmpty(%(label)s)</visible>
-                    <width>auto</width><height>60</height>
+                    <width max="%(max_w)d">auto</width><height>60</height>
                     <label>$INFO[%(label)s]</label>
                     <font>silo_tab</font>
                     <textoffsetx>24</textoffsetx>
@@ -1636,7 +1661,7 @@ def custom_items():
                 </control>''' % {'label': label, 'pills': CUSTOM_PILLS, 'id': control_id, 'dim': TAB_DIM, 'text': TEXT, 'has_widgets': has_widgets,
                              'path': shortcut(slot, 'Property(path)'), 'actions': actions,
                              'go': go, 'to_submenu': to_submenu, 'shortcuts': SHORTCUTS, 'slot': slot,
-                             'submenu': SUBMENU, 'has_submenu': has_submenu,
+                             'submenu': SUBMENU, 'has_submenu': has_submenu, 'max_w': custom_button_max(),
                              'nofocus': '$VAR[SiloCustomTab%d]' % control_id,
                              # Left and right come from the grouplist: Kodi points its direct
                              # children at their neighbours (passing hidden ones), over ours.
@@ -1666,10 +1691,12 @@ def custom_tab_variables():
 
 def bar_down(indent='            '):
     """Down from the bar: the first row showing, on whichever page is shown
-    (only one page's rows are ever visible)."""
+    (only one page's rows are ever visible), as Netflix's and Infuse's: the
+    content first, the page's pills above it reached with Up from the top row
+    (dimmed until then, page_pills). A page with pills but no rows (a custom
+    item that is only a submenu) goes to its pills."""
     out = ''.join(first_visible('ondown', page_rows(index, range(1, LOOKAHEAD + 1)), indent)
                   for index in range(len(PAGES)))
-    # A page with pills but no rows (a custom item that is only a submenu).
     for index, page in enumerate(PAGES):
         pills = pills_id(index) if page in PILL_PAGES else CUSTOM_PILLS if page == 'custom' else None
         if pills:
@@ -1958,6 +1985,8 @@ def build():
             <left>%(bar_left)d</left><top>%(tabs_top)d</top>
             <width>%(bar_w)d</width><height>60</height>
             <orientation>horizontal</orientation>
+            <!-- Centred however many custom items it holds. -->
+            <align>center</align>
             <itemgap>8</itemgap>%(bar_down)s%(tabs)s
         </control>
 %(avatar)s
@@ -1971,7 +2000,7 @@ def build():
        'row_overlap': ROW_PITCH - BAND_H,
        'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
        'bar_down': bar_down(), 'avatar': avatar(), 'custom': shortcuts_list,
-       'bar_left': bar_positions()[9001], 'bar_w': 1920 - SAFE_X - 64 - 16 - bar_positions()[9001], 'shortcuts': SHORTCUTS, 'sections': sections, 'drop_dim': dropdown_dim(), 'pills': page_pills() + custom_pills(),
+       'bar_left': BAR_LEFT, 'bar_w': BAR_RIGHT - BAR_LEFT, 'shortcuts': SHORTCUTS, 'sections': sections, 'drop_dim': dropdown_dim(), 'pills': page_pills() + custom_pills(),
        'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'wordmark': wordmark(SAFE_X, BAR_TOP, '\n            <animation effect="fade" start="100" end="70" time="200" condition="%s">Conditional</animation>' % BAR_DIM), 'waiting': ' | '.join('[%s]' % c for c, _ in waiting_rows()), 'background': BACKGROUND, 'splash_max': SPLASH_MAX,
        # The age rating as Silo draws it: the quality badges' size, centred on the info line.
        'splash': splash(), 'mpaa_badge': badge('$VAR[SiloMpaa]', 34, 'silo_badge').replace(

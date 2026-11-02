@@ -878,21 +878,6 @@
         <value condition="Control.HasFocus(9240) + String.IsEqual(Window(Home).Property(silo.submenu.from),9032)">26FFFFFF</value>
         <value>00FFFFFF</value>
     </variable>
-    <variable name="SiloCustomTab9033">
-        <value condition="String.IsEqual(Window(Home).Property(silo.page),custom) + String.IsEqual(Window(Home).Property(silo.custom.button),9033)">26FFFFFF</value>
-        <value condition="Control.HasFocus(9240) + String.IsEqual(Window(Home).Property(silo.submenu.from),9033)">26FFFFFF</value>
-        <value>00FFFFFF</value>
-    </variable>
-    <variable name="SiloCustomTab9034">
-        <value condition="String.IsEqual(Window(Home).Property(silo.page),custom) + String.IsEqual(Window(Home).Property(silo.custom.button),9034)">26FFFFFF</value>
-        <value condition="Control.HasFocus(9240) + String.IsEqual(Window(Home).Property(silo.submenu.from),9034)">26FFFFFF</value>
-        <value>00FFFFFF</value>
-    </variable>
-    <variable name="SiloCustomTab9035">
-        <value condition="String.IsEqual(Window(Home).Property(silo.page),custom) + String.IsEqual(Window(Home).Property(silo.custom.button),9035)">26FFFFFF</value>
-        <value condition="Control.HasFocus(9240) + String.IsEqual(Window(Home).Property(silo.submenu.from),9035)">26FFFFFF</value>
-        <value>00FFFFFF</value>
-    </variable>
     <variable name="SiloDropIcon">
         <value condition="!String.IsEmpty(ListItem.Property(siloIcon))">$INFO[ListItem.Property(siloIcon)]</value>
         <value condition="String.StartsWith(ListItem.Icon,silo/)">$INFO[ListItem.Icon]</value>
@@ -7765,6 +7750,7 @@
          episode, SiloKodiConnect's silo.caption), else its year. -->
     <variable name="SiloBrowseCardSub">
         <value condition="[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]">$INFO[ListItem.Art(set.siloyears)]</value>
+        <value condition="String.IsEqual(ListItem.DBType,set)">$INFO[ListItem.Art(siloyears)]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.caption))">$INFO[ListItem.Property(silo.caption)]</value>
         <value>$INFO[ListItem.Year]</value>
     </variable>
@@ -7819,6 +7805,7 @@
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),favorites) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">Favorites</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">History</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),comingsoon) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">Coming Soon</value>
+        <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),boxsets) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">Box sets</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),collections)">Collections</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),genres)">Genres</value>
         <value condition="!String.IsEmpty(Window(Home).Property(silo.browse.genre))">$INFO[Window(Home).Property(silo.browse.genre)]</value>
@@ -7835,6 +7822,8 @@
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list))"></value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),comingsoon) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Integer.IsGreater(Container(54).NumItems,0)">$INFO[Container(54).NumItems,, titles]</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),comingsoon) + !String.IsEmpty(Window(Home).Property(silo.browse.list))"></value>
+        <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),boxsets) + !String.IsEmpty(Window(Home).Property(silo.browse.list)) + Integer.IsGreater(Container(62).NumItems,0)">$INFO[Container(62).NumItems,, box sets]</value>
+        <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),boxsets) + !String.IsEmpty(Window(Home).Property(silo.browse.list))"></value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),collections)">$INFO[Container(56).NumItems,, collections]</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),genres)">$INFO[Container(59).NumItems,, genres]</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),collection)">$INFO[Container(55).NumItems,, titles]</value>
@@ -7902,6 +7891,7 @@
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),favorites) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">$INFO[Container(52).ListItem.Art(fanart)]</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),history) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">$INFO[Container(53).ListItem.Art(fanart)]</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),comingsoon) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">$INFO[Container(54).ListItem.Art(fanart)]</value>
+        <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),boxsets) + !String.IsEmpty(Window(Home).Property(silo.browse.list))">$INFO[Container(62).ListItem.Art(fanart)]</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),collections)">$INFO[Container(56).ListItem.Art(fanart)]</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.browse.type),collection)">$INFO[Container(55).ListItem.Art(fanart)]</value>
         <value condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]]"></value>

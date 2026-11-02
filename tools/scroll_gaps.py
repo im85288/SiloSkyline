@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Give every scrolling label a gap, as Silo's: without one Kodi runs the
 end of a title into its start ("MeYou Are No"). Runs last in build_all.py,
-over generated and hand-written files alike; a label with its own gap keeps it.
+over generated and hand-written files alike; a label with its own gap keeps it
+(one of spaces only counts as none: Kodi trims it).
 
     python3 tools/scroll_gaps.py
 """
@@ -14,7 +15,12 @@ GAP = '<scrollsuffix>     ·     </scrollsuffix>'
 SCROLL = re.compile(r'<scroll>true</scroll>')
 
 
+BLANK = re.compile(r'<scrollsuffix>\s*</scrollsuffix>')
+
+
 def with_gaps(text):
+    # A gap of spaces only is no gap: Kodi trims it away.
+    text = BLANK.sub(GAP, text)
     out, last = [], 0
     for match in SCROLL.finditer(text):
         # The rest of this control: up to its next control or its end.

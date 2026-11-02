@@ -34,7 +34,9 @@ GRID_ID, AZ_ID = 50, 60
 # in it, so a shared one would open History on a title picked in Favorites.
 PERSONAL = {'watchlist': ('Watchlist', 51), 'favorites': ('Favorites', 52), 'history': ('History', 53),
             # Silo's calendar: each started show's next episode (SiloKodiConnect).
-            'comingsoon': ('Coming Soon', 54)}
+            'comingsoon': ('Coming Soon', 54),
+            # Silo's box sets (Kodi's movie sets): OK opens a box set's page.
+            'boxsets': ('Box sets', 62)}
 IS_PERSONAL = '!String.IsEmpty(%s)' % LIST
 COLS = 6
 GRID_X, GRID_TOP = SAFE_X - 6, 252
@@ -147,7 +149,7 @@ def box_set_marks(width, height, indent=16, visible=None):
     return '''
 %(p)s<control type="group">
 %(p)s    <left>6</left><top>6</top>
-%(p)s    <visible>%(box)s</visible>
+%(p)s    <visible>%(box)s | String.IsEqual(ListItem.DBType,set)</visible>
 %(p)s    <control type="image">
 %(p)s        <left>14</left><top>14</top><width>132</width><height>40</height>
 %(p)s        <texture border="10" colordiffuse="CC000000">silo/badge_solid.png</texture>
@@ -168,7 +170,7 @@ def box_set_marks(width, height, indent=16, visible=None):
 %(p)s        <align>right</align><aligny>center</aligny>
 %(p)s        <font>silo_detail</font>
 %(p)s        <textcolor>%(text)s</textcolor>
-%(p)s        <label>[B]$INFO[ListItem.Art(set.silocount)][/B]</label>
+%(p)s        <label>[B]$INFO[ListItem.Art(set.silocount)]$INFO[ListItem.Art(silocount)][/B]</label>
 %(p)s    </control>
 %(p)s</control>''' % {'p': pad, 'box': visible or BOX_SET, 'text': TEXT, 'w': width, 'scrim_y': height - 90,
                        'count_y': height - 52, 'count_w': width - 18}
@@ -858,8 +860,10 @@ def empty_note(key, list_id):
             <visible>%(personal)s + !Container(%(list)d).IsUpdating + Integer.IsEqual(Container(%(list)d).NumItems,0)</visible>
         </control>
 ''' % {'gx': SAFE_X, 'top': GRID_TOP + 20, 'gw': 1920 - 2 * SAFE_X, 'dim': TEXT_DIM, 'personal': is_list(key),
-       'list': list_id, 'note': 'No new episodes of your shows in the next two weeks.' if key == 'comingsoon'
-       else 'Nothing here yet. Add titles from Silo and they appear here.'}
+       'list': list_id, 'note': {'comingsoon': 'No new episodes of your shows in the next two weeks.',
+                                 'boxsets': "No box sets yet: Silo groups a library's films into box sets "
+                                            "once they're turned on for it."}.get(
+           key, 'Nothing here yet. Add titles from Silo and they appear here.')}
 
 
 # Silo's collections, here rather than in Kodi's library window (where OK
@@ -1108,8 +1112,9 @@ VARIABLES = '''
        'personal': ''.join('        <value condition="%s">%s</value>\n' % (is_list(key), title)
                            for key, (title, _) in PERSONAL.items()),
        'subs': ''.join('        <value condition="%s + Integer.IsGreater(Container(%d).NumItems,0)">'
-                       '$INFO[Container(%d).NumItems,, titles]</value>\n        <value condition="%s"></value>\n'
-                       % (is_list(key), list_id, list_id, is_list(key)) for key, (_, list_id) in PERSONAL.items()),
+                       '$INFO[Container(%d).NumItems,, %s]</value>\n        <value condition="%s"></value>\n'
+                       % (is_list(key), list_id, list_id, 'box sets' if key == 'boxsets' else 'titles', is_list(key))
+                       for key, (_, list_id) in PERSONAL.items()),
        'sort_values': ''.join('        <value condition="String.IsEqual(%s,%s) + !String.IsEmpty(Skin.String(silo.sort.%s))">'
                               '$INFO[Skin.String(silo.sort.%s)]</value>\n' % (TYPE, kind, kind, kind)
                               for kind in ('movies', 'tvshows')),
@@ -1137,6 +1142,7 @@ def filter_variables():
          episode, SiloKodiConnect's silo.caption), else its year. -->
     <variable name="SiloBrowseCardSub">
         <value condition="%(box)s">$INFO[ListItem.Art(set.siloyears)]</value>
+        <value condition="String.IsEqual(ListItem.DBType,set)">$INFO[ListItem.Art(siloyears)]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.caption))">$INFO[ListItem.Property(silo.caption)]</value>
         <value>$INFO[ListItem.Year]</value>
     </variable>
