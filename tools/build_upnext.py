@@ -25,7 +25,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import LANDSCAPE, ROOT, SAFE_X, TEXT, card_body  # noqa: E402
+from build_home import LANDSCAPE, ROOT, TEXT, card_body  # noqa: E402
 
 UPNEXT = 'service.upnext'
 SILO = 'Skin.HasSetting(SkylineSiloOSD)'      # Silo's player style chosen

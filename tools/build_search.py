@@ -15,7 +15,7 @@ import sys
 from urllib.parse import quote
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import focus_sheen, focus_zoom, wordmark, BACKGROUND, POSTER, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM, card_layout, GRID_BACKDROP  # noqa: E402
+from build_home import focus_sheen, focus_zoom, BACKGROUND, POSTER, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM, card_layout, GRID_BACKDROP  # noqa: E402
 from build_library import box_set_marks, BOX_SET_MEMBER  # noqa: E402
 
 WINDOW_ID = 1190
@@ -148,14 +148,14 @@ def row(index, list_id, title, path, kind):
                     <focusedlayout width="%(item_w)d" height="%(item_h)d">%(focused)s
                     </focusedlayout>
                 </control>
-            </control>''' % {'row_h': ROW_H, 'has': has_items(list_id), 'id': list_id, 'x': SAFE_X, 'text': TEXT,
+            </control>''' % {'row_h': ROW_H, 'id': list_id, 'x': SAFE_X, 'text': TEXT,
                              'title': title, 'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'item_h': item_h,
                              'item_w': item_w, 'moves': moves, 'path': search_path(path, kind),
                              'normal': box_set_card(False, list_id) if kind == 'boxsets' else card_layout(POSTER, False),
                              'focused': box_set_card(True, list_id) if kind == 'boxsets' else card_layout(POSTER, True, list_id),
                              'info_type': 'set' if kind == 'boxsets' else '$INFO[ListItem.DBType]',
                              'info_id': '$INFO[ListItem.SetId]' if kind == 'boxsets' else '$INFO[ListItem.DBID]',
-                             'loading': LOADING,
+                             
                              'group_shown': shown(list_id, '%s | Container(%d).IsUpdating | String.IsEqual(Window(Home).Property(%s),1)'
                                                   % (has_items(list_id), list_id, LOADING)),
                              'title_shown': shown(list_id, '%s | Container(%d).IsUpdating' % (has_items(list_id), list_id))}
@@ -266,7 +266,7 @@ def build():
         <include>SiloTrailerCover</include>
     </controls>
 </window>
-''' % {'backdrop': GRID_BACKDROP, 'wordmark': wordmark(SAFE_X, 56), 'window': WINDOW_ID, 'pill': PILL_ID, 'background': BACKGROUND, 'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM,
+''' % {'backdrop': GRID_BACKDROP, 'window': WINDOW_ID, 'pill': PILL_ID, 'background': BACKGROUND, 'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM,
        'pill_down': pill_down, 'rows_top': ROWS_TOP, 'rows_h': 1080 - ROWS_TOP, 'query': QUERY,
        'nothing': nothing, 'rows': ''.join(row(i, *r) for i, r in enumerate(ROWS)), 'loading': LOADING}
 

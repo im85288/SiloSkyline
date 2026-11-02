@@ -25,7 +25,6 @@ PATH = ('plugin://plugin.video.silokodiconnect/?mode=requests&amp;row=$INFO[%s]$
 
 def pill(control_id, label, media, left, right):
     """Movies or Series on a genre's page: the shown one lit."""
-    shown = ('String.IsEqual(%s,series)' % MEDIA) if media == 'series' else ('!String.IsEqual(%s,series)' % MEDIA)
     return '''
             <control type="button" id="%(id)d">
                 <width>auto</width><height>48</height>
@@ -41,7 +40,7 @@ def pill(control_id, label, media, left, right):
                 <ondown>%(grid)d</ondown>
                 <onclick>%(click)s</onclick>
             </control>''' % {'id': control_id, 'label': label, 'name': label, 'text': TEXT, 'left': left, 'right': right,
-                             'grid': GRID, 'shown': shown,
+                             'grid': GRID, 
                              'click': 'SetProperty(silo.rbrowse.media,series,home)' if media == 'series'
                              else 'ClearProperty(silo.rbrowse.media,home)'}
 
@@ -113,7 +112,7 @@ def build():
         </control>
     </controls>
 </window>
-''' % {'backdrop': GRID_BACKDROP, 'window': REQUEST_BROWSE, 'grid': GRID, 'genre': GENRE, 'movies': MOVIES, 'iw': item[0], 'ih': item[1],
+''' % {'backdrop': GRID_BACKDROP, 'window': REQUEST_BROWSE, 'grid': GRID, 'genre': GENRE, 'movies': MOVIES, 
        'path': PATH, 'clicks': CLICKS, 'cards': cards(GRID, item[0], item[1]),
        'pills': pill(MOVIES, 'Movies', 'movie', 'noop', SERIES) + pill(SERIES, 'Series', 'series', MOVIES, 'noop')}
 

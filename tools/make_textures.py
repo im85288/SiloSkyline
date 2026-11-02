@@ -544,7 +544,7 @@ if __name__ == '__main__':
         disc = rounded_rect_coverage(x, y, size, size, size / 2.0)
         if disc <= 0:
             return 0.0
-        u, v = x / size, y / size
+        v = y / size
         sky = tuple(int(a + (b - a) * v) for a, b in zip(DUSK_TOP, DUSK_BOTTOM))
         hits = 0
         for sy in range(SUB):
@@ -560,13 +560,13 @@ if __name__ == '__main__':
     write_png('skyline_mark.png', 192, 192, skyline)
     # The bar's up chevron (a tab with a sub-menu): two strokes meeting at the top.
     def chevron_up(x, y, w=56.0, h=32.0, stroke=5.0):
+        import math
         hits = 0
         for sy in range(SUB):
             for sx in range(SUB):
                 px = x - 0.5 + (sx + 0.5) / SUB
                 py = y - 0.5 + (sy + 0.5) / SUB
                 # Distance to the polyline (6, h-6) -> (w/2, 6) -> (w-6, h-6).
-                import math
                 def seg(ax, ay, bx, by):
                     t = max(0.0, min(1.0, ((px - ax) * (bx - ax) + (py - ay) * (by - ay)) / ((bx - ax) ** 2 + (by - ay) ** 2)))
                     return math.hypot(px - ax - t * (bx - ax), py - ay - t * (by - ay))

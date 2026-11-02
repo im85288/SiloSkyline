@@ -968,7 +968,7 @@ def episode_card(focused, list_id=61, current='String.IsEqual(ListItem.DBID,Cont
                             <textcolor>99EDEDED</textcolor>
                             <label>$INFO[ListItem.Art(siloaired)]$INFO[ListItem.Duration(mins), · , min]</label>
                         </control>
-                    </control>''' % {'zoom': zoom, 'sheen': sheen, 'text': TEXT, 'dim': TEXT_DIM,
+                    </control>''' % {'zoom': zoom, 'sheen': sheen, 'text': TEXT, 
                                          'watched': watched_mark(360, 202, 'silo/card_landscape_mask.png', 'Integer.IsGreater(ListItem.PlayCount,0)',
                                                                 lit if focused else ''),
                                          'titles': ''.join(episode_title(scroll, visible) for scroll, visible in

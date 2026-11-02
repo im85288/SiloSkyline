@@ -811,7 +811,7 @@ def row(page, page_index, slot, landscape):
             </control>''' % {
         'group_h': BAND_H, 'rules': rules, 'x': SAFE_X, 'text': TEXT, 'title': prop(key + '.title'), 'type': prop(key + '.type'), 'icon_x': SAFE_X + 42,
         'cards_top': CARDS_TOP, 'id': list_id(page_index, slot, landscape), 'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'item_h': item_h,
-        'moves': moves(page_index, slot), 'path': path, 'content': content, 'layouts': item_layouts,
+        'moves': moves(page_index, slot), 'content': content, 'layouts': item_layouts,
         # A custom item's widgets are any Kodi list: OK does what Kodi does
         # (plays an item, opens a folder). Silo's rows open details.
         'clicks': '' if page == 'custom' else ROW_CLICKS}
@@ -980,7 +980,6 @@ def dropdown(x, list_id, back, heading, content, shown, rows, fit=False, header=
                         <left>4</left><top>4</top><width>%d</width><height>%d</height>
                         <texture border="28" colordiffuse="%s">silo/pill.png</texture>%s
                     </control>''' % (DROP_W - 40, DROP_ROW - 8, TEXT, on) + body('FF000000', on) + body(TEXT, off))
-    height = head_h + rows * DROP_ROW + 16
     def frame(n, visible):
         return '''
             <control type="group">%(v)s
@@ -1021,8 +1020,8 @@ def dropdown(x, list_id, back, heading, content, shown, rows, fit=False, header=
                 <content>%(content)s
                 </content>
             </control>
-        </control>''' % {'x': x, 'top': BAR_TOP + 76, 'shown': shown, 'w': DROP_W, 'h': height, 'lw': DROP_W - 56,
-                         'closed': prop('silo.drop.closed'), 'heading': heading, 'id': list_id, 'liw': DROP_W - 32, 'lh': rows * DROP_ROW, 'back': back,
+        </control>''' % {'x': x, 'top': BAR_TOP + 76, 'shown': shown, 
+                         'closed': prop('silo.drop.closed'), 'id': list_id, 'liw': DROP_W - 32, 'lh': rows * DROP_ROW, 'back': back,
                          'row': DROP_ROW, 'normal': entry(False), 'focused': entry(True), 'content': content, 'frames': frames,
                          'to_rows': bar_down('                '), 'dwell': DROP_DWELL, 'cx': DROP_W // 2,
                          'head_h': head_h, 'header': header if header is not None else '''
@@ -1684,7 +1683,6 @@ def custom_items():
     """The user's own menu items (Skin Shortcuts), as tabs after Requests.
     An item with widgets opens them as rows (the 'custom' page); any other
     runs its action. Returns the hidden list holding the menu, and the tabs."""
-    index = PAGES.index('custom')
     buttons = ''
     for slot, control_id in enumerate(CUSTOM_IDS):
         label = shortcut(slot, 'Label')
@@ -1732,7 +1730,7 @@ def custom_items():
                 </control>''' % {'label': label, 'pills': CUSTOM_PILLS, 'id': control_id, 'dim': TAB_DIM, 'text': TEXT, 'has_widgets': has_widgets,
                              'path': shortcut(slot, 'Property(path)'), 'actions': actions,
                              'go': go, 'to_submenu': to_submenu, 'shortcuts': SHORTCUTS, 'slot': slot,
-                             'submenu': SUBMENU, 'has_submenu': has_submenu, 'max_w': custom_button_max(),
+                             'max_w': custom_button_max(),
                              'nofocus': '$VAR[SiloCustomTab%d]' % control_id,
                              # Left and right come from the grouplist: Kodi points its direct
                              # children at their neighbours (passing hidden ones), over ours.
@@ -2070,7 +2068,7 @@ def build():
 </window>
 ''' % {'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'meta': HERO_META, 'plot': PLOT, 'cast': CAST, 'rows_top': ROWS_TOP, 'rows_h': BAND_H,
        'row_overlap': ROW_PITCH - BAND_H,
-       'rows': rows, 'no_rows': no_rows, 'bar_top': BAR_TOP, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
+       'rows': rows, 'no_rows': no_rows, 'tabs_top': BAR_TOP + 2, 'tabs': tabs,
        'bar_down': bar_down(), 'avatar': avatar(), 'custom': shortcuts_list,
        'bar_left': BAR_LEFT, 'bar_w': BAR_RIGHT - BAR_LEFT, 'shortcuts': SHORTCUTS, 'sections': sections, 'drop_dim': dropdown_dim(), 'pills': page_pills() + custom_pills(),
        'bar_dim': BAR_DIM, 'row_prop': prop('silo.row'), 'wordmark': wordmark(SAFE_X, BAR_TOP, '\n            <animation effect="fade" start="100" end="70" time="200" condition="%s">Conditional</animation>' % BAR_DIM), 'waiting': ' | '.join('[%s]' % c for c, _ in waiting_rows()), 'background': BACKGROUND, 'splash_max': SPLASH_MAX,
@@ -2493,7 +2491,7 @@ def wordmark(x, top, extra=''):
                 <textcolor>%(text)s</textcolor>
                 <label>Skyline</label>
             </control>
-        </control>''' % {'x': x, 'top': top, 'extra': extra, 'text': TEXT, 'dim': TEXT_DIM}
+        </control>''' % {'x': x, 'top': top, 'extra': extra, 'text': TEXT, }
 
 
 def splash():
@@ -2529,7 +2527,7 @@ def splash():
                 <animation effect="rotate" start="0" end="-360" center="auto" time="900" loop="true" reversible="false" condition="true">Conditional</animation>
                 <texture colordiffuse="99EDEDED">silo/spinner_arc.png</texture>
             </control>
-        </control>''' % {'ready': prop('silo.ready'), 'background': BACKGROUND, 'text': TEXT}
+        </control>''' % {'ready': prop('silo.ready'), 'text': TEXT}
 
 
 TIMER_START, TIMER_END = '    <!-- Silo Skyline (tools/build_home.py) -->\n', '    <!-- end Silo Skyline -->\n'

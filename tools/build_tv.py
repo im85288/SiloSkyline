@@ -97,7 +97,7 @@ def channel(focused):
                     </control>''' % (SAFE_X + LOGO_W + 18, CHANNEL_W - SAFE_X - LOGO_W - 100, ROW_H - 10),
                                                       colour, ACCENT, PLAYING, DIM),
                                      'fill': '1FFFFFFF' if focused else '0DFFFFFF', 'lx': SAFE_X + 4,
-                                     'tx': SAFE_X + 84, 'tw': CHANNEL_W - SAFE_X - 160, 'dim': DIM, 'colour': colour,
+                                     'dim': DIM, 
                                      'ax': CHANNEL_W - 40}
 
 
@@ -142,7 +142,7 @@ def variables():
             '        <value condition="String.IsEmpty(ListItem.Label)">[COLOR 80EDEDED]No information[/COLOR]</value>\n'
             '        <value>[COLOR D9EDEDED]$INFO[ListItem.Label][/COLOR]</value>\n'
             '    </variable>\n'
-            ) % {'lit': lit, 'text': TEXT, 'playing': PLAYING, 'accent': ACCENT} + quick_variables() + stream_variables() + '    <!-- end Silo Skyline TV guide -->\n'
+            ) % {'lit': lit, } + quick_variables() + stream_variables() + '    <!-- end Silo Skyline TV guide -->\n'
 
 
 def add_variables():
@@ -894,7 +894,7 @@ def schedule_row(focused=False, width=SCHEDULE_W, height=SCHEDULE_ROW, lit_id=No
                             {visible}
                         </control>''' % (width - 230, height), title_colour,
                                                                title_colour if title_colour == 'FF000000' else ACCENT, NOW_ROW), 'mark': mark_colour, 'live': live_colour,
-                                      'tw': width - 230, 'mx': width - 44, 'my': (height - 24) // 2, 'lx': width - 92}
+                                      'mx': width - 44, 'my': (height - 24) // 2, 'lx': width - 92}
     head = '''
                     <control type="group">
                         <visible>%(header)s</visible>%(label)s
@@ -1285,8 +1285,8 @@ def build_quick_guide():
 ''' % {'w': QUICK_W, 'sw': SCHEDULE_W + 60, 'sx': QUICK_W + 30, 'sx_end': QUICK_W + SCHEDULE_W + 60,
        'bg': PANEL, 'x': SAFE_X - 40, 'lw': QUICK_W - SAFE_X, 'text': TEXT, 'dim': DIM,
        'lh': QUICK_ROW * 9, 'row': QUICK_ROW, 'item': quick_row(False), 'item_focused': quick_row(True),
-       'f': focused, 'stw': SCHEDULE_W - 120, 'sw2': SCHEDULE_W, 'sh': SCHEDULE_ROW * 15, 'srow': SCHEDULE_ROW,
-       'short': schedule_row(), 'sched_id': SCHEDULE_ID, 'quick_rows': quick_rows(), 'days_id': DAYS_ID, 'in_sched': IN_SCHED, 'view': SCHED_VIEW, 'band': 112, 'band_colour': 'FF33373E',
+       'f': focused, 'stw': SCHEDULE_W - 120, 
+       'sched_id': SCHEDULE_ID, 'quick_rows': quick_rows(), 'days_id': DAYS_ID, 'view': SCHED_VIEW, 'band': 112, 'band_colour': 'FF33373E',
        'loaded': '[String.IsEqual(Window(Home).Property(silokodi.schedule_for),Container(11).ListItem.ChannelNumberLabel) + '
                  'Integer.IsGreater(Container(%d).NumItems,0) + !Container(%d).IsUpdating]' % (SCHEDULE_ID, SCHEDULE_ID),
        'panel': FULL_PANEL, 'hx': SAFE_X + 100, 'hw': FULL_W - SAFE_X - 100,
@@ -1443,9 +1443,9 @@ def playback_bar():
                 <orientation>horizontal</orientation>
                 <itemgap>20</itemgap>%(transport)s
             </control>%(restart)s%(live_button)s
-        </control>''' % {'open': CONTROLS_OPEN, 'band_y': BAND_Y, 'band_h': BAND_H, 'panel': PANEL, 'x': SAFE_X,
+        </control>''' % {'open': CONTROLS_OPEN, 'band_y': BAND_Y, 'band_h': BAND_H, 'x': SAFE_X,
                          'text': TEXT, 'id': CONTROLS, 'top': top, 'b': BUTTON, 'gx': (1920 - width) // 2,
-                         'gw': width, 'transport': transport, 'list': RECENT_LIST,
+                         'gw': width, 'transport': transport, 
                          'restart': round_button(RESTART, (('silo/skip_back.png', ''),), 'PVR.SeekPercentage(0)',
                                                  ids[-1], LIVE_BUTTON, 'Watch from start', x=1548),
                          'live_button': round_button(LIVE_BUTTON, (), 'PVR.SeekPercentage(100)', RESTART, 'noop',
@@ -1553,7 +1553,7 @@ def build_recent():
         </control>%(bar)s
     </controls>
 </window>
-''' % {'window': RECENT_ID, 'list': RECENT_LIST, 'bg': BACKGROUND[2:], 'text': TEXT,
+''' % {'window': RECENT_ID, 'list': RECENT_LIST, 'bg': BACKGROUND[2:], 
        'corners': corners(), 'info': infobar(ROW_Y - 32 - INFO_H),
        'lx': SAFE_X - 8, 'ly': ROW_Y, 'lw': 1920 - SAFE_X + 8, 'iw': TILE_W + TILE_GAP, 'ih': TILE_H,
        'card': recent_card(False), 'card_focused': recent_card(True),

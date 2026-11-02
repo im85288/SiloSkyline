@@ -5,8 +5,7 @@ Needs Pillow.
     python3 tools/make_art.py
 """
 import os
-import sys
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+from PIL import Image, ImageDraw, ImageFont
 root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 out = os.path.join(root, 'resources')
 mark = Image.open(root + '/media/silo/skyline_mark.png').convert('RGBA')

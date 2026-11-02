@@ -183,7 +183,7 @@ def dialog():
         </control>
     </controls>
 </window>
-''' % {'text': TEXT, 'rows': rows, 'actions': menu_actions(), 'item': item_layout(False), 'item_focused': item_layout(True)}
+''' % {'rows': rows, 'actions': menu_actions(), 'item': item_layout(False), 'item_focused': item_layout(True)}
 
 
 def menu_actions():

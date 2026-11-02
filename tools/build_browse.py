@@ -19,7 +19,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import rt_list_marks, RATING_SHOWN, wordmark, focus_sheen, focus_zoom, watched_mark, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM, GRID_BACKDROP  # noqa: E402
+from build_home import rt_list_marks, RATING_SHOWN, focus_sheen, focus_zoom, watched_mark, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM, GRID_BACKDROP  # noqa: E402
 
 # An add-on's videos (content videos) get the poster grid too, and its views.
 GRID = ('Container.Content(movies) | Container.Content(tvshows) | Container.Content(sets) | Container.Content(seasons)'
@@ -105,7 +105,7 @@ def poster(focused, view_id):
                         <textcolor>%(sub_colour)s</textcolor>
                         <label>$VAR[SiloBrowseSub]</label>
                     </control>
-                </control>''' % {'w': POSTER_W, 'h': POSTER_H, 'pw': POSTER_W - 24, 'text': TEXT, 'dim': TEXT_DIM,
+                </control>''' % {'w': POSTER_W, 'h': POSTER_H, 'pw': POSTER_W - 24, 'text': TEXT, 
                                      'watched': watched_mark(POSTER_W, POSTER_H, 'silo/card_poster_mask.png', WATCHED,
                                                             'Control.HasFocus(%d)' % view_id if focused else '', 20), 'zoom': zoom,
                                      'sheen': focus_sheen(POSTER_W, POSTER_H, 'silo/card_poster_mask.png', 'silo/card_poster_rim.png',
@@ -771,7 +771,7 @@ def build():
         <include>SiloTrailerCover</include>
     </controls>
 </window>
-''' % {'backdrop': GRID_BACKDROP, 'wordmark': wordmark(SAFE_X, 56), 'background': BACKGROUND, 'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'lx': SAFE_X - 36,
+''' % {'backdrop': GRID_BACKDROP, 'background': BACKGROUND, 'lx': SAFE_X - 36,
        'views_top': VIEWS_TOP, 'views_h': 1080 - VIEWS_TOP, 'gx': SAFE_X - 6,
        'gw': 1920 - 2 * (SAFE_X - 6), 'pw': poster_item_w, 'ph': POSTER_ITEM_H,
        'ew': 1920 - 2 * (SAFE_X - 6), 'eh': EPISODE_ITEM_H,
@@ -863,7 +863,7 @@ VARIABLES = '''
         <value>$INFO[Container.Art(fanart)]</value>
     </variable>
     <!-- end Silo Skyline browse -->
-''' % {'grid': GRID, 'episodes': EPISODES, 'jump': JUMP_ID, 'fans': FANS, 'chips': CHIPS, 'hero_view': HERO_VIEW,
+''' % {'grid': GRID, 'episodes': EPISODES, 'fans': FANS, 'chips': CHIPS, 'hero_view': HERO_VIEW,
        'jump_arts': ''.join('        <value condition="Control.HasFocus(%d) + Control.IsVisible(%d)">'
                             '$INFO[Container(%d).ListItem.Art(fanart)]</value>\n' % (JUMP_ID, view, view)
                             for view in TITLE_VIEWS)}

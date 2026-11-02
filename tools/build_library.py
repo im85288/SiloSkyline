@@ -418,7 +418,7 @@ def sort_controls():
                         <right>22</right><top>%(ay)d</top><width>22</width><height>22</height>
                         <texture colordiffuse="%(colour)s">$VAR[SiloSortArrowIcon]</texture>
                         %(v_chosen)s
-                    </control>''' % {'box': BOX_SET, 'iy': (SORT_ROW - 26) // 2, 'ay': (SORT_ROW - 22) // 2, 'lw': SORT_W - 260,
+                    </control>''' % {'iy': (SORT_ROW - 26) // 2, 'ay': (SORT_ROW - 22) // 2, 'lw': SORT_W - 260,
                                      'row': SORT_ROW, 'colour': colour, 'dim': dim, 'v': both(''),
                                      'v_chosen': both(chosen)}
         if not focused:
@@ -504,7 +504,7 @@ def sort_controls():
 ''' % {'shuffle': SHUFFLE_ID, 'pill': SORT_ID, 'list': SORT_LIST_ID, 'x': SAFE_X, 'top': SORT_TOP, 'text': TEXT,
        'personal': IS_PERSONAL, 'ly': SORT_TOP + 68, 'frames': frames, 'head': SORT_HEAD,
        'lw': SORT_W - 32, 'lh': len(SORTS) * SORT_ROW, 'row': SORT_ROW, 'normal': row(False), 'focused': row(True),
-       'items': items, 'open_list': open_list, 'view': VIEW_ID, 'unwatched': UNWATCHED_ID,
+       'items': items, 'open_list': open_list, 'unwatched': UNWATCHED_ID,
        'pill_icons': pill_icon('FF000000', '!%s + Control.HasFocus(%d)' % (IS_PERSONAL, SORT_ID))
                      + pill_icon(TEXT, '!%s + !Control.HasFocus(%d)' % (IS_PERSONAL, SORT_ID))}
 
@@ -827,7 +827,7 @@ def view_controls():
        'shiy': SORT_TOP + 14,
        'unwatched_down': ''.join('            <ondown condition="%s">%s</ondown>\n' % (c, a) for c, a in focus_view()),
        'ly': SORT_TOP + 68, 'open_list': open_list, 'fh': SORT_HEAD + 16 + SORT_ROW * len(VIEWS), 'head': SORT_HEAD,
-       'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'personal': IS_PERSONAL, 'sort': SORT_ID, 'vw': VIEW_W,
+       'text': TEXT, 'dim': TEXT_DIM, 'personal': IS_PERSONAL, 'sort': SORT_ID, 'vw': VIEW_W,
        'lw': VIEW_W - 32,
        'lh': SORT_ROW * len(VIEWS), 'row': SORT_ROW, 'normal': row(False), 'focused': row(True), 'items': pick,
        'is_hero': view_is('hero'), 'is_list': view_is('list'), 'hero': hero, 'lst': lst, 'backdrop': GRID_BACKDROP,
@@ -1049,7 +1049,7 @@ def build():
         <include>SiloTrailerCover</include>
     </controls>
 </window>
-''' % {'backdrop': GRID_BACKDROP, 'window': WINDOW_ID, 'grid': GRID_ID, 'background': BACKGROUND, 'letter': LETTER, 'gx': GRID_X,
+''' % {'backdrop': GRID_BACKDROP, 'window': WINDOW_ID, 'grid': GRID_ID, 'background': BACKGROUND, 
        'gy': GRID_TOP, 'gh': 1080 - GRID_TOP, 'az': AZ_ID, 'personal': IS_PERSONAL, 'genre': GENRE,
        'loading': ' | '.join('[%s + Container(%d).IsUpdating]' % (is_list(key), list_id)
                              for key, list_id in [('collections', 56), ('collection', 55)]

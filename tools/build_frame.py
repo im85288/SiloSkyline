@@ -521,7 +521,7 @@ def setting_button():
 			<textureslidernibfocus colordiffuse="FF000000">buttons/slider-nib.png</textureslidernibfocus>
 		</definition>
 	</include>
-''' % {'text': TEXT, 'pill': FOCUS_ROW}
+''' % {'text': TEXT, }
 
 
 def skin_settings(text):
