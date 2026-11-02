@@ -376,6 +376,13 @@
                         <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                     </control>
 
+                    <control type="image">
+                        <left>6</left><top>6</top>
+                        <width>246</width><height>369</height>
+                        <texture diffuse="silo/card_poster_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                        <visible>[Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]</visible>
+                        <animation effect="fade" time="160">VisibleChange</animation>
+                    </control>
                     <control type="group">
                         <left>202</left><top>16</top>
                         <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
@@ -439,6 +446,13 @@
                             <width>246</width><height>369</height>
                             <texture colordiffuse="33FFFFFF">silo/card_poster_rim.png</texture>
                         </control>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top>
+                        <width>246</width><height>369</height>
+                        <texture diffuse="silo/card_poster_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                        <visible>[Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]] + !Control.HasFocus(51)</visible>
+                        <animation effect="fade" time="160">VisibleChange</animation>
                     </control>
                     <control type="group">
                         <left>202</left><top>16</top>
@@ -833,6 +847,13 @@
                     <aspectratio>scale</aspectratio>
                     <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
                 </control>
+                <control type="image">
+                    <left>6</left><top>6</top>
+                    <width>179</width><height>268</height>
+                    <texture diffuse="silo/card_poster_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                    <visible>[Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]</visible>
+                    <animation effect="fade" time="160">VisibleChange</animation>
+                </control>
                 <control type="group">
                     <left>135</left><top>16</top>
                     <visible>Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]</visible>
@@ -866,6 +887,13 @@
                         <width>179</width><height>268</height>
                         <texture colordiffuse="33FFFFFF">silo/card_poster_rim.png</texture>
                     </control>
+                </control>
+                <control type="image">
+                    <left>6</left><top>6</top>
+                    <width>179</width><height>268</height>
+                    <texture diffuse="silo/card_poster_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                    <visible>[Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]] + !Control.HasFocus(55)</visible>
+                    <animation effect="fade" time="160">VisibleChange</animation>
                 </control>
                 <control type="group">
                     <left>135</left><top>16</top>
@@ -1240,6 +1268,13 @@
                         <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                     </control>
 
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>202</height>
+                            <texture diffuse="silo/card_landscape_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                            <visible>[Integer.IsGreater(ListItem.PlayCount,0)]</visible>
+                            <animation effect="fade" time="160">VisibleChange</animation>
+                        </control>
                         <control type="group">
                             <left>316</left><top>16</top>
                             <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
@@ -1265,7 +1300,7 @@
                         <width>1100</width><height>32</height>
                         <font>silo_detail</font>
                         <textcolor>BFEDEDED</textcolor>
-                        <label>$INFO[ListItem.Duration(mins),, min]$INFO[ListItem.Premiered, · ,]</label>
+                        <label>$INFO[ListItem.Duration(mins),, min]$INFO[ListItem.Art(siloaired), · ,]</label>
                     </control>
                     <control type="textbox">
                         <left>412</left><top>100</top>
@@ -1311,6 +1346,13 @@
                             <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
                         </control>
                     </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>202</height>
+                            <texture diffuse="silo/card_landscape_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                            <visible>[Integer.IsGreater(ListItem.PlayCount,0)] + !Control.HasFocus(52)</visible>
+                            <animation effect="fade" time="160">VisibleChange</animation>
+                        </control>
                         <control type="group">
                             <left>316</left><top>16</top>
                             <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
@@ -1336,7 +1378,7 @@
                         <width>1100</width><height>32</height>
                         <font>silo_detail</font>
                         <textcolor>BFEDEDED</textcolor>
-                        <label>$INFO[ListItem.Duration(mins),, min]$INFO[ListItem.Premiered, · ,]</label>
+                        <label>$INFO[ListItem.Duration(mins),, min]$INFO[ListItem.Art(siloaired), · ,]</label>
                     </control>
                     <control type="textbox">
                         <left>412</left><top>100</top>

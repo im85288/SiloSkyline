@@ -31,7 +31,7 @@ TABS = [
         ('Player details', '', ['Dialog.Close(1180)', 'ActivateWindow(PlayerProcessInfo)']),
     ], [
         ('Title', '$INFO[VideoPlayer.Title]'),
-        ('Episode', '$INFO[VideoPlayer.Season,S,]$INFO[VideoPlayer.Episode, · E,]'),
+        ('Episode', '$INFO[VideoPlayer.Season,S,]$INFO[VideoPlayer.Episode, E,]'),
         ('Length', '$INFO[Player.Duration]'),
         ('Video', '$INFO[VideoPlayer.VideoResolution][UPPERCASE]$INFO[VideoPlayer.HdrType, · ,][/UPPERCASE][UPPERCASE]$INFO[VideoPlayer.VideoCodec, · ,][/UPPERCASE]'),
         ('Audio', '$INFO[VideoPlayer.AudioLanguage][UPPERCASE]$INFO[VideoPlayer.AudioCodec, · ,][/UPPERCASE]$INFO[VideoPlayer.AudioChannels, · , ch]'),

@@ -117,7 +117,7 @@ def showcase():
                 <left>%(x)d</left><top>404</top><width>900</width><height>50</height>
                 <font>silo_row</font>
                 <textcolor>%(text)s</textcolor>
-                <label>$INFO[Window.Property(season),S,]$INFO[Window.Property(episode), · E,]$INFO[Window.Property(title), · ,]</label>
+                <label>$INFO[Window.Property(season),S,]$INFO[Window.Property(episode), E,]$INFO[Window.Property(title), · ,]</label>
             </control>
             <control type="label">
                 <left>%(x)d</left><top>462</top><width>900</width><height>40</height>

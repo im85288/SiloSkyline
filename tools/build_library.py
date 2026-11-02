@@ -22,7 +22,7 @@ import sys
 from urllib.parse import quote
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import rt_list_marks, focus_sheen, focus_zoom, watched_disc, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM, GRID_BACKDROP  # noqa: E402
+from build_home import rt_list_marks, focus_sheen, focus_zoom, watched_mark, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM, GRID_BACKDROP  # noqa: E402
 
 WINDOW_ID = 1191
 TYPE = 'Window(Home).Property(silo.browse.type)'
@@ -208,9 +208,11 @@ def card(focused, control_id=GRID_ID, size=None):
                                  'sheen': focus_sheen(POSTER_W, POSTER_H, 'silo/card_poster_mask.png', 'silo/card_poster_rim.png',
                                                       lit, 16) if focused else '',
                                  # A box set's card shows no one film's watched state.
-                                 'watched': watched_disc(POSTER_W - 44, 16, '!%s + [Integer.IsGreater(ListItem.PlayCount,0) | '
+                                 'watched': watched_mark(POSTER_W, POSTER_H, 'silo/card_poster_mask.png',
+                                                         '!%s + [Integer.IsGreater(ListItem.PlayCount,0) | '
                                                          '[Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + '
-                                                         'Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]' % BOX_SET, 16),
+                                                         'Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]' % BOX_SET,
+                                                         lit if focused else '', 16),
                                  'yy': POSTER_H + 58, 'w': POSTER_W, 'dim': TEXT if focused else SUB_DIM,
                                  'box': box_set_marks(POSTER_W, POSTER_H)}
 
@@ -227,9 +229,11 @@ def hero_card(focused, control_id, width, height):
                 </control>''' % {'box': box_set_marks(width, height), 'w': width, 'h': height, 'zoom': focus_zoom(lit, 20) if focused else '',
                                  'sheen': focus_sheen(width, height, 'silo/card_poster_mask.png', 'silo/card_poster_rim.png',
                                                       lit, 16) if focused else '',
-                                 'watched': watched_disc(width - 44, 16, 'Integer.IsGreater(ListItem.PlayCount,0) | '
+                                 'watched': watched_mark(width, height, 'silo/card_poster_mask.png',
+                                                         '!%s + [Integer.IsGreater(ListItem.PlayCount,0) | '
                                                          '[Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + '
-                                                         'Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]', 16)}
+                                                         'Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]' % BOX_SET,
+                                                         lit if focused else '', 16)}
 
 
 def letter_layouts(list_id=AZ_ID, chosen=None):
@@ -718,7 +722,7 @@ def view_controls():
             <control type="textbox">
                 <left>%(sx)d</left><top>%(py)d</top><width>960</width><height>62</height>
                 <font>silo_detail</font>
-                <textcolor>%(text)s</textcolor>
+                <textcolor>%(dim)s</textcolor>
                 <label>$INFO[%(hero)s.Plot]</label>
                 <visible>!%(hero_box)s</visible>
             </control>
@@ -763,7 +767,7 @@ def view_controls():
             <control type="textbox">
                 <left>%(dx)d</left><top>%(ply)d</top><width>%(plw)d</width><height>260</height>
                 <font>silo_detail</font>
-                <textcolor>%(text)s</textcolor>
+                <textcolor>%(dim)s</textcolor>
                 <label>$INFO[%(lst)s.Plot]</label>
             </control>
         </control>

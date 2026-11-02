@@ -417,7 +417,7 @@
 				<height>262</height>
 				<font>font36_title</font>
 				<label>$INFO[ListItem.Title] $INFO[ListItem.Year,([COLOR grey],[/COLOR])]</label>
-				<scroll>true</scroll>
+				<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 				<visible>!ListItem.HasEpg</visible>
 			</control>
 			<control type="label">
@@ -426,14 +426,14 @@
 				<height>262</height>
 				<font>font36_title</font>
 				<label>$INFO[ListItem.EpgEventTitle] $INFO[ListItem.Year,([COLOR grey],[/COLOR])]</label>
-				<scroll>true</scroll>
+				<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 				<visible>ListItem.HasEpg</visible>
 			</control>
 			<control type="label">
 				<top>410</top>
 				<width>830</width>
 				<height>70</height>
-				<scroll>true</scroll>
+				<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 				<label>[I]$VAR[SeasonEpisodeLabel]$INFO[ListItem.EpisodeName][/I]</label>
 			</control>
 			<control type="textbox">
@@ -508,7 +508,7 @@
 				<align>right</align>
 				<aligny>center</aligny>
 				<label>$INFO[$PARAM[value]]</label>
-				<scroll>true</scroll>
+				<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 			</control>
 		</control>
 	</include>
@@ -607,7 +607,7 @@
 						<textcolor>button_focus</textcolor>
 						<aligny>center</aligny>
 						<textoffsetx>10</textoffsetx>
-						<scroll>true</scroll>
+						<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 					</control>
 				</focusedchannellayout>
 				<itemlayout height="62" width="60">

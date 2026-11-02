@@ -82,7 +82,7 @@
 					<aligny>center</aligny>
 					<textcolor>grey</textcolor>
 					<shadowcolor>black</shadowcolor>
-					<scroll>true</scroll>
+					<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 				</control>
 				<control type="list" id="120">
 					<width>920</width>

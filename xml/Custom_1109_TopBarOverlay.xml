@@ -200,7 +200,7 @@
 						<font>font13</font>
 						<label>$VAR[OSDSubLabelVar]</label>
 						<shadowcolor>text_shadow</shadowcolor>
-						<scroll>true</scroll>
+						<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 					</control>
 				</control>
 				<control type="group">

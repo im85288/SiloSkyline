@@ -193,6 +193,22 @@ def rank_numeral(card, indent=24):
 %(p)s</control>''' % {'p': pad, 'y': 6 + card['height'] - 110 - 16, 'w': card['width'], 'rank': RANK, 'ranked': RANKED}
 
 
+def watched_mark(width, height, mask, visible, focus='', indent=24):
+    """Every card's watched look, as Home's: the card dimmed (lifting while it
+    has focus) under Silo's tick disc in its top right corner."""
+    pad = ' ' * indent
+    veil = '''
+%(p)s<control type="image">
+%(p)s    <left>6</left><top>6</top>
+%(p)s    <width>%(w)d</width><height>%(h)d</height>
+%(p)s    <texture diffuse="%(mask)s" colordiffuse="99000000">colors/white.png</texture>
+%(p)s    <visible>%(v)s</visible>
+%(p)s    <animation effect="fade" time="160">VisibleChange</animation>
+%(p)s</control>''' % {'p': pad, 'w': width, 'h': height, 'mask': mask,
+                       'v': '[%s]' % visible + (' + !%s' % focus if focus else '')}
+    return veil + watched_disc(width - 44, 16, visible, indent)
+
+
 def watched_dim(card, focus, indent=24):
     """A watched title's card, dimmed so what's left to watch stands out; it
     lifts while the card has focus. Drawn under the watched mark."""

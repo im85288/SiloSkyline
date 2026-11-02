@@ -152,7 +152,7 @@
 						<top>0</top>
 						<bottom>0</bottom>
 						<aligny>center</aligny>
-						<scroll>true</scroll>
+						<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 						<font>font27</font>
 						<label>$VAR[ListLabelVar]</label>
 						<textcolor>SkylineFocusText</textcolor>

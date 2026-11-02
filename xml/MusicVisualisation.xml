@@ -74,7 +74,7 @@
 					<label>[B]$INFO[MusicPlayer.TrackNumber,,. ]$INFO[Player.Title][/B]</label>
 					<font>font45</font>
 					<shadowcolor>black</shadowcolor>
-					<scroll>true</scroll>
+					<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 				</control>
 				<control type="label">
 					<top>65</top>
@@ -84,7 +84,7 @@
 					<label>$INFO[MusicPlayer.Artist]</label>
 					<font>font45</font>
 					<shadowcolor>black</shadowcolor>
-					<scroll>true</scroll>
+					<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 				</control>
 				<control type="grouplist">
 					<top>120</top>
@@ -111,7 +111,7 @@
 						<shadowcolor>black</shadowcolor>
 						<aligny>center</aligny>
 						<align>left</align>
-						<scroll>true</scroll>
+						<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 						<visible>!String.IsEmpty(MusicPlayer.Genre)</visible>
 					</control>
 					<control type="image">
@@ -131,7 +131,7 @@
 					<label>$INFO[MusicPlayer.Album]$VAR[MultiDiscVar]</label>
 					<font>font37</font>
 					<shadowcolor>black</shadowcolor>
-					<scroll>true</scroll>
+					<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 				</control>
 				<control type="label">
 					<top>210</top>
@@ -140,7 +140,7 @@
 					<aligny>center</aligny>
 					<label>$VAR[OSDNextLabelVar]</label>
 					<shadowcolor>black</shadowcolor>
-					<scroll>true</scroll>
+					<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 					<visible>Integer.IsGreater(Playlist.Length(music),1)</visible>
 				</control>
 			</control>

@@ -222,7 +222,7 @@
                         <font>silo_card_title</font>
                         <textcolor>FFEDEDED</textcolor>
                         <label>$INFO[ListItem.Set]</label>
-                        <scroll>true</scroll>
+                        <scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
                     </control>
                     <control type="label">
                         <left>6</left><top>316</top><width>176</width><height>32</height>

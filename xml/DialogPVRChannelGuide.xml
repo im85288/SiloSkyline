@@ -71,7 +71,7 @@
 							<align>right</align>
 							<aligny>center</aligny>
 							<label>$VAR[PVRListItemSubLabelFocused]</label>
-							<scroll>true</scroll>
+							<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 						</control>
 						<control type="group">
 							<visible>!String.IsEmpty(ListItem.Plot) + Control.HasFocus(11)</visible>

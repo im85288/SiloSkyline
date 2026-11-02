@@ -84,7 +84,7 @@
 							<aligny>center</aligny>
 							<font>font12</font>
 							<label>[B]$INFO[ListItem.Label][/B]</label>
-							<scroll>true</scroll>
+							<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 						</control>
 						<control type="label">
 							<left>20</left>
@@ -94,7 +94,7 @@
 							<font>font10</font>
 							<aligny>center</aligny>
 							<label>[I]$INFO[ListItem.Property(ClientName)][/I]</label>
-							<scroll>true</scroll>
+							<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 						</control>
 						<control type="image">
 							<width>60</width>

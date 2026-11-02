@@ -479,7 +479,7 @@
 									<height>30</height>
 									<font>font27_narrow</font>
 									<label>$INFO[ListItem.Label] $INFO[ListItem.Label2]</label>
-									<scroll>true</scroll>
+									<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 									<visible>Control.HasFocus(41)</visible>
 								</control>
 								<control type="label">

@@ -454,6 +454,54 @@ if __name__ == '__main__':
                 else:
                     hits += abs(d - r) <= stroke / 2 or tick
         return hits / float(SUB * SUB)
+    # Icons in Skyline's line, for buttons that had Kodi's (Estuary's): drawn
+    # once as shapes on a unit square, then either filling the image (an
+    # info page's round button, a Play pill's icon) or small in its middle (a
+    # player button, which Kodi stretches to the button's size, as options.png).
+    def rect_outline(u, v, a, b, c, d, w):
+        inside = a - w / 2 <= u <= c + w / 2 and b - w / 2 <= v <= d + w / 2
+        hollow = a + w / 2 < u < c - w / 2 and b + w / 2 < v < d - w / 2
+        return inside and not hollow
+
+    def triangle(u, v, points):
+        (x1, y1), (x2, y2), (x3, y3) = points
+        def side(ax, ay, bx, by):
+            return (u - bx) * (ay - by) - (ax - bx) * (v - by)
+        d1, d2, d3 = side(x1, y1, x2, y2), side(x2, y2, x3, y3), side(x3, y3, x1, y1)
+        return not ((d1 < 0 or d2 < 0 or d3 < 0) and (d1 > 0 or d2 > 0 or d3 > 0))
+
+    SHAPES = {
+        'play': lambda u, v, w: triangle(u, v, ((0.24, 0.12), (0.24, 0.88), (0.86, 0.5))),
+        'pause': lambda u, v, w: (0.24 <= u <= 0.42 or 0.58 <= u <= 0.76) and 0.14 <= v <= 0.86,
+        'previous': lambda u, v, w: (0.16 <= u <= 0.25 and 0.18 <= v <= 0.82) or
+        triangle(u, v, ((0.84, 0.16), (0.84, 0.84), (0.27, 0.5))),
+        # A film frame: an outline with a frame line either side.
+        'trailer': lambda u, v, w: rect_outline(u, v, 0.08, 0.2, 0.92, 0.8, w) or
+        (0.2 + w / 2 < v < 0.8 - w / 2 and (abs(u - 0.3) <= w / 2 or abs(u - 0.7) <= w / 2)),
+        # Versions: two overlapping frames, the back one behind.
+        'versions': lambda u, v, w: rect_outline(u, v, 0.08, 0.32, 0.68, 0.92, w) or
+        (rect_outline(u, v, 0.32, 0.08, 0.92, 0.68, w) and not (0.08 < u < 0.68 and 0.32 < v < 0.92)),
+        # Subtitles: a caption box with two lines of text.
+        'subtitles': lambda u, v, w: rect_outline(u, v, 0.06, 0.18, 0.94, 0.82, w) or
+        (abs(v - 0.52) <= w / 2 and (0.2 <= u <= 0.46 or 0.56 <= u <= 0.8)) or
+        (abs(v - 0.67) <= w / 2 and 0.2 <= u <= 0.8),
+    }
+
+    def glyph(shape, size, scale, stroke):
+        def alpha(x, y):
+            hits = 0
+            w = stroke / (size * scale)
+            for sy in range(SUB):
+                for sx in range(SUB):
+                    u = ((x - 0.5 + (sx + 0.5) / SUB) / size - 0.5) / scale + 0.5
+                    v = ((y - 0.5 + (sy + 0.5) / SUB) / size - 0.5) / scale + 0.5
+                    hits += 0 <= u <= 1 and 0 <= v <= 1 and SHAPES[shape](u, v, w)
+            return hits / float(SUB * SUB)
+        return alpha
+    for shape in SHAPES:
+        write_png('icon_%s.png' % shape, 96, 96, glyph(shape, 96, 1.0, 7.0))
+        write_png('osd_%s.png' % shape, 96, 96, glyph(shape, 96, 0.36, 5.0))
+
     write_png('watched.png', 96, 96, lambda x, y: watched(x, y, False))
     write_png('watched_on.png', 96, 96, lambda x, y: watched(x, y, True))
 

@@ -6,8 +6,9 @@
 Each builder writes its own XML and its own section of the shared files
 (xml/Variables.xml, Timers.xml, Font.xml): it takes its section out and adds
 it back at the end, so running them all in this fixed order gives the same
-files whatever state they start in. build_colours goes last, as it rewrites
-colour values across everything the others wrote. Textures (make_textures.py,
+files whatever state they start in. build_colours goes next to last, as it
+rewrites colour values across everything the others wrote; scroll_gaps last,
+giving every scrolling label a gap. Textures (make_textures.py,
 make_rating_logos.swift) and art (make_art.py) are separate and rarely change.
 """
 import glob
@@ -20,7 +21,7 @@ TOOLS = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(TOOLS)
 BUILDERS = ('build_home', 'build_info', 'build_browse', 'build_search', 'build_upnext', 'build_shortcuts',
             'build_options', 'build_frame', 'build_library', 'build_person', 'build_tv', 'build_requests', 'build_showcase',
-            'build_colours')
+            'build_colours', 'scroll_gaps')
 
 
 def main():

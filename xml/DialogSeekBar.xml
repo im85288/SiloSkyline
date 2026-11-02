@@ -694,7 +694,7 @@
 			<control type="textbox">
 				<left>120</left><top>520</top><width>900</width><height>250</height>
 				<font>silo_detail</font>
-				<textcolor>FFEDEDED</textcolor>
+				<textcolor>BFEDEDED</textcolor>
 				<label>$INFO[VideoPlayer.Plot]</label>
 			</control>
 			<control type="image">

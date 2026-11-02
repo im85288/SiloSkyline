@@ -174,7 +174,7 @@
                 <align>right</align><aligny>center</aligny>
                 <font>silo_meta</font>
                 <textcolor>FFEDEDED</textcolor>
-                <label>$INFO[VideoPlayer.Season,S,]$INFO[VideoPlayer.Episode, · E,]</label>
+                <label>$INFO[VideoPlayer.Season,S,]$INFO[VideoPlayer.Episode, E,]</label>
             </control>
             <control type="label">
                 <left>800</left><top>216</top><width>220</width><height>68</height>

@@ -19,7 +19,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import rt_list_marks, wordmark, focus_sheen, focus_zoom, watched_disc, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM, GRID_BACKDROP  # noqa: E402
+from build_home import rt_list_marks, wordmark, focus_sheen, focus_zoom, watched_mark, BACKGROUND, ROOT, SAFE_X, TEXT, TEXT_DIM, TITLE_DIM, SUB_DIM, GRID_BACKDROP  # noqa: E402
 
 # An add-on's videos (content videos) get the poster grid too, and its views.
 GRID = ('Container.Content(movies) | Container.Content(tvshows) | Container.Content(sets) | Container.Content(seasons)'
@@ -106,7 +106,8 @@ def poster(focused, view_id):
                         <label>$VAR[SiloBrowseSub]</label>
                     </control>
                 </control>''' % {'w': POSTER_W, 'h': POSTER_H, 'pw': POSTER_W - 24, 'text': TEXT, 'dim': TEXT_DIM,
-                                     'watched': watched_disc(POSTER_W - 44, 16, WATCHED, 20), 'zoom': zoom,
+                                     'watched': watched_mark(POSTER_W, POSTER_H, 'silo/card_poster_mask.png', WATCHED,
+                                                            'Control.HasFocus(%d)' % view_id if focused else '', 20), 'zoom': zoom,
                                      'sheen': focus_sheen(POSTER_W, POSTER_H, 'silo/card_poster_mask.png', 'silo/card_poster_rim.png',
                                                           'Control.HasFocus(%d)' % view_id, 20) if focused else '', 't1': POSTER_H + 20, 't2': POSTER_H + 54,
                                      'title_color': title_color, 'dim_visible': dim_visible,
@@ -222,7 +223,7 @@ def episode(focused, view_id):
                         <width>1100</width><height>32</height>
                         <font>silo_detail</font>
                         <textcolor>%(dim)s</textcolor>
-                        <label>$INFO[ListItem.Duration(mins),, min]$INFO[ListItem.Premiered, · ,]</label>
+                        <label>$INFO[ListItem.Duration(mins),, min]$INFO[ListItem.Art(siloaired), · ,]</label>
                     </control>
                     <control type="textbox">
                         <left>%(x)d</left><top>100</top>
@@ -231,7 +232,8 @@ def episode(focused, view_id):
                         <textcolor>%(dim)s</textcolor>
                         <label>$INFO[ListItem.Plot]</label>
                     </control>''' % {'w': STILL_W, 'h': STILL_H, 'pw': STILL_W - 28, 'text': TEXT, 'dim': TEXT_DIM,
-                                     'watched': watched_disc(STILL_W - 44, 16, 'Integer.IsGreater(ListItem.PlayCount,0)', 24),
+                                     'watched': watched_mark(STILL_W, STILL_H, 'silo/card_landscape_mask.png', 'Integer.IsGreater(ListItem.PlayCount,0)',
+                                                            'Control.HasFocus(%d)' % view_id if focused else '', 24),
                                      'zoom': zoom, 'x': STILL_W + 52,
                                      'sheen': focus_sheen(STILL_W, STILL_H, 'silo/card_landscape_mask.png', 'silo/card_landscape_rim.png',
                                                           'Control.HasFocus(%d)' % view_id, 20) if focused else '', 'title_color': title_color}
@@ -306,7 +308,8 @@ def hero_poster(focused, view_id):
                 </control>''' % {'w': HERO_POSTER_W, 'h': HERO_POSTER_H, 'zoom': focus_zoom(lit, 20) if focused else '',
                                  'sheen': focus_sheen(HERO_POSTER_W, HERO_POSTER_H, 'silo/card_poster_mask.png',
                                                       'silo/card_poster_rim.png', lit, 16) if focused else '',
-                                 'watched': watched_disc(HERO_POSTER_W - 44, 16, WATCHED, 16)}
+                                 'watched': watched_mark(HERO_POSTER_W, HERO_POSTER_H, 'silo/card_poster_mask.png', WATCHED,
+                                                         'Control.HasFocus(%d)' % view_id if focused else '', 16)}
 
 
 def detail_row(focused):
@@ -831,8 +834,8 @@ VARIABLES = '''
         <value>$INFO[ListItem.Year]</value>
     </variable>
     <variable name="SiloBrowseEpisodeTitle">
-        <value condition="Integer.IsGreater(ListItem.Episode,0) + String.IsEmpty(Container.ShowTitle) + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle] · S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</value>
-        <value condition="Integer.IsGreater(ListItem.Episode,0)">S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</value>
+        <value condition="Integer.IsGreater(ListItem.Episode,0) + String.IsEmpty(Container.ShowTitle) + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle] · S$INFO[ListItem.Season] E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</value>
+        <value condition="Integer.IsGreater(ListItem.Episode,0)">S$INFO[ListItem.Season] E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</value>
         <value>$INFO[ListItem.Label]</value>
     </variable>
     <!-- List rows: SiloKodiConnect's menu names an icon of the skin's own. -->

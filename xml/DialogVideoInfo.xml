@@ -304,6 +304,9 @@
                 <!-- A show: Play or Resume its next episode, as in Silo (Kodi's button 8
                      would Browse); Browse once every episode is watched. Kodi reserves
                      ids 5-15 in this window (12 chooses art), so this is 300. -->
+                <control type="group" id="1300">
+                    <width>340</width><height>64</height>
+                    <visible>[String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]</visible>
                 <control type="button" id="300">
                     <ondown condition="[String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">60</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
@@ -322,12 +325,7 @@
                     <onright condition="Control.IsVisible(1014) + !Control.IsVisible(301) + !Control.IsVisible(1008) + !Control.IsVisible(1018) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352) + !Control.IsVisible(1353)">SetFocus(14)</onright>
                     <onright condition="Control.IsVisible(1303) + !Control.IsVisible(301) + !Control.IsVisible(1008) + !Control.IsVisible(1018) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352) + !Control.IsVisible(1353) + !Control.IsVisible(1014)">SetFocus(303)</onright>
                     <width>340</width><height>64</height>
-                    <label>$VAR[SiloDetailNextLabel]</label>
-                    <font>silo_tab</font>
-                    <textoffsetx>40</textoffsetx>
-                    <align>center</align><aligny>center</aligny>
-                    <textcolor>FFEDEDED</textcolor>
-                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <label />
                     <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
                     <!-- Another season chosen: its first episode, as Silo's Apple TV app does. -->
@@ -337,7 +335,33 @@
                     <!-- Nothing to play next (every episode watched): the page's own seasons, not Kodi's folder. -->
                     <onclick condition="![Integer.IsGreater(Container(61).NumItems,0) + !String.IsEqual(Container(61).ListItemAbsolute(0).Season,Container(62).ListItem.Season)] + ![Integer.IsGreater(Container(62).NumItems,0) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">SetFocus(60)</onclick>
                     <onclick condition="[Integer.IsGreater(Container(61).NumItems,0) + !String.IsEqual(Container(61).ListItemAbsolute(0).Season,Container(62).ListItem.Season)] | [Integer.IsGreater(Container(62).NumItems,0) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">Dialog.Close(movieinformation)</onclick>
-                    <visible>[String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]</visible>
+                </control>
+                    <control type="label">
+                        <left>78</left><width>250</width><height>64</height>
+                        <aligny>center</aligny>
+                        <font>silo_tab</font>
+                        <textcolor>SkylineFocusText</textcolor>
+                        <label>$VAR[SiloDetailNextLabel]</label>
+                        <visible>Control.HasFocus(300)</visible>
+                    </control>
+                    <control type="label">
+                        <left>78</left><width>250</width><height>64</height>
+                        <aligny>center</aligny>
+                        <font>silo_tab</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$VAR[SiloDetailNextLabel]</label>
+                        <visible>!Control.HasFocus(300)</visible>
+                    </control>
+                    <control type="image">
+                        <left>36</left><top>18</top><width>28</width><height>28</height>
+                        <texture colordiffuse="SkylineFocusText">silo/icon_play.png</texture>
+                        <visible>Control.HasFocus(300)</visible>
+                    </control>
+                    <control type="image">
+                        <left>36</left><top>18</top><width>28</width><height>28</height>
+                        <texture colordiffuse="FFEDEDED">silo/icon_play.png</texture>
+                        <visible>!Control.HasFocus(300)</visible>
+                    </control>
                 </control>
                 <!-- A Requests card: Request it, or its state when Silo already has it. -->
                 <control type="button" id="301">
@@ -356,7 +380,7 @@
                     <onright condition="Control.IsVisible(1353) + !Control.IsVisible(1008) + !Control.IsVisible(1018) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352)">SetFocus(353)</onright>
                     <onright condition="Control.IsVisible(1014) + !Control.IsVisible(1008) + !Control.IsVisible(1018) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352) + !Control.IsVisible(1353)">SetFocus(14)</onright>
                     <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1008) + !Control.IsVisible(1018) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352) + !Control.IsVisible(1353) + !Control.IsVisible(1014)">SetFocus(303)</onright>
-                    <onleft condition="Control.IsVisible(300)">SetFocus(300)</onleft>
+                    <onleft condition="Control.IsVisible(1300)">SetFocus(300)</onleft>
                     <visible>!String.IsEmpty(ListItem.Property(silo.request.tmdb))</visible>
                     <width>340</width><height>64</height>
                     <label>$VAR[SiloRequestLabel]</label>
@@ -394,7 +418,7 @@
                     <onright condition="Control.IsVisible(1014) + !Control.IsVisible(1018) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352) + !Control.IsVisible(1353)">SetFocus(14)</onright>
                     <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1018) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352) + !Control.IsVisible(1353) + !Control.IsVisible(1014)">SetFocus(303)</onright>
                     <onleft condition="Control.IsVisible(301)">SetFocus(301)</onleft>
-                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(301)">SetFocus(300)</onleft>
+                    <onleft condition="Control.IsVisible(1300) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>340</width><height>64</height>
                         <label />
                         <onclick condition="ListItem.IsResumable">PlayMedia($ESCINFO[ListItem.FileNameAndPath],resume)</onclick>
@@ -423,12 +447,12 @@
                     </control>
                     <control type="image">
                         <left>36</left><top>18</top><width>28</width><height>28</height>
-                        <texture colordiffuse="SkylineFocusText">osd/fullscreen/buttons/play.png</texture>
+                        <texture colordiffuse="SkylineFocusText">silo/icon_play.png</texture>
                         <visible>Control.HasFocus(308)</visible>
                     </control>
                     <control type="image">
                         <left>36</left><top>18</top><width>28</width><height>28</height>
-                        <texture colordiffuse="FFEDEDED">osd/fullscreen/buttons/play.png</texture>
+                        <texture colordiffuse="FFEDEDED">silo/icon_play.png</texture>
                         <visible>!Control.HasFocus(308)</visible>
                     </control>
                 </control>
@@ -452,9 +476,10 @@
                     <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1304) + !Control.IsVisible(1302) + !Control.IsVisible(1011) + !Control.IsVisible(1351) + !Control.IsVisible(1352) + !Control.IsVisible(1353) + !Control.IsVisible(1014)">SetFocus(303)</onright>
                     <onleft condition="Control.IsVisible(1008)">SetFocus(308)</onleft>
                     <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
-                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
+                    <onleft condition="Control.IsVisible(1300) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>auto</width><height>64</height>
-                        <label>$INFO[ListItem.Property(silo.boxset.play_label)]</label>
+                        <!-- Room for the play icon before the label (the pill fits the label). -->
+                        <label>      $INFO[ListItem.Property(silo.boxset.play_label)]</label>
                         <font>silo_tab</font>
                         <textoffsetx>40</textoffsetx>
                         <aligny>center</aligny>
@@ -465,6 +490,16 @@
                         <onclick condition="String.IsEqual(ListItem.Property(silo.boxset.resume),true)">PlayMedia($ESCINFO[ListItem.Property(silo.boxset.play)],resume)</onclick>
                         <onclick condition="!String.IsEqual(ListItem.Property(silo.boxset.resume),true)">PlayMedia($ESCINFO[ListItem.Property(silo.boxset.play)],noresume)</onclick>
                         <onclick>Dialog.Close(movieinformation)</onclick>
+                    </control>
+                    <control type="image">
+                        <left>36</left><top>18</top><width>28</width><height>28</height>
+                        <texture colordiffuse="SkylineFocusText">silo/icon_play.png</texture>
+                        <visible>Control.HasFocus(318)</visible>
+                    </control>
+                    <control type="image">
+                        <left>36</left><top>18</top><width>28</width><height>28</height>
+                        <texture colordiffuse="FFEDEDED">silo/icon_play.png</texture>
+                        <visible>!Control.HasFocus(318)</visible>
                     </control>
                 </control>
                 <control type="group" id="1304">
@@ -486,7 +521,7 @@
                     <onleft condition="Control.IsVisible(1018)">SetFocus(318)</onleft>
                     <onleft condition="Control.IsVisible(1008) + !Control.IsVisible(1018)">SetFocus(308)</onleft>
                     <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1018) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
-                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1018) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
+                    <onleft condition="Control.IsVisible(1300) + !Control.IsVisible(1018) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>64</width><height>64</height>
                         <label />
                         <texturefocus />
@@ -542,7 +577,7 @@
                     <onleft condition="Control.IsVisible(1018) + !Control.IsVisible(1304)">SetFocus(318)</onleft>
                     <onleft condition="Control.IsVisible(1008) + !Control.IsVisible(1304) + !Control.IsVisible(1018)">SetFocus(308)</onleft>
                     <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
-                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
+                    <onleft condition="Control.IsVisible(1300) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>64</width><height>64</height>
                         <label />
                         <texturefocus />
@@ -567,13 +602,13 @@
                     <control type="image">
                         <left>16</left><top>16</top>
                         <width>32</width><height>32</height>
-                        <texture colordiffuse="SkylineFocusText">osd/fullscreen/buttons/previous.png</texture>
+                        <texture colordiffuse="SkylineFocusText">silo/icon_previous.png</texture>
                         <visible>Control.HasFocus(302)</visible>
                     </control>
                     <control type="image">
                         <left>16</left><top>16</top>
                         <width>32</width><height>32</height>
-                        <texture colordiffuse="FFEDEDED">osd/fullscreen/buttons/previous.png</texture>
+                        <texture colordiffuse="FFEDEDED">silo/icon_previous.png</texture>
                         <visible>!Control.HasFocus(302)</visible>
                     </control>
                 </control>
@@ -598,7 +633,7 @@
                     <onleft condition="Control.IsVisible(1018) + !Control.IsVisible(1302) + !Control.IsVisible(1304)">SetFocus(318)</onleft>
                     <onleft condition="Control.IsVisible(1008) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018)">SetFocus(308)</onleft>
                     <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
-                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
+                    <onleft condition="Control.IsVisible(1300) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>64</width><height>64</height>
                         <label />
                         <texturefocus />
@@ -622,13 +657,13 @@
                     <control type="image">
                         <left>16</left><top>16</top>
                         <width>32</width><height>32</height>
-                        <texture colordiffuse="SkylineFocusText">icons/infodialogs/trailer.png</texture>
+                        <texture colordiffuse="SkylineFocusText">silo/icon_trailer.png</texture>
                         <visible>Control.HasFocus(11)</visible>
                     </control>
                     <control type="image">
                         <left>16</left><top>16</top>
                         <width>32</width><height>32</height>
-                        <texture colordiffuse="FFEDEDED">icons/infodialogs/trailer.png</texture>
+                        <texture colordiffuse="FFEDEDED">silo/icon_trailer.png</texture>
                         <visible>!Control.HasFocus(11)</visible>
                     </control>
                 </control>
@@ -654,7 +689,7 @@
                     <onleft condition="Control.IsVisible(1018) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304)">SetFocus(318)</onleft>
                     <onleft condition="Control.IsVisible(1008) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018)">SetFocus(308)</onleft>
                     <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
-                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
+                    <onleft condition="Control.IsVisible(1300) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>64</width><height>64</height>
                         <label />
                         <texturefocus />
@@ -685,13 +720,13 @@
                     <control type="image">
                         <left>16</left><top>16</top>
                         <width>32</width><height>32</height>
-                        <texture colordiffuse="SkylineFocusText">icons/infodialogs/trailer.png</texture>
+                        <texture colordiffuse="SkylineFocusText">silo/icon_trailer.png</texture>
                         <visible>Control.HasFocus(351)</visible>
                     </control>
                     <control type="image">
                         <left>16</left><top>16</top>
                         <width>32</width><height>32</height>
-                        <texture colordiffuse="FFEDEDED">icons/infodialogs/trailer.png</texture>
+                        <texture colordiffuse="FFEDEDED">silo/icon_trailer.png</texture>
                         <visible>!Control.HasFocus(351)</visible>
                     </control>
                 </control>
@@ -718,7 +753,7 @@
                     <onleft condition="Control.IsVisible(1018) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304)">SetFocus(318)</onleft>
                     <onleft condition="Control.IsVisible(1008) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018)">SetFocus(308)</onleft>
                     <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
-                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
+                    <onleft condition="Control.IsVisible(1300) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>64</width><height>64</height>
                         <label />
                         <texturefocus />
@@ -779,7 +814,7 @@
                     <onleft condition="Control.IsVisible(1018) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304)">SetFocus(318)</onleft>
                     <onleft condition="Control.IsVisible(1008) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018)">SetFocus(308)</onleft>
                     <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
-                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
+                    <onleft condition="Control.IsVisible(1300) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>64</width><height>64</height>
                         <label />
                         <texturefocus />
@@ -839,7 +874,7 @@
                     <onleft condition="Control.IsVisible(1018) + !Control.IsVisible(1353) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304)">SetFocus(318)</onleft>
                     <onleft condition="Control.IsVisible(1008) + !Control.IsVisible(1353) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018)">SetFocus(308)</onleft>
                     <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1353) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
-                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1353) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
+                    <onleft condition="Control.IsVisible(1300) + !Control.IsVisible(1353) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>64</width><height>64</height>
                         <label />
                         <texturefocus />
@@ -863,13 +898,13 @@
                     <control type="image">
                         <left>16</left><top>16</top>
                         <width>32</width><height>32</height>
-                        <texture colordiffuse="SkylineFocusText">icons/infodialogs/versions.png</texture>
+                        <texture colordiffuse="SkylineFocusText">silo/icon_versions.png</texture>
                         <visible>Control.HasFocus(14)</visible>
                     </control>
                     <control type="image">
                         <left>16</left><top>16</top>
                         <width>32</width><height>32</height>
-                        <texture colordiffuse="FFEDEDED">icons/infodialogs/versions.png</texture>
+                        <texture colordiffuse="FFEDEDED">silo/icon_versions.png</texture>
                         <visible>!Control.HasFocus(14)</visible>
                     </control>
                 </control>
@@ -899,7 +934,7 @@
                     <onleft condition="Control.IsVisible(1018) + !Control.IsVisible(1014) + !Control.IsVisible(1353) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304)">SetFocus(318)</onleft>
                     <onleft condition="Control.IsVisible(1008) + !Control.IsVisible(1014) + !Control.IsVisible(1353) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018)">SetFocus(308)</onleft>
                     <onleft condition="Control.IsVisible(301) + !Control.IsVisible(1014) + !Control.IsVisible(1353) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008)">SetFocus(301)</onleft>
-                    <onleft condition="Control.IsVisible(300) + !Control.IsVisible(1014) + !Control.IsVisible(1353) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
+                    <onleft condition="Control.IsVisible(1300) + !Control.IsVisible(1014) + !Control.IsVisible(1353) + !Control.IsVisible(1352) + !Control.IsVisible(1351) + !Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1304) + !Control.IsVisible(1018) + !Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(300)</onleft>
                         <width>64</width><height>64</height>
                         <label />
                         <texturefocus />
@@ -1044,6 +1079,13 @@
                             <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                         </control>
 
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>202</height>
+                            <texture diffuse="silo/card_landscape_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                            <visible>[Integer.IsGreater(ListItem.PlayCount,0)]</visible>
+                            <animation effect="fade" time="160">VisibleChange</animation>
+                        </control>
                         <control type="group">
                             <left>316</left><top>16</top>
                             <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
@@ -1069,7 +1111,7 @@
                             <width>360</width><height>30</height>
                             <font>silo_detail</font>
                             <textcolor>99EDEDED</textcolor>
-                            <label>$INFO[ListItem.Premiered]$INFO[ListItem.Duration(mins), · , min]</label>
+                            <label>$INFO[ListItem.Art(siloaired)]$INFO[ListItem.Duration(mins), · , min]</label>
                         </control>
                     </control>
                     </itemlayout>
@@ -1109,6 +1151,13 @@
                             <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
                             <visible>!Control.HasFocus(61) + String.IsEqual(ListItem.DBID,Container(62).ListItem.DBID)</visible>
                         </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>202</height>
+                            <texture diffuse="silo/card_landscape_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                            <visible>[Integer.IsGreater(ListItem.PlayCount,0)] + !Control.HasFocus(61)</visible>
+                            <animation effect="fade" time="160">VisibleChange</animation>
+                        </control>
                         <control type="group">
                             <left>316</left><top>16</top>
                             <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
@@ -1144,7 +1193,7 @@
                             <width>360</width><height>30</height>
                             <font>silo_detail</font>
                             <textcolor>99EDEDED</textcolor>
-                            <label>$INFO[ListItem.Premiered]$INFO[ListItem.Duration(mins), · , min]</label>
+                            <label>$INFO[ListItem.Art(siloaired)]$INFO[ListItem.Duration(mins), · , min]</label>
                         </control>
                     </control>
                     </focusedlayout>
@@ -1268,6 +1317,13 @@
                             <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
                         </control>
 
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>202</height>
+                            <texture diffuse="silo/card_landscape_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                            <visible>[Integer.IsGreater(ListItem.PlayCount,0)]</visible>
+                            <animation effect="fade" time="160">VisibleChange</animation>
+                        </control>
                         <control type="group">
                             <left>316</left><top>16</top>
                             <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
@@ -1293,7 +1349,7 @@
                             <width>360</width><height>30</height>
                             <font>silo_detail</font>
                             <textcolor>99EDEDED</textcolor>
-                            <label>$INFO[ListItem.Premiered]$INFO[ListItem.Duration(mins), · , min]</label>
+                            <label>$INFO[ListItem.Art(siloaired)]$INFO[ListItem.Duration(mins), · , min]</label>
                         </control>
                     </control>
                     </itemlayout>
@@ -1333,6 +1389,13 @@
                             <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
                             <visible>!Control.HasFocus(64) + String.IsEqual(ListItem.DBID,Window(movieinformation).Property(silo.episode_id))</visible>
                         </control>
+                        <control type="image">
+                            <left>6</left><top>6</top>
+                            <width>360</width><height>202</height>
+                            <texture diffuse="silo/card_landscape_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                            <visible>[Integer.IsGreater(ListItem.PlayCount,0)] + !Control.HasFocus(64)</visible>
+                            <animation effect="fade" time="160">VisibleChange</animation>
+                        </control>
                         <control type="group">
                             <left>316</left><top>16</top>
                             <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
@@ -1368,7 +1431,7 @@
                             <width>360</width><height>30</height>
                             <font>silo_detail</font>
                             <textcolor>99EDEDED</textcolor>
-                            <label>$INFO[ListItem.Premiered]$INFO[ListItem.Duration(mins), · , min]</label>
+                            <label>$INFO[ListItem.Art(siloaired)]$INFO[ListItem.Duration(mins), · , min]</label>
                         </control>
                     </control>
                     </focusedlayout>

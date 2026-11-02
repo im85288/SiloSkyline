@@ -312,7 +312,7 @@
 						<font>$PARAM[font]</font>
 						<aligny>center</aligny>
 						<label>$INFO[ListItem.Label]</label>
-						<scroll>true</scroll>
+						<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 					</control>
 				</control>
 				<control type="group">
@@ -329,7 +329,7 @@
 						<textcolor>SkylineFocusText</textcolor>
 						<selectedcolor>SkylineFocusText</selectedcolor>
 						<visible>Control.HasFocus($PARAM[list_id])</visible>
-						<scroll>true</scroll>
+						<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 					</control>
 					<control type="label">
 						<left>20</left>
@@ -341,7 +341,7 @@
 						<aligny>center</aligny>
 						<label>$INFO[ListItem.Label]</label>
 						<visible>!Control.HasFocus($PARAM[list_id])</visible>
-						<scroll>true</scroll>
+						<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 					</control>
 					<!-- Silo Skyline: a tick on the items chosen in a multi-select. -->
 					<control type="image">
@@ -658,7 +658,7 @@
 						<bottom>0</bottom>
 						<right>20</right>
 						<aligny>center</aligny>
-						<scroll>true</scroll>
+						<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 						<label>$INFO[ListItem.Label]</label>
 						<shadowcolor>text_shadow</shadowcolor>
 					</control>
@@ -796,7 +796,7 @@
 					<font>font30_title</font>
 					<shadowcolor>text_shadow</shadowcolor>
 					<height>35</height>
-					<scroll>true</scroll>
+					<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 					<animation effect="slide" start="0,0" end="0,15" time="0" condition="String.IsEmpty(Control.GetLabel($PARAM[id]))">Conditional</animation>
 				</control>
 				<control type="label" id="$PARAM[id]">
@@ -830,7 +830,7 @@
 					<shadowcolor>text_shadow</shadowcolor>
 					<height>65</height>
 					<align>center</align>
-					<scroll>true</scroll>
+					<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 					<animation effect="slide" start="0,0" end="0,25" time="0" condition="String.IsEmpty(Control.GetLabel($PARAM[id]))">Conditional</animation>
 				</control>
 				<control type="label" id="$PARAM[id]">
@@ -1640,7 +1640,7 @@
 					<right>20</right>
 					<height>60</height>
 					<aligny>center</aligny>
-					<scroll>true</scroll>
+					<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 					<font>font14</font>
 					<label>$VAR[MediaInfoListLabelVar]</label>
 				</control>

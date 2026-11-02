@@ -7303,15 +7303,15 @@
     </variable>
     <variable name="SiloDetailFacts">
         <value condition="String.IsEqual(ListItem.DBType,set)">Box set$INFO[ListItem.Property(silo.boxset.count),  [COLOR 80EDEDED]·[/COLOR]  ,]$INFO[ListItem.Property(silo.boxset.years),  [COLOR 80EDEDED]·[/COLOR]  ,]</value>
-        <value condition="Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]">$INFO[Container(64).ListItem.Premiered]$INFO[Container(64).ListItem.Duration(mins),  [COLOR 80EDEDED]·[/COLOR]  , min]</value>
-        <value condition="Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]">$INFO[Container(61).ListItem.Premiered]$INFO[Container(61).ListItem.Duration(mins),  [COLOR 80EDEDED]·[/COLOR]  , min]</value>
+        <value condition="Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]">$INFO[Container(64).ListItem.Art(siloaired)]$INFO[Container(64).ListItem.Duration(mins),  [COLOR 80EDEDED]·[/COLOR]  , min]</value>
+        <value condition="Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]">$INFO[Container(61).ListItem.Art(siloaired)]$INFO[Container(61).ListItem.Duration(mins),  [COLOR 80EDEDED]·[/COLOR]  , min]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))">$INFO[ListItem.Year]$VAR[SiloDetailSeasons]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">$INFO[ListItem.Year]$INFO[ListItem.Duration(mins),  [COLOR 80EDEDED]·[/COLOR]  , min]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.air_date))">$INFO[ListItem.Property(silo.air_date)]$INFO[ListItem.Duration(mins),  [COLOR 80EDEDED]·[/COLOR]  , min]</value>
         <value condition="String.IsEqual(ListItem.DBType,movie) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]">$INFO[ListItem.Year]$INFO[ListItem.Duration(mins),  [COLOR 80EDEDED]·[/COLOR]  , min]</value>
         <value condition="String.IsEqual(ListItem.DBType,tvshow) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]">$INFO[ListItem.Year]$VAR[SiloDetailSeasons]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.code))">$INFO[ListItem.Property(silo.code)]$INFO[ListItem.Title,  [COLOR 80EDEDED]·[/COLOR]  ,]$INFO[ListItem.Property(silo.aired),  [COLOR 80EDEDED]·[/COLOR]  ,]$INFO[ListItem.Duration(mins),  [COLOR 80EDEDED]·[/COLOR]  , min]</value>
-        <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Season,S,]$INFO[ListItem.Episode,E,]$INFO[ListItem.Title,  [COLOR 80EDEDED]·[/COLOR]  ,]$INFO[ListItem.Premiered,  [COLOR 80EDEDED]·[/COLOR]  ,]$INFO[ListItem.Duration(mins),  [COLOR 80EDEDED]·[/COLOR]  , min]</value>
+        <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Season,S,]$INFO[ListItem.Episode, E,]$INFO[ListItem.Title,  [COLOR 80EDEDED]·[/COLOR]  ,]$INFO[ListItem.Art(siloaired),  [COLOR 80EDEDED]·[/COLOR]  ,]$INFO[ListItem.Duration(mins),  [COLOR 80EDEDED]·[/COLOR]  , min]</value>
         <value condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Property(silo.genre))">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.genre),  [COLOR 80EDEDED]·[/COLOR]  ,]$INFO[ListItem.Property(silo.rating),  [COLOR 80EDEDED]·[/COLOR]  ,]$INFO[ListItem.Property(TotalEpisodes),  [COLOR 80EDEDED]·[/COLOR]  , episodes]</value>
         <value condition="!String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Property(silo.genre))">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.genre),  [COLOR 80EDEDED]·[/COLOR]  ,]$INFO[ListItem.Property(silo.rating),  [COLOR 80EDEDED]·[/COLOR]  ,]$INFO[ListItem.Duration(mins),  [COLOR 80EDEDED]·[/COLOR]  , min]</value>
         <value condition="String.IsEqual(ListItem.DBType,tvshow)">$INFO[ListItem.Year]$INFO[ListItem.Genre,  [COLOR 80EDEDED]·[/COLOR]  ,]$VAR[SiloDetailRating]$VAR[SiloDetailSeasons]</value>
@@ -7423,8 +7423,8 @@
     </variable>
     <variable name="SiloDetailPlayLabel">
         <value condition="String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)">$LOCALIZE[1024]</value>
-        <value condition="String.IsEqual(ListItem.DBType,episode) + ListItem.IsResumable">Resume S$INFO[ListItem.Season]:E$INFO[ListItem.Episode]</value>
-        <value condition="String.IsEqual(ListItem.DBType,episode)">Play S$INFO[ListItem.Season]:E$INFO[ListItem.Episode]</value>
+        <value condition="String.IsEqual(ListItem.DBType,episode) + ListItem.IsResumable">Resume S$INFO[ListItem.Season] E$INFO[ListItem.Episode]</value>
+        <value condition="String.IsEqual(ListItem.DBType,episode)">Play S$INFO[ListItem.Season] E$INFO[ListItem.Episode]</value>
         <value condition="ListItem.IsResumable">Resume</value>
         <value>$LOCALIZE[208]</value>
     </variable>
@@ -7519,9 +7519,9 @@
         <value>S$INFO[ListItem.Season]E$INFO[ListItem.Episode]</value>
     </variable>
     <variable name="SiloDetailNextLabel">
-        <value condition="[Integer.IsGreater(Container(61).NumItems,0) + !String.IsEqual(Container(61).ListItemAbsolute(0).Season,Container(62).ListItem.Season)]">Play S$INFO[Container(61).ListItemAbsolute(0).Season]:E$INFO[Container(61).ListItemAbsolute(0).Episode]</value>
-        <value condition="Integer.IsGreater(Container(62).NumItems,0) + Integer.IsGreater(Container(62).ListItem.PercentPlayed,0)">Resume S$INFO[Container(62).ListItem.Season]:E$INFO[Container(62).ListItem.Episode]</value>
-        <value condition="Integer.IsGreater(Container(62).NumItems,0)">Play S$INFO[Container(62).ListItem.Season]:E$INFO[Container(62).ListItem.Episode]</value>
+        <value condition="[Integer.IsGreater(Container(61).NumItems,0) + !String.IsEqual(Container(61).ListItemAbsolute(0).Season,Container(62).ListItem.Season)]">Play S$INFO[Container(61).ListItemAbsolute(0).Season] E$INFO[Container(61).ListItemAbsolute(0).Episode]</value>
+        <value condition="Integer.IsGreater(Container(62).NumItems,0) + Integer.IsGreater(Container(62).ListItem.PercentPlayed,0)">Resume S$INFO[Container(62).ListItem.Season] E$INFO[Container(62).ListItem.Episode]</value>
+        <value condition="Integer.IsGreater(Container(62).NumItems,0)">Play S$INFO[Container(62).ListItem.Season] E$INFO[Container(62).ListItem.Episode]</value>
         <value condition="Container(62).IsUpdating">$LOCALIZE[208]</value>
         <value>$LOCALIZE[1024]</value>
     </variable>
@@ -7583,8 +7583,8 @@
         <value>$INFO[ListItem.Year]</value>
     </variable>
     <variable name="SiloBrowseEpisodeTitle">
-        <value condition="Integer.IsGreater(ListItem.Episode,0) + String.IsEmpty(Container.ShowTitle) + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle] · S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</value>
-        <value condition="Integer.IsGreater(ListItem.Episode,0)">S$INFO[ListItem.Season] · E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</value>
+        <value condition="Integer.IsGreater(ListItem.Episode,0) + String.IsEmpty(Container.ShowTitle) + !String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle] · S$INFO[ListItem.Season] E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</value>
+        <value condition="Integer.IsGreater(ListItem.Episode,0)">S$INFO[ListItem.Season] E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</value>
         <value>$INFO[ListItem.Label]</value>
     </variable>
     <!-- List rows: SiloKodiConnect's menu names an icon of the skin's own. -->
@@ -8001,7 +8001,7 @@
         <value>$INFO[Player.Art(fanart)]</value>
     </variable>
     <variable name="SiloShowcaseLine">
-        <value condition="!String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.Season,S,]$INFO[VideoPlayer.Episode, · E,]$INFO[VideoPlayer.Title, · ,]</value>
+        <value condition="!String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.Season,S,]$INFO[VideoPlayer.Episode, E,]$INFO[VideoPlayer.Title, · ,]</value>
         <value>$INFO[VideoPlayer.Year]$INFO[VideoPlayer.Genre, · ,]</value>
     </variable>
     <variable name="SiloShowcaseName">
@@ -8102,8 +8102,12 @@
     </variable>
     <variable name="SiloShowcaseFacts">
         <value condition="!String.IsEmpty(VideoPlayer.TVShowTitle) + !String.IsEmpty(Window(Home).Property(silokodi.playing.air_date))">$INFO[Window(Home).Property(silokodi.playing.air_date)]$INFO[VideoPlayer.Duration(mins), · , min]</value>
-        <value condition="!String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.Premiered]$INFO[VideoPlayer.Duration(mins), · , min]</value>
+        <value condition="!String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[Player.Art(siloaired)]$INFO[VideoPlayer.Duration(mins), · , min]</value>
         <value>$INFO[VideoPlayer.Year]$INFO[VideoPlayer.Duration(mins), · , min]</value>
+    </variable>
+    <variable name="SiloOSDPlayIcon">
+        <value condition="Player.Playing">silo/osd_pause.png</value>
+        <value>silo/osd_play.png</value>
     </variable>
     <variable name="SiloOSDLeftName">
         <value condition="Control.HasFocus(609)">Back 10 seconds</value>

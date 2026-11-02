@@ -207,6 +207,13 @@
                 </control>
                 <!-- The rating is in Silo's poster art itself (top left). -->
                 <!-- Watched: Silo's frosted disc with a white tick, top right. -->
+                <control type="image">
+                    <left>6</left><top>6</top>
+                    <width>246</width><height>369</height>
+                    <texture diffuse="silo/card_poster_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                    <visible>[![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]]</visible>
+                    <animation effect="fade" time="160">VisibleChange</animation>
+                </control>
                 <control type="group">
                     <left>202</left><top>16</top>
                     <visible>![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]</visible>
@@ -281,6 +288,13 @@
                         <texture colordiffuse="33FFFFFF">silo/card_poster_rim.png</texture>
                     </control>
                 </control>
+                <control type="image">
+                    <left>6</left><top>6</top>
+                    <width>246</width><height>369</height>
+                    <texture diffuse="silo/card_poster_mask.png" colordiffuse="99000000">colors/white.png</texture>
+                    <visible>[![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]] + !Control.HasFocus(5301)</visible>
+                    <animation effect="fade" time="160">VisibleChange</animation>
+                </control>
                 <control type="group">
                     <left>202</left><top>16</top>
                     <visible>![Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]] + [Integer.IsGreater(ListItem.PlayCount,0) | [Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]</visible>
@@ -324,7 +338,7 @@
                     <font>silo_card_title</font>
                     <textcolor>FFEDEDED</textcolor>
                     <label>$VAR[SiloBrowseCardTitle]</label>
-                    <scroll>true</scroll>
+                    <scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
                 </control>
                 <control type="label">
                     <left>6</left><top>427</top><width>246</width><height>34</height>

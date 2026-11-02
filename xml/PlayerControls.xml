@@ -25,7 +25,7 @@
 					<font>font45</font>
 					<shadowcolor>black</shadowcolor>
 					<textcolor>button_focus</textcolor>
-					<scroll>true</scroll>
+					<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 				</control>
 				<control type="label">
 					<top>56</top>
@@ -35,7 +35,7 @@
 					<font>font37</font>
 					<shadowcolor>black</shadowcolor>
 					<textcolor>button_focus</textcolor>
-					<scroll>true</scroll>
+					<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 				</control>
 				<control type="label">
 					<top>100</top>
@@ -45,7 +45,7 @@
 					<font>font37</font>
 					<shadowcolor>black</shadowcolor>
 					<textcolor>grey</textcolor>
-					<scroll>true</scroll>
+					<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 				</control>
 			</control>
 			<control type="group">

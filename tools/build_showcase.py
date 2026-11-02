@@ -25,7 +25,7 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import ROOT, TEXT  # noqa: E402
+from build_home import ROOT, TEXT, TEXT_DIM  # noqa: E402
 
 # Showcase is the default: the setting (off until chosen) picks Silo's player.
 SETTING = 'SkylineSiloOSD'
@@ -87,10 +87,10 @@ def variables():
     out = variable('SiloShowcaseStill', [
         ('!String.IsEmpty(VideoPlayer.TVShowTitle) + !String.IsEmpty(Player.Art(thumb))', '$INFO[Player.Art(thumb)]'),
         (None, '$INFO[Player.Art(fanart)]')])
-    # Under the logo: "S3 · E5 · Unbowed and Unbent", or a film's year and genres.
+    # Under the logo: "S3 E5 · Unbowed and Unbent", or a film's year and genres.
     out += variable('SiloShowcaseLine', [
         ('!String.IsEmpty(VideoPlayer.TVShowTitle)',
-         '$INFO[VideoPlayer.Season,S,]$INFO[VideoPlayer.Episode, · E,]$INFO[VideoPlayer.Title, · ,]'),
+         '$INFO[VideoPlayer.Season,S,]$INFO[VideoPlayer.Episode, E,]$INFO[VideoPlayer.Title, · ,]'),
         (None, '$INFO[VideoPlayer.Year]$INFO[VideoPlayer.Genre, · ,]')])
     # The logo's stand-in: the show's or the film's name.
     out += variable('SiloShowcaseName', [
@@ -112,8 +112,10 @@ def variables():
     out += variable('SiloShowcaseFacts', [
         ('!String.IsEmpty(VideoPlayer.TVShowTitle) + !String.IsEmpty(%s)' % PLAYING % 'air_date',
          '$INFO[%s]$INFO[VideoPlayer.Duration(mins), · , min]' % PLAYING % 'air_date'),
-        ('!String.IsEmpty(VideoPlayer.TVShowTitle)', '$INFO[VideoPlayer.Premiered]$INFO[VideoPlayer.Duration(mins), · , min]'),
+        ('!String.IsEmpty(VideoPlayer.TVShowTitle)', '$INFO[Player.Art(siloaired)]$INFO[VideoPlayer.Duration(mins), · , min]'),
         (None, '$INFO[VideoPlayer.Year]$INFO[VideoPlayer.Duration(mins), · , min]')])
+    # The player's Play/Pause in Skyline's line (Kodi's Estuary icon elsewhere).
+    out += variable('SiloOSDPlayIcon', [('Player.Playing', 'silo/osd_pause.png'), (None, 'silo/osd_play.png')])
     # The focused player button's name, under its row (VideoOSD.xml).
     out += variable('SiloOSDLeftName', [
         ('Control.HasFocus(609)', 'Back 10 seconds'),
@@ -306,7 +308,7 @@ def pause_screen():
 			<control type="textbox">
 				<left>120</left><top>520</top><width>900</width><height>250</height>
 				<font>silo_detail</font>
-				<textcolor>%(text)s</textcolor>
+				<textcolor>%(plot)s</textcolor>
 				<label>$INFO[VideoPlayer.Plot]</label>
 			</control>
 			<control type="image">
@@ -339,7 +341,7 @@ def pause_screen():
 				<label>$INFO[Player.FinishTime,Ends ,]</label>
 			</control>
 		</control>
-		''' % {'dim': DIM, 'text': TEXT, 'logo': logo(120, 196, 900, 190, 'silo_osd_title'),
+		''' % {'dim': DIM, 'text': TEXT, 'plot': TEXT_DIM, 'logo': logo(120, 196, 900, 190, 'silo_osd_title'),
                'ratings': ratings('\t\t\t\t')}
 
 

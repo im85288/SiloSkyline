@@ -237,7 +237,7 @@
 					<height>40</height>
 					<aligny>center</aligny>
 					<label>$INFO[RDS.GetLine(3)]</label>
-					<scroll>true</scroll>
+					<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 				</control>
 				<control type="label">
 					<top>90</top>
@@ -245,7 +245,7 @@
 					<height>40</height>
 					<aligny>center</aligny>
 					<label>$INFO[RDS.GetLine(2)]</label>
-					<scroll>true</scroll>
+					<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 				</control>
 				<control type="label">
 					<top>130</top>
@@ -253,7 +253,7 @@
 					<height>40</height>
 					<aligny>center</aligny>
 					<label>$INFO[RDS.GetLine(1)]</label>
-					<scroll>true</scroll>
+					<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 				</control>
 				<control type="label">
 					<top>170</top>
@@ -261,7 +261,7 @@
 					<height>40</height>
 					<aligny>center</aligny>
 					<label>$INFO[RDS.GetLine(0)]</label>
-					<scroll>true</scroll>
+					<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 				</control>
 			</control>
 

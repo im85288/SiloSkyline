@@ -152,7 +152,7 @@
 							<width>74</width>
 							<height>74</height>
 							<animation center="38,38" effect="zoom" end="100" reversible="false" start="95" time="480" tween="back" condition="Control.HasFocus(602)">Conditional</animation>
-							<texture colordiffuse="$VAR[SiloOSDIconColor602]">$VAR[PlayerControlsPlayImageVar]</texture>
+							<texture colordiffuse="$VAR[SiloOSDIconColor602]">$VAR[SiloOSDPlayIcon]</texture>
 						</control>
 					</control>
 					<control type="group" id="691">
@@ -355,7 +355,7 @@
 					</control>
 					<control type="radiobutton" id="70046">
 						<include content="OSDButton">
-							<param name="texture" value="osd/fullscreen/buttons/settings-subtitle.png"/>
+							<param name="texture" value="silo/osd_subtitles.png"/>
 						</include>
 						<onclick>ActivateWindow(osdsubtitlesettings)</onclick>
 						<visible>!VideoPlayer.Content(LiveTV) | VideoPlayer.HasSubtitles</visible>
@@ -575,7 +575,7 @@
 						<font>silo_card_title</font>
 						<textcolor>FFEDEDED</textcolor>
 						<selectedcolor>FFEDEDED</selectedcolor>
-						<label>$INFO[ListItem.Episode,E,]$INFO[ListItem.Title, · ,]</label>
+						<label>$INFO[ListItem.Season,S,]$INFO[ListItem.Episode, E,]$INFO[ListItem.Title, · ,]</label>
 					</control>
 					<control type="label">
 						<left>6</left><top>256</top><width>360</width><height>30</height>
@@ -646,7 +646,7 @@
 						<font>silo_card_title</font>
 						<textcolor>FFEDEDED</textcolor>
 						<selectedcolor>FFEDEDED</selectedcolor>
-						<label>$INFO[ListItem.Episode,E,]$INFO[ListItem.Title, · ,]</label>
+						<label>$INFO[ListItem.Season,S,]$INFO[ListItem.Episode, E,]$INFO[ListItem.Title, · ,]</label>
 					</control>
 					<control type="label">
 						<left>6</left><top>256</top><width>360</width><height>30</height>

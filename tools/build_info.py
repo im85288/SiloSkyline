@@ -18,7 +18,7 @@ import sys
 from urllib.parse import quote
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import focus_sheen, focus_zoom, watched_disc, BACKGROUND, POSTER, ROOT, SAFE_X, TEXT, TEXT_DIM, card_layout  # noqa: E402
+from build_home import focus_sheen, focus_zoom, watched_mark, BACKGROUND, POSTER, ROOT, SAFE_X, TEXT, TEXT_DIM, card_layout  # noqa: E402
 
 # Silo's detail hero: 100 px down (tvOS 100pt on a 1080pt canvas).
 TOP = 100
@@ -54,6 +54,31 @@ WATCHED = ('[String.IsEqual(Window(movieinformation).Property(silo.marked),watch
            '[String.IsEmpty(Window(movieinformation).Property(silo.marked)) + [Integer.IsGreater(ListItem.PlayCount,0) | '
            '[String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + '
            'Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]]]')
+
+
+def play_face(button, label):
+    """A Play button's face, as the film's: Silo's play icon, then the label
+    (black on the white pill when the button has focus)."""
+    lit = 'Control.HasFocus(%d)' % button
+    out = ''
+    for colour, visible in (('FF000000', lit), ('%(text)s', '!' + lit)):
+        out += '''
+                    <control type="label">
+                        <left>78</left><width>%(w)d</width><height>64</height>
+                        <aligny>center</aligny>
+                        <font>silo_tab</font>
+                        <textcolor>%(c)s</textcolor>
+                        <label>%(label)s</label>
+                        <visible>%(v)s</visible>
+                    </control>''' % {'w': 250, 'c': colour, 'label': label, 'v': visible}
+    for colour, visible in (('FF000000', lit), ('%(text)s', '!' + lit)):
+        out += '''
+                    <control type="image">
+                        <left>36</left><top>18</top><width>28</width><height>28</height>
+                        <texture colordiffuse="%s">silo/icon_play.png</texture>
+                        <visible>%s</visible>
+                    </control>''' % (colour, visible)
+    return out
 
 
 def opened_by(label):
@@ -308,14 +333,12 @@ def build():
                 <!-- A show: Play or Resume its next episode, as in Silo (Kodi's button 8
                      would Browse); Browse once every episode is watched. Kodi reserves
                      ids 5-15 in this window (12 chooses art), so this is 300. -->
+                <control type="group" id="1300">
+                    <width>340</width><height>64</height>
+                    <visible>%(show)s</visible>
                 <control type="button" id="300">
                     <width>340</width><height>64</height>
-                    <label>$VAR[SiloDetailNextLabel]</label>
-                    <font>silo_tab</font>
-                    <textoffsetx>40</textoffsetx>
-                    <align>center</align><aligny>center</aligny>
-                    <textcolor>%(text)s</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
+                    <label />
                     <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
                     <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
                     <!-- Another season chosen: its first episode, as Silo's Apple TV app does. -->
@@ -325,7 +348,7 @@ def build():
                     <!-- Nothing to play next (every episode watched): the page's own seasons, not Kodi's folder. -->
                     <onclick condition="!%(other_season)s + !%(has_next)s">SetFocus(60)</onclick>
                     <onclick condition="%(other_season)s | %(has_next)s">Dialog.Close(movieinformation)</onclick>
-                    <visible>%(show)s</visible>
+                </control>%(show_play_face)s
                 </control>
                 <!-- A Requests card: Request it, or its state when Silo already has it. -->
                 <control type="button" id="301">
@@ -379,12 +402,12 @@ def build():
                     </control>
                     <control type="image">
                         <left>36</left><top>18</top><width>28</width><height>28</height>
-                        <texture colordiffuse="FF000000">osd/fullscreen/buttons/play.png</texture>
+                        <texture colordiffuse="FF000000">silo/icon_play.png</texture>
                         <visible>Control.HasFocus(308)</visible>
                     </control>
                     <control type="image">
                         <left>36</left><top>18</top><width>28</width><height>28</height>
-                        <texture colordiffuse="%(text)s">osd/fullscreen/buttons/play.png</texture>
+                        <texture colordiffuse="%(text)s">silo/icon_play.png</texture>
                         <visible>!Control.HasFocus(308)</visible>
                     </control>
                 </control>
@@ -394,7 +417,8 @@ def build():
                     <visible>%(box_set)s</visible>
                     <control type="button" id="318">
                         <width>auto</width><height>64</height>
-                        <label>$INFO[ListItem.Property(silo.boxset.play_label)]</label>
+                        <!-- Room for the play icon before the label (the pill fits the label). -->
+                        <label>      $INFO[ListItem.Property(silo.boxset.play_label)]</label>
                         <font>silo_tab</font>
                         <textoffsetx>40</textoffsetx>
                         <aligny>center</aligny>
@@ -405,6 +429,16 @@ def build():
                         <onclick condition="String.IsEqual(ListItem.Property(silo.boxset.resume),true)">PlayMedia($ESCINFO[ListItem.Property(silo.boxset.play)],resume)</onclick>
                         <onclick condition="!String.IsEqual(ListItem.Property(silo.boxset.resume),true)">PlayMedia($ESCINFO[ListItem.Property(silo.boxset.play)],noresume)</onclick>
                         <onclick>Dialog.Close(movieinformation)</onclick>
+                    </control>
+                    <control type="image">
+                        <left>36</left><top>18</top><width>28</width><height>28</height>
+                        <texture colordiffuse="FF000000">silo/icon_play.png</texture>
+                        <visible>Control.HasFocus(318)</visible>
+                    </control>
+                    <control type="image">
+                        <left>36</left><top>18</top><width>28</width><height>28</height>
+                        <texture colordiffuse="%(text)s">silo/icon_play.png</texture>
+                        <visible>!Control.HasFocus(318)</visible>
                     </control>
                 </control>%(start_over)s%(previous)s%(trailer)s%(silo_trailer)s%(watchlist)s%(rate)s%(versions)s%(more)s
             </control>
@@ -676,7 +710,7 @@ def build():
        'start_over': round_button(304, 'silo/start_over.png', '!%s + %s + ListItem.IsResumable' % (SHOW, NOT_REQUEST),
                                   'PlayMedia($ESCINFO[ListItem.FileNameAndPath],noresume)</onclick>\n'
                                   '                    <onclick>Dialog.Close(movieinformation)'),
-       'previous': round_button(302, 'osd/fullscreen/buttons/previous.png', 'String.IsEqual(ListItem.DBType,episode)',
+       'previous': round_button(302, 'silo/icon_previous.png', 'String.IsEqual(ListItem.DBType,episode)',
                                 'RunPlugin(plugin://plugin.video.silokodiconnect/?mode=previous&amp;dbid=$INFO[ListItem.DBID])'),
        # Watched (a show: every episode), a toggle as Watchlist's and Rate's: a
        # tick in a ring, filled once watched (SiloKodiConnect's mark tells the page).
@@ -687,12 +721,12 @@ def build():
                             '?mode=mark&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID]&amp;action=unwatched)</onclick>\n'
                             '                    <onclick condition="!%s">RunPlugin(plugin://plugin.video.silokodiconnect/'
                             '?mode=mark&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID]&amp;action=watched)' % (WATCHED, WATCHED)),
-       'trailer': round_button(11, 'icons/infodialogs/trailer.png', '!String.IsEmpty(ListItem.Trailer)'),
+       'trailer': round_button(11, 'silo/icon_trailer.png', '!String.IsEmpty(ListItem.Trailer)'),
        # Silo's trailer (SiloKodiConnect's silo.trailer, a YouTube id) when the
        # library has none: played by the YouTube add-on, which it offers to
        # install when it's missing.
        'silo_trailer': round_button(
-           351, 'icons/infodialogs/trailer.png',
+           351, 'silo/icon_trailer.png',
            'String.IsEmpty(ListItem.Trailer) + !String.IsEmpty(ListItem.Property(silo.trailer))',
            'noop</onclick>\n'
            # The page closes for the trailer and SiloKodiConnect reopens it
@@ -726,7 +760,7 @@ def build():
            353, '$VAR[SiloRateIcon]', '!String.IsEmpty(ListItem.Property(silo.myrating))',
            'RunPlugin(plugin://plugin.video.silokodiconnect/?mode=rate'
            '&amp;id=$INFO[ListItem.Property(silo.content_id)]&amp;current=$VAR[SiloMyRating])'),
-       'versions': round_button(14, 'icons/infodialogs/versions.png',
+       'versions': round_button(14, 'silo/icon_versions.png',
                                 'String.IsEqual(ListItem.DBType,movie) + Integer.IsGreater(ListItem.VideoVersionsCount,1)'),
        'lx': SAFE_X - 6, 'lw': 1920 - SAFE_X + 6, 'person': person(False), 'person_focused': person(True),
        'has_similar': 'Integer.IsGreater(Container(63).NumItems,0)', 'similar_h': SECTION_H,
@@ -735,6 +769,7 @@ def build():
        'video_card': video_card(False), 'video_card_focused': video_card(True),
        'similar_item_w': POSTER['width'] + POSTER['gap'], 'similar_item_h': POSTER['height'] + 12 + 76,
        'similar_card': card_layout(POSTER, False), 'similar_card_focused': card_layout(POSTER, True, 63),
+       'show_play_face': play_face(300, '$VAR[SiloDetailNextLabel]').replace('%(text)s', TEXT),
        'box_card': box_card(False), 'box_card_focused': box_card(True), 'box_set': BOX_SET, 'box_row': BOX_ROW,
        'box_set_page': 'String.IsEqual(Window(movieinformation).Property(silo.page_type),set)',
        'has_season': 'Integer.IsGreater(Container(64).NumItems,0)', 'episode_pills': EPISODE_PILLS,
@@ -891,10 +926,11 @@ def episode_card(focused, list_id=61, current='String.IsEqual(ListItem.DBID,Cont
                             <width>360</width><height>30</height>
                             <font>silo_detail</font>
                             <textcolor>99EDEDED</textcolor>
-                            <label>$INFO[ListItem.Premiered]$INFO[ListItem.Duration(mins), · , min]</label>
+                            <label>$INFO[ListItem.Art(siloaired)]$INFO[ListItem.Duration(mins), · , min]</label>
                         </control>
                     </control>''' % {'zoom': zoom, 'sheen': sheen, 'text': TEXT, 'dim': TEXT_DIM,
-                                         'watched': watched_disc(366 - 10 - 40, 16, 'Integer.IsGreater(ListItem.PlayCount,0)'),
+                                         'watched': watched_mark(360, 202, 'silo/card_landscape_mask.png', 'Integer.IsGreater(ListItem.PlayCount,0)',
+                                                                lit if focused else ''),
                                          'titles': ''.join(episode_title(scroll, visible) for scroll, visible in
                                                            (((True, lit), (False, '!' + lit)) if focused else ((False, ''),)))}
 
@@ -1014,8 +1050,8 @@ VARIABLES = '''
     </variable>
     <variable name="SiloDetailFacts">
         <value condition="String.IsEqual(ListItem.DBType,set)">Box set$INFO[ListItem.Property(silo.boxset.count), · ,]$INFO[ListItem.Property(silo.boxset.years), · ,]</value>
-        <value condition="Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]">$INFO[Container(64).ListItem.Premiered]$INFO[Container(64).ListItem.Duration(mins), · , min]$INFO[Container(64).ListItem.Rating(imdb), · [COLOR BFEDEDED]IMDb[/COLOR] [B],[/B]]$INFO[Container(64).ListItem.Rating(themoviedb), · [COLOR BFEDEDED]TMDB[/COLOR] [B],[/B]]$INFO[Container(64).ListItem.Season, · S,]$INFO[Container(64).ListItem.Episode, E,]</value>
-        <value condition="Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]">$INFO[Container(61).ListItem.Premiered]$INFO[Container(61).ListItem.Duration(mins), · , min]$INFO[Container(61).ListItem.Rating(imdb), · [COLOR BFEDEDED]IMDb[/COLOR] [B],[/B]]$INFO[Container(61).ListItem.Rating(themoviedb), · [COLOR BFEDEDED]TMDB[/COLOR] [B],[/B]]$INFO[Container(61).ListItem.Season, · S,]$INFO[Container(61).ListItem.Episode, E,]</value>
+        <value condition="Control.HasFocus(64) | [Control.HasFocus(65) + Integer.IsGreater(Container(64).NumItems,0)]">$INFO[Container(64).ListItem.Art(siloaired)]$INFO[Container(64).ListItem.Duration(mins), · , min]$INFO[Container(64).ListItem.Rating(imdb), · [COLOR BFEDEDED]IMDb[/COLOR] [B],[/B]]$INFO[Container(64).ListItem.Rating(themoviedb), · [COLOR BFEDEDED]TMDB[/COLOR] [B],[/B]]$INFO[Container(64).ListItem.Season, · S,]$INFO[Container(64).ListItem.Episode, E,]</value>
+        <value condition="Control.HasFocus(61) | [Control.HasFocus(60) + Integer.IsGreater(Container(61).NumItems,0)]">$INFO[Container(61).ListItem.Art(siloaired)]$INFO[Container(61).ListItem.Duration(mins), · , min]$INFO[Container(61).ListItem.Rating(imdb), · [COLOR BFEDEDED]IMDb[/COLOR] [B],[/B]]$INFO[Container(61).ListItem.Rating(themoviedb), · [COLOR BFEDEDED]TMDB[/COLOR] [B],[/B]]$INFO[Container(61).ListItem.Season, · S,]$INFO[Container(61).ListItem.Episode, E,]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEmpty(ListItem.Property(silo.request.seasons))">$INFO[ListItem.Year]$VAR[SiloDetailSeasons]$INFO[ListItem.Property(silo.rating.tmdb), · [COLOR BFEDEDED]TMDB[/COLOR] [B],[/B]]$VAR[SiloDetailGenres]</value>
         <value condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), · , min]$INFO[ListItem.Property(silo.rating.tmdb), · [COLOR BFEDEDED]TMDB[/COLOR] [B],[/B]]$VAR[SiloDetailGenres]</value>
         <!-- Silo's order: date · runtime · IMDb · TMDB · season and episode (S2 E4, short so Rotten Tomatoes' score fits). -->
@@ -1023,7 +1059,7 @@ VARIABLES = '''
         <value condition="String.IsEqual(ListItem.DBType,movie) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]">$INFO[ListItem.Year]$INFO[ListItem.Duration(mins), · , min]$INFO[ListItem.Property(silo.rating.imdb), · [COLOR BFEDEDED]IMDb[/COLOR] [B],[/B]]$INFO[ListItem.Property(silo.rating.tmdb), · [COLOR BFEDEDED]TMDB[/COLOR] [B],[/B]]$VAR[SiloDetailGenres]</value>
         <value condition="String.IsEqual(ListItem.DBType,tvshow) + [!String.IsEmpty(ListItem.Property(silo.rating.imdb)) | !String.IsEmpty(ListItem.Property(silo.rating.tmdb))]">$INFO[ListItem.Year]$VAR[SiloDetailSeasons]$INFO[ListItem.Property(silo.rating.imdb), · [COLOR BFEDEDED]IMDb[/COLOR] [B],[/B]]$INFO[ListItem.Property(silo.rating.tmdb), · [COLOR BFEDEDED]TMDB[/COLOR] [B],[/B]]$VAR[SiloDetailGenres]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Property(silo.code))">$INFO[ListItem.Property(silo.code)]$INFO[ListItem.Title, · ,]$INFO[ListItem.Property(silo.aired), · ,]$INFO[ListItem.Duration(mins), · , min]</value>
-        <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Season,S,]$INFO[ListItem.Episode,E,]$INFO[ListItem.Title, · ,]$INFO[ListItem.Premiered, · ,]$INFO[ListItem.Duration(mins), · , min]</value>
+        <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Season,S,]$INFO[ListItem.Episode, E,]$INFO[ListItem.Title, · ,]$INFO[ListItem.Art(siloaired), · ,]$INFO[ListItem.Duration(mins), · , min]</value>
         <value condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Property(silo.genre))">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.genre), · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Property(TotalEpisodes), · , episodes]</value>
         <value condition="!String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Property(silo.genre))">$INFO[ListItem.Year]$INFO[ListItem.Property(silo.genre), · ,]$INFO[ListItem.Property(silo.rating), · ,]$INFO[ListItem.Duration(mins), · , min]</value>
         <value condition="String.IsEqual(ListItem.DBType,tvshow)">$INFO[ListItem.Year]$INFO[ListItem.Genre, · ,]$VAR[SiloDetailRating]$VAR[SiloDetailSeasons]</value>
@@ -1087,8 +1123,8 @@ VARIABLES = '''
     </variable>
     <variable name="SiloDetailPlayLabel">
         <value condition="String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)">$LOCALIZE[1024]</value>
-        <value condition="String.IsEqual(ListItem.DBType,episode) + ListItem.IsResumable">Resume S$INFO[ListItem.Season]:E$INFO[ListItem.Episode]</value>
-        <value condition="String.IsEqual(ListItem.DBType,episode)">Play S$INFO[ListItem.Season]:E$INFO[ListItem.Episode]</value>
+        <value condition="String.IsEqual(ListItem.DBType,episode) + ListItem.IsResumable">Resume S$INFO[ListItem.Season] E$INFO[ListItem.Episode]</value>
+        <value condition="String.IsEqual(ListItem.DBType,episode)">Play S$INFO[ListItem.Season] E$INFO[ListItem.Episode]</value>
         <value condition="ListItem.IsResumable">Resume</value>
         <value>$LOCALIZE[208]</value>
     </variable>
@@ -1183,9 +1219,9 @@ VARIABLES = '''
         <value>S$INFO[ListItem.Season]E$INFO[ListItem.Episode]</value>
     </variable>
     <variable name="SiloDetailNextLabel">
-        <value condition="[Integer.IsGreater(Container(61).NumItems,0) + !String.IsEqual(Container(61).ListItemAbsolute(0).Season,Container(62).ListItem.Season)]">Play S$INFO[Container(61).ListItemAbsolute(0).Season]:E$INFO[Container(61).ListItemAbsolute(0).Episode]</value>
-        <value condition="Integer.IsGreater(Container(62).NumItems,0) + Integer.IsGreater(Container(62).ListItem.PercentPlayed,0)">Resume S$INFO[Container(62).ListItem.Season]:E$INFO[Container(62).ListItem.Episode]</value>
-        <value condition="Integer.IsGreater(Container(62).NumItems,0)">Play S$INFO[Container(62).ListItem.Season]:E$INFO[Container(62).ListItem.Episode]</value>
+        <value condition="[Integer.IsGreater(Container(61).NumItems,0) + !String.IsEqual(Container(61).ListItemAbsolute(0).Season,Container(62).ListItem.Season)]">Play S$INFO[Container(61).ListItemAbsolute(0).Season] E$INFO[Container(61).ListItemAbsolute(0).Episode]</value>
+        <value condition="Integer.IsGreater(Container(62).NumItems,0) + Integer.IsGreater(Container(62).ListItem.PercentPlayed,0)">Resume S$INFO[Container(62).ListItem.Season] E$INFO[Container(62).ListItem.Episode]</value>
+        <value condition="Integer.IsGreater(Container(62).NumItems,0)">Play S$INFO[Container(62).ListItem.Season] E$INFO[Container(62).ListItem.Episode]</value>
         <value condition="Container(62).IsUpdating">$LOCALIZE[208]</value>
         <value>$LOCALIZE[1024]</value>
     </variable>
@@ -1391,7 +1427,7 @@ def add_timers():
 # The action row's buttons in order, with the control whose visibility counts
 # (round buttons and Play sit in groups, which Kodi's grouplist can't move
 # between, so each button names its neighbours).
-ACTIONS = [(300, 300), (301, 301), (308, 1008), (318, 1018), (304, 1304), (302, 1302), (11, 1011), (351, 1351), (352, 1352),
+ACTIONS = [(300, 1300), (301, 301), (308, 1008), (318, 1018), (304, 1304), (302, 1302), (11, 1011), (351, 1351), (352, 1352),
            (353, 1353), (14, 1014), (303, 1303)]
 
 

@@ -43,7 +43,7 @@
 							<bottom>0</bottom>
 							<right>40</right>
 							<aligny>center</aligny>
-							<scroll>true</scroll>
+							<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 							<label>$VAR[ListLabelVar]</label>
 							<textcolor>SkylineFocusText</textcolor>
 					</control>
@@ -107,7 +107,7 @@
 							<bottom>0</bottom>
 							<right>40</right>
 							<aligny>center</aligny>
-							<scroll>true</scroll>
+							<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 							<label>$INFO[ListItem.Label]</label>
 							<textcolor>SkylineFocusText</textcolor>
 					</control>
@@ -172,7 +172,7 @@
 							<bottom>0</bottom>
 							<right>100</right>
 							<aligny>center</aligny>
-							<scroll>true</scroll>
+							<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 							<label>$INFO[ListItem.Label]</label>
 							<textcolor>SkylineFocusText</textcolor>
 					</control>
@@ -215,7 +215,7 @@
 				<left>35</left>
 				<right>40</right>
 				<aligny>center</aligny>
-				<scroll>true</scroll>
+				<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 				<label>$VAR[ListLabelVar]</label>
 				<textcolor>SkylineFocusText</textcolor>
 					</control>
@@ -267,7 +267,7 @@
 				<left>75</left>
 				<right>40</right>
 				<aligny>center</aligny>
-				<scroll>true</scroll>
+				<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 				<label>$INFO[ListItem.Label]</label>
 				<textcolor>SkylineFocusText</textcolor>
 					</control>
@@ -278,7 +278,7 @@
 				<aligny>center</aligny>
 				<font>font27</font>
 				<label>$VAR[AddonsLabel2Var]</label>
-				<scroll>true</scroll>
+				<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 				<textcolor>SkylineFocusText</textcolor>
 					</control>
 			<control type="image">

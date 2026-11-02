@@ -136,7 +136,7 @@
 						<right>20</right>
 						<height>60</height>
 						<aligny>center</aligny>
-						<scroll>true</scroll>
+						<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 						<font>font14</font>
 						<textcolor>SkylineFocusText</textcolor>
 						<label>$INFO[ListItem.Label]</label>
@@ -267,7 +267,7 @@
 								<height>20</height>
 								<align>center</align>
 								<aligny>center</aligny>
-								<scroll>true</scroll>
+								<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 								<font>font13</font>
 								<label>$INFO[ListItem.Label]</label>
 								<shadowcolor>text_shadow</shadowcolor>
@@ -279,7 +279,7 @@
 								<height>20</height>
 								<align>center</align>
 								<aligny>center</aligny>
-								<scroll>true</scroll>
+								<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 								<font>font27</font>
 								<label>$INFO[ListItem.Label2]</label>
 								<shadowcolor>text_shadow</shadowcolor>
@@ -305,7 +305,7 @@
 								<height>20</height>
 								<align>center</align>
 								<aligny>center</aligny>
-								<scroll>true</scroll>
+								<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 								<font>font13</font>
 								<label>$INFO[ListItem.Label]</label>
 								<shadowcolor>text_shadow</shadowcolor>
@@ -317,7 +317,7 @@
 								<height>20</height>
 								<align>center</align>
 								<aligny>center</aligny>
-								<scroll>true</scroll>
+								<scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
 								<font>font27</font>
 								<label>$INFO[ListItem.Label2]</label>
 								<shadowcolor>text_shadow</shadowcolor>
