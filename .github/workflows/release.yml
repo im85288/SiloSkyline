@@ -2,31 +2,41 @@ name: Release
 # Pushing a tag v<version> publishes it: the skin's zip (what git archive
 # ships, .gitattributes leaving the build tools out) and its notes from
 # changelog.txt's entry.
+# Run by hand (Actions > Release) to publish or refresh an existing tag's release.
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: The tag to release, e.g. v1.2.3
+        required: true
 permissions:
   contents: write
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      TAG: ${{ inputs.tag || github.ref_name }}
     steps:
     - uses: actions/checkout@v4
+      with:
+        ref: ${{ env.TAG }}
     - name: The tag matches addon.xml's version
       run: |
         version=$(python3 -c "import xml.etree.ElementTree as E; print(E.parse('addon.xml').getroot().get('version'))")
-        [ "v$version" = "$GITHUB_REF_NAME" ] || { echo "addon.xml says $version, the tag is $GITHUB_REF_NAME"; exit 1; }
+        [ "v$version" = "$TAG" ] || { echo "addon.xml says $version, the tag is $TAG"; exit 1; }
     - name: Build the zip
-      run: git archive --prefix=skin.silo.skyline/ -o "skin.silo.skyline-${GITHUB_REF_NAME#v}.zip" "$GITHUB_REF_NAME"
+      run: git archive --prefix=skin.silo.skyline/ -o "skin.silo.skyline-${TAG#v}.zip" "$TAG"
     - name: Notes
-      run: python3 .github/release_notes.py "${GITHUB_REF_NAME#v}" > notes.md
+      run: python3 .github/release_notes.py "${TAG#v}" > notes.md
     - name: Publish
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        zip="skin.silo.skyline-${GITHUB_REF_NAME#v}.zip"
-        if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-          gh release upload "$GITHUB_REF_NAME" "$zip" --clobber
+        zip="skin.silo.skyline-${TAG#v}.zip"
+        if gh release view "$TAG" >/dev/null 2>&1; then
+          gh release upload "$TAG" "$zip" --clobber
         else
-          gh release create "$GITHUB_REF_NAME" "$zip" --title "Skyline ${GITHUB_REF_NAME#v}" --notes-file notes.md --latest
+          gh release create "$TAG" "$zip" --title "Skyline ${TAG#v}" --notes-file notes.md --latest
         fi
