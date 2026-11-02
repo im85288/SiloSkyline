@@ -410,6 +410,38 @@ def build():
                         <texture colordiffuse="%(text)s">silo/icon_play.png</texture>
                         <visible>!Control.HasFocus(308)</visible>
                     </control>
+                    <!-- Resume, as Apple TV's: the time left at the pill's end and how far in
+                         along its foot (SiloKodiConnect's silo.left_short, "32m"). -->
+                    <control type="label">
+                        <left>200</left><width>116</width><height>58</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>FF000000</textcolor>
+                        <label>$INFO[ListItem.Property(silo.left_short)]</label>
+                        <visible>ListItem.IsResumable + !String.IsEmpty(ListItem.Property(silo.left_short)) + Control.HasFocus(308)</visible>
+                    </control>
+                    <control type="progress">
+                        <left>36</left><top>52</top><width>268</width><height>4</height>
+                        <info>ListItem.PercentPlayed</info>
+                        <texturebg colordiffuse="40000000">colors/white.png</texturebg>
+                        <midtexture colordiffuse="FF000000">colors/white.png</midtexture>
+                        <visible>ListItem.IsResumable + !String.IsEmpty(ListItem.Property(silo.left_short)) + Control.HasFocus(308)</visible>
+                    </control>
+                    <control type="label">
+                        <left>200</left><width>116</width><height>58</height>
+                        <align>right</align><aligny>center</aligny>
+                        <font>silo_detail</font>
+                        <textcolor>%(text)s</textcolor>
+                        <label>$INFO[ListItem.Property(silo.left_short)]</label>
+                        <visible>ListItem.IsResumable + !String.IsEmpty(ListItem.Property(silo.left_short)) + !Control.HasFocus(308)</visible>
+                    </control>
+                    <control type="progress">
+                        <left>36</left><top>52</top><width>268</width><height>4</height>
+                        <info>ListItem.PercentPlayed</info>
+                        <texturebg colordiffuse="40FFFFFF">colors/white.png</texturebg>
+                        <midtexture colordiffuse="%(text)s">colors/white.png</midtexture>
+                        <visible>ListItem.IsResumable + !String.IsEmpty(ListItem.Property(silo.left_short)) + !Control.HasFocus(308)</visible>
+                    </control>
                 </control>
                 <!-- A box set: Play (or Resume) its first unwatched film, named, as Silo's. -->
                 <control type="group" id="1018">
