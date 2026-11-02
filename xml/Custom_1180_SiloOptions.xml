@@ -774,7 +774,8 @@
                     <texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
                     <texturenofocus />
                     <onclick>Dialog.Close(1180)</onclick>
-                    <onclick>ActivateWindow(SubtitleSearch)</onclick>
+                    <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=subtitles)</onclick>
+                    <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">ActivateWindow(SubtitleSearch)</onclick>
                 </control>
             </control>
         </control>

@@ -46,7 +46,11 @@ TABS = [
     ]),
     ('subtitles', 'Subtitles', [
         ('Subtitle settings', '', ['Dialog.Close(1180)', 'ActivateWindow(osdsubtitlesettings)']),
-        ('Search online', '', ['Dialog.Close(1180)', 'ActivateWindow(SubtitleSearch)']),
+        # Silo's subtitle providers for the playing file (SiloKodiConnect), else Kodi's subtitle add-ons.
+        ('Search online', '', ['Dialog.Close(1180)',
+                               ('RunPlugin(plugin://plugin.video.silokodiconnect/?mode=subtitles)',
+                                'System.AddonIsEnabled(plugin.video.silokodiconnect)'),
+                               ('ActivateWindow(SubtitleSearch)', '!System.AddonIsEnabled(plugin.video.silokodiconnect)')]),
     ], [
         ('Showing', '$VAR[SiloOptionsSubtitles]'),
     ]),
@@ -176,7 +180,9 @@ def tab_button(index, key, title):
 
 
 def row(control_id, label, value, actions):
-    clicks = ''.join('\n                    <onclick>%s</onclick>' % action for action in actions)
+    # An action is a builtin, or (builtin, condition).
+    clicks = ''.join('\n                    <onclick%s>%s</onclick>' % (
+        (' condition="%s"' % action[1], action[0]) if isinstance(action, tuple) else ('', action)) for action in actions)
     return '''
                 <control type="button" id="%(id)d">
                     <width>%(w)d</width><height>%(h)d</height>
