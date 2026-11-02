@@ -1,3 +1,11 @@
+[B]0.4.1[/B]
+• Info page: a Watched toggle (Mark watched / unwatched) in place of the More menu
+• Skin settings: show or hide IMDb, TMDB and Rotten Tomatoes ratings everywhere
+• One look across screens: episode codes "S2 E4", dates "21 Oct 2026", watched cards dimmed,
+  a gap in scrolling titles, Skyline's own player and info icons, quieter plots, a play icon on
+  every Play button
+• Checks on every push: the skin rebuilds unchanged and passes Kodi's add-on checker
+
 [B]0.4.0[/B]
 • Box sets: one card per box set in Browse (BOX SET, film count, years), a box set page with
   Play and its films in release order, a film's box set row, and box sets first in search
