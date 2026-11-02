@@ -7163,8 +7163,8 @@
                     <onclick condition="!String.IsEmpty(Container(9100).ListItemAbsolute(0).Property(widgetPath))">SetProperty(silo.custom.loading,1,home)</onclick>
                     <!-- Select the item in the hidden menu list, so the pills list its submenu. -->
                     <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(0).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(0).Property(hasSubmenu),True)]">SetFocus(9100,0,absolute)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(0).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(0).Property(hasSubmenu),True)] + !String.IsEqual(Container(9100).ListItemAbsolute(0).Property(hasSubmenu),True) + !!String.IsEmpty(Container(9100).ListItemAbsolute(0).Property(widgetPath))">SetFocus(9031)</onclick>
-                    <onclick condition="String.IsEqual(Container(9100).ListItemAbsolute(0).Property(hasSubmenu),True) + !!String.IsEmpty(Container(9100).ListItemAbsolute(0).Property(widgetPath))">SetFocus(4699,0,absolute)</onclick>
+                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(0).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(0).Property(hasSubmenu),True)] + !String.IsEqual(Container(9100).ListItemAbsolute(0).Property(hasSubmenu),True) + String.IsEmpty(Container(9100).ListItemAbsolute(0).Property(widgetPath))">SetFocus(9031)</onclick>
+                    <onclick condition="String.IsEqual(Container(9100).ListItemAbsolute(0).Property(hasSubmenu),True) + String.IsEmpty(Container(9100).ListItemAbsolute(0).Property(widgetPath))">SetFocus(4699,0,absolute)</onclick>
                 </control>
                 <control type="button" id="9032">
                     <visible>!String.IsEmpty(Container(9100).ListItemAbsolute(1).Label)</visible>
@@ -7244,8 +7244,8 @@
                     <onclick condition="!String.IsEmpty(Container(9100).ListItemAbsolute(1).Property(widgetPath))">SetProperty(silo.custom.loading,1,home)</onclick>
                     <!-- Select the item in the hidden menu list, so the pills list its submenu. -->
                     <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(1).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(1).Property(hasSubmenu),True)]">SetFocus(9100,1,absolute)</onclick>
-                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(1).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(1).Property(hasSubmenu),True)] + !String.IsEqual(Container(9100).ListItemAbsolute(1).Property(hasSubmenu),True) + !!String.IsEmpty(Container(9100).ListItemAbsolute(1).Property(widgetPath))">SetFocus(9032)</onclick>
-                    <onclick condition="String.IsEqual(Container(9100).ListItemAbsolute(1).Property(hasSubmenu),True) + !!String.IsEmpty(Container(9100).ListItemAbsolute(1).Property(widgetPath))">SetFocus(4699,0,absolute)</onclick>
+                    <onclick condition="[!String.IsEmpty(Container(9100).ListItemAbsolute(1).Property(widgetPath)) | String.IsEqual(Container(9100).ListItemAbsolute(1).Property(hasSubmenu),True)] + !String.IsEqual(Container(9100).ListItemAbsolute(1).Property(hasSubmenu),True) + String.IsEmpty(Container(9100).ListItemAbsolute(1).Property(widgetPath))">SetFocus(9032)</onclick>
+                    <onclick condition="String.IsEqual(Container(9100).ListItemAbsolute(1).Property(hasSubmenu),True) + String.IsEmpty(Container(9100).ListItemAbsolute(1).Property(widgetPath))">SetFocus(4699,0,absolute)</onclick>
                 </control>
             <control type="group" id="9309">
                 <width>60</width><height>60</height>
@@ -7458,7 +7458,7 @@
                 <left>4</left><top>4</top>
                 <width>56</width><height>56</height>
                 <texture colordiffuse="33FFFFFF">silo/avatar_mask.png</texture>
-                <visible>!!String.IsEmpty(Window(Home).Property(silo.avatar))</visible>
+                <visible>String.IsEmpty(Window(Home).Property(silo.avatar))</visible>
             </control>
             <control type="label">
                 <left>4</left><top>4</top>
@@ -7467,7 +7467,7 @@
                 <font>silo_tab</font>
                 <textcolor>FFEDEDED</textcolor>
                 <label>$INFO[Window(Home).Property(silo.profile_initial)]</label>
-                <visible>!!String.IsEmpty(Window(Home).Property(silo.avatar))</visible>
+                <visible>String.IsEmpty(Window(Home).Property(silo.avatar))</visible>
             </control>
             <control type="image">
                 <left>4</left><top>4</top>
@@ -7517,7 +7517,7 @@
             <control type="image">
                 <left>28</left><top>22</top><width>56</width><height>56</height>
                 <texture colordiffuse="33FFFFFF">silo/avatar_mask.png</texture>
-                <visible>!!String.IsEmpty(Window(Home).Property(silo.avatar))</visible>
+                <visible>String.IsEmpty(Window(Home).Property(silo.avatar))</visible>
             </control>
             <control type="label">
                 <left>28</left><top>22</top><width>56</width><height>56</height>
@@ -7525,7 +7525,7 @@
                 <font>silo_tab</font>
                 <textcolor>FFEDEDED</textcolor>
                 <label>$INFO[Window(Home).Property(silo.profile_initial)]</label>
-                <visible>!!String.IsEmpty(Window(Home).Property(silo.avatar))</visible>
+                <visible>String.IsEmpty(Window(Home).Property(silo.avatar))</visible>
             </control>
             <control type="image">
                 <left>28</left><top>22</top><width>56</width><height>56</height>

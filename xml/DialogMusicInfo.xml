@@ -369,10 +369,7 @@
 							</include>
 							<label>$LOCALIZE[31033]</label>
 							<onup>130</onup>
-							<onleft>155</onleft>
 							<onright>120</onright>
-							<onup condition="Integer.IsGreater(Container(5000).CurrentItem,3)">210</onup>
-							<onup condition="!Integer.IsGreater(Container(5000).CurrentItem,3)">138</onup>
 						</control>
 						<control type="label">
 							<label>$INFO[ListItem.UserRating]</label>

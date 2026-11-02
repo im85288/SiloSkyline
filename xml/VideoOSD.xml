@@ -269,11 +269,8 @@
 					<itemgap>10</itemgap>
 					<scrolltime tween="sine">200</scrolltime>
 					<orientation>horizontal</orientation>
-					<onup condition="!!String.IsEmpty(Window(Home).Property(silo.osd.episodes))">87</onup>
+					<onup condition="String.IsEmpty(Window(Home).Property(silo.osd.episodes))">87</onup>
 					<onup condition="!String.IsEmpty(Window(Home).Property(silo.osd.episodes))">7100</onup>
-					<ondown condition="Control.HasFocus(70043)">11104</ondown>
-					<ondown condition="Control.HasFocus(704)">12104</ondown>
-					<ondown condition="Control.HasFocus(255)">13103</ondown>
 					<onleft condition="!$EXP[SiloVideoPlayer]">608</onleft>
 					<onleft condition="$EXP[SiloVideoPlayer]">610</onleft>
 					<onright condition="!$EXP[SiloVideoPlayer]">600</onright>
@@ -338,8 +335,8 @@
 						<include content="OSDButton">
 							<param name="texture" value="silo/episodes.png"/>
 						</include>
-						<onclick condition="!!String.IsEmpty(Window(Home).Property(silo.osd.episodes))">SetProperty(silo.osd.episodes,1,home)</onclick>
-						<onclick condition="!!String.IsEmpty(Window(Home).Property(silo.osd.episodes))">SetFocus(7100,$INFO[Window(Home).Property(silokodi.playing.episode_index)],absolute)</onclick>
+						<onclick condition="String.IsEmpty(Window(Home).Property(silo.osd.episodes))">SetProperty(silo.osd.episodes,1,home)</onclick>
+						<onclick condition="String.IsEmpty(Window(Home).Property(silo.osd.episodes))">SetFocus(7100,$INFO[Window(Home).Property(silokodi.playing.episode_index)],absolute)</onclick>
 						<onclick condition="!String.IsEmpty(Window(Home).Property(silo.osd.episodes))">ClearProperty(silo.osd.episodes,home)</onclick>
 						<visible>$EXP[SiloVideoPlayer] + !String.IsEmpty(Window(Home).Property(silokodi.playing.season_path))</visible>
 					</control>
@@ -406,7 +403,7 @@
 				<animation type="WindowClose" condition="Window.IsVisible(fullscreeninfo)" reversible="False">
 					<effect type="fade" start="100" end="0" time="300"/>
 				</animation>
-				<visible>Player.SeekEnabled + !!String.IsEmpty(Window(Home).Property(silo.osd.episodes))</visible>
+				<visible>Player.SeekEnabled + String.IsEmpty(Window(Home).Property(silo.osd.episodes))</visible>
 				<control type="button" id="87">
 					<include>HiddenObject</include>
 					<onup>200</onup>

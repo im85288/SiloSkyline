@@ -8,7 +8,8 @@ Each builder writes its own XML and its own section of the shared files
 it back at the end, so running them all in this fixed order gives the same
 files whatever state they start in. build_colours goes next to last, as it
 rewrites colour values across everything the others wrote; scroll_gaps last,
-giving every scrolling label a gap. Textures (make_textures.py,
+giving every scrolling label a gap. Then every file must parse, and every
+move must name a control in its window (check_moves.py). Textures (make_textures.py,
 make_rating_logos.swift) and art (make_art.py) are separate and rarely change.
 """
 import glob
@@ -21,7 +22,7 @@ TOOLS = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(TOOLS)
 BUILDERS = ('build_home', 'build_info', 'build_browse', 'build_search', 'build_upnext', 'build_shortcuts',
             'build_options', 'build_frame', 'build_library', 'build_person', 'build_tv', 'build_requests', 'build_showcase',
-            'build_colours', 'scroll_gaps')
+            'build_colours', 'scroll_gaps', 'tidy_conditions')
 
 
 def main():
@@ -41,7 +42,13 @@ def main():
     if broken:
         sys.stderr.write('Not well-formed:\n  %s\n' % '\n  '.join(broken))
         return 1
-    print('Rebuilt the skin (%d builders); every xml/*.xml parses.' % len(BUILDERS))
+    # Every move must name a control in its window (a wrong id is a dead key press).
+    moves = subprocess.run([sys.executable, os.path.join(TOOLS, 'check_moves.py')], cwd=ROOT,
+                           capture_output=True, text=True)
+    if moves.returncode:
+        sys.stderr.write('Moves to missing controls:\n%s' % moves.stderr)
+        return 1
+    print('Rebuilt the skin (%d builders); every xml/*.xml parses; every move names a control.' % len(BUILDERS))
     return 0
 
 

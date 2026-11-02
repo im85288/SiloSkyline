@@ -260,7 +260,7 @@
                     <!-- Outlined, as on Silo's Apple TV app. -->
                     <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
                     <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
-                    <visible>!!String.IsEmpty(ListItem.Property(silo.badge1)) + !String.IsEmpty(ListItem.VideoResolution)</visible>
+                    <visible>String.IsEmpty(ListItem.Property(silo.badge1)) + !String.IsEmpty(ListItem.VideoResolution)</visible>
                 </control>
                 <control type="button">
                     <width>auto</width><height>36</height>
@@ -273,7 +273,7 @@
                     <!-- Outlined, as on Silo's Apple TV app. -->
                     <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
                     <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
-                    <visible>!!String.IsEmpty(ListItem.Property(silo.badge1)) + !String.IsEmpty(ListItem.HdrType)</visible>
+                    <visible>String.IsEmpty(ListItem.Property(silo.badge1)) + !String.IsEmpty(ListItem.HdrType)</visible>
                 </control>
                 <control type="button">
                     <width>auto</width><height>36</height>
@@ -286,7 +286,7 @@
                     <!-- Outlined, as on Silo's Apple TV app. -->
                     <texturenofocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturenofocus>
                     <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
-                    <visible>!!String.IsEmpty(ListItem.Property(silo.badge1)) + !String.IsEmpty(ListItem.AudioCodec)</visible>
+                    <visible>String.IsEmpty(ListItem.Property(silo.badge1)) + !String.IsEmpty(ListItem.AudioCodec)</visible>
                 </control>
                 <visible>![!String.IsEmpty(ListItem.Property(silo.version)) | !String.IsEmpty(ListItem.Property(silo.audio)) | Control.HasFocus(64) | Control.HasFocus(65) | Control.HasFocus(61) | Control.HasFocus(60)]</visible>
             </control>
@@ -300,7 +300,7 @@
                 <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
                 <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
                 <ondown condition="!String.IsEmpty(ListItem.Property(silo.set_id))">66</ondown>
-                <ondown condition="!!String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
+                <ondown condition="String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
                 <!-- A show: Play or Resume its next episode, as in Silo (Kodi's button 8
                      would Browse); Browse once every episode is watched. Kodi reserves
                      ids 5-15 in this window (12 chooses art), so this is 300. -->
@@ -312,7 +312,7 @@
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
                     <ondown condition="!String.IsEmpty(ListItem.Property(silo.set_id))">66</ondown>
-                    <ondown condition="!!String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
+                    <ondown condition="String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
                     <onright condition="Control.IsVisible(301)">SetFocus(301)</onright>
                     <onright condition="Control.IsVisible(1008) + !Control.IsVisible(301)">SetFocus(308)</onright>
                     <onright condition="Control.IsVisible(1018) + !Control.IsVisible(301) + !Control.IsVisible(1008)">SetFocus(318)</onright>
@@ -370,7 +370,7 @@
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
                     <ondown condition="!String.IsEmpty(ListItem.Property(silo.set_id))">66</ondown>
-                    <ondown condition="!!String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
+                    <ondown condition="String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
                     <onright condition="Control.IsVisible(1008)">SetFocus(308)</onright>
                     <onright condition="Control.IsVisible(1018) + !Control.IsVisible(1008)">SetFocus(318)</onright>
                     <onright condition="Control.IsVisible(1304) + !Control.IsVisible(1008) + !Control.IsVisible(1018)">SetFocus(304)</onright>
@@ -401,7 +401,7 @@
                      grouplist moves only between children with ids. -->
                 <control type="group" id="1008">
                     <width>340</width><height>64</height>
-                    <visible>![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + !!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEqual(ListItem.DBType,set)</visible>
+                    <visible>![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !String.IsEqual(ListItem.DBType,set)</visible>
                     <!-- Not Kodi's Play button (id 8), which asks whether to resume:
                          Resume resumes, as in Silo, and Start over plays from the start. -->
                     <control type="button" id="308">
@@ -409,7 +409,7 @@
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
                     <ondown condition="!String.IsEmpty(ListItem.Property(silo.set_id))">66</ondown>
-                    <ondown condition="!!String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
+                    <ondown condition="String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
                     <onright condition="Control.IsVisible(1018)">SetFocus(318)</onright>
                     <onright condition="Control.IsVisible(1304) + !Control.IsVisible(1018)">SetFocus(304)</onright>
                     <onright condition="Control.IsVisible(1302) + !Control.IsVisible(1018) + !Control.IsVisible(1304)">SetFocus(302)</onright>
@@ -500,7 +500,7 @@
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
                     <ondown condition="!String.IsEmpty(ListItem.Property(silo.set_id))">66</ondown>
-                    <ondown condition="!!String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
+                    <ondown condition="String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
                     <onright condition="Control.IsVisible(1304)">SetFocus(304)</onright>
                     <onright condition="Control.IsVisible(1302) + !Control.IsVisible(1304)">SetFocus(302)</onright>
                     <onright condition="Control.IsVisible(1305) + !Control.IsVisible(1304) + !Control.IsVisible(1302)">SetFocus(305)</onright>
@@ -546,7 +546,7 @@
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
                     <ondown condition="!String.IsEmpty(ListItem.Property(silo.set_id))">66</ondown>
-                    <ondown condition="!!String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
+                    <ondown condition="String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
                     <onright condition="Control.IsVisible(1302)">SetFocus(302)</onright>
                     <onright condition="Control.IsVisible(1305) + !Control.IsVisible(1302)">SetFocus(305)</onright>
                     <onright condition="Control.IsVisible(1011) + !Control.IsVisible(1302) + !Control.IsVisible(1305)">SetFocus(11)</onright>
@@ -603,7 +603,7 @@
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
                     <ondown condition="!String.IsEmpty(ListItem.Property(silo.set_id))">66</ondown>
-                    <ondown condition="!!String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
+                    <ondown condition="String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
                     <onright condition="Control.IsVisible(1305)">SetFocus(305)</onright>
                     <onright condition="Control.IsVisible(1011) + !Control.IsVisible(1305)">SetFocus(11)</onright>
                     <onright condition="Control.IsVisible(1351) + !Control.IsVisible(1305) + !Control.IsVisible(1011)">SetFocus(351)</onright>
@@ -660,7 +660,7 @@
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
                     <ondown condition="!String.IsEmpty(ListItem.Property(silo.set_id))">66</ondown>
-                    <ondown condition="!!String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
+                    <ondown condition="String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
                     <onright condition="Control.IsVisible(1011)">SetFocus(11)</onright>
                     <onright condition="Control.IsVisible(1351) + !Control.IsVisible(1011)">SetFocus(351)</onright>
                     <onright condition="Control.IsVisible(1352) + !Control.IsVisible(1011) + !Control.IsVisible(1351)">SetFocus(352)</onright>
@@ -720,7 +720,7 @@
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
                     <ondown condition="!String.IsEmpty(ListItem.Property(silo.set_id))">66</ondown>
-                    <ondown condition="!!String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
+                    <ondown condition="String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
                     <onright condition="Control.IsVisible(1351)">SetFocus(351)</onright>
                     <onright condition="Control.IsVisible(1352) + !Control.IsVisible(1351)">SetFocus(352)</onright>
                     <onright condition="Control.IsVisible(1353) + !Control.IsVisible(1351) + !Control.IsVisible(1352)">SetFocus(353)</onright>
@@ -778,7 +778,7 @@
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
                     <ondown condition="!String.IsEmpty(ListItem.Property(silo.set_id))">66</ondown>
-                    <ondown condition="!!String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
+                    <ondown condition="String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
                     <onright condition="Control.IsVisible(1352)">SetFocus(352)</onright>
                     <onright condition="Control.IsVisible(1353) + !Control.IsVisible(1352)">SetFocus(353)</onright>
                     <onright condition="Control.IsVisible(1014) + !Control.IsVisible(1352) + !Control.IsVisible(1353)">SetFocus(14)</onright>
@@ -844,7 +844,7 @@
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
                     <ondown condition="!String.IsEmpty(ListItem.Property(silo.set_id))">66</ondown>
-                    <ondown condition="!!String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
+                    <ondown condition="String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
                     <onright condition="Control.IsVisible(1353)">SetFocus(353)</onright>
                     <onright condition="Control.IsVisible(1014) + !Control.IsVisible(1353)">SetFocus(14)</onright>
                     <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1353) + !Control.IsVisible(1014)">SetFocus(303)</onright>
@@ -907,7 +907,7 @@
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
                     <ondown condition="!String.IsEmpty(ListItem.Property(silo.set_id))">66</ondown>
-                    <ondown condition="!!String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
+                    <ondown condition="String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
                     <onright condition="Control.IsVisible(1014)">SetFocus(14)</onright>
                     <onright condition="Control.IsVisible(1303) + !Control.IsVisible(1014)">SetFocus(303)</onright>
                     <onleft condition="Control.IsVisible(1352)">SetFocus(352)</onleft>
@@ -969,7 +969,7 @@
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
                     <ondown condition="!String.IsEmpty(ListItem.Property(silo.set_id))">66</ondown>
-                    <ondown condition="!!String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
+                    <ondown condition="String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
                     <onright condition="Control.IsVisible(1303)">SetFocus(303)</onright>
                     <onleft condition="Control.IsVisible(1353)">SetFocus(353)</onleft>
                     <onleft condition="Control.IsVisible(1352) + !Control.IsVisible(1353)">SetFocus(352)</onleft>
@@ -1031,7 +1031,7 @@
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]">65</ondown>
                     <ondown condition="String.IsEqual(ListItem.DBType,episode) + ![Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating] + Integer.IsGreater(Container(64).NumItems,0)">64</ondown>
                     <ondown condition="!String.IsEmpty(ListItem.Property(silo.set_id))">66</ondown>
-                    <ondown condition="!!String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
+                    <ondown condition="String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">70</ondown>
                     <onleft condition="Control.IsVisible(1014)">SetFocus(14)</onleft>
                     <onleft condition="Control.IsVisible(1353) + !Control.IsVisible(1014)">SetFocus(353)</onleft>
                     <onleft condition="Control.IsVisible(1352) + !Control.IsVisible(1014) + !Control.IsVisible(1353)">SetFocus(352)</onleft>
@@ -1614,7 +1614,7 @@
                     <onup condition="[String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">61</onup>
                     <onup condition="String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)">64</onup>
                     <onup condition="!String.IsEmpty(ListItem.Property(silo.set_id))">66</onup>
-                    <onup condition="!!String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">5000</onup>
+                    <onup condition="String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">5000</onup>
                     <!-- A cast member's page (SiloKodiConnect: Silo's person, their titles here). -->
                     <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=person&amp;id=$INFO[Window(movieinformation).Property(silo.content_id)]&amp;name=$INFO[ListItem.Label])</onclick>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
@@ -1696,7 +1696,7 @@
                     <onup condition="Integer.IsGreater(Container(70).NumItems,0)">70</onup>
                     <onup condition="!Integer.IsGreater(Container(70).NumItems,0) + [String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">61</onup>
                     <onup condition="!Integer.IsGreater(Container(70).NumItems,0) + !String.IsEmpty(ListItem.Property(silo.set_id))">66</onup>
-                    <onup condition="!Integer.IsGreater(Container(70).NumItems,0) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + !!String.IsEmpty(ListItem.Property(silo.set_id))">5000</onup>
+                    <onup condition="!Integer.IsGreater(Container(70).NumItems,0) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + String.IsEmpty(ListItem.Property(silo.set_id))">5000</onup>
                     <ondown condition="Integer.IsGreater(Container(63).NumItems,0)">63</ondown>
                     <onclick condition="System.HasAddon(plugin.video.youtube)">SetProperty(silokodi.trailer_art,$INFO[Window(movieinformation).Property(silo.page_fanart)],home)</onclick>
                     <onclick condition="System.HasAddon(plugin.video.youtube)">SetProperty(silokodi.trailer_return,$INFO[Window(movieinformation).Property(silo.page_type)]|$INFO[Window(movieinformation).Property(silo.page_dbid)],home)</onclick>
@@ -1795,7 +1795,7 @@
                     <onup condition="!Integer.IsGreater(Container(71).NumItems,0) + Integer.IsGreater(Container(70).NumItems,0)">70</onup>
                     <onup condition="!Integer.IsGreater(Container(71).NumItems,0) + !Integer.IsGreater(Container(70).NumItems,0) + [String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))]">61</onup>
                     <onup condition="!Integer.IsGreater(Container(71).NumItems,0) + !Integer.IsGreater(Container(70).NumItems,0) + !String.IsEmpty(ListItem.Property(silo.set_id))">66</onup>
-                    <onup condition="!Integer.IsGreater(Container(71).NumItems,0) + !Integer.IsGreater(Container(70).NumItems,0) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + !!String.IsEmpty(ListItem.Property(silo.set_id))">5000</onup>
+                    <onup condition="!Integer.IsGreater(Container(71).NumItems,0) + !Integer.IsGreater(Container(70).NumItems,0) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + String.IsEmpty(ListItem.Property(silo.set_id))">5000</onup>
                     <!-- Kodi can't open an info page from inside one: close this one and
                          have SiloKodiConnect open the chosen title's. That page opens with
                          the column below still scrolled to this rail; silo.from_rail has

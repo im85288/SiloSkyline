@@ -30,7 +30,7 @@
     <onload condition="![[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]]">ClearProperty(silo.browse.vpath.hero,home)</onload>
     <onload condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]]">SetProperty(silo.browse.vpath.list,$INFO[Window(Home).Property(silo.browse.path)],home)</onload>
     <onload condition="![[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]]">ClearProperty(silo.browse.vpath.list,home)</onload>
-    <onload condition="!!String.IsEmpty(Window(Home).Property(silo.browse.list)) + [[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]] | [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]]]">SetProperty(silo.browse.focusview,1,home)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(silo.browse.list)) + [[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]] | [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]]]">SetProperty(silo.browse.focusview,1,home)</onload>
 
     <backgroundcolor>SkylineBackground</backgroundcolor>
     <controls>
@@ -43,7 +43,7 @@
             <texture background="true" colordiffuse="40FFFFFF" diffuse="silo/hero_mask.png">$VAR[SiloLibraryFanart]</texture>
         </control>
         <control type="group">
-            <visible>!!String.IsEmpty(Window(Home).Property(silo.browse.list)) + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]]</visible>
+            <visible>String.IsEmpty(Window(Home).Property(silo.browse.list)) + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]]</visible>
             <control type="image">
                 <left>576</left><top>0</top><width>1344</width><height>756</height>
                 <aspectratio>scale</aspectratio>
@@ -64,7 +64,7 @@
             <left>82</left><top>252</top>
             <width>1620</width><height>828</height>
             <orientation>vertical</orientation>
-            <visible>!!String.IsEmpty(Window(Home).Property(silo.browse.list)) + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEmpty(Skin.String(silo.view.movies))] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEmpty(Skin.String(silo.view.tvshows))]]</visible>
+            <visible>String.IsEmpty(Window(Home).Property(silo.browse.list)) + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEmpty(Skin.String(silo.view.movies))] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEmpty(Skin.String(silo.view.tvshows))]]</visible>
             <onright>60</onright>
             <onleft>noop</onleft>
             <onup>70</onup>
@@ -230,7 +230,7 @@
             <left>82</left><top>496</top>
             <width>1624</width><height>584</height>
             <orientation>vertical</orientation>
-            <visible>!!String.IsEmpty(Window(Home).Property(silo.browse.list)) + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]]</visible>
+            <visible>String.IsEmpty(Window(Home).Property(silo.browse.list)) + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]]</visible>
             <onright>60</onright>
             <onleft>noop</onleft>
             <onup>70</onup>
@@ -375,7 +375,7 @@
             <focusedcolor>SkylineFocusText</focusedcolor>
             <texturefocus border="28" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
             <texturenofocus border="28" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
-            <visible>!!String.IsEmpty(Window(Home).Property(silo.browse.list))</visible>
+            <visible>String.IsEmpty(Window(Home).Property(silo.browse.list))</visible>
             <onclick condition="String.IsEqual(Window(Home).Property(silo.browse.type),movies) + [String.IsEqual(Skin.String(silo.sort.movies),title) | String.IsEmpty(Skin.String(silo.sort.movies))]">SetFocus(71,0,absolute)</onclick>
             <ondown condition="String.IsEqual(Window(Home).Property(silo.browse.type),movies) + [String.IsEqual(Skin.String(silo.sort.movies),title) | String.IsEmpty(Skin.String(silo.sort.movies))]">SetFocus(71,0,absolute)</ondown>
             <onclick condition="String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.sort.movies),dateadded)">SetFocus(71,1,absolute)</onclick>
@@ -404,12 +404,12 @@
             <control type="image">
                 <left>114</left><top>183</top><width>26</width><height>26</height>
                 <texture colordiffuse="SkylineFocusText">silo/sort.png</texture>
-                <visible>!!String.IsEmpty(Window(Home).Property(silo.browse.list)) + Control.HasFocus(70)</visible>
+                <visible>String.IsEmpty(Window(Home).Property(silo.browse.list)) + Control.HasFocus(70)</visible>
             </control>
             <control type="image">
                 <left>114</left><top>183</top><width>26</width><height>26</height>
                 <texture colordiffuse="FFEDEDED">silo/sort.png</texture>
-                <visible>!!String.IsEmpty(Window(Home).Property(silo.browse.list)) + !Control.HasFocus(70)</visible>
+                <visible>String.IsEmpty(Window(Home).Property(silo.browse.list)) + !Control.HasFocus(70)</visible>
             </control>
         <!-- Browse's views: a View pill on Sort's line, at the right, and its
              list below it (shown while either has focus, as Sort's). -->
@@ -423,7 +423,7 @@
             <focusedcolor>SkylineFocusText</focusedcolor>
             <texturefocus border="28" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
             <texturenofocus border="28" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
-            <visible>!!String.IsEmpty(Window(Home).Property(silo.browse.list))</visible>
+            <visible>String.IsEmpty(Window(Home).Property(silo.browse.list))</visible>
             <onclick condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEmpty(Skin.String(silo.view.movies))] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEmpty(Skin.String(silo.view.tvshows))]]">SetFocus(73,0,absolute)</onclick>
             <ondown condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEmpty(Skin.String(silo.view.movies))] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEmpty(Skin.String(silo.view.tvshows))]]">SetFocus(73,0,absolute)</ondown>
             <onclick condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]]">SetFocus(73,1,absolute)</onclick>
@@ -443,7 +443,7 @@
             <focusedcolor>SkylineFocusText</focusedcolor>
             <texturefocus border="28" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
             <texturenofocus border="28" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
-            <visible>!!String.IsEmpty(Window(Home).Property(silo.browse.list))</visible>
+            <visible>String.IsEmpty(Window(Home).Property(silo.browse.list))</visible>
             <onclick>Skin.ToggleSetting(silo.unwatched)</onclick>
             <ondown condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEmpty(Skin.String(silo.view.movies))] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEmpty(Skin.String(silo.view.tvshows))]]">SetFocus(50)</ondown>
             <ondown condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]]">SetFocus(57)</ondown>
@@ -480,7 +480,7 @@
         </control>
         <!-- The hero view: the focused title over two rows of posters. -->
         <control type="group">
-            <visible>!!String.IsEmpty(Window(Home).Property(silo.browse.list)) + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]]</visible>
+            <visible>String.IsEmpty(Window(Home).Property(silo.browse.list)) + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]]</visible>
             <control type="image">
                 <left>88</left><top>236</top><width>760</width><height>130</height>
                 <aspectratio align="left" aligny="bottom">keep</aspectratio>
@@ -587,7 +587,7 @@
         </control>
         <!-- The list view's details: the focused title's poster and facts. -->
         <control type="group">
-            <visible>!!String.IsEmpty(Window(Home).Property(silo.browse.list)) + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]]</visible>
+            <visible>String.IsEmpty(Window(Home).Property(silo.browse.list)) + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]]</visible>
             <control type="image">
                 <left>576</left><top>0</top><width>1344</width><height>756</height>
                 <aspectratio>stretch</aspectratio>
@@ -690,7 +690,7 @@
         <control type="list" id="58">
             <left>82</left><top>252</top><width>780</width><height>804</height>
             <orientation>vertical</orientation>
-            <visible>!!String.IsEmpty(Window(Home).Property(silo.browse.list)) + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]]</visible>
+            <visible>String.IsEmpty(Window(Home).Property(silo.browse.list)) + [[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]]</visible>
             <onup>70</onup><onright>60</onright><onleft>noop</onleft>
             <scrolltime tween="cubic" easing="out">200</scrolltime>
             <!-- A box set's card opens the box set (SiloKodiConnect's page for Kodi's movie set). -->
@@ -2123,7 +2123,7 @@
         </control>
         <!-- Silo's A-Z (not in a genre: a letter's filter would drop it). -->
         <control type="list" id="60">
-            <visible>!!String.IsEmpty(Window(Home).Property(silo.browse.list)) + String.IsEmpty(Window(Home).Property(silo.browse.genre))</visible>
+            <visible>String.IsEmpty(Window(Home).Property(silo.browse.list)) + String.IsEmpty(Window(Home).Property(silo.browse.genre))</visible>
             <left>1736</left><top>252</top>
             <width>96</width><height>828</height>
             <orientation>vertical</orientation>

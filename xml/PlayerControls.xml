@@ -129,8 +129,6 @@
 						<texturenofocus />
 						<onleft>605</onleft>
 						<onright>607</onright>
-						<onup>1000</onup>
-						<ondown>1000</ondown>
 						<onclick>PlayerControl(Repeat)</onclick>
 					</control>
 					<control type="image">
