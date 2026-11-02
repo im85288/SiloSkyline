@@ -1,0 +1,37 @@
+name: Check
+on:
+- pull_request
+- push
+jobs:
+  build:
+    name: Generated files up to date
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+    # build_all.py rebuilds every generated file and checks every xml/*.xml
+    # parses; a tools/ change committed without rebuilding shows as a diff.
+    - name: Rebuild the skin
+      run: python3 tools/build_all.py
+    - name: Generated files match the commit
+      run: git diff --exit-code --stat
+  addon-checker:
+    name: Add-on checker (omega)
+    runs-on: ubuntu-latest
+    steps:
+    # The checker wants the folder named after the add-on id.
+    - uses: actions/checkout@v4
+      with:
+        path: skin.silo.skyline
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+    - name: Install kodi-addon-checker
+      run: pip install kodi-addon-checker
+    - name: Remove files not shipped in the skin
+      run: awk '/export-ignore/ { print $1 }' .gitattributes | xargs rm -rf --
+      working-directory: skin.silo.skyline
+    - name: Run kodi-addon-checker
+      run: kodi-addon-checker --branch=omega skin.silo.skyline/
