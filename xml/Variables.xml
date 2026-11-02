@@ -7498,19 +7498,14 @@
         <value condition="String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(Container(60).NumItems,1)">$INFO[Container(60).NumItems,  [COLOR 80EDEDED]·[/COLOR]  , Seasons]</value>
     </variable>
     <!-- Silo's first two genres ("Drama, Crime"), from SiloKodiConnect. -->
-    <!-- More's menu: its heading, and its rows' names (a show's are for every episode). -->
-    <variable name="SiloMoreHeading">
-        <value condition="String.IsEqual(Window(Home).Property(silo.more.type),tvshow)">Series</value>
-        <value condition="String.IsEqual(Window(Home).Property(silo.more.type),episode)">Episode</value>
-        <value>Film</value>
+    <!-- The Watched button: its icon and name (a show's marks every episode). -->
+    <variable name="SiloWatchedIcon">
+        <value condition="[String.IsEqual(Window(movieinformation).Property(silo.marked),watched) | [String.IsEmpty(Window(movieinformation).Property(silo.marked)) + [Integer.IsGreater(ListItem.PlayCount,0) | [String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]]]">silo/watched_on.png</value>
+        <value>silo/watched.png</value>
     </variable>
-    <variable name="SiloMoreWatched">
-        <value condition="String.IsEqual(Window(Home).Property(silo.more.type),tvshow)">Mark series as watched</value>
-        <value>Mark as watched</value>
-    </variable>
-    <variable name="SiloMoreUnwatched">
-        <value condition="String.IsEqual(Window(Home).Property(silo.more.type),tvshow)">Mark series as unwatched</value>
-        <value>Mark as unwatched</value>
+    <variable name="SiloWatchedLabel">
+        <value condition="[String.IsEqual(Window(movieinformation).Property(silo.marked),watched) | [String.IsEmpty(Window(movieinformation).Property(silo.marked)) + [Integer.IsGreater(ListItem.PlayCount,0) | [String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]]]">Mark unwatched</value>
+        <value>Mark watched</value>
     </variable>
     <variable name="SiloDetailGenres">
         <value condition="!String.IsEmpty(ListItem.Property(silo.genres))">$INFO[ListItem.Property(silo.genres),  [COLOR 80EDEDED]·[/COLOR]  ,]</value>

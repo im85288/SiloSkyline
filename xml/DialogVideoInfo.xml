@@ -904,52 +904,36 @@
                         <label />
                         <texturefocus />
                         <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
-                    <onclick>SetProperty(silo.more.type,$INFO[ListItem.DBType],home)</onclick>
-                    <onclick>SetProperty(silo.more.dbid,$INFO[ListItem.DBID],home)</onclick>
-                    <onclick>ClearProperty(silo.more.watched,home)</onclick>
-                    <onclick condition="[String.IsEqual(Window(movieinformation).Property(silo.marked),watched) | [String.IsEmpty(Window(movieinformation).Property(silo.marked)) + [Integer.IsGreater(ListItem.PlayCount,0) | [String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]]]">SetProperty(silo.more.watched,1,home)</onclick>
-                    <onclick>ClearProperty(silo.more.b304,home)</onclick>
-                    <onclick condition="Control.IsVisible(1304)">SetProperty(silo.more.b304,1,home)</onclick>
-                    <onclick>ClearProperty(silo.more.b302,home)</onclick>
-                    <onclick condition="Control.IsVisible(1302)">SetProperty(silo.more.b302,1,home)</onclick>
-                    <onclick>ClearProperty(silo.more.b11,home)</onclick>
-                    <onclick condition="Control.IsVisible(1011)">SetProperty(silo.more.b11,1,home)</onclick>
-                    <onclick>ClearProperty(silo.more.b351,home)</onclick>
-                    <onclick condition="Control.IsVisible(1351)">SetProperty(silo.more.b351,1,home)</onclick>
-                    <onclick>ClearProperty(silo.more.b352,home)</onclick>
-                    <onclick condition="Control.IsVisible(1352)">SetProperty(silo.more.b352,1,home)</onclick>
-                    <onclick>ClearProperty(silo.more.b353,home)</onclick>
-                    <onclick condition="Control.IsVisible(1353)">SetProperty(silo.more.b353,1,home)</onclick>
-                    <onclick>ClearProperty(silo.more.b14,home)</onclick>
-                    <onclick condition="Control.IsVisible(1014)">SetProperty(silo.more.b14,1,home)</onclick>
-                    <onclick>ActivateWindow(1194)</onclick>
+                    <onclick>noop</onclick>
+                    <onclick condition="[String.IsEqual(Window(movieinformation).Property(silo.marked),watched) | [String.IsEmpty(Window(movieinformation).Property(silo.marked)) + [Integer.IsGreater(ListItem.PlayCount,0) | [String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=mark&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID]&amp;action=unwatched)</onclick>
+                    <onclick condition="![String.IsEqual(Window(movieinformation).Property(silo.marked),watched) | [String.IsEmpty(Window(movieinformation).Property(silo.marked)) + [Integer.IsGreater(ListItem.PlayCount,0) | [String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=mark&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID]&amp;action=watched)</onclick>
                     </control>
                     <control type="group">
-                        <visible>[Control.HasFocus(303) | Window.IsActive(1194)]</visible>
+                        <visible>Control.HasFocus(303)</visible>
                         <animation effect="zoom" start="40,100" end="100,100" center="0,32" time="180" tween="sine" easing="out">Visible</animation>
                         <control type="image">
-                            <width>158</width><height>64</height>
+                            <width>318</width><height>64</height>
                             <texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
                         </control>
                         <control type="label">
-                            <left>62</left><width>90</width><height>64</height>
+                            <left>62</left><width>250</width><height>64</height>
                             <aligny>center</aligny>
                             <font>silo_tab</font>
                             <textcolor>SkylineFocusText</textcolor>
-                            <label>More</label>
+                            <label>$VAR[SiloWatchedLabel]</label>
                         </control>
                     </control>
                     <control type="image">
                         <left>16</left><top>16</top>
                         <width>32</width><height>32</height>
-                        <texture colordiffuse="SkylineFocusText">icons/menu.png</texture>
-                        <visible>[Control.HasFocus(303) | Window.IsActive(1194)]</visible>
+                        <texture colordiffuse="SkylineFocusText">$VAR[SiloWatchedIcon]</texture>
+                        <visible>Control.HasFocus(303)</visible>
                     </control>
                     <control type="image">
                         <left>16</left><top>16</top>
                         <width>32</width><height>32</height>
-                        <texture colordiffuse="FFEDEDED">icons/menu.png</texture>
-                        <visible>![Control.HasFocus(303) | Window.IsActive(1194)]</visible>
+                        <texture colordiffuse="FFEDEDED">$VAR[SiloWatchedIcon]</texture>
+                        <visible>!Control.HasFocus(303)</visible>
                     </control>
                 </control>
             </control>

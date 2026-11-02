@@ -431,6 +431,32 @@ if __name__ == '__main__':
         return hits / float(SUB * SUB)
     write_png('episodes.png', 96, 96, episodes)
 
+    # Watched, for the info page's toggle: a tick in a ring (not watched),
+    # or knocked out of a filled disc (watched), as Rate's star and Watchlist's bookmark.
+    def watched(x, y, filled, size=96.0, stroke=6.0):
+        import math
+        c, r = size / 2.0, size * 0.40
+        hits = 0
+        for sy in range(SUB):
+            for sx in range(SUB):
+                px = x - 0.5 + (sx + 0.5) / SUB
+                py = y - 0.5 + (sy + 0.5) / SUB
+                d = math.hypot(px - c, py - c)
+                # The tick: two strokes, (0.30,0.52)-(0.44,0.66) and (0.44,0.66)-(0.70,0.38).
+                def near(ax, ay, bx, by):
+                    ax, ay, bx, by = ax * size, ay * size, bx * size, by * size
+                    t = max(0.0, min(1.0, ((px - ax) * (bx - ax) + (py - ay) * (by - ay)) /
+                                     ((bx - ax) ** 2 + (by - ay) ** 2)))
+                    return math.hypot(px - (ax + t * (bx - ax)), py - (ay + t * (by - ay))) <= stroke / 2
+                tick = near(0.31, 0.51, 0.44, 0.64) or near(0.44, 0.64, 0.69, 0.37)
+                if filled:
+                    hits += d <= r and not tick
+                else:
+                    hits += abs(d - r) <= stroke / 2 or tick
+        return hits / float(SUB * SUB)
+    write_png('watched.png', 96, 96, lambda x, y: watched(x, y, False))
+    write_png('watched_on.png', 96, 96, lambda x, y: watched(x, y, True))
+
     # Next Episode: a play triangle against a bar (skip to next).
     def next_episode(x, y, size=96.0):
         hits = 0
