@@ -1,3 +1,9 @@
+[B]0.5.0[/B]
+• Home's hero: Play and More info, reached with Up from the top row
+• Shuffle on show and box set pages, and in Browse
+• Resume shows the time left and how far in
+• Icons for shuffle and info in Skyline's line
+
 [B]0.4.2[/B]
 • Movies > Box sets: every box set in a grid, each opening its page
 • The menu bar is centred, with room for two custom items (long names end in "...")
