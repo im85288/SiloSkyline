@@ -1,3 +1,10 @@
+[B]0.4.2[/B]
+• Movies > Box sets: every box set in a grid, each opening its page
+• The menu bar is centred, with room for two custom items (long names end in "...")
+• Down from the bar goes to the content; a page's pills, dimmed until then, are reached with Up
+• Player Options > Subtitles > Search online uses Silo's subtitle providers
+• Home's scrolling titles get their gap
+
 [B]0.4.1[/B]
 • Info page: a Watched toggle (Mark watched / unwatched) in place of the More menu
 • Skin settings: show or hide IMDb, TMDB and Rotten Tomatoes ratings everywhere
