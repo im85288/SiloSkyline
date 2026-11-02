@@ -663,6 +663,9 @@ def moves(page_index, slot):
     elif PAGES[page_index] == 'custom':
         ups = [(' + '.join(c for c in (above, CUSTOM_HAS_PILLS) if c), '%d' % CUSTOM_PILLS),
                (' + '.join(c for c in (above, '!' + CUSTOM_HAS_PILLS) if c), target)]
+    elif PAGES[page_index] == 'home':
+        ups = [(' + '.join(c for c in (above, '$EXP[HasSiloHeroTitle]') if c), '%d' % HERO_PLAY),
+               (' + '.join(c for c in (above, '!$EXP[HasSiloHeroTitle]') if c), target)]
     else:
         ups = [(above, target)]
     for condition, to in ups:
@@ -921,6 +924,9 @@ def bar_positions():
 
 
 DROP_W, DROP_ROW = 460, 64  # Silo's dropdown under a tab
+# The hero's Play and More info, as Netflix's: Up from Home's top row reaches
+# them (in the badges' place); they act on the hero's title (SiloKodiConnect).
+HERO_BUTTONS, HERO_PLAY, HERO_INFO = 4800, 4801, 4802
 
 
 DROP_DWELL = 250  # ms a tab holds focus before its dropdown opens
@@ -1502,6 +1508,71 @@ def tab(control_id, page, page_index):
                             'open_sections': open_sections(page, control_id)}
 
 
+def hero_buttons():
+    """Play (resume or the next episode) and More info for the hero's title."""
+    plugin = 'plugin://plugin.video.silokodiconnect/'
+    item = 'type=$VAR[SiloHeroType]&amp;dbid=$VAR[SiloHeroDbid]'
+    row = '$INFO[%s]' % prop('silo.row')
+    def button(control_id, label, icon, action, width):
+        lit = 'Control.HasFocus(%d)' % control_id
+        return '''
+                <control type="group" id="%(group)d">
+                    <width>%(w)d</width><height>56</height>
+                    <control type="button" id="%(id)d">
+                        <width>%(w)d</width><height>56</height>
+                        <label />
+                        <texturefocus border="28" colordiffuse="%(text)s">silo/pill.png</texturefocus>
+                        <texturenofocus border="28" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
+                        <onclick>%(action)s</onclick>
+                        <onup>SetFocus(9002)</onup>
+                        <onleft>SetFocus(%(left)d)</onleft><onright>SetFocus(%(right)d)</onright>
+                        <ondown>SetFocus(%(row)s)</ondown>
+                        <onback>SetFocus(%(row)s)</onback>
+                    </control>
+                    <control type="image">
+                        <left>26</left><top>15</top><width>26</width><height>26</height>
+                        <texture colordiffuse="FF000000">%(icon)s</texture>
+                        <visible>%(lit)s</visible>
+                    </control>
+                    <control type="image">
+                        <left>26</left><top>15</top><width>26</width><height>26</height>
+                        <texture colordiffuse="%(text)s">%(icon)s</texture>
+                        <visible>!%(lit)s</visible>
+                    </control>
+                    <control type="label">
+                        <left>66</left><width>%(lw)d</width><height>56</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FF000000</textcolor>
+                        <label>%(label)s</label>
+                        <visible>%(lit)s</visible>
+                    </control>
+                    <control type="label">
+                        <left>66</left><width>%(lw)d</width><height>56</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>%(text)s</textcolor>
+                        <label>%(label)s</label>
+                        <visible>!%(lit)s</visible>
+                    </control>
+                </control>''' % {'group': control_id + 100, 'id': control_id, 'w': width, 'lw': width - 80, 'text': TEXT,
+                                     'action': action, 'row': row, 'icon': icon, 'label': label, 'lit': lit,
+                                     'left': HERO_PLAY, 'right': HERO_INFO}
+    return '''
+            <!-- The hero's Play and More info (Up from Home's top row), in the badges' place. -->
+            <control type="grouplist" id="%(id)d">
+                <top>540</top>
+                <width>1000</width><height>56</height>
+                <orientation>horizontal</orientation>
+                <itemgap>14</itemgap>
+                <visible allowhiddenfocus="true">ControlGroup(%(id)d).HasFocus()</visible>%(play)s%(info)s
+            </control>''' % {'id': HERO_BUTTONS,
+                         'play': button(HERO_PLAY, 'Play', 'silo/icon_play.png',
+                                        'RunPlugin(%s?mode=playitem&amp;%s)' % (plugin, item), 180),
+                         'info': button(HERO_INFO, 'More info', 'silo/icon_info.png',
+                                        'RunPlugin(%s?mode=info&amp;%s)' % (plugin, item), 230)}
+
+
 def tv_tab():
     """TV, after Requests when Live TV has channels: TiviMate's guide in
     Silo's look (tools/build_tv.py). A button of the bar's own, as the custom
@@ -1949,7 +2020,8 @@ def build():
                 <width>1000</width><height>36</height>
                 <orientation>horizontal</orientation>
                 <itemgap>12</itemgap>%(quality_badges)s
-            </control>
+                <visible>!ControlGroup(%(hero_buttons)d).HasFocus()</visible>
+            </control>%(hero_buttons_xml)s
         </control>
 
         <!-- Rows: own all focus. -->
@@ -2005,6 +2077,7 @@ def build():
        # The age rating as Silo draws it: the quality badges' size, centred on the info line.
        'splash': splash(), 'mpaa_badge': badge('$VAR[SiloMpaa]', 34, 'silo_badge').replace(
            '<width>auto</width><height>34</height>', '<top>3</top><width>auto</width><height>34</height>', 1),
+       'hero_buttons': HERO_BUTTONS, 'hero_buttons_xml': hero_buttons(),
        'quality_badges': ''.join(badge('$VAR[SiloBadge%d]' % n, 36, 'silo_badge') for n in (1, 2, 3)),
        # Silo's request stage track: four short bars, empty for anything else.
        'status_track': ''.join('''
@@ -2019,9 +2092,13 @@ def build():
 # (condition, value) template; LI stands for that row's ListItem.
 # A Home card: an item SiloKodiConnect published as properties (rows.py).
 HOME_CARD = '!String.IsEmpty(LI.Property(home.type))'
-HERO_STATIC = {'SiloHeroArt': 'home.art.fanart', 'SiloLogoArt': 'home.art.clearlogo', 'SiloTitle': 'home.hero.title', 'SiloMetaLine': 'home.hero.meta', 'SiloHeroFacts': 'home.hero.facts', 'SiloHeroImdb': 'home.rating.imdb', 'SiloHeroTmdb': 'home.rating.tmdb', 'SiloHeroRtCritic': 'home.rating.rtcritic', 'SiloPlot': 'home.plot', 'SiloDetail': 'home.hero.detail', 'SiloMpaa': 'home.mpaa', 'SiloHeroTint': 'home.tint', 'SiloBadge1': 'home.badge1', 'SiloBadge2': 'home.badge2', 'SiloBadge3': 'home.badge3'}
+HERO_TITLE_TERM = '[!String.IsEmpty(Container(%(r)d).ListItem.Property(home.dbid)) + String.IsEmpty(Container(%(r)d).ListItem.Property(home.request.tmdb))] | [Integer.IsGreater(Container(%(r)d).ListItem.DBID,0) + [String.IsEqual(Container(%(r)d).ListItem.DBType,movie) | String.IsEqual(Container(%(r)d).ListItem.DBType,tvshow) | String.IsEqual(Container(%(r)d).ListItem.DBType,episode)]]'
+HERO_STATIC = {'SiloHeroType': 'home.type', 'SiloHeroDbid': 'home.dbid', 'SiloHeroArt': 'home.art.fanart', 'SiloLogoArt': 'home.art.clearlogo', 'SiloTitle': 'home.hero.title', 'SiloMetaLine': 'home.hero.meta', 'SiloHeroFacts': 'home.hero.facts', 'SiloHeroImdb': 'home.rating.imdb', 'SiloHeroTmdb': 'home.rating.tmdb', 'SiloHeroRtCritic': 'home.rating.rtcritic', 'SiloPlot': 'home.plot', 'SiloDetail': 'home.hero.detail', 'SiloMpaa': 'home.mpaa', 'SiloHeroTint': 'home.tint', 'SiloBadge1': 'home.badge1', 'SiloBadge2': 'home.badge2', 'SiloBadge3': 'home.badge3'}
 
 HERO = [
+    # The hero's title for its Play and More info buttons (a library title's).
+    ('SiloHeroType', [(None, '$INFO[LI.DBType]')]),
+    ('SiloHeroDbid', [(None, '$INFO[LI.DBID]')]),
     ('SiloHeroArt', [('!String.IsEmpty(LI.Art(fanart))', '$INFO[LI.Art(fanart)]'),
                      ('!String.IsEmpty(LI.Art(tvshow.fanart))', '$INFO[LI.Art(tvshow.fanart)]'),
                      (None, '$INFO[LI.Art(landscape)]')]),
@@ -2271,6 +2348,10 @@ def variables():
         terms += ['[%s + !String.IsEmpty(%s)]' % (home_waiting(row), prop('silo.home.%d.1.%s' % (row, home_property[5:])))
                   for row in (1, 2)]
         out += '    <expression name="Has%s">%s</expression>\n' % (name, ' | '.join(terms))
+    # The hero shows a library title (its Play and More info apply), on Home.
+    hero_title = ' | '.join('[String.IsEqual(%s,%d) + [%s]]' % (prop('silo.row'), row_id, HERO_TITLE_TERM % {'r': row_id})
+                            for row_id in page_rows(PAGES.index('home'), range(1, rows_of('home') + 1)))
+    out += '    <expression name="HasSiloHeroTitle">%s</expression>\n' % (hero_title or 'false')
     # The ratings' marks: Silo's score (a library item, or a Home card's), else
     # Kodi's own rating for an item it lists itself; never an episode's.
     for name, item_property, home_property, kodi_rating in (

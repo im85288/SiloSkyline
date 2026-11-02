@@ -43,7 +43,7 @@ def badge(label, condition, font='silo_badge', height=36):
 
 # The round buttons in the row's order, with their names: the focused one
 # opens into a white pill with its name, as in Silo's Apple TV app.
-ROUND_BUTTONS = [(304, 'Start over'), (302, 'Previous'), (11, 'Trailer'), (351, 'Trailer'), (352, 'Watchlist'),
+ROUND_BUTTONS = [(304, 'Start over'), (302, 'Previous'), (305, 'Shuffle'), (11, 'Trailer'), (351, 'Trailer'), (352, 'Watchlist'),
                  (353, 'Rate'), (14, 'Versions'), (303, 'Mark unwatched')]
 # A button whose name changes: its longest name above sets the pill's width.
 ROUND_LABELS = {303: '$VAR[SiloWatchedLabel]'}
@@ -472,7 +472,7 @@ def build():
                         <texture colordiffuse="%(text)s">silo/icon_play.png</texture>
                         <visible>!Control.HasFocus(318)</visible>
                     </control>
-                </control>%(start_over)s%(previous)s%(trailer)s%(silo_trailer)s%(watchlist)s%(rate)s%(versions)s%(more)s
+                </control>%(start_over)s%(previous)s%(shuffle)s%(trailer)s%(silo_trailer)s%(watchlist)s%(rate)s%(versions)s%(more)s
             </control>
         </control>
 
@@ -742,6 +742,14 @@ def build():
        'start_over': round_button(304, 'silo/start_over.png', '!%s + %s + ListItem.IsResumable' % (SHOW, NOT_REQUEST),
                                   'PlayMedia($ESCINFO[ListItem.FileNameAndPath],noresume)</onclick>\n'
                                   '                    <onclick>Dialog.Close(movieinformation)'),
+       # Shuffle, as Netflix's "Play something": a random episode of the show
+       # (unwatched first), or a random film of the box set (SiloKodiConnect).
+       'shuffle': round_button(305, 'silo/icon_shuffle.png', '[%s | %s] + System.AddonIsEnabled(plugin.video.silokodiconnect)' % (SHOW, BOX_SET),
+                               'noop</onclick>\n'
+                               '                    <onclick condition="String.IsEqual(ListItem.DBType,set)">RunPlugin(plugin://plugin.video.silokodiconnect/'
+                               '?mode=shuffle&amp;scope=set&amp;id=$INFO[ListItem.DBID])</onclick>\n'
+                               '                    <onclick condition="!String.IsEqual(ListItem.DBType,set)">RunPlugin(plugin://plugin.video.silokodiconnect/'
+                               '?mode=shuffle&amp;scope=tvshow&amp;id=$INFO[ListItem.DBID])'),
        'previous': round_button(302, 'silo/icon_previous.png', 'String.IsEqual(ListItem.DBType,episode)',
                                 'RunPlugin(plugin://plugin.video.silokodiconnect/?mode=previous&amp;dbid=$INFO[ListItem.DBID])'),
        # Watched (a show: every episode), a toggle as Watchlist's and Rate's: a
@@ -1469,7 +1477,7 @@ def add_timers():
 # The action row's buttons in order, with the control whose visibility counts
 # (round buttons and Play sit in groups, which Kodi's grouplist can't move
 # between, so each button names its neighbours).
-ACTIONS = [(300, 1300), (301, 301), (308, 1008), (318, 1018), (304, 1304), (302, 1302), (11, 1011), (351, 1351), (352, 1352),
+ACTIONS = [(300, 1300), (301, 301), (308, 1008), (318, 1018), (304, 1304), (302, 1302), (305, 1305), (11, 1011), (351, 1351), (352, 1352),
            (353, 1353), (14, 1014), (303, 1303)]
 
 

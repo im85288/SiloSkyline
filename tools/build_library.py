@@ -77,6 +77,10 @@ HERO_ID, LIST_VIEW_ID = 57, 58
 VIEW_ID, VIEW_LIST_ID = 72, 73
 # Infuse's Unwatched filter: a pill left of View, kept for every Browse list.
 UNWATCHED_ID = 74
+# Shuffle (SiloKodiConnect's mode=shuffle): a round button left of Show, for films and series.
+SHUFFLE_ID = 75
+SHUFFLE_SHOWN = ('[String.IsEqual(%s,movies) | String.IsEqual(%s,tvshows)] + String.IsEmpty(%s) + '
+                 'System.AddonIsEnabled(plugin.video.silokodiconnect)')
 UNWATCHED = 'Skin.HasSetting(silo.unwatched)'
 # Silo's box sets in a films grid: SiloKodiConnect tags each box set's films but
 # its first by title, which the grid hides (BOX_SET_MEMBER, kodidb.py); the
@@ -467,7 +471,9 @@ def sort_controls():
             <texturenofocus border="28" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
             <visible>!%(personal)s</visible>
 %(open_list)s
-            <onleft>noop</onleft><onright>%(unwatched)d</onright><onup>noop</onup>
+            <onleft>noop</onleft><onup>noop</onup>
+            <onright condition="Control.IsVisible(%(shuffle)d)">%(shuffle)d</onright>
+            <onright condition="!Control.IsVisible(%(shuffle)d)">%(unwatched)d</onright>
         </control>%(pill_icons)s
         <!-- DROPDOWN -->
         <control type="group">
@@ -495,7 +501,7 @@ def sort_controls():
             </control>
         </control>
         <!-- END DROPDOWN -->
-''' % {'pill': SORT_ID, 'list': SORT_LIST_ID, 'x': SAFE_X, 'top': SORT_TOP, 'text': TEXT,
+''' % {'shuffle': SHUFFLE_ID, 'pill': SORT_ID, 'list': SORT_LIST_ID, 'x': SAFE_X, 'top': SORT_TOP, 'text': TEXT,
        'personal': IS_PERSONAL, 'ly': SORT_TOP + 68, 'frames': frames, 'head': SORT_HEAD,
        'lw': SORT_W - 32, 'lh': len(SORTS) * SORT_ROW, 'row': SORT_ROW, 'normal': row(False), 'focused': row(True),
        'items': items, 'open_list': open_list, 'view': VIEW_ID, 'unwatched': UNWATCHED_ID,
@@ -632,7 +638,32 @@ def view_controls():
             <texturenofocus border="28" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
             <visible>!%(personal)s</visible>
             <onclick>Skin.ToggleSetting(silo.unwatched)</onclick>
-%(unwatched_down)s            <onleft>%(sort)d</onleft><onright>%(pill)d</onright><onup>noop</onup>
+%(unwatched_down)s            <onleft condition="Control.IsVisible(%(shuffle)d)">%(shuffle)d</onleft>
+            <onleft condition="!Control.IsVisible(%(shuffle)d)">%(sort)d</onleft>
+            <onright>%(pill)d</onright><onup>noop</onup>
+        </control>
+        <!-- Shuffle, as Netflix's "Play something": a random film not yet watched,
+             or a random show's next episode. -->
+        <control type="button" id="%(shuffle)d">
+            <right>%(shx)d</right><top>%(top)d</top>
+            <width>56</width><height>56</height>
+            <label />
+            <texturefocus border="28" colordiffuse="%(text)s">silo/pill.png</texturefocus>
+            <texturenofocus border="28" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
+            <visible>%(shuffle_shown)s</visible>
+            <onclick condition="String.IsEqual(%(type)s,movies)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=shuffle&amp;scope=movies)</onclick>
+            <onclick condition="String.IsEqual(%(type)s,tvshows)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=shuffle&amp;scope=tvshows)</onclick>
+%(unwatched_down)s            <onleft>%(sort)d</onleft><onright>%(unwatched)d</onright><onup>noop</onup>
+        </control>
+        <control type="image">
+            <right>%(shxi)d</right><top>%(shiy)d</top><width>28</width><height>28</height>
+            <texture colordiffuse="FF000000">silo/icon_shuffle.png</texture>
+            <visible>%(shuffle_shown)s + Control.HasFocus(%(shuffle)d)</visible>
+        </control>
+        <control type="image">
+            <right>%(shxi)d</right><top>%(shiy)d</top><width>28</width><height>28</height>
+            <texture colordiffuse="%(text)s">silo/icon_shuffle.png</texture>
+            <visible>%(shuffle_shown)s + !Control.HasFocus(%(shuffle)d)</visible>
         </control>
         <!-- DROPDOWN -->
         <control type="group">
@@ -791,6 +822,9 @@ def view_controls():
         </control>
 """ % {'box': BOX_SET, 'list': VIEW_LIST_ID, 'pill': VIEW_ID, 'px': SAFE_X + AZ_W + 24, 'pw': 260, 'top': SORT_TOP,
        'unwatched': UNWATCHED_ID, 'ux': SAFE_X + AZ_W + 24 + 260 + 16, 'uw': 300,
+       'shuffle': SHUFFLE_ID, 'shuffle_shown': SHUFFLE_SHOWN % (TYPE, TYPE, LIST), 'type': TYPE,
+       'shx': SAFE_X + AZ_W + 24 + 260 + 16 + 300 + 16, 'shxi': SAFE_X + AZ_W + 24 + 260 + 16 + 300 + 16 + 14,
+       'shiy': SORT_TOP + 14,
        'unwatched_down': ''.join('            <ondown condition="%s">%s</ondown>\n' % (c, a) for c, a in focus_view()),
        'ly': SORT_TOP + 68, 'open_list': open_list, 'fh': SORT_HEAD + 16 + SORT_ROW * len(VIEWS), 'head': SORT_HEAD,
        'x': SAFE_X, 'text': TEXT, 'dim': TEXT_DIM, 'personal': IS_PERSONAL, 'sort': SORT_ID, 'vw': VIEW_W,

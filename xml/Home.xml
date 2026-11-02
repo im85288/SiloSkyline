@@ -273,6 +273,95 @@
                     <texturefocus border="8" colordiffuse="B3FFFFFF">silo/badge_outline.png</texturefocus>
                     <visible>$EXP[HasSiloBadge3]</visible>
                 </control>
+                <visible>!ControlGroup(4800).HasFocus()</visible>
+            </control>
+            <!-- The hero's Play and More info (Up from Home's top row), in the badges' place. -->
+            <control type="grouplist" id="4800">
+                <top>540</top>
+                <width>1000</width><height>56</height>
+                <orientation>horizontal</orientation>
+                <itemgap>14</itemgap>
+                <visible allowhiddenfocus="true">ControlGroup(4800).HasFocus()</visible>
+                <control type="group" id="4901">
+                    <width>180</width><height>56</height>
+                    <control type="button" id="4801">
+                        <width>180</width><height>56</height>
+                        <label />
+                        <texturefocus border="28" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                        <texturenofocus border="28" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
+                        <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=playitem&amp;type=$VAR[SiloHeroType]&amp;dbid=$VAR[SiloHeroDbid])</onclick>
+                        <onup>SetFocus(9002)</onup>
+                        <onleft>SetFocus(4801)</onleft><onright>SetFocus(4802)</onright>
+                        <ondown>SetFocus($INFO[Window(Home).Property(silo.row)])</ondown>
+                        <onback>SetFocus($INFO[Window(Home).Property(silo.row)])</onback>
+                    </control>
+                    <control type="image">
+                        <left>26</left><top>15</top><width>26</width><height>26</height>
+                        <texture colordiffuse="SkylineFocusText">silo/icon_play.png</texture>
+                        <visible>Control.HasFocus(4801)</visible>
+                    </control>
+                    <control type="image">
+                        <left>26</left><top>15</top><width>26</width><height>26</height>
+                        <texture colordiffuse="FFEDEDED">silo/icon_play.png</texture>
+                        <visible>!Control.HasFocus(4801)</visible>
+                    </control>
+                    <control type="label">
+                        <left>66</left><width>100</width><height>56</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>SkylineFocusText</textcolor>
+                        <label>Play</label>
+                        <visible>Control.HasFocus(4801)</visible>
+                    </control>
+                    <control type="label">
+                        <left>66</left><width>100</width><height>56</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>Play</label>
+                        <visible>!Control.HasFocus(4801)</visible>
+                    </control>
+                </control>
+                <control type="group" id="4902">
+                    <width>230</width><height>56</height>
+                    <control type="button" id="4802">
+                        <width>230</width><height>56</height>
+                        <label />
+                        <texturefocus border="28" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                        <texturenofocus border="28" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
+                        <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$VAR[SiloHeroType]&amp;dbid=$VAR[SiloHeroDbid])</onclick>
+                        <onup>SetFocus(9002)</onup>
+                        <onleft>SetFocus(4801)</onleft><onright>SetFocus(4802)</onright>
+                        <ondown>SetFocus($INFO[Window(Home).Property(silo.row)])</ondown>
+                        <onback>SetFocus($INFO[Window(Home).Property(silo.row)])</onback>
+                    </control>
+                    <control type="image">
+                        <left>26</left><top>15</top><width>26</width><height>26</height>
+                        <texture colordiffuse="SkylineFocusText">silo/icon_info.png</texture>
+                        <visible>Control.HasFocus(4802)</visible>
+                    </control>
+                    <control type="image">
+                        <left>26</left><top>15</top><width>26</width><height>26</height>
+                        <texture colordiffuse="FFEDEDED">silo/icon_info.png</texture>
+                        <visible>!Control.HasFocus(4802)</visible>
+                    </control>
+                    <control type="label">
+                        <left>66</left><width>150</width><height>56</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>SkylineFocusText</textcolor>
+                        <label>More info</label>
+                        <visible>Control.HasFocus(4802)</visible>
+                    </control>
+                    <control type="label">
+                        <left>66</left><width>150</width><height>56</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>More info</label>
+                        <visible>!Control.HasFocus(4802)</visible>
+                    </control>
+                </control>
             </control>
         </control>
 
@@ -338,7 +427,8 @@
                     <ondown condition="$EXP[SiloRow5003] + !$EXP[SiloRow5002]">SetFocus(5003)</ondown>
                     <ondown condition="$EXP[SiloRow5004] + !$EXP[SiloRow5002] + !$EXP[SiloRow5003]">SetFocus(5004)</ondown>
                     <ondown condition="$EXP[SiloRow5005] + !$EXP[SiloRow5002] + !$EXP[SiloRow5003] + !$EXP[SiloRow5004]">SetFocus(5005)</ondown>
-                    <onup>SetFocus(9002)</onup>
+                    <onup condition="$EXP[HasSiloHeroTitle]">SetFocus(4801)</onup>
+                    <onup condition="!$EXP[HasSiloHeroTitle]">SetFocus(9002)</onup>
                     <onback>SetFocus(9002)</onback>
                     <content>
                         <item><label>$INFO[Window(Home).Property(silo.home.1.1.label)]</label><property name="home.type">$INFO[Window(Home).Property(silo.home.1.1.type)]</property><property name="home.dbid">$INFO[Window(Home).Property(silo.home.1.1.dbid)]</property><property name="home.card.title">$INFO[Window(Home).Property(silo.home.1.1.card.title)]</property><property name="home.card.sub">$INFO[Window(Home).Property(silo.home.1.1.card.sub)]</property><property name="home.card.wide_sub">$INFO[Window(Home).Property(silo.home.1.1.card.wide_sub)]</property><property name="home.hero.title">$INFO[Window(Home).Property(silo.home.1.1.hero.title)]</property><property name="home.hero.meta">$INFO[Window(Home).Property(silo.home.1.1.hero.meta)]</property><property name="home.hero.facts">$INFO[Window(Home).Property(silo.home.1.1.hero.facts)]</property><property name="home.rating.imdb">$INFO[Window(Home).Property(silo.home.1.1.rating.imdb)]</property><property name="home.rating.tmdb">$INFO[Window(Home).Property(silo.home.1.1.rating.tmdb)]</property><property name="home.rating.rtcritic">$INFO[Window(Home).Property(silo.home.1.1.rating.rtcritic)]</property><property name="home.hero.detail">$INFO[Window(Home).Property(silo.home.1.1.hero.detail)]</property><property name="home.plot">$INFO[Window(Home).Property(silo.home.1.1.plot)]</property><property name="home.mpaa">$INFO[Window(Home).Property(silo.home.1.1.mpaa)]</property><property name="home.badge1">$INFO[Window(Home).Property(silo.home.1.1.badge1)]</property><property name="home.badge2">$INFO[Window(Home).Property(silo.home.1.1.badge2)]</property><property name="home.badge3">$INFO[Window(Home).Property(silo.home.1.1.badge3)]</property><property name="home.tint">$INFO[Window(Home).Property(silo.home.1.1.tint)]</property><property name="home.percent">$INFO[Window(Home).Property(silo.home.1.1.percent)]</property><property name="home.playcount">$INFO[Window(Home).Property(silo.home.1.1.playcount)]</property><property name="home.new">$INFO[Window(Home).Property(silo.home.1.1.new)]</property><property name="home.left">$INFO[Window(Home).Property(silo.home.1.1.left)]</property><property name="home.dismiss">$INFO[Window(Home).Property(silo.home.1.1.dismiss)]</property><property name="home.rank">$INFO[Window(Home).Property(silo.home.1.1.rank)]</property><property name="home.place">$INFO[Window(Home).Property(silo.home.1.1.place)]</property><property name="home.art.poster">$INFO[Window(Home).Property(silo.home.1.1.art.poster)]</property><property name="home.art.landscape">$INFO[Window(Home).Property(silo.home.1.1.art.landscape)]</property><property name="home.art.fanart">$INFO[Window(Home).Property(silo.home.1.1.art.fanart)]</property><property name="home.art.clearlogo">$INFO[Window(Home).Property(silo.home.1.1.art.clearlogo)]</property><visible>!String.IsEmpty(Window(Home).Property(silo.home.1.1.type))</visible></item>
@@ -431,7 +521,8 @@
                     <ondown condition="$EXP[SiloRow5005] + !$EXP[SiloRow5003] + !$EXP[SiloRow5004]">SetFocus(5005)</ondown>
                     <ondown condition="$EXP[SiloRow5006] + !$EXP[SiloRow5003] + !$EXP[SiloRow5004] + !$EXP[SiloRow5005]">SetFocus(5006)</ondown>
                     <onup condition="$EXP[SiloRow5001]">SetFocus(5001)</onup>
-                    <onup condition="!$EXP[SiloRow5001]">SetFocus(9002)</onup>
+                    <onup condition="!$EXP[SiloRow5001] + $EXP[HasSiloHeroTitle]">SetFocus(4801)</onup>
+                    <onup condition="!$EXP[SiloRow5001] + !$EXP[HasSiloHeroTitle]">SetFocus(9002)</onup>
                     <onback>SetFocus(9002)</onback>
                     <content>
                         <item><label>$INFO[Window(Home).Property(silo.home.2.1.label)]</label><property name="home.type">$INFO[Window(Home).Property(silo.home.2.1.type)]</property><property name="home.dbid">$INFO[Window(Home).Property(silo.home.2.1.dbid)]</property><property name="home.card.title">$INFO[Window(Home).Property(silo.home.2.1.card.title)]</property><property name="home.card.sub">$INFO[Window(Home).Property(silo.home.2.1.card.sub)]</property><property name="home.card.wide_sub">$INFO[Window(Home).Property(silo.home.2.1.card.wide_sub)]</property><property name="home.hero.title">$INFO[Window(Home).Property(silo.home.2.1.hero.title)]</property><property name="home.hero.meta">$INFO[Window(Home).Property(silo.home.2.1.hero.meta)]</property><property name="home.hero.facts">$INFO[Window(Home).Property(silo.home.2.1.hero.facts)]</property><property name="home.rating.imdb">$INFO[Window(Home).Property(silo.home.2.1.rating.imdb)]</property><property name="home.rating.tmdb">$INFO[Window(Home).Property(silo.home.2.1.rating.tmdb)]</property><property name="home.rating.rtcritic">$INFO[Window(Home).Property(silo.home.2.1.rating.rtcritic)]</property><property name="home.hero.detail">$INFO[Window(Home).Property(silo.home.2.1.hero.detail)]</property><property name="home.plot">$INFO[Window(Home).Property(silo.home.2.1.plot)]</property><property name="home.mpaa">$INFO[Window(Home).Property(silo.home.2.1.mpaa)]</property><property name="home.badge1">$INFO[Window(Home).Property(silo.home.2.1.badge1)]</property><property name="home.badge2">$INFO[Window(Home).Property(silo.home.2.1.badge2)]</property><property name="home.badge3">$INFO[Window(Home).Property(silo.home.2.1.badge3)]</property><property name="home.tint">$INFO[Window(Home).Property(silo.home.2.1.tint)]</property><property name="home.percent">$INFO[Window(Home).Property(silo.home.2.1.percent)]</property><property name="home.playcount">$INFO[Window(Home).Property(silo.home.2.1.playcount)]</property><property name="home.new">$INFO[Window(Home).Property(silo.home.2.1.new)]</property><property name="home.left">$INFO[Window(Home).Property(silo.home.2.1.left)]</property><property name="home.dismiss">$INFO[Window(Home).Property(silo.home.2.1.dismiss)]</property><property name="home.rank">$INFO[Window(Home).Property(silo.home.2.1.rank)]</property><property name="home.place">$INFO[Window(Home).Property(silo.home.2.1.place)]</property><property name="home.art.poster">$INFO[Window(Home).Property(silo.home.2.1.art.poster)]</property><property name="home.art.landscape">$INFO[Window(Home).Property(silo.home.2.1.art.landscape)]</property><property name="home.art.fanart">$INFO[Window(Home).Property(silo.home.2.1.art.fanart)]</property><property name="home.art.clearlogo">$INFO[Window(Home).Property(silo.home.2.1.art.clearlogo)]</property><visible>!String.IsEmpty(Window(Home).Property(silo.home.2.1.type))</visible></item>
@@ -525,7 +616,8 @@
                     <ondown condition="$EXP[SiloRow5007] + !$EXP[SiloRow5004] + !$EXP[SiloRow5005] + !$EXP[SiloRow5006]">SetFocus(5007)</ondown>
                     <onup condition="$EXP[SiloRow5002]">SetFocus(5002)</onup>
                     <onup condition="$EXP[SiloRow5001] + !$EXP[SiloRow5002]">SetFocus(5001)</onup>
-                    <onup condition="!$EXP[SiloRow5002] + !$EXP[SiloRow5001]">SetFocus(9002)</onup>
+                    <onup condition="!$EXP[SiloRow5002] + !$EXP[SiloRow5001] + $EXP[HasSiloHeroTitle]">SetFocus(4801)</onup>
+                    <onup condition="!$EXP[SiloRow5002] + !$EXP[SiloRow5001] + !$EXP[HasSiloHeroTitle]">SetFocus(9002)</onup>
                     <onback>SetFocus(9002)</onback>
                     <content>
                         <item><label>$INFO[Window(Home).Property(silo.home.3.1.label)]</label><property name="home.type">$INFO[Window(Home).Property(silo.home.3.1.type)]</property><property name="home.dbid">$INFO[Window(Home).Property(silo.home.3.1.dbid)]</property><property name="home.card.title">$INFO[Window(Home).Property(silo.home.3.1.card.title)]</property><property name="home.card.sub">$INFO[Window(Home).Property(silo.home.3.1.card.sub)]</property><property name="home.card.wide_sub">$INFO[Window(Home).Property(silo.home.3.1.card.wide_sub)]</property><property name="home.hero.title">$INFO[Window(Home).Property(silo.home.3.1.hero.title)]</property><property name="home.hero.meta">$INFO[Window(Home).Property(silo.home.3.1.hero.meta)]</property><property name="home.hero.facts">$INFO[Window(Home).Property(silo.home.3.1.hero.facts)]</property><property name="home.rating.imdb">$INFO[Window(Home).Property(silo.home.3.1.rating.imdb)]</property><property name="home.rating.tmdb">$INFO[Window(Home).Property(silo.home.3.1.rating.tmdb)]</property><property name="home.rating.rtcritic">$INFO[Window(Home).Property(silo.home.3.1.rating.rtcritic)]</property><property name="home.hero.detail">$INFO[Window(Home).Property(silo.home.3.1.hero.detail)]</property><property name="home.plot">$INFO[Window(Home).Property(silo.home.3.1.plot)]</property><property name="home.mpaa">$INFO[Window(Home).Property(silo.home.3.1.mpaa)]</property><property name="home.badge1">$INFO[Window(Home).Property(silo.home.3.1.badge1)]</property><property name="home.badge2">$INFO[Window(Home).Property(silo.home.3.1.badge2)]</property><property name="home.badge3">$INFO[Window(Home).Property(silo.home.3.1.badge3)]</property><property name="home.tint">$INFO[Window(Home).Property(silo.home.3.1.tint)]</property><property name="home.percent">$INFO[Window(Home).Property(silo.home.3.1.percent)]</property><property name="home.playcount">$INFO[Window(Home).Property(silo.home.3.1.playcount)]</property><property name="home.new">$INFO[Window(Home).Property(silo.home.3.1.new)]</property><property name="home.left">$INFO[Window(Home).Property(silo.home.3.1.left)]</property><property name="home.dismiss">$INFO[Window(Home).Property(silo.home.3.1.dismiss)]</property><property name="home.rank">$INFO[Window(Home).Property(silo.home.3.1.rank)]</property><property name="home.place">$INFO[Window(Home).Property(silo.home.3.1.place)]</property><property name="home.art.poster">$INFO[Window(Home).Property(silo.home.3.1.art.poster)]</property><property name="home.art.landscape">$INFO[Window(Home).Property(silo.home.3.1.art.landscape)]</property><property name="home.art.fanart">$INFO[Window(Home).Property(silo.home.3.1.art.fanart)]</property><property name="home.art.clearlogo">$INFO[Window(Home).Property(silo.home.3.1.art.clearlogo)]</property><visible>!String.IsEmpty(Window(Home).Property(silo.home.3.1.type))</visible></item>
@@ -620,7 +712,8 @@
                     <onup condition="$EXP[SiloRow5003]">SetFocus(5003)</onup>
                     <onup condition="$EXP[SiloRow5002] + !$EXP[SiloRow5003]">SetFocus(5002)</onup>
                     <onup condition="$EXP[SiloRow5001] + !$EXP[SiloRow5003] + !$EXP[SiloRow5002]">SetFocus(5001)</onup>
-                    <onup condition="!$EXP[SiloRow5003] + !$EXP[SiloRow5002] + !$EXP[SiloRow5001]">SetFocus(9002)</onup>
+                    <onup condition="!$EXP[SiloRow5003] + !$EXP[SiloRow5002] + !$EXP[SiloRow5001] + $EXP[HasSiloHeroTitle]">SetFocus(4801)</onup>
+                    <onup condition="!$EXP[SiloRow5003] + !$EXP[SiloRow5002] + !$EXP[SiloRow5001] + !$EXP[HasSiloHeroTitle]">SetFocus(9002)</onup>
                     <onback>SetFocus(9002)</onback>
                     <content>
                         <item><label>$INFO[Window(Home).Property(silo.home.4.1.label)]</label><property name="home.type">$INFO[Window(Home).Property(silo.home.4.1.type)]</property><property name="home.dbid">$INFO[Window(Home).Property(silo.home.4.1.dbid)]</property><property name="home.card.title">$INFO[Window(Home).Property(silo.home.4.1.card.title)]</property><property name="home.card.sub">$INFO[Window(Home).Property(silo.home.4.1.card.sub)]</property><property name="home.card.wide_sub">$INFO[Window(Home).Property(silo.home.4.1.card.wide_sub)]</property><property name="home.hero.title">$INFO[Window(Home).Property(silo.home.4.1.hero.title)]</property><property name="home.hero.meta">$INFO[Window(Home).Property(silo.home.4.1.hero.meta)]</property><property name="home.hero.facts">$INFO[Window(Home).Property(silo.home.4.1.hero.facts)]</property><property name="home.rating.imdb">$INFO[Window(Home).Property(silo.home.4.1.rating.imdb)]</property><property name="home.rating.tmdb">$INFO[Window(Home).Property(silo.home.4.1.rating.tmdb)]</property><property name="home.rating.rtcritic">$INFO[Window(Home).Property(silo.home.4.1.rating.rtcritic)]</property><property name="home.hero.detail">$INFO[Window(Home).Property(silo.home.4.1.hero.detail)]</property><property name="home.plot">$INFO[Window(Home).Property(silo.home.4.1.plot)]</property><property name="home.mpaa">$INFO[Window(Home).Property(silo.home.4.1.mpaa)]</property><property name="home.badge1">$INFO[Window(Home).Property(silo.home.4.1.badge1)]</property><property name="home.badge2">$INFO[Window(Home).Property(silo.home.4.1.badge2)]</property><property name="home.badge3">$INFO[Window(Home).Property(silo.home.4.1.badge3)]</property><property name="home.tint">$INFO[Window(Home).Property(silo.home.4.1.tint)]</property><property name="home.percent">$INFO[Window(Home).Property(silo.home.4.1.percent)]</property><property name="home.playcount">$INFO[Window(Home).Property(silo.home.4.1.playcount)]</property><property name="home.new">$INFO[Window(Home).Property(silo.home.4.1.new)]</property><property name="home.left">$INFO[Window(Home).Property(silo.home.4.1.left)]</property><property name="home.dismiss">$INFO[Window(Home).Property(silo.home.4.1.dismiss)]</property><property name="home.rank">$INFO[Window(Home).Property(silo.home.4.1.rank)]</property><property name="home.place">$INFO[Window(Home).Property(silo.home.4.1.place)]</property><property name="home.art.poster">$INFO[Window(Home).Property(silo.home.4.1.art.poster)]</property><property name="home.art.landscape">$INFO[Window(Home).Property(silo.home.4.1.art.landscape)]</property><property name="home.art.fanart">$INFO[Window(Home).Property(silo.home.4.1.art.fanart)]</property><property name="home.art.clearlogo">$INFO[Window(Home).Property(silo.home.4.1.art.clearlogo)]</property><visible>!String.IsEmpty(Window(Home).Property(silo.home.4.1.type))</visible></item>
@@ -715,7 +808,8 @@
                     <onup condition="$EXP[SiloRow5004]">SetFocus(5004)</onup>
                     <onup condition="$EXP[SiloRow5003] + !$EXP[SiloRow5004]">SetFocus(5003)</onup>
                     <onup condition="$EXP[SiloRow5002] + !$EXP[SiloRow5004] + !$EXP[SiloRow5003]">SetFocus(5002)</onup>
-                    <onup condition="!$EXP[SiloRow5004] + !$EXP[SiloRow5003] + !$EXP[SiloRow5002]">SetFocus(9002)</onup>
+                    <onup condition="!$EXP[SiloRow5004] + !$EXP[SiloRow5003] + !$EXP[SiloRow5002] + $EXP[HasSiloHeroTitle]">SetFocus(4801)</onup>
+                    <onup condition="!$EXP[SiloRow5004] + !$EXP[SiloRow5003] + !$EXP[SiloRow5002] + !$EXP[HasSiloHeroTitle]">SetFocus(9002)</onup>
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.5.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.5.order)]" limit="$INFO[Window(Home).Property(silo.home.5.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.5.poster)]$INFO[Window(Home).Property(silo.home.5.landscape)]$INFO[Window(Home).Property(silo.home.5.ranked)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.5.style),landscape)">
@@ -789,7 +883,8 @@
                     <onup condition="$EXP[SiloRow5005]">SetFocus(5005)</onup>
                     <onup condition="$EXP[SiloRow5004] + !$EXP[SiloRow5005]">SetFocus(5004)</onup>
                     <onup condition="$EXP[SiloRow5003] + !$EXP[SiloRow5005] + !$EXP[SiloRow5004]">SetFocus(5003)</onup>
-                    <onup condition="!$EXP[SiloRow5005] + !$EXP[SiloRow5004] + !$EXP[SiloRow5003]">SetFocus(9002)</onup>
+                    <onup condition="!$EXP[SiloRow5005] + !$EXP[SiloRow5004] + !$EXP[SiloRow5003] + $EXP[HasSiloHeroTitle]">SetFocus(4801)</onup>
+                    <onup condition="!$EXP[SiloRow5005] + !$EXP[SiloRow5004] + !$EXP[SiloRow5003] + !$EXP[HasSiloHeroTitle]">SetFocus(9002)</onup>
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.6.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.6.order)]" limit="$INFO[Window(Home).Property(silo.home.6.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.6.poster)]$INFO[Window(Home).Property(silo.home.6.landscape)]$INFO[Window(Home).Property(silo.home.6.ranked)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.6.style),landscape)">
@@ -863,7 +958,8 @@
                     <onup condition="$EXP[SiloRow5006]">SetFocus(5006)</onup>
                     <onup condition="$EXP[SiloRow5005] + !$EXP[SiloRow5006]">SetFocus(5005)</onup>
                     <onup condition="$EXP[SiloRow5004] + !$EXP[SiloRow5006] + !$EXP[SiloRow5005]">SetFocus(5004)</onup>
-                    <onup condition="!$EXP[SiloRow5006] + !$EXP[SiloRow5005] + !$EXP[SiloRow5004]">SetFocus(9002)</onup>
+                    <onup condition="!$EXP[SiloRow5006] + !$EXP[SiloRow5005] + !$EXP[SiloRow5004] + $EXP[HasSiloHeroTitle]">SetFocus(4801)</onup>
+                    <onup condition="!$EXP[SiloRow5006] + !$EXP[SiloRow5005] + !$EXP[SiloRow5004] + !$EXP[HasSiloHeroTitle]">SetFocus(9002)</onup>
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.7.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.7.order)]" limit="$INFO[Window(Home).Property(silo.home.7.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.7.poster)]$INFO[Window(Home).Property(silo.home.7.landscape)]$INFO[Window(Home).Property(silo.home.7.ranked)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.7.style),landscape)">
@@ -937,7 +1033,8 @@
                     <onup condition="$EXP[SiloRow5007]">SetFocus(5007)</onup>
                     <onup condition="$EXP[SiloRow5006] + !$EXP[SiloRow5007]">SetFocus(5006)</onup>
                     <onup condition="$EXP[SiloRow5005] + !$EXP[SiloRow5007] + !$EXP[SiloRow5006]">SetFocus(5005)</onup>
-                    <onup condition="!$EXP[SiloRow5007] + !$EXP[SiloRow5006] + !$EXP[SiloRow5005]">SetFocus(9002)</onup>
+                    <onup condition="!$EXP[SiloRow5007] + !$EXP[SiloRow5006] + !$EXP[SiloRow5005] + $EXP[HasSiloHeroTitle]">SetFocus(4801)</onup>
+                    <onup condition="!$EXP[SiloRow5007] + !$EXP[SiloRow5006] + !$EXP[SiloRow5005] + !$EXP[HasSiloHeroTitle]">SetFocus(9002)</onup>
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.8.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.8.order)]" limit="$INFO[Window(Home).Property(silo.home.8.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.8.poster)]$INFO[Window(Home).Property(silo.home.8.landscape)]$INFO[Window(Home).Property(silo.home.8.ranked)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.8.style),landscape)">
@@ -1011,7 +1108,8 @@
                     <onup condition="$EXP[SiloRow5008]">SetFocus(5008)</onup>
                     <onup condition="$EXP[SiloRow5007] + !$EXP[SiloRow5008]">SetFocus(5007)</onup>
                     <onup condition="$EXP[SiloRow5006] + !$EXP[SiloRow5008] + !$EXP[SiloRow5007]">SetFocus(5006)</onup>
-                    <onup condition="!$EXP[SiloRow5008] + !$EXP[SiloRow5007] + !$EXP[SiloRow5006]">SetFocus(9002)</onup>
+                    <onup condition="!$EXP[SiloRow5008] + !$EXP[SiloRow5007] + !$EXP[SiloRow5006] + $EXP[HasSiloHeroTitle]">SetFocus(4801)</onup>
+                    <onup condition="!$EXP[SiloRow5008] + !$EXP[SiloRow5007] + !$EXP[SiloRow5006] + !$EXP[HasSiloHeroTitle]">SetFocus(9002)</onup>
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.9.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.9.order)]" limit="$INFO[Window(Home).Property(silo.home.9.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.9.poster)]$INFO[Window(Home).Property(silo.home.9.landscape)]$INFO[Window(Home).Property(silo.home.9.ranked)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.9.style),landscape)">
@@ -1085,7 +1183,8 @@
                     <onup condition="$EXP[SiloRow5009]">SetFocus(5009)</onup>
                     <onup condition="$EXP[SiloRow5008] + !$EXP[SiloRow5009]">SetFocus(5008)</onup>
                     <onup condition="$EXP[SiloRow5007] + !$EXP[SiloRow5009] + !$EXP[SiloRow5008]">SetFocus(5007)</onup>
-                    <onup condition="!$EXP[SiloRow5009] + !$EXP[SiloRow5008] + !$EXP[SiloRow5007]">SetFocus(9002)</onup>
+                    <onup condition="!$EXP[SiloRow5009] + !$EXP[SiloRow5008] + !$EXP[SiloRow5007] + $EXP[HasSiloHeroTitle]">SetFocus(4801)</onup>
+                    <onup condition="!$EXP[SiloRow5009] + !$EXP[SiloRow5008] + !$EXP[SiloRow5007] + !$EXP[HasSiloHeroTitle]">SetFocus(9002)</onup>
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.10.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.10.order)]" limit="$INFO[Window(Home).Property(silo.home.10.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.10.poster)]$INFO[Window(Home).Property(silo.home.10.landscape)]$INFO[Window(Home).Property(silo.home.10.ranked)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.10.style),landscape)">
@@ -1159,7 +1258,8 @@
                     <onup condition="$EXP[SiloRow5010]">SetFocus(5010)</onup>
                     <onup condition="$EXP[SiloRow5009] + !$EXP[SiloRow5010]">SetFocus(5009)</onup>
                     <onup condition="$EXP[SiloRow5008] + !$EXP[SiloRow5010] + !$EXP[SiloRow5009]">SetFocus(5008)</onup>
-                    <onup condition="!$EXP[SiloRow5010] + !$EXP[SiloRow5009] + !$EXP[SiloRow5008]">SetFocus(9002)</onup>
+                    <onup condition="!$EXP[SiloRow5010] + !$EXP[SiloRow5009] + !$EXP[SiloRow5008] + $EXP[HasSiloHeroTitle]">SetFocus(4801)</onup>
+                    <onup condition="!$EXP[SiloRow5010] + !$EXP[SiloRow5009] + !$EXP[SiloRow5008] + !$EXP[HasSiloHeroTitle]">SetFocus(9002)</onup>
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.11.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.11.order)]" limit="$INFO[Window(Home).Property(silo.home.11.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.11.poster)]$INFO[Window(Home).Property(silo.home.11.landscape)]$INFO[Window(Home).Property(silo.home.11.ranked)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.11.style),landscape)">
@@ -1233,7 +1333,8 @@
                     <onup condition="$EXP[SiloRow5011]">SetFocus(5011)</onup>
                     <onup condition="$EXP[SiloRow5010] + !$EXP[SiloRow5011]">SetFocus(5010)</onup>
                     <onup condition="$EXP[SiloRow5009] + !$EXP[SiloRow5011] + !$EXP[SiloRow5010]">SetFocus(5009)</onup>
-                    <onup condition="!$EXP[SiloRow5011] + !$EXP[SiloRow5010] + !$EXP[SiloRow5009]">SetFocus(9002)</onup>
+                    <onup condition="!$EXP[SiloRow5011] + !$EXP[SiloRow5010] + !$EXP[SiloRow5009] + $EXP[HasSiloHeroTitle]">SetFocus(4801)</onup>
+                    <onup condition="!$EXP[SiloRow5011] + !$EXP[SiloRow5010] + !$EXP[SiloRow5009] + !$EXP[HasSiloHeroTitle]">SetFocus(9002)</onup>
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.12.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.12.order)]" limit="$INFO[Window(Home).Property(silo.home.12.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.12.poster)]$INFO[Window(Home).Property(silo.home.12.landscape)]$INFO[Window(Home).Property(silo.home.12.ranked)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.12.style),landscape)">
@@ -1307,7 +1408,8 @@
                     <onup condition="$EXP[SiloRow5012]">SetFocus(5012)</onup>
                     <onup condition="$EXP[SiloRow5011] + !$EXP[SiloRow5012]">SetFocus(5011)</onup>
                     <onup condition="$EXP[SiloRow5010] + !$EXP[SiloRow5012] + !$EXP[SiloRow5011]">SetFocus(5010)</onup>
-                    <onup condition="!$EXP[SiloRow5012] + !$EXP[SiloRow5011] + !$EXP[SiloRow5010]">SetFocus(9002)</onup>
+                    <onup condition="!$EXP[SiloRow5012] + !$EXP[SiloRow5011] + !$EXP[SiloRow5010] + $EXP[HasSiloHeroTitle]">SetFocus(4801)</onup>
+                    <onup condition="!$EXP[SiloRow5012] + !$EXP[SiloRow5011] + !$EXP[SiloRow5010] + !$EXP[HasSiloHeroTitle]">SetFocus(9002)</onup>
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.13.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.13.order)]" limit="$INFO[Window(Home).Property(silo.home.13.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.13.poster)]$INFO[Window(Home).Property(silo.home.13.landscape)]$INFO[Window(Home).Property(silo.home.13.ranked)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.13.style),landscape)">
@@ -1381,7 +1483,8 @@
                     <onup condition="$EXP[SiloRow5013]">SetFocus(5013)</onup>
                     <onup condition="$EXP[SiloRow5012] + !$EXP[SiloRow5013]">SetFocus(5012)</onup>
                     <onup condition="$EXP[SiloRow5011] + !$EXP[SiloRow5013] + !$EXP[SiloRow5012]">SetFocus(5011)</onup>
-                    <onup condition="!$EXP[SiloRow5013] + !$EXP[SiloRow5012] + !$EXP[SiloRow5011]">SetFocus(9002)</onup>
+                    <onup condition="!$EXP[SiloRow5013] + !$EXP[SiloRow5012] + !$EXP[SiloRow5011] + $EXP[HasSiloHeroTitle]">SetFocus(4801)</onup>
+                    <onup condition="!$EXP[SiloRow5013] + !$EXP[SiloRow5012] + !$EXP[SiloRow5011] + !$EXP[HasSiloHeroTitle]">SetFocus(9002)</onup>
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.14.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.14.order)]" limit="$INFO[Window(Home).Property(silo.home.14.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.14.poster)]$INFO[Window(Home).Property(silo.home.14.landscape)]$INFO[Window(Home).Property(silo.home.14.ranked)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.14.style),landscape)">
@@ -1454,7 +1557,8 @@
                     <onup condition="$EXP[SiloRow5014]">SetFocus(5014)</onup>
                     <onup condition="$EXP[SiloRow5013] + !$EXP[SiloRow5014]">SetFocus(5013)</onup>
                     <onup condition="$EXP[SiloRow5012] + !$EXP[SiloRow5014] + !$EXP[SiloRow5013]">SetFocus(5012)</onup>
-                    <onup condition="!$EXP[SiloRow5014] + !$EXP[SiloRow5013] + !$EXP[SiloRow5012]">SetFocus(9002)</onup>
+                    <onup condition="!$EXP[SiloRow5014] + !$EXP[SiloRow5013] + !$EXP[SiloRow5012] + $EXP[HasSiloHeroTitle]">SetFocus(4801)</onup>
+                    <onup condition="!$EXP[SiloRow5014] + !$EXP[SiloRow5013] + !$EXP[SiloRow5012] + !$EXP[HasSiloHeroTitle]">SetFocus(9002)</onup>
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.15.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.15.order)]" limit="$INFO[Window(Home).Property(silo.home.15.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.15.poster)]$INFO[Window(Home).Property(silo.home.15.landscape)]$INFO[Window(Home).Property(silo.home.15.ranked)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.15.style),landscape)">
@@ -1526,7 +1630,8 @@
                     <onup condition="$EXP[SiloRow5015]">SetFocus(5015)</onup>
                     <onup condition="$EXP[SiloRow5014] + !$EXP[SiloRow5015]">SetFocus(5014)</onup>
                     <onup condition="$EXP[SiloRow5013] + !$EXP[SiloRow5015] + !$EXP[SiloRow5014]">SetFocus(5013)</onup>
-                    <onup condition="!$EXP[SiloRow5015] + !$EXP[SiloRow5014] + !$EXP[SiloRow5013]">SetFocus(9002)</onup>
+                    <onup condition="!$EXP[SiloRow5015] + !$EXP[SiloRow5014] + !$EXP[SiloRow5013] + $EXP[HasSiloHeroTitle]">SetFocus(4801)</onup>
+                    <onup condition="!$EXP[SiloRow5015] + !$EXP[SiloRow5014] + !$EXP[SiloRow5013] + !$EXP[HasSiloHeroTitle]">SetFocus(9002)</onup>
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.16.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.16.order)]" limit="$INFO[Window(Home).Property(silo.home.16.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.16.poster)]$INFO[Window(Home).Property(silo.home.16.landscape)]$INFO[Window(Home).Property(silo.home.16.ranked)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.16.style),landscape)">
@@ -1597,7 +1702,8 @@
                     <onup condition="$EXP[SiloRow5016]">SetFocus(5016)</onup>
                     <onup condition="$EXP[SiloRow5015] + !$EXP[SiloRow5016]">SetFocus(5015)</onup>
                     <onup condition="$EXP[SiloRow5014] + !$EXP[SiloRow5016] + !$EXP[SiloRow5015]">SetFocus(5014)</onup>
-                    <onup condition="!$EXP[SiloRow5016] + !$EXP[SiloRow5015] + !$EXP[SiloRow5014]">SetFocus(9002)</onup>
+                    <onup condition="!$EXP[SiloRow5016] + !$EXP[SiloRow5015] + !$EXP[SiloRow5014] + $EXP[HasSiloHeroTitle]">SetFocus(4801)</onup>
+                    <onup condition="!$EXP[SiloRow5016] + !$EXP[SiloRow5015] + !$EXP[SiloRow5014] + !$EXP[HasSiloHeroTitle]">SetFocus(9002)</onup>
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.17.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.17.order)]" limit="$INFO[Window(Home).Property(silo.home.17.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.17.poster)]$INFO[Window(Home).Property(silo.home.17.landscape)]$INFO[Window(Home).Property(silo.home.17.ranked)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.17.style),landscape)">
@@ -1667,7 +1773,8 @@
                     <onup condition="$EXP[SiloRow5017]">SetFocus(5017)</onup>
                     <onup condition="$EXP[SiloRow5016] + !$EXP[SiloRow5017]">SetFocus(5016)</onup>
                     <onup condition="$EXP[SiloRow5015] + !$EXP[SiloRow5017] + !$EXP[SiloRow5016]">SetFocus(5015)</onup>
-                    <onup condition="!$EXP[SiloRow5017] + !$EXP[SiloRow5016] + !$EXP[SiloRow5015]">SetFocus(9002)</onup>
+                    <onup condition="!$EXP[SiloRow5017] + !$EXP[SiloRow5016] + !$EXP[SiloRow5015] + $EXP[HasSiloHeroTitle]">SetFocus(4801)</onup>
+                    <onup condition="!$EXP[SiloRow5017] + !$EXP[SiloRow5016] + !$EXP[SiloRow5015] + !$EXP[HasSiloHeroTitle]">SetFocus(9002)</onup>
                     <onback>SetFocus(9002)</onback>
                     <content target="videos" sortby="$INFO[Window(Home).Property(silo.home.18.sort)]" sortorder="$INFO[Window(Home).Property(silo.home.18.order)]" limit="$INFO[Window(Home).Property(silo.home.18.limit)]" browse="never">$INFO[Window(Home).Property(silo.home.18.poster)]$INFO[Window(Home).Property(silo.home.18.landscape)]$INFO[Window(Home).Property(silo.home.18.ranked)]</content>
                     <itemlayout width="400" height="290" condition="String.IsEqual(Window(Home).Property(silo.home.18.style),landscape)">

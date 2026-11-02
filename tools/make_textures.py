@@ -470,7 +470,23 @@ if __name__ == '__main__':
         d1, d2, d3 = side(x1, y1, x2, y2), side(x2, y2, x3, y3), side(x3, y3, x1, y1)
         return not ((d1 < 0 or d2 < 0 or d3 < 0) and (d1 > 0 or d2 > 0 or d3 > 0))
 
+    def segment(u, v, ax, ay, bx, by, w):
+        dx, dy = bx - ax, by - ay
+        t = max(0.0, min(1.0, ((u - ax) * dx + (v - ay) * dy) / (dx * dx + dy * dy)))
+        return (u - ax - t * dx) ** 2 + (v - ay - t * dy) ** 2 <= (w / 2) ** 2
+
     SHAPES = {
+        # More info: an "i" in a ring.
+        'info': lambda u, v, w: (abs(((u - 0.5) ** 2 + (v - 0.5) ** 2) ** 0.5 - 0.42) <= w / 2
+                                 or ((u - 0.5) ** 2 + (v - 0.3) ** 2) ** 0.5 <= w * 0.75
+                                 or (abs(u - 0.5) <= w / 2 and 0.42 <= v <= 0.74)),
+        # Shuffle: two crossing paths, each ending in an arrowhead on the right.
+        'shuffle': lambda u, v, w: (segment(u, v, 0.1, 0.28, 0.32, 0.28, w) or segment(u, v, 0.32, 0.28, 0.62, 0.72, w)
+                                    or segment(u, v, 0.62, 0.72, 0.8, 0.72, w)
+                                    or segment(u, v, 0.1, 0.72, 0.32, 0.72, w) or segment(u, v, 0.32, 0.72, 0.62, 0.28, w)
+                                    or segment(u, v, 0.62, 0.28, 0.8, 0.28, w)
+                                    or triangle(u, v, ((0.78, 0.15), (0.78, 0.41), (0.95, 0.28)))
+                                    or triangle(u, v, ((0.78, 0.59), (0.78, 0.85), (0.95, 0.72)))),
         'play': lambda u, v, w: triangle(u, v, ((0.24, 0.12), (0.24, 0.88), (0.86, 0.5))),
         'pause': lambda u, v, w: (0.24 <= u <= 0.42 or 0.58 <= u <= 0.76) and 0.14 <= v <= 0.86,
         'previous': lambda u, v, w: (0.16 <= u <= 0.25 and 0.18 <= v <= 0.82) or

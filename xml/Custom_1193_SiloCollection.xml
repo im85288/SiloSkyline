@@ -402,7 +402,9 @@
             <onclick condition="String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.sort.tvshows),rating)">SetFocus(71,3,absolute)</onclick>
             <ondown condition="String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.sort.tvshows),rating)">SetFocus(71,3,absolute)</ondown>
 
-            <onleft>noop</onleft><onright>74</onright><onup>noop</onup>
+            <onleft>noop</onleft><onup>noop</onup>
+            <onright condition="Control.IsVisible(75)">75</onright>
+            <onright condition="!Control.IsVisible(75)">74</onright>
         </control>
             <control type="image">
                 <left>114</left><top>183</top><width>26</width><height>26</height>
@@ -451,7 +453,35 @@
             <ondown condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEmpty(Skin.String(silo.view.movies))] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEmpty(Skin.String(silo.view.tvshows))]]">SetFocus(50)</ondown>
             <ondown condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]]">SetFocus(57)</ondown>
             <ondown condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]]">SetFocus(58)</ondown>
-            <onleft>70</onleft><onright>72</onright><onup>noop</onup>
+            <onleft condition="Control.IsVisible(75)">75</onleft>
+            <onleft condition="!Control.IsVisible(75)">70</onleft>
+            <onright>72</onright><onup>noop</onup>
+        </control>
+        <!-- Shuffle, as Netflix's "Play something": a random film not yet watched,
+             or a random show's next episode. -->
+        <control type="button" id="75">
+            <right>800</right><top>168</top>
+            <width>56</width><height>56</height>
+            <label />
+            <texturefocus border="28" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+            <texturenofocus border="28" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
+            <visible>[String.IsEqual(Window(Home).Property(silo.browse.type),movies) | String.IsEqual(Window(Home).Property(silo.browse.type),tvshows)] + String.IsEmpty(Window(Home).Property(silo.browse.list)) + System.AddonIsEnabled(plugin.video.silokodiconnect)</visible>
+            <onclick condition="String.IsEqual(Window(Home).Property(silo.browse.type),movies)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=shuffle&amp;scope=movies)</onclick>
+            <onclick condition="String.IsEqual(Window(Home).Property(silo.browse.type),tvshows)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=shuffle&amp;scope=tvshows)</onclick>
+            <ondown condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEmpty(Skin.String(silo.view.movies))] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEmpty(Skin.String(silo.view.tvshows))]]">SetFocus(50)</ondown>
+            <ondown condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),hero)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),hero)]]">SetFocus(57)</ondown>
+            <ondown condition="[[String.IsEqual(Window(Home).Property(silo.browse.type),movies) + String.IsEqual(Skin.String(silo.view.movies),list)] | [String.IsEqual(Window(Home).Property(silo.browse.type),tvshows) + String.IsEqual(Skin.String(silo.view.tvshows),list)]]">SetFocus(58)</ondown>
+            <onleft>70</onleft><onright>74</onright><onup>noop</onup>
+        </control>
+        <control type="image">
+            <right>814</right><top>182</top><width>28</width><height>28</height>
+            <texture colordiffuse="SkylineFocusText">silo/icon_shuffle.png</texture>
+            <visible>[String.IsEqual(Window(Home).Property(silo.browse.type),movies) | String.IsEqual(Window(Home).Property(silo.browse.type),tvshows)] + String.IsEmpty(Window(Home).Property(silo.browse.list)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + Control.HasFocus(75)</visible>
+        </control>
+        <control type="image">
+            <right>814</right><top>182</top><width>28</width><height>28</height>
+            <texture colordiffuse="FFEDEDED">silo/icon_shuffle.png</texture>
+            <visible>[String.IsEqual(Window(Home).Property(silo.browse.type),movies) | String.IsEqual(Window(Home).Property(silo.browse.type),tvshows)] + String.IsEmpty(Window(Home).Property(silo.browse.list)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + !Control.HasFocus(75)</visible>
         </control>
         <!-- The hero view: the focused title over two rows of posters. -->
         <control type="group">
