@@ -55,6 +55,9 @@ TABS = [
         ('Showing', '$VAR[SiloOptionsSubtitles]'),
     ]),
     ('video', 'Video', [
+        # A YouTube video's qualities are its video streams (the add-on's Auto
+        # and one per quality), chosen in Kodi's video settings, as the app's.
+        ('Quality', '$INFO[VideoPlayer.VideoResolution]', ['Dialog.Close(1180)', 'ActivateWindow(osdvideosettings)']),
         ('Zoom', '$INFO[Player.Process(videoaspect)]', ['AspectRatio']),
         ('Video settings', '', ['Dialog.Close(1180)', 'ActivateWindow(osdvideosettings)']),
         ('Player details', '', ['Dialog.Close(1180)', 'ActivateWindow(PlayerProcessInfo)']),

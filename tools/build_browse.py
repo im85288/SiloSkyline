@@ -924,6 +924,7 @@ VARIABLES = '''
         <value condition="$EXP[SiloBrowseChips]">$INFO[Container.NumItems,, genres]</value>
         <value condition="$EXP[SiloBrowseAddonVideos] + Integer.IsGreater(Container.NumItems,0)">$INFO[Container.NumItems,, videos]</value>
         <!-- Another add-on's folder: what's in it, not Silo's library. -->
+        <value condition="String.StartsWith(Container.FolderPath,plugin://) + !String.StartsWith(Container.FolderPath,plugin://plugin.video.silokodiconnect) + Integer.IsEqual(Container.NumItems,1)">1 item</value>
         <value condition="String.StartsWith(Container.FolderPath,plugin://) + !String.StartsWith(Container.FolderPath,plugin://plugin.video.silokodiconnect)">$INFO[Container.NumItems,, items]</value>
         <value>$INFO[Window(Home).Property(silo.library.facts)]</value>
     </variable>

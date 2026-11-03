@@ -803,6 +803,20 @@
                 <onleft>noop</onleft><onright>noop</onright>
                 <control type="button" id="2040">
                     <width>720</width><height>68</height>
+                    <label>Quality</label>
+                    <label2>$INFO[VideoPlayer.VideoResolution]</label2>
+                    <font>silo_meta</font>
+                    <textoffsetx>32</textoffsetx>
+                    <aligny>center</aligny>
+                    <textcolor>FFEDEDED</textcolor>
+                    <focusedcolor>SkylineFocusText</focusedcolor>
+                    <texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
+                    <texturenofocus />
+                    <onclick>Dialog.Close(1180)</onclick>
+                    <onclick>ActivateWindow(osdvideosettings)</onclick>
+                </control>
+                <control type="button" id="2041">
+                    <width>720</width><height>68</height>
                     <label>Zoom</label>
                     <label2>$INFO[Player.Process(videoaspect)]</label2>
                     <font>silo_meta</font>
@@ -814,7 +828,7 @@
                     <texturenofocus />
                     <onclick>AspectRatio</onclick>
                 </control>
-                <control type="button" id="2041">
+                <control type="button" id="2042">
                     <width>720</width><height>68</height>
                     <label>Video settings</label>
                     <label2></label2>
@@ -828,7 +842,7 @@
                     <onclick>Dialog.Close(1180)</onclick>
                     <onclick>ActivateWindow(osdvideosettings)</onclick>
                 </control>
-                <control type="button" id="2042">
+                <control type="button" id="2043">
                     <width>720</width><height>68</height>
                     <label>Player details</label>
                     <label2></label2>

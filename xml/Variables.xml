@@ -7934,6 +7934,7 @@
         <value condition="$EXP[SiloBrowseChips]">$INFO[Container.NumItems,, genres]</value>
         <value condition="$EXP[SiloBrowseAddonVideos] + Integer.IsGreater(Container.NumItems,0)">$INFO[Container.NumItems,, videos]</value>
         <!-- Another add-on's folder: what's in it, not Silo's library. -->
+        <value condition="String.StartsWith(Container.FolderPath,plugin://) + !String.StartsWith(Container.FolderPath,plugin://plugin.video.silokodiconnect) + Integer.IsEqual(Container.NumItems,1)">1 item</value>
         <value condition="String.StartsWith(Container.FolderPath,plugin://) + !String.StartsWith(Container.FolderPath,plugin://plugin.video.silokodiconnect)">$INFO[Container.NumItems,, items]</value>
         <value>$INFO[Window(Home).Property(silo.library.facts)]</value>
     </variable>
@@ -8576,6 +8577,18 @@
     </variable>
     <variable name="SiloYouTubeRow_514">
         <value condition="!String.IsEmpty(Window(Home).Property(silo.youtube.loaded.library))">plugin://plugin.video.youtube/channel/mine/playlist/LL/?hide_folders=true&amp;hide_next_page=true</value>
+    </variable>
+    <variable name="SiloYouTubeSearchLabel">
+        <value condition="!String.IsEmpty(Window(Home).Property(silo.youtube.query))">$INFO[Window(Home).Property(silo.youtube.query)]</value>
+        <value>Search YouTube</value>
+    </variable>
+    <variable name="SiloYouTubeSearchText">
+        <value condition="String.IsEqual(Window(Home).Property(silo.youtube.section),search)">FFEDEDED</value>
+        <value>B3EDEDED</value>
+    </variable>
+    <variable name="SiloYouTubeSearchFill">
+        <value condition="String.IsEqual(Window(Home).Property(silo.youtube.section),search)">33FFFFFF</value>
+        <value>12FFFFFF</value>
     </variable>
     <variable name="SiloYouTubeSection">
         <value condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions)">Subscriptions</value>
