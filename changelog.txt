@@ -1,3 +1,6 @@
+[B]0.5.1[/B]
+• Resume on an episode's page no longer runs under its time left
+
 [B]0.5.0[/B]
 • Home's hero: Play and More info, reached with Up from the top row
 • Shuffle on show and box set pages, and in Browse
