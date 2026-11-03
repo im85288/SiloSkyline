@@ -28,6 +28,11 @@ CUSTOM_SLOTS = 2
 WIDGETS = 6
 CUSTOM_IDS = list(range(9031, 9031 + CUSTOM_SLOTS))
 TV_TAB = 9006  # Live TV's guide, when Kodi has TV channels
+YOUTUBE_TAB = 9007  # the YouTube page (tools/build_youtube.py), when the YouTube add-on is installed
+YOUTUBE_PAGE = 1198
+YOUTUBE_SHOWN = 'System.HasAddon(plugin.video.youtube) + System.AddonIsEnabled(plugin.video.youtube)'
+# Tabs the viewer can hide in Skyline's settings, giving their room to the custom items.
+HIDE_TV, HIDE_YOUTUBE, HIDE_REQUESTS = 'SkylineHideTvTab', 'SkylineHideYouTubeTab', 'SkylineHideRequestsTab'
 SHORTCUTS = 9100  # hidden list holding Skin Shortcuts' main menu
 SUBMENU = 9240    # the dropdown of a custom item's submenu
 HOME_CARDS = 20   # cards in a published row (SiloKodiConnect rows.CARDS): each adds ~9 ms to Home's load
@@ -819,7 +824,7 @@ def row(page, page_index, slot, landscape):
 
 # Silo dims the whole bar to 70% while focus is down in the rows.
 BAR_DIM = '!ControlGroup(9000).HasFocus() + !Control.HasFocus(9011)'
-BAR_ORDER = [9001, 9002, 9003, 9004, 9005, TV_TAB] + CUSTOM_IDS + [9009, 9010, 9011]  # Search, tabs, TV, custom items, Settings, Power, profile
+BAR_ORDER = [9001, 9002, 9003, 9004, 9005, TV_TAB, YOUTUBE_TAB] + CUSTOM_IDS + [9009, 9010, 9011]  # Search, tabs, TV, custom items, Settings, Power, profile
 
 
 def bar_moves(control_id, down=None, menu=None):
@@ -899,22 +904,22 @@ def open_sections(page, control_id):
     return ''
 
 
-# The bar's span: from just after the logo (wordmark) to just before the avatar.
-BAR_LEFT, BAR_RIGHT = SAFE_X + 260, 1920 - SAFE_X - 64 - 16
+# The bar's span: from just after the mark to just before the avatar.
+BAR_LEFT, BAR_RIGHT = SAFE_X + 52 + 24, 1920 - SAFE_X - 64 - 16
 
 
 def custom_button_max():
     """A custom item's widest: the bar's spare room shared between the slots."""
-    widths = [60] + [tab_width(page) for page in TABBED] + [60 + 17 * 2, 60, 60]
+    widths = [60] + [tab_width(page) for page in TABBED] + [60 + 17 * 2, 60 + 17 * 7, 60, 60]
     built_in = sum(widths) + BAR_GAP * len(widths)
     return (BAR_RIGHT - BAR_LEFT - built_in) // CUSTOM_SLOTS - BAR_GAP
 
 
 def bar_positions():
     """Each bar button's left edge: the bar is a centred grouplist."""
-    # TV's width too (it shows when Kodi has TV channels), so the bar keeps room for it.
-    widths = [60] + [tab_width(page) for page in TABBED] + [60 + 17 * 2, 60, 60]
-    ids = [9001] + [9002 + index for index in range(len(TABBED))] + [TV_TAB, 9009, 9010]
+    # TV's and YouTube's widths too (each shows only when it can), so the bar keeps room for them.
+    widths = [60] + [tab_width(page) for page in TABBED] + [60 + 17 * 2, 60 + 17 * 7, 60, 60]
+    ids = [9001] + [9002 + index for index in range(len(TABBED))] + [TV_TAB, YOUTUBE_TAB, 9009, 9010]
     total = sum(widths) + BAR_GAP * (len(widths) - 1)
     x, out = (1920 - total) // 2, {}
     for control_id, width in zip(ids, widths):
@@ -1467,7 +1472,8 @@ def avatar_menu():
 
 def tab(control_id, page, page_index):
     visible = '' if page == 'home' else \
-        '\n                <visible>String.Contains(%s,%s)</visible>' % (prop('silo.pages'), page)
+        '\n                <visible>String.Contains(%s,%s)%s</visible>' % (
+            prop('silo.pages'), page, ' + !Skin.HasSetting(%s)' % HIDE_REQUESTS if page == 'requests' else '')
     # The group has an id (the button's + 300) so the grouplist can point the
     # custom buttons beside it here.
     return '''
@@ -1578,7 +1584,7 @@ def tv_tab():
     items: Kodi moves left and right past it when it's hidden."""
     return '''
                 <control type="button" id="%(id)d">
-                    <visible>PVR.HasTVChannels</visible>
+                    <visible>PVR.HasTVChannels + !Skin.HasSetting(%(hide)s)</visible>
                     <width>auto</width><height>60</height>
                     <label>$LOCALIZE[19020]</label>
                     <font>silo_tab</font>
@@ -1589,7 +1595,29 @@ def tv_tab():
                     <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
                     <texturenofocus />%(moves)s
                     <onclick>ActivateWindow(TVGuide)</onclick>
-                </control>''' % {'id': TV_TAB, 'dim': TAB_DIM, 'text': TEXT, 'moves': bar_down('                    ')}
+                </control>''' % {'id': TV_TAB, 'dim': TAB_DIM, 'text': TEXT, 'moves': bar_down('                    '),
+                         'hide': HIDE_TV}
+
+
+def youtube_tab():
+    """YouTube, after TV while the YouTube add-on is installed: the YouTube
+    app's Home, Subscriptions and Library in Silo's look (tools/build_youtube.py)."""
+    return '''
+                <control type="button" id="%(id)d">
+                    <visible>%(shown)s</visible>
+                    <width>auto</width><height>60</height>
+                    <label>YouTube</label>
+                    <font>silo_tab</font>
+                    <textoffsetx>24</textoffsetx>
+                    <align>center</align><aligny>center</aligny>
+                    <textcolor>%(dim)s</textcolor>
+                    <focusedcolor>FF000000</focusedcolor>
+                    <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
+                    <texturenofocus />%(moves)s
+                    <onclick>ActivateWindow(%(page)d)</onclick>
+                </control>''' % {'id': YOUTUBE_TAB, 'shown': YOUTUBE_SHOWN + ' + !Skin.HasSetting(%s)' % HIDE_YOUTUBE,
+                         'dim': TAB_DIM, 'text': TEXT,
+                         'moves': bar_down('                    '), 'page': YOUTUBE_PAGE}
 
 
 def icon_tab(control_id, icon, action):
@@ -1805,6 +1833,7 @@ def build():
                     '                    <onclick>ActivateWindow(1190)')
     tabs += ''.join(tab(9002 + index, page, index) for index, page in enumerate(TABBED))
     tabs += tv_tab()
+    tabs += youtube_tab()
     shortcuts_list, custom_tabs = custom_items()
     tabs += custom_tabs
     tabs += icon_tab(9009, 'icons/settings.png', 'ActivateWindow(Settings)')
@@ -2472,8 +2501,8 @@ def splash_timer():
 
 
 def wordmark(x, top, extra=''):
-    """Skyline's mark and name, top left on Home."""
-    return '''        <!-- Skyline's mark and name (media/silo/skyline_mark.png). -->
+    """Skyline's mark, top left on Home (its name made room the bar's custom items need)."""
+    return '''        <!-- Skyline's mark (media/silo/skyline_mark.png). -->
         <control type="grouplist">
             <left>%(x)d</left><top>%(top)d</top>
             <width>440</width><height>64</height>
@@ -2484,14 +2513,7 @@ def wordmark(x, top, extra=''):
                 <top>6</top><width>52</width><height>52</height>
                 <texture>silo/skyline_mark.png</texture>
             </control>
-            <control type="label">
-                <width>auto</width><height>64</height>
-                <aligny>center</aligny>
-                <font>silo_wordmark</font>
-                <textcolor>%(text)s</textcolor>
-                <label>Skyline</label>
-            </control>
-        </control>''' % {'x': x, 'top': top, 'extra': extra, 'text': TEXT, }
+        </control>''' % {'x': x, 'top': top, 'extra': extra}
 
 
 def splash():

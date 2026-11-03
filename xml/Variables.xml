@@ -8539,4 +8539,84 @@
         <value condition="!Skin.HasSetting(SkylineSiloOSD)">Showcase</value>
         <value>Silo</value>
     </variable>
-    <!-- end Silo Skyline Showcase --></includes>
+    <!-- end Silo Skyline Showcase -->
+    <!-- Silo Skyline YouTube (tools/build_youtube.py) -->
+    <variable name="SiloYouTubePill_home">
+        <value condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)]">FFEDEDED</value>
+        <value>B3EDEDED</value>
+    </variable>
+    <variable name="SiloYouTubePillFill_home">
+        <value condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)]">33FFFFFF</value>
+        <value>12FFFFFF</value>
+    </variable>
+    <variable name="SiloYouTubePill_subscriptions">
+        <value condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions)">FFEDEDED</value>
+        <value>B3EDEDED</value>
+    </variable>
+    <variable name="SiloYouTubePillFill_subscriptions">
+        <value condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions)">33FFFFFF</value>
+        <value>12FFFFFF</value>
+    </variable>
+    <variable name="SiloYouTubePill_library">
+        <value condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library)">FFEDEDED</value>
+        <value>B3EDEDED</value>
+    </variable>
+    <variable name="SiloYouTubePillFill_library">
+        <value condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library)">33FFFFFF</value>
+        <value>12FFFFFF</value>
+    </variable>
+    <variable name="SiloYouTubeRow_511">
+        <value condition="!String.IsEmpty(Window(Home).Property(silo.youtube.loaded.library))">plugin://plugin.video.youtube/special/playlist/HL/?hide_folders=true&amp;hide_next_page=true</value>
+    </variable>
+    <variable name="SiloYouTubeRow_512">
+        <value condition="!String.IsEmpty(Window(Home).Property(silo.youtube.loaded.library))">plugin://plugin.video.youtube/special/playlist/WL/?hide_folders=true&amp;hide_next_page=true</value>
+    </variable>
+    <variable name="SiloYouTubeRow_513">
+        <value condition="!String.IsEmpty(Window(Home).Property(silo.youtube.loaded.library))">plugin://plugin.video.youtube/channel/mine/playlists/?hide_next_page=true</value>
+    </variable>
+    <variable name="SiloYouTubeRow_514">
+        <value condition="!String.IsEmpty(Window(Home).Property(silo.youtube.loaded.library))">plugin://plugin.video.youtube/channel/mine/playlist/LL/?hide_folders=true&amp;hide_next_page=true</value>
+    </variable>
+    <variable name="SiloYouTubeSection">
+        <value condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions)">Subscriptions</value>
+        <value condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library)">Library</value>
+        <value>Home</value>
+    </variable>
+    <variable name="SiloYouTubeThumb">
+        <value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+        <value>$INFO[ListItem.Icon]</value>
+    </variable>
+    <!-- The app's second line, the channel; the add-on names it as the studio (or the artist). -->
+    <variable name="SiloYouTubeChannel">
+        <value condition="String.IsEqual(ListItem.Studio,Untitled) | String.IsEqual(ListItem.Artist,Untitled)"></value>
+        <value condition="!String.IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]</value>
+        <value>$INFO[ListItem.Artist]</value>
+    </variable>
+    <variable name="SiloYouTubeWhen">
+        <value condition="!String.IsEmpty(ListItem.Premiered)">$INFO[ListItem.Premiered]</value>
+        <value>$INFO[ListItem.Date]</value>
+    </variable>
+    <variable name="SiloYouTubeRowText">
+        <value condition="Control.HasFocus(402)">FF000000</value>
+        <value>FFEDEDED</value>
+    </variable>
+    <variable name="SiloYouTubeAllPill">
+        <value condition="String.IsEmpty(Window(Home).Property(silo.youtube.channel))">33FFFFFF</value>
+        <value>00FFFFFF</value>
+    </variable>
+    <!-- The chosen channel's videos, or All: the subscriptions' newest. -->
+    <variable name="SiloYouTubeChannels">
+        <value condition="!String.IsEmpty(Window(Home).Property(silo.youtube.loaded.subscriptions))">plugin://plugin.video.youtube/subscriptions/list/</value>
+    </variable>
+    <variable name="SiloYouTubeChannelPath">
+        <value condition="String.IsEmpty(Window(Home).Property(silo.youtube.loaded.subscriptions))"></value>
+        <value condition="String.Contains(Window(Home).Property(silo.youtube.channel),?)">$INFO[Window(Home).Property(silo.youtube.channel)]&amp;hide_folders=true&amp;hide_next_page=true</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(silo.youtube.channel))">$INFO[Window(Home).Property(silo.youtube.channel)]?hide_folders=true&amp;hide_next_page=true</value>
+        <value>plugin://plugin.video.youtube/special/my_subscriptions/?hide_folders=true&amp;hide_next_page=true</value>
+    </variable>
+    <variable name="SiloYouTubeChannelTitle">
+        <value condition="!String.IsEmpty(Window(Home).Property(silo.youtube.channel))">Latest</value>
+        <value>Most recent</value>
+    </variable>
+    <!-- end Silo Skyline YouTube -->
+</includes>

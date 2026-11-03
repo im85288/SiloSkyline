@@ -614,6 +614,29 @@ def skin_settings(text):
 \t\t\t\t\t<selected>Skin.HasSetting(SkylineArtworkBackground)</selected>
 \t\t\t\t\t<onclick>Skin.ToggleSetting(SkylineArtworkBackground)</onclick>
 \t\t\t\t</control>
+\t\t\t\t<!-- The bar's tabs (tools/build_home.py), each offered only where it can show:
+\t\t\t\t     hiding one gives its room to the custom items. -->
+\t\t\t\t<control type="radiobutton" id="780">
+\t\t\t\t\t<label>Requests tab</label>
+\t\t\t\t\t<include>DefaultSettingButton</include>
+\t\t\t\t\t<selected>!Skin.HasSetting(SkylineHideRequestsTab)</selected>
+\t\t\t\t\t<onclick>Skin.ToggleSetting(SkylineHideRequestsTab)</onclick>
+\t\t\t\t\t<visible>System.HasAddon(plugin.video.silokodiconnect)</visible>
+\t\t\t\t</control>
+\t\t\t\t<control type="radiobutton" id="781">
+\t\t\t\t\t<label>TV tab</label>
+\t\t\t\t\t<include>DefaultSettingButton</include>
+\t\t\t\t\t<selected>!Skin.HasSetting(SkylineHideTvTab)</selected>
+\t\t\t\t\t<onclick>Skin.ToggleSetting(SkylineHideTvTab)</onclick>
+\t\t\t\t\t<visible>PVR.HasTVChannels</visible>
+\t\t\t\t</control>
+\t\t\t\t<control type="radiobutton" id="782">
+\t\t\t\t\t<label>YouTube tab</label>
+\t\t\t\t\t<include>DefaultSettingButton</include>
+\t\t\t\t\t<selected>!Skin.HasSetting(SkylineHideYouTubeTab)</selected>
+\t\t\t\t\t<onclick>Skin.ToggleSetting(SkylineHideYouTubeTab)</onclick>
+\t\t\t\t\t<visible>System.HasAddon(plugin.video.youtube) + System.AddonIsEnabled(plugin.video.youtube)</visible>
+\t\t\t\t</control>
 \t\t\t\t<control type="radiobutton" id="701">''' % look, 1)
     # The settings: in the right pane.
     text = text.replace('<control type="group" id="10000">\n\t\t\t<left>470</left>',

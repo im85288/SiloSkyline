@@ -85,6 +85,29 @@
 					<selected>Skin.HasSetting(SkylineArtworkBackground)</selected>
 					<onclick>Skin.ToggleSetting(SkylineArtworkBackground)</onclick>
 				</control>
+				<!-- The bar's tabs (tools/build_home.py), each offered only where it can show:
+				     hiding one gives its room to the custom items. -->
+				<control type="radiobutton" id="780">
+					<label>Requests tab</label>
+					<include>DefaultSettingButton</include>
+					<selected>!Skin.HasSetting(SkylineHideRequestsTab)</selected>
+					<onclick>Skin.ToggleSetting(SkylineHideRequestsTab)</onclick>
+					<visible>System.HasAddon(plugin.video.silokodiconnect)</visible>
+				</control>
+				<control type="radiobutton" id="781">
+					<label>TV tab</label>
+					<include>DefaultSettingButton</include>
+					<selected>!Skin.HasSetting(SkylineHideTvTab)</selected>
+					<onclick>Skin.ToggleSetting(SkylineHideTvTab)</onclick>
+					<visible>PVR.HasTVChannels</visible>
+				</control>
+				<control type="radiobutton" id="782">
+					<label>YouTube tab</label>
+					<include>DefaultSettingButton</include>
+					<selected>!Skin.HasSetting(SkylineHideYouTubeTab)</selected>
+					<onclick>Skin.ToggleSetting(SkylineHideYouTubeTab)</onclick>
+					<visible>System.HasAddon(plugin.video.youtube) + System.AddonIsEnabled(plugin.video.youtube)</visible>
+				</control>
 				<control type="radiobutton" id="701">
 					<label>$LOCALIZE[31095]</label>
 					<include>DefaultSettingButton</include>
