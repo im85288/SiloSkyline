@@ -7914,10 +7914,11 @@
     <!-- Silo Skyline browse (tools/build_browse.py) -->
     <expression name="SiloBrowseFans">Container.Content(sets) + String.IsEqual(Container.Property(silo.fans),true)</expression>
     <expression name="SiloBrowseChips">Container.Content(genres)</expression>
-    <expression name="SiloBrowseGrid">[Container.Content(movies) | Container.Content(tvshows) | Container.Content(sets) | Container.Content(seasons) | Container.Content(videos)] + !$EXP[SiloBrowseFans]</expression>
+    <expression name="SiloBrowseAddonVideos">Container.Content(videos) + String.StartsWith(Container.FolderPath,plugin://) + !String.StartsWith(Container.FolderPath,plugin://plugin.video.silokodiconnect)</expression>
+    <expression name="SiloBrowseGrid">[Container.Content(movies) | Container.Content(tvshows) | Container.Content(sets) | Container.Content(seasons) | Container.Content(videos)] + !$EXP[SiloBrowseFans] + !$EXP[SiloBrowseAddonVideos]</expression>
     <expression name="SiloBrowseEpisodes">Container.Content(episodes)</expression>
     <!-- Films and shows: the views they have beside the poster grid (hero, list). -->
-    <expression name="SiloBrowseTitles">[Container.Content(movies) | Container.Content(tvshows) | Container.Content(videos)] + !$EXP[SiloBrowseFans]</expression>
+    <expression name="SiloBrowseTitles">[Container.Content(movies) | Container.Content(tvshows) | Container.Content(videos)] + !$EXP[SiloBrowseFans] + !$EXP[SiloBrowseAddonVideos]</expression>
     <!-- The genre in a view's facts: SiloKodiConnect's first (kept in the library), else Kodi's. -->
     <variable name="SiloViewGenre">
         <value condition="!String.IsEmpty(ListItem.Art(silogenre))">$INFO[ListItem.Art(silogenre),  ·  ,]</value>
@@ -7931,6 +7932,9 @@
         <value condition="Integer.IsGreater(Container.NumItems,0) + [$EXP[SiloBrowseGrid] | $EXP[SiloBrowseEpisodes]]">$INFO[Container.NumItems,, titles]</value>
         <value condition="$EXP[SiloBrowseFans]">$INFO[Container.NumItems,, collections]</value>
         <value condition="$EXP[SiloBrowseChips]">$INFO[Container.NumItems,, genres]</value>
+        <value condition="$EXP[SiloBrowseAddonVideos] + Integer.IsGreater(Container.NumItems,0)">$INFO[Container.NumItems,, videos]</value>
+        <!-- Another add-on's folder: what's in it, not Silo's library. -->
+        <value condition="String.StartsWith(Container.FolderPath,plugin://) + !String.StartsWith(Container.FolderPath,plugin://plugin.video.silokodiconnect)">$INFO[Container.NumItems,, items]</value>
         <value>$INFO[Window(Home).Property(silo.library.facts)]</value>
     </variable>
     <variable name="SiloBrowseTitle">
@@ -7986,9 +7990,29 @@
         <value condition="Control.HasFocus(60) + Control.IsVisible(55)">$INFO[Container(55).ListItem.Art(fanart)]</value>
         <value condition="Control.HasFocus(60) + Control.IsVisible(56)">$INFO[Container(56).ListItem.Art(fanart)]</value>
 
+        <value condition="$EXP[SiloBrowseAddonVideos]">$VAR[SiloVideoThumb]</value>
         <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
         <value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
         <value>$INFO[Container.Art(fanart)]</value>
+    </variable>
+    <!-- An add-on's videos (view 57): 16:9 art, its channel, length and date. -->
+    <variable name="SiloVideoThumb">
+        <value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(landscape))">$INFO[ListItem.Art(landscape)]</value>
+        <value>$INFO[ListItem.Icon]</value>
+    </variable>
+    <variable name="SiloVideoCardSub">
+        <value condition="!String.IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]$INFO[ListItem.Duration(mins), · , min]</value>
+        <value condition="!String.IsEmpty(ListItem.Duration)">$INFO[ListItem.Duration(mins),, min]$INFO[ListItem.Premiered, · ,]</value>
+        <value>$INFO[ListItem.Label2]</value>
+    </variable>
+    <variable name="SiloVideoFacts">
+        <value>$INFO[Container(57).ListItem.Studio,,  ·  ]$INFO[Container(57).ListItem.Duration(mins),, min  ·  ]$INFO[Container(57).ListItem.Premiered]</value>
+    </variable>
+    <!-- YouTube's placeholder for a video it knows nothing about: no description. -->
+    <variable name="SiloVideoPlot">
+        <value condition="String.Contains(Container(57).ListItem.Plot,Untitled) + String.Contains(Container(57).ListItem.Plot,--------)"></value>
+        <value>$INFO[Container(57).ListItem.Plot]</value>
     </variable>
     <!-- end Silo Skyline browse -->
 
