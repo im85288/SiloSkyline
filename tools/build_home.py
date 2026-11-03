@@ -1193,6 +1193,8 @@ def page_pills():
                 </control>''' % {'id': gid * 10 + number, 'h': PILL_H, 'label': label, 'text': TEXT, 'clicks': clicks,
                                  'colour': colour, 'rest': rest}
         rows = page_rows(index, range(1, LOOKAHEAD + 1)) + ([collection_id(index)] if page in COLLECTION_PAGES else [])
+        if page == 'requests':
+            buttons = request_search_box(gid, 9002 + index, rows) + buttons
         out += '''
         <control type="grouplist" id="%(gid)d">
             <left>%(x)d</left><top>%(top)d</top>
@@ -1209,6 +1211,55 @@ def page_pills():
                          'visible': page_visible(page), 'tab': 9002 + index, 'buttons': buttons,
                          'down': first_visible('ondown', rows, '            ')}
     return out
+
+
+REQUEST_SEARCH_W = 400
+
+
+def request_search_box(gid, tab, rows):
+    """Requests' search box, as the YouTube page's: the keyboard, then the
+    search page with Silo's titles to request alone (tools/build_search.py's
+    request-only mode); Back from there comes back here. In its own group
+    for the magnifier, so it has its own moves."""
+    box = gid * 10 + 9
+    return '''
+                <control type="group" id="%(gbox)d">
+                    <width>%(w)d</width><height>%(h)d</height>
+                    <control type="button" id="%(id)d">
+                        <width>%(w)d</width><height>%(h)d</height>
+                        <label>Search to request</label>
+                        <font>silo_meta</font>
+                        <textoffsetx>62</textoffsetx>
+                        <aligny>center</aligny>
+                        <textcolor>%(dim)s</textcolor>
+                        <focusedcolor>FF000000</focusedcolor>
+                        <texturefocus border="24" colordiffuse="%(text)s">silo/pill.png</texturefocus>
+                        <texturenofocus border="24" colordiffuse="12FFFFFF">silo/pill.png</texturenofocus>
+                        <onclick>SetProperty(silo.search.mode,requests,home)</onclick>
+                        <!-- A new search: the keyboard starts empty (the bar's Search reopens on the last). -->
+                        <onclick>Skin.Reset(silo.search)</onclick>
+                        <onclick>Skin.SetString(silo.search)</onclick>
+                        <onclick condition="!String.IsEmpty(Skin.String(silo.search))">ActivateWindow(1190)</onclick>
+                        <onleft>noop</onleft>
+                        <onright>%(first)d</onright>
+                        <onup>SetFocus(%(tab)d)</onup>
+                        <onback>SetFocus(%(tab)d)</onback>%(down)s
+                    </control>
+                    <control type="image">
+                        <left>22</left><top>%(it)d</top><width>28</width><height>28</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture colordiffuse="FF000000">icons/search.png</texture>
+                        <visible>Control.HasFocus(%(id)d)</visible>
+                    </control>
+                    <control type="image">
+                        <left>22</left><top>%(it)d</top><width>28</width><height>28</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture colordiffuse="%(dim)s">icons/search.png</texture>
+                        <visible>!Control.HasFocus(%(id)d)</visible>
+                    </control>
+                </control>''' % {'gbox': box + 1000, 'id': box, 'w': REQUEST_SEARCH_W, 'h': PILL_H, 'dim': TAB_DIM,
+                                   'text': TEXT, 'first': gid * 10, 'tab': tab, 'it': (PILL_H - 28) // 2,
+                                   'down': first_visible('ondown', rows, '                        ')}
 
 
 CUSTOM_HAS_PILLS = 'String.IsEqual(Container(%d).ListItem.Property(hasSubmenu),True)' % SHORTCUTS

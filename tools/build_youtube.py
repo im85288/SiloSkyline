@@ -48,7 +48,10 @@ TOP = PILLS_TOP + PILL_H + 28  # under the title and the pills
 # two and a half across), the others smaller (528 x 297).
 BIG, MEDIUM = (720, 405), (528, 297)
 ZOOM = BIG[0] * 100 // MEDIUM[0]  # the chosen row: its medium cards zoomed to the big size
-CARD_GAP = 32
+CARD_GAP = 40  # as Home's: the focused card's growth stays inside it
+# A focused card grows from its left edge (in line with its row's title), so all
+# its growth is to the right: 6% of 528 px is 32, inside the gap.
+CARD_ZOOM = 106
 TEXT_H = 16 + 70 + 34 + 34 + 24  # a two-line title, the channel, the date
 
 
@@ -94,9 +97,10 @@ def card(width, height, focused, view_id):
     """A video as the app shows one: its picture with the duration in the
     corner, then a two-line title, the channel and the date."""
     has_focus = 'Control.HasFocus(%d)' % view_id
-    # No zoom of its own, as the app's: the chosen row is already big, and a card
-    # growing stood out of line with the row's title or over its neighbours.
-    zoom = ''
+    # Skyline's focus zoom, as Home's cards, grown from the card's left edge so
+    # it stays in line with the row's title (from its centre it stood out left).
+    zoom = ('\n                    <animation effect="zoom" start="100" end="%d" time="180" tween="sine" easing="out" '
+            'center="6,%d" condition="%s">Conditional</animation>' % (CARD_ZOOM, 6 + height // 2, has_focus)) if focused else ''
     # Skyline's focus, as Home's rows: the zoom, a faint veil and a hairline rim.
     ring = focus_sheen(width, height, 'silo/card_landscape_mask.png', 'silo/card_landscape_rim.png',
                        has_focus, 20) if focused else ''
@@ -185,9 +189,18 @@ def row_hidden(section, number, count):
     later = ['String.IsEqual(%s,%d)' % (row_property(section), focus) for focus in range(number + 1, count)]
     if not later:
         return ''
+    # As the app's page scrolls: the row left behind slides up and off as the
+    # next comes up into its place, and back down when Up returns to it.
     return ('\n                <visible allowhiddenfocus="true">!%s</visible>'
-            '\n                <animation effect="fade" time="160">VisibleChange</animation>'
-            % ('[%s]' % ' | '.join(later)))
+            '\n                <animation type="Hidden" reversible="false">'
+            '\n                    <effect type="slide" end="0,-%d" time="260" tween="cubic" easing="out" />'
+            '\n                    <effect type="fade" start="100" end="0" time="120" />'
+            '\n                </animation>'
+            '\n                <animation type="Visible" reversible="false">'
+            '\n                    <effect type="slide" start="0,-%d" end="0,0" time="260" tween="cubic" easing="out" />'
+            '\n                    <effect type="fade" start="0" end="100" time="200" />'
+            '\n                </animation>'
+            % ('[%s]' % ' | '.join(later), BIG_SLOT, BIG_SLOT))
 
 
 def row_layouts(list_id):

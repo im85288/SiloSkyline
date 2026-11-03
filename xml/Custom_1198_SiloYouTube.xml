@@ -28,7 +28,14 @@
             <control type="group">
                 <left>0</left><top>0</top><width>1832</width><height>728</height>
                 <visible allowhiddenfocus="true">![String.IsEqual(Window(Home).Property(silo.youtube.row.home),1) | String.IsEqual(Window(Home).Property(silo.youtube.row.home),2)]</visible>
-                <animation effect="fade" time="160">VisibleChange</animation>
+                <animation type="Hidden" reversible="false">
+                    <effect type="slide" end="0,-728" time="260" tween="cubic" easing="out" />
+                    <effect type="fade" start="100" end="0" time="120" />
+                </animation>
+                <animation type="Visible" reversible="false">
+                    <effect type="slide" start="0,-728" end="0,0" time="260" tween="cubic" easing="out" />
+                    <effect type="fade" start="0" end="100" time="200" />
+                </animation>
                 <control type="label">
                     <left>0</left><top>0</top><width>1832</width><height>52</height>
                     <aligny>center</aligny>
@@ -56,7 +63,7 @@
                     <onfocus>SetProperty(silo.youtube.row.home,0,home)</onfocus>
                     <onup>100</onup>
                     <ondown>302</ondown>
-                    <itemlayout width="560" height="475">
+                    <itemlayout width="568" height="475">
                 <control type="group">
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -103,8 +110,9 @@
                     </control>
                 </control>
                     </itemlayout>
-                    <focusedlayout width="560" height="475">
+                    <focusedlayout width="568" height="475">
                 <control type="group">
+                    <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(301)">Conditional</animation>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
@@ -168,7 +176,14 @@
             <control type="group">
                 <left>0</left><top>0</top><width>1832</width><height>728</height>
                 <visible allowhiddenfocus="true">![String.IsEqual(Window(Home).Property(silo.youtube.row.home),2)]</visible>
-                <animation effect="fade" time="160">VisibleChange</animation>
+                <animation type="Hidden" reversible="false">
+                    <effect type="slide" end="0,-728" time="260" tween="cubic" easing="out" />
+                    <effect type="fade" start="100" end="0" time="120" />
+                </animation>
+                <animation type="Visible" reversible="false">
+                    <effect type="slide" start="0,-728" end="0,0" time="260" tween="cubic" easing="out" />
+                    <effect type="fade" start="0" end="100" time="200" />
+                </animation>
                 <animation effect="slide" end="0,728" time="260" tween="cubic" easing="out" condition="[String.IsEmpty(Window(Home).Property(silo.youtube.row.home)) | String.IsEqual(Window(Home).Property(silo.youtube.row.home),0)]">Conditional</animation>
                 <control type="label">
                     <left>0</left><top>0</top><width>1832</width><height>52</height>
@@ -197,7 +212,7 @@
                     <onfocus>SetProperty(silo.youtube.row.home,1,home)</onfocus>
                     <onup>301</onup>
                     <ondown>303</ondown>
-                    <itemlayout width="560" height="475">
+                    <itemlayout width="568" height="475">
                 <control type="group">
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -244,8 +259,9 @@
                     </control>
                 </control>
                     </itemlayout>
-                    <focusedlayout width="560" height="475">
+                    <focusedlayout width="568" height="475">
                 <control type="group">
+                    <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(302)">Conditional</animation>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
@@ -337,7 +353,7 @@
                     <onfocus>SetProperty(silo.youtube.row.home,2,home)</onfocus>
                     <onup>302</onup>
                     <ondown>noop</ondown>
-                    <itemlayout width="560" height="475">
+                    <itemlayout width="568" height="475">
                 <control type="group">
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -384,8 +400,9 @@
                     </control>
                 </control>
                     </itemlayout>
-                    <focusedlayout width="560" height="475">
+                    <focusedlayout width="568" height="475">
                 <control type="group">
+                    <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(303)">Conditional</animation>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
@@ -536,19 +553,19 @@
                 <orientation>vertical</orientation>
                 <scrolltime tween="cubic" easing="out">280</scrolltime>
                 <onleft>402</onleft><onup>100</onup>
-                <itemlayout width="456" height="416">
+                <itemlayout width="456" height="412">
                 <control type="group">
                     <control type="image">
-                        <left>6</left><top>6</top><width>424</width><height>238</height>
+                        <left>6</left><top>6</top><width>416</width><height>234</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>424</width><height>238</height>
+                        <left>6</left><top>6</top><width>416</width><height>234</height>
                         <texture border="24" colordiffuse="SkylineBackground">silo/card_corners.png</texture>
                     </control>
                     <control type="progress">
-                        <left>20</left><top>236</top><width>396</width><height>6</height>
+                        <left>20</left><top>232</top><width>388</width><height>6</height>
                         <texturebg colordiffuse="66000000">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFFF0033">colors/white.png</midtexture>
                         <info>ListItem.PercentPlayed</info>
@@ -556,7 +573,7 @@
                     </control>
                     <!-- The duration in the picture's corner, as the app's. -->
                     <control type="label">
-                        <left>306</left><top>202</top><width>110</width><height>34</height>
+                        <left>298</left><top>198</top><width>110</width><height>34</height>
                         <align>right</align><aligny>center</aligny>
                         <font>silo_badge</font>
                         <textcolor>FFEDEDED</textcolor>
@@ -564,38 +581,39 @@
                         <visible>!String.IsEmpty(ListItem.Duration) + !ListItem.IsFolder</visible>
                     </control>
                     <control type="textbox">
-                        <left>6</left><top>258</top><width>424</width><height>64</height>
+                        <left>6</left><top>254</top><width>416</width><height>64</height>
                         <font>silo_card_title</font>
                         <textcolor>66EDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>328</top><width>424</width><height>34</height>
+                        <left>6</left><top>324</top><width>416</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>4AEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeChannel]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>362</top><width>424</width><height>34</height>
+                        <left>6</left><top>358</top><width>416</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>4AEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeWhen]</label>
                     </control>
                 </control>
                 </itemlayout>
-                <focusedlayout width="456" height="416">
+                <focusedlayout width="456" height="412">
                 <control type="group">
+                    <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,123" condition="Control.HasFocus(410)">Conditional</animation>
                     <control type="image">
-                        <left>6</left><top>6</top><width>424</width><height>238</height>
+                        <left>6</left><top>6</top><width>416</width><height>234</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>424</width><height>238</height>
+                        <left>6</left><top>6</top><width>416</width><height>234</height>
                         <texture border="24" colordiffuse="SkylineBackground">silo/card_corners.png</texture>
                     </control>
                     <control type="progress">
-                        <left>20</left><top>236</top><width>396</width><height>6</height>
+                        <left>20</left><top>232</top><width>388</width><height>6</height>
                         <texturebg colordiffuse="66000000">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFFF0033">colors/white.png</midtexture>
                         <info>ListItem.PercentPlayed</info>
@@ -603,7 +621,7 @@
                     </control>
                     <!-- The duration in the picture's corner, as the app's. -->
                     <control type="label">
-                        <left>306</left><top>202</top><width>110</width><height>34</height>
+                        <left>298</left><top>198</top><width>110</width><height>34</height>
                         <align>right</align><aligny>center</aligny>
                         <font>silo_badge</font>
                         <textcolor>FFEDEDED</textcolor>
@@ -614,28 +632,28 @@
                         <left>6</left><top>6</top>
                         <visible>Control.HasFocus(410)</visible>
                         <control type="image">
-                            <width>424</width><height>238</height>
+                            <width>416</width><height>234</height>
                             <texture diffuse="silo/card_landscape_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
                         </control>
                         <control type="image">
-                            <width>424</width><height>238</height>
+                            <width>416</width><height>234</height>
                             <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
                         </control>
                     </control>
                     <control type="textbox">
-                        <left>6</left><top>258</top><width>424</width><height>64</height>
+                        <left>6</left><top>254</top><width>416</width><height>64</height>
                         <font>silo_card_title</font>
                         <textcolor>FFEDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>328</top><width>424</width><height>34</height>
+                        <left>6</left><top>324</top><width>416</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeChannel]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>362</top><width>424</width><height>34</height>
+                        <left>6</left><top>358</top><width>416</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeWhen]</label>
@@ -653,7 +671,14 @@
             <control type="group">
                 <left>0</left><top>0</top><width>1832</width><height>728</height>
                 <visible allowhiddenfocus="true">![String.IsEqual(Window(Home).Property(silo.youtube.row.library),1) | String.IsEqual(Window(Home).Property(silo.youtube.row.library),2) | String.IsEqual(Window(Home).Property(silo.youtube.row.library),3)]</visible>
-                <animation effect="fade" time="160">VisibleChange</animation>
+                <animation type="Hidden" reversible="false">
+                    <effect type="slide" end="0,-728" time="260" tween="cubic" easing="out" />
+                    <effect type="fade" start="100" end="0" time="120" />
+                </animation>
+                <animation type="Visible" reversible="false">
+                    <effect type="slide" start="0,-728" end="0,0" time="260" tween="cubic" easing="out" />
+                    <effect type="fade" start="0" end="100" time="200" />
+                </animation>
                 <control type="label">
                     <left>0</left><top>0</top><width>1832</width><height>52</height>
                     <aligny>center</aligny>
@@ -681,7 +706,7 @@
                     <onfocus>SetProperty(silo.youtube.row.library,0,home)</onfocus>
                     <onup>100</onup>
                     <ondown>512</ondown>
-                    <itemlayout width="560" height="475">
+                    <itemlayout width="568" height="475">
                 <control type="group">
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -728,8 +753,9 @@
                     </control>
                 </control>
                     </itemlayout>
-                    <focusedlayout width="560" height="475">
+                    <focusedlayout width="568" height="475">
                 <control type="group">
+                    <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(511)">Conditional</animation>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
@@ -793,7 +819,14 @@
             <control type="group">
                 <left>0</left><top>0</top><width>1832</width><height>728</height>
                 <visible allowhiddenfocus="true">![String.IsEqual(Window(Home).Property(silo.youtube.row.library),2) | String.IsEqual(Window(Home).Property(silo.youtube.row.library),3)]</visible>
-                <animation effect="fade" time="160">VisibleChange</animation>
+                <animation type="Hidden" reversible="false">
+                    <effect type="slide" end="0,-728" time="260" tween="cubic" easing="out" />
+                    <effect type="fade" start="100" end="0" time="120" />
+                </animation>
+                <animation type="Visible" reversible="false">
+                    <effect type="slide" start="0,-728" end="0,0" time="260" tween="cubic" easing="out" />
+                    <effect type="fade" start="0" end="100" time="200" />
+                </animation>
                 <animation effect="slide" end="0,728" time="260" tween="cubic" easing="out" condition="[String.IsEmpty(Window(Home).Property(silo.youtube.row.library)) | String.IsEqual(Window(Home).Property(silo.youtube.row.library),0)]">Conditional</animation>
                 <control type="label">
                     <left>0</left><top>0</top><width>1832</width><height>52</height>
@@ -822,7 +855,7 @@
                     <onfocus>SetProperty(silo.youtube.row.library,1,home)</onfocus>
                     <onup>511</onup>
                     <ondown>513</ondown>
-                    <itemlayout width="560" height="475">
+                    <itemlayout width="568" height="475">
                 <control type="group">
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -869,8 +902,9 @@
                     </control>
                 </control>
                     </itemlayout>
-                    <focusedlayout width="560" height="475">
+                    <focusedlayout width="568" height="475">
                 <control type="group">
+                    <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(512)">Conditional</animation>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
@@ -934,7 +968,14 @@
             <control type="group">
                 <left>0</left><top>0</top><width>1832</width><height>728</height>
                 <visible allowhiddenfocus="true">![String.IsEqual(Window(Home).Property(silo.youtube.row.library),3)]</visible>
-                <animation effect="fade" time="160">VisibleChange</animation>
+                <animation type="Hidden" reversible="false">
+                    <effect type="slide" end="0,-728" time="260" tween="cubic" easing="out" />
+                    <effect type="fade" start="100" end="0" time="120" />
+                </animation>
+                <animation type="Visible" reversible="false">
+                    <effect type="slide" start="0,-728" end="0,0" time="260" tween="cubic" easing="out" />
+                    <effect type="fade" start="0" end="100" time="200" />
+                </animation>
                 <animation effect="slide" end="0,1285" time="260" tween="cubic" easing="out" condition="[String.IsEmpty(Window(Home).Property(silo.youtube.row.library)) | String.IsEqual(Window(Home).Property(silo.youtube.row.library),0)]">Conditional</animation>
                 <animation effect="slide" end="0,728" time="260" tween="cubic" easing="out" condition="String.IsEqual(Window(Home).Property(silo.youtube.row.library),1)">Conditional</animation>
                 <control type="label">
@@ -964,7 +1005,7 @@
                     <onfocus>SetProperty(silo.youtube.row.library,2,home)</onfocus>
                     <onup>512</onup>
                     <ondown>514</ondown>
-                    <itemlayout width="560" height="475">
+                    <itemlayout width="568" height="475">
                 <control type="group">
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -1011,8 +1052,9 @@
                     </control>
                 </control>
                     </itemlayout>
-                    <focusedlayout width="560" height="475">
+                    <focusedlayout width="568" height="475">
                 <control type="group">
+                    <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(513)">Conditional</animation>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
@@ -1105,7 +1147,7 @@
                     <onfocus>SetProperty(silo.youtube.row.library,3,home)</onfocus>
                     <onup>513</onup>
                     <ondown>noop</ondown>
-                    <itemlayout width="560" height="475">
+                    <itemlayout width="568" height="475">
                 <control type="group">
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -1152,8 +1194,9 @@
                     </control>
                 </control>
                     </itemlayout>
-                    <focusedlayout width="560" height="475">
+                    <focusedlayout width="568" height="475">
                 <control type="group">
+                    <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(514)">Conditional</animation>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
@@ -1234,7 +1277,7 @@
                 <visible>!Container(610).IsUpdating + Integer.IsEqual(Container(610).NumItems,0)</visible>
             </control>
             <control type="panel" id="610">
-                <left>82</left><top>286</top><width>1680</width><height>794</height>
+                <left>82</left><top>286</top><width>1704</width><height>794</height>
                 <orientation>vertical</orientation>
                 <scrolltime tween="cubic" easing="out">280</scrolltime>
                 <onup>100</onup>
@@ -1243,7 +1286,7 @@
                 <onback>ClearProperty(silo.youtube.section,home)</onback>
                 <onback>SetFocus(301)</onback>
                 <onback>ClearProperty(silo.youtube.query,home)</onback>
-                <itemlayout width="560" height="475">
+                <itemlayout width="568" height="475">
                 <control type="group">
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -1290,8 +1333,9 @@
                     </control>
                 </control>
                 </itemlayout>
-                <focusedlayout width="560" height="475">
+                <focusedlayout width="568" height="475">
                 <control type="group">
+                    <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(610)">Conditional</animation>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>

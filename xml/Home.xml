@@ -6489,6 +6489,45 @@
             <ondown condition="$EXP[SiloRow5303] + !$EXP[SiloRow5301] + !$EXP[SiloRow5302]">SetFocus(5303)</ondown>
             <ondown condition="$EXP[SiloRow5304] + !$EXP[SiloRow5301] + !$EXP[SiloRow5302] + !$EXP[SiloRow5303]">SetFocus(5304)</ondown>
             <onleft>noop</onleft><onright>noop</onright>
+                <control type="group" id="47039">
+                    <width>400</width><height>48</height>
+                    <control type="button" id="46039">
+                        <width>400</width><height>48</height>
+                        <label>Search to request</label>
+                        <font>silo_meta</font>
+                        <textoffsetx>62</textoffsetx>
+                        <aligny>center</aligny>
+                        <textcolor>B3EDEDED</textcolor>
+                        <focusedcolor>SkylineFocusText</focusedcolor>
+                        <texturefocus border="24" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                        <texturenofocus border="24" colordiffuse="12FFFFFF">silo/pill.png</texturenofocus>
+                        <onclick>SetProperty(silo.search.mode,requests,home)</onclick>
+                        <!-- A new search: the keyboard starts empty (the bar's Search reopens on the last). -->
+                        <onclick>Skin.Reset(silo.search)</onclick>
+                        <onclick>Skin.SetString(silo.search)</onclick>
+                        <onclick condition="!String.IsEmpty(Skin.String(silo.search))">ActivateWindow(1190)</onclick>
+                        <onleft>noop</onleft>
+                        <onright>46030</onright>
+                        <onup>SetFocus(9005)</onup>
+                        <onback>SetFocus(9005)</onback>
+                        <ondown condition="$EXP[SiloRow5301]">SetFocus(5301)</ondown>
+                        <ondown condition="$EXP[SiloRow5302] + !$EXP[SiloRow5301]">SetFocus(5302)</ondown>
+                        <ondown condition="$EXP[SiloRow5303] + !$EXP[SiloRow5301] + !$EXP[SiloRow5302]">SetFocus(5303)</ondown>
+                        <ondown condition="$EXP[SiloRow5304] + !$EXP[SiloRow5301] + !$EXP[SiloRow5302] + !$EXP[SiloRow5303]">SetFocus(5304)</ondown>
+                    </control>
+                    <control type="image">
+                        <left>22</left><top>10</top><width>28</width><height>28</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture colordiffuse="SkylineFocusText">icons/search.png</texture>
+                        <visible>Control.HasFocus(46039)</visible>
+                    </control>
+                    <control type="image">
+                        <left>22</left><top>10</top><width>28</width><height>28</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture colordiffuse="B3EDEDED">icons/search.png</texture>
+                        <visible>!Control.HasFocus(46039)</visible>
+                    </control>
+                </control>
                 <control type="button" id="46030">
                     <width>auto</width><height>48</height>
                     <label>Discover</label>

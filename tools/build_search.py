@@ -32,7 +32,7 @@ ROWS = [(204, 'Box sets', 'videodb://movies/titles/', 'boxsets'),
         (201, 'Movies', 'videodb://movies/titles/', 'movies'),
         (202, 'Shows', 'videodb://tvshows/titles/', 'tvshows'),
         (203, 'Request', 'plugin://plugin.video.silokodiconnect/?mode=requests', None)]
-# Requests' "Search to request" sets Window(Home).Property(silo.search.mode)
+# Requests' search box (tools/build_home.py) sets Window(Home).Property(silo.search.mode)
 # to requests: only Silo's row shows (the menu bar's Search clears it).
 REQUEST_ONLY = 'String.IsEqual(Window(Home).Property(silo.search.mode),requests)'
 LIBRARY_LISTS = (204, 201, 202)
