@@ -4,8 +4,8 @@ on Android TV lays one out, in Silo's look, from the YouTube add-on:
 
     python3 tools/build_youtube.py
 
-Pills under the title, as Skyline's other pages (Requests' Discover and
-Yours): Search, then Home, Subscriptions and Library, which switch the page.
+A side menu from the left, as the app's (Left from a section's first
+column): Search, then Home, Subscriptions and Library, which switch the page.
 Home: rows of the app's big 16:9 cards (Recommended, Recently uploaded,
 Trending). Subscriptions: the channels at the left (All first), a grid of
 the chosen channel's videos at the right. Library: rows of History,
@@ -18,7 +18,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import (BACKGROUND, PILL_GAP, PILL_H, PILLS_TOP, ROOT, SAFE_X, SUB_DIM,  # noqa: E402
+from build_home import (BACKGROUND, PILLS_TOP, ROOT, SAFE_X, SUB_DIM,  # noqa: E402
                         TAB_DIM, TEXT, TEXT_DIM, TITLE_DIM, focus_sheen)
 
 WINDOW_ID = 1198
@@ -26,23 +26,29 @@ ADDON = 'plugin.video.youtube'
 YT = 'plugin://%s/' % ADDON
 # A row's list: videos only, no "Next page" (the app's rows end too).
 ROW_PARAMS = '?hide_folders=true&amp;hide_next_page=true'
-PILLS_ID = 100
+MENU_ID = 100  # the side menu: Left from the content, as the app's
+MENU_W = 460
+MENU_KEYS = ('search', 'home', 'subscriptions', 'library')  # the menu's order
+
+
+def open_menu(section):
+    """Left from a section: the menu, on that section's item, as the app's."""
+    return 'SetFocus(%d,%d,absolute)' % (MENU_ID, MENU_KEYS.index(section))
 SECTION = 'Window(Home).Property(silo.youtube.section)'
 # A section opened this visit: Kodi loads even a hidden list as the window
 # opens, so Subscriptions' and Library's lists have no path until then.
 LOADED = 'Window(Home).Property(silo.youtube.loaded.%s)'
 SECTIONS = [('home', 'Home'), ('subscriptions', 'Subscriptions'), ('library', 'Library')]
-# Search, as the app's: a box before the pills; SiloKodiConnect's keyboard
+# Search, as the app's: the side menu's first item; SiloKodiConnect's keyboard
 # (mode=youtubesearch) puts the words and their results' path in properties
 # and chooses the 'search' section, a grid of the results.
-SEARCH_BOX_W = 420
 QUERY = 'Window(Home).Property(silo.youtube.query)'
 RESULTS = 'Window(Home).Property(silo.youtube.search)'
 RESULTS_ID = 610
 RESULTS_COLS = 3
 CONTENT_X = SAFE_X
 CONTENT_W = 1920 - CONTENT_X
-TOP = PILLS_TOP + PILL_H + 28  # under the title and the pills
+TOP = PILLS_TOP + 8  # under the title (the sections are in the side menu)
 
 # The app's cards, as measured on a SHIELD: the chosen row's big (720 x 405,
 # two and a half across), the others smaller (528 x 297).
@@ -163,7 +169,7 @@ MEDIUM_SLOT = ROW_LABEL_H + LABEL_GAP + item_h(MEDIUM) + ROW_GAP
 
 
 def row_property(section):
-    """The section's chosen row (0 first), kept while the pills have focus."""
+    """The section's chosen row (0 first), kept while the menu has focus."""
     return 'Window(Home).Property(silo.youtube.row.%s)' % section
 
 
@@ -238,7 +244,8 @@ ROW = '''
                     <scrolltime tween="cubic" easing="out">240</scrolltime>
                     <animation effect="zoom" end="%(zoom)d" center="%(cx)d,%(cy)d" time="260" tween="cubic" easing="out" condition="%(big)s">Conditional</animation>
                     <onfocus>SetProperty(silo.youtube.row.%(section)s,%(number)d,home)</onfocus>
-                    <onup>%(up)d</onup>%(down)s%(layouts)s
+                    <onleft>%(menu)s</onleft>
+                    <onup>%(up)s</onup>%(down)s%(layouts)s
                     <content target="videos">%(path)s</content>
                 </control>
             </control>'''
@@ -251,7 +258,8 @@ def row(section, number, count, list_id, title, path, up, down):
         'w': CONTENT_W, 'slot': BIG_SLOT, 'moves': row_moves(section, number, count),
         'hidden': row_hidden(section, number, count), 'lh': ROW_LABEL_H,
         'lt': ROW_LABEL_H + LABEL_GAP, 'dim': TEXT_DIM, 'sub': SUB_DIM, 'title': title, 'id': list_id,
-        'lw': CONTENT_W + 6, 'ih': item_h(MEDIUM), 'section': section, 'number': number, 'up': up,
+        'lw': CONTENT_W + 6, 'ih': item_h(MEDIUM), 'section': section, 'number': number, 'up': up or 'noop',
+        'menu': open_menu(section),
         'layouts': row_layouts(list_id), 'path': path, 'zoom': ZOOM, 'big': chosen_row(section, number),
         # Kodi takes a zoom's centre in the section group's coordinates: the list's top left.
         'cx': -6, 'cy': ROW_LABEL_H + LABEL_GAP,
@@ -270,7 +278,7 @@ def lazy_variables():
 ''' % (list_id, LOADED % 'library', row_path(path)) for list_id, _, path in LIBRARY_ROWS)
 
 
-def rows_section(group_id, section, rows, first_up=PILLS_ID):
+def rows_section(group_id, section, rows, first_up=None):
     """The section's rows, the chosen one at the top (see row())."""
     ids = [list_id for list_id, _, _ in rows]
     lazy = section != 'home'  # Home shows first; the others load once chosen (lazy_variables)
@@ -283,71 +291,6 @@ def rows_section(group_id, section, rows, first_up=PILLS_ID):
             <left>%d</left><top>%d</top><width>%d</width><height>%d</height>
             <visible>%s</visible>%s
         </control>''' % (section.title(), group_id, CONTENT_X, TOP, CONTENT_W, 1080 - TOP, shown(section), body)
-
-
-def pill(control_id, label, colour, fill, click):
-    return '''
-                <control type="button" id="%(id)d">
-                    <width>auto</width><height>%(h)d</height>
-                    <label>%(label)s</label>
-                    <font>silo_meta</font>
-                    <textoffsetx>22</textoffsetx>
-                    <align>center</align><aligny>center</aligny>
-                    <textcolor>%(colour)s</textcolor>
-                    <focusedcolor>FF000000</focusedcolor>
-                    <texturefocus border="24" colordiffuse="%(text)s">silo/pill.png</texturefocus>
-                    <texturenofocus border="24" colordiffuse="%(fill)s">silo/pill.png</texturenofocus>
-%(clicks)s
-                </control>''' % {'id': control_id, 'h': PILL_H, 'label': label, 'colour': colour, 'fill': fill,
-                                 'text': TEXT, 'clicks': ''.join('\n                    <onclick>%s</onclick>' % c
-                                                                 for c in ([click] if isinstance(click, str) else click))}
-
-
-def pills_down(indent):
-    """Down from the pills: the shown section's first list."""
-    return ''.join('\n%s<ondown condition="%s">%d</ondown>' % (indent, shown(key), target)
-                   for key, target in (('home', HOME_ROWS[0][0]), ('subscriptions', ALL_ID),
-                                       ('library', LIBRARY_ROWS[0][0]), ('search', RESULTS_ID)))
-
-
-def search_box():
-    """The app's search field: a magnifier and what was searched (or Search
-    YouTube), the white pill while focused."""
-    return '''
-                <control type="group" id="%(gid)d">
-                    <width>%(w)d</width><height>%(h)d</height>
-                    <control type="button" id="%(id)d">
-                        <width>%(w)d</width><height>%(h)d</height>
-                        <label>$VAR[SiloYouTubeSearchLabel]</label>
-                        <font>silo_meta</font>
-                        <textoffsetx>62</textoffsetx>
-                        <aligny>center</aligny>
-                        <textcolor>$VAR[SiloYouTubeSearchText]</textcolor>
-                        <focusedcolor>FF000000</focusedcolor>
-                        <texturefocus border="24" colordiffuse="%(text)s">silo/pill.png</texturefocus>
-                        <texturenofocus border="24" colordiffuse="$VAR[SiloYouTubeSearchFill]">silo/pill.png</texturenofocus>
-                        <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubesearch)</onclick>
-                        <!-- In its own group (for the magnifier), it takes none of the
-                             pills' moves: its own, the same. -->
-                        <onleft>noop</onleft><onup>noop</onup>
-                        <onright>%(next)d</onright>%(down)s%(back)s
-                    </control>
-                    <control type="image">
-                        <left>22</left><top>%(it)d</top><width>28</width><height>28</height>
-                        <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="FF000000">icons/search.png</texture>
-                        <visible>Control.HasFocus(%(id)d)</visible>
-                    </control>
-                    <control type="image">
-                        <left>22</left><top>%(it)d</top><width>28</width><height>28</height>
-                        <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="%(dim)s">icons/search.png</texture>
-                        <visible>!Control.HasFocus(%(id)d)</visible>
-                    </control>
-                </control>''' % {'gid': PILLS_ID + 1000, 'id': PILLS_ID + 1, 'w': SEARCH_BOX_W, 'h': PILL_H,
-                                   'it': (PILL_H - 28) // 2, 'text': TEXT, 'dim': TAB_DIM,
-                                   'next': PILLS_ID + 2, 'down': pills_down('                        '),
-                                   'back': search_back(shown('search')).replace('\n                ', '\n                        ')}
 
 
 def search_back(condition=None):
@@ -385,7 +328,7 @@ def search_results():
                 <left>%(gx)d</left><top>%(gt)d</top><width>%(gw)d</width><height>%(gh)d</height>
                 <orientation>vertical</orientation>
                 <scrolltime tween="cubic" easing="out">280</scrolltime>
-                <onup>%(pills)d</onup>
+                <onup>noop</onup><onleft>%(menu)s</onleft>
                 <!-- Back from the results: YouTube's Home again, as the app's. -->%(back)s
                 <itemlayout width="%(iw)d" height="%(ih)d">%(card)s
                 </itemlayout>
@@ -394,7 +337,7 @@ def search_results():
                 <content target="videos">$INFO[%(results)s]</content>
             </control>
         </control>''' % {'shown': shown('search'), 'x': CONTENT_X, 'top': TOP, 'w': CONTENT_W, 'lh': ROW_LABEL_H,
-                          'dim': TEXT_DIM, 'sub': SUB_DIM, 'query': QUERY, 'id': RESULTS_ID, 'pills': PILLS_ID,
+                          'dim': TEXT_DIM, 'sub': SUB_DIM, 'query': QUERY, 'id': RESULTS_ID, 'menu': open_menu('search'),
                           'gx': CONTENT_X - 6, 'gt': TOP + ROW_LABEL_H + LABEL_GAP,
                           'gw': item_w * RESULTS_COLS, 'gh': 1080 - TOP - ROW_LABEL_H - LABEL_GAP,
                           'iw': item_w, 'ih': item_h(MEDIUM), 'results': RESULTS, 'back': search_back(),
@@ -402,25 +345,94 @@ def search_results():
                           'card_focused': card(MEDIUM[0], MEDIUM[1], True, RESULTS_ID)}
 
 
-def pills():
-    """Search, then the sections, as Requests' pills: the chosen section's
-    pill stays lit; dimmed until Up from the content reaches them."""
-    buttons = search_box()
-    for number, (key, label) in enumerate(SECTIONS, 2):
-        buttons += pill(PILLS_ID + number, label, '$VAR[SiloYouTubePill_%s]' % key, '$VAR[SiloYouTubePillFill_%s]' % key,
-                        ['SetProperty(silo.youtube.section,%s,home)' % key,
-                         'SetProperty(silo.youtube.loaded.%s,1,home)' % key])
-    down = pills_down('            ')
-    return '''
-        <control type="grouplist" id="%(id)d">
-            <left>%(x)d</left><top>%(top)d</top><width>%(w)d</width><height>%(h)d</height>
-            <orientation>horizontal</orientation>
-            <itemgap>%(gap)d</itemgap>
-            <animation effect="fade" start="100" end="50" time="200" condition="!ControlGroup(%(id)d).HasFocus()">Conditional</animation>
-            <onup>noop</onup><onleft>noop</onleft><onright>noop</onright>%(down)s%(back)s%(buttons)s
-        </control>''' % {'id': PILLS_ID, 'x': SAFE_X, 'top': PILLS_TOP, 'w': 1920 - 2 * SAFE_X, 'h': PILL_H,
-                         'gap': PILL_GAP, 'down': down, 'buttons': buttons,
-                         'back': search_back(shown('search'))}
+def first_of(key):
+    return {'home': HOME_ROWS[0][0], 'subscriptions': ALL_ID, 'library': LIBRARY_ROWS[0][0],
+            'search': RESULTS_ID}[key]
+
+
+MENU_ITEM = '''
+                <item>
+                    <label>%(label)s</label>
+                    <icon>%(icon)s</icon>
+                    <property name="key">%(key)s</property>%(clicks)s
+                </item>'''
+
+MENU_ROW = '''%(pill)s
+                    <control type="image">
+                        <left>22</left><top>18</top><width>32</width><height>32</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture colordiffuse="%(colour)s">$INFO[ListItem.Icon]</texture>
+                    </control>
+                    <control type="label">
+                        <left>74</left><top>4</top><width>%(lw)d</width><height>60</height>
+                        <aligny>center</aligny>
+                        <font>silo_tab</font>
+                        <textcolor>%(colour)s</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>'''
+
+MENU_PILL = '''
+                    <control type="image">
+                        <left>0</left><top>4</top><width>%(w)d</width><height>60</height>
+                        <texture border="30" colordiffuse="%(text)s">silo/pill.png</texture>
+                        <visible>Control.HasFocus(%(id)d)</visible>
+                    </control>'''
+
+MENU = '''
+        <!-- The side menu, from the left (Left from a section's first column). -->
+        <control type="group">
+            <left>-%(w)d</left>
+            <animation effect="slide" start="0,0" end="%(w)d,0" time="220" tween="cubic" easing="out" condition="Control.HasFocus(%(id)d)">Conditional</animation>
+            <control type="image">
+                <left>0</left><top>0</top><width>%(w)d</width><height>1080</height>
+                <texture colordiffuse="F21C1F24">colors/white.png</texture>
+            </control>
+            <control type="label">
+                <left>%(x)d</left><top>%(ty)d</top><width>%(lw)d</width><height>40</height>
+                <aligny>center</aligny>
+                <font>silo_badge</font>
+                <textcolor>99EDEDED</textcolor>
+                <label>YOUTUBE</label>
+            </control>
+            <control type="list" id="%(id)d">
+                <left>%(x)d</left><top>%(top)d</top><width>%(lw)d</width><height>%(h)d</height>
+                <orientation>vertical</orientation>
+                <onleft>noop</onleft>%(back)s
+                <itemlayout width="%(lw)d" height="68">%(row)s
+                </itemlayout>
+                <focusedlayout width="%(lw)d" height="68">%(row_focused)s
+                </focusedlayout>
+                <content>%(items)s
+                </content>
+            </control>
+        </control>'''
+
+
+def side_menu():
+    """The app's side menu, from the left (Left from a section's first
+    column): Search, Home, Subscriptions and Library, the shown section lit.
+    It waits off screen and slides in while it has focus, as the video
+    pages' View and sort menu; Right or Back returns to the section."""
+    def clicks(actions):
+        return ''.join('\n                    <onclick>%s</onclick>' % a for a in actions)
+    icons = {'search': 'icons/search.png', 'home': 'silo/yt_home.png', 'subscriptions': 'silo/yt_subscriptions.png',
+             'library': 'silo/yt_library.png'}
+    items = MENU_ITEM % {'label': 'Search', 'key': 'search', 'icon': icons['search'],
+                         'clicks': clicks(['RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubesearch)'])}
+    for key, label in SECTIONS:
+        items += MENU_ITEM % {'label': label, 'key': key, 'icon': icons[key], 'clicks': clicks([
+            'SetProperty(silo.youtube.section,%s,home)' % key, 'SetProperty(silo.youtube.loaded.%s,1,home)' % key,
+            'SetFocus(%d)' % first_of(key)])}
+    back = ''.join('\n                <%s condition="%s">SetFocus(%d)</%s>' % (tag, shown(key), first_of(key), tag)
+                   for tag in ('onright', 'onback') for key in ('home', 'subscriptions', 'library', 'search'))
+    lw = MENU_W - SAFE_X + 4
+
+    def row(focused):
+        pill = MENU_PILL % {'w': lw - 8, 'text': TEXT, 'id': MENU_ID} if focused else ''
+        return MENU_ROW % {'pill': pill, 'lw': lw - 98,
+                           'colour': '$VAR[SiloYouTubeMenuText]' if focused else '$VAR[SiloYouTubeMenuDim]'}
+    return MENU % {'w': MENU_W, 'id': MENU_ID, 'x': SAFE_X - 24, 'lw': lw, 'ty': TOP - 56, 'top': TOP,
+                   'h': 68 * 4, 'back': back, 'row': row(False), 'row_focused': row(True), 'items': items}
 
 
 def channel_row(focused):
@@ -464,7 +476,7 @@ def subscriptions():
                 <focusedcolor>FF000000</focusedcolor>
                 <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
                 <texturenofocus border="30" colordiffuse="$VAR[SiloYouTubeAllPill]">silo/pill.png</texturenofocus>
-                <onleft>noop</onleft><onup>%(pills)d</onup>
+                <onleft>%(menu)s</onleft><onup>noop</onup>
                 <ondown>%(channels)d</ondown>
                 <onright>%(grid)d</onright>
                 <onclick>ClearProperty(silo.youtube.channel,home)</onclick>
@@ -480,7 +492,7 @@ def subscriptions():
                 <left>%(x)d</left><top>%(ltop)d</top><width>%(cw)d</width><height>%(lh)d</height>
                 <orientation>vertical</orientation>
                 <scrolltime tween="cubic" easing="out">200</scrolltime>
-                <onleft>noop</onleft><onup>%(all)d</onup>
+                <onleft>%(menu)s</onleft><onup>%(all)d</onup>
                 <onright>%(grid)d</onright>
                 <!-- A channel's videos at the right, as the app's (not its page). -->
                 <onclick>SetProperty(silo.youtube.channel,$INFO[ListItem.FolderPath],home)</onclick>
@@ -509,7 +521,7 @@ def subscriptions():
                 <left>%(gx6)d</left><top>%(gtop)d</top><width>%(gw)d</width><height>%(gh)d</height>
                 <orientation>vertical</orientation>
                 <scrolltime tween="cubic" easing="out">280</scrolltime>
-                <onleft>%(channels)d</onleft><onup>%(pills)d</onup>
+                <onleft>%(channels)d</onleft><onup>noop</onup>
                 <itemlayout width="%(giw)d" height="%(gih)d">%(card)s
                 </itemlayout>
                 <focusedlayout width="%(giw)d" height="%(gih)d">%(card_focused)s
@@ -517,7 +529,7 @@ def subscriptions():
                 <content target="videos">$VAR[SiloYouTubeChannelPath]</content>
             </control>
         </control>''' % {
-        'shown': shown('subscriptions'), 'all': ALL_ID, 'channels': CHANNELS_ID, 'grid': SUBS_GRID, 'pills': PILLS_ID,
+        'shown': shown('subscriptions'), 'all': ALL_ID, 'channels': CHANNELS_ID, 'grid': SUBS_GRID, 'menu': open_menu('subscriptions'),
         'x': CONTENT_X, 'top': TOP, 'cw': CHANNELS_W, 'rh': CHANNEL_ROW - 8, 'text': TEXT, 'dim': TEXT_DIM, 'sub': SUB_DIM,
         'atop': TOP + CHANNEL_ROW + 8, 'ltop': TOP + CHANNEL_ROW + 52, 'lh': 1080 - TOP - CHANNEL_ROW - 52,
         'row': CHANNEL_ROW, 'channel': channel_row(False), 'channel_focused': channel_row(True),
@@ -536,6 +548,9 @@ def build():
 <!-- Generated by tools/build_youtube.py: edit that, not this. -->
 <window id="%(window)d" type="window">
     <defaultcontrol always="true">%(first)d</defaultcontrol>
+    <!-- A video left playing behind the page (Back from the player): stopped,
+         as Skyline's other pages do; the YouTube add-on keeps its place. -->
+    <onload condition="Player.HasVideo">PlayerControl(Stop)</onload>
     <!-- Home, its first row focused, as the app opens. -->
     <onload>ClearProperty(silo.youtube.section,home)</onload>
     <onload>ClearProperty(silo.youtube.row.home,home)</onload>
@@ -552,51 +567,32 @@ def build():
         </control>
         <include content="SiloFrame">
             <param name="title">YouTube</param>
-            <param name="sub"></param>
+            <param name="sub">$VAR[SiloYouTubeSection]</param>
         </include>
 %(home_rows)s
 %(subscriptions)s
 %(library)s
 %(search)s
-%(pills)s
+%(menu)s
     </controls>
 </window>
 ''' % {'window': WINDOW_ID, 'first': HOME_ROWS[0][0], 'background': BACKGROUND,
        'home_rows': rows_section(HOME_LIST, 'home', HOME_ROWS), 'subscriptions': subscriptions(),
-       'library': library(), 'search': search_results(), 'pills': pills()}
-
-
-def pill_variables():
-    out = ''
-    for key, _ in SECTIONS:
-        chosen = shown(key)
-        out += '''    <variable name="SiloYouTubePill_%(k)s">
-        <value condition="%(c)s">%(text)s</value>
-        <value>%(dim)s</value>
-    </variable>
-    <variable name="SiloYouTubePillFill_%(k)s">
-        <value condition="%(c)s">33FFFFFF</value>
-        <value>12FFFFFF</value>
-    </variable>
-''' % {'k': key, 'c': chosen, 'text': TEXT, 'dim': TAB_DIM}
-    return out
+       'library': library(), 'search': search_results(), 'menu': side_menu()}
 
 
 VARIABLES = '''
     <!-- Silo Skyline YouTube (tools/build_youtube.py) -->
-%(pills)s    <variable name="SiloYouTubeSearchLabel">
-        <value condition="!String.IsEmpty(%(query)s)">$INFO[%(query)s]</value>
-        <value>Search YouTube</value>
+%(lazy)s    <variable name="SiloYouTubeMenuText">
+        <value condition="Control.HasFocus(%(menu)d)">FF000000</value>
+        <value>%(text)s</value>
     </variable>
-    <variable name="SiloYouTubeSearchText">
-        <value condition="String.IsEqual(%(section)s,search)">%(text)s</value>
+    <variable name="SiloYouTubeMenuDim">
+        <value condition="String.IsEqual(ListItem.Property(key),$INFO[%(section)s]) | [String.IsEmpty(%(section)s) + String.IsEqual(ListItem.Property(key),home)]">%(text)s</value>
         <value>%(dim)s</value>
     </variable>
-    <variable name="SiloYouTubeSearchFill">
-        <value condition="String.IsEqual(%(section)s,search)">33FFFFFF</value>
-        <value>12FFFFFF</value>
-    </variable>
     <variable name="SiloYouTubeSection">
+        <value condition="String.IsEqual(%(section)s,search)">Search</value>
         <value condition="String.IsEqual(%(section)s,subscriptions)">Subscriptions</value>
         <value condition="String.IsEqual(%(section)s,library)">Library</value>
         <value>Home</value>
@@ -638,7 +634,7 @@ VARIABLES = '''
         <value>Most recent</value>
     </variable>
     <!-- end Silo Skyline YouTube -->
-''' % {'pills': pill_variables() + lazy_variables(), 'subs_loaded': LOADED % 'subscriptions', 'query': QUERY, 'dim': TAB_DIM,
+''' % {'lazy': lazy_variables(), 'menu': MENU_ID, 'subs_loaded': LOADED % 'subscriptions', 'dim': TAB_DIM,
        'section': SECTION, 'channels': CHANNELS_ID, 'text': TEXT, 'channel': CHANNEL,
        'yt': YT, 'params': ROW_PARAMS, 'more': ROW_PARAMS.replace('?', '&amp;', 1)}
 

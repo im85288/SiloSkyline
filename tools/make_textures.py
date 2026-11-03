@@ -272,8 +272,37 @@ def rotten_tomatoes_marks():
     write_png('rt_rotten.png', 64, 64, layered([(lambda x, y: any(b(x, y) for b in blobs), green)]))
 
 
+def glyph_covers(polygon, x, y):
+    """Whether (x, y) is inside a polygon of (x, y) points (even-odd rule)."""
+    hit = False
+    for (x1, y1), (x2, y2) in zip(polygon, polygon[1:] + polygon[:1]):
+        if (y1 > y) != (y2 > y) and x < x1 + (y - y1) * (x2 - x1) / (y2 - y1):
+            hit = not hit
+    return hit
+
+
+def youtube_icons(size=96):
+    """The YouTube page's side menu glyphs (tools/build_youtube.py), solid as
+    the app's: a house, a screen with a play mark, a bookmark."""
+    def glyph(name, shape):
+        def alpha(x, y):
+            hits = sum(shape(x - 0.5 + (i + 0.5) / SUB, y - 0.5 + (j + 0.5) / SUB)
+                       for i in range(SUB) for j in range(SUB))
+            return hits / float(SUB * SUB)
+        write_png(name, size, size, alpha)
+    roof = [(10, 48), (48, 12), (86, 48)]
+    glyph('yt_home.png', lambda x, y: (glyph_covers(roof, x, y) or (22 <= x <= 74 and 44 <= y <= 84))
+          and not (41 <= x <= 55 and 60 <= y <= 85))
+    play = [(40, 40), (40, 70), (63, 55)]
+    glyph('yt_subscriptions.png', lambda x, y: ((rounded_rect_coverage(x - 12, y - 26, 72, 58, 8) > 0.5
+                                                 and not glyph_covers(play, x, y))
+                                                or (22 <= x <= 74 and 14 <= y <= 19)))
+    glyph('yt_library.png', lambda x, y: glyph_covers([(24, 12), (72, 12), (72, 86), (48, 66), (24, 86)], x, y))
+
+
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
+    youtube_icons()
     hero_mask()
     tint_wash()
     card_mask('card_poster_mask.png', 176, 264, 18)

@@ -8542,30 +8542,6 @@
     </variable>
     <!-- end Silo Skyline Showcase -->
     <!-- Silo Skyline YouTube (tools/build_youtube.py) -->
-    <variable name="SiloYouTubePill_home">
-        <value condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)]">FFEDEDED</value>
-        <value>B3EDEDED</value>
-    </variable>
-    <variable name="SiloYouTubePillFill_home">
-        <value condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)]">33FFFFFF</value>
-        <value>12FFFFFF</value>
-    </variable>
-    <variable name="SiloYouTubePill_subscriptions">
-        <value condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions)">FFEDEDED</value>
-        <value>B3EDEDED</value>
-    </variable>
-    <variable name="SiloYouTubePillFill_subscriptions">
-        <value condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions)">33FFFFFF</value>
-        <value>12FFFFFF</value>
-    </variable>
-    <variable name="SiloYouTubePill_library">
-        <value condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library)">FFEDEDED</value>
-        <value>B3EDEDED</value>
-    </variable>
-    <variable name="SiloYouTubePillFill_library">
-        <value condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library)">33FFFFFF</value>
-        <value>12FFFFFF</value>
-    </variable>
     <variable name="SiloYouTubeRow_511">
         <value condition="!String.IsEmpty(Window(Home).Property(silo.youtube.loaded.library))">plugin://plugin.video.youtube/special/playlist/HL/?hide_folders=true&amp;hide_next_page=true</value>
     </variable>
@@ -8578,19 +8554,16 @@
     <variable name="SiloYouTubeRow_514">
         <value condition="!String.IsEmpty(Window(Home).Property(silo.youtube.loaded.library))">plugin://plugin.video.youtube/channel/mine/playlist/LL/?hide_folders=true&amp;hide_next_page=true</value>
     </variable>
-    <variable name="SiloYouTubeSearchLabel">
-        <value condition="!String.IsEmpty(Window(Home).Property(silo.youtube.query))">$INFO[Window(Home).Property(silo.youtube.query)]</value>
-        <value>Search YouTube</value>
+    <variable name="SiloYouTubeMenuText">
+        <value condition="Control.HasFocus(100)">FF000000</value>
+        <value>FFEDEDED</value>
     </variable>
-    <variable name="SiloYouTubeSearchText">
-        <value condition="String.IsEqual(Window(Home).Property(silo.youtube.section),search)">FFEDEDED</value>
+    <variable name="SiloYouTubeMenuDim">
+        <value condition="String.IsEqual(ListItem.Property(key),$INFO[Window(Home).Property(silo.youtube.section)]) | [String.IsEmpty(Window(Home).Property(silo.youtube.section)) + String.IsEqual(ListItem.Property(key),home)]">FFEDEDED</value>
         <value>B3EDEDED</value>
     </variable>
-    <variable name="SiloYouTubeSearchFill">
-        <value condition="String.IsEqual(Window(Home).Property(silo.youtube.section),search)">33FFFFFF</value>
-        <value>12FFFFFF</value>
-    </variable>
     <variable name="SiloYouTubeSection">
+        <value condition="String.IsEqual(Window(Home).Property(silo.youtube.section),search)">Search</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions)">Subscriptions</value>
         <value condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library)">Library</value>
         <value>Home</value>
