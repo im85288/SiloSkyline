@@ -7797,6 +7797,8 @@
     </variable>
     <variable name="SiloDetailPlayLabel">
         <value condition="String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)">$LOCALIZE[1024]</value>
+        <!-- The time left takes the pill's end: "Resume S2 E10" would run under it. -->
+        <value condition="ListItem.IsResumable + !String.IsEmpty(ListItem.Property(silo.left_short))">Resume</value>
         <value condition="String.IsEqual(ListItem.DBType,episode) + ListItem.IsResumable">Resume S$INFO[ListItem.Season] E$INFO[ListItem.Episode]</value>
         <value condition="String.IsEqual(ListItem.DBType,episode)">Play S$INFO[ListItem.Season] E$INFO[ListItem.Episode]</value>
         <value condition="ListItem.IsResumable">Resume</value>
