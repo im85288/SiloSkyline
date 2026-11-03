@@ -1,3 +1,7 @@
+[B]0.5.2[/B]
+• Add-ons' videos (YouTube's) as a grid of 16:9 cards under the focused video's details
+• Add-on menus without a repeated second line; the header counts the page's items
+
 [B]0.5.1[/B]
 • Resume on an episode's page no longer runs under its time left
 
