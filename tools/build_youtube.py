@@ -18,8 +18,8 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_home import (BACKGROUND, PILL_GAP, PILL_H, PILLS_TOP, ROOT, SAFE_X, SUB_DIM, TAB_DIM, TEXT,  # noqa: E402
-                        TEXT_DIM, TITLE_DIM, focus_sheen, focus_zoom)
+from build_home import (BACKGROUND, PILL_GAP, PILL_H, PILLS_TOP, ROOT, SAFE_X, SUB_DIM,  # noqa: E402
+                        TAB_DIM, TEXT, TEXT_DIM, TITLE_DIM, focus_sheen)
 
 WINDOW_ID = 1198
 ADDON = 'plugin.video.youtube'
@@ -86,7 +86,9 @@ def card(width, height, focused, view_id):
     """A video as the app shows one: its picture with the duration in the
     corner, then a two-line title, the channel and the date."""
     has_focus = 'Control.HasFocus(%d)' % view_id
-    zoom = focus_zoom(has_focus) if focused else ''
+    # No zoom of its own, as the app's: the chosen row is already big, and a card
+    # growing stood out of line with the row's title or over its neighbours.
+    zoom = ''
     # Skyline's focus, as Home's rows: the zoom, a faint veil and a hairline rim.
     ring = focus_sheen(width, height, 'silo/card_landscape_mask.png', 'silo/card_landscape_rim.png',
                        has_focus, 20) if focused else ''
@@ -96,6 +98,10 @@ def card(width, height, focused, view_id):
                         <left>6</left><top>6</top><width>%(w)d</width><height>%(h)d</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>%(w)d</width><height>%(h)d</height>
+                        <texture border="24" colordiffuse="%(page)s">silo/card_corners.png</texture>
                     </control>
                     <control type="progress">
                         <left>20</left><top>%(pt)d</top><width>%(pw)d</width><height>6</height>
@@ -133,6 +139,7 @@ def card(width, height, focused, view_id):
                     </control>
                 </control>''' % {
         'zoom': zoom, 'w': width, 'h': height, 'pt': height - 2, 'pw': width - 28, 'text': TEXT, 'ring': ring,
+        'page': BACKGROUND,
         'bx': width + 6 - 110 - 14, 'bt': height - 36,
         't1': height + 20, 't2': height + 90, 't3': height + 124,
         'title': TEXT if focused else TITLE_DIM, 'sub': TEXT_DIM if focused else SUB_DIM}
@@ -154,22 +161,25 @@ def chosen_row(section, number):
 
 
 def row_moves(section, number, count):
-    """Where a row slides for each chosen row: the chosen one at the top, the
-    next under it, those above faded out."""
+    """Where a row slides for each chosen row above it: the chosen one at the
+    top, the next under it. Rows above the chosen one are hidden instead
+    (row_hidden): Kodi didn't undo their slide and fade on going back up."""
     moves = ''
-    for focus in range(count):
-        if number == focus:
-            continue
-        if number > focus:
-            offset = BIG_SLOT + (number - focus - 1) * MEDIUM_SLOT
-        else:
-            offset = -(focus - number) * MEDIUM_SLOT
+    for focus in range(number):
         moves += ('\n                <animation effect="slide" end="0,%d" time="260" tween="cubic" easing="out" '
-                  'condition="%s">Conditional</animation>' % (offset, chosen_row(section, focus)))
-        if number < focus:
-            moves += ('\n                <animation effect="fade" end="0" time="160" condition="%s">Conditional</animation>'
-                      % chosen_row(section, focus))
+                  'condition="%s">Conditional</animation>' % (BIG_SLOT + (number - focus - 1) * MEDIUM_SLOT,
+                                                              chosen_row(section, focus)))
     return moves
+
+
+def row_hidden(section, number, count):
+    """A row above the chosen one is hidden, but Up can still focus it."""
+    later = ['String.IsEqual(%s,%d)' % (row_property(section), focus) for focus in range(number + 1, count)]
+    if not later:
+        return ''
+    return ('\n                <visible allowhiddenfocus="true">!%s</visible>'
+            '\n                <animation effect="fade" time="160">VisibleChange</animation>'
+            % ('[%s]' % ' | '.join(later)))
 
 
 def row_layouts(list_id):
@@ -181,7 +191,7 @@ def row_layouts(list_id):
 
 ROW = '''
             <control type="group">
-                <left>0</left><top>0</top><width>%(w)d</width><height>%(slot)d</height>%(moves)s
+                <left>0</left><top>0</top><width>%(w)d</width><height>%(slot)d</height>%(hidden)s%(moves)s
                 <control type="label">
                     <left>0</left><top>0</top><width>%(w)d</width><height>%(lh)d</height>
                     <aligny>center</aligny>
@@ -217,7 +227,8 @@ def row(section, number, count, list_id, title, path, up, down):
     """A row of the app's cards. As the app's, the chosen row is big and at the
     top, the next one medium under it (row_moves, row_layouts)."""
     return ROW % {
-        'w': CONTENT_W, 'slot': BIG_SLOT, 'moves': row_moves(section, number, count), 'lh': ROW_LABEL_H,
+        'w': CONTENT_W, 'slot': BIG_SLOT, 'moves': row_moves(section, number, count),
+        'hidden': row_hidden(section, number, count), 'lh': ROW_LABEL_H,
         'lt': ROW_LABEL_H + LABEL_GAP, 'dim': TEXT_DIM, 'sub': SUB_DIM, 'title': title, 'id': list_id,
         'lw': CONTENT_W + 6, 'ih': item_h(MEDIUM), 'section': section, 'number': number, 'up': up,
         'layouts': row_layouts(list_id), 'path': path, 'zoom': ZOOM, 'big': chosen_row(section, number),

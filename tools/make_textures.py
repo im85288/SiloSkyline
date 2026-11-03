@@ -89,6 +89,14 @@ def card_mask(name, width, height, radius):
     write_png(name, width, height, lambda x, y: rounded_rect_coverage(x, y, width, height, radius))
 
 
+def card_corners(name='card_corners.png', size=64, radius=24):
+    """A card's four corners outside its rounded rectangle, drawn over a picture
+    in the page's colour (stretched with border="24"): a mask is applied to the
+    whole picture, so a picture cropped to fit (YouTube's 4:3 thumbnails) loses
+    the mask's rounded corners with the cropped part."""
+    write_png(name, size, size, lambda x, y: 1.0 - rounded_rect_coverage(x, y, size, size, radius))
+
+
 def focus_ring(name, width, height, radius, thickness):
     def alpha(x, y):
         outer = rounded_rect_coverage(x, y, width, height, radius)
@@ -270,6 +278,7 @@ if __name__ == '__main__':
     tint_wash()
     card_mask('card_poster_mask.png', 176, 264, 18)
     card_mask('card_landscape_mask.png', 360, 202, 20)
+    card_corners()
     # Rings sit 6 px outside the card on each side.
     focus_ring('card_poster_focus.png', 188, 276, 18, 4)
     focus_ring('card_landscape_focus.png', 372, 214, 20, 4)
