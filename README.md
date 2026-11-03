@@ -34,6 +34,7 @@ Community project: not made or endorsed by the Silo team.
 - **Showcase player** (the default): a richer overlay with Episodes (the season over the buttons) and Next
   Episode, the focused button's name, a Netflix-style pause screen after 10 seconds, and Up Next to match. Silo's own player style is the other choice.
 - **Live TV** laid out as TiviMate, in Silo's look: guide, quick guide (its channel groups on Left), OK screen, catch-up and recent channels.
+- **YouTube** (with the YouTube add-on) as the YouTube app: Home, Subscriptions and Library, the focused row big at the top.
 - Silo-style menus, dialogs, keyboard, notifications and settings; **Inter** throughout, as the Silo apps use.
 
 | Movies | Series | Film |
@@ -98,6 +99,7 @@ python3 tools/build_all.py
 - `build_showcase.py`, `build_options.py`, `build_upnext.py`: the player's styles, its Options sheet and Up
   Next's windows.
 - `build_tv.py`: Live TV's guide and programme information.
+- `build_youtube.py`: the YouTube page.
 - `build_shortcuts.py`: the menu editor for your own menu items. Skin Shortcuts writes
   `xml/script-skinshortcuts-includes.xml` on the device, over the placeholder here.
 - `build_colours.py` runs last: it turns the colours a theme changes into the names `colors/defaults.xml`,

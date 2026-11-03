@@ -1,3 +1,9 @@
+[B]0.6.0[/B]
+• YouTube: a tab after TV while the YouTube add-on is installed, with Home, Subscriptions and Library as the YouTube app has them
+• The focused row is big at the top, the next one peeking in below, as in the app
+• The bar shows Skyline's mark alone, making room for custom items
+• Settings can hide the Requests, TV and YouTube tabs
+
 [B]0.5.2[/B]
 • Add-ons' videos (YouTube's) as a grid of 16:9 cards under the focused video's details
 • Add-on menus without a repeated second line; the header counts the page's items
