@@ -164,14 +164,26 @@ def popup(still_watching):
         what = 'Up Next asks before it plays another episode.'
     else:
         credits = 'String.IsEqual(Window.Property(credits_countdown),true)'
+        # Up Next from 1.3.5 counts down in remaining_time (m:ss) too, so a popup
+        # opened early shows its time; before that, only the last minute had one.
+        timed = '!String.IsEmpty(Window.Property(remaining_time))'
+        untimed = 'String.IsEmpty(Window.Property(remaining_time))'
+        long_wait = '%s + Integer.IsGreater(Window.Property(remaining),59)' % timed
+        seconds = '[[%s + !Integer.IsGreater(Window.Property(remaining),59)] | ' \
+                  '[%s + !Integer.IsGreater(Player.TimeRemaining,59)]]' % (timed, untimed)
         eyebrows = (
+            label(top, 36, 'silo_meta', '85EDEDED', 'UP NEXT IN $INFO[Window.Property(remaining_time)]',
+                  '!%s + %s' % (credits, long_wait), shared=True) +
             label(top, 36, 'silo_meta', '85EDEDED', 'UP NEXT',
-                  '!%s + Integer.IsGreater(Player.TimeRemaining,59)' % credits, shared=True) +
+                  '!%s + %s + Integer.IsGreater(Player.TimeRemaining,59)' % (credits, untimed), shared=True) +
             label(top, 36, 'silo_meta', '85EDEDED', 'UP NEXT IN $INFO[Window.Property(remaining)] S',
-                  '!%s + !Integer.IsGreater(Player.TimeRemaining,59)' % credits, shared=True) +
+                  '!%s + %s' % (credits, seconds), shared=True) +
             # While the credits roll: the countdown and how to keep watching them.
             label(top, 36, 'silo_meta', '85EDEDED',
-                  '$ADDON[%s 30050]  ·  $ADDON[%s 30051]' % (UPNEXT, UPNEXT), credits,
+                  'Next episode in $INFO[Window.Property(remaining_time)]  ·  $ADDON[%s 30051]' % UPNEXT,
+                  '%s + %s' % (credits, long_wait), shared=True) +
+            label(top, 36, 'silo_meta', '85EDEDED',
+                  '$ADDON[%s 30050]  ·  $ADDON[%s 30051]' % (UPNEXT, UPNEXT), '%s + ![%s]' % (credits, long_wait),
                   '\n                <description>credits countdown</description>', shared=True).replace(
                       '<control type="label">', '<control type="label" id="3015">', 1))
         main = 'Play Now'

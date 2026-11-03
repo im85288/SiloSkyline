@@ -116,8 +116,18 @@
                 <aligny>center</aligny>
                 <font>silo_meta</font>
                 <textcolor>85EDEDED</textcolor>
+                <label>UP NEXT IN $INFO[Window.Property(remaining_time)]</label>
+                <visible>!String.IsEqual(Window.Property(credits_countdown),true) + !String.IsEmpty(Window.Property(remaining_time)) + Integer.IsGreater(Window.Property(remaining),59)</visible>
+                <animation effect="slide" end="-696,-50" time="0" condition="!Skin.HasSetting(SkylineSiloOSD)">Conditional</animation>
+            </control>
+            <control type="label">
+                <left>816</left><top>200</top>
+                <width>944</width><height>36</height>
+                <aligny>center</aligny>
+                <font>silo_meta</font>
+                <textcolor>85EDEDED</textcolor>
                 <label>UP NEXT</label>
-                <visible>!String.IsEqual(Window.Property(credits_countdown),true) + Integer.IsGreater(Player.TimeRemaining,59)</visible>
+                <visible>!String.IsEqual(Window.Property(credits_countdown),true) + String.IsEmpty(Window.Property(remaining_time)) + Integer.IsGreater(Player.TimeRemaining,59)</visible>
                 <animation effect="slide" end="-696,-50" time="0" condition="!Skin.HasSetting(SkylineSiloOSD)">Conditional</animation>
             </control>
             <control type="label">
@@ -127,7 +137,17 @@
                 <font>silo_meta</font>
                 <textcolor>85EDEDED</textcolor>
                 <label>UP NEXT IN $INFO[Window.Property(remaining)] S</label>
-                <visible>!String.IsEqual(Window.Property(credits_countdown),true) + !Integer.IsGreater(Player.TimeRemaining,59)</visible>
+                <visible>!String.IsEqual(Window.Property(credits_countdown),true) + [[!String.IsEmpty(Window.Property(remaining_time)) + !Integer.IsGreater(Window.Property(remaining),59)] | [String.IsEmpty(Window.Property(remaining_time)) + !Integer.IsGreater(Player.TimeRemaining,59)]]</visible>
+                <animation effect="slide" end="-696,-50" time="0" condition="!Skin.HasSetting(SkylineSiloOSD)">Conditional</animation>
+            </control>
+            <control type="label">
+                <left>816</left><top>200</top>
+                <width>944</width><height>36</height>
+                <aligny>center</aligny>
+                <font>silo_meta</font>
+                <textcolor>85EDEDED</textcolor>
+                <label>Next episode in $INFO[Window.Property(remaining_time)]  ·  $ADDON[service.upnext 30051]</label>
+                <visible>String.IsEqual(Window.Property(credits_countdown),true) + !String.IsEmpty(Window.Property(remaining_time)) + Integer.IsGreater(Window.Property(remaining),59)</visible>
                 <animation effect="slide" end="-696,-50" time="0" condition="!Skin.HasSetting(SkylineSiloOSD)">Conditional</animation>
             </control>
             <control type="label" id="3015">
@@ -137,7 +157,7 @@
                 <font>silo_meta</font>
                 <textcolor>85EDEDED</textcolor>
                 <label>$ADDON[service.upnext 30050]  ·  $ADDON[service.upnext 30051]</label>
-                <visible>String.IsEqual(Window.Property(credits_countdown),true)</visible>
+                <visible>String.IsEqual(Window.Property(credits_countdown),true) + ![!String.IsEmpty(Window.Property(remaining_time)) + Integer.IsGreater(Window.Property(remaining),59)]</visible>
                 <animation effect="slide" end="-696,-50" time="0" condition="!Skin.HasSetting(SkylineSiloOSD)">Conditional</animation>
                 <description>credits countdown</description>
             </control>
