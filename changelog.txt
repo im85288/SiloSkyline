@@ -1,3 +1,10 @@
+[B]0.6.1[/B]
+• YouTube: a search box with the results on the page, Back returning to its Home
+• YouTube: the menu key offers Play, or Play choosing the video's quality
+• YouTube: rows scroll down as in the app, the focused card stands out, cards rounded
+• Requests: a Search to request box
+• Player options: Quality, the video's streams (a YouTube video's qualities)
+
 [B]0.6.0[/B]
 • YouTube: a tab after TV while the YouTube add-on is installed, with Home, Subscriptions and Library as the YouTube app has them
 • The focused row is big at the top, the next one peeking in below, as in the app
