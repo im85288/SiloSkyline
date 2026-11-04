@@ -70,10 +70,18 @@
                     <ondown>302</ondown>
                     <itemlayout width="568" height="475">
                 <control type="group">
+                    <!-- Behind the picture, the video's smaller one YouTube always has:
+                         the add-on asks for its largest 16:9 (hq720) without checking,
+                         and older videos have none, which left the card grey. -->
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -118,10 +126,18 @@
                     <focusedlayout width="568" height="475">
                 <control type="group">
                     <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(301)">Conditional</animation>
+                    <!-- Behind the picture, the video's smaller one YouTube always has:
+                         the add-on asks for its largest 16:9 (hq720) without checking,
+                         and older videos have none, which left the card grey. -->
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -221,10 +237,18 @@
                     <ondown>303</ondown>
                     <itemlayout width="568" height="475">
                 <control type="group">
+                    <!-- Behind the picture, the video's smaller one YouTube always has:
+                         the add-on asks for its largest 16:9 (hq720) without checking,
+                         and older videos have none, which left the card grey. -->
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -269,10 +293,18 @@
                     <focusedlayout width="568" height="475">
                 <control type="group">
                     <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(302)">Conditional</animation>
+                    <!-- Behind the picture, the video's smaller one YouTube always has:
+                         the add-on asks for its largest 16:9 (hq720) without checking,
+                         and older videos have none, which left the card grey. -->
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -364,10 +396,18 @@
                     <ondown>noop</ondown>
                     <itemlayout width="568" height="475">
                 <control type="group">
+                    <!-- Behind the picture, the video's smaller one YouTube always has:
+                         the add-on asks for its largest 16:9 (hq720) without checking,
+                         and older videos have none, which left the card grey. -->
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -412,10 +452,18 @@
                     <focusedlayout width="568" height="475">
                 <control type="group">
                     <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(303)">Conditional</animation>
+                    <!-- Behind the picture, the video's smaller one YouTube always has:
+                         the add-on asks for its largest 16:9 (hq720) without checking,
+                         and older videos have none, which left the card grey. -->
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -567,10 +615,18 @@
                 <onleft>402</onleft><onup>noop</onup>
                 <itemlayout width="456" height="412">
                 <control type="group">
+                    <!-- Behind the picture, the video's smaller one YouTube always has:
+                         the add-on asks for its largest 16:9 (hq720) without checking,
+                         and older videos have none, which left the card grey. -->
                     <control type="image">
                         <left>6</left><top>6</top><width>416</width><height>234</height>
                         <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>416</width><height>234</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top><width>416</width><height>234</height>
@@ -615,10 +671,18 @@
                 <focusedlayout width="456" height="412">
                 <control type="group">
                     <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,123" condition="Control.HasFocus(410)">Conditional</animation>
+                    <!-- Behind the picture, the video's smaller one YouTube always has:
+                         the add-on asks for its largest 16:9 (hq720) without checking,
+                         and older videos have none, which left the card grey. -->
                     <control type="image">
                         <left>6</left><top>6</top><width>416</width><height>234</height>
                         <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>416</width><height>234</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top><width>416</width><height>234</height>
@@ -722,10 +786,18 @@
                     <ondown>512</ondown>
                     <itemlayout width="568" height="475">
                 <control type="group">
+                    <!-- Behind the picture, the video's smaller one YouTube always has:
+                         the add-on asks for its largest 16:9 (hq720) without checking,
+                         and older videos have none, which left the card grey. -->
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -770,10 +842,18 @@
                     <focusedlayout width="568" height="475">
                 <control type="group">
                     <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(511)">Conditional</animation>
+                    <!-- Behind the picture, the video's smaller one YouTube always has:
+                         the add-on asks for its largest 16:9 (hq720) without checking,
+                         and older videos have none, which left the card grey. -->
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -873,10 +953,18 @@
                     <ondown>513</ondown>
                     <itemlayout width="568" height="475">
                 <control type="group">
+                    <!-- Behind the picture, the video's smaller one YouTube always has:
+                         the add-on asks for its largest 16:9 (hq720) without checking,
+                         and older videos have none, which left the card grey. -->
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -921,10 +1009,18 @@
                     <focusedlayout width="568" height="475">
                 <control type="group">
                     <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(512)">Conditional</animation>
+                    <!-- Behind the picture, the video's smaller one YouTube always has:
+                         the add-on asks for its largest 16:9 (hq720) without checking,
+                         and older videos have none, which left the card grey. -->
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -1025,10 +1121,18 @@
                     <ondown>514</ondown>
                     <itemlayout width="568" height="475">
                 <control type="group">
+                    <!-- Behind the picture, the video's smaller one YouTube always has:
+                         the add-on asks for its largest 16:9 (hq720) without checking,
+                         and older videos have none, which left the card grey. -->
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -1073,10 +1177,18 @@
                     <focusedlayout width="568" height="475">
                 <control type="group">
                     <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(513)">Conditional</animation>
+                    <!-- Behind the picture, the video's smaller one YouTube always has:
+                         the add-on asks for its largest 16:9 (hq720) without checking,
+                         and older videos have none, which left the card grey. -->
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -1169,10 +1281,18 @@
                     <ondown>noop</ondown>
                     <itemlayout width="568" height="475">
                 <control type="group">
+                    <!-- Behind the picture, the video's smaller one YouTube always has:
+                         the add-on asks for its largest 16:9 (hq720) without checking,
+                         and older videos have none, which left the card grey. -->
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -1217,10 +1337,18 @@
                     <focusedlayout width="568" height="475">
                 <control type="group">
                     <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(514)">Conditional</animation>
+                    <!-- Behind the picture, the video's smaller one YouTube always has:
+                         the add-on asks for its largest 16:9 (hq720) without checking,
+                         and older videos have none, which left the card grey. -->
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -1309,10 +1437,18 @@
                 <onback>ClearProperty(silo.youtube.query,home)</onback>
                 <itemlayout width="568" height="475">
                 <control type="group">
+                    <!-- Behind the picture, the video's smaller one YouTube always has:
+                         the add-on asks for its largest 16:9 (hq720) without checking,
+                         and older videos have none, which left the card grey. -->
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
@@ -1357,10 +1493,18 @@
                 <focusedlayout width="568" height="475">
                 <control type="group">
                     <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(610)">Conditional</animation>
+                    <!-- Behind the picture, the video's smaller one YouTube always has:
+                         the add-on asks for its largest 16:9 (hq720) without checking,
+                         and older videos have none, which left the card grey. -->
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>
                         <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top><width>528</width><height>297</height>

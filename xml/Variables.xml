@@ -8568,6 +8568,10 @@
         <value condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library)">Library</value>
         <value>Home</value>
     </variable>
+    <variable name="SiloYouTubeThumbBehind">
+        <value condition="!String.IsEmpty(ListItem.Property(video_id))">https://i.ytimg.com/vi/$INFO[ListItem.Property(video_id)]/hqdefault.jpg</value>
+        <value>colors/grey.png</value>
+    </variable>
     <variable name="SiloYouTubeThumb">
         <value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
         <value>$INFO[ListItem.Icon]</value>

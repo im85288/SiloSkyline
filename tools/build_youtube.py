@@ -112,10 +112,18 @@ def card(width, height, focused, view_id):
                        has_focus, 20) if focused else ''
     return '''
                 <control type="group">%(zoom)s
+                    <!-- Behind the picture, the video's smaller one YouTube always has:
+                         the add-on asks for its largest 16:9 (hq720) without checking,
+                         and older videos have none, which left the card grey. -->
                     <control type="image">
                         <left>6</left><top>6</top><width>%(w)d</width><height>%(h)d</height>
                         <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumb]</texture>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
+                    </control>
+                    <control type="image">
+                        <left>6</left><top>6</top><width>%(w)d</width><height>%(h)d</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
                         <left>6</left><top>6</top><width>%(w)d</width><height>%(h)d</height>
@@ -616,6 +624,10 @@ VARIABLES = '''
         <value condition="String.IsEqual(%(section)s,subscriptions)">Subscriptions</value>
         <value condition="String.IsEqual(%(section)s,library)">Library</value>
         <value>Home</value>
+    </variable>
+    <variable name="SiloYouTubeThumbBehind">
+        <value condition="!String.IsEmpty(ListItem.Property(video_id))">https://i.ytimg.com/vi/$INFO[ListItem.Property(video_id)]/hqdefault.jpg</value>
+        <value>colors/grey.png</value>
     </variable>
     <variable name="SiloYouTubeThumb">
         <value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
