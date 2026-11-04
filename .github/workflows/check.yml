@@ -7,8 +7,8 @@ jobs:
     name: Build tools linted, generated files up to date
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
+    - uses: actions/checkout@v7
+    - uses: actions/setup-python@v7
       with:
         python-version: '3.12'
     - name: Lint the build tools
@@ -24,10 +24,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     # The checker wants the folder named after the add-on id.
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
       with:
         path: skin.silo.skyline
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v7
       with:
         python-version: '3.12'
     - name: Install kodi-addon-checker
