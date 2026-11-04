@@ -237,6 +237,7 @@ ROW = '''
                 <!-- The chosen row's cards zoom to the big size from their top left;
                      the focused card stays at the left (a fixedlist), as the app's. -->
                 <control type="fixedlist" id="%(id)d">
+                    <visible>%(shown)s</visible>
                     <left>-6</left><top>%(lt)d</top><width>%(lw)d</width><height>%(ih)d</height>
                     <orientation>horizontal</orientation>
                     <focusposition>0</focusposition>
@@ -259,7 +260,7 @@ def row(section, number, count, list_id, title, path, up, down):
         'hidden': row_hidden(section, number, count), 'lh': ROW_LABEL_H,
         'lt': ROW_LABEL_H + LABEL_GAP, 'dim': TEXT_DIM, 'sub': SUB_DIM, 'title': title, 'id': list_id,
         'lw': CONTENT_W + 6, 'ih': item_h(MEDIUM), 'section': section, 'number': number, 'up': up or 'noop',
-        'menu': open_menu(section),
+        'menu': open_menu(section), 'shown': shown(section),
         'layouts': row_layouts(list_id), 'path': path, 'zoom': ZOOM, 'big': chosen_row(section, number),
         # Kodi takes a zoom's centre in the section group's coordinates: the list's top left.
         'cx': -6, 'cy': ROW_LABEL_H + LABEL_GAP,
@@ -325,6 +326,7 @@ def search_results():
                 <visible>!Container(%(id)d).IsUpdating + Integer.IsEqual(Container(%(id)d).NumItems,0)</visible>
             </control>
             <control type="panel" id="%(id)d">
+                <visible>%(shown)s</visible>
                 <left>%(gx)d</left><top>%(gt)d</top><width>%(gw)d</width><height>%(gh)d</height>
                 <orientation>vertical</orientation>
                 <scrolltime tween="cubic" easing="out">280</scrolltime>
@@ -408,6 +410,20 @@ MENU = '''
         </control>'''
 
 
+ROW_SECTIONS = {'home': HOME_ROWS, 'library': LIBRARY_ROWS}
+
+
+def focus_section(key):
+    """Actions that focus a section's first column. Kodi can't focus a row
+    still loading (Library's load once chosen) or empty, so SiloKodiConnect
+    then waits for the first row with videos and focuses that."""
+    actions = ['SetFocus(%d)' % first_of(key)]
+    if key in ROW_SECTIONS:
+        actions.append('RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=%s&amp;ids=%s)'
+                       % (key, ','.join(str(list_id) for list_id, _, _ in ROW_SECTIONS[key])))
+    return actions
+
+
 def side_menu():
     """The app's side menu, from the left (Left from a section's first
     column): Search, Home, Subscriptions and Library, the shown section lit.
@@ -421,10 +437,11 @@ def side_menu():
                          'clicks': clicks(['RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubesearch)'])}
     for key, label in SECTIONS:
         items += MENU_ITEM % {'label': label, 'key': key, 'icon': icons[key], 'clicks': clicks([
-            'SetProperty(silo.youtube.section,%s,home)' % key, 'SetProperty(silo.youtube.loaded.%s,1,home)' % key,
-            'SetFocus(%d)' % first_of(key)])}
-    back = ''.join('\n                <%s condition="%s">SetFocus(%d)</%s>' % (tag, shown(key), first_of(key), tag)
-                   for tag in ('onright', 'onback') for key in ('home', 'subscriptions', 'library', 'search'))
+            'SetProperty(silo.youtube.section,%s,home)' % key, 'SetProperty(silo.youtube.loaded.%s,1,home)' % key]
+            + focus_section(key))}
+    back = ''.join('\n                <%s condition="%s">%s</%s>' % (tag, shown(key), action, tag)
+                   for tag in ('onright', 'onback') for key in ('home', 'subscriptions', 'library', 'search')
+                   for action in focus_section(key))
     lw = MENU_W - SAFE_X + 4
 
     def row(focused):
@@ -467,6 +484,7 @@ def subscriptions():
         <control type="group">
             <visible>%(shown)s</visible>
             <control type="button" id="%(all)d">
+                <visible>%(shown)s</visible>
                 <left>%(x)d</left><top>%(top)d</top><width>%(cw)d</width><height>%(rh)d</height>
                 <label>All</label>
                 <font>silo_meta</font>
@@ -489,6 +507,7 @@ def subscriptions():
                 <label>CHANNELS</label>
             </control>
             <control type="list" id="%(channels)d">
+                <visible>%(shown)s</visible>
                 <left>%(x)d</left><top>%(ltop)d</top><width>%(cw)d</width><height>%(lh)d</height>
                 <orientation>vertical</orientation>
                 <scrolltime tween="cubic" easing="out">200</scrolltime>
@@ -518,6 +537,7 @@ def subscriptions():
                 <visible>!Container(%(grid)d).IsUpdating + Integer.IsEqual(Container(%(grid)d).NumItems,0)</visible>
             </control>
             <control type="panel" id="%(grid)d">
+                <visible>%(shown)s</visible>
                 <left>%(gx6)d</left><top>%(gtop)d</top><width>%(gw)d</width><height>%(gh)d</height>
                 <orientation>vertical</orientation>
                 <scrolltime tween="cubic" easing="out">280</scrolltime>

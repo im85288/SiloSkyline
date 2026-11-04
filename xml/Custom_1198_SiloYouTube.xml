@@ -57,6 +57,7 @@
                 <!-- The chosen row's cards zoom to the big size from their top left;
                      the focused card stays at the left (a fixedlist), as the app's. -->
                 <control type="fixedlist" id="301">
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)]</visible>
                     <left>-6</left><top>70</top><width>1838</width><height>475</height>
                     <orientation>horizontal</orientation>
                     <focusposition>0</focusposition>
@@ -207,6 +208,7 @@
                 <!-- The chosen row's cards zoom to the big size from their top left;
                      the focused card stays at the left (a fixedlist), as the app's. -->
                 <control type="fixedlist" id="302">
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)]</visible>
                     <left>-6</left><top>70</top><width>1838</width><height>475</height>
                     <orientation>horizontal</orientation>
                     <focusposition>0</focusposition>
@@ -349,6 +351,7 @@
                 <!-- The chosen row's cards zoom to the big size from their top left;
                      the focused card stays at the left (a fixedlist), as the app's. -->
                 <control type="fixedlist" id="303">
+                    <visible>[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)]</visible>
                     <left>-6</left><top>70</top><width>1838</width><height>475</height>
                     <orientation>horizontal</orientation>
                     <focusposition>0</focusposition>
@@ -475,6 +478,7 @@
         <control type="group">
             <visible>String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions)</visible>
             <control type="button" id="401">
+                <visible>String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions)</visible>
                 <left>88</left><top>148</top><width>400</width><height>64</height>
                 <label>All</label>
                 <font>silo_meta</font>
@@ -497,6 +501,7 @@
                 <label>CHANNELS</label>
             </control>
             <control type="list" id="402">
+                <visible>String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions)</visible>
                 <left>88</left><top>272</top><width>400</width><height>808</height>
                 <orientation>vertical</orientation>
                 <scrolltime tween="cubic" easing="out">200</scrolltime>
@@ -555,6 +560,7 @@
                 <visible>!Container(410).IsUpdating + Integer.IsEqual(Container(410).NumItems,0)</visible>
             </control>
             <control type="panel" id="410">
+                <visible>String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions)</visible>
                 <left>522</left><top>220</top><width>1392</width><height>860</height>
                 <orientation>vertical</orientation>
                 <scrolltime tween="cubic" easing="out">280</scrolltime>
@@ -703,6 +709,7 @@
                 <!-- The chosen row's cards zoom to the big size from their top left;
                      the focused card stays at the left (a fixedlist), as the app's. -->
                 <control type="fixedlist" id="511">
+                    <visible>String.IsEqual(Window(Home).Property(silo.youtube.section),library)</visible>
                     <left>-6</left><top>70</top><width>1838</width><height>475</height>
                     <orientation>horizontal</orientation>
                     <focusposition>0</focusposition>
@@ -853,6 +860,7 @@
                 <!-- The chosen row's cards zoom to the big size from their top left;
                      the focused card stays at the left (a fixedlist), as the app's. -->
                 <control type="fixedlist" id="512">
+                    <visible>String.IsEqual(Window(Home).Property(silo.youtube.section),library)</visible>
                     <left>-6</left><top>70</top><width>1838</width><height>475</height>
                     <orientation>horizontal</orientation>
                     <focusposition>0</focusposition>
@@ -1004,6 +1012,7 @@
                 <!-- The chosen row's cards zoom to the big size from their top left;
                      the focused card stays at the left (a fixedlist), as the app's. -->
                 <control type="fixedlist" id="513">
+                    <visible>String.IsEqual(Window(Home).Property(silo.youtube.section),library)</visible>
                     <left>-6</left><top>70</top><width>1838</width><height>475</height>
                     <orientation>horizontal</orientation>
                     <focusposition>0</focusposition>
@@ -1147,6 +1156,7 @@
                 <!-- The chosen row's cards zoom to the big size from their top left;
                      the focused card stays at the left (a fixedlist), as the app's. -->
                 <control type="fixedlist" id="514">
+                    <visible>String.IsEqual(Window(Home).Property(silo.youtube.section),library)</visible>
                     <left>-6</left><top>70</top><width>1838</width><height>475</height>
                     <orientation>horizontal</orientation>
                     <focusposition>0</focusposition>
@@ -1287,6 +1297,7 @@
                 <visible>!Container(610).IsUpdating + Integer.IsEqual(Container(610).NumItems,0)</visible>
             </control>
             <control type="panel" id="610">
+                <visible>String.IsEqual(Window(Home).Property(silo.youtube.section),search)</visible>
                 <left>82</left><top>218</top><width>1704</width><height>862</height>
                 <orientation>vertical</orientation>
                 <scrolltime tween="cubic" easing="out">280</scrolltime>
@@ -1427,12 +1438,16 @@
                 <orientation>vertical</orientation>
                 <onleft>noop</onleft>
                 <onright condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)]">SetFocus(301)</onright>
+                <onright condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=home&amp;ids=301,302,303)</onright>
                 <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions)">SetFocus(401)</onright>
                 <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library)">SetFocus(511)</onright>
+                <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=library&amp;ids=511,512,513,514)</onright>
                 <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),search)">SetFocus(610)</onright>
                 <onback condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)]">SetFocus(301)</onback>
+                <onback condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=home&amp;ids=301,302,303)</onback>
                 <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions)">SetFocus(401)</onback>
                 <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library)">SetFocus(511)</onback>
+                <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=library&amp;ids=511,512,513,514)</onback>
                 <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),search)">SetFocus(610)</onback>
                 <itemlayout width="376" height="68">
                     <control type="image">
@@ -1481,6 +1496,7 @@
                     <onclick>SetProperty(silo.youtube.section,home,home)</onclick>
                     <onclick>SetProperty(silo.youtube.loaded.home,1,home)</onclick>
                     <onclick>SetFocus(301)</onclick>
+                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=home&amp;ids=301,302,303)</onclick>
                 </item>
                 <item>
                     <label>Subscriptions</label>
@@ -1497,6 +1513,7 @@
                     <onclick>SetProperty(silo.youtube.section,library,home)</onclick>
                     <onclick>SetProperty(silo.youtube.loaded.library,1,home)</onclick>
                     <onclick>SetFocus(511)</onclick>
+                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=library&amp;ids=511,512,513,514)</onclick>
                 </item>
                 </content>
             </control>
