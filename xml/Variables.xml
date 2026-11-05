@@ -7984,6 +7984,10 @@
         <value condition="String.IsEqual(ListItem.Property(silo.menu.icon),profile)">Profile</value>
         <value>$INFO[ListItem.Plot]</value>
     </variable>
+    <variable name="SiloListDetail">
+        <value condition="!String.IsEmpty(Container(50).ListItem.Property(silo.menu.description))">$INFO[Container(50).ListItem.Property(silo.menu.description)]</value>
+        <value>$INFO[Container(50).ListItem.Plot]</value>
+    </variable>
     <variable name="SiloBrowseArt">
         <!-- The hero view draws its own, stronger. -->
         <value condition="Control.IsVisible(55)"></value>
@@ -8002,13 +8006,28 @@
         <value condition="!String.IsEmpty(ListItem.Art(landscape))">$INFO[ListItem.Art(landscape)]</value>
         <value>$INFO[ListItem.Icon]</value>
     </variable>
+    <!-- The plain title: an add-on's label can carry more through Kodi's label
+         mask (the YouTube add-on's view, like and comment counts, in colours). -->
+    <variable name="SiloVideoTitle">
+        <value condition="!String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
+        <value>$INFO[ListItem.Label]</value>
+    </variable>
+    <variable name="SiloVideoFocusTitle">
+        <value condition="!String.IsEmpty(Container(57).ListItem.Title)">$INFO[Container(57).ListItem.Title]</value>
+        <value>$INFO[Container(57).ListItem.Label]</value>
+    </variable>
+    <!-- A video's channel: the studio, or the artist as the YouTube add-on names it. -->
     <variable name="SiloVideoCardSub">
-        <value condition="!String.IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]$INFO[ListItem.Duration(mins), · , min]</value>
-        <value condition="!String.IsEmpty(ListItem.Duration)">$INFO[ListItem.Duration(mins),, min]$INFO[ListItem.Premiered, · ,]</value>
+        <value condition="!String.IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]$INFO[ListItem.Duration, · ,]</value>
+        <value condition="!String.IsEmpty(ListItem.Artist)">$INFO[ListItem.Artist]$INFO[ListItem.Duration, · ,]</value>
+        <value condition="!String.IsEmpty(ListItem.Duration)">$INFO[ListItem.Duration]$INFO[ListItem.Premiered, · ,]</value>
         <value>$INFO[ListItem.Label2]</value>
     </variable>
+    <!-- Its studio, length and date. The YouTube add-on's channel and counts
+         open its description (its "detailed description" setting), and Kodi has
+         no info label for the counts by themselves. -->
     <variable name="SiloVideoFacts">
-        <value>$INFO[Container(57).ListItem.Studio,,  ·  ]$INFO[Container(57).ListItem.Duration(mins),, min  ·  ]$INFO[Container(57).ListItem.Premiered]</value>
+        <value>$INFO[Container(57).ListItem.Studio,,  ·  ]$INFO[Container(57).ListItem.Duration,,  ·  ]$INFO[Container(57).ListItem.Premiered]</value>
     </variable>
     <!-- YouTube's placeholder for a video it knows nothing about: no description. -->
     <variable name="SiloVideoPlot">

@@ -34,7 +34,7 @@
 
         <!-- Everything else: a list of pills. -->
         <control type="list" id="50">
-            <left>52</left><top>200</top>
+            <left>88</left><top>200</top>
             <width>1110</width><height>880</height>
             <orientation>vertical</orientation>
             <scrolltime tween="cubic" easing="out">240</scrolltime>
@@ -58,64 +58,39 @@
                         <visible>String.IsEqual(ListItem.Property(silo.menu.icon),profile)</visible>
                     </control>
                     <control type="image">
-                        <left>32</left><top>24</top><width>44</width><height>44</height>
-                        <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="SkylineFocusText">$VAR[SiloRowIcon]</texture>
-                        <visible>false + [String.IsEqual(ListItem.Property(silo.menu.icon),sync) | String.IsEqual(ListItem.Property(silo.menu.icon),remove)]</visible>
-                    </control>
-                    <control type="image">
-                        <left>29</left><top>21</top><width>50</width><height>50</height>
-                        <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="SkylineFocusText">$VAR[SiloRowIcon]</texture>
-                        <visible>false + [String.IsEqual(ListItem.Property(silo.menu.icon),rewrite)]</visible>
-                    </control>
-                    <control type="image">
-                        <left>26</left><top>18</top><width>56</width><height>56</height>
-                        <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="SkylineFocusText">$VAR[SiloRowIcon]</texture>
-                        <visible>false + [String.IsEqual(ListItem.Property(silo.menu.icon),play)]</visible>
-                    </control>
-                    <control type="image">
-                        <left>14</left><top>6</top><width>80</width><height>80</height>
-                        <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="SkylineFocusText">$VAR[SiloRowIcon]</texture>
-                        <visible>false + [String.IsEqual(ListItem.Property(silo.menu.icon),rows) | String.IsEqual(ListItem.Property(silo.menu.icon),libraries) | String.IsEqual(ListItem.Property(silo.menu.icon),signout)]</visible>
-                    </control>
-                    <control type="image">
-                        <left>30</left><top>22</top><width>48</width><height>48</height>
-                        <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="SkylineFocusText">$VAR[SiloRowIcon]</texture>
-                        <visible>false + !String.IsEqual(ListItem.Property(silo.menu.icon),profile) + ![String.IsEqual(ListItem.Property(silo.menu.icon),sync) | String.IsEqual(ListItem.Property(silo.menu.icon),remove) | String.IsEqual(ListItem.Property(silo.menu.icon),rewrite) | String.IsEqual(ListItem.Property(silo.menu.icon),play) | String.IsEqual(ListItem.Property(silo.menu.icon),rows) | String.IsEqual(ListItem.Property(silo.menu.icon),libraries) | String.IsEqual(ListItem.Property(silo.menu.icon),signout)] + [[!String.IsEmpty(ListItem.Property(silo.menu.icon)) | !String.StartsWith(ListItem.Icon,Default)]]</visible>
+                        <left>20</left><top>12</top><width>68</width><height>68</height>
+                        <texture border="16" colordiffuse="FF2A2E36">silo/card_landscape_mask.png</texture>
+                        <visible>!String.IsEqual(ListItem.Property(silo.menu.icon),profile) + [!String.IsEmpty(ListItem.Property(silo.menu.icon)) | !String.StartsWith(ListItem.Icon,Default)]</visible>
                     </control>
                     <control type="image">
                         <left>32</left><top>24</top><width>44</width><height>44</height>
                         <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="FFEDEDED">$VAR[SiloRowIcon]</texture>
-                        <visible>!false + [String.IsEqual(ListItem.Property(silo.menu.icon),sync) | String.IsEqual(ListItem.Property(silo.menu.icon),remove)]</visible>
+                        <texture>$VAR[SiloRowIcon]</texture>
+                        <visible>[String.IsEqual(ListItem.Property(silo.menu.icon),sync) | String.IsEqual(ListItem.Property(silo.menu.icon),remove)]</visible>
                     </control>
                     <control type="image">
                         <left>29</left><top>21</top><width>50</width><height>50</height>
                         <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="FFEDEDED">$VAR[SiloRowIcon]</texture>
-                        <visible>!false + [String.IsEqual(ListItem.Property(silo.menu.icon),rewrite)]</visible>
+                        <texture>$VAR[SiloRowIcon]</texture>
+                        <visible>[String.IsEqual(ListItem.Property(silo.menu.icon),rewrite)]</visible>
                     </control>
                     <control type="image">
                         <left>26</left><top>18</top><width>56</width><height>56</height>
                         <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="FFEDEDED">$VAR[SiloRowIcon]</texture>
-                        <visible>!false + [String.IsEqual(ListItem.Property(silo.menu.icon),play)]</visible>
+                        <texture>$VAR[SiloRowIcon]</texture>
+                        <visible>[String.IsEqual(ListItem.Property(silo.menu.icon),play)]</visible>
                     </control>
                     <control type="image">
                         <left>14</left><top>6</top><width>80</width><height>80</height>
                         <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="FFEDEDED">$VAR[SiloRowIcon]</texture>
-                        <visible>!false + [String.IsEqual(ListItem.Property(silo.menu.icon),rows) | String.IsEqual(ListItem.Property(silo.menu.icon),libraries) | String.IsEqual(ListItem.Property(silo.menu.icon),signout)]</visible>
+                        <texture>$VAR[SiloRowIcon]</texture>
+                        <visible>[String.IsEqual(ListItem.Property(silo.menu.icon),rows) | String.IsEqual(ListItem.Property(silo.menu.icon),libraries) | String.IsEqual(ListItem.Property(silo.menu.icon),signout)]</visible>
                     </control>
                     <control type="image">
                         <left>30</left><top>22</top><width>48</width><height>48</height>
                         <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="FFEDEDED">$VAR[SiloRowIcon]</texture>
-                        <visible>!false + !String.IsEqual(ListItem.Property(silo.menu.icon),profile) + ![String.IsEqual(ListItem.Property(silo.menu.icon),sync) | String.IsEqual(ListItem.Property(silo.menu.icon),remove) | String.IsEqual(ListItem.Property(silo.menu.icon),rewrite) | String.IsEqual(ListItem.Property(silo.menu.icon),play) | String.IsEqual(ListItem.Property(silo.menu.icon),rows) | String.IsEqual(ListItem.Property(silo.menu.icon),libraries) | String.IsEqual(ListItem.Property(silo.menu.icon),signout)] + [[!String.IsEmpty(ListItem.Property(silo.menu.icon)) | !String.StartsWith(ListItem.Icon,Default)]]</visible>
+                        <texture>$VAR[SiloRowIcon]</texture>
+                        <visible>!String.IsEqual(ListItem.Property(silo.menu.icon),profile) + ![String.IsEqual(ListItem.Property(silo.menu.icon),sync) | String.IsEqual(ListItem.Property(silo.menu.icon),remove) | String.IsEqual(ListItem.Property(silo.menu.icon),rewrite) | String.IsEqual(ListItem.Property(silo.menu.icon),play) | String.IsEqual(ListItem.Property(silo.menu.icon),rows) | String.IsEqual(ListItem.Property(silo.menu.icon),libraries) | String.IsEqual(ListItem.Property(silo.menu.icon),signout)] + [[!String.IsEmpty(ListItem.Property(silo.menu.icon)) | !String.StartsWith(ListItem.Icon,Default)]]</visible>
                     </control>
                     <control type="label">
                         <left>112</left><top>12</top>
@@ -208,64 +183,39 @@
                         <visible>String.IsEqual(ListItem.Property(silo.menu.icon),profile)</visible>
                     </control>
                     <control type="image">
-                        <left>32</left><top>24</top><width>44</width><height>44</height>
-                        <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="SkylineFocusText">$VAR[SiloRowIcon]</texture>
-                        <visible>Control.HasFocus(50) + [String.IsEqual(ListItem.Property(silo.menu.icon),sync) | String.IsEqual(ListItem.Property(silo.menu.icon),remove)]</visible>
-                    </control>
-                    <control type="image">
-                        <left>29</left><top>21</top><width>50</width><height>50</height>
-                        <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="SkylineFocusText">$VAR[SiloRowIcon]</texture>
-                        <visible>Control.HasFocus(50) + [String.IsEqual(ListItem.Property(silo.menu.icon),rewrite)]</visible>
-                    </control>
-                    <control type="image">
-                        <left>26</left><top>18</top><width>56</width><height>56</height>
-                        <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="SkylineFocusText">$VAR[SiloRowIcon]</texture>
-                        <visible>Control.HasFocus(50) + [String.IsEqual(ListItem.Property(silo.menu.icon),play)]</visible>
-                    </control>
-                    <control type="image">
-                        <left>14</left><top>6</top><width>80</width><height>80</height>
-                        <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="SkylineFocusText">$VAR[SiloRowIcon]</texture>
-                        <visible>Control.HasFocus(50) + [String.IsEqual(ListItem.Property(silo.menu.icon),rows) | String.IsEqual(ListItem.Property(silo.menu.icon),libraries) | String.IsEqual(ListItem.Property(silo.menu.icon),signout)]</visible>
-                    </control>
-                    <control type="image">
-                        <left>30</left><top>22</top><width>48</width><height>48</height>
-                        <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="SkylineFocusText">$VAR[SiloRowIcon]</texture>
-                        <visible>Control.HasFocus(50) + !String.IsEqual(ListItem.Property(silo.menu.icon),profile) + ![String.IsEqual(ListItem.Property(silo.menu.icon),sync) | String.IsEqual(ListItem.Property(silo.menu.icon),remove) | String.IsEqual(ListItem.Property(silo.menu.icon),rewrite) | String.IsEqual(ListItem.Property(silo.menu.icon),play) | String.IsEqual(ListItem.Property(silo.menu.icon),rows) | String.IsEqual(ListItem.Property(silo.menu.icon),libraries) | String.IsEqual(ListItem.Property(silo.menu.icon),signout)] + [[!String.IsEmpty(ListItem.Property(silo.menu.icon)) | !String.StartsWith(ListItem.Icon,Default)]]</visible>
+                        <left>20</left><top>12</top><width>68</width><height>68</height>
+                        <texture border="16" colordiffuse="FF2A2E36">silo/card_landscape_mask.png</texture>
+                        <visible>!String.IsEqual(ListItem.Property(silo.menu.icon),profile) + [!String.IsEmpty(ListItem.Property(silo.menu.icon)) | !String.StartsWith(ListItem.Icon,Default)]</visible>
                     </control>
                     <control type="image">
                         <left>32</left><top>24</top><width>44</width><height>44</height>
                         <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="FFEDEDED">$VAR[SiloRowIcon]</texture>
-                        <visible>!Control.HasFocus(50) + [String.IsEqual(ListItem.Property(silo.menu.icon),sync) | String.IsEqual(ListItem.Property(silo.menu.icon),remove)]</visible>
+                        <texture>$VAR[SiloRowIcon]</texture>
+                        <visible>[String.IsEqual(ListItem.Property(silo.menu.icon),sync) | String.IsEqual(ListItem.Property(silo.menu.icon),remove)]</visible>
                     </control>
                     <control type="image">
                         <left>29</left><top>21</top><width>50</width><height>50</height>
                         <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="FFEDEDED">$VAR[SiloRowIcon]</texture>
-                        <visible>!Control.HasFocus(50) + [String.IsEqual(ListItem.Property(silo.menu.icon),rewrite)]</visible>
+                        <texture>$VAR[SiloRowIcon]</texture>
+                        <visible>[String.IsEqual(ListItem.Property(silo.menu.icon),rewrite)]</visible>
                     </control>
                     <control type="image">
                         <left>26</left><top>18</top><width>56</width><height>56</height>
                         <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="FFEDEDED">$VAR[SiloRowIcon]</texture>
-                        <visible>!Control.HasFocus(50) + [String.IsEqual(ListItem.Property(silo.menu.icon),play)]</visible>
+                        <texture>$VAR[SiloRowIcon]</texture>
+                        <visible>[String.IsEqual(ListItem.Property(silo.menu.icon),play)]</visible>
                     </control>
                     <control type="image">
                         <left>14</left><top>6</top><width>80</width><height>80</height>
                         <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="FFEDEDED">$VAR[SiloRowIcon]</texture>
-                        <visible>!Control.HasFocus(50) + [String.IsEqual(ListItem.Property(silo.menu.icon),rows) | String.IsEqual(ListItem.Property(silo.menu.icon),libraries) | String.IsEqual(ListItem.Property(silo.menu.icon),signout)]</visible>
+                        <texture>$VAR[SiloRowIcon]</texture>
+                        <visible>[String.IsEqual(ListItem.Property(silo.menu.icon),rows) | String.IsEqual(ListItem.Property(silo.menu.icon),libraries) | String.IsEqual(ListItem.Property(silo.menu.icon),signout)]</visible>
                     </control>
                     <control type="image">
                         <left>30</left><top>22</top><width>48</width><height>48</height>
                         <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="FFEDEDED">$VAR[SiloRowIcon]</texture>
-                        <visible>!Control.HasFocus(50) + !String.IsEqual(ListItem.Property(silo.menu.icon),profile) + ![String.IsEqual(ListItem.Property(silo.menu.icon),sync) | String.IsEqual(ListItem.Property(silo.menu.icon),remove) | String.IsEqual(ListItem.Property(silo.menu.icon),rewrite) | String.IsEqual(ListItem.Property(silo.menu.icon),play) | String.IsEqual(ListItem.Property(silo.menu.icon),rows) | String.IsEqual(ListItem.Property(silo.menu.icon),libraries) | String.IsEqual(ListItem.Property(silo.menu.icon),signout)] + [[!String.IsEmpty(ListItem.Property(silo.menu.icon)) | !String.StartsWith(ListItem.Icon,Default)]]</visible>
+                        <texture>$VAR[SiloRowIcon]</texture>
+                        <visible>!String.IsEqual(ListItem.Property(silo.menu.icon),profile) + ![String.IsEqual(ListItem.Property(silo.menu.icon),sync) | String.IsEqual(ListItem.Property(silo.menu.icon),remove) | String.IsEqual(ListItem.Property(silo.menu.icon),rewrite) | String.IsEqual(ListItem.Property(silo.menu.icon),play) | String.IsEqual(ListItem.Property(silo.menu.icon),rows) | String.IsEqual(ListItem.Property(silo.menu.icon),libraries) | String.IsEqual(ListItem.Property(silo.menu.icon),signout)] + [[!String.IsEmpty(ListItem.Property(silo.menu.icon)) | !String.StartsWith(ListItem.Icon,Default)]]</visible>
                     </control>
                     <control type="label">
                         <left>112</left><top>12</top>
@@ -340,6 +290,31 @@
                         <visible>!Control.HasFocus(50)</visible>
                     </control>
             </focusedlayout>
+        </control>
+        <!-- The focused row's whole description, beside the list. -->
+        <control type="group">
+            <left>1262</left><top>200</top>
+            <visible>Control.IsVisible(50) + [!String.IsEmpty(Container(50).ListItem.Property(silo.menu.description)) | [!String.IsEmpty(Container(50).ListItem.Plot) + !String.IsEqual(Container(50).ListItem.Plot,Container(50).ListItem.Label)]]</visible>
+            <!-- A long label wraps (Signed in as ... on its server). -->
+            <control type="grouplist">
+                <left>0</left><top>8</top><width>570</width><height>780</height>
+                <orientation>vertical</orientation>
+                <itemgap>16</itemgap>
+                <usecontrolcoords>true</usecontrolcoords>
+                <control type="textbox">
+                    <width>570</width><height>auto</height>
+                    <font>silo_row</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>$INFO[Container(50).ListItem.Label]</label>
+                </control>
+                <control type="textbox">
+                    <width>570</width><height>640</height>
+                    <font>silo_plot</font>
+                    <textcolor>BFEDEDED</textcolor>
+                    <autoscroll delay="6000" time="3000" repeat="8000">true</autoscroll>
+                    <label>$VAR[SiloListDetail]</label>
+                </control>
+            </control>
         </control>
 
         <!-- Films, shows, sets and seasons: a poster grid. -->
@@ -1101,7 +1076,7 @@
                 <aligny>center</aligny>
                 <font>silo_osd_title</font>
                 <textcolor>FFEDEDED</textcolor>
-                <label>$INFO[Container(57).ListItem.Label]</label>
+                <label>$VAR[SiloVideoFocusTitle]</label>
             </control>
             <control type="label">
                 <left>88</left><top>270</top><width>1444</width><height>40</height>
@@ -1173,7 +1148,7 @@
                         <width>324</width><height>34</height>
                         <font>silo_card_title</font>
                         <textcolor>66EDEDED</textcolor>
-                        <label>$INFO[ListItem.Label]</label>
+                        <label>$VAR[SiloVideoTitle]</label>
                     </control>
                     <control type="label">
                         <left>6</left><top>234</top>
@@ -1244,7 +1219,7 @@
                         <width>324</width><height>34</height>
                         <font>silo_card_title</font>
                         <textcolor>FFEDEDED</textcolor>
-                        <label>$INFO[ListItem.Label]</label>
+                        <label>$VAR[SiloVideoTitle]</label>
                         <scroll>true</scroll>
                         <scrollspeed>50</scrollspeed><scrollsuffix>     ·     </scrollsuffix>
                     </control>

@@ -282,7 +282,7 @@ def video_card(focused, view_id):
                         <width>%(w)d</width><height>34</height>
                         <font>silo_card_title</font>
                         <textcolor>%(title)s</textcolor>
-                        <label>$INFO[ListItem.Label]</label>%(scroll)s
+                        <label>$VAR[SiloVideoTitle]</label>%(scroll)s
                     </control>
                     <control type="label">
                         <left>6</left><top>%(t2)d</top>
@@ -314,7 +314,7 @@ def addon_videos_view():
                 <aligny>center</aligny>
                 <font>silo_osd_title</font>
                 <textcolor>%(text)s</textcolor>
-                <label>$INFO[Container(%(id)d).ListItem.Label]</label>
+                <label>$VAR[SiloVideoFocusTitle]</label>
             </control>
             <control type="label">
                 <left>%(x)d</left><top>%(t2)d</top><width>%(tw)d</width><height>40</height>
@@ -737,7 +737,10 @@ def pill_row(focused, view_id):
                     </control>''' % {'lx': 112, 't1': 12, 't2': 50, 'w': ROW_W - 112 - 260, 'colour': colour,
                                  'dim': '99000000' if colour == fg else TEXT_DIM, 'cond': condition, 'has_text': HAS_TEXT,
                                  'ch': CARD_H, 'l2x': ROW_W - 250}
-    def icon(colour, condition):
+    def icon():
+        # On a dark tile and never tinted: an add-on's icons often have their own
+        # solid background, and tinting those black for the white card left a black
+        # square. Kodi's and the skin's white glyphs show on the tile too.
         named = ' | '.join('String.IsEqual(ListItem.%s,%s)' % (MENU_ICON, key)
                            for keys in ICON_SIZES.values() for key in keys)
         boxes = [(size, '[%s]' % ' | '.join('String.IsEqual(ListItem.%s,%s)' % (MENU_ICON, key) for key in keys))
@@ -747,10 +750,10 @@ def pill_row(focused, view_id):
                     <control type="image">
                         <left>%(x)d</left><top>%(y)d</top><width>%(s)d</width><height>%(s)d</height>
                         <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="%(colour)s">$VAR[SiloRowIcon]</texture>
-                        <visible>%(cond)s + %(which)s</visible>
-                    </control>''' % {'x': 54 - size // 2, 'y': (CARD_H - size) // 2, 's': size, 'colour': colour,
-                                 'cond': condition, 'which': which} for size, which in boxes)
+                        <texture>$VAR[SiloRowIcon]</texture>
+                        <visible>%(which)s</visible>
+                    </control>''' % {'x': 54 - size // 2, 'y': (CARD_H - size) // 2, 's': size, 'which': which}
+            for size, which in boxes)
     return '''
                     <control type="image">
                         <width>%(rw)d</width><height>%(ch)d</height>
@@ -767,9 +770,14 @@ def pill_row(focused, view_id):
                         <left>24</left><top>%(at)d</top><width>60</width><height>60</height>
                         <texture background="true" diffuse="silo/avatar_mask.png">$INFO[Window(Home).Property(silo.avatar)]</texture>
                         <visible>%(profile)s</visible>
-                    </control>%(icon_fg)s%(icon_bg)s%(text_fg)s%(text_bg)s''' % {
+                    </control>
+                    <control type="image">
+                        <left>20</left><top>%(ty)d</top><width>68</width><height>68</height>
+                        <texture border="16" colordiffuse="FF2A2E36">silo/card_landscape_mask.png</texture>
+                        <visible>!%(profile)s + %(has_icon)s</visible>
+                    </control>%(icon)s%(text_fg)s%(text_bg)s''' % {
         'rw': ROW_W, 'ch': CARD_H, 'text': TEXT, 'focus': has_focus, 'at': (CARD_H - 60) // 2, 'profile': PROFILE,
-        'icon_fg': icon(fg, has_focus), 'icon_bg': icon(TEXT, '!' + has_focus),
+        'ty': (CARD_H - 68) // 2, 'has_icon': HAS_ICON, 'icon': icon(),
         'text_fg': text(fg, has_focus), 'text_bg': text(TEXT, '!' + has_focus)}
 
 def build():
@@ -820,6 +828,31 @@ def build():
             </itemlayout>
             <focusedlayout width="1110" height="%(row_h)d">%(row_focused)s
             </focusedlayout>
+        </control>
+        <!-- The focused row's whole description, beside the list. -->
+        <control type="group">
+            <left>%(detail_x)d</left><top>%(views_top)d</top>
+            <visible>Control.IsVisible(50) + [!String.IsEmpty(Container(50).ListItem.Property(silo.menu.description)) | [!String.IsEmpty(Container(50).ListItem.Plot) + !String.IsEqual(Container(50).ListItem.Plot,Container(50).ListItem.Label)]]</visible>
+            <!-- A long label wraps (Signed in as ... on its server). -->
+            <control type="grouplist">
+                <left>0</left><top>8</top><width>%(detail_w)d</width><height>780</height>
+                <orientation>vertical</orientation>
+                <itemgap>16</itemgap>
+                <usecontrolcoords>true</usecontrolcoords>
+                <control type="textbox">
+                    <width>%(detail_w)d</width><height>auto</height>
+                    <font>silo_row</font>
+                    <textcolor>%(text)s</textcolor>
+                    <label>$INFO[Container(50).ListItem.Label]</label>
+                </control>
+                <control type="textbox">
+                    <width>%(detail_w)d</width><height>640</height>
+                    <font>silo_plot</font>
+                    <textcolor>%(dim)s</textcolor>
+                    <autoscroll delay="6000" time="3000" repeat="8000">true</autoscroll>
+                    <label>$VAR[SiloListDetail]</label>
+                </control>
+            </control>
         </control>
 
         <!-- Films, shows, sets and seasons: a poster grid. -->
@@ -885,7 +918,7 @@ def build():
         <include>SiloTrailerCover</include>
     </controls>
 </window>
-''' % {'backdrop': GRID_BACKDROP, 'background': BACKGROUND, 'lx': SAFE_X - 36,
+''' % {'backdrop': GRID_BACKDROP, 'background': BACKGROUND, 'lx': SAFE_X, 'detail_x': SAFE_X + 1110 + 64, 'detail_w': 1920 - 2 * SAFE_X - 1110 - 64, 'text': TEXT, 'dim': TEXT_DIM,
        'views_top': VIEWS_TOP, 'views_h': 1080 - VIEWS_TOP, 'gx': SAFE_X - 6,
        'gw': 1920 - 2 * (SAFE_X - 6), 'pw': poster_item_w, 'ph': POSTER_ITEM_H,
        'ew': 1920 - 2 * (SAFE_X - 6), 'eh': EPISODE_ITEM_H,
@@ -974,6 +1007,10 @@ VARIABLES = '''
         <value condition="String.IsEqual(ListItem.Property(silo.menu.icon),profile)">Profile</value>
         <value>$INFO[ListItem.Plot]</value>
     </variable>
+    <variable name="SiloListDetail">
+        <value condition="!String.IsEmpty(Container(50).ListItem.Property(silo.menu.description))">$INFO[Container(50).ListItem.Property(silo.menu.description)]</value>
+        <value>$INFO[Container(50).ListItem.Plot]</value>
+    </variable>
     <variable name="SiloBrowseArt">
         <!-- The hero view draws its own, stronger. -->
         <value condition="Control.IsVisible(%(hero_view)d)"></value>
@@ -989,13 +1026,28 @@ VARIABLES = '''
         <value condition="!String.IsEmpty(ListItem.Art(landscape))">$INFO[ListItem.Art(landscape)]</value>
         <value>$INFO[ListItem.Icon]</value>
     </variable>
+    <!-- The plain title: an add-on's label can carry more through Kodi's label
+         mask (the YouTube add-on's view, like and comment counts, in colours). -->
+    <variable name="SiloVideoTitle">
+        <value condition="!String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
+        <value>$INFO[ListItem.Label]</value>
+    </variable>
+    <variable name="SiloVideoFocusTitle">
+        <value condition="!String.IsEmpty(Container(%(video_view)d).ListItem.Title)">$INFO[Container(%(video_view)d).ListItem.Title]</value>
+        <value>$INFO[Container(%(video_view)d).ListItem.Label]</value>
+    </variable>
+    <!-- A video's channel: the studio, or the artist as the YouTube add-on names it. -->
     <variable name="SiloVideoCardSub">
-        <value condition="!String.IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]$INFO[ListItem.Duration(mins), · , min]</value>
-        <value condition="!String.IsEmpty(ListItem.Duration)">$INFO[ListItem.Duration(mins),, min]$INFO[ListItem.Premiered, · ,]</value>
+        <value condition="!String.IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]$INFO[ListItem.Duration, · ,]</value>
+        <value condition="!String.IsEmpty(ListItem.Artist)">$INFO[ListItem.Artist]$INFO[ListItem.Duration, · ,]</value>
+        <value condition="!String.IsEmpty(ListItem.Duration)">$INFO[ListItem.Duration]$INFO[ListItem.Premiered, · ,]</value>
         <value>$INFO[ListItem.Label2]</value>
     </variable>
+    <!-- Its studio, length and date. The YouTube add-on's channel and counts
+         open its description (its "detailed description" setting), and Kodi has
+         no info label for the counts by themselves. -->
     <variable name="SiloVideoFacts">
-        <value>$INFO[Container(%(video_view)d).ListItem.Studio,,  ·  ]$INFO[Container(%(video_view)d).ListItem.Duration(mins),, min  ·  ]$INFO[Container(%(video_view)d).ListItem.Premiered]</value>
+        <value>$INFO[Container(%(video_view)d).ListItem.Studio,,  ·  ]$INFO[Container(%(video_view)d).ListItem.Duration,,  ·  ]$INFO[Container(%(video_view)d).ListItem.Premiered]</value>
     </variable>
     <!-- YouTube's placeholder for a video it knows nothing about: no description. -->
     <variable name="SiloVideoPlot">
