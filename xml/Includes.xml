@@ -966,6 +966,15 @@
 				<!-- Silo Skyline: Silo's Apple TV glass panel (as its menus), no heading strip. -->
 				<texture border="28">silo/menu_panel.png</texture>
 			</control>
+			<!-- Twice over: Kodi can't blur what's behind, and one layer let the page's
+			     text read through a dialog's list. -->
+			<control type="image">
+				<left>0</left>
+				<top>0</top>
+				<right>0</right>
+				<bottom>0</bottom>
+				<texture border="28">silo/menu_panel.png</texture>
+			</control>
 			<control type="label" id="$PARAM[header_id]">
 				<left>40</left>
 				<top>0</top>

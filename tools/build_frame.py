@@ -1028,38 +1028,6 @@ def silo_dialog(text):
 CARD_TEXTURE = '<texture border="24" colordiffuse="%s">silo/card_landscape_mask.png</texture>' % CARD
 
 
-def addon_info(text):
-    """An add-on's info page (from tools/source): Silo cards for its panels,
-    no grey placeholders where an add-on has no screenshots, Inter."""
-    text = text.replace('<texturenofocus border="21">dialogs/dialog-bg.png</texturenofocus>',
-                        '<texturenofocus border="24" colordiffuse="%s">silo/card_landscape_mask.png</texturenofocus>' % CARD)
-    # The facts panel: level with the description card, and rounded (a stretched
-    # "scale" image drops the texture's border).
-    text = re.sub(r'<left>1370</left>\s*<top>420</top>\s*<width>450</width>\s*<height>396</height>\s*<aspectratio>scale</aspectratio>\s*<texture colordiffuse="AAFFFFFF">colors/black.png</texture>',
-                  '<left>1370</left>\n\t\t\t\t\t\t<top>400</top>\n\t\t\t\t\t\t<width>450</width>\n\t\t\t\t\t\t<height>435</height>\n\t\t\t\t\t\t' + CARD_TEXTURE, text)
-    text = text.replace('<texture colordiffuse="AAFFFFFF">colors/black.png</texture>', CARD_TEXTURE)
-    text = re.sub(r'<texture>dialogs/dialog-bg-nobo.png</texture>\s*<bordertexture[^>]*>[^<]*</bordertexture>\s*<bordersize>\d+</bordersize>',
-                  '<texture border="24" colordiffuse="00FFFFFF">silo/card_landscape_mask.png</texture>', text)
-    # No screenshots: nothing, rather than three grey "no preview" boxes.
-    text = text.replace('<visible>Integer.IsEqual(Container(50).NumItems,0)</visible>', '<visible>false</visible>')
-    text = text.replace('<texture border="8" colordiffuse="button_focus">buttons/thumbnail_focused.png</texture>',
-                        '<texture border="8" colordiffuse="%s">buttons/thumbnail_focused.png</texture>' % TEXT)
-    text = text.replace('[COLOR button_focus]', '[COLOR %s]' % TEXT_DIM)  # the facts' labels: dimmed, as Silo's
-    # The button row: cards apart, not overlapping as Estuary's padded images did.
-    text = text.replace('<itemgap>-18</itemgap>', '<itemgap>12</itemgap>')
-    # Auto-update: a card like its neighbours.
-    text = re.sub(r'(<control type="radiobutton" id="13">\s*)<width>262</width>(.*?)<radioposx>81</radioposx>(.*?)<font>font12</font>',
-                  lambda m: m.group(1) + '<width>%d</width>' % INFO_BUTTON_W + m.group(2)
-                  + '<radioposx>%d</radioposx>' % ((INFO_BUTTON_W - 100) // 2) + m.group(3)
-                  + '<font>silo_detail</font>\n\t\t\t\t\t\t<focusedcolor>FF000000</focusedcolor>'
-                  '\n\t\t\t\t\t\t<texturefocus border="24" colordiffuse="%s">silo/card_landscape_mask.png</texturefocus>'
-                  '\n\t\t\t\t\t\t<texturenofocus border="24" colordiffuse="14FFFFFF">silo/card_landscape_mask.png</texturenofocus>' % TEXT,
-                  text, count=1, flags=re.S)
-    for estuary, silo in (('font27_narrow', 'silo_meta'), ('font12', 'silo_detail'), ('font32_title', 'silo_row')):
-        text = text.replace('<font>%s</font>' % estuary, '<font>%s</font>' % silo)
-    return text
-
-
 INFO_BUTTON_W = 230  # seven to a row with gaps between, as Silo's cards
 
 
@@ -1591,9 +1559,6 @@ def main():
     path = xml_path('Includes_Buttons.xml')
     text = open(path, encoding='utf-8').read()
     open(path, 'w', encoding='utf-8').write(info_buttons(replace_include(text, 'DefaultSettingButton', setting_button())))
-    source = os.path.join(ROOT, 'tools', 'source', 'DialogAddonInfo.xml')
-    with open(xml_path('DialogAddonInfo.xml'), 'w', encoding='utf-8') as handle:
-        handle.write(addon_info(open(source, encoding='utf-8').read()))
     # Skin settings: Estuary's window (tools/source) with the frame's edits.
     source = os.path.join(ROOT, 'tools', 'source', 'SkinSettings.xml')
     with open(xml_path('SkinSettings.xml'), 'w', encoding='utf-8') as handle:

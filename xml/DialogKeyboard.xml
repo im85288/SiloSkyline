@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
-	<defaultcontrol always="true">300</defaultcontrol>
+	<!-- Silo Skyline: start on a letter (q), ready to type, not on OK. -->
+	<defaultcontrol always="true">120</defaultcontrol>
 	<include>Keyboard_Slide_Up</include>
 	<depth>DepthDialog+</depth>
 	<controls>

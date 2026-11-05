@@ -8578,7 +8578,7 @@
         <value>FFEDEDED</value>
     </variable>
     <variable name="SiloYouTubeMenuDim">
-        <value condition="String.IsEqual(ListItem.Property(key),$INFO[Window(Home).Property(silo.youtube.section)]) | [String.IsEmpty(Window(Home).Property(silo.youtube.section)) + String.IsEqual(ListItem.Property(key),home)]">FFEDEDED</value>
+        <value condition="[String.IsEqual(ListItem.Property(key),search) + String.IsEqual(Window(Home).Property(silo.youtube.section),search)] | [String.IsEqual(ListItem.Property(key),home) + [String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)]] | [String.IsEqual(ListItem.Property(key),subscriptions) + String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions)] | [String.IsEqual(ListItem.Property(key),library) + String.IsEqual(Window(Home).Property(silo.youtube.section),library)]">FFEDEDED</value>
         <value>B3EDEDED</value>
     </variable>
     <variable name="SiloYouTubeSection">
@@ -8654,6 +8654,15 @@
     <variable name="SiloAddonRowDim">
         <value condition="Control.HasFocus(50)">99000000</value>
         <value>BFEDEDED</value>
+    </variable>
+    <!-- The file browser's lists (FileBrowser.xml): dark on the white focus pill. -->
+    <variable name="SiloFileRowText450">
+        <value condition="Control.HasFocus(450)">FF000000</value>
+        <value>FFEDEDED</value>
+    </variable>
+    <variable name="SiloFileRowText451">
+        <value condition="Control.HasFocus(451)">FF000000</value>
+        <value>FFEDEDED</value>
     </variable>
     <!-- A word at a row's right when the add-on needs attention. -->
     <variable name="SiloAddonFlag">

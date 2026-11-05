@@ -97,14 +97,14 @@
 						<right>0</right>
 						<height>71</height>
 						<visible>Control.HasFocus(450)</visible>
-						<texture border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texture>
+						<texture border="14" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
 					</control>
 					<control type="image">
 						<left>10</left>
 						<top>10</top>
 						<width>50</width>
 						<height>50</height>
-						<texture>$INFO[ListItem.Icon]</texture>
+						<texture colordiffuse="$VAR[SiloFileRowText450]">$INFO[ListItem.Icon]</texture>
 						<aspectratio>keep</aspectratio>
 					</control>
 					<control type="label">
@@ -114,6 +114,7 @@
 						<height>70</height>
 						<aligny>center</aligny>
 						<label>$INFO[ListItem.Label]</label>
+						<textcolor>$VAR[SiloFileRowText450]</textcolor>
 					</control>
 				</focusedlayout>
 			</control>
@@ -153,14 +154,14 @@
 						<right>0</right>
 						<height>71</height>
 						<visible>Control.HasFocus(451)</visible>
-						<texture border="14" colordiffuse="2EFFFFFF">silo/card_landscape_mask.png</texture>
+						<texture border="14" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
 					</control>
 					<control type="image">
 						<left>10</left>
 						<top>10</top>
 						<width>50</width>
 						<height>50</height>
-						<texture>$INFO[ListItem.Icon]</texture>
+						<texture colordiffuse="$VAR[SiloFileRowText451]">$INFO[ListItem.Icon]</texture>
 						<aspectratio>keep</aspectratio>
 					</control>
 					<control type="label">
@@ -170,6 +171,7 @@
 						<height>70</height>
 						<aligny>center</aligny>
 						<label>$INFO[ListItem.Label]</label>
+						<textcolor>$VAR[SiloFileRowText451]</textcolor>
 					</control>
 				</focusedlayout>
 			</control>

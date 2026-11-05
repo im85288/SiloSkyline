@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Write xml/AddonBrowser.xml: Kodi's add-on browser in Silo's style.
+"""Write xml/AddonBrowser.xml and xml/DialogAddonInfo.xml: Kodi's add-on browser
+and an add-on's page, in Silo's style.
 
     python3 tools/build_addons.py
 
@@ -33,6 +34,16 @@ PANEL_X = SAFE_X + LIST_W + 72
 PANEL_W = 1920 - SAFE_X - PANEL_X
 PANEL_ICON = 176
 FOCUSED_TEXT = 'FF000000'
+
+# An add-on's page (DialogAddonInfo).
+INFO_ROW, NEWS_BUTTON = 9000, 5000
+INFO_TOP, INFO_ICON = 96, 240
+PILL_H = 64
+RADIO_PILL_W = 300
+FACTS_W = 420
+FACTS_X = 1920 - SAFE_X - FACTS_W
+SHOT_W, SHOT_H = 400, 225
+SHOT_TOP = 1080 - SHOT_H - 12 - 48
 
 # Kodi's add-on states (ListItem properties set by the add-on browser).
 BROKEN = 'String.IsEqual(ListItem.AddonLifecycleType,$LOCALIZE[24171])'
@@ -253,6 +264,161 @@ def build():
        'details': details(), 'menu_xml': side_menu()}
 
 
+def info_button(control_id, label, kind='button', extra=''):
+    """A pill in the add-on page's button row, as long as its label. Kodi labels
+    Install/Uninstall (6) and Enable/Disable (7) itself, and turns off those
+    that don't apply; a button turned off leaves the row."""
+    width = '<width>auto</width>' if kind == 'button' else '<width>%d</width>' % RADIO_PILL_W
+    radio = '' if kind == 'button' else '\n                    <radioposx>%d</radioposx><radioposy>12</radioposy><radiowidth>72</radiowidth><radioheight>36</radioheight>' % (RADIO_PILL_W - 96)
+    return """
+                <control type="%(kind)s" id="%(id)d">
+                    %(width)s<height>%(h)d</height>
+                    <label>%(label)s</label>
+                    <font>silo_meta</font>
+                    <align>%(align)s</align><aligny>center</aligny>
+                    <textoffsetx>32</textoffsetx>
+                    <textcolor>%(text)s</textcolor>
+                    <focusedcolor>%(dark)s</focusedcolor>
+                    <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
+                    <texturenofocus border="30" colordiffuse="1FFFFFFF">silo/pill.png</texturenofocus>%(radio)s%(extra)s
+                    <visible>Control.IsEnabled(%(id)d)</visible>
+                </control>""" % {'kind': kind, 'id': control_id, 'width': width, 'h': PILL_H, 'label': label,
+                                 'align': 'center' if kind == 'button' else 'left', 'text': TEXT, 'dark': FOCUSED_TEXT,
+                                 'radio': radio, 'extra': extra}
+
+
+def fact(label, value, visible):
+    return """
+                <control type="group">
+                    <height>84</height>
+                    <visible>%(visible)s</visible>
+                    <control type="label">
+                        <width>%(w)d</width><height>36</height>
+                        <font>silo_badge</font>
+                        <textcolor>99EDEDED</textcolor>
+                        <label>%(label)s</label>
+                    </control>
+                    <control type="label">
+                        <top>34</top><width>%(w)d</width><height>40</height>
+                        <font>silo_meta</font>
+                        <textcolor>%(text)s</textcolor>
+                        <label>%(value)s</label>
+                    </control>
+                </control>""" % {'visible': visible, 'w': FACTS_W, 'label': label, 'value': value, 'text': TEXT}
+
+
+def addon_info():
+    """An add-on's page, as Skyline's film and series pages: icon, name, version
+    and author, a row of pills (Kodi's own buttons, those that apply), then the
+    description beside the facts, and any screenshots underneath."""
+    news = ''.join('\n                    <onclick>%s</onclick>' % action for action in (
+        'SetProperty(TextViewer_Header,$LOCALIZE[31141] $INFO[ListItem.AddonVersion],home)',
+        'SetProperty(TextViewer_Text,$ESCINFO[ListItem.AddonNews],home)', 'ActivateWindow(1102)'))
+    buttons = (info_button(12, '$LOCALIZE[518]') + info_button(9, '$LOCALIZE[24020]') + info_button(8, '$LOCALIZE[24138]')
+               + info_button(6, '') + info_button(NEWS_BUTTON, "What's new", extra=news + '\n                    <enable>!String.IsEmpty(ListItem.AddonNews)</enable>')
+               + info_button(13, 'Auto-update', 'radiobutton') + info_button(10, '$LOCALIZE[39024]')
+               + info_button(14, '$LOCALIZE[24069]') + info_button(7, ''))
+    facts = (fact('TYPE', '$INFO[ListItem.AddonType]', '!String.IsEmpty(ListItem.AddonType)')
+             + fact('FROM', '$INFO[ListItem.AddonOrigin]', '!String.IsEmpty(ListItem.AddonOrigin)')
+             + fact('SIZE', '$INFO[ListItem.AddonSize]', '!String.IsEmpty(ListItem.AddonSize)')
+             + fact('STATUS', '$INFO[ListItem.Property(Addon.Status)]$INFO[ListItem.Property(Addon.ValidUpdateVersion),  ·  $LOCALIZE[19114] ,]',
+                    '!String.IsEmpty(ListItem.Property(Addon.Status))'))
+    return """<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated by tools/build_addons.py: edit that, not this. -->
+<window>
+    <defaultcontrol always="true">%(row)d</defaultcontrol>
+    <onload condition="!ListItem.Property(addon.isinstalled) + Window.IsActive(addonbrowser)">SetFocus(6)</onload>
+    <controls>
+        <control type="image">
+            <left>0</left><top>0</top><width>1920</width><height>1080</height>
+            <texture colordiffuse="%(background)s">colors/white.png</texture>
+        </control>
+        <!-- The add-on's fanart, faint in the top right, as on Silo's pages. -->
+        <control type="image">
+            <left>576</left><top>0</top><width>1344</width><height>756</height>
+            <aspectratio>stretch</aspectratio>
+            <fadetime>240</fadetime>
+            <texture background="true" colordiffuse="20FFFFFF" diffuse="silo/hero_mask.png">$INFO[ListItem.Art(fanart)]</texture>
+        </control>
+        <control type="image">
+            <left>%(x)d</left><top>%(top)d</top><width>%(icon)d</width><height>%(icon)d</height>
+            <texture border="24" colordiffuse="FF1C1F24">silo/card_landscape_mask.png</texture>
+        </control>
+        <control type="image">
+            <left>%(x)d</left><top>%(top)d</top><width>%(icon)d</width><height>%(icon)d</height>
+            <aspectratio>keep</aspectratio>
+            <fadetime>160</fadetime>
+            <texture background="true" fallback="DefaultAddon.png" diffuse="silo/card_poster_mask.png">$INFO[ListItem.Art(thumb)]</texture>
+        </control>
+        <control type="label">
+            <left>%(tx)d</left><top>%(t1)d</top><width>%(tw)d</width><height>84</height>
+            <aligny>center</aligny>
+            <font>silo_title</font>
+            <textcolor>%(text)s</textcolor>
+            <label>$INFO[ListItem.AddonName]</label>
+        </control>
+        <control type="label">
+            <left>%(tx)d</left><top>%(t2)d</top><width>%(tw)d</width><height>40</height>
+            <aligny>center</aligny>
+            <font>silo_meta</font>
+            <textcolor>%(dim)s</textcolor>
+            <label>$INFO[ListItem.AddonVersion,Version ,]$INFO[ListItem.AddonCreator,  ·  ,]</label>
+        </control>
+        <control type="grouplist" id="%(row)d">
+            <left>%(tx)d</left><top>%(t3)d</top><width>%(rw)d</width><height>%(ph)d</height>
+            <orientation>horizontal</orientation>
+            <itemgap>12</itemgap>
+            <onup>noop</onup><ondown>50</ondown><onleft>noop</onleft><onright>noop</onright>%(buttons)s
+        </control>
+        <control type="textbox">
+            <left>%(x)d</left><top>%(dt)d</top><width>%(dw)d</width><height>%(dh)d</height>
+            <font>silo_plot</font>
+            <textcolor>%(dim)s</textcolor>
+            <autoscroll delay="6000" time="3000" repeat="8000">true</autoscroll>
+            <label>$INFO[ListItem.AddonSummary,[COLOR %(text)s][B],[/B][/COLOR][CR]]$VAR[SiloAddonDescription]$INFO[ListItem.AddonDisclaimer,[CR][CR][I],[/I]]</label>
+        </control>
+        <control type="grouplist">
+            <left>%(fx)d</left><top>%(dt)d</top><width>%(fw)d</width><height>%(dh)d</height>
+            <orientation>vertical</orientation>
+            <usecontrolcoords>true</usecontrolcoords>%(facts)s
+        </control>
+        <!-- Screenshots, when an add-on has them (OK shows them full size). -->
+        <control type="panel" id="50">
+            <left>%(sx)d</left><top>%(st)d</top><width>%(sw)d</width><height>%(sh)d</height>
+            <orientation>horizontal</orientation>
+            <scrolltime tween="cubic" easing="out">240</scrolltime>
+            <onup>%(row)d</onup><ondown>noop</ondown>
+            <visible>Integer.IsGreater(Container(50).NumItems,0)</visible>
+            <itemlayout width="%(siw)d" height="%(sh)d">%(shot)s
+            </itemlayout>
+            <focusedlayout width="%(siw)d" height="%(sh)d">%(shot_focused)s
+            </focusedlayout>
+        </control>
+    </controls>
+</window>
+""" % {'row': INFO_ROW, 'background': BACKGROUND, 'x': SAFE_X, 'top': INFO_TOP, 'icon': INFO_ICON, 'tx': SAFE_X + INFO_ICON + 48,
+       't1': INFO_TOP + 4, 't2': INFO_TOP + 92, 't3': INFO_TOP + INFO_ICON - PILL_H, 'tw': 1920 - SAFE_X - (SAFE_X + INFO_ICON + 48),
+       'rw': 1920 - SAFE_X - (SAFE_X + INFO_ICON + 48), 'ph': PILL_H, 'text': TEXT, 'dim': TEXT_DIM, 'buttons': buttons,
+       'dt': INFO_TOP + INFO_ICON + 56, 'dw': FACTS_X - SAFE_X - 64, 'dh': SHOT_TOP - (INFO_TOP + INFO_ICON + 56) - 24,
+       'fx': FACTS_X, 'fw': FACTS_W, 'facts': facts, 'sx': SAFE_X - 6, 'st': SHOT_TOP, 'sw': 1920 - SAFE_X, 'sh': SHOT_H + 12,
+       'siw': SHOT_W + 24, 'shot': shot(False), 'shot_focused': shot(True)}
+
+
+def shot(focused):
+    rim = """
+                    <control type="image">
+                        <left>6</left><top>6</top><width>%d</width><height>%d</height>
+                        <texture colordiffuse="%s" border="20">silo/card_landscape_rim.png</texture>
+                        <visible>Control.HasFocus(50)</visible>
+                    </control>""" % (SHOT_W, SHOT_H, TEXT) if focused else ''
+    return """
+                    <control type="image">
+                        <left>6</left><top>6</top><width>%d</width><height>%d</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture background="true" diffuse="silo/card_landscape_mask.png">$INFO[ListItem.Icon]</texture>
+                    </control>%s""" % (SHOT_W, SHOT_H, rim)
+
+
 VARIABLES = '''
     <!-- Silo Skyline add-ons (tools/build_addons.py) -->
     <!-- An add-on's own icon is its thumb (its icon is Kodi's generic box);
@@ -269,6 +435,15 @@ VARIABLES = '''
     <variable name="SiloAddonRowDim">
         <value condition="Control.HasFocus(%(list)d)">99000000</value>
         <value>%(dim)s</value>
+    </variable>
+    <!-- The file browser's lists (FileBrowser.xml): dark on the white focus pill. -->
+    <variable name="SiloFileRowText450">
+        <value condition="Control.HasFocus(450)">%(dark)s</value>
+        <value>%(text)s</value>
+    </variable>
+    <variable name="SiloFileRowText451">
+        <value condition="Control.HasFocus(451)">%(dark)s</value>
+        <value>%(text)s</value>
     </variable>
     <!-- A word at a row's right when the add-on needs attention. -->
     <variable name="SiloAddonFlag">
@@ -314,5 +489,7 @@ def add_variables():
 if __name__ == '__main__':
     with open(os.path.join(ROOT, 'xml', 'AddonBrowser.xml'), 'w', encoding='utf-8') as handle:
         handle.write(build())
+    with open(os.path.join(ROOT, 'xml', 'DialogAddonInfo.xml'), 'w', encoding='utf-8') as handle:
+        handle.write(addon_info())
     add_variables()
-    print('Wrote xml/AddonBrowser.xml and its variables in xml/Variables.xml')
+    print('Wrote xml/AddonBrowser.xml, xml/DialogAddonInfo.xml and their variables in xml/Variables.xml')

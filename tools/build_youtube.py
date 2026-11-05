@@ -662,7 +662,7 @@ VARIABLES = '''
         <value>%(text)s</value>
     </variable>
     <variable name="SiloYouTubeMenuDim">
-        <value condition="String.IsEqual(ListItem.Property(key),$INFO[%(section)s]) | [String.IsEmpty(%(section)s) + String.IsEqual(ListItem.Property(key),home)]">%(text)s</value>
+        <value condition="%(menu_lit)s">%(text)s</value>
         <value>%(dim)s</value>
     </variable>
     <variable name="SiloYouTubeSection">
@@ -723,6 +723,8 @@ VARIABLES = '''
     </variable>
     <!-- end Silo Skyline YouTube -->
 ''' % {'lazy': lazy_variables(), 'menu': MENU_ID, 'dim': TAB_DIM, 'query': QUERY, 'history': HISTORY_ID,
+       # Spelled out per section: Kodi can't parse a $INFO inside a condition with [ ] groups.
+       'menu_lit': ' | '.join('[String.IsEqual(ListItem.Property(key),%s) + %s]' % (key, shown(key)) for key in MENU_KEYS),
        'section': SECTION, 'channels': CHANNELS_ID, 'text': TEXT, 'channel': CHANNEL,
        'yt': YT, 'params': ROW_PARAMS, 'more': ROW_PARAMS.replace('?', '&amp;', 1)}
 
