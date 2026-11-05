@@ -7,10 +7,8 @@
     <onload condition="Player.HasVideo">PlayerControl(Stop)</onload>
     <!-- Home, its first row focused, as the app opens. -->
     <onload>ClearProperty(silo.youtube.section,home)</onload>
-    <onload>ClearProperty(silo.youtube.row.home,home)</onload>
-    <onload>ClearProperty(silo.youtube.row.library,home)</onload>
-    <onload>ClearProperty(silo.youtube.loaded.subscriptions,home)</onload>
     <onload>ClearProperty(silo.youtube.loaded.library,home)</onload>
+    <onload>ClearProperty(silo.youtube.channel,home)</onload>
     <onload>ClearProperty(silo.youtube.query,home)</onload>
     <onload>ClearProperty(silo.youtube.search,home)</onload>
     <backgroundcolor>SkylineBackground</backgroundcolor>
@@ -25,20 +23,14 @@
         </include>
 
         <!-- Home -->
-        <control type="group" id="300">
+        <control type="grouplist" id="300">
             <left>88</left><top>148</top><width>1832</width><height>932</height>
+            <orientation>vertical</orientation>
+            <itemgap>-280</itemgap>
+            <scrolltime tween="cubic" easing="out">300</scrolltime>
             <visible>[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)]</visible>
             <control type="group">
-                <left>0</left><top>0</top><width>1832</width><height>728</height>
-                <visible allowhiddenfocus="true">![String.IsEqual(Window(Home).Property(silo.youtube.row.home),1) | String.IsEqual(Window(Home).Property(silo.youtube.row.home),2)]</visible>
-                <animation type="Hidden" reversible="false">
-                    <effect type="slide" end="0,-728" time="260" tween="cubic" easing="out" />
-                    <effect type="fade" start="100" end="0" time="120" />
-                </animation>
-                <animation type="Visible" reversible="false">
-                    <effect type="slide" start="0,-728" end="0,0" time="260" tween="cubic" easing="out" />
-                    <effect type="fade" start="0" end="100" time="200" />
-                </animation>
+                <height>932</height>
                 <control type="label">
                     <left>0</left><top>0</top><width>1832</width><height>52</height>
                     <aligny>center</aligny>
@@ -54,41 +46,38 @@
                     <label>Nothing here yet</label>
                     <visible>!Container(301).IsUpdating + Integer.IsEqual(Container(301).NumItems,0)</visible>
                 </control>
-                <!-- The chosen row's cards zoom to the big size from their top left;
-                     the focused card stays at the left (a fixedlist), as the app's. -->
+                <!-- The focused card stays at the left (a fixedlist), as the app's. -->
                 <control type="fixedlist" id="301">
                     <visible>[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)]</visible>
-                    <left>-6</left><top>70</top><width>1838</width><height>475</height>
+                    <left>-6</left><top>70</top><width>1838</width><height>538</height>
                     <orientation>horizontal</orientation>
                     <focusposition>0</focusposition>
                     <movement>0</movement>
                     <scrolltime tween="cubic" easing="out">240</scrolltime>
-                    <animation effect="zoom" end="136" center="-6,70" time="260" tween="cubic" easing="out" condition="[String.IsEmpty(Window(Home).Property(silo.youtube.row.home)) | String.IsEqual(Window(Home).Property(silo.youtube.row.home),0)]">Conditional</animation>
-                    <onfocus>SetProperty(silo.youtube.row.home,0,home)</onfocus>
                     <onleft>SetFocus(100,1,absolute)</onleft>
                     <onup>noop</onup>
-                    <ondown>302</ondown>
-                    <itemlayout width="568" height="475">
+                    <ondown condition="Integer.IsGreater(Container(302).NumItems,0)">SetFocus(302)</ondown>
+                    <itemlayout width="680" height="538">
                 <control type="group">
                     <!-- Behind the picture, the video's smaller one YouTube always has:
                          the add-on asks for its largest 16:9 (hq720) without checking,
                          and older videos have none, which left the card grey. -->
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <texture border="24" colordiffuse="SkylineBackground">silo/card_corners.png</texture>
                     </control>
                     <control type="progress">
-                        <left>20</left><top>295</top><width>500</width><height>6</height>
+                        <left>20</left><top>358</top><width>612</width><height>6</height>
                         <texturebg colordiffuse="66000000">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFFF0033">colors/white.png</midtexture>
                         <info>ListItem.PercentPlayed</info>
@@ -96,7 +85,7 @@
                     </control>
                     <!-- The duration in the picture's corner, as the app's. -->
                     <control type="label">
-                        <left>410</left><top>261</top><width>110</width><height>34</height>
+                        <left>522</left><top>324</top><width>110</width><height>34</height>
                         <align>right</align><aligny>center</aligny>
                         <font>silo_badge</font>
                         <textcolor>FFEDEDED</textcolor>
@@ -104,47 +93,47 @@
                         <visible>!String.IsEmpty(ListItem.Duration) + !ListItem.IsFolder</visible>
                     </control>
                     <control type="textbox">
-                        <left>6</left><top>317</top><width>528</width><height>64</height>
+                        <left>6</left><top>380</top><width>640</width><height>64</height>
                         <font>silo_card_title</font>
                         <textcolor>66EDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>387</top><width>528</width><height>34</height>
+                        <left>6</left><top>450</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>4AEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeChannel]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>421</top><width>528</width><height>34</height>
+                        <left>6</left><top>484</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>4AEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeWhen]</label>
                     </control>
                 </control>
                     </itemlayout>
-                    <focusedlayout width="568" height="475">
+                    <focusedlayout width="680" height="538">
                 <control type="group">
-                    <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(301)">Conditional</animation>
+                    <animation effect="zoom" start="100" end="105" time="180" tween="sine" easing="out" center="6,186" condition="Control.HasFocus(301)">Conditional</animation>
                     <!-- Behind the picture, the video's smaller one YouTube always has:
                          the add-on asks for its largest 16:9 (hq720) without checking,
                          and older videos have none, which left the card grey. -->
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <texture border="24" colordiffuse="SkylineBackground">silo/card_corners.png</texture>
                     </control>
                     <control type="progress">
-                        <left>20</left><top>295</top><width>500</width><height>6</height>
+                        <left>20</left><top>358</top><width>612</width><height>6</height>
                         <texturebg colordiffuse="66000000">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFFF0033">colors/white.png</midtexture>
                         <info>ListItem.PercentPlayed</info>
@@ -152,7 +141,7 @@
                     </control>
                     <!-- The duration in the picture's corner, as the app's. -->
                     <control type="label">
-                        <left>410</left><top>261</top><width>110</width><height>34</height>
+                        <left>522</left><top>324</top><width>110</width><height>34</height>
                         <align>right</align><aligny>center</aligny>
                         <font>silo_badge</font>
                         <textcolor>FFEDEDED</textcolor>
@@ -163,28 +152,28 @@
                         <left>6</left><top>6</top>
                         <visible>Control.HasFocus(301)</visible>
                         <control type="image">
-                            <width>528</width><height>297</height>
+                            <width>640</width><height>360</height>
                             <texture diffuse="silo/card_landscape_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
                         </control>
                         <control type="image">
-                            <width>528</width><height>297</height>
+                            <width>640</width><height>360</height>
                             <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
                         </control>
                     </control>
                     <control type="textbox">
-                        <left>6</left><top>317</top><width>528</width><height>64</height>
+                        <left>6</left><top>380</top><width>640</width><height>64</height>
                         <font>silo_card_title</font>
                         <textcolor>FFEDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>387</top><width>528</width><height>34</height>
+                        <left>6</left><top>450</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeChannel]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>421</top><width>528</width><height>34</height>
+                        <left>6</left><top>484</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeWhen]</label>
@@ -195,176 +184,7 @@
                 </control>
             </control>
             <control type="group">
-                <left>0</left><top>0</top><width>1832</width><height>728</height>
-                <visible allowhiddenfocus="true">![String.IsEqual(Window(Home).Property(silo.youtube.row.home),2)]</visible>
-                <animation type="Hidden" reversible="false">
-                    <effect type="slide" end="0,-728" time="260" tween="cubic" easing="out" />
-                    <effect type="fade" start="100" end="0" time="120" />
-                </animation>
-                <animation type="Visible" reversible="false">
-                    <effect type="slide" start="0,-728" end="0,0" time="260" tween="cubic" easing="out" />
-                    <effect type="fade" start="0" end="100" time="200" />
-                </animation>
-                <animation effect="slide" end="0,728" time="260" tween="cubic" easing="out" condition="[String.IsEmpty(Window(Home).Property(silo.youtube.row.home)) | String.IsEqual(Window(Home).Property(silo.youtube.row.home),0)]">Conditional</animation>
-                <control type="label">
-                    <left>0</left><top>0</top><width>1832</width><height>52</height>
-                    <aligny>center</aligny>
-                    <font>silo_meta</font>
-                    <textcolor>BFEDEDED</textcolor>
-                    <label>Recently uploaded</label>
-                </control>
-                <control type="label">
-                    <left>0</left><top>52</top><width>1832</width><height>80</height>
-                    <aligny>center</aligny>
-                    <font>silo_detail</font>
-                    <textcolor>4AEDEDED</textcolor>
-                    <label>Nothing here yet</label>
-                    <visible>!Container(302).IsUpdating + Integer.IsEqual(Container(302).NumItems,0)</visible>
-                </control>
-                <!-- The chosen row's cards zoom to the big size from their top left;
-                     the focused card stays at the left (a fixedlist), as the app's. -->
-                <control type="fixedlist" id="302">
-                    <visible>[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)]</visible>
-                    <left>-6</left><top>70</top><width>1838</width><height>475</height>
-                    <orientation>horizontal</orientation>
-                    <focusposition>0</focusposition>
-                    <movement>0</movement>
-                    <scrolltime tween="cubic" easing="out">240</scrolltime>
-                    <animation effect="zoom" end="136" center="-6,70" time="260" tween="cubic" easing="out" condition="String.IsEqual(Window(Home).Property(silo.youtube.row.home),1)">Conditional</animation>
-                    <onfocus>SetProperty(silo.youtube.row.home,1,home)</onfocus>
-                    <onleft>SetFocus(100,1,absolute)</onleft>
-                    <onup>301</onup>
-                    <ondown>303</ondown>
-                    <itemlayout width="568" height="475">
-                <control type="group">
-                    <!-- Behind the picture, the video's smaller one YouTube always has:
-                         the add-on asks for its largest 16:9 (hq720) without checking,
-                         and older videos have none, which left the card grey. -->
-                    <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
-                        <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
-                    </control>
-                    <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
-                        <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
-                    </control>
-                    <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
-                        <texture border="24" colordiffuse="SkylineBackground">silo/card_corners.png</texture>
-                    </control>
-                    <control type="progress">
-                        <left>20</left><top>295</top><width>500</width><height>6</height>
-                        <texturebg colordiffuse="66000000">colors/white.png</texturebg>
-                        <midtexture colordiffuse="FFFF0033">colors/white.png</midtexture>
-                        <info>ListItem.PercentPlayed</info>
-                        <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
-                    </control>
-                    <!-- The duration in the picture's corner, as the app's. -->
-                    <control type="label">
-                        <left>410</left><top>261</top><width>110</width><height>34</height>
-                        <align>right</align><aligny>center</aligny>
-                        <font>silo_badge</font>
-                        <textcolor>FFEDEDED</textcolor>
-                        <label>$INFO[ListItem.Duration]</label>
-                        <visible>!String.IsEmpty(ListItem.Duration) + !ListItem.IsFolder</visible>
-                    </control>
-                    <control type="textbox">
-                        <left>6</left><top>317</top><width>528</width><height>64</height>
-                        <font>silo_card_title</font>
-                        <textcolor>66EDEDED</textcolor>
-                        <label>$INFO[ListItem.Label]</label>
-                    </control>
-                    <control type="label">
-                        <left>6</left><top>387</top><width>528</width><height>34</height>
-                        <font>silo_card_sub</font>
-                        <textcolor>4AEDEDED</textcolor>
-                        <label>$VAR[SiloYouTubeChannel]</label>
-                    </control>
-                    <control type="label">
-                        <left>6</left><top>421</top><width>528</width><height>34</height>
-                        <font>silo_card_sub</font>
-                        <textcolor>4AEDEDED</textcolor>
-                        <label>$VAR[SiloYouTubeWhen]</label>
-                    </control>
-                </control>
-                    </itemlayout>
-                    <focusedlayout width="568" height="475">
-                <control type="group">
-                    <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(302)">Conditional</animation>
-                    <!-- Behind the picture, the video's smaller one YouTube always has:
-                         the add-on asks for its largest 16:9 (hq720) without checking,
-                         and older videos have none, which left the card grey. -->
-                    <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
-                        <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
-                    </control>
-                    <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
-                        <aspectratio>scale</aspectratio>
-                        <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
-                    </control>
-                    <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
-                        <texture border="24" colordiffuse="SkylineBackground">silo/card_corners.png</texture>
-                    </control>
-                    <control type="progress">
-                        <left>20</left><top>295</top><width>500</width><height>6</height>
-                        <texturebg colordiffuse="66000000">colors/white.png</texturebg>
-                        <midtexture colordiffuse="FFFF0033">colors/white.png</midtexture>
-                        <info>ListItem.PercentPlayed</info>
-                        <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
-                    </control>
-                    <!-- The duration in the picture's corner, as the app's. -->
-                    <control type="label">
-                        <left>410</left><top>261</top><width>110</width><height>34</height>
-                        <align>right</align><aligny>center</aligny>
-                        <font>silo_badge</font>
-                        <textcolor>FFEDEDED</textcolor>
-                        <label>$INFO[ListItem.Duration]</label>
-                        <visible>!String.IsEmpty(ListItem.Duration) + !ListItem.IsFolder</visible>
-                    </control>
-                    <control type="group">
-                        <left>6</left><top>6</top>
-                        <visible>Control.HasFocus(302)</visible>
-                        <control type="image">
-                            <width>528</width><height>297</height>
-                            <texture diffuse="silo/card_landscape_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
-                        </control>
-                        <control type="image">
-                            <width>528</width><height>297</height>
-                            <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
-                        </control>
-                    </control>
-                    <control type="textbox">
-                        <left>6</left><top>317</top><width>528</width><height>64</height>
-                        <font>silo_card_title</font>
-                        <textcolor>FFEDEDED</textcolor>
-                        <label>$INFO[ListItem.Label]</label>
-                    </control>
-                    <control type="label">
-                        <left>6</left><top>387</top><width>528</width><height>34</height>
-                        <font>silo_card_sub</font>
-                        <textcolor>BFEDEDED</textcolor>
-                        <label>$VAR[SiloYouTubeChannel]</label>
-                    </control>
-                    <control type="label">
-                        <left>6</left><top>421</top><width>528</width><height>34</height>
-                        <font>silo_card_sub</font>
-                        <textcolor>BFEDEDED</textcolor>
-                        <label>$VAR[SiloYouTubeWhen]</label>
-                    </control>
-                </control>
-                    </focusedlayout>
-                    <content target="videos">plugin://plugin.video.youtube/special/my_subscriptions/?hide_folders=true&amp;hide_next_page=true</content>
-                </control>
-            </control>
-            <control type="group">
-                <left>0</left><top>0</top><width>1832</width><height>728</height>
-                <animation effect="slide" end="0,1285" time="260" tween="cubic" easing="out" condition="[String.IsEmpty(Window(Home).Property(silo.youtube.row.home)) | String.IsEqual(Window(Home).Property(silo.youtube.row.home),0)]">Conditional</animation>
-                <animation effect="slide" end="0,728" time="260" tween="cubic" easing="out" condition="String.IsEqual(Window(Home).Property(silo.youtube.row.home),1)">Conditional</animation>
+                <height>932</height>
                 <control type="label">
                     <left>0</left><top>0</top><width>1832</width><height>52</height>
                     <aligny>center</aligny>
@@ -378,43 +198,40 @@
                     <font>silo_detail</font>
                     <textcolor>4AEDEDED</textcolor>
                     <label>Nothing here yet</label>
-                    <visible>!Container(303).IsUpdating + Integer.IsEqual(Container(303).NumItems,0)</visible>
+                    <visible>!Container(302).IsUpdating + Integer.IsEqual(Container(302).NumItems,0)</visible>
                 </control>
-                <!-- The chosen row's cards zoom to the big size from their top left;
-                     the focused card stays at the left (a fixedlist), as the app's. -->
-                <control type="fixedlist" id="303">
+                <!-- The focused card stays at the left (a fixedlist), as the app's. -->
+                <control type="fixedlist" id="302">
                     <visible>[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)]</visible>
-                    <left>-6</left><top>70</top><width>1838</width><height>475</height>
+                    <left>-6</left><top>70</top><width>1838</width><height>538</height>
                     <orientation>horizontal</orientation>
                     <focusposition>0</focusposition>
                     <movement>0</movement>
                     <scrolltime tween="cubic" easing="out">240</scrolltime>
-                    <animation effect="zoom" end="136" center="-6,70" time="260" tween="cubic" easing="out" condition="String.IsEqual(Window(Home).Property(silo.youtube.row.home),2)">Conditional</animation>
-                    <onfocus>SetProperty(silo.youtube.row.home,2,home)</onfocus>
                     <onleft>SetFocus(100,1,absolute)</onleft>
-                    <onup>302</onup>
+                    <onup condition="Integer.IsGreater(Container(301).NumItems,0)">SetFocus(301)</onup>
                     <ondown>noop</ondown>
-                    <itemlayout width="568" height="475">
+                    <itemlayout width="680" height="538">
                 <control type="group">
                     <!-- Behind the picture, the video's smaller one YouTube always has:
                          the add-on asks for its largest 16:9 (hq720) without checking,
                          and older videos have none, which left the card grey. -->
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <texture border="24" colordiffuse="SkylineBackground">silo/card_corners.png</texture>
                     </control>
                     <control type="progress">
-                        <left>20</left><top>295</top><width>500</width><height>6</height>
+                        <left>20</left><top>358</top><width>612</width><height>6</height>
                         <texturebg colordiffuse="66000000">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFFF0033">colors/white.png</midtexture>
                         <info>ListItem.PercentPlayed</info>
@@ -422,7 +239,7 @@
                     </control>
                     <!-- The duration in the picture's corner, as the app's. -->
                     <control type="label">
-                        <left>410</left><top>261</top><width>110</width><height>34</height>
+                        <left>522</left><top>324</top><width>110</width><height>34</height>
                         <align>right</align><aligny>center</aligny>
                         <font>silo_badge</font>
                         <textcolor>FFEDEDED</textcolor>
@@ -430,47 +247,47 @@
                         <visible>!String.IsEmpty(ListItem.Duration) + !ListItem.IsFolder</visible>
                     </control>
                     <control type="textbox">
-                        <left>6</left><top>317</top><width>528</width><height>64</height>
+                        <left>6</left><top>380</top><width>640</width><height>64</height>
                         <font>silo_card_title</font>
                         <textcolor>66EDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>387</top><width>528</width><height>34</height>
+                        <left>6</left><top>450</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>4AEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeChannel]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>421</top><width>528</width><height>34</height>
+                        <left>6</left><top>484</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>4AEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeWhen]</label>
                     </control>
                 </control>
                     </itemlayout>
-                    <focusedlayout width="568" height="475">
+                    <focusedlayout width="680" height="538">
                 <control type="group">
-                    <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(303)">Conditional</animation>
+                    <animation effect="zoom" start="100" end="105" time="180" tween="sine" easing="out" center="6,186" condition="Control.HasFocus(302)">Conditional</animation>
                     <!-- Behind the picture, the video's smaller one YouTube always has:
                          the add-on asks for its largest 16:9 (hq720) without checking,
                          and older videos have none, which left the card grey. -->
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <texture border="24" colordiffuse="SkylineBackground">silo/card_corners.png</texture>
                     </control>
                     <control type="progress">
-                        <left>20</left><top>295</top><width>500</width><height>6</height>
+                        <left>20</left><top>358</top><width>612</width><height>6</height>
                         <texturebg colordiffuse="66000000">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFFF0033">colors/white.png</midtexture>
                         <info>ListItem.PercentPlayed</info>
@@ -478,7 +295,7 @@
                     </control>
                     <!-- The duration in the picture's corner, as the app's. -->
                     <control type="label">
-                        <left>410</left><top>261</top><width>110</width><height>34</height>
+                        <left>522</left><top>324</top><width>110</width><height>34</height>
                         <align>right</align><aligny>center</aligny>
                         <font>silo_badge</font>
                         <textcolor>FFEDEDED</textcolor>
@@ -487,30 +304,30 @@
                     </control>
                     <control type="group">
                         <left>6</left><top>6</top>
-                        <visible>Control.HasFocus(303)</visible>
+                        <visible>Control.HasFocus(302)</visible>
                         <control type="image">
-                            <width>528</width><height>297</height>
+                            <width>640</width><height>360</height>
                             <texture diffuse="silo/card_landscape_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
                         </control>
                         <control type="image">
-                            <width>528</width><height>297</height>
+                            <width>640</width><height>360</height>
                             <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
                         </control>
                     </control>
                     <control type="textbox">
-                        <left>6</left><top>317</top><width>528</width><height>64</height>
+                        <left>6</left><top>380</top><width>640</width><height>64</height>
                         <font>silo_card_title</font>
                         <textcolor>FFEDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>387</top><width>528</width><height>34</height>
+                        <left>6</left><top>450</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeChannel]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>421</top><width>528</width><height>34</height>
+                        <left>6</left><top>484</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeWhen]</label>
@@ -538,9 +355,11 @@
                 <texturenofocus border="30" colordiffuse="$VAR[SiloYouTubeAllPill]">silo/pill.png</texturenofocus>
                 <onleft>SetFocus(100,2,absolute)</onleft><onup>noop</onup>
                 <ondown>402</ondown>
-                <onright>410</onright>
+                <!-- Right waits for the grid while it loads (Kodi can't focus it yet). -->
+                <onright condition="Integer.IsGreater(Container(410).NumItems,0)">SetFocus(410)</onright>
+                <onright condition="!Integer.IsGreater(Container(410).NumItems,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=subscriptions&amp;ids=410)</onright>
                 <onclick>ClearProperty(silo.youtube.channel,home)</onclick>
-                <onclick>SetFocus(410)</onclick>
+                <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=subscriptions&amp;ids=410)</onclick>
             </control>
             <control type="label">
                 <left>88</left><top>228</top><width>400</width><height>40</height>
@@ -554,10 +373,12 @@
                 <orientation>vertical</orientation>
                 <scrolltime tween="cubic" easing="out">200</scrolltime>
                 <onleft>SetFocus(100,2,absolute)</onleft><onup>401</onup>
-                <onright>410</onright>
-                <!-- A channel's videos at the right, as the app's (not its page). -->
+                <onright condition="Integer.IsGreater(Container(410).NumItems,0)">SetFocus(410)</onright>
+                <onright condition="!Integer.IsGreater(Container(410).NumItems,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=subscriptions&amp;ids=410)</onright>
+                <!-- A channel's videos at the right, as the app's (not its page),
+                     focused once they have loaded. -->
                 <onclick>SetProperty(silo.youtube.channel,$INFO[ListItem.FolderPath],home)</onclick>
-                <onclick>SetFocus(410)</onclick>
+                <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=subscriptions&amp;ids=410)</onclick>
                 <itemlayout width="400" height="72">
                     <control type="image">
                         <left>14</left><top>8</top><width>48</width><height>48</height>
@@ -591,7 +412,7 @@
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                 </focusedlayout>
-                <content target="videos">$VAR[SiloYouTubeChannels]</content>
+                <content target="videos">plugin://plugin.video.youtube/subscriptions/list/</content>
             </control>
             <control type="label">
                 <left>528</left><top>148</top><width>1392</width><height>64</height>
@@ -670,7 +491,7 @@
                 </itemlayout>
                 <focusedlayout width="456" height="412">
                 <control type="group">
-                    <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,123" condition="Control.HasFocus(410)">Conditional</animation>
+                    <animation effect="zoom" start="100" end="105" time="180" tween="sine" easing="out" center="6,123" condition="Control.HasFocus(410)">Conditional</animation>
                     <!-- Behind the picture, the video's smaller one YouTube always has:
                          the add-on asks for its largest 16:9 (hq720) without checking,
                          and older videos have none, which left the card grey. -->
@@ -741,20 +562,14 @@
         </control>
 
         <!-- Library -->
-        <control type="group" id="510">
+        <control type="grouplist" id="510">
             <left>88</left><top>148</top><width>1832</width><height>932</height>
+            <orientation>vertical</orientation>
+            <itemgap>-280</itemgap>
+            <scrolltime tween="cubic" easing="out">300</scrolltime>
             <visible>String.IsEqual(Window(Home).Property(silo.youtube.section),library)</visible>
             <control type="group">
-                <left>0</left><top>0</top><width>1832</width><height>728</height>
-                <visible allowhiddenfocus="true">![String.IsEqual(Window(Home).Property(silo.youtube.row.library),1) | String.IsEqual(Window(Home).Property(silo.youtube.row.library),2) | String.IsEqual(Window(Home).Property(silo.youtube.row.library),3)]</visible>
-                <animation type="Hidden" reversible="false">
-                    <effect type="slide" end="0,-728" time="260" tween="cubic" easing="out" />
-                    <effect type="fade" start="100" end="0" time="120" />
-                </animation>
-                <animation type="Visible" reversible="false">
-                    <effect type="slide" start="0,-728" end="0,0" time="260" tween="cubic" easing="out" />
-                    <effect type="fade" start="0" end="100" time="200" />
-                </animation>
+                <height>932</height>
                 <control type="label">
                     <left>0</left><top>0</top><width>1832</width><height>52</height>
                     <aligny>center</aligny>
@@ -770,41 +585,40 @@
                     <label>Nothing here yet</label>
                     <visible>!Container(511).IsUpdating + Integer.IsEqual(Container(511).NumItems,0)</visible>
                 </control>
-                <!-- The chosen row's cards zoom to the big size from their top left;
-                     the focused card stays at the left (a fixedlist), as the app's. -->
+                <!-- The focused card stays at the left (a fixedlist), as the app's. -->
                 <control type="fixedlist" id="511">
                     <visible>String.IsEqual(Window(Home).Property(silo.youtube.section),library)</visible>
-                    <left>-6</left><top>70</top><width>1838</width><height>475</height>
+                    <left>-6</left><top>70</top><width>1838</width><height>538</height>
                     <orientation>horizontal</orientation>
                     <focusposition>0</focusposition>
                     <movement>0</movement>
                     <scrolltime tween="cubic" easing="out">240</scrolltime>
-                    <animation effect="zoom" end="136" center="-6,70" time="260" tween="cubic" easing="out" condition="[String.IsEmpty(Window(Home).Property(silo.youtube.row.library)) | String.IsEqual(Window(Home).Property(silo.youtube.row.library),0)]">Conditional</animation>
-                    <onfocus>SetProperty(silo.youtube.row.library,0,home)</onfocus>
                     <onleft>SetFocus(100,3,absolute)</onleft>
                     <onup>noop</onup>
-                    <ondown>512</ondown>
-                    <itemlayout width="568" height="475">
+                    <ondown condition="Integer.IsGreater(Container(512).NumItems,0)">SetFocus(512)</ondown>
+                    <ondown condition="Integer.IsGreater(Container(513).NumItems,0) + !Integer.IsGreater(Container(512).NumItems,0)">SetFocus(513)</ondown>
+                    <ondown condition="Integer.IsGreater(Container(514).NumItems,0) + !Integer.IsGreater(Container(512).NumItems,0) + !Integer.IsGreater(Container(513).NumItems,0)">SetFocus(514)</ondown>
+                    <itemlayout width="680" height="538">
                 <control type="group">
                     <!-- Behind the picture, the video's smaller one YouTube always has:
                          the add-on asks for its largest 16:9 (hq720) without checking,
                          and older videos have none, which left the card grey. -->
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <texture border="24" colordiffuse="SkylineBackground">silo/card_corners.png</texture>
                     </control>
                     <control type="progress">
-                        <left>20</left><top>295</top><width>500</width><height>6</height>
+                        <left>20</left><top>358</top><width>612</width><height>6</height>
                         <texturebg colordiffuse="66000000">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFFF0033">colors/white.png</midtexture>
                         <info>ListItem.PercentPlayed</info>
@@ -812,7 +626,7 @@
                     </control>
                     <!-- The duration in the picture's corner, as the app's. -->
                     <control type="label">
-                        <left>410</left><top>261</top><width>110</width><height>34</height>
+                        <left>522</left><top>324</top><width>110</width><height>34</height>
                         <align>right</align><aligny>center</aligny>
                         <font>silo_badge</font>
                         <textcolor>FFEDEDED</textcolor>
@@ -820,47 +634,47 @@
                         <visible>!String.IsEmpty(ListItem.Duration) + !ListItem.IsFolder</visible>
                     </control>
                     <control type="textbox">
-                        <left>6</left><top>317</top><width>528</width><height>64</height>
+                        <left>6</left><top>380</top><width>640</width><height>64</height>
                         <font>silo_card_title</font>
                         <textcolor>66EDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>387</top><width>528</width><height>34</height>
+                        <left>6</left><top>450</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>4AEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeChannel]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>421</top><width>528</width><height>34</height>
+                        <left>6</left><top>484</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>4AEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeWhen]</label>
                     </control>
                 </control>
                     </itemlayout>
-                    <focusedlayout width="568" height="475">
+                    <focusedlayout width="680" height="538">
                 <control type="group">
-                    <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(511)">Conditional</animation>
+                    <animation effect="zoom" start="100" end="105" time="180" tween="sine" easing="out" center="6,186" condition="Control.HasFocus(511)">Conditional</animation>
                     <!-- Behind the picture, the video's smaller one YouTube always has:
                          the add-on asks for its largest 16:9 (hq720) without checking,
                          and older videos have none, which left the card grey. -->
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <texture border="24" colordiffuse="SkylineBackground">silo/card_corners.png</texture>
                     </control>
                     <control type="progress">
-                        <left>20</left><top>295</top><width>500</width><height>6</height>
+                        <left>20</left><top>358</top><width>612</width><height>6</height>
                         <texturebg colordiffuse="66000000">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFFF0033">colors/white.png</midtexture>
                         <info>ListItem.PercentPlayed</info>
@@ -868,7 +682,7 @@
                     </control>
                     <!-- The duration in the picture's corner, as the app's. -->
                     <control type="label">
-                        <left>410</left><top>261</top><width>110</width><height>34</height>
+                        <left>522</left><top>324</top><width>110</width><height>34</height>
                         <align>right</align><aligny>center</aligny>
                         <font>silo_badge</font>
                         <textcolor>FFEDEDED</textcolor>
@@ -879,28 +693,28 @@
                         <left>6</left><top>6</top>
                         <visible>Control.HasFocus(511)</visible>
                         <control type="image">
-                            <width>528</width><height>297</height>
+                            <width>640</width><height>360</height>
                             <texture diffuse="silo/card_landscape_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
                         </control>
                         <control type="image">
-                            <width>528</width><height>297</height>
+                            <width>640</width><height>360</height>
                             <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
                         </control>
                     </control>
                     <control type="textbox">
-                        <left>6</left><top>317</top><width>528</width><height>64</height>
+                        <left>6</left><top>380</top><width>640</width><height>64</height>
                         <font>silo_card_title</font>
                         <textcolor>FFEDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>387</top><width>528</width><height>34</height>
+                        <left>6</left><top>450</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeChannel]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>421</top><width>528</width><height>34</height>
+                        <left>6</left><top>484</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeWhen]</label>
@@ -911,17 +725,7 @@
                 </control>
             </control>
             <control type="group">
-                <left>0</left><top>0</top><width>1832</width><height>728</height>
-                <visible allowhiddenfocus="true">![String.IsEqual(Window(Home).Property(silo.youtube.row.library),2) | String.IsEqual(Window(Home).Property(silo.youtube.row.library),3)]</visible>
-                <animation type="Hidden" reversible="false">
-                    <effect type="slide" end="0,-728" time="260" tween="cubic" easing="out" />
-                    <effect type="fade" start="100" end="0" time="120" />
-                </animation>
-                <animation type="Visible" reversible="false">
-                    <effect type="slide" start="0,-728" end="0,0" time="260" tween="cubic" easing="out" />
-                    <effect type="fade" start="0" end="100" time="200" />
-                </animation>
-                <animation effect="slide" end="0,728" time="260" tween="cubic" easing="out" condition="[String.IsEmpty(Window(Home).Property(silo.youtube.row.library)) | String.IsEqual(Window(Home).Property(silo.youtube.row.library),0)]">Conditional</animation>
+                <height>932</height>
                 <control type="label">
                     <left>0</left><top>0</top><width>1832</width><height>52</height>
                     <aligny>center</aligny>
@@ -937,41 +741,39 @@
                     <label>Nothing here yet</label>
                     <visible>!Container(512).IsUpdating + Integer.IsEqual(Container(512).NumItems,0)</visible>
                 </control>
-                <!-- The chosen row's cards zoom to the big size from their top left;
-                     the focused card stays at the left (a fixedlist), as the app's. -->
+                <!-- The focused card stays at the left (a fixedlist), as the app's. -->
                 <control type="fixedlist" id="512">
                     <visible>String.IsEqual(Window(Home).Property(silo.youtube.section),library)</visible>
-                    <left>-6</left><top>70</top><width>1838</width><height>475</height>
+                    <left>-6</left><top>70</top><width>1838</width><height>538</height>
                     <orientation>horizontal</orientation>
                     <focusposition>0</focusposition>
                     <movement>0</movement>
                     <scrolltime tween="cubic" easing="out">240</scrolltime>
-                    <animation effect="zoom" end="136" center="-6,70" time="260" tween="cubic" easing="out" condition="String.IsEqual(Window(Home).Property(silo.youtube.row.library),1)">Conditional</animation>
-                    <onfocus>SetProperty(silo.youtube.row.library,1,home)</onfocus>
                     <onleft>SetFocus(100,3,absolute)</onleft>
-                    <onup>511</onup>
-                    <ondown>513</ondown>
-                    <itemlayout width="568" height="475">
+                    <onup condition="Integer.IsGreater(Container(511).NumItems,0)">SetFocus(511)</onup>
+                    <ondown condition="Integer.IsGreater(Container(513).NumItems,0)">SetFocus(513)</ondown>
+                    <ondown condition="Integer.IsGreater(Container(514).NumItems,0) + !Integer.IsGreater(Container(513).NumItems,0)">SetFocus(514)</ondown>
+                    <itemlayout width="680" height="538">
                 <control type="group">
                     <!-- Behind the picture, the video's smaller one YouTube always has:
                          the add-on asks for its largest 16:9 (hq720) without checking,
                          and older videos have none, which left the card grey. -->
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <texture border="24" colordiffuse="SkylineBackground">silo/card_corners.png</texture>
                     </control>
                     <control type="progress">
-                        <left>20</left><top>295</top><width>500</width><height>6</height>
+                        <left>20</left><top>358</top><width>612</width><height>6</height>
                         <texturebg colordiffuse="66000000">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFFF0033">colors/white.png</midtexture>
                         <info>ListItem.PercentPlayed</info>
@@ -979,7 +781,7 @@
                     </control>
                     <!-- The duration in the picture's corner, as the app's. -->
                     <control type="label">
-                        <left>410</left><top>261</top><width>110</width><height>34</height>
+                        <left>522</left><top>324</top><width>110</width><height>34</height>
                         <align>right</align><aligny>center</aligny>
                         <font>silo_badge</font>
                         <textcolor>FFEDEDED</textcolor>
@@ -987,47 +789,47 @@
                         <visible>!String.IsEmpty(ListItem.Duration) + !ListItem.IsFolder</visible>
                     </control>
                     <control type="textbox">
-                        <left>6</left><top>317</top><width>528</width><height>64</height>
+                        <left>6</left><top>380</top><width>640</width><height>64</height>
                         <font>silo_card_title</font>
                         <textcolor>66EDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>387</top><width>528</width><height>34</height>
+                        <left>6</left><top>450</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>4AEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeChannel]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>421</top><width>528</width><height>34</height>
+                        <left>6</left><top>484</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>4AEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeWhen]</label>
                     </control>
                 </control>
                     </itemlayout>
-                    <focusedlayout width="568" height="475">
+                    <focusedlayout width="680" height="538">
                 <control type="group">
-                    <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(512)">Conditional</animation>
+                    <animation effect="zoom" start="100" end="105" time="180" tween="sine" easing="out" center="6,186" condition="Control.HasFocus(512)">Conditional</animation>
                     <!-- Behind the picture, the video's smaller one YouTube always has:
                          the add-on asks for its largest 16:9 (hq720) without checking,
                          and older videos have none, which left the card grey. -->
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <texture border="24" colordiffuse="SkylineBackground">silo/card_corners.png</texture>
                     </control>
                     <control type="progress">
-                        <left>20</left><top>295</top><width>500</width><height>6</height>
+                        <left>20</left><top>358</top><width>612</width><height>6</height>
                         <texturebg colordiffuse="66000000">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFFF0033">colors/white.png</midtexture>
                         <info>ListItem.PercentPlayed</info>
@@ -1035,7 +837,7 @@
                     </control>
                     <!-- The duration in the picture's corner, as the app's. -->
                     <control type="label">
-                        <left>410</left><top>261</top><width>110</width><height>34</height>
+                        <left>522</left><top>324</top><width>110</width><height>34</height>
                         <align>right</align><aligny>center</aligny>
                         <font>silo_badge</font>
                         <textcolor>FFEDEDED</textcolor>
@@ -1046,28 +848,28 @@
                         <left>6</left><top>6</top>
                         <visible>Control.HasFocus(512)</visible>
                         <control type="image">
-                            <width>528</width><height>297</height>
+                            <width>640</width><height>360</height>
                             <texture diffuse="silo/card_landscape_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
                         </control>
                         <control type="image">
-                            <width>528</width><height>297</height>
+                            <width>640</width><height>360</height>
                             <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
                         </control>
                     </control>
                     <control type="textbox">
-                        <left>6</left><top>317</top><width>528</width><height>64</height>
+                        <left>6</left><top>380</top><width>640</width><height>64</height>
                         <font>silo_card_title</font>
                         <textcolor>FFEDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>387</top><width>528</width><height>34</height>
+                        <left>6</left><top>450</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeChannel]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>421</top><width>528</width><height>34</height>
+                        <left>6</left><top>484</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeWhen]</label>
@@ -1078,18 +880,7 @@
                 </control>
             </control>
             <control type="group">
-                <left>0</left><top>0</top><width>1832</width><height>728</height>
-                <visible allowhiddenfocus="true">![String.IsEqual(Window(Home).Property(silo.youtube.row.library),3)]</visible>
-                <animation type="Hidden" reversible="false">
-                    <effect type="slide" end="0,-728" time="260" tween="cubic" easing="out" />
-                    <effect type="fade" start="100" end="0" time="120" />
-                </animation>
-                <animation type="Visible" reversible="false">
-                    <effect type="slide" start="0,-728" end="0,0" time="260" tween="cubic" easing="out" />
-                    <effect type="fade" start="0" end="100" time="200" />
-                </animation>
-                <animation effect="slide" end="0,1285" time="260" tween="cubic" easing="out" condition="[String.IsEmpty(Window(Home).Property(silo.youtube.row.library)) | String.IsEqual(Window(Home).Property(silo.youtube.row.library),0)]">Conditional</animation>
-                <animation effect="slide" end="0,728" time="260" tween="cubic" easing="out" condition="String.IsEqual(Window(Home).Property(silo.youtube.row.library),1)">Conditional</animation>
+                <height>932</height>
                 <control type="label">
                     <left>0</left><top>0</top><width>1832</width><height>52</height>
                     <aligny>center</aligny>
@@ -1105,41 +896,39 @@
                     <label>Nothing here yet</label>
                     <visible>!Container(513).IsUpdating + Integer.IsEqual(Container(513).NumItems,0)</visible>
                 </control>
-                <!-- The chosen row's cards zoom to the big size from their top left;
-                     the focused card stays at the left (a fixedlist), as the app's. -->
+                <!-- The focused card stays at the left (a fixedlist), as the app's. -->
                 <control type="fixedlist" id="513">
                     <visible>String.IsEqual(Window(Home).Property(silo.youtube.section),library)</visible>
-                    <left>-6</left><top>70</top><width>1838</width><height>475</height>
+                    <left>-6</left><top>70</top><width>1838</width><height>538</height>
                     <orientation>horizontal</orientation>
                     <focusposition>0</focusposition>
                     <movement>0</movement>
                     <scrolltime tween="cubic" easing="out">240</scrolltime>
-                    <animation effect="zoom" end="136" center="-6,70" time="260" tween="cubic" easing="out" condition="String.IsEqual(Window(Home).Property(silo.youtube.row.library),2)">Conditional</animation>
-                    <onfocus>SetProperty(silo.youtube.row.library,2,home)</onfocus>
                     <onleft>SetFocus(100,3,absolute)</onleft>
-                    <onup>512</onup>
-                    <ondown>514</ondown>
-                    <itemlayout width="568" height="475">
+                    <onup condition="Integer.IsGreater(Container(512).NumItems,0)">SetFocus(512)</onup>
+                    <onup condition="Integer.IsGreater(Container(511).NumItems,0) + !Integer.IsGreater(Container(512).NumItems,0)">SetFocus(511)</onup>
+                    <ondown condition="Integer.IsGreater(Container(514).NumItems,0)">SetFocus(514)</ondown>
+                    <itemlayout width="680" height="538">
                 <control type="group">
                     <!-- Behind the picture, the video's smaller one YouTube always has:
                          the add-on asks for its largest 16:9 (hq720) without checking,
                          and older videos have none, which left the card grey. -->
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <texture border="24" colordiffuse="SkylineBackground">silo/card_corners.png</texture>
                     </control>
                     <control type="progress">
-                        <left>20</left><top>295</top><width>500</width><height>6</height>
+                        <left>20</left><top>358</top><width>612</width><height>6</height>
                         <texturebg colordiffuse="66000000">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFFF0033">colors/white.png</midtexture>
                         <info>ListItem.PercentPlayed</info>
@@ -1147,7 +936,7 @@
                     </control>
                     <!-- The duration in the picture's corner, as the app's. -->
                     <control type="label">
-                        <left>410</left><top>261</top><width>110</width><height>34</height>
+                        <left>522</left><top>324</top><width>110</width><height>34</height>
                         <align>right</align><aligny>center</aligny>
                         <font>silo_badge</font>
                         <textcolor>FFEDEDED</textcolor>
@@ -1155,47 +944,47 @@
                         <visible>!String.IsEmpty(ListItem.Duration) + !ListItem.IsFolder</visible>
                     </control>
                     <control type="textbox">
-                        <left>6</left><top>317</top><width>528</width><height>64</height>
+                        <left>6</left><top>380</top><width>640</width><height>64</height>
                         <font>silo_card_title</font>
                         <textcolor>66EDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>387</top><width>528</width><height>34</height>
+                        <left>6</left><top>450</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>4AEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeChannel]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>421</top><width>528</width><height>34</height>
+                        <left>6</left><top>484</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>4AEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeWhen]</label>
                     </control>
                 </control>
                     </itemlayout>
-                    <focusedlayout width="568" height="475">
+                    <focusedlayout width="680" height="538">
                 <control type="group">
-                    <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(513)">Conditional</animation>
+                    <animation effect="zoom" start="100" end="105" time="180" tween="sine" easing="out" center="6,186" condition="Control.HasFocus(513)">Conditional</animation>
                     <!-- Behind the picture, the video's smaller one YouTube always has:
                          the add-on asks for its largest 16:9 (hq720) without checking,
                          and older videos have none, which left the card grey. -->
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <texture border="24" colordiffuse="SkylineBackground">silo/card_corners.png</texture>
                     </control>
                     <control type="progress">
-                        <left>20</left><top>295</top><width>500</width><height>6</height>
+                        <left>20</left><top>358</top><width>612</width><height>6</height>
                         <texturebg colordiffuse="66000000">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFFF0033">colors/white.png</midtexture>
                         <info>ListItem.PercentPlayed</info>
@@ -1203,7 +992,7 @@
                     </control>
                     <!-- The duration in the picture's corner, as the app's. -->
                     <control type="label">
-                        <left>410</left><top>261</top><width>110</width><height>34</height>
+                        <left>522</left><top>324</top><width>110</width><height>34</height>
                         <align>right</align><aligny>center</aligny>
                         <font>silo_badge</font>
                         <textcolor>FFEDEDED</textcolor>
@@ -1214,28 +1003,28 @@
                         <left>6</left><top>6</top>
                         <visible>Control.HasFocus(513)</visible>
                         <control type="image">
-                            <width>528</width><height>297</height>
+                            <width>640</width><height>360</height>
                             <texture diffuse="silo/card_landscape_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
                         </control>
                         <control type="image">
-                            <width>528</width><height>297</height>
+                            <width>640</width><height>360</height>
                             <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
                         </control>
                     </control>
                     <control type="textbox">
-                        <left>6</left><top>317</top><width>528</width><height>64</height>
+                        <left>6</left><top>380</top><width>640</width><height>64</height>
                         <font>silo_card_title</font>
                         <textcolor>FFEDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>387</top><width>528</width><height>34</height>
+                        <left>6</left><top>450</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeChannel]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>421</top><width>528</width><height>34</height>
+                        <left>6</left><top>484</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeWhen]</label>
@@ -1246,10 +1035,7 @@
                 </control>
             </control>
             <control type="group">
-                <left>0</left><top>0</top><width>1832</width><height>728</height>
-                <animation effect="slide" end="0,1842" time="260" tween="cubic" easing="out" condition="[String.IsEmpty(Window(Home).Property(silo.youtube.row.library)) | String.IsEqual(Window(Home).Property(silo.youtube.row.library),0)]">Conditional</animation>
-                <animation effect="slide" end="0,1285" time="260" tween="cubic" easing="out" condition="String.IsEqual(Window(Home).Property(silo.youtube.row.library),1)">Conditional</animation>
-                <animation effect="slide" end="0,728" time="260" tween="cubic" easing="out" condition="String.IsEqual(Window(Home).Property(silo.youtube.row.library),2)">Conditional</animation>
+                <height>932</height>
                 <control type="label">
                     <left>0</left><top>0</top><width>1832</width><height>52</height>
                     <aligny>center</aligny>
@@ -1265,41 +1051,40 @@
                     <label>Nothing here yet</label>
                     <visible>!Container(514).IsUpdating + Integer.IsEqual(Container(514).NumItems,0)</visible>
                 </control>
-                <!-- The chosen row's cards zoom to the big size from their top left;
-                     the focused card stays at the left (a fixedlist), as the app's. -->
+                <!-- The focused card stays at the left (a fixedlist), as the app's. -->
                 <control type="fixedlist" id="514">
                     <visible>String.IsEqual(Window(Home).Property(silo.youtube.section),library)</visible>
-                    <left>-6</left><top>70</top><width>1838</width><height>475</height>
+                    <left>-6</left><top>70</top><width>1838</width><height>538</height>
                     <orientation>horizontal</orientation>
                     <focusposition>0</focusposition>
                     <movement>0</movement>
                     <scrolltime tween="cubic" easing="out">240</scrolltime>
-                    <animation effect="zoom" end="136" center="-6,70" time="260" tween="cubic" easing="out" condition="String.IsEqual(Window(Home).Property(silo.youtube.row.library),3)">Conditional</animation>
-                    <onfocus>SetProperty(silo.youtube.row.library,3,home)</onfocus>
                     <onleft>SetFocus(100,3,absolute)</onleft>
-                    <onup>513</onup>
+                    <onup condition="Integer.IsGreater(Container(513).NumItems,0)">SetFocus(513)</onup>
+                    <onup condition="Integer.IsGreater(Container(512).NumItems,0) + !Integer.IsGreater(Container(513).NumItems,0)">SetFocus(512)</onup>
+                    <onup condition="Integer.IsGreater(Container(511).NumItems,0) + !Integer.IsGreater(Container(513).NumItems,0) + !Integer.IsGreater(Container(512).NumItems,0)">SetFocus(511)</onup>
                     <ondown>noop</ondown>
-                    <itemlayout width="568" height="475">
+                    <itemlayout width="680" height="538">
                 <control type="group">
                     <!-- Behind the picture, the video's smaller one YouTube always has:
                          the add-on asks for its largest 16:9 (hq720) without checking,
                          and older videos have none, which left the card grey. -->
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <texture border="24" colordiffuse="SkylineBackground">silo/card_corners.png</texture>
                     </control>
                     <control type="progress">
-                        <left>20</left><top>295</top><width>500</width><height>6</height>
+                        <left>20</left><top>358</top><width>612</width><height>6</height>
                         <texturebg colordiffuse="66000000">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFFF0033">colors/white.png</midtexture>
                         <info>ListItem.PercentPlayed</info>
@@ -1307,7 +1092,7 @@
                     </control>
                     <!-- The duration in the picture's corner, as the app's. -->
                     <control type="label">
-                        <left>410</left><top>261</top><width>110</width><height>34</height>
+                        <left>522</left><top>324</top><width>110</width><height>34</height>
                         <align>right</align><aligny>center</aligny>
                         <font>silo_badge</font>
                         <textcolor>FFEDEDED</textcolor>
@@ -1315,47 +1100,47 @@
                         <visible>!String.IsEmpty(ListItem.Duration) + !ListItem.IsFolder</visible>
                     </control>
                     <control type="textbox">
-                        <left>6</left><top>317</top><width>528</width><height>64</height>
+                        <left>6</left><top>380</top><width>640</width><height>64</height>
                         <font>silo_card_title</font>
                         <textcolor>66EDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>387</top><width>528</width><height>34</height>
+                        <left>6</left><top>450</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>4AEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeChannel]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>421</top><width>528</width><height>34</height>
+                        <left>6</left><top>484</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>4AEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeWhen]</label>
                     </control>
                 </control>
                     </itemlayout>
-                    <focusedlayout width="568" height="475">
+                    <focusedlayout width="680" height="538">
                 <control type="group">
-                    <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(514)">Conditional</animation>
+                    <animation effect="zoom" start="100" end="105" time="180" tween="sine" easing="out" center="6,186" condition="Control.HasFocus(514)">Conditional</animation>
                     <!-- Behind the picture, the video's smaller one YouTube always has:
                          the add-on asks for its largest 16:9 (hq720) without checking,
                          and older videos have none, which left the card grey. -->
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>640</width><height>360</height>
                         <texture border="24" colordiffuse="SkylineBackground">silo/card_corners.png</texture>
                     </control>
                     <control type="progress">
-                        <left>20</left><top>295</top><width>500</width><height>6</height>
+                        <left>20</left><top>358</top><width>612</width><height>6</height>
                         <texturebg colordiffuse="66000000">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFFF0033">colors/white.png</midtexture>
                         <info>ListItem.PercentPlayed</info>
@@ -1363,7 +1148,7 @@
                     </control>
                     <!-- The duration in the picture's corner, as the app's. -->
                     <control type="label">
-                        <left>410</left><top>261</top><width>110</width><height>34</height>
+                        <left>522</left><top>324</top><width>110</width><height>34</height>
                         <align>right</align><aligny>center</aligny>
                         <font>silo_badge</font>
                         <textcolor>FFEDEDED</textcolor>
@@ -1374,28 +1159,28 @@
                         <left>6</left><top>6</top>
                         <visible>Control.HasFocus(514)</visible>
                         <control type="image">
-                            <width>528</width><height>297</height>
+                            <width>640</width><height>360</height>
                             <texture diffuse="silo/card_landscape_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
                         </control>
                         <control type="image">
-                            <width>528</width><height>297</height>
+                            <width>640</width><height>360</height>
                             <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
                         </control>
                     </control>
                     <control type="textbox">
-                        <left>6</left><top>317</top><width>528</width><height>64</height>
+                        <left>6</left><top>380</top><width>640</width><height>64</height>
                         <font>silo_card_title</font>
                         <textcolor>FFEDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>387</top><width>528</width><height>34</height>
+                        <left>6</left><top>450</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeChannel]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>421</top><width>528</width><height>34</height>
+                        <left>6</left><top>484</top><width>640</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeWhen]</label>
@@ -1411,51 +1196,96 @@
         <control type="group">
             <visible>String.IsEqual(Window(Home).Property(silo.youtube.section),search)</visible>
             <control type="label">
-                <left>88</left><top>148</top><width>1832</width><height>52</height>
+                <left>88</left><top>148</top><width>400</width><height>40</height>
+                <font>silo_badge</font>
+                <textcolor>BFEDEDED</textcolor>
+                <label>SEARCHES</label>
+            </control>
+            <control type="list" id="620">
+                <visible>String.IsEqual(Window(Home).Property(silo.youtube.section),search)</visible>
+                <left>88</left><top>192</top><width>400</width><height>888</height>
+                <orientation>vertical</orientation>
+                <scrolltime tween="cubic" easing="out">200</scrolltime>
+                <onleft>SetFocus(100,0,absolute)</onleft><onup>noop</onup>
+                <onright condition="Integer.IsGreater(Container(610).NumItems,0)">610</onright>
+                <!-- New search opens the keyboard; a past search shows its results. -->
+                <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubepick)</onclick>
+                <itemlayout width="400" height="72">
+                    <control type="image">
+                        <left>22</left><top>16</top><width>32</width><height>32</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture colordiffuse="FFEDEDED">$VAR[SiloYouTubeHistoryIcon]</texture>
+                    </control>
+                    <control type="label">
+                        <left>74</left><top>0</top><width>308</width><height>64</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>FFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                </itemlayout>
+                <focusedlayout width="400" height="72">
+                    <control type="image">
+                        <width>400</width><height>64</height>
+                        <texture border="30" colordiffuse="SkylineFocus">silo/pill.png</texture>
+                        <visible>Control.HasFocus(620)</visible>
+                    </control>
+                    <control type="image">
+                        <left>22</left><top>16</top><width>32</width><height>32</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture colordiffuse="$VAR[SiloYouTubeHistoryText]">$VAR[SiloYouTubeHistoryIcon]</texture>
+                    </control>
+                    <control type="label">
+                        <left>74</left><top>0</top><width>308</width><height>64</height>
+                        <aligny>center</aligny>
+                        <font>silo_meta</font>
+                        <textcolor>$VAR[SiloYouTubeHistoryText]</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                </focusedlayout>
+                <content>plugin://plugin.video.youtube/kodion/search/list/?silo_reload=$INFO[Window(Home).Property(silo.youtube.history)]</content>
+            </control>
+            <control type="label">
+                <left>528</left><top>148</top><width>1392</width><height>64</height>
                 <aligny>center</aligny>
                 <font>silo_meta</font>
                 <textcolor>BFEDEDED</textcolor>
-                <label>$INFO[Window(Home).Property(silo.youtube.query),Results for “,”]</label>
+                <label>$VAR[SiloYouTubeResultsTitle]</label>
             </control>
             <control type="label">
-                <left>88</left><top>218</top><width>1832</width><height>80</height>
+                <left>528</left><top>220</top><width>1392</width><height>80</height>
                 <font>silo_detail</font>
                 <textcolor>4AEDEDED</textcolor>
                 <label>Nothing found</label>
-                <visible>!Container(610).IsUpdating + Integer.IsEqual(Container(610).NumItems,0)</visible>
+                <visible>!String.IsEmpty(Window(Home).Property(silo.youtube.search)) + !Container(610).IsUpdating + Integer.IsEqual(Container(610).NumItems,0)</visible>
             </control>
             <control type="panel" id="610">
                 <visible>String.IsEqual(Window(Home).Property(silo.youtube.section),search)</visible>
-                <left>82</left><top>218</top><width>1704</width><height>862</height>
+                <left>522</left><top>220</top><width>1392</width><height>860</height>
                 <orientation>vertical</orientation>
                 <scrolltime tween="cubic" easing="out">280</scrolltime>
-                <onup>noop</onup><onleft>SetFocus(100,0,absolute)</onleft>
-                <!-- Back from the results: YouTube's Home again, as the app's. -->
-                <onback>ClearProperty(silo.youtube.search,home)</onback>
-                <onback>ClearProperty(silo.youtube.section,home)</onback>
-                <onback>SetFocus(301)</onback>
-                <onback>ClearProperty(silo.youtube.query,home)</onback>
-                <itemlayout width="568" height="475">
+                <onleft>620</onleft><onup>noop</onup>
+                <itemlayout width="456" height="412">
                 <control type="group">
                     <!-- Behind the picture, the video's smaller one YouTube always has:
                          the add-on asks for its largest 16:9 (hq720) without checking,
                          and older videos have none, which left the card grey. -->
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>416</width><height>234</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>416</width><height>234</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>416</width><height>234</height>
                         <texture border="24" colordiffuse="SkylineBackground">silo/card_corners.png</texture>
                     </control>
                     <control type="progress">
-                        <left>20</left><top>295</top><width>500</width><height>6</height>
+                        <left>20</left><top>232</top><width>388</width><height>6</height>
                         <texturebg colordiffuse="66000000">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFFF0033">colors/white.png</midtexture>
                         <info>ListItem.PercentPlayed</info>
@@ -1463,7 +1293,7 @@
                     </control>
                     <!-- The duration in the picture's corner, as the app's. -->
                     <control type="label">
-                        <left>410</left><top>261</top><width>110</width><height>34</height>
+                        <left>298</left><top>198</top><width>110</width><height>34</height>
                         <align>right</align><aligny>center</aligny>
                         <font>silo_badge</font>
                         <textcolor>FFEDEDED</textcolor>
@@ -1471,47 +1301,47 @@
                         <visible>!String.IsEmpty(ListItem.Duration) + !ListItem.IsFolder</visible>
                     </control>
                     <control type="textbox">
-                        <left>6</left><top>317</top><width>528</width><height>64</height>
+                        <left>6</left><top>254</top><width>416</width><height>64</height>
                         <font>silo_card_title</font>
                         <textcolor>66EDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>387</top><width>528</width><height>34</height>
+                        <left>6</left><top>324</top><width>416</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>4AEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeChannel]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>421</top><width>528</width><height>34</height>
+                        <left>6</left><top>358</top><width>416</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>4AEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeWhen]</label>
                     </control>
                 </control>
                 </itemlayout>
-                <focusedlayout width="568" height="475">
+                <focusedlayout width="456" height="412">
                 <control type="group">
-                    <animation effect="zoom" start="100" end="106" time="180" tween="sine" easing="out" center="6,154" condition="Control.HasFocus(610)">Conditional</animation>
+                    <animation effect="zoom" start="100" end="105" time="180" tween="sine" easing="out" center="6,123" condition="Control.HasFocus(610)">Conditional</animation>
                     <!-- Behind the picture, the video's smaller one YouTube always has:
                          the add-on asks for its largest 16:9 (hq720) without checking,
                          and older videos have none, which left the card grey. -->
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>416</width><height>234</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png" fallback="colors/grey.png">$VAR[SiloYouTubeThumbBehind]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>416</width><height>234</height>
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloYouTubeThumb]</texture>
                     </control>
                     <control type="image">
-                        <left>6</left><top>6</top><width>528</width><height>297</height>
+                        <left>6</left><top>6</top><width>416</width><height>234</height>
                         <texture border="24" colordiffuse="SkylineBackground">silo/card_corners.png</texture>
                     </control>
                     <control type="progress">
-                        <left>20</left><top>295</top><width>500</width><height>6</height>
+                        <left>20</left><top>232</top><width>388</width><height>6</height>
                         <texturebg colordiffuse="66000000">colors/white.png</texturebg>
                         <midtexture colordiffuse="FFFF0033">colors/white.png</midtexture>
                         <info>ListItem.PercentPlayed</info>
@@ -1519,7 +1349,7 @@
                     </control>
                     <!-- The duration in the picture's corner, as the app's. -->
                     <control type="label">
-                        <left>410</left><top>261</top><width>110</width><height>34</height>
+                        <left>298</left><top>198</top><width>110</width><height>34</height>
                         <align>right</align><aligny>center</aligny>
                         <font>silo_badge</font>
                         <textcolor>FFEDEDED</textcolor>
@@ -1530,28 +1360,28 @@
                         <left>6</left><top>6</top>
                         <visible>Control.HasFocus(610)</visible>
                         <control type="image">
-                            <width>528</width><height>297</height>
+                            <width>416</width><height>234</height>
                             <texture diffuse="silo/card_landscape_mask.png" colordiffuse="0FFFFFFF">colors/white.png</texture>
                         </control>
                         <control type="image">
-                            <width>528</width><height>297</height>
+                            <width>416</width><height>234</height>
                             <texture colordiffuse="33FFFFFF">silo/card_landscape_rim.png</texture>
                         </control>
                     </control>
                     <control type="textbox">
-                        <left>6</left><top>317</top><width>528</width><height>64</height>
+                        <left>6</left><top>254</top><width>416</width><height>64</height>
                         <font>silo_card_title</font>
                         <textcolor>FFEDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>387</top><width>528</width><height>34</height>
+                        <left>6</left><top>324</top><width>416</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeChannel]</label>
                     </control>
                     <control type="label">
-                        <left>6</left><top>421</top><width>528</width><height>34</height>
+                        <left>6</left><top>358</top><width>416</width><height>34</height>
                         <font>silo_card_sub</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$VAR[SiloYouTubeWhen]</label>
@@ -1581,18 +1411,22 @@
                 <left>64</left><top>148</top><width>376</width><height>272</height>
                 <orientation>vertical</orientation>
                 <onleft>noop</onleft>
-                <onright condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)]">SetFocus(301)</onright>
-                <onright condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=home&amp;ids=301,302,303)</onright>
-                <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions)">SetFocus(401)</onright>
-                <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library)">SetFocus(511)</onright>
-                <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=library&amp;ids=511,512,513,514)</onright>
-                <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),search)">SetFocus(610)</onright>
-                <onback condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)]">SetFocus(301)</onback>
-                <onback condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=home&amp;ids=301,302,303)</onback>
-                <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions)">SetFocus(401)</onback>
-                <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library)">SetFocus(511)</onback>
-                <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=library&amp;ids=511,512,513,514)</onback>
-                <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),search)">SetFocus(610)</onback>
+                <onright condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)] + Integer.IsGreater(Container(301).NumItems,0)">SetFocus(301)</onright>
+                <onright condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)] + !Integer.IsGreater(Container(301).NumItems,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=home&amp;ids=301,302)</onright>
+                <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions) + Control.IsVisible(401)">SetFocus(401)</onright>
+                <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions) + !Control.IsVisible(401)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=subscriptions&amp;ids=&amp;controls=401)</onright>
+                <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library) + Integer.IsGreater(Container(511).NumItems,0)">SetFocus(511)</onright>
+                <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library) + !Integer.IsGreater(Container(511).NumItems,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=library&amp;ids=511,512,513,514)</onright>
+                <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),search) + Integer.IsGreater(Container(620).NumItems,0)">SetFocus(620)</onright>
+                <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),search) + !Integer.IsGreater(Container(620).NumItems,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=search&amp;ids=620)</onright>
+                <onback condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)] + Integer.IsGreater(Container(301).NumItems,0)">SetFocus(301)</onback>
+                <onback condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)] + !Integer.IsGreater(Container(301).NumItems,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=home&amp;ids=301,302)</onback>
+                <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions) + Control.IsVisible(401)">SetFocus(401)</onback>
+                <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions) + !Control.IsVisible(401)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=subscriptions&amp;ids=&amp;controls=401)</onback>
+                <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library) + Integer.IsGreater(Container(511).NumItems,0)">SetFocus(511)</onback>
+                <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library) + !Integer.IsGreater(Container(511).NumItems,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=library&amp;ids=511,512,513,514)</onback>
+                <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),search) + Integer.IsGreater(Container(620).NumItems,0)">SetFocus(620)</onback>
+                <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),search) + !Integer.IsGreater(Container(620).NumItems,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=search&amp;ids=620)</onback>
                 <itemlayout width="376" height="68">
                     <control type="image">
                         <left>22</left><top>18</top><width>32</width><height>32</height>
@@ -1631,7 +1465,9 @@
                     <label>Search</label>
                     <icon>icons/search.png</icon>
                     <property name="key">search</property>
-                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubesearch)</onclick>
+                    <onclick>SetProperty(silo.youtube.section,search,home)</onclick>
+                    <onclick>SetProperty(silo.youtube.loaded.search,1,home)</onclick>
+                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=search&amp;ids=620)</onclick>
                 </item>
                 <item>
                     <label>Home</label>
@@ -1639,8 +1475,7 @@
                     <property name="key">home</property>
                     <onclick>SetProperty(silo.youtube.section,home,home)</onclick>
                     <onclick>SetProperty(silo.youtube.loaded.home,1,home)</onclick>
-                    <onclick>SetFocus(301)</onclick>
-                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=home&amp;ids=301,302,303)</onclick>
+                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=home&amp;ids=301,302)</onclick>
                 </item>
                 <item>
                     <label>Subscriptions</label>
@@ -1648,7 +1483,7 @@
                     <property name="key">subscriptions</property>
                     <onclick>SetProperty(silo.youtube.section,subscriptions,home)</onclick>
                     <onclick>SetProperty(silo.youtube.loaded.subscriptions,1,home)</onclick>
-                    <onclick>SetFocus(401)</onclick>
+                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=subscriptions&amp;ids=&amp;controls=401)</onclick>
                 </item>
                 <item>
                     <label>Library</label>
@@ -1656,7 +1491,6 @@
                     <property name="key">library</property>
                     <onclick>SetProperty(silo.youtube.section,library,home)</onclick>
                     <onclick>SetProperty(silo.youtube.loaded.library,1,home)</onclick>
-                    <onclick>SetFocus(511)</onclick>
                     <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=library&amp;ids=511,512,513,514)</onclick>
                 </item>
                 </content>

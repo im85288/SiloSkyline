@@ -8594,12 +8594,9 @@
         <value condition="String.IsEmpty(Window(Home).Property(silo.youtube.channel))">33FFFFFF</value>
         <value>00FFFFFF</value>
     </variable>
-    <!-- The chosen channel's videos, or All: the subscriptions' newest. -->
-    <variable name="SiloYouTubeChannels">
-        <value condition="!String.IsEmpty(Window(Home).Property(silo.youtube.loaded.subscriptions))">plugin://plugin.video.youtube/subscriptions/list/</value>
-    </variable>
+    <!-- The chosen channel's videos, or All: the subscriptions' newest, loaded
+         as the page opens (hidden), so Subscriptions shows at once. -->
     <variable name="SiloYouTubeChannelPath">
-        <value condition="String.IsEmpty(Window(Home).Property(silo.youtube.loaded.subscriptions))"></value>
         <value condition="String.Contains(Window(Home).Property(silo.youtube.channel),?)">$INFO[Window(Home).Property(silo.youtube.channel)]&amp;hide_folders=true&amp;hide_next_page=true</value>
         <value condition="!String.IsEmpty(Window(Home).Property(silo.youtube.channel))">$INFO[Window(Home).Property(silo.youtube.channel)]?hide_folders=true&amp;hide_next_page=true</value>
         <value>plugin://plugin.video.youtube/special/my_subscriptions/?hide_folders=true&amp;hide_next_page=true</value>
@@ -8607,6 +8604,19 @@
     <variable name="SiloYouTubeChannelTitle">
         <value condition="!String.IsEmpty(Window(Home).Property(silo.youtube.channel))">Latest</value>
         <value>Most recent</value>
+    </variable>
+    <variable name="SiloYouTubeResultsTitle">
+        <value condition="!String.IsEmpty(Window(Home).Property(silo.youtube.query))">$INFO[Window(Home).Property(silo.youtube.query),Results for “,”]</value>
+        <value>Pick a search, or start a new one</value>
+    </variable>
+    <!-- The add-on's New search item opens its keyboard (kodion/search/input). -->
+    <variable name="SiloYouTubeHistoryIcon">
+        <value condition="String.Contains(ListItem.FolderPath,/search/input)">icons/search.png</value>
+        <value>silo/menu_history.png</value>
+    </variable>
+    <variable name="SiloYouTubeHistoryText">
+        <value condition="Control.HasFocus(620)">FF000000</value>
+        <value>FFEDEDED</value>
     </variable>
     <!-- end Silo Skyline YouTube -->
 </includes>
