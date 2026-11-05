@@ -8691,4 +8691,15 @@
         <value>$INFO[ListItem.Plot]</value>
     </variable>
     <!-- end Silo Skyline add-ons -->
+
+    <!-- Silo Skyline playback (tools/build_playback.py) -->
+    <variable name="SiloChapterText">
+        <value condition="Control.HasFocus(11)">FF000000</value>
+        <value>FFEDEDED</value>
+    </variable>
+    <variable name="SiloChapterDim">
+        <value condition="Control.HasFocus(11)">99000000</value>
+        <value>BFEDEDED</value>
+    </variable>
+    <!-- end Silo Skyline playback -->
 </includes>

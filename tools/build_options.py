@@ -196,7 +196,7 @@ def row(control_id, label, value, actions):
                     <aligny>center</aligny>
                     <textcolor>%(text)s</textcolor>
                     <focusedcolor>FF000000</focusedcolor>
-                    <texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
+                    <texturefocus border="34">silo/dialog_row_focus.png</texturefocus>
                     <texturenofocus />%(clicks)s
                 </control>''' % {'id': control_id, 'w': PANEL_W // 2 - 60, 'h': ROW_H, 'label': label,
                                  'value': value, 'text': TEXT, 'clicks': clicks}

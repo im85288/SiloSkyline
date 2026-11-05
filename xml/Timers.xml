@@ -434,4 +434,13 @@
         <start reset="true">!Skin.HasSetting(SkylineSiloOSD) + Window.IsActive(fullscreenvideo) + !VideoPlayer.Content(LiveTV) + !Player.HasGame + Player.Paused + !Window.IsActive(videoosd) + System.IdleTime(10)</start>
         <stop>!Player.Paused | Window.IsActive(videoosd)</stop>
     </timer>
-    <!-- end Silo Skyline Showcase timer --></timers>
+    <!-- end Silo Skyline Showcase timer -->    <!-- Silo Skyline playback (tools/build_playback.py) -->
+    <timer>
+        <name>silo_chapters_focus</name>
+        <description>Focus the chapter list: Kodi fills it after choosing the window's focus, so its default control can't take it</description>
+        <start reset="true">Window.IsActive(videobookmarks) + Integer.IsGreater(Container(11).NumItems,0) + !Control.HasFocus(11) + !ControlGroup(9001).HasFocus()</start>
+        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_chapters_focus),0)</stop>
+        <onstop condition="Window.IsActive(videobookmarks)">SetFocus(11)</onstop>
+    </timer>
+    <!-- end Silo Skyline playback -->
+</timers>

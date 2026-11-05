@@ -128,7 +128,7 @@
                     <aligny>center</aligny>
                     <textcolor>FFEDEDED</textcolor>
                     <focusedcolor>SkylineFocusText</focusedcolor>
-                    <texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
+                    <texturefocus border="34">silo/dialog_row_focus.png</texturefocus>
                     <texturenofocus />
                     <onclick>SetProperty(silo.options.tab,chapters,home)</onclick>
                     <onclick>SetFocus(205)</onclick>
@@ -142,7 +142,7 @@
                     <aligny>center</aligny>
                     <textcolor>FFEDEDED</textcolor>
                     <focusedcolor>SkylineFocusText</focusedcolor>
-                    <texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
+                    <texturefocus border="34">silo/dialog_row_focus.png</texturefocus>
                     <texturenofocus />
                     <onclick>Dialog.Close(1180)</onclick>
                     <onclick>ActivateWindow(PlayerProcessInfo)</onclick>
@@ -418,7 +418,7 @@
                     <aligny>center</aligny>
                     <textcolor>FFEDEDED</textcolor>
                     <focusedcolor>SkylineFocusText</focusedcolor>
-                    <texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
+                    <texturefocus border="34">silo/dialog_row_focus.png</texturefocus>
                     <texturenofocus />
                     <onclick>Dialog.Close(1180)</onclick>
                     <onclick>ActivateWindow(osdaudiosettings)</onclick>
@@ -757,7 +757,7 @@
                     <aligny>center</aligny>
                     <textcolor>FFEDEDED</textcolor>
                     <focusedcolor>SkylineFocusText</focusedcolor>
-                    <texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
+                    <texturefocus border="34">silo/dialog_row_focus.png</texturefocus>
                     <texturenofocus />
                     <onclick>Dialog.Close(1180)</onclick>
                     <onclick>ActivateWindow(osdsubtitlesettings)</onclick>
@@ -771,7 +771,7 @@
                     <aligny>center</aligny>
                     <textcolor>FFEDEDED</textcolor>
                     <focusedcolor>SkylineFocusText</focusedcolor>
-                    <texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
+                    <texturefocus border="34">silo/dialog_row_focus.png</texturefocus>
                     <texturenofocus />
                     <onclick>Dialog.Close(1180)</onclick>
                     <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=subtitles)</onclick>
@@ -810,7 +810,7 @@
                     <aligny>center</aligny>
                     <textcolor>FFEDEDED</textcolor>
                     <focusedcolor>SkylineFocusText</focusedcolor>
-                    <texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
+                    <texturefocus border="34">silo/dialog_row_focus.png</texturefocus>
                     <texturenofocus />
                     <onclick>Dialog.Close(1180)</onclick>
                     <onclick>ActivateWindow(osdvideosettings)</onclick>
@@ -824,7 +824,7 @@
                     <aligny>center</aligny>
                     <textcolor>FFEDEDED</textcolor>
                     <focusedcolor>SkylineFocusText</focusedcolor>
-                    <texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
+                    <texturefocus border="34">silo/dialog_row_focus.png</texturefocus>
                     <texturenofocus />
                     <onclick>AspectRatio</onclick>
                 </control>
@@ -837,7 +837,7 @@
                     <aligny>center</aligny>
                     <textcolor>FFEDEDED</textcolor>
                     <focusedcolor>SkylineFocusText</focusedcolor>
-                    <texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
+                    <texturefocus border="34">silo/dialog_row_focus.png</texturefocus>
                     <texturenofocus />
                     <onclick>Dialog.Close(1180)</onclick>
                     <onclick>ActivateWindow(osdvideosettings)</onclick>
@@ -851,7 +851,7 @@
                     <aligny>center</aligny>
                     <textcolor>FFEDEDED</textcolor>
                     <focusedcolor>SkylineFocusText</focusedcolor>
-                    <texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
+                    <texturefocus border="34">silo/dialog_row_focus.png</texturefocus>
                     <texturenofocus />
                     <onclick>Dialog.Close(1180)</onclick>
                     <onclick>ActivateWindow(PlayerProcessInfo)</onclick>
@@ -945,7 +945,7 @@
                     <aligny>center</aligny>
                     <textcolor>FFEDEDED</textcolor>
                     <focusedcolor>SkylineFocusText</focusedcolor>
-                    <texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
+                    <texturefocus border="34">silo/dialog_row_focus.png</texturefocus>
                     <texturenofocus />
                     <onclick>PlayerControl(Previous)</onclick>
                 </control>
@@ -958,7 +958,7 @@
                     <aligny>center</aligny>
                     <textcolor>FFEDEDED</textcolor>
                     <focusedcolor>SkylineFocusText</focusedcolor>
-                    <texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
+                    <texturefocus border="34">silo/dialog_row_focus.png</texturefocus>
                     <texturenofocus />
                     <onclick>PlayerControl(Next)</onclick>
                 </control>
@@ -971,7 +971,7 @@
                     <aligny>center</aligny>
                     <textcolor>FFEDEDED</textcolor>
                     <focusedcolor>SkylineFocusText</focusedcolor>
-                    <texturefocus border="46">silo/dialog_row_focus.png</texturefocus>
+                    <texturefocus border="34">silo/dialog_row_focus.png</texturefocus>
                     <texturenofocus />
                     <onclick>Dialog.Close(1180)</onclick>
                     <onclick>ActivateWindow(VideoBookmarks)</onclick>
