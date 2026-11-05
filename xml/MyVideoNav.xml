@@ -9,7 +9,7 @@
     <onload condition="Player.HasVideo">PlayerControl(Stop)</onload>
     <defaultcontrol always="true">50</defaultcontrol>
     <backgroundcolor>SkylineBackground</backgroundcolor>
-    <views>50,51,52,53,54,55,56,57</views>
+    <views>50,51,52,53,54,55,56,57,58</views>
     <controls>
         <control type="image">
             <left>0</left><top>0</top><width>1920</width><height>1080</height>
@@ -44,12 +44,17 @@
                     <control type="image">
                         <width>1110</width><height>92</height>
                         <texture border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
-                        <visible>!false</visible>
+                        <visible>![false + !String.Contains(ListItem.Label,COLOR)]</visible>
                     </control>
                     <control type="image">
                         <width>1110</width><height>92</height>
                         <texture border="24" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
-                        <visible>false</visible>
+                        <visible>[false + !String.Contains(ListItem.Label,COLOR)]</visible>
+                    </control>
+                    <control type="image">
+                        <width>1110</width><height>92</height>
+                        <texture border="24" colordiffuse="FF3F444D">silo/card_landscape_mask.png</texture>
+                        <visible>false + String.Contains(ListItem.Label,COLOR)</visible>
                     </control>
                     <!-- SiloKodiConnect's profile row: the profile's avatar. -->
                     <control type="image">
@@ -99,7 +104,7 @@
                         <font>silo_meta</font>
                         <textcolor>SkylineFocusText</textcolor>
                         <label>$INFO[ListItem.Label]</label>
-                        <visible>false + [!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
+                        <visible>[false + !String.Contains(ListItem.Label,COLOR)] + [!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
                     </control>
                     <control type="label">
                         <left>112</left><top>50</top>
@@ -108,7 +113,7 @@
                         <font>silo_detail</font>
                         <textcolor>SkylineFocusTextDim</textcolor>
                         <label>$VAR[SiloRowDescription]</label>
-                        <visible>false + [!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
+                        <visible>[false + !String.Contains(ListItem.Label,COLOR)] + [!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
                     </control>
                     <control type="label">
                         <left>112</left><top>0</top>
@@ -117,7 +122,7 @@
                         <font>silo_meta</font>
                         <textcolor>SkylineFocusText</textcolor>
                         <label>$INFO[ListItem.Label]</label>
-                        <visible>false + ![!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
+                        <visible>[false + !String.Contains(ListItem.Label,COLOR)] + ![!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
                     </control>
                     <control type="label">
                         <left>860</left><top>0</top>
@@ -126,7 +131,7 @@
                         <font>silo_detail</font>
                         <textcolor>SkylineFocusText</textcolor>
                         <label>$INFO[ListItem.Label2]</label>
-                        <visible>false</visible>
+                        <visible>[false + !String.Contains(ListItem.Label,COLOR)]</visible>
                     </control>
                     <control type="label">
                         <left>112</left><top>12</top>
@@ -135,7 +140,7 @@
                         <font>silo_meta</font>
                         <textcolor>FFEDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
-                        <visible>!false + [!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
+                        <visible>![false + !String.Contains(ListItem.Label,COLOR)] + [!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
                     </control>
                     <control type="label">
                         <left>112</left><top>50</top>
@@ -144,7 +149,7 @@
                         <font>silo_detail</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$VAR[SiloRowDescription]</label>
-                        <visible>!false + [!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
+                        <visible>![false + !String.Contains(ListItem.Label,COLOR)] + [!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
                     </control>
                     <control type="label">
                         <left>112</left><top>0</top>
@@ -153,7 +158,7 @@
                         <font>silo_meta</font>
                         <textcolor>FFEDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
-                        <visible>!false + ![!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
+                        <visible>![false + !String.Contains(ListItem.Label,COLOR)] + ![!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
                     </control>
                     <control type="label">
                         <left>860</left><top>0</top>
@@ -162,19 +167,24 @@
                         <font>silo_detail</font>
                         <textcolor>FFEDEDED</textcolor>
                         <label>$INFO[ListItem.Label2]</label>
-                        <visible>!false</visible>
+                        <visible>![false + !String.Contains(ListItem.Label,COLOR)]</visible>
                     </control>
             </itemlayout>
             <focusedlayout width="1110" height="104">
                     <control type="image">
                         <width>1110</width><height>92</height>
                         <texture border="24" colordiffuse="SkylinePanel">silo/card_landscape_mask.png</texture>
-                        <visible>!Control.HasFocus(50)</visible>
+                        <visible>![Control.HasFocus(50) + !String.Contains(ListItem.Label,COLOR)]</visible>
                     </control>
                     <control type="image">
                         <width>1110</width><height>92</height>
                         <texture border="24" colordiffuse="SkylineFocus">silo/card_landscape_mask.png</texture>
-                        <visible>Control.HasFocus(50)</visible>
+                        <visible>[Control.HasFocus(50) + !String.Contains(ListItem.Label,COLOR)]</visible>
+                    </control>
+                    <control type="image">
+                        <width>1110</width><height>92</height>
+                        <texture border="24" colordiffuse="FF3F444D">silo/card_landscape_mask.png</texture>
+                        <visible>Control.HasFocus(50) + String.Contains(ListItem.Label,COLOR)</visible>
                     </control>
                     <!-- SiloKodiConnect's profile row: the profile's avatar. -->
                     <control type="image">
@@ -224,7 +234,7 @@
                         <font>silo_meta</font>
                         <textcolor>SkylineFocusText</textcolor>
                         <label>$INFO[ListItem.Label]</label>
-                        <visible>Control.HasFocus(50) + [!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
+                        <visible>[Control.HasFocus(50) + !String.Contains(ListItem.Label,COLOR)] + [!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
                     </control>
                     <control type="label">
                         <left>112</left><top>50</top>
@@ -233,7 +243,7 @@
                         <font>silo_detail</font>
                         <textcolor>SkylineFocusTextDim</textcolor>
                         <label>$VAR[SiloRowDescription]</label>
-                        <visible>Control.HasFocus(50) + [!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
+                        <visible>[Control.HasFocus(50) + !String.Contains(ListItem.Label,COLOR)] + [!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
                     </control>
                     <control type="label">
                         <left>112</left><top>0</top>
@@ -242,7 +252,7 @@
                         <font>silo_meta</font>
                         <textcolor>SkylineFocusText</textcolor>
                         <label>$INFO[ListItem.Label]</label>
-                        <visible>Control.HasFocus(50) + ![!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
+                        <visible>[Control.HasFocus(50) + !String.Contains(ListItem.Label,COLOR)] + ![!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
                     </control>
                     <control type="label">
                         <left>860</left><top>0</top>
@@ -251,7 +261,7 @@
                         <font>silo_detail</font>
                         <textcolor>SkylineFocusText</textcolor>
                         <label>$INFO[ListItem.Label2]</label>
-                        <visible>Control.HasFocus(50)</visible>
+                        <visible>[Control.HasFocus(50) + !String.Contains(ListItem.Label,COLOR)]</visible>
                     </control>
                     <control type="label">
                         <left>112</left><top>12</top>
@@ -260,7 +270,7 @@
                         <font>silo_meta</font>
                         <textcolor>FFEDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
-                        <visible>!Control.HasFocus(50) + [!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
+                        <visible>![Control.HasFocus(50) + !String.Contains(ListItem.Label,COLOR)] + [!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
                     </control>
                     <control type="label">
                         <left>112</left><top>50</top>
@@ -269,7 +279,7 @@
                         <font>silo_detail</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$VAR[SiloRowDescription]</label>
-                        <visible>!Control.HasFocus(50) + [!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
+                        <visible>![Control.HasFocus(50) + !String.Contains(ListItem.Label,COLOR)] + [!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
                     </control>
                     <control type="label">
                         <left>112</left><top>0</top>
@@ -278,7 +288,7 @@
                         <font>silo_meta</font>
                         <textcolor>FFEDEDED</textcolor>
                         <label>$INFO[ListItem.Label]</label>
-                        <visible>!Control.HasFocus(50) + ![!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
+                        <visible>![Control.HasFocus(50) + !String.Contains(ListItem.Label,COLOR)] + ![!String.IsEmpty(ListItem.Property(silo.menu.description)) | [!String.IsEmpty(ListItem.Plot) + !String.IsEqual(ListItem.Plot,ListItem.Label)] | String.IsEqual(ListItem.Property(silo.menu.icon),profile)]</visible>
                     </control>
                     <control type="label">
                         <left>860</left><top>0</top>
@@ -287,7 +297,7 @@
                         <font>silo_detail</font>
                         <textcolor>FFEDEDED</textcolor>
                         <label>$INFO[ListItem.Label2]</label>
-                        <visible>!Control.HasFocus(50)</visible>
+                        <visible>![Control.HasFocus(50) + !String.Contains(ListItem.Label,COLOR)]</visible>
                     </control>
             </focusedlayout>
         </control>
@@ -893,6 +903,14 @@
                 <left>888</left><top>200</top><width>300</width><height>450</height>
                 <aspectratio>scale</aspectratio>
                 <texture background="true" diffuse="silo/card_poster_mask.png" fallback="colors/grey.png">$VAR[SiloBrowsePoster]</texture>
+                <visible>![String.IsEmpty(ListItem.Art(poster)) + String.IsEmpty(ListItem.Art(tvshow.poster)) + String.IsEmpty(Container.Art(tvshow.poster))]</visible>
+            </control>
+            <!-- An add-on's folder has no poster: its own picture, whole, or nothing. -->
+            <control type="image">
+                <left>888</left><top>200</top><width>300</width><height>450</height>
+                <aspectratio aligny="top">keep</aspectratio>
+                <texture background="true">$VAR[SiloVideoThumb]</texture>
+                <visible>[String.IsEmpty(ListItem.Art(poster)) + String.IsEmpty(ListItem.Art(tvshow.poster)) + String.IsEmpty(Container.Art(tvshow.poster))]</visible>
             </control>
             <control type="image">
                 <left>1218</left><top>200</top><width>494</width><height>120</height>
@@ -1031,7 +1049,12 @@
                 <control type="image">
                     <left>4</left><top>4</top><width>772</width><height>58</height>
                     <texture border="28" colordiffuse="SkylineFocus">silo/pill.png</texture>
-                    <visible>Control.HasFocus(56)</visible>
+                    <visible>Control.HasFocus(56) + !String.Contains(ListItem.Label,COLOR)</visible>
+                </control>
+                <control type="image">
+                    <left>4</left><top>4</top><width>772</width><height>58</height>
+                    <texture border="28" colordiffuse="FF3F444D">silo/pill.png</texture>
+                    <visible>Control.HasFocus(56) + String.Contains(ListItem.Label,COLOR)</visible>
                 </control>
                 <control type="label">
                     <left>28</left><width>580</width><height>66</height>
@@ -1039,7 +1062,7 @@
                     <font>silo_meta</font>
                     <textcolor>SkylineFocusText</textcolor>
                     <label>$VAR[SiloBrowseLabel]</label>
-                    <visible>Control.HasFocus(56)</visible>
+                    <visible>Control.HasFocus(56) + !String.Contains(ListItem.Label,COLOR)</visible>
                 </control>
                 <control type="label">
                     <right>28</right><width>140</width><height>66</height>
@@ -1047,7 +1070,7 @@
                     <font>silo_meta</font>
                     <textcolor>SkylineFocusTextDim</textcolor>
                     <label>$INFO[ListItem.Year]</label>
-                    <visible>Control.HasFocus(56)</visible>
+                    <visible>Control.HasFocus(56) + !String.Contains(ListItem.Label,COLOR)</visible>
                 </control>
                 <control type="label">
                     <left>28</left><width>580</width><height>66</height>
@@ -1055,7 +1078,7 @@
                     <font>silo_meta</font>
                     <textcolor>FFEDEDED</textcolor>
                     <label>$VAR[SiloBrowseLabel]</label>
-                    <visible>!Control.HasFocus(56)</visible>
+                    <visible>[!Control.HasFocus(56) | String.Contains(ListItem.Label,COLOR)]</visible>
                 </control>
                 <control type="label">
                     <right>28</right><width>140</width><height>66</height>
@@ -1063,7 +1086,7 @@
                     <font>silo_meta</font>
                     <textcolor>BFEDEDED</textcolor>
                     <label>$INFO[ListItem.Year]</label>
-                    <visible>!Control.HasFocus(56)</visible>
+                    <visible>[!Control.HasFocus(56) | String.Contains(ListItem.Label,COLOR)]</visible>
                 </control>
             </focusedlayout>
         </control>
@@ -1386,8 +1409,12 @@
             <scrolltime tween="cubic" easing="out">280</scrolltime>
             <viewtype label="Episodes">list</viewtype>
             <visible>$EXP[SiloBrowseEpisodes]</visible>
+            <onleft>9000</onleft>
             <itemlayout width="1756" height="246">
+                <!-- As wide as the still: a group's zoom centres on the group, and
+                     without a size it's the whole row, so the still slid to the screen's edge. -->
                 <control type="group">
+                    <width>372</width><height>214</height>
                     <control type="image">
                         <left>6</left><top>6</top>
                         <width>360</width><height>202</height>
@@ -1442,6 +1469,7 @@
                         <font>silo_detail</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$INFO[ListItem.Duration(mins),, min]$INFO[ListItem.Art(siloaired), · ,]</label>
+                        <visible>[!String.IsEmpty(ListItem.Duration) | !String.IsEmpty(ListItem.Art(siloaired))]</visible>
                     </control>
                     <control type="textbox">
                         <left>412</left><top>100</top>
@@ -1449,10 +1477,22 @@
                         <font>silo_detail</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$INFO[ListItem.Plot]</label>
+                        <visible>[!String.IsEmpty(ListItem.Duration) | !String.IsEmpty(ListItem.Art(siloaired))]</visible>
+                    </control>
+                    <control type="textbox">
+                        <left>412</left><top>58</top>
+                        <width>1100</width><height>100</height>
+                        <font>silo_detail</font>
+                        <textcolor>BFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Plot]</label>
+                        <visible>![!String.IsEmpty(ListItem.Duration) | !String.IsEmpty(ListItem.Art(siloaired))]</visible>
                     </control>
             </itemlayout>
             <focusedlayout width="1756" height="246">
+                <!-- As wide as the still: a group's zoom centres on the group, and
+                     without a size it's the whole row, so the still slid to the screen's edge. -->
                 <control type="group">
+                    <width>372</width><height>214</height>
                         <animation effect="zoom" start="100" end="110" time="180" tween="sine" easing="out" center="auto" condition="Control.HasFocus(52)">Conditional</animation>
                     <control type="image">
                         <left>6</left><top>6</top>
@@ -1520,6 +1560,7 @@
                         <font>silo_detail</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$INFO[ListItem.Duration(mins),, min]$INFO[ListItem.Art(siloaired), · ,]</label>
+                        <visible>[!String.IsEmpty(ListItem.Duration) | !String.IsEmpty(ListItem.Art(siloaired))]</visible>
                     </control>
                     <control type="textbox">
                         <left>412</left><top>100</top>
@@ -1527,7 +1568,148 @@
                         <font>silo_detail</font>
                         <textcolor>BFEDEDED</textcolor>
                         <label>$INFO[ListItem.Plot]</label>
+                        <visible>[!String.IsEmpty(ListItem.Duration) | !String.IsEmpty(ListItem.Art(siloaired))]</visible>
                     </control>
+                    <control type="textbox">
+                        <left>412</left><top>58</top>
+                        <width>1100</width><height>100</height>
+                        <font>silo_detail</font>
+                        <textcolor>BFEDEDED</textcolor>
+                        <label>$INFO[ListItem.Plot]</label>
+                        <visible>![!String.IsEmpty(ListItem.Duration) | !String.IsEmpty(ListItem.Art(siloaired))]</visible>
+                    </control>
+            </focusedlayout>
+        </control>
+
+        <!-- An add-on's lists: the focused item's picture and description, beside the list. -->
+        <control type="group">
+            <visible>Control.IsVisible(58)</visible>
+            <control type="image">
+                <left>88</left><top>200</top><width>640</width><height>360</height>
+                <texture diffuse="silo/card_landscape_mask.png" colordiffuse="FF1C1F24">colors/white.png</texture>
+            </control>
+            <!-- Whole, whatever its shape: Kodi can't tell an add-on's picture's shape in advance. -->
+            <control type="image">
+                <left>88</left><top>200</top><width>640</width><height>360</height>
+                <aspectratio>keep</aspectratio>
+                <fadetime>160</fadetime>
+                <texture background="true" diffuse="silo/card_landscape_mask.png">$VAR[SiloExtraArt]</texture>
+            </control>
+            <control type="progress">
+                <left>102</left><top>546</top><width>612</width><height>6</height>
+                <texturebg colordiffuse="33FFFFFF">colors/white.png</texturebg>
+                <midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+                <info>Container(58).ListItem.PercentPlayed</info>
+                <visible>Integer.IsGreater(Container(58).ListItem.PercentPlayed,0)</visible>
+            </control>
+            <control type="label">
+                <left>88</left><top>574</top><width>640</width><height>40</height>
+                <aligny>center</aligny>
+                <font>silo_meta</font>
+                <textcolor>BFEDEDED</textcolor>
+                <label>$VAR[SiloExtraFacts]</label>
+            </control>
+            <control type="textbox">
+                <left>88</left><top>624</top><width>640</width><height>416</height>
+                <font>silo_plot</font>
+                <textcolor>BFEDEDED</textcolor>
+                <label>$VAR[SiloExtraPlot]</label>
+                <autoscroll delay="6000" time="3000" repeat="8000">true</autoscroll>
+            </control>
+        </control>
+        <control type="list" id="58">
+            <left>768</left><top>200</top>
+            <width>1064</width><height>856</height>
+            <orientation>vertical</orientation>
+            <scrolltime tween="cubic" easing="out">200</scrolltime>
+            <viewtype label="Extra Info">biginfo</viewtype>
+            <visible>$EXP[SiloBrowseExtra]</visible>
+            <onleft>9000</onleft>
+            <itemlayout width="1064" height="80">
+                <control type="label">
+                    <left>28</left><width>816</width><height>80</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>66EDEDED</textcolor>
+                    <label>$VAR[SiloVideoTitle]</label>
+                </control>
+                <control type="label">
+                    <left>856</left><width>140</width><height>80</height>
+                    <align>right</align><aligny>center</aligny>
+                    <font>silo_detail</font>
+                    <textcolor>4AEDEDED</textcolor>
+                    <label>$INFO[ListItem.Duration]</label>
+                </control>
+                <control type="group">
+                    <left>1004</left><top>20</top>
+                    <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+                    <control type="image">
+                        <width>40</width><height>40</height>
+                        <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+                    </control>
+                    <control type="image">
+                        <left>9</left><top>9</top><width>22</width><height>22</height>
+                        <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                    </control>
+                </control>
+            </itemlayout>
+            <focusedlayout width="1064" height="80">
+                <control type="image">
+                    <left>4</left><top>4</top><width>1056</width><height>72</height>
+                    <texture border="34" colordiffuse="SkylineFocus">silo/pill.png</texture>
+                    <visible>Control.HasFocus(58) + !String.Contains(ListItem.Label,COLOR)</visible>
+                </control>
+                <control type="image">
+                    <left>4</left><top>4</top><width>1056</width><height>72</height>
+                    <texture border="34" colordiffuse="FF3F444D">silo/pill.png</texture>
+                    <visible>Control.HasFocus(58) + String.Contains(ListItem.Label,COLOR)</visible>
+                </control>
+                <control type="label">
+                    <left>28</left><width>816</width><height>80</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>SkylineFocusText</textcolor>
+                    <label>$VAR[SiloVideoTitle]</label>
+                    <scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
+                    <visible>Control.HasFocus(58) + !String.Contains(ListItem.Label,COLOR)</visible>
+                </control>
+                <control type="label">
+                    <left>856</left><width>140</width><height>80</height>
+                    <align>right</align><aligny>center</aligny>
+                    <font>silo_detail</font>
+                    <textcolor>SkylineFocusTextDim</textcolor>
+                    <label>$INFO[ListItem.Duration]</label>
+                    <visible>Control.HasFocus(58) + !String.Contains(ListItem.Label,COLOR)</visible>
+                </control>
+                <control type="label">
+                    <left>28</left><width>816</width><height>80</height>
+                    <aligny>center</aligny>
+                    <font>silo_meta</font>
+                    <textcolor>FFEDEDED</textcolor>
+                    <label>$VAR[SiloVideoTitle]</label>
+                    <scroll>true</scroll><scrollsuffix>     ·     </scrollsuffix>
+                    <visible>[!Control.HasFocus(58) | String.Contains(ListItem.Label,COLOR)]</visible>
+                </control>
+                <control type="label">
+                    <left>856</left><width>140</width><height>80</height>
+                    <align>right</align><aligny>center</aligny>
+                    <font>silo_detail</font>
+                    <textcolor>BFEDEDED</textcolor>
+                    <label>$INFO[ListItem.Duration]</label>
+                    <visible>[!Control.HasFocus(58) | String.Contains(ListItem.Label,COLOR)]</visible>
+                </control>
+                <control type="group">
+                    <left>1004</left><top>20</top>
+                    <visible>Integer.IsGreater(ListItem.PlayCount,0)</visible>
+                    <control type="image">
+                        <width>40</width><height>40</height>
+                        <texture colordiffuse="F2EDEDED">silo/avatar_mask.png</texture>
+                    </control>
+                    <control type="image">
+                        <left>9</left><top>9</top><width>22</width><height>22</height>
+                        <texture colordiffuse="FF000000">OverlayWatched.png</texture>
+                    </control>
+                </control>
             </focusedlayout>
         </control>
 
@@ -1558,7 +1740,11 @@
                 <onback condition="Control.IsVisible(55)">55</onback>
                 <onback condition="Control.IsVisible(56)">56</onback>
                 <onright condition="Control.IsVisible(57)">57</onright>
+                <onright condition="Control.IsVisible(52)">52</onright>
+                <onright condition="Control.IsVisible(58)">58</onright>
                 <onback condition="Control.IsVisible(57)">57</onback>
+                <onback condition="Control.IsVisible(52)">52</onback>
+                <onback condition="Control.IsVisible(58)">58</onback>
                 <control type="button" id="2">
                     <width>432</width>
                     <include>DefaultSettingButton</include>
