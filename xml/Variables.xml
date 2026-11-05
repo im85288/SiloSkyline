@@ -8619,4 +8619,48 @@
         <value>FFEDEDED</value>
     </variable>
     <!-- end Silo Skyline YouTube -->
+
+    <!-- Silo Skyline add-ons (tools/build_addons.py) -->
+    <!-- An add-on's own icon is its thumb (its icon is Kodi's generic box);
+         a category's is its icon (Kodi's glyph for it; its thumb is empty). -->
+    <variable name="SiloAddonIcon">
+        <value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+        <value condition="!String.IsEmpty(ListItem.Icon)">$INFO[ListItem.Icon]</value>
+        <value>DefaultAddon.png</value>
+    </variable>
+    <variable name="SiloAddonRowText">
+        <value condition="Control.HasFocus(50)">FF000000</value>
+        <value>FFEDEDED</value>
+    </variable>
+    <variable name="SiloAddonRowDim">
+        <value condition="Control.HasFocus(50)">99000000</value>
+        <value>BFEDEDED</value>
+    </variable>
+    <!-- A word at a row's right when the add-on needs attention. -->
+    <variable name="SiloAddonFlag">
+        <value condition="ListItem.Property(addon.downloading)">INSTALLING</value>
+        <value condition="String.IsEqual(ListItem.AddonLifecycleType,$LOCALIZE[24171])">BROKEN</value>
+        <value condition="[ListItem.Property(addon.hasupdate) | ListItem.Property(addon.isupdate)]">UPDATE</value>
+        <value condition="ListItem.Property(addon.isinstalled) + !ListItem.Property(addon.isenabled)">DISABLED</value>
+        <value condition="String.IsEqual(ListItem.AddonLifecycleType,$LOCALIZE[24170])">DEPRECATED</value>
+        <value condition="ListItem.Property(addon.orphaned)">UNUSED</value>
+    </variable>
+    <variable name="SiloAddonState">
+        <value condition="ListItem.Property(addon.downloading)">Installing</value>
+        <value condition="String.IsEqual(ListItem.AddonLifecycleType,$LOCALIZE[24171])">Broken</value>
+        <value condition="[ListItem.Property(addon.hasupdate) | ListItem.Property(addon.isupdate)]">Update available</value>
+        <value condition="ListItem.Property(addon.isinstalled) + !ListItem.Property(addon.isenabled)">Disabled</value>
+        <value condition="String.IsEqual(ListItem.AddonLifecycleType,$LOCALIZE[24170])">Deprecated</value>
+        <value condition="ListItem.Property(addon.orphaned)">No longer needed by any add-on</value>
+        <value condition="ListItem.Property(addon.isenabled)">Enabled</value>
+        <value condition="ListItem.Property(addon.isinstalled)">Installed</value>
+        <value>Not installed</value>
+    </variable>
+    <!-- Why it's broken or deprecated first, then what it does. -->
+    <variable name="SiloAddonDescription">
+        <value condition="[String.IsEqual(ListItem.AddonLifecycleType,$LOCALIZE[24171]) | String.IsEqual(ListItem.AddonLifecycleType,$LOCALIZE[24170])] + !String.IsEmpty(ListItem.AddonLifecycleDesc)">$INFO[ListItem.AddonLifecycleDesc][CR][CR]$INFO[ListItem.AddonDescription]</value>
+        <value condition="!String.IsEmpty(ListItem.AddonDescription)">$INFO[ListItem.AddonDescription]</value>
+        <value>$INFO[ListItem.Plot]</value>
+    </variable>
+    <!-- end Silo Skyline add-ons -->
 </includes>
