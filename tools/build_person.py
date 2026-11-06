@@ -5,7 +5,7 @@ person's titles in the library as a six-wide grid with All / Movies / Series.
 
     python3 tools/build_person.py
 
-SiloKodiConnect opens it (mode=person) from a cast member on an info page,
+KodiConnectForSilo opens it (mode=person) from a cast member on an info page,
 with the person's facts in Home window properties silo.person.*; the grid
 lists their titles itself (mode=widget&person=...).
 """
@@ -135,7 +135,7 @@ def build():
                 <orientation>horizontal</orientation>
                 <itemgap>12</itemgap>%(chips)s
             </control>
-            <!-- SiloKodiConnect trims a long biography to fit, ending it with "…" as
+            <!-- KodiConnectForSilo trims a long biography to fit, ending it with "…" as
                  Silo's app does (Kodi's textbox would just cut it off). -->
             <control type="textbox">
                 <left>%(tx)d</left><top>290</top><width>920</width><height>210</height>
@@ -182,8 +182,8 @@ def build():
                      info page can't open another over itself). -->
                 <onclick>Dialog.Close(%(window)d)</onclick>
                 <onclick>Dialog.Close(movieinformation)</onclick>
-                <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
-                <content target="videos">plugin://plugin.video.silokodiconnect/?mode=widget&amp;section=person&amp;person=$INFO[%(id)s]&amp;type=$INFO[%(kind)s]</content>
+                <onclick>RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                <content target="videos">plugin://plugin.video.kodiconnectforsilo/?mode=widget&amp;section=person&amp;person=$INFO[%(id)s]&amp;type=$INFO[%(kind)s]</content>
             </control>
         </control>
     </controls>

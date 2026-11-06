@@ -51,15 +51,15 @@
 					<label>Top 10 rows</label>
 					<label2>Numbered Home rows</label2>
 					<include>DefaultSettingButton</include>
-					<onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=top10)</onclick>
-					<visible>System.HasAddon(plugin.video.silokodiconnect)</visible>
+					<onclick>RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=top10)</onclick>
+					<visible>System.HasAddon(plugin.video.kodiconnectforsilo)</visible>
 				</control>
 				<control type="radiobutton" id="795">
 					<label>Theme music on show pages</label>
 					<include>DefaultSettingButton</include>
 					<selected>!Skin.HasSetting(SkylineNoThemeMusic)</selected>
 					<onclick>Skin.ToggleSetting(SkylineNoThemeMusic)</onclick>
-					<visible>System.HasAddon(plugin.video.silokodiconnect)</visible>
+					<visible>System.HasAddon(plugin.video.kodiconnectforsilo)</visible>
 				</control>
 				<control type="radiobutton" id="796">
 					<label>IMDb ratings</label>
@@ -92,7 +92,7 @@
 					<include>DefaultSettingButton</include>
 					<selected>!Skin.HasSetting(SkylineHideRequestsTab)</selected>
 					<onclick>Skin.ToggleSetting(SkylineHideRequestsTab)</onclick>
-					<visible>System.HasAddon(plugin.video.silokodiconnect)</visible>
+					<visible>System.HasAddon(plugin.video.kodiconnectforsilo)</visible>
 				</control>
 				<control type="radiobutton" id="781">
 					<label>TV tab</label>

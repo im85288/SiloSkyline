@@ -357,9 +357,9 @@
                 <ondown>402</ondown>
                 <!-- Right waits for the grid while it loads (Kodi can't focus it yet). -->
                 <onright condition="Integer.IsGreater(Container(410).NumItems,0)">SetFocus(410)</onright>
-                <onright condition="!Integer.IsGreater(Container(410).NumItems,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=subscriptions&amp;ids=410)</onright>
+                <onright condition="!Integer.IsGreater(Container(410).NumItems,0)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=youtubefocus&amp;section=subscriptions&amp;ids=410)</onright>
                 <onclick>ClearProperty(silo.youtube.channel,home)</onclick>
-                <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=subscriptions&amp;ids=410)</onclick>
+                <onclick>RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=youtubefocus&amp;section=subscriptions&amp;ids=410)</onclick>
             </control>
             <control type="label">
                 <left>88</left><top>228</top><width>400</width><height>40</height>
@@ -374,11 +374,11 @@
                 <scrolltime tween="cubic" easing="out">200</scrolltime>
                 <onleft>SetFocus(100,2,absolute)</onleft><onup>401</onup>
                 <onright condition="Integer.IsGreater(Container(410).NumItems,0)">SetFocus(410)</onright>
-                <onright condition="!Integer.IsGreater(Container(410).NumItems,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=subscriptions&amp;ids=410)</onright>
+                <onright condition="!Integer.IsGreater(Container(410).NumItems,0)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=youtubefocus&amp;section=subscriptions&amp;ids=410)</onright>
                 <!-- A channel's videos at the right, as the app's (not its page),
                      focused once they have loaded. -->
                 <onclick>SetProperty(silo.youtube.channel,$INFO[ListItem.FolderPath],home)</onclick>
-                <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=subscriptions&amp;ids=410)</onclick>
+                <onclick>RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=youtubefocus&amp;section=subscriptions&amp;ids=410)</onclick>
                 <itemlayout width="400" height="72">
                     <control type="image">
                         <left>14</left><top>8</top><width>48</width><height>48</height>
@@ -1209,7 +1209,7 @@
                 <onleft>SetFocus(100,0,absolute)</onleft><onup>noop</onup>
                 <onright condition="Integer.IsGreater(Container(610).NumItems,0)">610</onright>
                 <!-- New search opens the keyboard; a past search shows its results. -->
-                <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubepick)</onclick>
+                <onclick>RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=youtubepick)</onclick>
                 <itemlayout width="400" height="72">
                     <control type="image">
                         <left>22</left><top>16</top><width>32</width><height>32</height>
@@ -1412,21 +1412,21 @@
                 <orientation>vertical</orientation>
                 <onleft>noop</onleft>
                 <onright condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)] + Integer.IsGreater(Container(301).NumItems,0)">SetFocus(301)</onright>
-                <onright condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)] + !Integer.IsGreater(Container(301).NumItems,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=home&amp;ids=301,302)</onright>
+                <onright condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)] + !Integer.IsGreater(Container(301).NumItems,0)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=youtubefocus&amp;section=home&amp;ids=301,302)</onright>
                 <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions) + Control.IsVisible(401)">SetFocus(401)</onright>
-                <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions) + !Control.IsVisible(401)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=subscriptions&amp;ids=&amp;controls=401)</onright>
+                <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions) + !Control.IsVisible(401)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=youtubefocus&amp;section=subscriptions&amp;ids=&amp;controls=401)</onright>
                 <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library) + Integer.IsGreater(Container(511).NumItems,0)">SetFocus(511)</onright>
-                <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library) + !Integer.IsGreater(Container(511).NumItems,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=library&amp;ids=511,512,513,514)</onright>
+                <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library) + !Integer.IsGreater(Container(511).NumItems,0)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=youtubefocus&amp;section=library&amp;ids=511,512,513,514)</onright>
                 <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),search) + Integer.IsGreater(Container(620).NumItems,0)">SetFocus(620)</onright>
-                <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),search) + !Integer.IsGreater(Container(620).NumItems,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=search&amp;ids=620)</onright>
+                <onright condition="String.IsEqual(Window(Home).Property(silo.youtube.section),search) + !Integer.IsGreater(Container(620).NumItems,0)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=youtubefocus&amp;section=search&amp;ids=620)</onright>
                 <onback condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)] + Integer.IsGreater(Container(301).NumItems,0)">SetFocus(301)</onback>
-                <onback condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)] + !Integer.IsGreater(Container(301).NumItems,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=home&amp;ids=301,302)</onback>
+                <onback condition="[String.IsEmpty(Window(Home).Property(silo.youtube.section)) | String.IsEqual(Window(Home).Property(silo.youtube.section),home)] + !Integer.IsGreater(Container(301).NumItems,0)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=youtubefocus&amp;section=home&amp;ids=301,302)</onback>
                 <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions) + Control.IsVisible(401)">SetFocus(401)</onback>
-                <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions) + !Control.IsVisible(401)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=subscriptions&amp;ids=&amp;controls=401)</onback>
+                <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),subscriptions) + !Control.IsVisible(401)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=youtubefocus&amp;section=subscriptions&amp;ids=&amp;controls=401)</onback>
                 <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library) + Integer.IsGreater(Container(511).NumItems,0)">SetFocus(511)</onback>
-                <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library) + !Integer.IsGreater(Container(511).NumItems,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=library&amp;ids=511,512,513,514)</onback>
+                <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),library) + !Integer.IsGreater(Container(511).NumItems,0)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=youtubefocus&amp;section=library&amp;ids=511,512,513,514)</onback>
                 <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),search) + Integer.IsGreater(Container(620).NumItems,0)">SetFocus(620)</onback>
-                <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),search) + !Integer.IsGreater(Container(620).NumItems,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=search&amp;ids=620)</onback>
+                <onback condition="String.IsEqual(Window(Home).Property(silo.youtube.section),search) + !Integer.IsGreater(Container(620).NumItems,0)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=youtubefocus&amp;section=search&amp;ids=620)</onback>
                 <itemlayout width="376" height="68">
                     <control type="image">
                         <left>22</left><top>18</top><width>32</width><height>32</height>
@@ -1467,7 +1467,7 @@
                     <property name="key">search</property>
                     <onclick>SetProperty(silo.youtube.section,search,home)</onclick>
                     <onclick>SetProperty(silo.youtube.loaded.search,1,home)</onclick>
-                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=search&amp;ids=620)</onclick>
+                    <onclick>RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=youtubefocus&amp;section=search&amp;ids=620)</onclick>
                 </item>
                 <item>
                     <label>Home</label>
@@ -1475,7 +1475,7 @@
                     <property name="key">home</property>
                     <onclick>SetProperty(silo.youtube.section,home,home)</onclick>
                     <onclick>SetProperty(silo.youtube.loaded.home,1,home)</onclick>
-                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=home&amp;ids=301,302)</onclick>
+                    <onclick>RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=youtubefocus&amp;section=home&amp;ids=301,302)</onclick>
                 </item>
                 <item>
                     <label>Subscriptions</label>
@@ -1483,7 +1483,7 @@
                     <property name="key">subscriptions</property>
                     <onclick>SetProperty(silo.youtube.section,subscriptions,home)</onclick>
                     <onclick>SetProperty(silo.youtube.loaded.subscriptions,1,home)</onclick>
-                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=subscriptions&amp;ids=&amp;controls=401)</onclick>
+                    <onclick>RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=youtubefocus&amp;section=subscriptions&amp;ids=&amp;controls=401)</onclick>
                 </item>
                 <item>
                     <label>Library</label>
@@ -1491,7 +1491,7 @@
                     <property name="key">library</property>
                     <onclick>SetProperty(silo.youtube.section,library,home)</onclick>
                     <onclick>SetProperty(silo.youtube.loaded.library,1,home)</onclick>
-                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=youtubefocus&amp;section=library&amp;ids=511,512,513,514)</onclick>
+                    <onclick>RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=youtubefocus&amp;section=library&amp;ids=511,512,513,514)</onclick>
                 </item>
                 </content>
             </control>

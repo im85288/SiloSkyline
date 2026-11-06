@@ -43,11 +43,11 @@ LOADED = 'Window(Home).Property(silo.youtube.loaded.%s)'
 SECTIONS = [('home', 'Home'), ('subscriptions', 'Subscriptions'), ('library', 'Library')]
 # Search: the side menu's first item, the YouTube add-on's search history at
 # the left (its New search first), the chosen search's results at the right.
-# SiloKodiConnect (mode=youtubepick) opens the keyboard for New search, and
+# KodiConnectForSilo (mode=youtubepick) opens the keyboard for New search, and
 # puts the words and their results' path in properties for either.
 QUERY = 'Window(Home).Property(silo.youtube.query)'
 RESULTS = 'Window(Home).Property(silo.youtube.search)'
-# Changed by SiloKodiConnect after each search, so the history list reloads
+# Changed by KodiConnectForSilo after each search, so the history list reloads
 # with it (Kodi reloads a list only when its path changes).
 HISTORY_TOKEN = 'Window(Home).Property(silo.youtube.history)'
 HISTORY_ID = 620
@@ -281,15 +281,15 @@ def rows_section(group_id, section, rows):
 
 
 def plugin(mode, **params):
-    """A SiloKodiConnect call, as an action."""
+    """A KodiConnectForSilo call, as an action."""
     query = ''.join('&amp;%s=%s' % (key, value) for key, value in params.items())
-    return 'RunPlugin(plugin://plugin.video.silokodiconnect/?mode=%s%s)' % (mode, query)
+    return 'RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=%s%s)' % (mode, query)
 
 
 def wait_focus(section, ids, controls=()):
     """Focus a section's first list with videos once it has loaded (or a
     plain control once it shows): Kodi can't focus a list still loading or
-    empty, and a SetFocus it can't do drops focus, so SiloKodiConnect waits."""
+    empty, and a SetFocus it can't do drops focus, so KodiConnectForSilo waits."""
     params = {'section': section, 'ids': ','.join(str(i) for i in ids)}
     if controls:
         params['controls'] = ','.join(str(i) for i in controls)
@@ -454,7 +454,7 @@ MENU = '''
         </control>'''
 
 
-# What SiloKodiConnect focuses when a section is chosen: its rows' first with
+# What KodiConnectForSilo focuses when a section is chosen: its rows' first with
 # videos, Search's history, or Subscriptions' All (a button, once it shows).
 WAIT_IDS = {'home': [i for i, _, _ in HOME_ROWS], 'library': [i for i, _, _ in LIBRARY_ROWS], 'search': [HISTORY_ID],
             'subscriptions': []}
@@ -462,7 +462,7 @@ WAIT_CONTROLS = {'subscriptions': [ALL_ID]}
 
 
 def choose_section(key):
-    """The menu's OK: the section shows, and SiloKodiConnect focuses it once
+    """The menu's OK: the section shows, and KodiConnectForSilo focuses it once
     it can. Not a SetFocus here: the section shows only from the next frame,
     and a SetFocus Kodi can't do drops focus altogether, so the next key
     went to the page's default control, a hidden Home row (Right "did nothing")."""

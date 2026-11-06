@@ -56,7 +56,7 @@
                         <texture border="24" colordiffuse="FF3F444D">silo/card_landscape_mask.png</texture>
                         <visible>false + String.Contains(ListItem.Label,COLOR)</visible>
                     </control>
-                    <!-- SiloKodiConnect's profile row: the profile's avatar. -->
+                    <!-- KodiConnectForSilo's profile row: the profile's avatar. -->
                     <control type="image">
                         <left>24</left><top>16</top><width>60</width><height>60</height>
                         <texture background="true" diffuse="silo/avatar_mask.png">$INFO[Window(Home).Property(silo.avatar)]</texture>
@@ -186,7 +186,7 @@
                         <texture border="24" colordiffuse="FF3F444D">silo/card_landscape_mask.png</texture>
                         <visible>Control.HasFocus(50) + String.Contains(ListItem.Label,COLOR)</visible>
                     </control>
-                    <!-- SiloKodiConnect's profile row: the profile's avatar. -->
+                    <!-- KodiConnectForSilo's profile row: the profile's avatar. -->
                     <control type="image">
                         <left>24</left><top>16</top><width>60</width><height>60</height>
                         <texture background="true" diffuse="silo/avatar_mask.png">$INFO[Window(Home).Property(silo.avatar)]</texture>
@@ -336,7 +336,7 @@
             <viewtype label="Posters">poster</viewtype>
             <onleft condition="$EXP[SiloBrowseTitles]">9000</onleft>
             <onright condition="[Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(Container.NumItems,20) + String.StartsWith(Container.FolderPath,videodb://)">60</onright>
-            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + [Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+            <onclick condition="System.AddonIsEnabled(plugin.video.kodiconnectforsilo) + [Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
             <visible>$EXP[SiloBrowseGrid]</visible>
             <itemlayout width="270" height="481">
                 <control type="group">
@@ -480,7 +480,7 @@
             </focusedlayout>
         </control>
 
-        <!-- A-Z: jump the poster grid to a letter (SiloKodiConnect's jump.py). -->
+        <!-- A-Z: jump the poster grid to a letter (KodiConnectForSilo's jump.py). -->
         <control type="list" id="60">
             <left>1736</left><top>200</top>
             <width>96</width><height>880</height>
@@ -824,7 +824,7 @@
             <visible>$EXP[SiloBrowseTitles]</visible>
             <onleft>9000</onleft>
             <onright condition="[Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(Container.NumItems,20) + String.StartsWith(Container.FolderPath,videodb://)">60</onright>
-            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + [Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+            <onclick condition="System.AddonIsEnabled(plugin.video.kodiconnectforsilo) + [Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
             <itemlayout width="203" height="292">
                 <control type="group">
                 <control type="image">
@@ -1028,7 +1028,7 @@
             <visible>$EXP[SiloBrowseTitles]</visible>
             <onleft>9000</onleft>
             <onright condition="[Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(Container.NumItems,20) + String.StartsWith(Container.FolderPath,videodb://)">60</onright>
-            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + [Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+            <onclick condition="System.AddonIsEnabled(plugin.video.kodiconnectforsilo) + [Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(ListItem.DBID,0)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
             <itemlayout width="780" height="66">
                 <control type="label">
                     <left>28</left><width>580</width><height>66</height>

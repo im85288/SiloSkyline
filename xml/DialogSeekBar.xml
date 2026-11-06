@@ -900,7 +900,7 @@
 				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
 				<midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
 			</control>
-			<!-- Silo's marker bands (from SiloKodiConnect), over the bar, the played part too:
+			<!-- Silo's marker bands (from KodiConnectForSilo), over the bar, the played part too:
 			     intro cyan, recap green, credits orange, preview purple, at 60%. -->
 			<control type="ranges">
 				<left>96</left><top>862</top><width>1728</width><height>8</height>

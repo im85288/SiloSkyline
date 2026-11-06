@@ -394,7 +394,7 @@
                     <texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
                     <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
                     <!-- The plugin first: closing the page first loses its title. -->
-                    <onclick condition="String.IsEqual(ListItem.Property(silo.request.requestable),true)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)]&amp;title=$ESCINFO[ListItem.Title])</onclick>
+                    <onclick condition="String.IsEqual(ListItem.Property(silo.request.requestable),true)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=request&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)]&amp;title=$ESCINFO[ListItem.Title])</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.request.requestable),true)">Dialog.Close(movieinformation)</onclick>
                 </control>
                 <!-- Play or Resume, with Silo's play icon. Its group has an id: the
@@ -459,7 +459,7 @@
                         <visible>!Control.HasFocus(308)</visible>
                     </control>
                     <!-- Resume, as Apple TV's: the time left at the pill's end and how far in
-                         along its foot (SiloKodiConnect's silo.left_short, "32m"). -->
+                         along its foot (KodiConnectForSilo's silo.left_short, "32m"). -->
                     <control type="label">
                         <left>200</left><width>116</width><height>58</height>
                         <align>right</align><aligny>center</aligny>
@@ -620,7 +620,7 @@
                         <label />
                         <texturefocus />
                         <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
-                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=previous&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick>RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=previous&amp;dbid=$INFO[ListItem.DBID])</onclick>
                     </control>
                     <control type="group">
                         <visible>Control.HasFocus(302)</visible>
@@ -652,7 +652,7 @@
                 </control>
                 <control type="group" id="1305">
                     <width>64</width><height>64</height>
-                    <visible>[[String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] | String.IsEqual(ListItem.DBType,set)] + System.AddonIsEnabled(plugin.video.silokodiconnect)</visible>
+                    <visible>[[String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] | String.IsEqual(ListItem.DBType,set)] + System.AddonIsEnabled(plugin.video.kodiconnectforsilo)</visible>
                     <animation effect="slide" end="190,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(304)">Conditional</animation>
                     <animation effect="slide" end="158,0" time="180" tween="sine" easing="out" condition="Control.HasFocus(302)">Conditional</animation>
                     <control type="button" id="305">
@@ -678,8 +678,8 @@
                         <texturefocus />
                         <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
                     <onclick>noop</onclick>
-                    <onclick condition="String.IsEqual(ListItem.DBType,set)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=shuffle&amp;scope=set&amp;id=$INFO[ListItem.DBID])</onclick>
-                    <onclick condition="!String.IsEqual(ListItem.DBType,set)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=shuffle&amp;scope=tvshow&amp;id=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEqual(ListItem.DBType,set)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=shuffle&amp;scope=set&amp;id=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="!String.IsEqual(ListItem.DBType,set)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=shuffle&amp;scope=tvshow&amp;id=$INFO[ListItem.DBID])</onclick>
                     </control>
                     <control type="group">
                         <visible>Control.HasFocus(305)</visible>
@@ -862,8 +862,8 @@
                         <texturefocus />
                         <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
                     <onclick>noop</onclick>
-                    <onclick condition="$EXP[SiloOnWatchlist]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=watchlist&amp;id=$INFO[ListItem.Property(silo.content_id)]&amp;add=0)</onclick>
-                    <onclick condition="!$EXP[SiloOnWatchlist]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=watchlist&amp;id=$INFO[ListItem.Property(silo.content_id)]&amp;add=1)</onclick>
+                    <onclick condition="$EXP[SiloOnWatchlist]">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=watchlist&amp;id=$INFO[ListItem.Property(silo.content_id)]&amp;add=0)</onclick>
+                    <onclick condition="!$EXP[SiloOnWatchlist]">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=watchlist&amp;id=$INFO[ListItem.Property(silo.content_id)]&amp;add=1)</onclick>
                     </control>
                     <control type="group">
                         <visible>Control.HasFocus(352)</visible>
@@ -924,7 +924,7 @@
                         <label />
                         <texturefocus />
                         <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
-                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=rate&amp;id=$INFO[ListItem.Property(silo.content_id)]&amp;current=$VAR[SiloMyRating])</onclick>
+                    <onclick>RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=rate&amp;id=$INFO[ListItem.Property(silo.content_id)]&amp;current=$VAR[SiloMyRating])</onclick>
                     </control>
                     <control type="group">
                         <visible>Control.HasFocus(353)</visible>
@@ -1049,8 +1049,8 @@
                         <texturefocus />
                         <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
                     <onclick>noop</onclick>
-                    <onclick condition="[String.IsEqual(Window(movieinformation).Property(silo.marked),watched) | [String.IsEmpty(Window(movieinformation).Property(silo.marked)) + [Integer.IsGreater(ListItem.PlayCount,0) | [String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=mark&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID]&amp;action=unwatched)</onclick>
-                    <onclick condition="![String.IsEqual(Window(movieinformation).Property(silo.marked),watched) | [String.IsEmpty(Window(movieinformation).Property(silo.marked)) + [Integer.IsGreater(ListItem.PlayCount,0) | [String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]]]">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=mark&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID]&amp;action=watched)</onclick>
+                    <onclick condition="[String.IsEqual(Window(movieinformation).Property(silo.marked),watched) | [String.IsEmpty(Window(movieinformation).Property(silo.marked)) + [Integer.IsGreater(ListItem.PlayCount,0) | [String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]]]">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=mark&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID]&amp;action=unwatched)</onclick>
+                    <onclick condition="![String.IsEqual(Window(movieinformation).Property(silo.marked),watched) | [String.IsEmpty(Window(movieinformation).Property(silo.marked)) + [Integer.IsGreater(ListItem.PlayCount,0) | [String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]]]">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=mark&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID]&amp;action=watched)</onclick>
                     </control>
                     <control type="group">
                         <visible>Control.HasFocus(303)</visible>
@@ -1332,7 +1332,7 @@
                     <ondown>64</ondown>
                     <onclick>SetProperty(silo.from_rail,1,home)</onclick>
                     <!-- The episode's id while this page is open (RunPlugin runs later). -->
-                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=show&amp;episode=$INFO[ListItem.DBID])</onclick>
+                    <onclick>RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=show&amp;episode=$INFO[ListItem.DBID])</onclick>
                     <onclick>Dialog.Close(movieinformation)</onclick>
                     <visible>String.IsEqual(ListItem.DBType,episode) + [Integer.IsGreater(Container(65).NumItems,1) | Container(65).IsUpdating]</visible>
                 </control>
@@ -1567,10 +1567,10 @@
                     <ondown condition="Integer.IsGreater(Container(70).NumItems,0)">70</ondown>
                     <ondown condition="!Integer.IsGreater(Container(70).NumItems,0) + Integer.IsGreater(Container(71).NumItems,0)">71</ondown>
                     <ondown condition="!Integer.IsGreater(Container(70).NumItems,0) + !Integer.IsGreater(Container(71).NumItems,0) + Integer.IsGreater(Container(63).NumItems,0)">63</ondown>
-                    <!-- Another film: this page closes and SiloKodiConnect opens its page. -->
+                    <!-- Another film: this page closes and KodiConnectForSilo opens its page. -->
                     <onclick condition="!String.IsEqual(ListItem.DBID,Window(movieinformation).Property(silo.page_dbid)) | String.IsEqual(Window(movieinformation).Property(silo.page_type),set)">SetProperty(silo.from_rail,1,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.DBID,Window(movieinformation).Property(silo.page_dbid)) | String.IsEqual(Window(movieinformation).Property(silo.page_type),set)">Dialog.Close(movieinformation)</onclick>
-                    <onclick condition="!String.IsEqual(ListItem.DBID,Window(movieinformation).Property(silo.page_dbid)) | String.IsEqual(Window(movieinformation).Property(silo.page_type),set)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=movie&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="!String.IsEqual(ListItem.DBID,Window(movieinformation).Property(silo.page_dbid)) | String.IsEqual(Window(movieinformation).Property(silo.page_type),set)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=movie&amp;dbid=$INFO[ListItem.DBID])</onclick>
                     <onclick condition="String.IsEqual(ListItem.DBID,Window(movieinformation).Property(silo.page_dbid)) + !String.IsEqual(Window(movieinformation).Property(silo.page_type),set)">SetFocus(5000)</onclick>
                     <content target="videos" sortby="year" sortorder="ascending">videodb://movies/sets/$INFO[ListItem.Property(silo.set_id)]/</content>
                     <itemlayout width="216" height="352">
@@ -1606,8 +1606,8 @@
                 </control>
                 <control type="list" id="70">
                     <!-- Not Kodi's cast list (control 50), which searches the library for a
-                         chosen name: SiloKodiConnect's, so a name opens the person page. -->
-                    <content target="videos">plugin://plugin.video.silokodiconnect/?mode=cast&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID]</content>
+                         chosen name: KodiConnectForSilo's, so a name opens the person page. -->
+                    <content target="videos">plugin://plugin.video.kodiconnectforsilo/?mode=cast&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID]</content>
                     <left>82</left><top>60</top>
                     <width>1838</width><height>280</height>
                     <orientation>horizontal</orientation>
@@ -1615,8 +1615,8 @@
                     <onup condition="String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)">64</onup>
                     <onup condition="!String.IsEmpty(ListItem.Property(silo.set_id))">66</onup>
                     <onup condition="String.IsEmpty(ListItem.Property(silo.set_id)) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + ![String.IsEqual(ListItem.DBType,episode) + Integer.IsGreater(Container(64).NumItems,0)]">5000</onup>
-                    <!-- A cast member's page (SiloKodiConnect: Silo's person, their titles here). -->
-                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=person&amp;id=$INFO[Window(movieinformation).Property(silo.content_id)]&amp;name=$INFO[ListItem.Label])</onclick>
+                    <!-- A cast member's page (KodiConnectForSilo: Silo's person, their titles here). -->
+                    <onclick>RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=person&amp;id=$INFO[Window(movieinformation).Property(silo.content_id)]&amp;name=$INFO[ListItem.Label])</onclick>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <ondown condition="Integer.IsGreater(Container(71).NumItems,0)">71</ondown>
                     <ondown condition="!Integer.IsGreater(Container(71).NumItems,0) + Integer.IsGreater(Container(63).NumItems,0)">63</ondown>
@@ -1675,7 +1675,7 @@
                     </focusedlayout>
                 </control>
             </control>
-            <!-- Trailers & More: the title's YouTube videos from Silo (SiloKodiConnect),
+            <!-- Trailers & More: the title's YouTube videos from Silo (KodiConnectForSilo),
                  as Silo's Apple TV app; one plays as the Trailer button's does. -->
             <control type="group">
                 <height>404</height>
@@ -1688,7 +1688,7 @@
                     <label>Trailers &amp; More</label>
                 </control>
                 <control type="list" id="71">
-                    <content target="videos">plugin://plugin.video.silokodiconnect/?mode=videos&amp;id=$INFO[Window(movieinformation).Property(silo.content_id)]</content>
+                    <content target="videos">plugin://plugin.video.kodiconnectforsilo/?mode=videos&amp;id=$INFO[Window(movieinformation).Property(silo.content_id)]</content>
                     <left>82</left><top>56</top>
                     <width>1838</width><height>348</height>
                     <orientation>horizontal</orientation>
@@ -1774,7 +1774,7 @@
                 </control>
             </control>
             <!-- More Like This: same-genre titles from the library, best rated
-                 first (SiloKodiConnect's silo.similar). -->
+                 first (KodiConnectForSilo's silo.similar). -->
             <control type="group">
                 <height>404</height>
                 <visible>Integer.IsGreater(Container(63).NumItems,0) | Container(63).IsUpdating</visible>
@@ -1797,13 +1797,13 @@
                     <onup condition="!Integer.IsGreater(Container(71).NumItems,0) + !Integer.IsGreater(Container(70).NumItems,0) + !String.IsEmpty(ListItem.Property(silo.set_id))">66</onup>
                     <onup condition="!Integer.IsGreater(Container(71).NumItems,0) + !Integer.IsGreater(Container(70).NumItems,0) + ![String.IsEqual(ListItem.DBType,tvshow) + String.IsEmpty(ListItem.Property(silo.request.tmdb))] + String.IsEmpty(ListItem.Property(silo.set_id))">5000</onup>
                     <!-- Kodi can't open an info page from inside one: close this one and
-                         have SiloKodiConnect open the chosen title's. That page opens with
+                         have KodiConnectForSilo open the chosen title's. That page opens with
                          the column below still scrolled to this rail; silo.from_rail has
                          its onload scroll it back to the top. -->
                     <onclick>SetProperty(silo.from_rail,1,home)</onclick>
                     <onclick>Dialog.Close(movieinformation)</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
-                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb))">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
                     <content target="videos" sortby="rating" sortorder="descending">$INFO[ListItem.Property(silo.similar)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>

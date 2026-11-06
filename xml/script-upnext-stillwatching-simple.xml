@@ -209,7 +209,7 @@
                 <onclick condition="Integer.IsGreater(ListItem.PercentPlayed,0)">SetProperty(silo.deck_resume,resume,home)</onclick>
                 <onclick condition="!Integer.IsGreater(ListItem.PercentPlayed,0)">SetProperty(silo.deck_resume,noresume,home)</onclick>
                 <onclick>Action(Back)</onclick>
-                <content target="videos">plugin://plugin.video.silokodiconnect/?mode=widget&amp;section=continue_watching&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]&amp;exclude_show=$INFO[Window.Property(tvshowtitle)]</content>
+                <content target="videos">plugin://plugin.video.kodiconnectforsilo/?mode=widget&amp;section=continue_watching&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]&amp;exclude_show=$INFO[Window.Property(tvshowtitle)]</content>
                 <itemlayout width="328" height="250">
                     <control type="group">
                         <control type="image">

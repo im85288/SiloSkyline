@@ -9,7 +9,7 @@ Layout (Silo TV's 960-unit grid doubled to 1920x1080):
 - a marquee bottom-left of it: clear logo or title, a meta line, three lines
   of plot; it never takes focus;
 - a band of rows below that owns all focus, filled from the pages and rows
-  SiloKodiConnect publishes as Home window properties (silo.*).
+  KodiConnectForSilo publishes as Home window properties (silo.*).
 """
 import os
 import re
@@ -35,12 +35,12 @@ YOUTUBE_SHOWN = 'System.HasAddon(plugin.video.youtube) + System.AddonIsEnabled(p
 HIDE_TV, HIDE_YOUTUBE, HIDE_REQUESTS = 'SkylineHideTvTab', 'SkylineHideYouTubeTab', 'SkylineHideRequestsTab'
 SHORTCUTS = 9100  # hidden list holding Skin Shortcuts' main menu
 SUBMENU = 9240    # the dropdown of a custom item's submenu
-HOME_CARDS = 20   # cards in a published row (SiloKodiConnect rows.CARDS): each adds ~9 ms to Home's load
-# Pages whose rows are SiloKodiConnect's published cards (Movies' and
+HOME_CARDS = 20   # cards in a published row (KodiConnectForSilo rows.CARDS): each adds ~9 ms to Home's load
+# Pages whose rows are KodiConnectForSilo's published cards (Movies' and
 # Series' rows are native Kodi lists where they can be, plugin rows otherwise).
 PUBLISHED_PAGES = ('home', 'requests')
 # Home's first rows only are published cards (at hand the moment Home opens);
-# the rest load from SiloKodiConnect's rows as Movies' do, filling while the
+# the rest load from KodiConnectForSilo's rows as Movies' do, filling while the
 # first are looked at. Each published card costs Home about 9 ms to load.
 HOME_PUBLISHED_ROWS = 4
 HOME_ROWS = 18  # Silo's Home rows (its admin's choice)
@@ -133,7 +133,7 @@ NEW_H = 30
 def new_tag(card, indent=24):
     """Netflix's New Episode tab across the poster's foot: a show you've
     started with an episode you haven't watched that aired this week
-    (SiloKodiConnect's silo.new). It covers a poster's own next-episode text."""
+    (KodiConnectForSilo's silo.new). It covers a poster's own next-episode text."""
     pad = ' ' * indent
     return '''
 %(p)s<control type="group">
@@ -183,7 +183,7 @@ RANK = '$INFO[ListItem.Property(home.rank)]$INFO[ListItem.Property(silo.rank)]'
 
 
 def rank_numeral(card, indent=24):
-    """Netflix's Top 10: the title's place in a ranked row (SiloKodiConnect's
+    """Netflix's Top 10: the title's place in a ranked row (KodiConnectForSilo's
     rank), a big numeral in the poster's bottom-left corner, in the same
     place on every card (a ranked card has no New Episode tab)."""
     pad = ' ' * indent
@@ -342,7 +342,7 @@ def published_item(prefix, page):
 
 def write_card_includes():
     """The card includes every row (Home, Search, More Like This) uses, and
-    a Home card: one item of SiloKodiConnect's published rows."""
+    a Home card: one item of KodiConnectForSilo's published rows."""
     home_card = '''
     <include name="SiloHomeCard">
         <param name="p" />
@@ -614,7 +614,7 @@ def row_rules(page, page_index, slot, landscape):
     style = '' if page in PUBLISHED_PAGES else ' + ' + (
         ('String.IsEqual(%s,landscape)' if landscape else '!String.IsEqual(%s,landscape)') % prop(key + '.style'))
     if published(page, slot):
-        # Published cards: the row shows when SiloKodiConnect has cards for
+        # Published cards: the row shows when KodiConnectForSilo has cards for
         # it. Not the list's item count: Kodi doesn't evaluate a hidden list's
         # items, so the row would wait for the page's loading flag. Its one
         # list draws either style (styles()).
@@ -626,7 +626,7 @@ def row_rules(page, page_index, slot, landscape):
                 prop(key + '.section'), YOURS_SHOWN, prop(key + '.section'), YOURS_SHOWN)
         return rule
     # Empty rows hide, as in Silo; Kodi still loads a list hidden this way.
-    # silo.<page>.loading (SiloKodiConnect) keeps rows shown while they load:
+    # silo.<page>.loading (KodiConnectForSilo) keeps rows shown while they load:
     # Kodi never loads a hidden list whose path changed.
     return ('%s + !String.IsEmpty(%s)%s + [Integer.IsGreater(Container(%d).NumItems,0) | Container(%d).IsUpdating'
             ' | String.IsEqual(%s,1)]' % (page_visible(page), prop(key + '.path'), style, lid, lid,
@@ -682,20 +682,20 @@ def moves(page_index, slot):
 
 ROW_CLICKS = '''
                     <!-- A title Silo can request opens with Silo's full details. -->
-                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
-                    <!-- A published card opens its info page through SiloKodiConnect:
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
+                    <!-- A published card opens its info page through KodiConnectForSilo:
                          a title Silo can request, its request page. -->
-                    <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(home.request.tmdb))">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=request_info&amp;type=$INFO[ListItem.Property(home.request.type)]&amp;tmdb=$INFO[ListItem.Property(home.request.tmdb)])</onclick>
                     <!-- A studio, network or genre tile: Silo's browse page. -->
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.row,$INFO[ListItem.Property(home.request.more)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">SetProperty(silo.rbrowse.title,$INFO[ListItem.Property(home.hero.title)],home)</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(home.request.more))">ActivateWindow(1197)</onclick>
-                    <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(home.request.tmdb)) + String.IsEmpty(ListItem.Property(home.request.more))">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=$INFO[ListItem.Property(home.type)]&amp;dbid=$INFO[ListItem.Property(home.dbid)])</onclick>
                     <!-- A library title from one of Kodi's own lists (Movies' and Series'
-                         Recently Added...) opens through SiloKodiConnect too, so its page
+                         Recently Added...) opens through KodiConnectForSilo too, so its page
                          has the same facts, badges, trailers and More Like This. -->
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect) + %(library)s">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.silokodiconnect)] + ![System.AddonIsEnabled(plugin.video.silokodiconnect) + %(library)s]">Action(Info)</onclick>''' % {
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.kodiconnectforsilo) + %(library)s">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(home.type)) + [String.IsEmpty(ListItem.Property(silo.request.tmdb)) | !System.AddonIsEnabled(plugin.video.kodiconnectforsilo)] + ![System.AddonIsEnabled(plugin.video.kodiconnectforsilo) + %(library)s]">Action(Info)</onclick>''' % {
     'library': '[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | '
                'String.IsEqual(ListItem.DBType,episode)] + Integer.IsGreater(ListItem.DBID,0)'}
 
@@ -717,7 +717,7 @@ def row(page, page_index, slot, landscape):
     card = LANDSCAPE if landscape else POSTER
     key = 'silo.%s.%d' % (page, slot)
     rules = '$EXP[SiloRow%d]' % list_id(page_index, slot, landscape)
-    # SiloKodiConnect publishes each row's path under its style (the slot has
+    # KodiConnectForSilo publishes each row's path under its style (the slot has
     # a poster and a landscape list, so only the list that shows loads), empty
     # until the page has been viewed, and with a refresh token it changes when
     # it writes the library, which reloads the row. An empty path keeps Kodi
@@ -731,14 +731,14 @@ def row(page, page_index, slot, landscape):
     if page == 'custom':
         # A Skin Shortcuts widget: any Kodi path, used as it is.
         path = '$INFO[%s]' % prop(key + '.path')
-    # Home's, Movies', Series' and Requests' rows: the cards SiloKodiConnect
+    # Home's, Movies', Series' and Requests' rows: the cards KodiConnectForSilo
     # publishes, in Silo's order, so a row draws at once (no plugin, no
     # Python) and keeps Silo's ranking. A custom page's widgets are any
     # Kodi path, so they load as they are.
     content = '<content target="videos">%s</content>' % path
     if page != 'custom':
         # A Kodi library row (Movies' and Series' Recently Added, say) comes
-        # in its sort from SiloKodiConnect: Kodi ignores a videodb path's own
+        # in its sort from KodiConnectForSilo: Kodi ignores a videodb path's own
         # order, and sorts before it cuts the row to its limit. Empty for a
         # plugin row, which keeps its order. browse="never": no "More..." item
         # after the limit (Kodi 20+ adds one by default), as Silo's rows end.
@@ -872,7 +872,7 @@ def close_on_back(menu, condition=None):
 # Silo's library sections for a page's tab (TvLibraryPill.set): a dropdown
 # under the tab whenever it has focus, as Silo's; Down goes into it, OK on the
 # tab opens the page. Collections are
-# the page's libraries' collections, linked by SiloKodiConnect.
+# the page's libraries' collections, linked by KodiConnectForSilo.
 YOURS = 'Yours$INFO[Window(Home).Property(silokodi.requests_mine),   ,]'
 # The Requests page's view: Discover's rows, or Yours' (In progress, Available)
 # under the same hero, as Silo's two pills.
@@ -882,7 +882,7 @@ SECTIONS = {
     # (Kodi's genre list) and Collections.
     'movies': [('Recommended', None), ('Browse', 'videodb://movies/titles/'), ('Recently Added', None),
                ('Genres', 'videodb://movies/genres/'),
-               # Silo's box sets (Kodi's movie sets, from SiloKodiConnect), each opening its page.
+               # Silo's box sets (Kodi's movie sets, from KodiConnectForSilo), each opening its page.
                ('Box sets', 'videodb://movies/sets/'),
                ('Collections', '$INFO[Window(Home).Property(silo.movies.collections)]')],
     'series': [('Recommended', None), ('Browse', 'videodb://tvshows/titles/'), ('Recently Added', None),
@@ -930,7 +930,7 @@ def bar_positions():
 
 DROP_W, DROP_ROW = 460, 64  # Silo's dropdown under a tab
 # The hero's Play and More info, as Netflix's: Up from Home's top row reaches
-# them (in the badges' place); they act on the hero's title (SiloKodiConnect).
+# them (in the badges' place); they act on the hero's title (KodiConnectForSilo).
 HERO_BUTTONS, HERO_PLAY, HERO_INFO = 4800, 4801, 4802
 
 
@@ -1311,7 +1311,7 @@ def custom_pills():
 
 
 def collection_rule(page, page_index):
-    # Shown whenever the page's libraries have collections (SiloKodiConnect
+    # Shown whenever the page's libraries have collections (KodiConnectForSilo
     # publishes the path only then): Kodi never loads a hidden list.
     return '%s + !String.IsEmpty(%s)' % (page_visible(page), prop('silo.%s.collections' % page))
 
@@ -1437,7 +1437,7 @@ def sections_menus():
     return out
 
 AVATAR_MENU = 9211
-PLUGIN_URL = 'plugin://plugin.video.silokodiconnect/'
+PLUGIN_URL = 'plugin://plugin.video.kodiconnectforsilo/'
 # The avatar card's lists. Each has its own grid in Browse with its own path
 # (silo.browse.list.<key>); only the open one's is set, since Kodi loads a
 # grid's path even while the grid is hidden.
@@ -1447,7 +1447,7 @@ PERSONAL_KEYS = ('watchlist', 'favorites', 'history', 'comingsoon', 'boxsets')
 def avatar_menu():
     """Silo's profile menu: a card under the avatar, shown while it has focus;
     Down or OK goes in. Switch Profile is Kodi's own profile switch when Kodi
-    has profiles, else SiloKodiConnect's switch of the Silo profile."""
+    has profiles, else KodiConnectForSilo's switch of the Silo profile."""
     def personal(key):
         path = '%s?mode=widget&amp;section=%s' % (PLUGIN_URL, key)
         return (['SetProperty(silo.browse.type,%s,home)' % key, 'ClearProperty(silo.browse.letter,home)',
@@ -1566,7 +1566,7 @@ def tab(control_id, page, page_index):
 
 def hero_buttons():
     """Play (resume or the next episode) and More info for the hero's title."""
-    plugin = 'plugin://plugin.video.silokodiconnect/'
+    plugin = 'plugin://plugin.video.kodiconnectforsilo/'
     item = 'type=$VAR[SiloHeroType]&amp;dbid=$VAR[SiloHeroDbid]'
     row = '$INFO[%s]' % prop('silo.row')
     def button(control_id, label, icon, action, width):
@@ -2112,7 +2112,7 @@ def build():
             <onup>9000</onup>%(rows)s
         </control>
 
-        <!-- Before SiloKodiConnect has published any rows. -->
+        <!-- Before KodiConnectForSilo has published any rows. -->
         <control type="label">
             <left>%(x)d</left><top>%(rows_top)d</top>
             <width>1600</width><height>60</height>
@@ -2168,7 +2168,7 @@ def build():
 # The hero and marquee read from the row that last had focus (silo.row), so
 # they stay put while the menu bar has focus, as in Silo. Each entry is a
 # (condition, value) template; LI stands for that row's ListItem.
-# A Home card: an item SiloKodiConnect published as properties (rows.py).
+# A Home card: an item KodiConnectForSilo published as properties (rows.py).
 HOME_CARD = '!String.IsEmpty(LI.Property(home.type))'
 HERO_TITLE_TERM = '[!String.IsEmpty(Container(%(r)d).ListItem.Property(home.dbid)) + String.IsEmpty(Container(%(r)d).ListItem.Property(home.request.tmdb))] | [Integer.IsGreater(Container(%(r)d).ListItem.DBID,0) + [String.IsEqual(Container(%(r)d).ListItem.DBType,movie) | String.IsEqual(Container(%(r)d).ListItem.DBType,tvshow) | String.IsEqual(Container(%(r)d).ListItem.DBType,episode)]]'
 HERO_STATIC = {'SiloHeroType': 'home.type', 'SiloHeroDbid': 'home.dbid', 'SiloHeroArt': 'home.art.fanart', 'SiloLogoArt': 'home.art.clearlogo', 'SiloTitle': 'home.hero.title', 'SiloMetaLine': 'home.hero.meta', 'SiloHeroFacts': 'home.hero.facts', 'SiloHeroImdb': 'home.rating.imdb', 'SiloHeroTmdb': 'home.rating.tmdb', 'SiloHeroRtCritic': 'home.rating.rtcritic', 'SiloPlot': 'home.plot', 'SiloDetail': 'home.hero.detail', 'SiloMpaa': 'home.mpaa', 'SiloHeroTint': 'home.tint', 'SiloBadge1': 'home.badge1', 'SiloBadge2': 'home.badge2', 'SiloBadge3': 'home.badge3'}
@@ -2201,7 +2201,7 @@ HERO = [
                       (None, '$INFO[LI.Rating(imdb)]')]),
     ('SiloHeroTmdb', [('String.IsEqual(LI.DBType,episode)', ''),
                       ('!String.IsEmpty(LI.Property(silo.rating.tmdb))', '$INFO[LI.Property(silo.rating.tmdb)]'),
-                      # Kodi's own lists: SiloKodiConnect's extra (they load only the default rating).
+                      # Kodi's own lists: KodiConnectForSilo's extra (they load only the default rating).
                       ('!String.IsEmpty(LI.Art(silotmdb))', '$INFO[LI.Art(silotmdb)]'),
                       (None, '$INFO[LI.Rating(themoviedb)]')]),
     ('SiloHeroRtCritic', [('String.IsEqual(LI.DBType,episode)', ''),
@@ -2227,7 +2227,7 @@ HERO = [
                         'String.IsEmpty(LI.Property(home.request.library))', 'colors/white.png')]),
 ] + [('SiloStatusSeg%d' % n, [(HOME_CARD, '$INFO[LI.Property(home.status.seg%d)]' % n)]) for n in range(1, 5)] + [
     # A title from one of Kodi's own lists (Movies' Recently Added...) has no
-    # silo.* properties: SiloKodiConnect keeps its genre, cast, badges and tint
+    # silo.* properties: KodiConnectForSilo keeps its genre, cast, badges and tint
     # in the library as text in art entries (silogenre...), read only as text.
     # Kodi gives a library item those entries in any list, so the property wins.
     (name, [('!String.IsEmpty(LI.Property(silo.%s))' % key, '$INFO[LI.Property(silo.%s)]' % key),
@@ -2286,11 +2286,11 @@ CARDS = '''
 '''
 
 
-# Home's message before SiloKodiConnect has published any rows: it publishes
+# Home's message before KodiConnectForSilo has published any rows: it publishes
 # silokodi.signed_in as soon as its service starts.
 EMPTY_HOME = '''    <variable name="SiloEmptyHome">
-        <value condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Install SiloKodiConnect and sign in to Silo to fill this screen.</value>
-        <value condition="String.IsEqual(Window(Home).Property(silokodi.signed_in),false)">Sign in to Silo in SiloKodiConnect to fill this screen.</value>
+        <value condition="!System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">Install KodiConnectForSilo and sign in to Silo to fill this screen.</value>
+        <value condition="String.IsEqual(Window(Home).Property(silokodi.signed_in),false)">Sign in to Silo in KodiConnectForSilo to fill this screen.</value>
         <value>Loading Silo…</value>
     </variable>
 '''
@@ -2307,7 +2307,7 @@ def request_pill_variables():
     return out
 
 
-# A title's place in a chart row's first ten (SiloKodiConnect's place: any
+# A title's place in a chart row's first ten (KodiConnectForSilo's place: any
 # ranking row, numbered on its posters or not).
 RANK_OF = '[!String.IsEmpty(LI.Property(home.place)) | !String.IsEmpty(LI.Property(silo.place))]'
 NEW_OF = '[!String.IsEmpty(LI.Property(home.new)) | !String.IsEmpty(LI.Property(silo.new))]'
@@ -2332,7 +2332,7 @@ def hero_reason():
     return out + '    </variable>\n'
 
 
-# A title's scores kept as text art by SiloKodiConnect, for Kodi's own lists
+# A title's scores kept as text art by KodiConnectForSilo, for Kodi's own lists
 # (they load only a title's default rating).
 RATING_ART = {'themoviedb': 'silotmdb', 'rottentomatoes': 'silortcritic'}
 # Each rating source shown unless turned off (Skin settings > General): by Kodi's rating name.
@@ -2344,7 +2344,7 @@ RT_MARKS = (('SiloHeroRtCriticMark', 'rating.rtcritic', 'silortcritic', 'silo/rt
 
 def rt_list_marks(item, indent, colour):
     """Rotten Tomatoes' critics' mark with its score for a title in a list (Browse,
-    Kodi's own lists), from SiloKodiConnect's art extras: Kodi's lists load
+    Kodi's own lists), from KodiConnectForSilo's art extras: Kodi's lists load
     only a title's default rating."""
     out = ''
     for _, score, art, fresh, rotten in RT_MARKS:
@@ -2451,7 +2451,7 @@ def variables():
     out += rt_marks(rows)
     out += EMPTY_HOME + hero_reason()
     for name, entries in HERO:
-        # A Home card (SiloKodiConnect's published rows) carries its text ready.
+        # A Home card (KodiConnectForSilo's published rows) carries its text ready.
         if name in HERO_STATIC:
             entries = [(HOME_CARD, '$INFO[LI.Property(%s)]' % HERO_STATIC[name])] + entries
         out += '    <variable name="%s">\n' % name

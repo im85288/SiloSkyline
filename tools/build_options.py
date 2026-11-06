@@ -46,11 +46,11 @@ TABS = [
     ]),
     ('subtitles', 'Subtitles', [
         ('Subtitle settings', '', ['Dialog.Close(1180)', 'ActivateWindow(osdsubtitlesettings)']),
-        # Silo's subtitle providers for the playing file (SiloKodiConnect), else Kodi's subtitle add-ons.
+        # Silo's subtitle providers for the playing file (KodiConnectForSilo), else Kodi's subtitle add-ons.
         ('Search online', '', ['Dialog.Close(1180)',
-                               ('RunPlugin(plugin://plugin.video.silokodiconnect/?mode=subtitles)',
-                                'System.AddonIsEnabled(plugin.video.silokodiconnect)'),
-                               ('ActivateWindow(SubtitleSearch)', '!System.AddonIsEnabled(plugin.video.silokodiconnect)')]),
+                               ('RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=subtitles)',
+                                'System.AddonIsEnabled(plugin.video.kodiconnectforsilo)'),
+                               ('ActivateWindow(SubtitleSearch)', '!System.AddonIsEnabled(plugin.video.kodiconnectforsilo)')]),
     ], [
         ('Showing', '$VAR[SiloOptionsSubtitles]'),
     ]),
@@ -78,7 +78,7 @@ TABS = [
 ]
 
 
-# Tabs that list the playing video's tracks (SiloKodiConnect's tracks.py),
+# Tabs that list the playing video's tracks (KodiConnectForSilo's tracks.py),
 # with how many it publishes: the list on the left, settings on the right.
 TRACKS = {'audio': ('audio', 10), 'subtitles': ('sub', 30)}
 TRACK_H = 60
@@ -292,7 +292,7 @@ def build():
 <window type="dialog" id="%(window)d">
     <defaultcontrol always="true">101</defaultcontrol>
     <onload>ClearProperty(silo.options.tab,home)</onload>
-    <!-- SiloKodiConnect publishes the playing video's tracks (tracks.py). -->
+    <!-- KodiConnectForSilo publishes the playing video's tracks (tracks.py). -->
     <onload>NotifyAll(silokodi,tracks.refresh)</onload>
     <include>Animation_DialogPopupOpenClose</include>
     <controls>

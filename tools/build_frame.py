@@ -6,7 +6,7 @@ As Arctic Zephyr does, every screen shares one frame, so moving between them
 only changes what's in the panel:
 
 - a header top left: the Silo Skyline mark, the screen's title and a facts
-  line (SiloKodiConnect's silo.library.facts: films, series, episodes);
+  line (KodiConnectForSilo's silo.library.facts: films, series, episodes);
 - the time and date top right, level with the title (Kodi's own screens
   have a bottom strip of their own);
 - one rounded panel for the content;
@@ -117,7 +117,7 @@ def includes():
 	<include name="SiloTrailerCover">
 		<control type="group">
 			<!-- Up until the page is back (it clears the flag as it opens);
-			     SiloKodiConnect clears it after a few seconds if it isn't. -->
+			     KodiConnectForSilo clears it after a few seconds if it isn't. -->
 			<visible>!String.IsEmpty(Window(Home).Property(silokodi.trailer_playing))</visible>
 			<control type="image">
 				<left>0</left><top>0</top><width>1920</width><height>1080</height>
@@ -580,15 +580,15 @@ def skin_settings(text):
 \t\t\t\t\t<label>Top 10 rows</label>
 \t\t\t\t\t<label2>Numbered Home rows</label2>
 \t\t\t\t\t<include>DefaultSettingButton</include>
-\t\t\t\t\t<onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=top10)</onclick>
-\t\t\t\t\t<visible>System.HasAddon(plugin.video.silokodiconnect)</visible>
+\t\t\t\t\t<onclick>RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=top10)</onclick>
+\t\t\t\t\t<visible>System.HasAddon(plugin.video.kodiconnectforsilo)</visible>
 \t\t\t\t</control>
 \t\t\t\t<control type="radiobutton" id="795">
 \t\t\t\t\t<label>Theme music on show pages</label>
 \t\t\t\t\t<include>DefaultSettingButton</include>
 \t\t\t\t\t<selected>!Skin.HasSetting(SkylineNoThemeMusic)</selected>
 \t\t\t\t\t<onclick>Skin.ToggleSetting(SkylineNoThemeMusic)</onclick>
-\t\t\t\t\t<visible>System.HasAddon(plugin.video.silokodiconnect)</visible>
+\t\t\t\t\t<visible>System.HasAddon(plugin.video.kodiconnectforsilo)</visible>
 \t\t\t\t</control>
 \t\t\t\t<control type="radiobutton" id="796">
 \t\t\t\t\t<label>IMDb ratings</label>
@@ -621,7 +621,7 @@ def skin_settings(text):
 \t\t\t\t\t<include>DefaultSettingButton</include>
 \t\t\t\t\t<selected>!Skin.HasSetting(SkylineHideRequestsTab)</selected>
 \t\t\t\t\t<onclick>Skin.ToggleSetting(SkylineHideRequestsTab)</onclick>
-\t\t\t\t\t<visible>System.HasAddon(plugin.video.silokodiconnect)</visible>
+\t\t\t\t\t<visible>System.HasAddon(plugin.video.kodiconnectforsilo)</visible>
 \t\t\t\t</control>
 \t\t\t\t<control type="radiobutton" id="781">
 \t\t\t\t\t<label>TV tab</label>
@@ -1430,8 +1430,8 @@ def event_log_window():
 # The add-ons Skyline works with: (id, name, what it adds, where to get it when
 # it isn't in Kodi's repository, which InstallAddon can't reach).
 RECOMMENDED = [
-    ('plugin.video.silokodiconnect', 'SiloKodiConnect', 'Everything Silo: the rows, sync, requests and profiles',
-     'github.com/im85288/SiloKodiConnect/releases'),
+    ('plugin.video.kodiconnectforsilo', 'KodiConnectForSilo', 'Everything Silo: the rows, sync, requests and profiles',
+     'github.com/im85288/KodiConnectForSilo/releases'),
     ('service.upnext', 'Up Next', 'The next episode prompt, and Skip intro and Skip recap', ''),
     ('plugin.video.youtube', 'YouTube', 'Trailers (sign in to it for smooth playback)', ''),
     ('script.skinshortcuts', 'Skin Shortcuts', 'Your own items in the menu bar, with widgets',

@@ -67,9 +67,9 @@
 	</include>
 	<!-- Recommended add-ons' states (addon_states). -->
 	<variable name="SkylineAddonState0">
-		<value condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">Installed  ·  OK for settings</value>
-		<value condition="System.HasAddon(plugin.video.silokodiconnect)">Turned off  ·  OK turns it on</value>
-		<value>Get it from github.com/im85288/SiloKodiConnect/releases</value>
+		<value condition="System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">Installed  ·  OK for settings</value>
+		<value condition="System.HasAddon(plugin.video.kodiconnectforsilo)">Turned off  ·  OK turns it on</value>
+		<value>Get it from github.com/im85288/KodiConnectForSilo/releases</value>
 	</variable>
 	<variable name="SkylineAddonState1">
 		<value condition="System.AddonIsEnabled(service.upnext)">Installed  ·  OK for settings</value>
@@ -102,7 +102,7 @@
 	<include name="SiloTrailerCover">
 		<control type="group">
 			<!-- Up until the page is back (it clears the flag as it opens);
-			     SiloKodiConnect clears it after a few seconds if it isn't. -->
+			     KodiConnectForSilo clears it after a few seconds if it isn't. -->
 			<visible>!String.IsEmpty(Window(Home).Property(silokodi.trailer_playing))</visible>
 			<control type="image">
 				<left>0</left><top>0</top><width>1920</width><height>1080</height>

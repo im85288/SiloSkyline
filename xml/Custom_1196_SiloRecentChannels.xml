@@ -299,11 +299,11 @@
                 <visible allowhiddenfocus="true">!ControlGroup(5610).HasFocus()</visible>
                 <animation effect="fade" start="0" end="100" time="160">Visible</animation>
                 <scrolltime tween="cubic" easing="out">200</scrolltime>
-                <!-- SiloKodiConnect's recent channels: newest first, not the playing one, none
+                <!-- KodiConnectForSilo's recent channels: newest first, not the playing one, none
                      the viewer removed (the long-press menu); silokodi.recent_changed reloads it. -->
-                <content target="videos">plugin://plugin.video.silokodiconnect/?mode=recent_channels&amp;v=$INFO[Window(Home).Property(silokodi.recent_changed)]</content>
+                <content target="videos">plugin://plugin.video.kodiconnectforsilo/?mode=recent_channels&amp;v=$INFO[Window(Home).Property(silokodi.recent_changed)]</content>
                 <onclick>Dialog.Close(1196)</onclick>
-                <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=play_channel&amp;id=$INFO[ListItem.Property(silo.channelid)])</onclick>
+                <onclick>RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=play_channel&amp;id=$INFO[ListItem.Property(silo.channelid)])</onclick>
                 <itemlayout width="252" height="180">
                 <control type="group">
                     <control type="image">
@@ -365,7 +365,7 @@
                 <left>80</left><top>1035</top><width>1840</width><height>180</height>
                 <orientation>horizontal</orientation>
                 <visible>ControlGroup(5610).HasFocus()</visible>
-                <content target="videos">plugin://plugin.video.silokodiconnect/?mode=recent_channels&amp;v=$INFO[Window(Home).Property(silokodi.recent_changed)]</content>
+                <content target="videos">plugin://plugin.video.kodiconnectforsilo/?mode=recent_channels&amp;v=$INFO[Window(Home).Property(silokodi.recent_changed)]</content>
                 <itemlayout width="252" height="180">
                 <control type="group">
                     <control type="image">

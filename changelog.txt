@@ -73,5 +73,5 @@
 
 [B]0.1.0[/B]
 • First release: Estuary rebuilt as the Silo TV apps' Skyline layout
-• Home, Movies and Series pages built from the rows SiloKodiConnect publishes from Silo
+• Home, Movies and Series pages built from the rows KodiConnectForSilo publishes from Silo
 • Silo-style hero, rows and detail page; Inter font

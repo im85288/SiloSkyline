@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Silo Skyline: background progress (library scans, SiloKodiConnect's sync)
+<!-- Silo Skyline: background progress (library scans, KodiConnectForSilo's sync)
      as a Silo notice, top right under the menu bar: the task, its detail and
      a thin bar. Kodi fills 30 (heading), 31 (detail) and 32 (progress). -->
 <window>

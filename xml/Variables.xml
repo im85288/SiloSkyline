@@ -1531,8 +1531,8 @@
         <value condition="String.IsEmpty(Window(Home).Property(silo.row)) + String.IsEqual(Window(Home).Property(silo.page),custom) + $EXP[SiloRow5452] + Integer.IsGreater(Container(5452).NumItems,0) + !String.IsEmpty(Container(5452).ListItem.Art(silortcritic))">silo/rt_rotten.png</value>
     </variable>
     <variable name="SiloEmptyHome">
-        <value condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Install SiloKodiConnect and sign in to Silo to fill this screen.</value>
-        <value condition="String.IsEqual(Window(Home).Property(silokodi.signed_in),false)">Sign in to Silo in SiloKodiConnect to fill this screen.</value>
+        <value condition="!System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">Install KodiConnectForSilo and sign in to Silo to fill this screen.</value>
+        <value condition="String.IsEqual(Window(Home).Property(silokodi.signed_in),false)">Sign in to Silo in KodiConnectForSilo to fill this screen.</value>
         <value>Loading Silo…</value>
     </variable>
     <expression name="HasSiloHeroRank">[String.IsEqual(Window(Home).Property(silo.row),5001) + [!String.IsEmpty(Container(5001).ListItem.Property(home.place)) | !String.IsEmpty(Container(5001).ListItem.Property(silo.place))]] | [String.IsEqual(Window(Home).Property(silo.row),5002) + [!String.IsEmpty(Container(5002).ListItem.Property(home.place)) | !String.IsEmpty(Container(5002).ListItem.Property(silo.place))]] | [String.IsEqual(Window(Home).Property(silo.row),5003) + [!String.IsEmpty(Container(5003).ListItem.Property(home.place)) | !String.IsEmpty(Container(5003).ListItem.Property(silo.place))]] | [String.IsEqual(Window(Home).Property(silo.row),5004) + [!String.IsEmpty(Container(5004).ListItem.Property(home.place)) | !String.IsEmpty(Container(5004).ListItem.Property(silo.place))]] | [String.IsEqual(Window(Home).Property(silo.row),5005) + [!String.IsEmpty(Container(5005).ListItem.Property(home.place)) | !String.IsEmpty(Container(5005).ListItem.Property(silo.place))]] | [String.IsEqual(Window(Home).Property(silo.row),5006) + [!String.IsEmpty(Container(5006).ListItem.Property(home.place)) | !String.IsEmpty(Container(5006).ListItem.Property(silo.place))]] | [String.IsEqual(Window(Home).Property(silo.row),5007) + [!String.IsEmpty(Container(5007).ListItem.Property(home.place)) | !String.IsEmpty(Container(5007).ListItem.Property(silo.place))]] | [String.IsEqual(Window(Home).Property(silo.row),5008) + [!String.IsEmpty(Container(5008).ListItem.Property(home.place)) | !String.IsEmpty(Container(5008).ListItem.Property(silo.place))]] | [String.IsEqual(Window(Home).Property(silo.row),5009) + [!String.IsEmpty(Container(5009).ListItem.Property(home.place)) | !String.IsEmpty(Container(5009).ListItem.Property(silo.place))]] | [String.IsEqual(Window(Home).Property(silo.row),5010) + [!String.IsEmpty(Container(5010).ListItem.Property(home.place)) | !String.IsEmpty(Container(5010).ListItem.Property(silo.place))]] | [String.IsEqual(Window(Home).Property(silo.row),5011) + [!String.IsEmpty(Container(5011).ListItem.Property(home.place)) | !String.IsEmpty(Container(5011).ListItem.Property(silo.place))]] | [String.IsEqual(Window(Home).Property(silo.row),5012) + [!String.IsEmpty(Container(5012).ListItem.Property(home.place)) | !String.IsEmpty(Container(5012).ListItem.Property(silo.place))]] | [String.IsEqual(Window(Home).Property(silo.row),5013) + [!String.IsEmpty(Container(5013).ListItem.Property(home.place)) | !String.IsEmpty(Container(5013).ListItem.Property(silo.place))]] | [String.IsEqual(Window(Home).Property(silo.row),5014) + [!String.IsEmpty(Container(5014).ListItem.Property(home.place)) | !String.IsEmpty(Container(5014).ListItem.Property(silo.place))]] | [String.IsEqual(Window(Home).Property(silo.row),5015) + [!String.IsEmpty(Container(5015).ListItem.Property(home.place)) | !String.IsEmpty(Container(5015).ListItem.Property(silo.place))]] | [String.IsEqual(Window(Home).Property(silo.row),5016) + [!String.IsEmpty(Container(5016).ListItem.Property(home.place)) | !String.IsEmpty(Container(5016).ListItem.Property(silo.place))]] | [String.IsEqual(Window(Home).Property(silo.row),5017) + [!String.IsEmpty(Container(5017).ListItem.Property(home.place)) | !String.IsEmpty(Container(5017).ListItem.Property(silo.place))]] | [String.IsEqual(Window(Home).Property(silo.row),5018) + [!String.IsEmpty(Container(5018).ListItem.Property(home.place)) | !String.IsEmpty(Container(5018).ListItem.Property(silo.place))]]</expression>
@@ -7808,7 +7808,7 @@
         <value condition="String.IsEqual(ListItem.VideoResolution,4K)"></value>
         <value>P</value>
     </variable>
-    <!-- On the watchlist: a toggle on this page (SiloKodiConnect sets
+    <!-- On the watchlist: a toggle on this page (KodiConnectForSilo sets
          Window(movieinformation) silo.watchlist.for/.now), else as it opened. -->
     <expression name="SiloOnWatchlist">[String.IsEqual(Window(movieinformation).Property(silo.watchlist.for),ListItem.Property(silo.content_id)) + String.IsEqual(Window(movieinformation).Property(silo.watchlist.now),true)] | [!String.IsEqual(Window(movieinformation).Property(silo.watchlist.for),ListItem.Property(silo.content_id)) + String.IsEqual(ListItem.Property(silo.watchlist),true)]</expression>
     <variable name="SiloWatchlistIcon">
@@ -7859,7 +7859,7 @@
         <value condition="Integer.IsEqual(ListItem.AudioChannels,8)"> 7.1</value>
         <value>$INFO[ListItem.AudioChannels, ,]</value>
     </variable>
-    <!-- The rating named by its source, as Silo shows it (SiloKodiConnect stores
+    <!-- The rating named by its source, as Silo shows it (KodiConnectForSilo stores
          IMDb's, else TMDB's). -->
     <variable name="SiloDetailRating">
         <value condition="!String.IsEmpty(ListItem.Rating(imdb))">$INFO[ListItem.Rating(imdb),  [COLOR 80EDEDED]·[/COLOR]  [COLOR BFEDEDED]IMDb[/COLOR] [B],[/B]]</value>
@@ -7873,7 +7873,7 @@
         <value condition="String.IsEqual(ListItem.DBType,tvshow) + Integer.IsEqual(Container(60).NumItems,1)">  [COLOR 80EDEDED]·[/COLOR]  1 Season</value>
         <value condition="String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(Container(60).NumItems,1)">$INFO[Container(60).NumItems,  [COLOR 80EDEDED]·[/COLOR]  , Seasons]</value>
     </variable>
-    <!-- Silo's first two genres ("Drama, Crime"), from SiloKodiConnect. -->
+    <!-- Silo's first two genres ("Drama, Crime"), from KodiConnectForSilo. -->
     <!-- The Watched button: its icon and name (a show's marks every episode). -->
     <variable name="SiloWatchedIcon">
         <value condition="[String.IsEqual(Window(movieinformation).Property(silo.marked),watched) | [String.IsEmpty(Window(movieinformation).Property(silo.marked)) + [Integer.IsGreater(ListItem.PlayCount,0) | [String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.Property(TotalEpisodes),0) + Integer.IsEqual(ListItem.Property(UnWatchedEpisodes),0)]]]]">silo/watched_on.png</value>
@@ -7914,13 +7914,13 @@
     <!-- Silo Skyline browse (tools/build_browse.py) -->
     <expression name="SiloBrowseFans">Container.Content(sets) + String.IsEqual(Container.Property(silo.fans),true)</expression>
     <expression name="SiloBrowseChips">Container.Content(genres)</expression>
-    <expression name="SiloBrowseAddonVideos">Container.Content(videos) + String.StartsWith(Container.FolderPath,plugin://) + !String.StartsWith(Container.FolderPath,plugin://plugin.video.silokodiconnect)</expression>
+    <expression name="SiloBrowseAddonVideos">Container.Content(videos) + String.StartsWith(Container.FolderPath,plugin://) + !String.StartsWith(Container.FolderPath,plugin://plugin.video.kodiconnectforsilo)</expression>
     <expression name="SiloBrowseGrid">[Container.Content(movies) | Container.Content(tvshows) | Container.Content(sets) | Container.Content(seasons) | Container.Content(videos)] + !$EXP[SiloBrowseFans] + !$EXP[SiloBrowseAddonVideos]</expression>
     <expression name="SiloBrowseEpisodes">Container.Content(episodes)</expression>
-    <expression name="SiloBrowseExtra">[Container.Content(episodes) | Container.Content(movies) | Container.Content(tvshows) | Container.Content(videos)] + String.StartsWith(Container.FolderPath,plugin://) + !String.StartsWith(Container.FolderPath,plugin://plugin.video.silokodiconnect)</expression>
+    <expression name="SiloBrowseExtra">[Container.Content(episodes) | Container.Content(movies) | Container.Content(tvshows) | Container.Content(videos)] + String.StartsWith(Container.FolderPath,plugin://) + !String.StartsWith(Container.FolderPath,plugin://plugin.video.kodiconnectforsilo)</expression>
     <!-- Films and shows: the views they have beside the poster grid (hero, list). -->
     <expression name="SiloBrowseTitles">[Container.Content(movies) | Container.Content(tvshows) | Container.Content(videos)] + !$EXP[SiloBrowseFans] + !$EXP[SiloBrowseAddonVideos]</expression>
-    <!-- The genre in a view's facts: SiloKodiConnect's first (kept in the library), else Kodi's. -->
+    <!-- The genre in a view's facts: KodiConnectForSilo's first (kept in the library), else Kodi's. -->
     <variable name="SiloViewGenre">
         <value condition="!String.IsEmpty(ListItem.Art(silogenre))">$INFO[ListItem.Art(silogenre),  ·  ,]</value>
         <value>$INFO[ListItem.Genre,  ·  ,]</value>
@@ -7932,15 +7932,15 @@
     <variable name="SiloBrowseFacts">
         <value condition="$EXP[SiloBrowseAddonVideos] + Integer.IsGreater(Container.NumItems,0)">$INFO[Container.NumItems,, videos]</value>
         <!-- Another add-on's folder: what's in it, not Silo's library. -->
-        <value condition="String.StartsWith(Container.FolderPath,plugin://) + !String.StartsWith(Container.FolderPath,plugin://plugin.video.silokodiconnect) + Integer.IsEqual(Container.NumItems,1)">1 item</value>
-        <value condition="String.StartsWith(Container.FolderPath,plugin://) + !String.StartsWith(Container.FolderPath,plugin://plugin.video.silokodiconnect)">$INFO[Container.NumItems,, items]</value>
+        <value condition="String.StartsWith(Container.FolderPath,plugin://) + !String.StartsWith(Container.FolderPath,plugin://plugin.video.kodiconnectforsilo) + Integer.IsEqual(Container.NumItems,1)">1 item</value>
+        <value condition="String.StartsWith(Container.FolderPath,plugin://) + !String.StartsWith(Container.FolderPath,plugin://plugin.video.kodiconnectforsilo)">$INFO[Container.NumItems,, items]</value>
         <value condition="Integer.IsGreater(Container.NumItems,0) + [$EXP[SiloBrowseGrid] | $EXP[SiloBrowseEpisodes]]">$INFO[Container.NumItems,, titles]</value>
         <value condition="$EXP[SiloBrowseFans]">$INFO[Container.NumItems,, collections]</value>
         <value condition="$EXP[SiloBrowseChips]">$INFO[Container.NumItems,, genres]</value>
         <value>$INFO[Window(Home).Property(silo.library.facts)]</value>
     </variable>
     <variable name="SiloBrowseTitle">
-        <value condition="String.IsEqual(Container.FolderPath,plugin://plugin.video.silokodiconnect/)">SiloKodiConnect</value>
+        <value condition="String.IsEqual(Container.FolderPath,plugin://plugin.video.kodiconnectforsilo/)">KodiConnectForSilo</value>
         <value condition="!String.IsEmpty(Container.PluginCategory)">$INFO[Container.PluginCategory]</value>
         <value condition="String.StartsWith(Container.FolderPath,videodb://movies/titles/)">Movies</value>
         <value condition="String.StartsWith(Container.FolderPath,videodb://tvshows/titles/) + Container.Content(tvshows)">Series</value>
@@ -7969,7 +7969,7 @@
         <value condition="Integer.IsGreater(ListItem.Episode,0)">S$INFO[ListItem.Season] E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</value>
         <value>$INFO[ListItem.Label]</value>
     </variable>
-    <!-- List rows: SiloKodiConnect's menu names an icon of the skin's own. -->
+    <!-- List rows: KodiConnectForSilo's menu names an icon of the skin's own. -->
     <variable name="SiloRowIcon">
         <value condition="String.IsEqual(ListItem.Property(silo.menu.icon),play)">icons/infodialogs/play.png</value>
         <value condition="String.IsEqual(ListItem.Property(silo.menu.icon),rows)">icons/sidemenu/tv.png</value>
@@ -8187,7 +8187,7 @@
 
     <!-- Silo Skyline library (tools/build_library.py) -->
     <!-- A grid card's line under its title: its own (Coming Soon's date and
-         episode, SiloKodiConnect's silo.caption), else its year. -->
+         episode, KodiConnectForSilo's silo.caption), else its year. -->
     <variable name="SiloBrowseCardSub">
         <value condition="[Integer.IsGreater(ListItem.SetId,0) + [String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/) + !String.StartsWith(Window(Home).Property(silo.browse.path),videodb://movies/sets/)]]">$INFO[ListItem.Art(set.siloyears)]</value>
         <value condition="String.IsEqual(ListItem.DBType,set)">$INFO[ListItem.Art(siloyears)]</value>
@@ -8374,14 +8374,14 @@
         <value>[COLOR D9EDEDED]$INFO[ListItem.Label][/COLOR]</value>
     </variable>
     <variable name="SiloSchedulePath">
-        <value condition="[Control.HasFocus(14) | Control.HasFocus(13) | String.IsEqual(Window(Home).Property(silo.sched.want),1)]">plugin://plugin.video.silokodiconnect/?mode=schedule&amp;full=1&amp;number=$INFO[Window(Home).Property(silo.sched.number)]&amp;name=$INFO[Window(Home).Property(silo.sched.name)]</value>
-        <value condition="Control.HasFocus(11) + System.IdleTime(1)">plugin://plugin.video.silokodiconnect/?mode=schedule&amp;full=1&amp;number=$INFO[Container(11).ListItem.ChannelNumberLabel]&amp;name=$INFO[Container(11).ListItem.ChannelName]</value>
-        <value condition="!String.IsEmpty(Window(Home).Property(silo.sched.number))">plugin://plugin.video.silokodiconnect/?mode=schedule&amp;full=1&amp;number=$INFO[Window(Home).Property(silo.sched.number)]&amp;name=$INFO[Window(Home).Property(silo.sched.name)]</value>
+        <value condition="[Control.HasFocus(14) | Control.HasFocus(13) | String.IsEqual(Window(Home).Property(silo.sched.want),1)]">plugin://plugin.video.kodiconnectforsilo/?mode=schedule&amp;full=1&amp;number=$INFO[Window(Home).Property(silo.sched.number)]&amp;name=$INFO[Window(Home).Property(silo.sched.name)]</value>
+        <value condition="Control.HasFocus(11) + System.IdleTime(1)">plugin://plugin.video.kodiconnectforsilo/?mode=schedule&amp;full=1&amp;number=$INFO[Container(11).ListItem.ChannelNumberLabel]&amp;name=$INFO[Container(11).ListItem.ChannelName]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(silo.sched.number))">plugin://plugin.video.kodiconnectforsilo/?mode=schedule&amp;full=1&amp;number=$INFO[Window(Home).Property(silo.sched.number)]&amp;name=$INFO[Window(Home).Property(silo.sched.name)]</value>
     </variable>
     <variable name="SiloScheduleDaysPath">
-        <value condition="[Control.HasFocus(14) | Control.HasFocus(13) | String.IsEqual(Window(Home).Property(silo.sched.want),1)]">plugin://plugin.video.silokodiconnect/?mode=schedule_days&amp;number=$INFO[Window(Home).Property(silo.sched.number)]&amp;name=$INFO[Window(Home).Property(silo.sched.name)]</value>
-        <value condition="Control.HasFocus(11) + System.IdleTime(1)">plugin://plugin.video.silokodiconnect/?mode=schedule_days&amp;number=$INFO[Container(11).ListItem.ChannelNumberLabel]&amp;name=$INFO[Container(11).ListItem.ChannelName]</value>
-        <value condition="!String.IsEmpty(Window(Home).Property(silo.sched.number))">plugin://plugin.video.silokodiconnect/?mode=schedule_days&amp;number=$INFO[Window(Home).Property(silo.sched.number)]&amp;name=$INFO[Window(Home).Property(silo.sched.name)]</value>
+        <value condition="[Control.HasFocus(14) | Control.HasFocus(13) | String.IsEqual(Window(Home).Property(silo.sched.want),1)]">plugin://plugin.video.kodiconnectforsilo/?mode=schedule_days&amp;number=$INFO[Window(Home).Property(silo.sched.number)]&amp;name=$INFO[Window(Home).Property(silo.sched.name)]</value>
+        <value condition="Control.HasFocus(11) + System.IdleTime(1)">plugin://plugin.video.kodiconnectforsilo/?mode=schedule_days&amp;number=$INFO[Container(11).ListItem.ChannelNumberLabel]&amp;name=$INFO[Container(11).ListItem.ChannelName]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(silo.sched.number))">plugin://plugin.video.kodiconnectforsilo/?mode=schedule_days&amp;number=$INFO[Window(Home).Property(silo.sched.number)]&amp;name=$INFO[Window(Home).Property(silo.sched.name)]</value>
     </variable>
     <variable name="SiloQuickNow">
         <value condition="String.IsEmpty(ListItem.Title)">No information</value>

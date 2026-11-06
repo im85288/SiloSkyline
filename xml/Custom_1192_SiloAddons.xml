@@ -108,13 +108,13 @@
 			</focusedlayout>
 			<content>
 				<item>
-					<label>SiloKodiConnect</label>
+					<label>KodiConnectForSilo</label>
 					<label2>$VAR[SkylineAddonState0]</label2>
-					<icon>$INFO[System.AddonIcon(plugin.video.silokodiconnect)]</icon>
+					<icon>$INFO[System.AddonIcon(plugin.video.kodiconnectforsilo)]</icon>
 					<property name="about">Everything Silo: the rows, sync, requests and profiles</property>
-					<onclick condition="!System.HasAddon(plugin.video.silokodiconnect)">noop</onclick>
-					<onclick condition="System.HasAddon(plugin.video.silokodiconnect) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">EnableAddon(plugin.video.silokodiconnect)</onclick>
-					<onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">Addon.OpenSettings(plugin.video.silokodiconnect)</onclick>
+					<onclick condition="!System.HasAddon(plugin.video.kodiconnectforsilo)">noop</onclick>
+					<onclick condition="System.HasAddon(plugin.video.kodiconnectforsilo) + !System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">EnableAddon(plugin.video.kodiconnectforsilo)</onclick>
+					<onclick condition="System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">Addon.OpenSettings(plugin.video.kodiconnectforsilo)</onclick>
 				</item>
 				<item>
 					<label>Up Next</label>

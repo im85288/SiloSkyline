@@ -113,12 +113,12 @@
                     <width>1838</width><height>352</height>
                     <orientation>horizontal</orientation>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
-                    <!-- Through SiloKodiConnect, when it is there, so the page has
+                    <!-- Through KodiConnectForSilo, when it is there, so the page has
                          Silo's details and More Like This, as from Home. -->
-                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
-                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=set&amp;dbid=$INFO[ListItem.SetId])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">Action(Info)</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=set&amp;dbid=$INFO[ListItem.SetId])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">Action(Info)</onclick>
                     <ondown condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)]">SetFocus(201)</ondown>
                     <ondown condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)]">SetFocus(202)</ondown>
                     <ondown condition="Integer.IsGreater(Container(203).NumItems,0) + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)]">SetFocus(203)</ondown>
@@ -253,12 +253,12 @@
                     <width>1838</width><height>352</height>
                     <orientation>horizontal</orientation>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
-                    <!-- Through SiloKodiConnect, when it is there, so the page has
+                    <!-- Through KodiConnectForSilo, when it is there, so the page has
                          Silo's details and More Like This, as from Home. -->
-                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
-                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">Action(Info)</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">Action(Info)</onclick>
                     <onup condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(204).NumItems,0)]">SetFocus(204)</onup>
                     <ondown condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)]">SetFocus(202)</ondown>
                     <ondown condition="Integer.IsGreater(Container(203).NumItems,0) + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)]">SetFocus(203)</ondown>
@@ -291,12 +291,12 @@
                     <width>1838</width><height>352</height>
                     <orientation>horizontal</orientation>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
-                    <!-- Through SiloKodiConnect, when it is there, so the page has
+                    <!-- Through KodiConnectForSilo, when it is there, so the page has
                          Silo's details and More Like This, as from Home. -->
-                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
-                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">Action(Info)</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">Action(Info)</onclick>
                     <onup condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)]">SetFocus(201)</onup>
                     <onup condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(204).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)]">SetFocus(204)</onup>
                     <ondown condition="Integer.IsGreater(Container(203).NumItems,0)">SetFocus(203)</ondown>
@@ -329,17 +329,17 @@
                     <width>1838</width><height>352</height>
                     <orientation>horizontal</orientation>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
-                    <!-- Through SiloKodiConnect, when it is there, so the page has
+                    <!-- Through KodiConnectForSilo, when it is there, so the page has
                          Silo's details and More Like This, as from Home. -->
-                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
-                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">Action(Info)</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">Action(Info)</onclick>
                     <onup condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)]">SetFocus(202)</onup>
                     <onup condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)]">SetFocus(201)</onup>
                     <onup condition="[!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(204).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)]">SetFocus(204)</onup>
                     <onup condition="![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(202).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(201).NumItems,0)] + ![!String.IsEqual(Window(Home).Property(silo.search.mode),requests) + Integer.IsGreater(Container(204).NumItems,0)]">SetFocus(100)</onup>
-                    <content target="videos">plugin://plugin.video.silokodiconnect/?mode=requests&amp;search=$INFO[Skin.String(silo.search)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
+                    <content target="videos">plugin://plugin.video.kodiconnectforsilo/?mode=requests&amp;search=$INFO[Skin.String(silo.search)]&amp;refresh=$INFO[Window(Home).Property(silokodi.library_updated)]</content>
                     <itemlayout width="216" height="352">
                     <include>SiloCardPoster</include>
                     </itemlayout>

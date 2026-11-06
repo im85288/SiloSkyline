@@ -6,7 +6,7 @@ Movies' and Series' Browse (their tab's dropdown) open it with
 Window(Home).Property(silo.browse.type) movies or tvshows and
 silo.browse.path the library folder to list. It is Silo's grid: six large
 posters to a row (their rating is in Silo's art) with a watched tick, the title and year
-under each; selecting one opens its details page (through SiloKodiConnect,
+under each; selecting one opens its details page (through KodiConnectForSilo,
 as from Home), not Kodi's play-or-open. On the right, Silo's A-Z: a column of
 dots that opens into letters when it has focus; a letter shows only the
 titles from it (a leading "The", "A" or "An" set aside), All shows them all.
@@ -33,7 +33,7 @@ GRID_ID, AZ_ID = 50, 60
 # Each list has its own grid: Kodi reopens a grid on the title last selected
 # in it, so a shared one would open History on a title picked in Favorites.
 PERSONAL = {'watchlist': ('Watchlist', 51), 'favorites': ('Favorites', 52), 'history': ('History', 53),
-            # Silo's calendar: each started show's next episode (SiloKodiConnect).
+            # Silo's calendar: each started show's next episode (KodiConnectForSilo).
             'comingsoon': ('Coming Soon', 54),
             # Silo's box sets (Kodi's movie sets): OK opens a box set's page.
             'boxsets': ('Box sets', 62)}
@@ -77,12 +77,12 @@ HERO_ID, LIST_VIEW_ID = 57, 58
 VIEW_ID, VIEW_LIST_ID = 72, 73
 # Infuse's Unwatched filter: a pill left of View, kept for every Browse list.
 UNWATCHED_ID = 74
-# Shuffle (SiloKodiConnect's mode=shuffle): a round button left of Show, for films and series.
+# Shuffle (KodiConnectForSilo's mode=shuffle): a round button left of Show, for films and series.
 SHUFFLE_ID = 75
 SHUFFLE_SHOWN = ('[String.IsEqual(%s,movies) | String.IsEqual(%s,tvshows)] + String.IsEmpty(%s) + '
-                 'System.AddonIsEnabled(plugin.video.silokodiconnect)')
+                 'System.AddonIsEnabled(plugin.video.kodiconnectforsilo)')
 UNWATCHED = 'Skin.HasSetting(silo.unwatched)'
-# Silo's box sets in a films grid: SiloKodiConnect tags each box set's films but
+# Silo's box sets in a films grid: KodiConnectForSilo tags each box set's films but
 # its first by title, which the grid hides (BOX_SET_MEMBER, kodidb.py); the
 # first stands for the box set there, with the set's art, as Silo's grouped
 # browse. Not in a set's own folder, which lists them all.
@@ -148,7 +148,7 @@ def letter_path(kind, letter):
 
 def box_set_marks(width, height, indent=16, visible=None):
     """A box set card's marks, as Silo's: BOX SET top left, the film count
-    bottom right (SiloKodiConnect's set art 'silocount')."""
+    bottom right (KodiConnectForSilo's set art 'silocount')."""
     pad = ' ' * indent
     return '''
 %(p)s<control type="group">
@@ -323,11 +323,11 @@ def panel(control_id, content, right, visible, up='noop', hero=False, left='<onl
             %(left)s
             <onup>%(up)s</onup>
             <scrolltime tween="cubic" easing="out">280</scrolltime>
-            <!-- Details, not Kodi's play or open (SiloKodiConnect's info page, else Kodi's). -->
-            <!-- A box set's card opens the box set (SiloKodiConnect's page for Kodi's movie set). -->
-            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + %(box)s">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=set&amp;dbid=$INFO[ListItem.SetId])</onclick>
-            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + !%(box)s">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
-            <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
+            <!-- Details, not Kodi's play or open (KodiConnectForSilo's info page, else Kodi's). -->
+            <!-- A box set's card opens the box set (KodiConnectForSilo's page for Kodi's movie set). -->
+            <onclick condition="System.AddonIsEnabled(plugin.video.kodiconnectforsilo) + %(box)s">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=set&amp;dbid=$INFO[ListItem.SetId])</onclick>
+            <onclick condition="System.AddonIsEnabled(plugin.video.kodiconnectforsilo) + !%(box)s">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+            <onclick condition="!System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">Action(Info)</onclick>
             <itemlayout width="%(iw)d" height="%(ih)d">%(card)s
             </itemlayout>
             <focusedlayout width="%(iw)d" height="%(ih)d">%(card_focused)s
@@ -513,7 +513,7 @@ def marks(item, indent):
     """IMDb's and TMDB's marks with their scores (as the hero's), for item."""
     out = ''
     for rating, mark, width, height, top in (('imdb', 'silo/imdb.png', 60, 28, 6), ('themoviedb', 'silo/tmdb.png', 165, 30, 5)):
-        # TMDB's from SiloKodiConnect's extras: Kodi's lists load only the default rating.
+        # TMDB's from KodiConnectForSilo's extras: Kodi's lists load only the default rating.
         score = ('%s.Art(silotmdb)' % item) if rating == 'themoviedb' else '%s.Rating(%s)' % (item, rating)
         out += """
 %(i)s<control type="image">
@@ -552,7 +552,7 @@ def title_art(item, left, top, width, height, hidden='false'):
         </control>""" % {'x': left, 'y': top, 'w': width, 'h': height, 'item': item, 'text': TEXT, 'hidden': hidden}
 
 
-# A title's facts as the hero's: year, runtime (a film), genre (SiloKodiConnect's
+# A title's facts as the hero's: year, runtime (a film), genre (KodiConnectForSilo's
 # first, kept in the library as silogenre), and its age rating.
 def facts(item):
     return ('$INFO[%(i)s.Mpaa,,  ·  ]$INFO[%(i)s.Year]$INFO[%(i)s.Duration(mins),  ·  , min]'
@@ -651,8 +651,8 @@ def view_controls():
             <texturefocus border="28" colordiffuse="%(text)s">silo/pill.png</texturefocus>
             <texturenofocus border="28" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
             <visible>%(shuffle_shown)s</visible>
-            <onclick condition="String.IsEqual(%(type)s,movies)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=shuffle&amp;scope=movies)</onclick>
-            <onclick condition="String.IsEqual(%(type)s,tvshows)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=shuffle&amp;scope=tvshows)</onclick>
+            <onclick condition="String.IsEqual(%(type)s,movies)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=shuffle&amp;scope=movies)</onclick>
+            <onclick condition="String.IsEqual(%(type)s,tvshows)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=shuffle&amp;scope=tvshows)</onclick>
 %(unwatched_down)s            <onleft>%(sort)d</onleft><onright>%(unwatched)d</onright><onup>noop</onup>
         </control>
         <control type="image">
@@ -715,7 +715,7 @@ def view_controls():
         <control type="group">
             <visible>!%(personal)s + %(is_hero)s</visible>%(hero_title)s
             <!-- A box set: its name, "Box set · 8 films · 2001 – 2011" and overview
-                 (SiloKodiConnect's set art), as Silo's box set page. -->
+                 (KodiConnectForSilo's set art), as Silo's box set page. -->
             <control type="label">
                 <left>%(sx)d</left><top>236</top><width>1200</width><height>130</height>
                 <aligny>bottom</aligny>
@@ -810,10 +810,10 @@ def view_controls():
             <visible>!%(personal)s + %(is_list)s</visible>
             <onup>%(sort)d</onup><onright>%(az)d</onright><onleft>noop</onleft>
             <scrolltime tween="cubic" easing="out">200</scrolltime>
-            <!-- A box set's card opens the box set (SiloKodiConnect's page for Kodi's movie set). -->
-            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + %(box)s">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=set&amp;dbid=$INFO[ListItem.SetId])</onclick>
-            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + !%(box)s">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
-            <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
+            <!-- A box set's card opens the box set (KodiConnectForSilo's page for Kodi's movie set). -->
+            <onclick condition="System.AddonIsEnabled(plugin.video.kodiconnectforsilo) + %(box)s">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=set&amp;dbid=$INFO[ListItem.SetId])</onclick>
+            <onclick condition="System.AddonIsEnabled(plugin.video.kodiconnectforsilo) + !%(box)s">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+            <onclick condition="!System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">Action(Info)</onclick>
             <itemlayout width="%(lvw)d" height="%(lrow)d">%(lrow_normal)s
             </itemlayout>
             <focusedlayout width="%(lvw)d" height="%(lrow)d">%(lrow_focused)s
@@ -902,8 +902,8 @@ def empty_note(key, list_id):
 
 # Silo's collections, here rather than in Kodi's library window (where OK
 # plays): silo.browse.type collections shows the fan cards (silo.browse.list.collections,
-# SiloKodiConnect's mode=collections); one chosen, or one from Home's Collections
-# row, is type collection: its titles by name with the A-Z (SiloKodiConnect's
+# KodiConnectForSilo's mode=collections); one chosen, or one from Home's Collections
+# row, is type collection: its titles by name with the A-Z (KodiConnectForSilo's
 # jump), OK opening details. A card opens its collection in a window of its
 # own (COLLECTION_WINDOW, this window again), so Kodi's Back returns to the
 # cards: Back in a window always closes it, whatever a control's onback does.
@@ -996,7 +996,7 @@ def arrange(text):
     text = re.sub(r'        <!-- (HERO BACKDROP|DROPDOWN) -->\n.*?        <!-- END \1 -->\n', '', text, flags=re.S)
     frame = '        <include content="SiloFrame">'
     text = text.replace(frame, ''.join(backdrops) + frame, 1)
-    spinner = '        <!-- A list from SiloKodiConnect still loading. -->'
+    spinner = '        <!-- A list from KodiConnectForSilo still loading. -->'
     return text.replace(spinner, ''.join(dropdowns) + spinner, 1)
 
 
@@ -1038,7 +1038,7 @@ def build():
             <content>%(items)s
             </content>
         </control>
-        <!-- A list from SiloKodiConnect still loading. -->
+        <!-- A list from KodiConnectForSilo still loading. -->
         <control type="image">
             <left>928</left><top>508</top><width>64</width><height>64</height>
             <texture colordiffuse="99EDEDED">silo/spinner_arc.png</texture>
@@ -1173,7 +1173,7 @@ def filter_variables():
     Unwatched is on, and for a films grid always (its box sets' other films
     hidden): Kodi's filter option, '&' when the path has a query."""
     out = '''    <!-- A grid card's line under its title: its own (Coming Soon's date and
-         episode, SiloKodiConnect's silo.caption), else its year. -->
+         episode, KodiConnectForSilo's silo.caption), else its year. -->
     <variable name="SiloBrowseCardSub">
         <value condition="%(box)s">$INFO[ListItem.Art(set.siloyears)]</value>
         <value condition="String.IsEqual(ListItem.DBType,set)">$INFO[ListItem.Art(siloyears)]</value>
@@ -1250,7 +1250,7 @@ TIMERS = '''    <timer>
                        for c, a in focus_view('SetFocus(%d,0,absolute)')),
        'focus': ''.join('        <onstop condition="%s + %s">%s</onstop>\n' % (BROWSE_ACTIVE, c, a)
                         for c, a in focus_view())}
-# A list from SiloKodiConnect can still be loading as the window opens, and
+# A list from KodiConnectForSilo can still be loading as the window opens, and
 # Kodi can't focus an empty list (its onload SetFocus fails and focus is
 # lost): focus each one once it has items, unless something of it has focus.
 FOCUS_WHEN_LOADED = ([('collections', 56), ('collection', 55), ('genres', GENRES_ID)]

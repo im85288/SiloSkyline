@@ -29,7 +29,7 @@
                     <onright>11</onright>
                     <onleft>noop</onleft>
                     <onback>11</onback>
-                    <!-- The guide follows the list as it moves (SiloKodiConnect); OK goes into its channels. -->
+                    <!-- The guide follows the list as it moves (KodiConnectForSilo); OK goes into its channels. -->
                     <onclick>SetFocus(11)</onclick>
                     <content target="videos">pvr://channels/tv/</content>
                     <itemlayout width="460" height="76">
@@ -101,7 +101,7 @@
                 </control>
                 <control type="fixedlist" id="11">
                     <left>0</left><top>110</top><width>640</width><height>954</height>
-                    <!-- Left: the groups (SiloKodiConnect puts the list on the guide's own). -->
+                    <!-- Left: the groups (KodiConnectForSilo puts the list on the guide's own). -->
                     <onleft>SetFocus(15)</onleft>
                     <!-- Right: into this channel's whole schedule, catch-up included (TiviMate's). -->
                     <onright>SetProperty(silo.sched.number,$INFO[Container(11).ListItem.ChannelNumberLabel],home)</onright>
@@ -283,7 +283,7 @@
                         <textcolor>FFEDEDED</textcolor>
                         <label>$INFO[Container(11).ListItem.ChannelNumberLabel,,  ·  ]$INFO[Container(11).ListItem.ChannelName]</label>
                     </control>
-                    <!-- SiloKodiConnect's service publishes the focused channel's rows (its
+                    <!-- KodiConnectForSilo's service publishes the focused channel's rows (its
                          quick.py; a plugin per channel took most of a second to start). Plain
                          rows, not a list: Kodi refreshed a static list's items once a second. -->
                     <control type="group">
@@ -1285,7 +1285,7 @@
                     <ondown>noop</ondown>
                     <content target="videos">$VAR[SiloSchedulePath]</content>
                     <onclick condition="!String.IsEmpty(ListItem.Property(silo.when)) + !String.IsEqual(ListItem.Property(silo.when),future)">Dialog.Close(pvrosdchannels)</onclick>
-                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.when)) + !String.IsEqual(ListItem.Property(silo.when),future)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=play_broadcast&amp;id=$INFO[ListItem.Property(silo.broadcastid)]&amp;channel=$INFO[ListItem.Property(silo.channelid)]&amp;when=$INFO[ListItem.Property(silo.when)])</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.when)) + !String.IsEqual(ListItem.Property(silo.when),future)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=play_broadcast&amp;id=$INFO[ListItem.Property(silo.broadcastid)]&amp;channel=$INFO[ListItem.Property(silo.channelid)]&amp;when=$INFO[ListItem.Property(silo.when)])</onclick>
                     <itemlayout width="900" height="74">
                     <control type="group">
                         <visible>String.IsEqual(ListItem.Property(silo.header),1)</visible>

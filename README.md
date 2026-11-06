@@ -1,7 +1,7 @@
 # Skyline
 
 Skyline is a Kodi skin laid out like the [Silo](https://github.com/Silo-Server/silo-server) TV apps' Skyline home, for
-Kodi 21 (Omega). It works with [SiloKodiConnect](https://github.com/im85288/SiloKodiConnect), which puts a
+Kodi 21 (Omega). It works with [KodiConnectForSilo](https://github.com/im85288/KodiConnectForSilo), which puts a
 Silo server's movies and TV shows into Kodi's library: the skin builds its pages from the rows on your Silo
 home screen, so they follow whatever Silo shows.
 
@@ -15,7 +15,7 @@ Community project: not made or endorsed by the Silo team.
   into the page; its clear logo, facts (age rating, year or episode, genre, IMDb, TMDB and Rotten Tomatoes ratings), plot,
   cast and quality badges (4K, Dolby Vision or HDR10, audio) fill the top left; rows of titles run underneath.
 - **Pages from Silo.** Home, Movies and Series with the rows Silo shows for each, in Silo's order:
-  SiloKodiConnect publishes Home's first rows as ready-made cards, so they draw at once, and the rest load as
+  KodiConnectForSilo publishes Home's first rows as ready-made cards, so they draw at once, and the rest load as
   you reach them. Rows far from the one you're on drop their artwork to save memory.
 - **Netflix touches.** Continue Watching cards in Silo's three lines with the time left; Remove from Continue
   Watching on the context menu key (a long OK); watched titles dimmed; a NEW EPISODE tab on shows you've
@@ -63,21 +63,21 @@ screen, as Arctic Zephyr does.
 ## Skin settings
 
 - **General:** Colours; Recommended add-ons (Up Next, YouTube and more, with what each adds); **Top 10
-  rows**, which opens SiloKodiConnect's choice of Home rows to number; Artwork background; Use slide animations;
+  rows**, which opens KodiConnectForSilo's choice of Home rows to number; Artwork background; Use slide animations;
   Theme music on show pages; IMDb, TMDB and Rotten Tomatoes ratings, each shown or hidden everywhere (all on by
   default).
 - **Player:** Player style (Showcase or Silo's) and the overlay's auto-close.
 
 ## Install
 
-Install and sign in to SiloKodiConnect 0.10.0 or newer first, then build a zip and use Kodi's
+Install and sign in to KodiConnectForSilo 0.13.0 or newer first, then build a zip and use Kodi's
 **Add-ons -> Install from zip file**:
 
 ```bash
 git archive --format=zip --prefix=skin.silo.skyline/ -o skin.silo.skyline.zip HEAD
 ```
 
-Switch to it under **Settings -> Interface -> Skin**. Without SiloKodiConnect, Home asks you to install it.
+Switch to it under **Settings -> Interface -> Skin**. Without KodiConnectForSilo, Home asks you to install it.
 
 ## Development
 

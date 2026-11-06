@@ -781,7 +781,7 @@ def quick_row(focused):
     """A channel in the quick guide: logo, number and name, what's on now
     with how far through it; the focused row a white bar, dark text; the
     playing channel's name yellow with TiviMate's ▶."""
-    # Not while SiloKodiConnect switches the guide's group: Kodi focuses the
+    # Not while KodiConnectForSilo switches the guide's group: Kodi focuses the
     # channels for a moment as it rebuilds, which flashed the highlight.
     lit = '[Control.HasFocus(11) + String.IsEmpty(Window(Home).Property(silokodi.quick.switching))]'
 
@@ -996,12 +996,12 @@ def programme_card(item, timeline, visible):
                          'plot': '$INFO[%s.Plot]' % item if item.startswith('Container(11)') else '$INFO[%s.Property(silo.plot)]' % item}
 
 
-QUICK_ROWS = 15               # SiloKodiConnect's quick.ROWS
+QUICK_ROWS = 15               # KodiConnectForSilo's quick.ROWS
 
 
 def quick_rows():
     """The short schedule's rows: schedule_row's layout, read from the
-    properties SiloKodiConnect's service publishes for the focused channel."""
+    properties KodiConnectForSilo's service publishes for the focused channel."""
     prop = 'Window(Home).Property(silokodi.quick.%d.%s)'
     rows = []
     for n in range(1, QUICK_ROWS + 1):
@@ -1017,10 +1017,10 @@ def quick_rows():
 
 
 # The quick guide's groups, as TiviMate's: Left from the channels slides in
-# Kodi's TV groups, the guide's own picked; as the list moves SiloKodiConnect
+# Kodi's TV groups, the guide's own picked; as the list moves KodiConnectForSilo
 # steps the guide along with it (its quick.py).
 QUICK_GROUPS_ID, GROUP_W, GROUP_ROW = 15, 460, 76
-# Open while it has focus, and while SiloKodiConnect switches the guide's group
+# Open while it has focus, and while KodiConnectForSilo switches the guide's group
 # (Kodi focuses the channels as it rebuilds; without this the list closed and reopened).
 IN_GROUPS = '[Control.HasFocus(%d) | !String.IsEmpty(Window(Home).Property(silokodi.quick.switching))]' % QUICK_GROUPS_ID
 
@@ -1050,7 +1050,7 @@ def group_row(focused):
 def build_quick_guide():
     """Kodi's channel list while Live TV plays (DialogPVRChannelsOSD; Left in
     our keymap), as TiviMate's: the channels down the left, the focused
-    channel's schedule beside them (SiloKodiConnect's mode=schedule), and its
+    channel's schedule beside them (KodiConnectForSilo's mode=schedule), and its
     programme in a card at the top right, the video playing on behind. Right
     slides the channels away for the whole schedule and its days. Kodi
     switches to the chosen channel."""
@@ -1114,7 +1114,7 @@ def build_quick_guide():
                     <onright>11</onright>
                     <onleft>noop</onleft>
                     <onback>11</onback>
-                    <!-- The guide follows the list as it moves (SiloKodiConnect); OK goes into its channels. -->
+                    <!-- The guide follows the list as it moves (KodiConnectForSilo); OK goes into its channels. -->
                     <onclick>SetFocus(11)</onclick>
                     <content target="videos">pvr://channels/tv/</content>
                     <itemlayout width="%(gw)d" height="%(grow)d">%(group)s
@@ -1158,7 +1158,7 @@ def build_quick_guide():
                 </control>
                 <control type="fixedlist" id="11">
                     <left>0</left><top>110</top><width>%(w)d</width><height>%(lh)d</height>
-                    <!-- Left: the groups (SiloKodiConnect puts the list on the guide's own). -->
+                    <!-- Left: the groups (KodiConnectForSilo puts the list on the guide's own). -->
                     <onleft>SetFocus(%(groups_id)d)</onleft>
                     <!-- Right: into this channel's whole schedule, catch-up included (TiviMate's). -->
                     <onright>SetProperty(silo.sched.number,$INFO[Container(11).ListItem.ChannelNumberLabel],home)</onright>
@@ -1192,7 +1192,7 @@ def build_quick_guide():
                         <textcolor>%(text)s</textcolor>
                         <label>$INFO[%(f)s.ChannelNumberLabel,,  ·  ]$INFO[%(f)s.ChannelName]</label>
                     </control>
-                    <!-- SiloKodiConnect's service publishes the focused channel's rows (its
+                    <!-- KodiConnectForSilo's service publishes the focused channel's rows (its
                          quick.py; a plugin per channel took most of a second to start). Plain
                          rows, not a list: Kodi refreshed a static list's items once a second. -->
                     <control type="group">
@@ -1249,7 +1249,7 @@ def build_quick_guide():
                     <ondown>noop</ondown>
                     <content target="videos">$VAR[SiloSchedulePath]</content>
                     <onclick condition="!String.IsEmpty(ListItem.Property(silo.when)) + !String.IsEqual(ListItem.Property(silo.when),future)">Dialog.Close(pvrosdchannels)</onclick>
-                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.when)) + !String.IsEqual(ListItem.Property(silo.when),future)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=play_broadcast&amp;id=$INFO[ListItem.Property(silo.broadcastid)]&amp;channel=$INFO[ListItem.Property(silo.channelid)]&amp;when=$INFO[ListItem.Property(silo.when)])</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.when)) + !String.IsEqual(ListItem.Property(silo.when),future)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=play_broadcast&amp;id=$INFO[ListItem.Property(silo.broadcastid)]&amp;channel=$INFO[ListItem.Property(silo.channelid)]&amp;when=$INFO[ListItem.Property(silo.when)])</onclick>
                     <itemlayout width="%(fw)d" height="%(frow)d">%(full)s
                     </itemlayout>
                     <focusedlayout width="%(fw)d" height="%(frow)d">%(full_focused)s
@@ -1310,7 +1310,7 @@ def quick_variables():
     # The channel moved into (Right sets silo.sched.*); before that, the one
     # the channel list has rested on a second, so Right finds it loaded (the
     # address is the same, so Kodi doesn't fetch it again).
-    path = 'plugin://plugin.video.silokodiconnect/?mode=%s&amp;number=$INFO[%s]&amp;name=$INFO[%s]'
+    path = 'plugin://plugin.video.kodiconnectforsilo/?mode=%s&amp;number=$INFO[%s]&amp;name=$INFO[%s]'
     paths = ''.join('    <variable name="%s">\n'
                     '        <value condition="%s">%s</value>\n'
                     '        <value condition="Control.HasFocus(11) + System.IdleTime(1)">%s</value>\n'
@@ -1529,11 +1529,11 @@ def build_recent():
                 <visible allowhiddenfocus="true">!%(open)s</visible>
                 <animation effect="fade" start="0" end="100" time="160">Visible</animation>
                 <scrolltime tween="cubic" easing="out">200</scrolltime>
-                <!-- SiloKodiConnect's recent channels: newest first, not the playing one, none
+                <!-- KodiConnectForSilo's recent channels: newest first, not the playing one, none
                      the viewer removed (the long-press menu); silokodi.recent_changed reloads it. -->
-                <content target="videos">plugin://plugin.video.silokodiconnect/?mode=recent_channels&amp;v=$INFO[Window(Home).Property(silokodi.recent_changed)]</content>
+                <content target="videos">plugin://plugin.video.kodiconnectforsilo/?mode=recent_channels&amp;v=$INFO[Window(Home).Property(silokodi.recent_changed)]</content>
                 <onclick>Dialog.Close(%(window)d)</onclick>
-                <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=play_channel&amp;id=$INFO[ListItem.Property(silo.channelid)])</onclick>
+                <onclick>RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=play_channel&amp;id=$INFO[ListItem.Property(silo.channelid)])</onclick>
                 <itemlayout width="%(iw)d" height="%(ih)d">%(card)s
                 </itemlayout>
                 <focusedlayout width="%(iw)d" height="%(ih)d">%(card_focused)s
@@ -1544,7 +1544,7 @@ def build_recent():
                 <left>%(lx)d</left><top>%(peek)d</top><width>%(lw)d</width><height>%(ih)d</height>
                 <orientation>horizontal</orientation>
                 <visible>%(open)s</visible>
-                <content target="videos">plugin://plugin.video.silokodiconnect/?mode=recent_channels&amp;v=$INFO[Window(Home).Property(silokodi.recent_changed)]</content>
+                <content target="videos">plugin://plugin.video.kodiconnectforsilo/?mode=recent_channels&amp;v=$INFO[Window(Home).Property(silokodi.recent_changed)]</content>
                 <itemlayout width="%(iw)d" height="%(ih)d">%(card)s
                 </itemlayout>
                 <focusedlayout width="%(iw)d" height="%(ih)d">%(card)s

@@ -5,7 +5,7 @@
 
 Silo's Requests page opens it for a studio's, network's or genre's titles
 (its tiles): a grid of Silo's request posters, with its tags, from
-SiloKodiConnect (mode=requests, row in
+KodiConnectForSilo (mode=requests, row in
 Window(Home).Property(silo.rbrowse.row), its title in silo.rbrowse.title).
 A genre has Movies and Series, as Silo's genre pages.
 """
@@ -20,7 +20,7 @@ MOVIES, SERIES = 70, 71
 ROW = 'Window(Home).Property(silo.rbrowse.row)'
 MEDIA = 'Window(Home).Property(silo.rbrowse.media)'
 GENRE = 'String.StartsWith(%s,browse:genre:)' % ROW
-PATH = ('plugin://plugin.video.silokodiconnect/?mode=requests&amp;row=$INFO[%s]$INFO[%s,:,]' % (ROW, MEDIA))
+PATH = ('plugin://plugin.video.kodiconnectforsilo/?mode=requests&amp;row=$INFO[%s]$INFO[%s,:,]' % (ROW, MEDIA))
 
 
 def pill(control_id, label, media, left, right):
@@ -47,8 +47,8 @@ def pill(control_id, label, media, left, right):
 
 CLICKS = ('''
             <!-- A title Silo can request: its request page; one in the library: its info page. -->
-            <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
-            <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>''')
+            <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
+            <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb))">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>''')
 
 
 def cards(control_id, width, height):

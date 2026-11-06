@@ -23,15 +23,15 @@ QUERY = 'Skin.String(silo.search)'
 LOADING = 'silo.search.loading'  # on Home, for a moment after new words
 PILL_ID = 100
 # (list id, row title, library path, smart-filter type)
-# The third row is Silo's own search for titles to request (SiloKodiConnect),
+# The third row is Silo's own search for titles to request (KodiConnectForSilo),
 # shown only when the add-on is there and found some.
 # Silo's search lists matching box sets ahead of the films (which it lists too):
-# the films whose box set's name has the words, less the films SiloKodiConnect
+# the films whose box set's name has the words, less the films KodiConnectForSilo
 # tags (BOX_SET_MEMBER), leave one per box set, drawn as the box set.
 ROWS = [(204, 'Box sets', 'videodb://movies/titles/', 'boxsets'),
         (201, 'Movies', 'videodb://movies/titles/', 'movies'),
         (202, 'Shows', 'videodb://tvshows/titles/', 'tvshows'),
-        (203, 'Request', 'plugin://plugin.video.silokodiconnect/?mode=requests', None)]
+        (203, 'Request', 'plugin://plugin.video.kodiconnectforsilo/?mode=requests', None)]
 # Requests' search box (tools/build_home.py) sets Window(Home).Property(silo.search.mode)
 # to requests: only Silo's row shows (the menu bar's Search clears it).
 REQUEST_ONLY = 'String.IsEqual(Window(Home).Property(silo.search.mode),requests)'
@@ -136,12 +136,12 @@ def row(index, list_id, title, path, kind):
                     <width>%(lw)d</width><height>%(item_h)d</height>
                     <orientation>horizontal</orientation>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
-                    <!-- Through SiloKodiConnect, when it is there, so the page has
+                    <!-- Through KodiConnectForSilo, when it is there, so the page has
                          Silo's details and More Like This, as from Home. -->
-                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
-                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=%(info_type)s&amp;dbid=%(info_id)s)</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.silokodiconnect)">Action(Info)</onclick>%(moves)s
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">Action(Info)</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=%(info_type)s&amp;dbid=%(info_id)s)</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb)) + !System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">Action(Info)</onclick>%(moves)s
                     <content target="videos">%(path)s</content>
                     <itemlayout width="%(item_w)d" height="%(item_h)d">%(normal)s
                     </itemlayout>

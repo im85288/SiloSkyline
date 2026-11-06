@@ -3,7 +3,7 @@
 <window type="dialog" id="1180">
     <defaultcontrol always="true">101</defaultcontrol>
     <onload>ClearProperty(silo.options.tab,home)</onload>
-    <!-- SiloKodiConnect publishes the playing video's tracks (tracks.py). -->
+    <!-- KodiConnectForSilo publishes the playing video's tracks (tracks.py). -->
     <onload>NotifyAll(silokodi,tracks.refresh)</onload>
     <include>Animation_DialogPopupOpenClose</include>
     <controls>
@@ -774,8 +774,8 @@
                     <texturefocus border="34">silo/dialog_row_focus.png</texturefocus>
                     <texturenofocus />
                     <onclick>Dialog.Close(1180)</onclick>
-                    <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=subtitles)</onclick>
-                    <onclick condition="!System.AddonIsEnabled(plugin.video.silokodiconnect)">ActivateWindow(SubtitleSearch)</onclick>
+                    <onclick condition="System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=subtitles)</onclick>
+                    <onclick condition="!System.AddonIsEnabled(plugin.video.kodiconnectforsilo)">ActivateWindow(SubtitleSearch)</onclick>
                 </control>
             </control>
         </control>

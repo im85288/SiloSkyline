@@ -15,7 +15,7 @@ focused item's picture and description (58, Extra Info). Left from a view
 opens a side panel with
 Kodi's View, Sort by and Order buttons (2, 3, 4), as Estuary's; Kodi keeps
 the chosen view per folder. Films and shows get an A-Z bar (60) right of the
-view, which SiloKodiConnect answers by jumping to the letter.
+view, which KodiConnectForSilo answers by jumping to the letter.
 """
 import os
 import sys
@@ -40,7 +40,7 @@ POSTER_W = (1920 - 2 * SAFE_X - 96 - 24) // POSTER_COLS - POSTER_GAP
 POSTER_H = POSTER_W * 3 // 2
 POSTER_ITEM_H = POSTER_H + 12 + 76 + 24
 # A-Z bar right of the poster grid, for films and shows: a letter asks
-# SiloKodiConnect (NotifyAll) to jump the grid to the first title from it.
+# KodiConnectForSilo (NotifyAll) to jump the grid to the first title from it.
 JUMP_ID = 60
 LETTERS = ['#'] + [chr(c) for c in range(ord('A'), ord('Z') + 1)]
 # The library's own films and shows only: an add-on's lists are seldom in title order.
@@ -123,7 +123,7 @@ def poster(focused, view_id):
                                      'focused_title': focused_title}
 
 
-# Collections (SiloKodiConnect's, which carry silo.fan1-3): Silo's fan card,
+# Collections (KodiConnectForSilo's, which carry silo.fan1-3): Silo's fan card,
 # three columns. Its first titles' posters fanned at the left (-8, -1 and
 # +7 degrees), its name and count at the right.
 FANS = 'Container.Content(sets) + String.IsEqual(Container.Property(silo.fans),true)'
@@ -263,9 +263,9 @@ def episode(focused, view_id):
 
 # An add-on's videos (YouTube's and the like): Silo's 16:9 cards, five to a
 # row, under the focused video's title, facts and description. Not
-# SiloKodiConnect's own lists, which have their pages.
+# KodiConnectForSilo's own lists, which have their pages.
 ADDON_VIDEOS = ('Container.Content(videos) + String.StartsWith(Container.FolderPath,plugin://)'
-                ' + !String.StartsWith(Container.FolderPath,plugin://plugin.video.silokodiconnect)')
+                ' + !String.StartsWith(Container.FolderPath,plugin://plugin.video.kodiconnectforsilo)')
 VIDEO_VIEW = 57
 VIDEO_COLS, VIDEO_GAP = 5, 24
 VIDEO_W = (1920 - 2 * SAFE_X) // VIDEO_COLS - VIDEO_GAP
@@ -376,7 +376,7 @@ def addon_videos_view():
 # An add-on's lists, as a list beside the focused item's picture and description.
 ADDON_LISTS = ('[Container.Content(episodes) | Container.Content(movies) | Container.Content(tvshows) | Container.Content(videos)]'
                ' + String.StartsWith(Container.FolderPath,plugin://)'
-               ' + !String.StartsWith(Container.FolderPath,plugin://plugin.video.silokodiconnect)')
+               ' + !String.StartsWith(Container.FolderPath,plugin://plugin.video.kodiconnectforsilo)')
 EXTRA_VIEW = 58
 EXTRA_PIC_W, EXTRA_PIC_H = 640, 360
 EXTRA_LIST_X = SAFE_X + EXTRA_PIC_W + 40
@@ -494,7 +494,7 @@ def to_view(tag, indent):
 
 def jump_bar():
     """The A-Z column (Browse's, tools/build_library.py): the selected title's
-    letter lit; a letter jumps the grid to it (SiloKodiConnect's jump.py)."""
+    letter lit; a letter jumps the grid to it (KodiConnectForSilo's jump.py)."""
     from build_library import AZ_W, letter_layouts
     current = '[%s]' % ' | '.join('[Control.IsVisible(%d) + String.IsEqual(ListItem.Label,Container(%d).ListItem.SortLetter)]'
                                   % (view, view) for view in TITLE_VIEWS)
@@ -505,7 +505,7 @@ def jump_bar():
                     <onclick condition="Control.IsVisible(%d)">NotifyAll(silokodi,jump.%d.%s)</onclick>'''
                                               % (view, view, letter) for view in TITLE_VIEWS)) for letter in LETTERS)
     return '''
-        <!-- A-Z: jump the poster grid to a letter (SiloKodiConnect's jump.py). -->
+        <!-- A-Z: jump the poster grid to a letter (KodiConnectForSilo's jump.py). -->
         <control type="list" id="%(id)d">
             <left>%(x)d</left><top>%(top)d</top>
             <width>%(w)d</width><height>%(h)d</height>
@@ -537,11 +537,11 @@ DETAIL_X = SAFE_X + DETAIL_LIST_W + 20
 DETAIL_INFO_X = DETAIL_X + 330
 DETAIL_INFO_W = 1920 - SAFE_X - 96 - 24 - DETAIL_INFO_X
 DETAIL_W = 1920 - SAFE_X - 96 - 24 - DETAIL_X
-# A library film's or show's OK: its details page (SiloKodiConnect's), as
+# A library film's or show's OK: its details page (KodiConnectForSilo's), as
 # Browse's; anything else does what Kodi does.
-INFO_CLICK = ('\n            <onclick condition="System.AddonIsEnabled(plugin.video.silokodiconnect) + '
+INFO_CLICK = ('\n            <onclick condition="System.AddonIsEnabled(plugin.video.kodiconnectforsilo) + '
               '[Container.Content(movies) | Container.Content(tvshows)] + Integer.IsGreater(ListItem.DBID,0)">'
-              'RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]'
+              'RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=$INFO[ListItem.DBType]'
               '&amp;dbid=$INFO[ListItem.DBID])</onclick>')
 
 
@@ -606,7 +606,7 @@ def rating_marks(indent):
     out = ''
     for rating, mark, width, height, top in (('imdb', 'silo/imdb.png', 60, 28, 6),
                                              ('themoviedb', 'silo/tmdb.png', 165, 30, 5)):
-        # TMDB's from SiloKodiConnect's extras (Kodi's lists load only the default
+        # TMDB's from KodiConnectForSilo's extras (Kodi's lists load only the default
         # rating), else Kodi's own (an add-on's titles).
         score = 'ListItem.Rating(%s)' % rating
         if rating == 'themoviedb':
@@ -846,7 +846,7 @@ ICON_SIZES = {44: ('sync', 'remove'), 50: ('rewrite',), 56: ('play',), 80: ('row
 def pill_row(focused, view_id):
     """One row of the list view (add-on menus, folders): a rounded card with
     an icon tile, the label and a one-line description; white when focused.
-    SiloKodiConnect's profile row shows the avatar instead of an icon."""
+    KodiConnectForSilo's profile row shows the avatar instead of an icon."""
     lit = 'Control.HasFocus(%d)' % view_id if focused else 'false'
     has_focus = '[%s + !%s]' % (lit, COLOURED)
     fg = 'FF000000'
@@ -923,7 +923,7 @@ def pill_row(focused, view_id):
                         <texture border="24" colordiffuse="%(pill)s">silo/card_landscape_mask.png</texture>
                         <visible>%(lit)s + %(coloured)s</visible>
                     </control>
-                    <!-- SiloKodiConnect's profile row: the profile's avatar. -->
+                    <!-- KodiConnectForSilo's profile row: the profile's avatar. -->
                     <control type="image">
                         <left>24</left><top>%(at)d</top><width>60</width><height>60</height>
                         <texture background="true" diffuse="silo/avatar_mask.png">$INFO[Window(Home).Property(silo.avatar)]</texture>
@@ -1111,7 +1111,7 @@ VARIABLES = '''
     <expression name="SiloBrowseExtra">%(addon_lists)s</expression>
     <!-- Films and shows: the views they have beside the poster grid (hero, list). -->
     <expression name="SiloBrowseTitles">[Container.Content(movies) | Container.Content(tvshows) | Container.Content(videos)] + !$EXP[SiloBrowseFans] + !$EXP[SiloBrowseAddonVideos]</expression>
-    <!-- The genre in a view's facts: SiloKodiConnect's first (kept in the library), else Kodi's. -->
+    <!-- The genre in a view's facts: KodiConnectForSilo's first (kept in the library), else Kodi's. -->
     <variable name="SiloViewGenre">
         <value condition="!String.IsEmpty(ListItem.Art(silogenre))">$INFO[ListItem.Art(silogenre),  ·  ,]</value>
         <value>$INFO[ListItem.Genre,  ·  ,]</value>
@@ -1123,15 +1123,15 @@ VARIABLES = '''
     <variable name="SiloBrowseFacts">
         <value condition="$EXP[SiloBrowseAddonVideos] + Integer.IsGreater(Container.NumItems,0)">$INFO[Container.NumItems,, videos]</value>
         <!-- Another add-on's folder: what's in it, not Silo's library. -->
-        <value condition="String.StartsWith(Container.FolderPath,plugin://) + !String.StartsWith(Container.FolderPath,plugin://plugin.video.silokodiconnect) + Integer.IsEqual(Container.NumItems,1)">1 item</value>
-        <value condition="String.StartsWith(Container.FolderPath,plugin://) + !String.StartsWith(Container.FolderPath,plugin://plugin.video.silokodiconnect)">$INFO[Container.NumItems,, items]</value>
+        <value condition="String.StartsWith(Container.FolderPath,plugin://) + !String.StartsWith(Container.FolderPath,plugin://plugin.video.kodiconnectforsilo) + Integer.IsEqual(Container.NumItems,1)">1 item</value>
+        <value condition="String.StartsWith(Container.FolderPath,plugin://) + !String.StartsWith(Container.FolderPath,plugin://plugin.video.kodiconnectforsilo)">$INFO[Container.NumItems,, items]</value>
         <value condition="Integer.IsGreater(Container.NumItems,0) + [$EXP[SiloBrowseGrid] | $EXP[SiloBrowseEpisodes]]">$INFO[Container.NumItems,, titles]</value>
         <value condition="$EXP[SiloBrowseFans]">$INFO[Container.NumItems,, collections]</value>
         <value condition="$EXP[SiloBrowseChips]">$INFO[Container.NumItems,, genres]</value>
         <value>$INFO[Window(Home).Property(silo.library.facts)]</value>
     </variable>
     <variable name="SiloBrowseTitle">
-        <value condition="String.IsEqual(Container.FolderPath,plugin://plugin.video.silokodiconnect/)">SiloKodiConnect</value>
+        <value condition="String.IsEqual(Container.FolderPath,plugin://plugin.video.kodiconnectforsilo/)">KodiConnectForSilo</value>
         <value condition="!String.IsEmpty(Container.PluginCategory)">$INFO[Container.PluginCategory]</value>
         <value condition="String.StartsWith(Container.FolderPath,videodb://movies/titles/)">Movies</value>
         <value condition="String.StartsWith(Container.FolderPath,videodb://tvshows/titles/) + Container.Content(tvshows)">Series</value>
@@ -1160,7 +1160,7 @@ VARIABLES = '''
         <value condition="Integer.IsGreater(ListItem.Episode,0)">S$INFO[ListItem.Season] E$INFO[ListItem.Episode]$INFO[ListItem.Title, · ,]</value>
         <value>$INFO[ListItem.Label]</value>
     </variable>
-    <!-- List rows: SiloKodiConnect's menu names an icon of the skin's own. -->
+    <!-- List rows: KodiConnectForSilo's menu names an icon of the skin's own. -->
     <variable name="SiloRowIcon">
         <value condition="String.IsEqual(ListItem.Property(silo.menu.icon),play)">icons/infodialogs/play.png</value>
         <value condition="String.IsEqual(ListItem.Property(silo.menu.icon),rows)">icons/sidemenu/tv.png</value>

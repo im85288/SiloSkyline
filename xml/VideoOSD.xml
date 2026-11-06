@@ -330,7 +330,7 @@
 						<visible>VideoPlayer.HasTeletext</visible>
 					</control>
 					<!-- Silo Skyline: Episodes, the season in a strip over the buttons
-					     (SiloKodiConnect's silokodi.playing.season_path), as Netflix's. -->
+					     (KodiConnectForSilo's silokodi.playing.season_path), as Netflix's. -->
 					<control type="radiobutton" id="70051">
 						<include content="OSDButton">
 							<param name="texture" value="silo/episodes.png"/>

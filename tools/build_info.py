@@ -363,7 +363,7 @@ def build():
                     <texturefocus border="30" colordiffuse="%(text)s">silo/pill.png</texturefocus>
                     <texturenofocus border="30" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
                     <!-- The plugin first: closing the page first loses its title. -->
-                    <onclick condition="String.IsEqual(ListItem.Property(silo.request.requestable),true)">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)]&amp;title=$ESCINFO[ListItem.Title])</onclick>
+                    <onclick condition="String.IsEqual(ListItem.Property(silo.request.requestable),true)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=request&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)]&amp;title=$ESCINFO[ListItem.Title])</onclick>
                     <onclick condition="String.IsEqual(ListItem.Property(silo.request.requestable),true)">Dialog.Close(movieinformation)</onclick>
                 </control>
                 <!-- Play or Resume, with Silo's play icon. Its group has an id: the
@@ -411,7 +411,7 @@ def build():
                         <visible>!Control.HasFocus(308)</visible>
                     </control>
                     <!-- Resume, as Apple TV's: the time left at the pill's end and how far in
-                         along its foot (SiloKodiConnect's silo.left_short, "32m"). -->
+                         along its foot (KodiConnectForSilo's silo.left_short, "32m"). -->
                     <control type="label">
                         <left>200</left><width>116</width><height>58</height>
                         <align>right</align><aligny>center</aligny>
@@ -613,10 +613,10 @@ def build():
                     <ondown condition="Integer.IsGreater(Container(70).NumItems,0)">70</ondown>
                     <ondown condition="!Integer.IsGreater(Container(70).NumItems,0) + %(has_videos)s">71</ondown>
                     <ondown condition="!Integer.IsGreater(Container(70).NumItems,0) + !%(has_videos)s + %(has_similar)s">63</ondown>
-                    <!-- Another film: this page closes and SiloKodiConnect opens its page. -->
+                    <!-- Another film: this page closes and KodiConnectForSilo opens its page. -->
                     <onclick condition="!String.IsEqual(ListItem.DBID,Window(movieinformation).Property(silo.page_dbid)) | %(box_set_page)s">SetProperty(silo.from_rail,1,home)</onclick>
                     <onclick condition="!String.IsEqual(ListItem.DBID,Window(movieinformation).Property(silo.page_dbid)) | %(box_set_page)s">Dialog.Close(movieinformation)</onclick>
-                    <onclick condition="!String.IsEqual(ListItem.DBID,Window(movieinformation).Property(silo.page_dbid)) | %(box_set_page)s">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=movie&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="!String.IsEqual(ListItem.DBID,Window(movieinformation).Property(silo.page_dbid)) | %(box_set_page)s">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=movie&amp;dbid=$INFO[ListItem.DBID])</onclick>
                     <onclick condition="String.IsEqual(ListItem.DBID,Window(movieinformation).Property(silo.page_dbid)) + !%(box_set_page)s">SetFocus(5000)</onclick>
                     <content target="videos" sortby="year" sortorder="ascending">videodb://movies/sets/$INFO[ListItem.Property(silo.set_id)]/</content>
                     <itemlayout width="%(similar_item_w)d" height="%(similar_item_h)d">%(box_card)s
@@ -640,8 +640,8 @@ def build():
                 </control>
                 <control type="list" id="70">
                     <!-- Not Kodi's cast list (control 50), which searches the library for a
-                         chosen name: SiloKodiConnect's, so a name opens the person page. -->
-                    <content target="videos">plugin://plugin.video.silokodiconnect/?mode=cast&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID]</content>
+                         chosen name: KodiConnectForSilo's, so a name opens the person page. -->
+                    <content target="videos">plugin://plugin.video.kodiconnectforsilo/?mode=cast&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID]</content>
                     <left>%(lx)d</left><top>60</top>
                     <width>%(lw)d</width><height>280</height>
                     <orientation>horizontal</orientation>
@@ -649,8 +649,8 @@ def build():
                     <onup condition="%(episode)s + %(has_season)s">64</onup>
                     <onup condition="%(box_row)s">66</onup>
                     <onup condition="!%(box_row)s + !%(show)s + ![%(episode)s + %(has_season)s]">5000</onup>
-                    <!-- A cast member's page (SiloKodiConnect: Silo's person, their titles here). -->
-                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=person&amp;id=$INFO[Window(movieinformation).Property(silo.content_id)]&amp;name=$INFO[ListItem.Label])</onclick>
+                    <!-- A cast member's page (KodiConnectForSilo: Silo's person, their titles here). -->
+                    <onclick>RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=person&amp;id=$INFO[Window(movieinformation).Property(silo.content_id)]&amp;name=$INFO[ListItem.Label])</onclick>
                     <scrolltime tween="cubic" easing="out">280</scrolltime>
                     <ondown condition="%(has_videos)s">71</ondown>
                     <ondown condition="!%(has_videos)s + %(has_similar)s">63</ondown>
@@ -660,7 +660,7 @@ def build():
                     </focusedlayout>
                 </control>
             </control>
-            <!-- Trailers & More: the title's YouTube videos from Silo (SiloKodiConnect),
+            <!-- Trailers & More: the title's YouTube videos from Silo (KodiConnectForSilo),
                  as Silo's Apple TV app; one plays as the Trailer button's does. -->
             <control type="group">
                 <height>%(videos_h)d</height>
@@ -673,7 +673,7 @@ def build():
                     <label>Trailers &amp; More</label>
                 </control>
                 <control type="list" id="71">
-                    <content target="videos">plugin://plugin.video.silokodiconnect/?mode=videos&amp;id=$INFO[Window(movieinformation).Property(silo.content_id)]</content>
+                    <content target="videos">plugin://plugin.video.kodiconnectforsilo/?mode=videos&amp;id=$INFO[Window(movieinformation).Property(silo.content_id)]</content>
                     <left>%(lx)d</left><top>56</top>
                     <width>%(lw)d</width><height>%(video_item_h)d</height>
                     <orientation>horizontal</orientation>
@@ -690,7 +690,7 @@ def build():
                 </control>
             </control>
             <!-- More Like This: same-genre titles from the library, best rated
-                 first (SiloKodiConnect's silo.similar). -->
+                 first (KodiConnectForSilo's silo.similar). -->
             <control type="group">
                 <height>%(similar_h)d</height>
                 <visible>%(has_similar)s | Container(63).IsUpdating</visible>
@@ -713,13 +713,13 @@ def build():
                     <onup condition="!%(has_videos)s + !Integer.IsGreater(Container(70).NumItems,0) + %(box_row)s">66</onup>
                     <onup condition="!%(has_videos)s + !Integer.IsGreater(Container(70).NumItems,0) + !%(show)s + !%(box_row)s">5000</onup>
                     <!-- Kodi can't open an info page from inside one: close this one and
-                         have SiloKodiConnect open the chosen title's. That page opens with
+                         have KodiConnectForSilo open the chosen title's. That page opens with
                          the column below still scrolled to this rail; silo.from_rail has
                          its onload scroll it back to the top. -->
                     <onclick>SetProperty(silo.from_rail,1,home)</onclick>
                     <onclick>Dialog.Close(movieinformation)</onclick>
-                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
-                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">RunPlugin(plugin://plugin.video.silokodiconnect/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
+                    <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb))">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
                     <content target="videos" sortby="rating" sortorder="descending">$INFO[ListItem.Property(silo.similar)]</content>
                     <itemlayout width="%(similar_item_w)d" height="%(similar_item_h)d">%(similar_card)s
                     </itemlayout>
@@ -743,33 +743,33 @@ def build():
                                   'PlayMedia($ESCINFO[ListItem.FileNameAndPath],noresume)</onclick>\n'
                                   '                    <onclick>Dialog.Close(movieinformation)'),
        # Shuffle, as Netflix's "Play something": a random episode of the show
-       # (unwatched first), or a random film of the box set (SiloKodiConnect).
-       'shuffle': round_button(305, 'silo/icon_shuffle.png', '[%s | %s] + System.AddonIsEnabled(plugin.video.silokodiconnect)' % (SHOW, BOX_SET),
+       # (unwatched first), or a random film of the box set (KodiConnectForSilo).
+       'shuffle': round_button(305, 'silo/icon_shuffle.png', '[%s | %s] + System.AddonIsEnabled(plugin.video.kodiconnectforsilo)' % (SHOW, BOX_SET),
                                'noop</onclick>\n'
-                               '                    <onclick condition="String.IsEqual(ListItem.DBType,set)">RunPlugin(plugin://plugin.video.silokodiconnect/'
+                               '                    <onclick condition="String.IsEqual(ListItem.DBType,set)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/'
                                '?mode=shuffle&amp;scope=set&amp;id=$INFO[ListItem.DBID])</onclick>\n'
-                               '                    <onclick condition="!String.IsEqual(ListItem.DBType,set)">RunPlugin(plugin://plugin.video.silokodiconnect/'
+                               '                    <onclick condition="!String.IsEqual(ListItem.DBType,set)">RunPlugin(plugin://plugin.video.kodiconnectforsilo/'
                                '?mode=shuffle&amp;scope=tvshow&amp;id=$INFO[ListItem.DBID])'),
        'previous': round_button(302, 'silo/icon_previous.png', 'String.IsEqual(ListItem.DBType,episode)',
-                                'RunPlugin(plugin://plugin.video.silokodiconnect/?mode=previous&amp;dbid=$INFO[ListItem.DBID])'),
+                                'RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=previous&amp;dbid=$INFO[ListItem.DBID])'),
        # Watched (a show: every episode), a toggle as Watchlist's and Rate's: a
-       # tick in a ring, filled once watched (SiloKodiConnect's mark tells the page).
+       # tick in a ring, filled once watched (KodiConnectForSilo's mark tells the page).
        'more': round_button(303, '$VAR[SiloWatchedIcon]',
                             '[String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow)] + String.IsEmpty(ListItem.Property(silo.request.tmdb))',
                             'noop</onclick>\n'
-                            '                    <onclick condition="%s">RunPlugin(plugin://plugin.video.silokodiconnect/'
+                            '                    <onclick condition="%s">RunPlugin(plugin://plugin.video.kodiconnectforsilo/'
                             '?mode=mark&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID]&amp;action=unwatched)</onclick>\n'
-                            '                    <onclick condition="!%s">RunPlugin(plugin://plugin.video.silokodiconnect/'
+                            '                    <onclick condition="!%s">RunPlugin(plugin://plugin.video.kodiconnectforsilo/'
                             '?mode=mark&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID]&amp;action=watched)' % (WATCHED, WATCHED)),
        'trailer': round_button(11, 'silo/icon_trailer.png', '!String.IsEmpty(ListItem.Trailer)'),
-       # Silo's trailer (SiloKodiConnect's silo.trailer, a YouTube id) when the
+       # Silo's trailer (KodiConnectForSilo's silo.trailer, a YouTube id) when the
        # library has none: played by the YouTube add-on, which it offers to
        # install when it's missing.
        'silo_trailer': round_button(
            351, 'silo/icon_trailer.png',
            'String.IsEmpty(ListItem.Trailer) + !String.IsEmpty(ListItem.Property(silo.trailer))',
            'noop</onclick>\n'
-           # The page closes for the trailer and SiloKodiConnect reopens it
+           # The page closes for the trailer and KodiConnectForSilo reopens it
            # when the trailer stops, ends or never starts (silokodi.trailer_return).
            # Meanwhile the window under it shows a cover with the title's
            # fanart (SiloTrailerCover, while silokodi.trailer_playing is set);
@@ -790,15 +790,15 @@ def build():
        'watchlist': round_button(
            352, '$VAR[SiloWatchlistIcon]', '!String.IsEmpty(ListItem.Property(silo.watchlist))',
            'noop</onclick>\n'
-           '                    <onclick condition="$EXP[SiloOnWatchlist]">RunPlugin(plugin://plugin.video.silokodiconnect/'
+           '                    <onclick condition="$EXP[SiloOnWatchlist]">RunPlugin(plugin://plugin.video.kodiconnectforsilo/'
            '?mode=watchlist&amp;id=$INFO[ListItem.Property(silo.content_id)]&amp;add=0)</onclick>\n'
-           '                    <onclick condition="!$EXP[SiloOnWatchlist]">RunPlugin(plugin://plugin.video.silokodiconnect/'
+           '                    <onclick condition="!$EXP[SiloOnWatchlist]">RunPlugin(plugin://plugin.video.kodiconnectforsilo/'
            '?mode=watchlist&amp;id=$INFO[ListItem.Property(silo.content_id)]&amp;add=1)'),
-       # Silo's rating, for a film or series (SiloKodiConnect's silo.myrating,
+       # Silo's rating, for a film or series (KodiConnectForSilo's silo.myrating,
        # '0' not rated): a filled star once rated; OK chooses the stars.
        'rate': round_button(
            353, '$VAR[SiloRateIcon]', '!String.IsEmpty(ListItem.Property(silo.myrating))',
-           'RunPlugin(plugin://plugin.video.silokodiconnect/?mode=rate'
+           'RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=rate'
            '&amp;id=$INFO[ListItem.Property(silo.content_id)]&amp;current=$VAR[SiloMyRating])'),
        'versions': round_button(14, 'silo/icon_versions.png',
                                 'String.IsEqual(ListItem.DBType,movie) + Integer.IsGreater(ListItem.VideoVersionsCount,1)'),
@@ -824,7 +824,7 @@ def build():
 # A series Silo can request is a tvshow to Kodi too, but has no library
 # seasons or episodes: those sections are for library shows only.
 NOT_REQUEST = 'String.IsEmpty(ListItem.Property(silo.request.tmdb))'
-# Silo's box sets, as Kodi's movie sets (SiloKodiConnect): a box set's page, and
+# Silo's box sets, as Kodi's movie sets (KodiConnectForSilo): a box set's page, and
 # the row of a box set's films on its page and on each film's (silo.set_id).
 BOX_SET = 'String.IsEqual(ListItem.DBType,set)'
 BOX_ROW = '!String.IsEmpty(ListItem.Property(silo.set_id))'
@@ -879,7 +879,7 @@ def show_pill():
                     <ondown>64</ondown>
                     <onclick>SetProperty(silo.from_rail,1,home)</onclick>
                     <!-- The episode's id while this page is open (RunPlugin runs later). -->
-                    <onclick>RunPlugin(plugin://plugin.video.silokodiconnect/?mode=show&amp;episode=$INFO[ListItem.DBID])</onclick>
+                    <onclick>RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=show&amp;episode=$INFO[ListItem.DBID])</onclick>
                     <onclick>Dialog.Close(movieinformation)</onclick>
                     <visible>%(episode)s + %(pills)s</visible>
                 </control>''' % {'x': SAFE_X, 'dim': TEXT_DIM, 'text': TEXT, 'episode': 'String.IsEqual(ListItem.DBType,episode)',
@@ -1174,7 +1174,7 @@ VARIABLES = '''
         <value condition="String.IsEqual(ListItem.VideoResolution,4K)"></value>
         <value>P</value>
     </variable>
-    <!-- On the watchlist: a toggle on this page (SiloKodiConnect sets
+    <!-- On the watchlist: a toggle on this page (KodiConnectForSilo sets
          Window(movieinformation) silo.watchlist.for/.now), else as it opened. -->
     <expression name="SiloOnWatchlist">[String.IsEqual(Window(movieinformation).Property(silo.watchlist.for),ListItem.Property(silo.content_id)) + String.IsEqual(Window(movieinformation).Property(silo.watchlist.now),true)] | [!String.IsEqual(Window(movieinformation).Property(silo.watchlist.for),ListItem.Property(silo.content_id)) + String.IsEqual(ListItem.Property(silo.watchlist),true)]</expression>
     <variable name="SiloWatchlistIcon">
@@ -1225,7 +1225,7 @@ VARIABLES = '''
         <value condition="Integer.IsEqual(ListItem.AudioChannels,8)"> 7.1</value>
         <value>$INFO[ListItem.AudioChannels, ,]</value>
     </variable>
-    <!-- The rating named by its source, as Silo shows it (SiloKodiConnect stores
+    <!-- The rating named by its source, as Silo shows it (KodiConnectForSilo stores
          IMDb's, else TMDB's). -->
     <variable name="SiloDetailRating">
         <value condition="!String.IsEmpty(ListItem.Rating(imdb))">$INFO[ListItem.Rating(imdb), · [COLOR BFEDEDED]IMDb[/COLOR] [B],[/B]]</value>
@@ -1239,7 +1239,7 @@ VARIABLES = '''
         <value condition="String.IsEqual(ListItem.DBType,tvshow) + Integer.IsEqual(Container(60).NumItems,1)"> · 1 Season</value>
         <value condition="String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(Container(60).NumItems,1)">$INFO[Container(60).NumItems, · , Seasons]</value>
     </variable>
-    <!-- Silo's first two genres ("Drama, Crime"), from SiloKodiConnect. -->
+    <!-- Silo's first two genres ("Drama, Crime"), from KodiConnectForSilo. -->
     <!-- The Watched button: its icon and name (a show's marks every episode). -->
     <variable name="SiloWatchedIcon">
         <value condition="''' + WATCHED + '''">silo/watched_on.png</value>
@@ -1294,7 +1294,7 @@ ON_RAILS = 'Control.HasFocus(60) | Control.HasFocus(61) | Control.HasFocus(64) |
 
 def rt_marks():
     """Rotten Tomatoes' critics' mark after TMDB's: the Fresh tomato (60%
-    and up) or Rotten splat, then the percentage. SiloKodiConnect's property
+    and up) or Rotten splat, then the percentage. KodiConnectForSilo's property
     (an episode shows its series'), else its art extra (a title Kodi opened
     itself): one of them, as a title can have both."""
     out = ''
