@@ -1,3 +1,15 @@
+[B]0.7.0[/B]
+• Now needs KodiConnectForSilo 0.13.0, the new name of SiloKodiConnect
+• Add-on lists: a new Extra Info view, the list beside the item's picture and description
+• Add-on lists: Left opens View and Sort from the Episodes view too
+• Add-on lists: coloured labels stay readable, no grey box without a poster, folders count items
+• Add-on browser, add-on page and add-on menus in Silo's style, with real icons
+• Player details and the chapter list redone; the Options row highlight fixed
+• Episodes: the focused picture stays in place, no blank line without a runtime
+• YouTube: rows scroll as Home's, Subscriptions load once, Search shows your past searches
+• Up Next: the countdown shows in minutes when it opens early
+• Dialogs drawn solid, and smaller fixes across the skin
+
 [B]0.6.1[/B]
 • YouTube: a search box with the results on the page, Back returning to its Home
 • YouTube: the menu key offers Play, or Play choosing the video's quality
