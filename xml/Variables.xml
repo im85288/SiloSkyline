@@ -8357,6 +8357,10 @@
         <value condition="!Control.HasFocus(5312) + String.IsEqual(Window(Home).Property(silo.person.type),series)">[COLOR FFEDEDED]Series[/COLOR]</value>
         <value>Series</value>
     </variable>
+    <variable name="SiloPersonFilter3">
+        <value condition="!Control.HasFocus(5313) + String.IsEqual(Window(Home).Property(silo.person.type),missing)">[COLOR FFEDEDED]Not on server[/COLOR]</value>
+        <value>Not on server</value>
+    </variable>
     <!-- end Silo Skyline person -->
     <!-- Silo Skyline TV guide (tools/build_tv.py) -->
     <variable name="SiloGuideCell">

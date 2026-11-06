@@ -26,7 +26,10 @@ GRID_TOP = FILMOGRAPHY_TOP + 160
 # Into the grid, the page slides up to leave Filmography and its pills at the top.
 LIFT = FILMOGRAPHY_TOP - 50
 BIO = 'A6EDEDED'                # the biography: grey, as Silo's
-FILTERS = (('', 'All'), ('movie', 'Movies'), ('series', 'Series'))
+FILTERS = (('', 'All'), ('movie', 'Movies'), ('series', 'Series'), ('missing', 'Not on server'))
+MISSING = 'String.IsEqual(%s,missing)' % KIND
+# Not on server: from TMDb Helper, by the person's TMDB id (KodiConnectForSilo's credits.py).
+CAN_LIST_MISSING = 'System.HasAddon(plugin.video.themoviedb.helper) + !String.IsEmpty(%s)' % (PERSON % 'tmdb')
 
 
 def chip(fact):
@@ -47,7 +50,7 @@ def chip(fact):
 
 
 # Each pill's width: its name in silo_detail and the pill's ends.
-PILL_WIDTHS = (84, 128, 120)
+PILL_WIDTHS = (84, 128, 120, 190)
 
 
 def filter_pill(index, kind, label):
@@ -62,7 +65,7 @@ def filter_pill(index, kind, label):
                          for move, step in (('onleft', -1), ('onright', 1)) if 0 <= index + step < len(FILTERS))
     return '''
                 <control type="group" id="%(group)d">
-                    <width>%(w)d</width><height>52</height>
+                    <width>%(w)d</width><height>52</height>%(shown)s
                     <control type="image">
                         <width>%(w)d</width><height>52</height>
                         <texture border="26" colordiffuse="2EFFFFFF">silo/pill.png</texture>
@@ -86,7 +89,8 @@ def filter_pill(index, kind, label):
                         <ondown>%(grid)d</ondown>
                     </control>
                 </control>''' % {'group': button + 10, 'id': button, 'w': PILL_WIDTHS[index], 'index': index, 'text': TEXT,
-                                  'kind': kind, 'grid': GRID_ID, 'chosen': chosen, 'neighbours': neighbours}
+                                  'kind': kind, 'grid': GRID_ID, 'chosen': chosen, 'neighbours': neighbours,
+                                  'shown': '\n                    <visible>%s</visible>' % CAN_LIST_MISSING if kind == 'missing' else ''}
 
 
 def variables():
@@ -182,8 +186,23 @@ def build():
                      info page can't open another over itself). -->
                 <onclick>Dialog.Close(%(window)d)</onclick>
                 <onclick>Dialog.Close(movieinformation)</onclick>
-                <onclick>RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
-                <content target="videos">plugin://plugin.video.kodiconnectforsilo/?mode=widget&amp;section=person&amp;person=$INFO[%(id)s]&amp;type=$INFO[%(kind)s]</content>
+                <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
+                <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb))">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                <content target="videos">plugin://plugin.video.kodiconnectforsilo/?mode=widget&amp;section=person&amp;person=$INFO[%(id)s]&amp;type=$INFO[%(kind)s]&amp;tmdb=$INFO[%(tmdb)s]</content>
+            </control>
+            <control type="label">
+                <left>%(x)d</left><top>%(gtop)d</top><width>1600</width><height>60</height>
+                <font>silo_detail</font>
+                <textcolor>99EDEDED</textcolor>
+                <label>Looking for their other titles…</label>
+                <visible>%(missing)s + Container(%(grid)d).IsUpdating</visible>
+            </control>
+            <control type="label">
+                <left>%(x)d</left><top>%(gtop)d</top><width>1600</width><height>60</height>
+                <font>silo_detail</font>
+                <textcolor>99EDEDED</textcolor>
+                <label>Everything they're best known for is already on your server.</label>
+                <visible>%(missing)s + !Container(%(grid)d).IsUpdating + Integer.IsEqual(Container(%(grid)d).NumItems,0)</visible>
             </control>
         </control>
     </controls>
@@ -196,7 +215,7 @@ def build():
        'filters': ''.join(filter_pill(index, kind, label) for index, (kind, label) in enumerate(FILTERS)),
        'gx': X - 6, 'gtop': GRID_TOP, 'gw': COLS * ITEM_W, 'gh': 1080 - GRID_TOP + LIFT,
        'iw': ITEM_W, 'ih': ITEM_H, 'card': card(False, GRID_ID), 'card_focused': card(True, GRID_ID),
-       'id': PERSON % 'id', 'kind': KIND,
+       'id': PERSON % 'id', 'kind': KIND, 'tmdb': PERSON % 'tmdb', 'missing': MISSING,
        # Up from the grid: to the chosen filter.
        'grid_up': ''.join('\n                <onup condition="%s">%d</onup>' % (
            'String.IsEqual(%s,%s)' % (KIND, kind) if kind else 'String.IsEmpty(%s)' % KIND, PILLS_ID + 10 + index)

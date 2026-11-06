@@ -186,6 +186,34 @@
                         <texturenofocus />
                         <onclick>SetProperty(silo.person.type,series,home)</onclick>
                         <onleft>5311</onleft>
+                        <onright>5313</onright>
+                        <ondown>5301</ondown>
+                    </control>
+                </control>
+                <control type="group" id="5323">
+                    <width>190</width><height>52</height>
+                    <visible>System.HasAddon(plugin.video.themoviedb.helper) + !String.IsEmpty(Window(Home).Property(silo.person.tmdb))</visible>
+                    <control type="image">
+                        <width>190</width><height>52</height>
+                        <texture border="26" colordiffuse="2EFFFFFF">silo/pill.png</texture>
+                        <visible>!String.IsEqual(Window(Home).Property(silo.person.type),missing)</visible>
+                    </control>
+                    <control type="image">
+                        <width>190</width><height>52</height>
+                        <texture border="28" colordiffuse="D9FFFFFF">silo/season_ring.png</texture>
+                        <visible>String.IsEqual(Window(Home).Property(silo.person.type),missing)</visible>
+                    </control>
+                    <control type="button" id="5313">
+                        <width>190</width><height>52</height>
+                        <label>$VAR[SiloPersonFilter3]</label>
+                        <font>silo_detail</font>
+                        <align>center</align><aligny>center</aligny>
+                        <textcolor>99EDEDED</textcolor>
+                        <focusedcolor>SkylineFocusText</focusedcolor>
+                        <texturefocus border="26" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+                        <texturenofocus />
+                        <onclick>SetProperty(silo.person.type,missing,home)</onclick>
+                        <onleft>5312</onleft>
                         <ondown>5301</ondown>
                     </control>
                 </control>
@@ -197,6 +225,7 @@
                 <onup condition="String.IsEmpty(Window(Home).Property(silo.person.type))">5310</onup>
                 <onup condition="String.IsEqual(Window(Home).Property(silo.person.type),movie)">5311</onup>
                 <onup condition="String.IsEqual(Window(Home).Property(silo.person.type),series)">5312</onup>
+                <onup condition="String.IsEqual(Window(Home).Property(silo.person.type),missing)">5313</onup>
                 <scrolltime tween="cubic" easing="out">240</scrolltime>
                 <itemlayout width="270" height="485">
                 <control type="group">
@@ -352,8 +381,23 @@
                      info page can't open another over itself). -->
                 <onclick>Dialog.Close(1195)</onclick>
                 <onclick>Dialog.Close(movieinformation)</onclick>
-                <onclick>RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
-                <content target="videos">plugin://plugin.video.kodiconnectforsilo/?mode=widget&amp;section=person&amp;person=$INFO[Window(Home).Property(silo.person.id)]&amp;type=$INFO[Window(Home).Property(silo.person.type)]</content>
+                <onclick condition="!String.IsEmpty(ListItem.Property(silo.request.tmdb))">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=request_info&amp;type=$INFO[ListItem.Property(silo.request.type)]&amp;tmdb=$INFO[ListItem.Property(silo.request.tmdb)])</onclick>
+                <onclick condition="String.IsEmpty(ListItem.Property(silo.request.tmdb))">RunPlugin(plugin://plugin.video.kodiconnectforsilo/?mode=info&amp;type=$INFO[ListItem.DBType]&amp;dbid=$INFO[ListItem.DBID])</onclick>
+                <content target="videos">plugin://plugin.video.kodiconnectforsilo/?mode=widget&amp;section=person&amp;person=$INFO[Window(Home).Property(silo.person.id)]&amp;type=$INFO[Window(Home).Property(silo.person.type)]&amp;tmdb=$INFO[Window(Home).Property(silo.person.tmdb)]</content>
+            </control>
+            <control type="label">
+                <left>160</left><top>760</top><width>1600</width><height>60</height>
+                <font>silo_detail</font>
+                <textcolor>99EDEDED</textcolor>
+                <label>Looking for their other titles…</label>
+                <visible>String.IsEqual(Window(Home).Property(silo.person.type),missing) + Container(5301).IsUpdating</visible>
+            </control>
+            <control type="label">
+                <left>160</left><top>760</top><width>1600</width><height>60</height>
+                <font>silo_detail</font>
+                <textcolor>99EDEDED</textcolor>
+                <label>Everything they're best known for is already on your server.</label>
+                <visible>String.IsEqual(Window(Home).Property(silo.person.type),missing) + !Container(5301).IsUpdating + Integer.IsEqual(Container(5301).NumItems,0)</visible>
             </control>
         </control>
     </controls>
