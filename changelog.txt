@@ -1,3 +1,10 @@
+[B]0.8.1[/B]
+• Now needs KodiConnectForSilo 0.14.2
+• TV guide: Back returns to what's playing; Back twice leaves Live TV
+• TV guide: with nothing playing, Back goes up to the channel groups from any channel
+• TV guide: Down from the groups goes to now
+• TV guide: the focused channel's name scrolls, and a slot with no programme shows the channel's name
+
 [B]0.8.0[/B]
 • Now needs KodiConnectForSilo 0.14.0
 • Player (Showcase): laid out as Netflix's, play/pause on the bar's line and named buttons under it, no Close (Back stops)
