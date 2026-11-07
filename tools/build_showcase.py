@@ -256,17 +256,110 @@ def overlay():
             ('$VAR[SiloShowcaseAudio]', 'VideoPlayer.AudioCodec')))}
 
 
-CHAPTERS = '''
-			<!-- Showcase: the chapters' starts, ticks on the bar. -->
-			<control type="ranges">
-				<left>96</left><top>858</top><width>1728</width><height>16</height>
-				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
-				<lefttexture />
-				<midtexture colordiffuse="00FFFFFF">colors/white.png</midtexture>
-				<righttexture colordiffuse="CCFFFFFF">colors/white.png</righttexture>
-				<info>Player.Chapters</info>
-				<visible>%s</visible>
-			</control>''' % ON
+# Showcase's bar, as Netflix's: play/pause at its left end (the OSD's button
+# 602 sits there, VideoOSD.xml), the time left at its right end, the OSD's
+# named buttons under it with the end time at that row's right.
+PLAY_X, PLAY_SIZE = 96, 74
+BAR_X, BAR_TOP, BAR_H = 198, 896, 8
+TIME_W = 140   # −1:57:33
+HANDLE = 22    # the handle, under three times the bar, as Netflix's (Silo's is 30)
+ENDS_TOP = 974  # centred on the OSD's button row (VideoOSD.xml, 962 to 1022)
+BAR_W = 1824 - TIME_W - 24 - BAR_X
+# Silo's marker bands (KodiConnectForSilo): plain white over the track, as
+# the rest of Showcase's player; where a band sits says what it is. Silo's
+# player style keeps Silo's colours (DialogSeekBar.xml).
+MARKERS = tuple((name, '99FFFFFF') for name in ('intro', 'recap', 'credits', 'preview'))
+
+
+def bar():
+    """Track, buffered, played, Silo's marker bands, chapter ticks, the handle and the times."""
+    place = '<left>%d</left><top>%d</top><width>%d</width><height>%d</height>' % (BAR_X, BAR_TOP, BAR_W, BAR_H)
+    middle = BAR_TOP + BAR_H // 2
+    out = '''
+			<control type="group">
+				<visible>%(on)s</visible>
+				<control type="image">
+					%(place)s
+					<texture colordiffuse="33FFFFFF">colors/white.png</texture>
+				</control>''' % {'on': ON, 'place': place}
+    for info, colour in (('Player.ProgressCache', '33FFFFFF'), ('Player.Progress', 'FFEDEDED')):
+        out += '''
+				<control type="progress">
+					%s
+					<info>%s</info>
+					<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+					<midtexture colordiffuse="%s">colors/white.png</midtexture>
+				</control>''' % (place, info, colour)
+    for name, colour in MARKERS:
+        out += '''
+				<control type="ranges">
+					%s
+					<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+					<lefttexture />
+					<midtexture colordiffuse="%s">colors/white.png</midtexture>
+					<righttexture />
+					<info>Window(Home).Property(silokodi.markers.%s)</info>
+				</control>''' % (place, colour, name)
+    out += '''
+				<!-- The chapters' starts, ticks on the bar. -->
+				<control type="ranges">
+					<left>%(x)d</left><top>%(tick)d</top><width>%(w)d</width><height>16</height>
+					<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+					<lefttexture />
+					<midtexture colordiffuse="00FFFFFF">colors/white.png</midtexture>
+					<righttexture colordiffuse="CCFFFFFF">colors/white.png</righttexture>
+					<info>Player.Chapters</info>
+				</control>''' % {'x': BAR_X, 'w': BAR_W, 'tick': middle - 8}
+    for info, shows in (('Player.Progress', '!Player.Seeking'), ('Player.SeekBar', 'Player.Seeking')):
+        out += '''
+				<control type="slider">
+					<left>%(x)d</left><top>%(y)d</top><width>%(w)d</width><height>%(h)d</height>
+					<info>%(info)s</info>
+					<texturesliderbar colordiffuse="00FFFFFF">silo/avatar_mask.png</texturesliderbar>
+					<textureslidernib>silo/avatar_mask.png</textureslidernib>
+					<textureslidernibfocus>silo/avatar_mask.png</textureslidernibfocus>
+					<visible>%(shows)s</visible>
+				</control>''' % {'x': BAR_X - HANDLE // 2, 'y': middle - HANDLE // 2, 'w': BAR_W + HANDLE, 'h': HANDLE,
+                                'info': info, 'shows': shows}
+    for label, shows in (('$INFO[Player.TimeRemaining,−,]', '!Player.Seeking + String.IsEmpty(Player.SeekNumeric)'),
+                         ('$INFO[Player.SeekTime]', 'Player.Seeking | !String.IsEmpty(Player.SeekNumeric)')):
+        out += '''
+				<control type="label">
+					<left>%(x)d</left><top>%(y)d</top><width>%(w)d</width><height>36</height>
+					<align>right</align><aligny>center</aligny>
+					<font>silo_detail</font>
+					<textcolor>%(text)s</textcolor>
+					<label>%(label)s</label>
+					<shadowcolor>99000000</shadowcolor>
+					<visible>%(shows)s</visible>
+				</control>''' % {'x': 1824 - TIME_W, 'y': middle - 18, 'w': TIME_W, 'text': TEXT, 'label': label,
+                                 'shows': shows}
+    out += '''
+				<control type="label">
+					<left>1224</left><top>%(y)d</top><width>600</width><height>36</height>
+					<align>right</align><aligny>center</aligny>
+					<font>silo_detail</font>
+					<textcolor>%(dim)s</textcolor>
+					<label>$INFO[Player.FinishTime,Ends ,]</label>
+					<shadowcolor>99000000</shadowcolor>
+				</control>''' % {'y': ENDS_TOP, 'dim': DIM}
+    # Play/pause at the bar's left end while the OSD (whose button it is) is closed.
+    out += '''
+				<control type="group">
+					<left>%(x)d</left><top>%(y)d</top>
+					<visible>!Window.IsVisible(videoosd)</visible>
+					<control type="image">
+						<width>%(s)d</width><height>%(s)d</height>
+						<texture>silo/osd_button_rest.png</texture>
+					</control>
+					<control type="image">
+						<width>%(s)d</width><height>%(s)d</height>
+						<texture colordiffuse="FFEDEDED">$VAR[SiloOSDPlayIcon]</texture>
+					</control>
+				</control>
+			</control>
+			''' % {'x': PLAY_X, 'y': middle - PLAY_SIZE // 2, 's': PLAY_SIZE}
+    return out
 
 
 def pause_screen():
@@ -408,7 +501,8 @@ def main():
         if episodes not in text:
             text = text.replace(paused, paused.replace('</visible>', episodes + '</visible>', 1), 1)
         text = put(text, 'Showcase overlay', overlay() + '\n\t\t\t', '\t\t\t<!-- The bar: track, buffered, played. -->')
-        return put(text, 'Showcase chapters', CHAPTERS + '\n\t\t\t', '\t\t\t<!-- The handle: where playback is')
+        text = drop(text, 'Showcase chapters')  # now on Showcase's own bar
+        return put(text, 'Showcase bar', bar(), "\t\t\t<!-- Showcase's bar. -->", before=False)
 
     edit('DialogSeekBar.xml', seekbar)
     edit('DialogSeekBar.xml', lambda text: put(text, 'Showcase pause screen', pause_screen(),

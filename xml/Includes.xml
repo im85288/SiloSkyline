@@ -43,6 +43,9 @@
 	<expression name="infodialog_active">Window.IsActive(musicinformation) | Window.IsActive(songinformation) | Window.IsActive(movieinformation) | Window.IsActive(addoninformation) | Window.IsActive(pvrguideinfo) | Window.IsActive(pvrrecordinginfo) | Window.IsActive(pictureinfo) | Window.IsVisible(script-embuary-video.xml) | Window.IsVisible(script-embuary-person.xml) | Window.IsVisible(script-embuary-image.xml)</expression>
 	<!-- Silo Skyline: playing a video fullscreen; its overlays are Silo's (Live TV and games keep Estuary's). -->
 	<expression name="SiloVideoPlayer">Window.IsActive(fullscreenvideo) + !VideoPlayer.Content(LiveTV) + !Player.HasGame</expression>
+	<!-- The Showcase player style (the default; Skin settings > Player style): its OSD
+	     names its buttons in pills, as Netflix's, with no Close (Back stops). -->
+	<expression name="ShowcaseOSD">$EXP[SiloVideoPlayer] + !Skin.HasSetting(SkylineSiloOSD)</expression>
 	<expression name="sidebar_visible">ControlGroup(9000).HasFocus | Control.HasFocus(6130) | Control.HasFocus(6131)</expression>
 	<include name="CommonScrollbars">
 		<param name="bottom_offset">list_bottom_offset</param>

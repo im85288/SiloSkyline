@@ -40,6 +40,8 @@
 					<left>20</left>
 					<top>90</top>
 					<animation effect="slide" end="76,-40" time="0" condition="$EXP[SiloVideoPlayer]">Conditional</animation>
+					<!-- Showcase: play on the bar's line, as Netflix's (DialogSeekBar.xml). -->
+					<animation effect="slide" end="0,-87" time="0" condition="$EXP[ShowcaseOSD]">Conditional</animation>
 					<width>100%</width>
 					<height>135</height>
 					<itemgap>10</itemgap>
@@ -70,7 +72,7 @@
 						<!-- Silo's skip back 10 s (Silo's player only). -->
 						<width>76</width>
 						<height>76</height>
-						<visible>$EXP[SiloVideoPlayer] + Player.SeekEnabled</visible>
+						<visible>$EXP[SiloVideoPlayer] + Player.SeekEnabled + !$EXP[ShowcaseOSD]</visible>
 						<control type="button" id="609">
 							<width>74</width>
 							<height>74</height>
@@ -139,11 +141,15 @@
 							<texturefocus colordiffuse="FFEDEDED">silo/avatar_mask.png</texturefocus>
 							<texturenofocus>silo/osd_button_rest.png</texturenofocus>
 							<onleft condition="!$EXP[SiloVideoPlayer]">601</onleft>
-							<onleft condition="$EXP[SiloVideoPlayer]">609</onleft>
+							<onleft condition="$EXP[SiloVideoPlayer] + !$EXP[ShowcaseOSD]">609</onleft>
 							<onright condition="!$EXP[SiloVideoPlayer]">603</onright>
-							<onright condition="$EXP[SiloVideoPlayer]">610</onright>
+							<onright condition="$EXP[SiloVideoPlayer] + !$EXP[ShowcaseOSD]">610</onright>
+							<!-- Showcase: Left and Right skip, as on Netflix's bar; Down to the buttons. -->
+							<onleft condition="$EXP[ShowcaseOSD]">StepBack</onleft>
+							<onright condition="$EXP[ShowcaseOSD]">StepForward</onright>
 							<onup>87</onup>
-							<ondown>noop</ondown>
+							<ondown condition="!$EXP[ShowcaseOSD]">noop</ondown>
+							<ondown condition="$EXP[ShowcaseOSD]">203</ondown>
 							<onclick>PlayerControl(Play)</onclick>
 						</control>
 						<control type="image">
@@ -159,7 +165,7 @@
 						<!-- Silo's skip forward 30 s (Silo's player only). -->
 						<width>76</width>
 						<height>76</height>
-						<visible>$EXP[SiloVideoPlayer] + Player.SeekEnabled</visible>
+						<visible>$EXP[SiloVideoPlayer] + Player.SeekEnabled + !$EXP[ShowcaseOSD]</visible>
 						<control type="button" id="610">
 							<width>74</width>
 							<height>74</height>
@@ -332,6 +338,7 @@
 					<!-- Silo Skyline: Episodes, the season in a strip over the buttons
 					     (KodiConnectForSilo's silokodi.playing.season_path), as Netflix's. -->
 					<control type="radiobutton" id="70051">
+						<visible>!$EXP[ShowcaseOSD]</visible>
 						<include content="OSDButton">
 							<param name="texture" value="silo/episodes.png"/>
 						</include>
@@ -343,6 +350,7 @@
 					<!-- Next Episode: the playlist's next, else the library's
 					     (silokodi.playing.next, as Up Next would play). -->
 					<control type="radiobutton" id="70050">
+						<visible>!$EXP[ShowcaseOSD]</visible>
 						<include content="OSDButton">
 							<param name="texture" value="silo/next_episode.png"/>
 						</include>
@@ -351,6 +359,7 @@
 						<visible>$EXP[SiloVideoPlayer] + [Integer.IsGreater(Playlist.Length(video),1) | !String.IsEmpty(Window(Home).Property(silokodi.playing.next))]</visible>
 					</control>
 					<control type="radiobutton" id="70046">
+						<visible>!$EXP[ShowcaseOSD]</visible>
 						<include content="OSDButton">
 							<param name="texture" value="silo/osd_subtitles.png"/>
 						</include>
@@ -367,6 +376,7 @@
 						<onclick>ActivateWindow(1101)</onclick>
 					</control>
 					<control type="radiobutton" id="70048">
+						<visible>!$EXP[ShowcaseOSD]</visible>
 						<include content="OSDButton">
 							<param name="texture" value="silo/options.png"/>
 						</include>
@@ -377,12 +387,115 @@
 						<onclick condition="$EXP[SiloVideoPlayer]">ActivateWindow(1180)</onclick>
 					</control>
 					<control type="radiobutton" id="70049">
+						<visible>!$EXP[ShowcaseOSD]</visible>
 						<!-- Silo's close: stop and leave the player. -->
 						<include content="OSDButton">
 							<param name="texture" value="silo/close.png"/>
 						</include>
 						<onclick>PlayerControl(Stop)</onclick>
 						<visible>$EXP[SiloVideoPlayer]</visible>
+					</control>
+				</control>
+				<!-- Silo Skyline, Showcase: the buttons named in pills under the bar,
+				     as Netflix's; no Close, since Back stops the video. -->
+				<control type="grouplist" id="203">
+					<left>96</left>
+					<top>62</top>
+					<width>1728</width>
+					<height>60</height>
+					<itemgap>10</itemgap>
+					<orientation>horizontal</orientation>
+					<onup>602</onup>
+					<ondown>noop</ondown>
+					<onleft>noop</onleft>
+					<onright>noop</onright>
+					<visible>$EXP[ShowcaseOSD]</visible>
+					<control type="radiobutton" id="70061">
+						<width>220</width><height>60</height>
+						<label>Episodes</label>
+						<font>silo_card_title</font>
+						<textcolor>FFEDEDED</textcolor>
+						<focusedcolor>SkylineFocusText</focusedcolor>
+						<textoffsetx>72</textoffsetx>
+						<textwidth>132</textwidth>
+						<aligny>center</aligny>
+						<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+						<texturenofocus border="30" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
+						<textureradioonfocus colordiffuse="SkylineFocusText">silo/episodes.png</textureradioonfocus>
+						<textureradioofffocus colordiffuse="SkylineFocusText">silo/episodes.png</textureradioofffocus>
+						<textureradioonnofocus>silo/episodes.png</textureradioonnofocus>
+						<textureradiooffnofocus>silo/episodes.png</textureradiooffnofocus>
+						<radioposx>14</radioposx><radioposy>2</radioposy>
+						<radiowidth>56</radiowidth><radioheight>56</radioheight>
+						<pulseonselect>false</pulseonselect>
+						<onclick condition="String.IsEmpty(Window(Home).Property(silo.osd.episodes))">SetProperty(silo.osd.episodes,1,home)</onclick>
+						<onclick condition="String.IsEmpty(Window(Home).Property(silo.osd.episodes))">SetFocus(7100,$INFO[Window(Home).Property(silokodi.playing.episode_index)],absolute)</onclick>
+						<onclick condition="!String.IsEmpty(Window(Home).Property(silo.osd.episodes))">ClearProperty(silo.osd.episodes,home)</onclick>
+						<visible>$EXP[ShowcaseOSD] + !String.IsEmpty(Window(Home).Property(silokodi.playing.season_path))</visible>
+					</control>
+					<control type="radiobutton" id="70062">
+						<width>280</width><height>60</height>
+						<label>Next episode</label>
+						<font>silo_card_title</font>
+						<textcolor>FFEDEDED</textcolor>
+						<focusedcolor>SkylineFocusText</focusedcolor>
+						<textoffsetx>72</textoffsetx>
+						<textwidth>192</textwidth>
+						<aligny>center</aligny>
+						<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+						<texturenofocus border="30" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
+						<textureradioonfocus colordiffuse="SkylineFocusText">silo/next_episode.png</textureradioonfocus>
+						<textureradioofffocus colordiffuse="SkylineFocusText">silo/next_episode.png</textureradioofffocus>
+						<textureradioonnofocus>silo/next_episode.png</textureradioonnofocus>
+						<textureradiooffnofocus>silo/next_episode.png</textureradiooffnofocus>
+						<radioposx>14</radioposx><radioposy>2</radioposy>
+						<radiowidth>56</radiowidth><radioheight>56</radioheight>
+						<pulseonselect>false</pulseonselect>
+						<onclick condition="Integer.IsGreater(Playlist.Length(video),1)">PlayerControl(Next)</onclick>
+						<onclick condition="!Integer.IsGreater(Playlist.Length(video),1)">PlayMedia($INFO[Window(Home).Property(silokodi.playing.next)])</onclick>
+						<visible>$EXP[ShowcaseOSD] + [Integer.IsGreater(Playlist.Length(video),1) | !String.IsEmpty(Window(Home).Property(silokodi.playing.next))]</visible>
+					</control>
+					<control type="radiobutton" id="70063">
+						<width>230</width><height>60</height>
+						<label>Subtitles</label>
+						<font>silo_card_title</font>
+						<textcolor>FFEDEDED</textcolor>
+						<focusedcolor>SkylineFocusText</focusedcolor>
+						<textoffsetx>72</textoffsetx>
+						<textwidth>142</textwidth>
+						<aligny>center</aligny>
+						<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+						<texturenofocus border="30" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
+						<textureradioonfocus colordiffuse="SkylineFocusText">silo/osd_subtitles.png</textureradioonfocus>
+						<textureradioofffocus colordiffuse="SkylineFocusText">silo/osd_subtitles.png</textureradioofffocus>
+						<textureradioonnofocus>silo/osd_subtitles.png</textureradioonnofocus>
+						<textureradiooffnofocus>silo/osd_subtitles.png</textureradiooffnofocus>
+						<radioposx>14</radioposx><radioposy>2</radioposy>
+						<radiowidth>56</radiowidth><radioheight>56</radioheight>
+						<pulseonselect>false</pulseonselect>
+						<onclick>ActivateWindow(osdsubtitlesettings)</onclick>
+						<visible>$EXP[ShowcaseOSD]</visible>
+					</control>
+					<control type="radiobutton" id="70064">
+						<width>210</width><height>60</height>
+						<label>Options</label>
+						<font>silo_card_title</font>
+						<textcolor>FFEDEDED</textcolor>
+						<focusedcolor>SkylineFocusText</focusedcolor>
+						<textoffsetx>72</textoffsetx>
+						<textwidth>122</textwidth>
+						<aligny>center</aligny>
+						<texturefocus border="30" colordiffuse="SkylineFocus">silo/pill.png</texturefocus>
+						<texturenofocus border="30" colordiffuse="26FFFFFF">silo/pill.png</texturenofocus>
+						<textureradioonfocus colordiffuse="SkylineFocusText">silo/options.png</textureradioonfocus>
+						<textureradioofffocus colordiffuse="SkylineFocusText">silo/options.png</textureradioofffocus>
+						<textureradioonnofocus>silo/options.png</textureradioonnofocus>
+						<textureradiooffnofocus>silo/options.png</textureradiooffnofocus>
+						<radioposx>14</radioposx><radioposy>2</radioposy>
+						<radiowidth>56</radiowidth><radioheight>56</radioheight>
+						<pulseonselect>false</pulseonselect>
+						<onclick>ActivateWindow(1180)</onclick>
+						<visible>$EXP[ShowcaseOSD]</visible>
 					</control>
 				</control>
 			</control>
@@ -478,7 +591,7 @@
 			<font>silo_detail</font>
 			<textcolor>D9EDEDED</textcolor>
 			<label>$VAR[SiloOSDLeftName]</label>
-			<visible>$EXP[SiloVideoPlayer] + [Control.HasFocus(609) | Control.HasFocus(602) | Control.HasFocus(610)]</visible>
+			<visible>$EXP[SiloVideoPlayer] + !$EXP[ShowcaseOSD] + [Control.HasFocus(609) | Control.HasFocus(602) | Control.HasFocus(610)]</visible>
 		</control>
 		<control type="label">
 			<right>96</right><top>1032</top><width>800</width><height>36</height>
@@ -517,9 +630,11 @@
 				<movement>3</movement>
 				<scrolltime tween="cubic" easing="out">200</scrolltime>
 				<ondown>ClearProperty(silo.osd.episodes,home)</ondown>
-				<ondown>SetFocus(70051)</ondown>
+				<ondown condition="!$EXP[ShowcaseOSD]">SetFocus(70051)</ondown>
+				<ondown condition="$EXP[ShowcaseOSD]">SetFocus(70061)</ondown>
 				<onback>ClearProperty(silo.osd.episodes,home)</onback>
-				<onback>SetFocus(70051)</onback>
+				<onback condition="!$EXP[ShowcaseOSD]">SetFocus(70051)</onback>
+				<onback condition="$EXP[ShowcaseOSD]">SetFocus(70061)</onback>
 				<onup>noop</onup>
 				<onclick>ClearProperty(silo.osd.episodes,home)</onclick>
 				<onclick condition="!ListItem.IsPlaying">PlayMedia($INFO[ListItem.FileNameAndPath])</onclick>

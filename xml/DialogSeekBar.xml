@@ -884,6 +884,9 @@
 				</control>
 			</control>
 			<!-- end Silo Skyline Showcase overlay -->			<!-- The bar: track, buffered, played. -->
+			<!-- Silo's player style; Showcase has its own bar after this group. -->
+			<control type="group">
+			<visible>Skin.HasSetting(SkylineSiloOSD)</visible>
 			<control type="image">
 				<left>96</left><top>862</top><width>1728</width><height>8</height>
 				<texture colordiffuse="33FFFFFF">colors/white.png</texture>
@@ -934,18 +937,7 @@
 				<righttexture />
 				<info>Window(Home).Property(silokodi.markers.preview)</info>
 			</control>
-<!-- Silo Skyline Showcase chapters (tools/build_showcase.py) -->
-			<!-- Showcase: the chapters' starts, ticks on the bar. -->
-			<control type="ranges">
-				<left>96</left><top>858</top><width>1728</width><height>16</height>
-				<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
-				<lefttexture />
-				<midtexture colordiffuse="00FFFFFF">colors/white.png</midtexture>
-				<righttexture colordiffuse="CCFFFFFF">colors/white.png</righttexture>
-				<info>Player.Chapters</info>
-				<visible>!Skin.HasSetting(SkylineSiloOSD)</visible>
-			</control>
-			<!-- end Silo Skyline Showcase chapters -->			<!-- The handle: where playback is, or where a seek will land. -->
+			<!-- The handle: where playback is, or where a seek will land. -->
 			<control type="slider">
 				<left>81</left><top>851</top><width>1758</width><height>30</height>
 				<info>Player.Progress</info>
@@ -977,6 +969,123 @@
 				<label>$INFO[Player.TimeRemaining,−,]$INFO[Player.FinishTime, · Ends ,]</label>
 				<shadowcolor>99000000</shadowcolor>
 			</control>
+			</control>
+			<!-- Showcase's bar. --><!-- Silo Skyline Showcase bar (tools/build_showcase.py) -->
+			<control type="group">
+				<visible>!Skin.HasSetting(SkylineSiloOSD)</visible>
+				<control type="image">
+					<left>198</left><top>896</top><width>1462</width><height>8</height>
+					<texture colordiffuse="33FFFFFF">colors/white.png</texture>
+				</control>
+				<control type="progress">
+					<left>198</left><top>896</top><width>1462</width><height>8</height>
+					<info>Player.ProgressCache</info>
+					<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+					<midtexture colordiffuse="33FFFFFF">colors/white.png</midtexture>
+				</control>
+				<control type="progress">
+					<left>198</left><top>896</top><width>1462</width><height>8</height>
+					<info>Player.Progress</info>
+					<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+					<midtexture colordiffuse="FFEDEDED">colors/white.png</midtexture>
+				</control>
+				<control type="ranges">
+					<left>198</left><top>896</top><width>1462</width><height>8</height>
+					<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+					<lefttexture />
+					<midtexture colordiffuse="99FFFFFF">colors/white.png</midtexture>
+					<righttexture />
+					<info>Window(Home).Property(silokodi.markers.intro)</info>
+				</control>
+				<control type="ranges">
+					<left>198</left><top>896</top><width>1462</width><height>8</height>
+					<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+					<lefttexture />
+					<midtexture colordiffuse="99FFFFFF">colors/white.png</midtexture>
+					<righttexture />
+					<info>Window(Home).Property(silokodi.markers.recap)</info>
+				</control>
+				<control type="ranges">
+					<left>198</left><top>896</top><width>1462</width><height>8</height>
+					<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+					<lefttexture />
+					<midtexture colordiffuse="99FFFFFF">colors/white.png</midtexture>
+					<righttexture />
+					<info>Window(Home).Property(silokodi.markers.credits)</info>
+				</control>
+				<control type="ranges">
+					<left>198</left><top>896</top><width>1462</width><height>8</height>
+					<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+					<lefttexture />
+					<midtexture colordiffuse="99FFFFFF">colors/white.png</midtexture>
+					<righttexture />
+					<info>Window(Home).Property(silokodi.markers.preview)</info>
+				</control>
+				<!-- The chapters' starts, ticks on the bar. -->
+				<control type="ranges">
+					<left>198</left><top>892</top><width>1462</width><height>16</height>
+					<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+					<lefttexture />
+					<midtexture colordiffuse="00FFFFFF">colors/white.png</midtexture>
+					<righttexture colordiffuse="CCFFFFFF">colors/white.png</righttexture>
+					<info>Player.Chapters</info>
+				</control>
+				<control type="slider">
+					<left>187</left><top>889</top><width>1484</width><height>22</height>
+					<info>Player.Progress</info>
+					<texturesliderbar colordiffuse="00FFFFFF">silo/avatar_mask.png</texturesliderbar>
+					<textureslidernib>silo/avatar_mask.png</textureslidernib>
+					<textureslidernibfocus>silo/avatar_mask.png</textureslidernibfocus>
+					<visible>!Player.Seeking</visible>
+				</control>
+				<control type="slider">
+					<left>187</left><top>889</top><width>1484</width><height>22</height>
+					<info>Player.SeekBar</info>
+					<texturesliderbar colordiffuse="00FFFFFF">silo/avatar_mask.png</texturesliderbar>
+					<textureslidernib>silo/avatar_mask.png</textureslidernib>
+					<textureslidernibfocus>silo/avatar_mask.png</textureslidernibfocus>
+					<visible>Player.Seeking</visible>
+				</control>
+				<control type="label">
+					<left>1684</left><top>882</top><width>140</width><height>36</height>
+					<align>right</align><aligny>center</aligny>
+					<font>silo_detail</font>
+					<textcolor>FFEDEDED</textcolor>
+					<label>$INFO[Player.TimeRemaining,−,]</label>
+					<shadowcolor>99000000</shadowcolor>
+					<visible>!Player.Seeking + String.IsEmpty(Player.SeekNumeric)</visible>
+				</control>
+				<control type="label">
+					<left>1684</left><top>882</top><width>140</width><height>36</height>
+					<align>right</align><aligny>center</aligny>
+					<font>silo_detail</font>
+					<textcolor>FFEDEDED</textcolor>
+					<label>$INFO[Player.SeekTime]</label>
+					<shadowcolor>99000000</shadowcolor>
+					<visible>Player.Seeking | !String.IsEmpty(Player.SeekNumeric)</visible>
+				</control>
+				<control type="label">
+					<left>1224</left><top>974</top><width>600</width><height>36</height>
+					<align>right</align><aligny>center</aligny>
+					<font>silo_detail</font>
+					<textcolor>87EDEDED</textcolor>
+					<label>$INFO[Player.FinishTime,Ends ,]</label>
+					<shadowcolor>99000000</shadowcolor>
+				</control>
+				<control type="group">
+					<left>96</left><top>863</top>
+					<visible>!Window.IsVisible(videoosd)</visible>
+					<control type="image">
+						<width>74</width><height>74</height>
+						<texture>silo/osd_button_rest.png</texture>
+					</control>
+					<control type="image">
+						<width>74</width><height>74</height>
+						<texture colordiffuse="FFEDEDED">$VAR[SiloOSDPlayIcon]</texture>
+					</control>
+				</control>
+			</control>
+			<!-- end Silo Skyline Showcase bar -->
 		</control>
 	</controls>
 </window>
