@@ -663,7 +663,11 @@ def moves(page_index, slot):
     target = '%d' % (9002 + page_index) if PAGES[page_index] in TABBED else '$INFO[%s]' % prop('silo.custom.button')
     # Up from the top row: the page's pills (a custom item's when it has a
     # submenu), else its tab. Kodi runs every onup whose condition holds.
-    if PAGES[page_index] in PILL_PAGES:
+    if PAGES[page_index] in HERO_PAGES and PAGES[page_index] in PILL_PAGES:
+        # The hero's Play and More info, then the page's pills above them.
+        ups = [(' + '.join(c for c in (above, '$EXP[HasSiloHeroTitle]') if c), '%d' % HERO_PLAY),
+               (' + '.join(c for c in (above, '!$EXP[HasSiloHeroTitle]') if c), '%d' % pills_id(page_index))]
+    elif PAGES[page_index] in PILL_PAGES:
         ups = [(above, '%d' % pills_id(page_index))]
     elif PAGES[page_index] == 'custom':
         ups = [(' + '.join(c for c in (above, CUSTOM_HAS_PILLS) if c), '%d' % CUSTOM_PILLS),
@@ -929,9 +933,11 @@ def bar_positions():
 
 
 DROP_W, DROP_ROW = 460, 64  # Silo's dropdown under a tab
-# The hero's Play and More info, as Netflix's: Up from Home's top row reaches
-# them (in the badges' place); they act on the hero's title (KodiConnectForSilo).
+# The hero's Play and More info, as Netflix's: Up from the top row of Home,
+# Movies or Series reaches them (in the badges' place); they act on the hero's
+# title (KodiConnectForSilo). Up again: the page's pills, else its tab.
 HERO_BUTTONS, HERO_PLAY, HERO_INFO = 4800, 4801, 4802
+HERO_PAGES = ('home', 'movies', 'series')  # whose top row has them above it
 
 
 DROP_DWELL = 250  # ms a tab holds focus before its dropdown opens
@@ -1569,6 +1575,17 @@ def hero_buttons():
     plugin = 'plugin://plugin.video.kodiconnectforsilo/'
     item = 'type=$VAR[SiloHeroType]&amp;dbid=$VAR[SiloHeroDbid]'
     row = '$INFO[%s]' % prop('silo.row')
+    # Up: the showing page's pills (Movies, Series), else Home's tab.
+    ups = '\n'.join('                        <onup condition="%s">SetFocus(%d)</onup>' % (
+        page_visible(page), pills_id(PAGES.index(page)) if page in PILL_PAGES else 9002 + PAGES.index(page))
+        for page in HERO_PAGES)
+
+    # Left on Play and Right on More info step the hero through the row's
+    # titles (the row's selection moves; focus stays), as Disney+'s and Apple
+    # TV's heroes; Down then lands on the title shown. A row's ends stop it.
+    step = 'Control.Move(%s,%%d)' % row
+    sides = {HERO_PLAY: (step % -1, 'SetFocus(%d)' % HERO_INFO), HERO_INFO: ('SetFocus(%d)' % HERO_PLAY, step % 1)}
+
     def button(control_id, label, icon, action, width):
         lit = 'Control.HasFocus(%d)' % control_id
         return '''
@@ -1580,8 +1597,8 @@ def hero_buttons():
                         <texturefocus border="28" colordiffuse="%(text)s">silo/pill.png</texturefocus>
                         <texturenofocus border="28" colordiffuse="33FFFFFF">silo/pill.png</texturenofocus>
                         <onclick>%(action)s</onclick>
-                        <onup>SetFocus(9002)</onup>
-                        <onleft>SetFocus(%(left)d)</onleft><onright>SetFocus(%(right)d)</onright>
+%(ups)s
+                        <onleft>%(left)s</onleft><onright>%(right)s</onright>
                         <ondown>SetFocus(%(row)s)</ondown>
                         <onback>SetFocus(%(row)s)</onback>
                     </control>
@@ -1613,9 +1630,9 @@ def hero_buttons():
                     </control>
                 </control>''' % {'group': control_id + 100, 'id': control_id, 'w': width, 'lw': width - 80, 'text': TEXT,
                                      'action': action, 'row': row, 'icon': icon, 'label': label, 'lit': lit,
-                                     'left': HERO_PLAY, 'right': HERO_INFO}
+                                     'left': sides[control_id][0], 'right': sides[control_id][1], 'ups': ups}
     return '''
-            <!-- The hero's Play and More info (Up from Home's top row), in the badges' place. -->
+            <!-- The hero's Play and More info (Up from the top row of Home, Movies or Series), in the badges' place. -->
             <control type="grouplist" id="%(id)d">
                 <top>540</top>
                 <width>1000</width><height>56</height>
@@ -2426,9 +2443,10 @@ def variables():
         terms += ['[%s + !String.IsEmpty(%s)]' % (home_waiting(row), prop('silo.home.%d.1.%s' % (row, home_property[5:])))
                   for row in (1, 2)]
         out += '    <expression name="Has%s">%s</expression>\n' % (name, ' | '.join(terms))
-    # The hero shows a library title (its Play and More info apply), on Home.
+    # The hero shows a library title (its Play and More info apply), on Home, Movies or Series.
     hero_title = ' | '.join('[String.IsEqual(%s,%d) + [%s]]' % (prop('silo.row'), row_id, HERO_TITLE_TERM % {'r': row_id})
-                            for row_id in page_rows(PAGES.index('home'), range(1, rows_of('home') + 1)))
+                            for page in HERO_PAGES
+                            for row_id in page_rows(PAGES.index(page), range(1, rows_of(page) + 1)))
     out += '    <expression name="HasSiloHeroTitle">%s</expression>\n' % (hero_title or 'false')
     # The ratings' marks: Silo's score (a library item, or a Home card's), else
     # Kodi's own rating for an item it lists itself; never an episode's.
