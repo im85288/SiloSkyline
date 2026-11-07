@@ -1,3 +1,14 @@
+[B]0.8.0[/B]
+• Now needs KodiConnectForSilo 0.14.0
+• Player (Showcase): laid out as Netflix's, play/pause on the bar's line and named buttons under it, no Close (Back stops)
+• Player (Showcase): the bar's intro and credits bands plain white, a smaller handle
+• Movies and Series: Play and More info above the top row, as on Home
+• Play and More info: Left and Right step through the row's titles
+• The remote's Play/Pause plays a title's card from any row
+• Favourites in Skyline's style
+• Person page: a Not on server filter, to request a person's other titles (needs TMDb Helper)
+• Back stops a video started from Favourites or the Add-ons page
+
 [B]0.7.0[/B]
 • Now needs KodiConnectForSilo 0.13.0, the new name of SiloKodiConnect
 • Add-on lists: a new Extra Info view, the list beside the item's picture and description
