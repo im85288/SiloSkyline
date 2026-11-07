@@ -285,11 +285,14 @@ def build():
             </control>
         </control>
 
-        <!-- Channel groups (Kodi fills list 11): Silo's pills. -->
+        <!-- Channel groups (Kodi fills list 11): Silo's pills. Down to the
+             timeline goes to now (Kodi's 0 on the grid): a new group keeps the
+             time of the programme selected before, which can be hours ago. -->
         <control type="list" id="%(groups)d">
             <left>%(x)d</left><top>%(pills_y)d</top><width>%(gw)d</width><height>52</height>
             <orientation>horizontal</orientation>
-            <ondown>%(grid)d</ondown>
+            <ondown>SetFocus(%(grid)d)</ondown>
+            <ondown>Action(Number0)</ondown>
             <scrolltime tween="cubic" easing="out">200</scrolltime>
             <itemlayout width="312" height="52">%(pill)s
             </itemlayout>

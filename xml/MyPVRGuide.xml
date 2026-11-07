@@ -72,11 +72,14 @@
             </control>
         </control>
 
-        <!-- Channel groups (Kodi fills list 11): Silo's pills. -->
+        <!-- Channel groups (Kodi fills list 11): Silo's pills. Down to the
+             timeline goes to now (Kodi's 0 on the grid): a new group keeps the
+             time of the programme selected before, which can be hours ago. -->
         <control type="list" id="11">
             <left>88</left><top>336</top><width>1744</width><height>52</height>
             <orientation>horizontal</orientation>
-            <ondown>51</ondown>
+            <ondown>SetFocus(51)</ondown>
+            <ondown>Action(Number0)</ondown>
             <scrolltime tween="cubic" easing="out">200</scrolltime>
             <itemlayout width="312" height="52">
                     <control type="image">
