@@ -374,6 +374,16 @@
         <onstop condition="[Window.IsActive(1191) | Window.IsActive(1193)] + !System.HasModalDialog + !Window.IsActive(movieinformation) + !Control.HasFocus(62)">SetFocus(62)</onstop>
     </timer>
     <!-- end Silo Skyline library -->
+    <!-- Silo Skyline guide Back (tools/build_tv.py) -->
+    <timer>
+        <name>silo_guide_leave</name>
+        <description>Back from Live TV has just opened the guide: Back again in 3 s leaves (window 1189)</description>
+        <start reset="true">Window.IsActive(tvguide) + !String.IsEmpty(Window(Home).Property(silo.guide.fromplayer))</start>
+        <onstart>ClearProperty(silo.guide.fromplayer,home)</onstart>
+        <onstart>Notification(Live TV,Press Back again to leave,3000)</onstart>
+        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(silo_guide_leave),3) | !Window.IsActive(tvguide)</stop>
+    </timer>
+    <!-- end Silo Skyline guide Back -->
     <!-- Silo Skyline TV (tools/build_tv.py) -->
     <timer>
         <name>silo_recent_autoclose</name>

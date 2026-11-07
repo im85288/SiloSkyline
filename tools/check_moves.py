@@ -2,7 +2,9 @@
 """Check that every move names a control that exists: SetFocus(n), and a
 plain number in onleft/onright/onup/ondown/onback, must be an id in the same
 window (its own controls, or ones its includes bring in). A wrong id is a
-key press that silently does nothing on the TV.
+key press that silently does nothing on the TV. A dialog that closes itself
+and moves focus in the window under it says so with a comment, <!-- focus
+lands in MyPVRGuide.xml -->, and its moves are checked against that window.
 
     python3 tools/check_moves.py
 """
@@ -18,6 +20,7 @@ INCLUDE_USE = re.compile(r'<include(?:\s+content="([^"]+)")?[^>]*>([^<]*)</inclu
 MOVE = re.compile(r'<on(left|right|up|down|back)(?: condition="[^"]*")?>\s*(\d+)\s*</on\1>')
 SET_FOCUS = re.compile(r'SetFocus\((\d+)')
 PARAM_VALUE = re.compile(r'<param name="[^"]*" value="(\d+)"')
+LANDS_IN = re.compile(r'<!-- focus lands in ([\w.-]+\.xml) -->')
 
 
 def includes():
@@ -50,6 +53,8 @@ def main():
         ids = set(ID.findall(text))
         # An include's control can take its id from a parameter (id="$PARAM[...]").
         ids |= set(PARAM_VALUE.findall(text))
+        for other in LANDS_IN.findall(raw):
+            ids |= set(ID.findall(expanded(open(os.path.join(ROOT, 'xml', other), encoding='utf-8').read(), defs)))
         targets = set(t for _, t in MOVE.findall(raw)) | set(SET_FOCUS.findall(raw))
         for target in sorted(targets - ids, key=int):
             problems.append('%s: moves to %s, which has no control' % (os.path.basename(path), target))
